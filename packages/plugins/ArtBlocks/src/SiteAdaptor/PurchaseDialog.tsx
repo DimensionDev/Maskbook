@@ -72,7 +72,7 @@ export function PurchaseDialog(props: ActionBarProps) {
 
     const shareText = [
         Sniffings.is_twitter_page || Sniffings.is_facebook_page ?
-            t`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Install @realMaskNetwork to get yours.`
+            t`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Install @masknetwork to get yours.`
         :   t`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Welcome to join.`,
         '#mask_io #artblocks_io #nft',
         postLink,

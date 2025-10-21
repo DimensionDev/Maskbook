@@ -44,7 +44,7 @@ export const InEligibilityTips = memo(() => {
             <Typography className={classes.description}>
                 <Trans>
                     You can follow Mask Network{' '}
-                    <Link href="https://x.com/realMaskNetwork" rel="noopener noreferrer" target="_blank">
+                    <Link href="https://x.com/masknetwork" rel="noopener noreferrer" target="_blank">
                         Twitter
                     </Link>{' '}
                     or{' '}

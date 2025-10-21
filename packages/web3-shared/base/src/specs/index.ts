@@ -99,7 +99,7 @@ export enum SearchResultType {
     NonFungibleToken = 'NonFungibleToken',
     // e.g., #punks
     NonFungibleCollection = 'NonFungibleCollection',
-    // e.g., realMaskNetwork
+    // e.g., masknetwork
     CollectionListByTwitterHandle = 'CollectionListByTwitterHandle',
     // e.g., PancakeSwap
     DAO = 'DAO',

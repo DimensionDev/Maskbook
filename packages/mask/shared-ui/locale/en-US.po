@@ -365,8 +365,8 @@ msgstr ""
 #~ msgid "Backup is saved to Mask Cloud Service."
 #~ msgstr ""
 
-#. placeholder {0}: user.cloudBackupAt
 #. placeholder {0}: user.localBackupAt
+#. placeholder {0}: user.cloudBackupAt
 #: popups/pages/Settings/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Backup on {0}"
@@ -1250,12 +1250,20 @@ msgid "Floor price"
 msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "Follow @{officialAccount} for Web3 updates and insights."
+#~ msgid "Follow @{officialAccount} for Web3 updates and insights."
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "Follow @masknetwork for Web3 updates and insights."
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx
-msgid "Follow @realMaskNetwork to explore Web3."
+msgid "Follow @masknetwork to explore Web3."
 msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx
+#~ msgid "Follow @realMaskNetwork to explore Web3."
+#~ msgstr ""
 
 #: popups/modals/SelectAppearanceModal/index.tsx
 #: popups/modals/SelectLanguageModal/index.tsx
@@ -1410,8 +1418,12 @@ msgid "Hello Mask world. This is my first encrypted message. Install https://mas
 msgstr ""
 
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
-msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
+msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."
 msgstr ""
+
+#: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
+#~ msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim."
@@ -1752,8 +1764,8 @@ msgid "Mask Network requires you to authorize the following websites before usin
 msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "masknetwork"
-msgstr ""
+#~ msgid "masknetwork"
+#~ msgstr ""
 
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
@@ -2353,8 +2365,8 @@ msgstr ""
 #~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "realMaskNetwork"
-msgstr ""
+#~ msgid "realMaskNetwork"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
 #: popups/pages/Wallet/Receive/index.tsx
@@ -2973,8 +2985,12 @@ msgid "This RPC URL is currently used by the {0} network"
 msgstr ""
 
 #: content-script/site-adaptors/twitter.com/customization/i18n.ts
-msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
+msgid "This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"
 msgstr ""
+
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+#~ msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
+#~ msgstr ""
 
 #. placeholder {0}: String(currentPersona?.nickname)
 #: popups/pages/Personas/ConnectWallet/index.tsx

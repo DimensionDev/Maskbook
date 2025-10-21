@@ -36,6 +36,13 @@
         "qqWcBV": ["完了しました"],
         "rcNnsQ": ["価格:"],
         "uqF4Nm": ["ブロックチェーン:"],
+        "xTQLHC": [
+            "I just purchased a beautiful piece of art from {0} collection for ",
+            ["1"],
+            " ",
+            ["2"],
+            ". Install @masknetwork to get yours."
+        ],
         "xjhtsV": ["チェーン"],
         "ywDBfs": ["問題が発生しました!"],
         "z/3+av": ["ライセンス:"],

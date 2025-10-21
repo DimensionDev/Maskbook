@@ -14,7 +14,7 @@ import {
     WalletConnectedBoundary,
     useOpenShareTxDialog,
 } from '@masknet/shared'
-import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json' with { type: 'json' }
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
@@ -187,7 +187,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
         chain: EVMChainResolver.chainName(chainId) ?? '',
-        account: Sniffings.is_twitter_page ? 'realMaskNetwork' : 'masknetwork',
+        account: 'masknetwork',
     }
     const shareText =
         isDeposit ?
