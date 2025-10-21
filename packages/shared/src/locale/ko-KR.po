@@ -1496,8 +1496,8 @@ msgstr "가스비 업데이트 중..."
 msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
 msgstr ""
 
-#. placeholder {0}: verifiedBy.join(', ')
 #. placeholder {0}: currentVerifiedBy.join(', ')
+#. placeholder {0}: verifiedBy.join(', ')
 #: src/UI/components/AssetsManagement/CollectibleItem.tsx
 #: src/UI/components/AssetsManagement/Collection.tsx
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
