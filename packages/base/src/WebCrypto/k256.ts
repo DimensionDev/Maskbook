@@ -17,7 +17,7 @@ export async function compressK256Point(x: string, y: string): Promise<Uint8Arra
     }
 }
 /**
- * Decompress x into x & y
+ * Decompress point into x & y
  */
 export async function decompressK256Point(point: Uint8Array): Promise<{ x: string; y: string }> {
     const { isPoint, isPointCompressed, pointCompress } = await import('tiny-secp256k1')
