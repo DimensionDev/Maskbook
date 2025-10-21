@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { assert, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionType, MessageStateType, TransactionDescriptorType } from '@masknet/web3-shared-base'
@@ -91,8 +91,6 @@ export function TransactionRequest(props: InteractionItemProps) {
     const { Message, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    assert(Message, 'Wallet transaction request: Message not found')
-
     let transaction: TransactionDetail
     {
         const client = useQueryClient()
@@ -133,7 +131,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             const provider = await privyWallet.getEthereumProvider()
             const result: string = await provider.request(request.request.arguments)
             mockingPrivyPid += 1
-            await Message.updateMessage(request.ID, {
+            await Message?.updateMessage(request.ID, {
                 request: request.request,
                 response: createJsonRpcResponse(mockingPrivyPid, result),
                 state: MessageStateType.APPROVED,
@@ -191,7 +189,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             }),
         )
 
-        const response = await Message.approveAndSendRequest(request.ID, {
+        const response = await Message?.approveAndSendRequest(request.ID, {
             arguments: {
                 ...request.request.arguments,
                 params,

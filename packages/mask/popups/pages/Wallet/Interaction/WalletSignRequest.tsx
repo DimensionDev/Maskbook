@@ -33,7 +33,7 @@ export function WalletSignRequest(props: InteractionItemProps) {
         if (privyWallet?.isConnected) {
             const provider = await privyWallet.getEthereumProvider()
             const result = await provider.request(request)
-            await Message!.updateMessage(currentRequest.ID, {
+            await Message?.updateMessage(currentRequest.ID, {
                 request: currentRequest.request,
                 response: result,
                 state: MessageStateType.APPROVED,
