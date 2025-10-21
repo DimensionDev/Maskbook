@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-10-21 04:18\n"
+"PO-Revision-Date: 2025-10-21 08:48\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1267,12 +1267,20 @@ msgid "Floor price"
 msgstr "crwdns30160:0crwdne30160:0"
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "Follow @{officialAccount} for Web3 updates and insights."
-msgstr "crwdns35460:0{officialAccount}crwdne35460:0"
+#~ msgid "Follow @{officialAccount} for Web3 updates and insights."
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "Follow @masknetwork for Web3 updates and insights."
+msgstr "crwdns38923:0crwdne38923:0"
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx
-msgid "Follow @realMaskNetwork to explore Web3."
-msgstr "crwdns32058:0crwdne32058:0"
+msgid "Follow @masknetwork to explore Web3."
+msgstr "crwdns38925:0crwdne38925:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx
+#~ msgid "Follow @realMaskNetwork to explore Web3."
+#~ msgstr ""
 
 #: popups/modals/SelectAppearanceModal/index.tsx
 #: popups/modals/SelectLanguageModal/index.tsx
@@ -1427,8 +1435,12 @@ msgid "Hello Mask world. This is my first encrypted message. Install https://mas
 msgstr "crwdns30210:0crwdne30210:0"
 
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
-msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
-msgstr "crwdns32064:0crwdne32064:0"
+msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."
+msgstr "crwdns38927:0crwdne38927:0"
+
+#: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
+#~ msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim."
@@ -1769,8 +1781,8 @@ msgid "Mask Network requires you to authorize the following websites before usin
 msgstr "crwdns32800:0crwdne32800:0"
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "masknetwork"
-msgstr "crwdns30304:0crwdne30304:0"
+#~ msgid "masknetwork"
+#~ msgstr ""
 
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
@@ -2370,8 +2382,8 @@ msgstr "crwdns30466:0crwdne30466:0"
 #~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "realMaskNetwork"
-msgstr "crwdns30468:0crwdne30468:0"
+#~ msgid "realMaskNetwork"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
 #: popups/pages/Wallet/Receive/index.tsx
@@ -2995,8 +3007,12 @@ msgid "This RPC URL is currently used by the {0} network"
 msgstr "crwdns30654:0{0}crwdne30654:0"
 
 #: content-script/site-adaptors/twitter.com/customization/i18n.ts
-msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
-msgstr "crwdns35462:0crwdne35462:0"
+msgid "This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"
+msgstr "crwdns38929:0crwdne38929:0"
+
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+#~ msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
+#~ msgstr ""
 
 #. placeholder {0}: String(currentPersona?.nickname)
 #: popups/pages/Personas/ConnectWallet/index.tsx
