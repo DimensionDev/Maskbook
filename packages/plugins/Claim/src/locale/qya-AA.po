@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:47\n"
+"PO-Revision-Date: 2025-10-21 08:48\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -32,13 +32,20 @@ msgstr "crwdns28434:0crwdne28434:0"
 msgid "Claimable"
 msgstr "crwdns28436:0crwdne28436:0"
 
+#. placeholder {0}: tokenDetail.symbol
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "Claimed {amount} ${0} successfully."
 msgstr "crwdns28438:0{amount}crwdnd28438:0${0}crwdne28438:0"
 
+#. placeholder {0}: duration.hours ?? ''
+#. placeholder {1}: duration.minutes ?? ''
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Claiming will be live until: <0>{days} d {0} h {1} m</0>"
-msgstr "crwdns31338:0{days}crwdnd31338:0{0}crwdnd31338:0{1}crwdne31338:0"
+msgid "Claiming will be live until: <0> {days} d {0} h {1} m</0>"
+msgstr "crwdns36398:0{days}crwdnd36398:0{0}crwdnd36398:0{1}crwdne36398:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
+#~ msgid "Claiming will be live until: <0>{days} d {0} h {1} m</0>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "Congratulations!"
@@ -48,6 +55,7 @@ msgstr "crwdns28440:0crwdne28440:0"
 msgid "Eligible to claim"
 msgstr "crwdns28442:0crwdne28442:0"
 
+#. placeholder {0}: format(endTime, 'MM-dd-yyyy HH:mm')
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Ended on <0>{0}</0>"
 msgstr "crwdns31340:0{0}crwdne31340:0"
@@ -56,10 +64,23 @@ msgstr "crwdns31340:0{0}crwdne31340:0"
 msgid "Expired"
 msgstr "crwdns28444:0crwdne28444:0"
 
+#. placeholder {0}: tokenDetail.symbol
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
-"Install https://mask.io to explore more airdrop activities."
-msgstr "crwdns28446:0{amount}crwdnd28446:0{0}crwdne28446:0"
+msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
+" Install https://mask.io to explore more airdrop activities."
+msgstr "crwdns38933:0{amount}crwdnd38933:0{0}crwdne38933:0"
+
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
+#~ msgid ""
+#~ "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.\n"
+#~ " Install https://mask.io to explore more airdrop activities."
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
+#~ msgid ""
+#~ "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
+#~ "Install https://mask.io to explore more airdrop activities."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Mask Community $ARB Giveaway"
@@ -85,6 +106,7 @@ msgstr "crwdns28456:0crwdne28456:0"
 msgid "Sorry, you are not eligible to claim $ARB in this campaign."
 msgstr "crwdns28458:0$ARBcrwdne28458:0"
 
+#. placeholder {0}: format(startTime, 'MM-dd-yyyy HH:mm')
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Start Time: <0>{0}</0>"
 msgstr "crwdns31342:0{0}crwdne31342:0"
@@ -93,6 +115,7 @@ msgstr "crwdns31342:0{0}crwdne31342:0"
 msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
 msgstr "crwdns28460:0crwdne28460:0"
 
+#. placeholder {0}: amount ?? ''
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "You have claimed {0} $ARB."
 msgstr "crwdns28462:0{0}crwdnd28462:0$ARBcrwdne28462:0"
