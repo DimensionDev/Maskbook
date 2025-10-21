@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-21 03:11\n"
+"PO-Revision-Date: 2025-10-21 08:48\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #~ msgid "Claim Requirements"
-#~ msgstr "要件を要求する"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Claimed"
@@ -279,7 +279,7 @@ msgstr "受け取り中.."
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "Clear all requirements"
-#~ msgstr "すべての要件をクリアする"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Collectibles"
@@ -295,7 +295,7 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "Comment"
-#~ msgstr "コメント"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "Completed"
@@ -442,8 +442,8 @@ msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
 msgstr ""
 
 #: src/SiteAdaptor/NftRedPacket/index.tsx
-msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
-msgstr ""
+#~ msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
+#~ msgstr ""
 
 #: src/SiteAdaptor/Requirements/index.tsx
 #~ msgid "Follow <0/> on {platform}"
@@ -452,7 +452,7 @@ msgstr ""
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "Follow me"
-#~ msgstr "今すぐフォロー"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "From: @{0}"
@@ -490,11 +490,16 @@ msgstr "{0} にラッキードロップスマートコントラクトへのア�
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid ""
-"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
-"\n"
+msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
+
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+#~ msgid ""
+#~ "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
+#~ "\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
@@ -583,11 +588,11 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "Like"
-#~ msgstr "いいね"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #~ msgid "Like / Repost / Comment"
-#~ msgstr "いいね/リポスト/コメント"
+#~ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 #~ msgid "Loading"
@@ -627,12 +632,12 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "Next"
-#~ msgstr "次へ"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "NFT holder"
-#~ msgstr "NFT ホルダー"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "NFT Holder"
@@ -741,7 +746,7 @@ msgstr "返金処理中"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "Repost"
-#~ msgstr "リポスト"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Requirements/index.tsx
 #~ msgid "Requirements"
@@ -780,7 +785,7 @@ msgstr "トークンを選択してください"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "Select NFT collection to gate access"
-#~ msgstr "ゲートにアクセスするNFTコレクションを選択します"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
 #: src/SiteAdaptor/components/ConditionSettings.tsx
@@ -802,7 +807,7 @@ msgstr "送る"
 
 #: src/SiteAdaptor/index.tsx
 #~ msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
-#~ msgstr "サプライズ暗号のプレゼントを送信します。複数のチェーンのトークンとNFTが対応されています。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Sent"
@@ -957,19 +962,19 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #~ msgid "Use Lucky Drop quests to grow your followers and engagement. Each requirement must be completed to be eligible to claim."
-#~ msgstr "ラッキードロップクエストを使用してフォロワーとエンゲージメントを成長させましょう。各要件をクリアすると、要求を受けることができます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #~ msgid "User must follow your account. Note: When you cross-post a Lucky Drop to multiple social networks, following you on any social allows users to claim."
-#~ msgstr "ユーザーはアカウントをフォローする必要があります。注意: 複数のソーシャルネットワークにラッキードロップを投稿する場合、ソーシャルネットワークをフォローすると、ユーザーが請求することができます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #~ msgid "Users must hold one NFT from the collection you select."
-#~ msgstr "ユーザーは選択したコレクションから1つのNFTを保持する必要があります。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #~ msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
-#~ msgstr "ユーザーは、あなたのラッキードロップの投稿に「いいね！」、リポスト/引用ツイート、コメントをしなければなりません。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
@@ -1009,7 +1014,7 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #~ msgid "You can set one or multiple rules to be eligible to win a Lucky Drop."
-#~ msgstr "1つまたは複数のルールを設定して、Lucky Dropを獲得することができます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."
@@ -1088,3 +1093,4 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
 msgstr ""
+
