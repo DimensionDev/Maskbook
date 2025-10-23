@@ -113,7 +113,6 @@ export function OperationFooter({
                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 <WalletConnectedBoundary
                     noGasText={t`Insufficient Balance`}
-                    hideRiskWarningConfirmed
                     expectedChainId={chainId ?? ChainId.Mainnet}
                     startIcon={<Icons.Wallet size={18} />}
                     ActionButtonProps={{ variant: 'roundedDark' }}>

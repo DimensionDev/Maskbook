@@ -370,8 +370,8 @@ msgstr "備份失敗"
 #~ msgid "Backup is saved to Mask Cloud Service."
 #~ msgstr ""
 
-#. placeholder {0}: user.localBackupAt
 #. placeholder {0}: user.cloudBackupAt
+#. placeholder {0}: user.localBackupAt
 #: popups/pages/Settings/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Backup on {0}"
@@ -811,6 +811,14 @@ msgstr "建立"
 msgid "Create a New Wallet"
 msgstr ""
 
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy Wallet"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy wallet using an X account"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
 msgstr ""
@@ -826,6 +834,10 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
@@ -1253,12 +1265,20 @@ msgid "Floor price"
 msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "Follow @{officialAccount} for Web3 updates and insights."
+#~ msgid "Follow @{officialAccount} for Web3 updates and insights."
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "Follow @masknetwork for Web3 updates and insights."
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx
-msgid "Follow @realMaskNetwork to explore Web3."
+msgid "Follow @masknetwork to explore Web3."
 msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx
+#~ msgid "Follow @realMaskNetwork to explore Web3."
+#~ msgstr ""
 
 #: popups/modals/SelectAppearanceModal/index.tsx
 #: popups/modals/SelectLanguageModal/index.tsx
@@ -1412,8 +1432,12 @@ msgid "Hello Mask world. This is my first encrypted message. Install https://mas
 msgstr ""
 
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
-msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
+msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."
 msgstr ""
+
+#: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
+#~ msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim."
@@ -1626,8 +1650,8 @@ msgid "Just Selected Contacts"
 msgstr ""
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-msgid "Keep your transactions and assets safe with Mask Wallet."
-msgstr ""
+#~ msgid "Keep your transactions and assets safe with Mask Wallet."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
@@ -1753,8 +1777,8 @@ msgid "Mask Network requires you to authorize the following websites before usin
 msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "masknetwork"
-msgstr ""
+#~ msgid "masknetwork"
+#~ msgstr ""
 
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
@@ -2351,8 +2375,8 @@ msgstr ""
 #~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "realMaskNetwork"
-msgstr ""
+#~ msgid "realMaskNetwork"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
 #: popups/pages/Wallet/Receive/index.tsx
@@ -2581,6 +2605,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
@@ -2748,6 +2773,10 @@ msgstr ""
 #: popups/modals/SupportedSitesModal/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
+msgstr ""
+
+#: popups/pages/Wallet/components/StartUp/index.tsx
+msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
 msgstr ""
 
 #: popups/pages/Trader/Header.tsx
@@ -2971,8 +3000,12 @@ msgid "This RPC URL is currently used by the {0} network"
 msgstr ""
 
 #: content-script/site-adaptors/twitter.com/customization/i18n.ts
-msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
+msgid "This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"
 msgstr ""
+
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+#~ msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
+#~ msgstr ""
 
 #. placeholder {0}: String(currentPersona?.nickname)
 #: popups/pages/Personas/ConnectWallet/index.tsx
@@ -3344,4 +3377,8 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Your X account authorization has timed out. Please try again."
 msgstr ""

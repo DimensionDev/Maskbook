@@ -16,8 +16,8 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RedPacket/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 984\n"
 
-#. placeholder {0}: format(fromUnixTime(timestamp), 'M/d/yyyy HH:mm')
 #. placeholder {0}: dateTimeFormat(locale, new Date(patchedHistory.creation_time))
+#. placeholder {0}: format(fromUnixTime(timestamp), 'M/d/yyyy HH:mm')
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "{0} (UTC+8)"
@@ -442,8 +442,8 @@ msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
 msgstr ""
 
 #: src/SiteAdaptor/NftRedPacket/index.tsx
-msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
-msgstr ""
+#~ msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
+#~ msgstr ""
 
 #: src/SiteAdaptor/Requirements/index.tsx
 #~ msgid "Follow <0/> on {platform}"
@@ -491,10 +491,17 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid ""
-"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
+"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n"
 "\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
+
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+#~ msgid ""
+#~ "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
+#~ "\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."

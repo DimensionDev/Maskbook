@@ -1,4 +1,4 @@
-import { ObservableMap } from '@masknet/shared-base'
+import { ObservableMap, PrivySetupProvider } from '@masknet/shared-base'
 import { StrictMode, useSyncExternalStore, type JSX } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PreventShadowRootEventPropagationListContext } from './Contexts.js'
@@ -40,9 +40,11 @@ const subscribe = (f: () => void) =>
 function MountingPoint(props: { wrapJSX: WrapJSX; preventPropagationList: Array<keyof HTMLElementEventMap> }) {
     const children = useSyncExternalStore(subscribe, () => shadowEnvironmentMountingRoots.asValues)
     return (
-        <PreventShadowRootEventPropagationListContext value={props.preventPropagationList}>
-            {props.wrapJSX ? props.wrapJSX(children) : children}
-        </PreventShadowRootEventPropagationListContext>
+        <PrivySetupProvider>
+            <PreventShadowRootEventPropagationListContext value={props.preventPropagationList}>
+                {props.wrapJSX ? props.wrapJSX(children) : children}
+            </PreventShadowRootEventPropagationListContext>
+        </PrivySetupProvider>
     )
 }
 

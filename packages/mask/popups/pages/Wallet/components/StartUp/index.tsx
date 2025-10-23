@@ -1,11 +1,13 @@
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
+import { PopupRoutes, Sniffings } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { Box, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { Sniffings } from '@masknet/shared-base'
-import Services from '#services'
 import { ImportCreateWallet } from '../ImportCreateWallet/index.js'
-import { Trans } from '@lingui/react/macro'
+import { WalletSetupHeaderUI } from '../WalletHeader/WalletSetupHeaderUI.js'
+import { useMatch } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -20,9 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     titleWrapper: {
-        padding: theme.spacing(2, 0),
         display: 'flex',
-        marginBottom: 12,
         flexDirection: 'column',
         alignItems: 'center',
     },
@@ -35,15 +35,18 @@ const useStyles = makeStyles()((theme) => ({
     placeholderDescription: {
         fontSize: 14,
         lineHeight: '18px',
-        fontWeight: 700,
-        color: theme.palette.maskColor.third,
-        marginTop: theme.spacing(1.5),
-        textAlign: 'center',
+        fontWeight: 400,
+        color: theme.palette.maskColor.second,
+        margin: theme.spacing(1.5, 0),
+        backgroundColor: theme.palette.maskColor.bg,
+        borderRadius: 8,
+        padding: theme.spacing(2),
     },
 }))
 
 export const WalletStartUp = memo(function WalletStartUp() {
     const { classes } = useStyles()
+    const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
 
     const [, onEnterCreateWallet] = useAsyncFn(async () => {
         if (Sniffings.is_firefox) {
@@ -55,16 +58,21 @@ export const WalletStartUp = memo(function WalletStartUp() {
 
     return (
         <Box className={classes.container} data-hide-scrollbar>
-            <Box className={classes.content}>
+            <WalletSetupHeaderUI showBack={!!matchResetWallet}>
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>
                         <Trans>Add Wallet</Trans>
                     </Typography>
-                    <Typography className={classes.placeholderDescription}>
-                        <Trans>Keep your transactions and assets safe with Mask Wallet.</Trans>
-                    </Typography>
                 </Box>
-                <ImportCreateWallet onChoose={onEnterCreateWallet} />
+            </WalletSetupHeaderUI>
+            <Box className={classes.content} gap={1.5}>
+                <Typography className={classes.placeholderDescription}>
+                    <Trans>
+                        Supports traditional wallet creation and import, creation of Firefly.social wallets via your X
+                        account.
+                    </Trans>
+                </Typography>
+                <ImportCreateWallet onChoose={onEnterCreateWallet} flex="column" gap={1.5} />
             </Box>
         </Box>
     )

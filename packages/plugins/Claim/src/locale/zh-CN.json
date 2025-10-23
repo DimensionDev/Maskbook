@@ -20,6 +20,13 @@
         "gWcGl/": ["你的钱包已取消交易。"],
         "hTbvD9": ["对不起，您没有资格在此活动中领取 $ARB。"],
         "hom7qf": ["领取"],
+        "kHDhjV": [
+            "I just claimed airdrop with ",
+            ["amount"],
+            " ",
+            ["0"],
+            " on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n Install https://mask.io to explore more airdrop activities."
+        ],
         "neBDpj": ["请连接钱包"],
         "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "rJZPaP": ["未找到活动"],

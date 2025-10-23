@@ -99,3 +99,9 @@
 
 ; lavamoat=true
 # Enable LavaMoat.
+
+### Build Environment Variables
+
+; FIREFLY_X_CLIENT_ID=
+; FIREFLY_X_CLIENT_SECRET=
+; PRIVY_APP_ID=

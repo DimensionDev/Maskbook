@@ -1,6 +1,5 @@
 import { MaskMessages } from '../Messages/index.js'
-import { PluginID } from '../types/PluginID.js'
-import { createProxyKVStorageBackend, type KVStorageBackend, createKVStorageHost } from './kv-storage/index.js'
+import { createKVStorageHost, createProxyKVStorageBackend, type KVStorageBackend } from './kv-storage/index.js'
 
 const indexedDBProxy = createProxyKVStorageBackend()
 const inMemoryBackend = createProxyKVStorageBackend()
@@ -17,10 +16,6 @@ export const InMemoryStorages = {
     Web3: createInMemoryKVStorage('web3', {}),
 }
 
-/**
- * @deprecated Will be removed in 2.23
- */
-const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
 const APPLICATION_ENTRY_UNLISTED = 'APPLICATION_ENTRY_UNLISTED'
 
 export enum BackupAccountType {
@@ -38,6 +33,17 @@ export interface BackupConfig {
     googleAccount: string | null
 }
 
+interface FireflyAccount {
+    accessToken: string
+    accountId: string
+    avatar: string
+    /** @example '2023-07-30T06:57:39.418Z' */
+    createdAt: string
+    displayName: string
+    isNew: boolean
+    uid: string
+}
+
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
     Web3: createPersistentKVStorage('web3', {}),
@@ -48,6 +54,7 @@ export const PersistentStorages = {
         /** lens account address, distinct by wallet address */
         lastLensAccountMap: Record<string, string>
         backupConfig: BackupConfig
+        firefly_account: FireflyAccount
     }>('settings@v1', {
         debugging: false,
         latestLensProfile: '',
@@ -62,44 +69,15 @@ export const PersistentStorages = {
             googleToken: '',
             googleAccount: '',
         },
-    }),
-    /**
-     * @deprecated Will be removed in 2.23
-     */
-    ApplicationEntryUnListedList: createPersistentKVStorage<{
-        current: {
-            [key: string]: boolean
-        }
-    }>(ApplicationEntryUnlistedListKey, {
-        current: {
-            [PluginID.RedPacket]: false,
-            [PluginID.FileService]: false,
-            [PluginID.CrossChainBridge]: false,
-            [PluginID.Savings]: false,
-            [PluginID.Avatar]: false,
-            [PluginID.Trader]: false,
-            [PluginID.Tips]: false,
-            [PluginID.Transak]: false,
-            [PluginID.GoPlusSecurity]: false,
+        firefly_account: {
+            accessToken: '',
+            accountId: '',
+            avatar: '',
+            createdAt: '',
+            displayName: '',
+            isNew: false,
+            uid: '',
         },
     }),
     ApplicationEntryUnListed: createPersistentKVStorage<{ data: string[] }>(APPLICATION_ENTRY_UNLISTED, { data: [] }),
 }
-
-// TODO remove in 2.23
-async function migrateUnlistedEntries() {
-    await Promise.allSettled([
-        PersistentStorages.ApplicationEntryUnListedList.storage.current.initializedPromise,
-        PersistentStorages.ApplicationEntryUnListed.storage.data.initializedPromise,
-    ])
-    const legacyData = PersistentStorages.ApplicationEntryUnListedList.storage.current.value
-    const newData = PersistentStorages.ApplicationEntryUnListed.storage.data.value
-    const pairs = Array.from(Object.entries(legacyData))
-    const unlisted = pairs.filter((x) => x[1])
-    if (unlisted.length && !newData.length) {
-        const legacyList = unlisted.map((x) => x[0])
-        await PersistentStorages.ApplicationEntryUnListed.storage.data.setValue(legacyList)
-        await PersistentStorages.ApplicationEntryUnListedList.storage.current.setValue({})
-    }
-}
-migrateUnlistedEntries()

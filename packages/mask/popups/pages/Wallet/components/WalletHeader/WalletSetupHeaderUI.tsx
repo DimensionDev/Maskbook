@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Box } from '@mui/material'
+import { Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -30,22 +30,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface WalletSetupHeaderUIProps {
+interface WalletSetupHeaderUIProps extends BoxProps {
     showBack?: boolean
 }
 
-export const WalletSetupHeaderUI = memo<WalletSetupHeaderUIProps>(function WalletSetupHeaderUI({ showBack }) {
-    const { classes } = useStyles()
+export const WalletSetupHeaderUI = memo<WalletSetupHeaderUIProps>(function WalletSetupHeaderUI({
+    showBack,
+    children,
+    className,
+    ...props
+}) {
+    const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()
     const handleBack = useCallback(() => navigate(-1), [location])
 
     return (
-        <Box className={classes.container}>
+        <Box className={cx(classes.container, className)} {...props}>
             {showBack ?
                 <Icons.Comeback className={classes.backIcon} onClick={handleBack} />
             :   null}
             <Icons.MaskWallet width={64} height={64} />
+            {children}
         </Box>
     )
 })

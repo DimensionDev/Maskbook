@@ -97,7 +97,6 @@ const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platfo
     arbitrum: Icons.Arbitrum,
     optimism: Icons.Optimism,
     avax: Icons.Avalanche,
-    mirror: Icons.Mirror,
     uniswap: Icons.Uniswap,
     farcaster: Icons.Farcaster,
     crossbell: Icons.Crossbell,
@@ -144,7 +143,6 @@ export const hostIconMap: Record<string, IconComponent> = {
     'gitcoin.co': Icons.Gitcoin,
     'bscscan.com': Icons.BSC,
     'zkscan.io': Icons.ZkScan,
-    'mirror.xyz': Icons.Mirror,
     'ipfs.io': Icons.IPFS,
     'snapshot.org': Icons.Snapshot,
     'momoka.lens.xyz': Icons.Momoka,
@@ -163,7 +161,6 @@ export const hostNameMap: Record<string, string> = {
     'zkscan.io': 'ZkScan',
     'ipfs.io': 'IPFS',
     'snapshot.org': 'Snapshot',
-    'mirror.xyz': 'Mirror',
     'momoka.lens.xyz': 'Momoka',
 }
 

@@ -192,7 +192,7 @@ export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(o
     const context = useContext(NetworkContext)
     return {
         ...context,
-        pluginID: (overrides ?? context.pluginID) as T,
+        pluginID: (overrides ?? context?.pluginID) as T,
     }
 }
 

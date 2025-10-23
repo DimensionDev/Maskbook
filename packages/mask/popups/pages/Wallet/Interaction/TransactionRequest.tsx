@@ -1,31 +1,32 @@
-import { compact, mapValues, omit } from 'lodash-es'
-import { BigNumber } from 'bignumber.js'
-import defer * as web3_utils from 'web3-utils'
-import { type TransactionDetail } from '../type.js'
-import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
-import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import { useCallback, useEffect, useState } from 'react'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { GasOptionType, MessageStateType, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import {
+    abiCoder,
+    ChainId,
     createJsonRpcPayload,
+    createJsonRpcResponse,
+    ErrorEditor,
     formatEthereumAddress,
     PayloadEditor,
-    abiCoder,
     type GasConfig,
-    ChainId,
-    ErrorEditor,
 } from '@masknet/web3-shared-evm'
-import { produce } from 'immer'
-import { GasOptionType, TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { useLatest } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Button, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { BigNumber } from 'bignumber.js'
+import { produce } from 'immer'
+import { compact, mapValues, omit } from 'lodash-es'
+import { useCallback, useEffect, useState } from 'react'
+import { useLatest } from 'react-use'
+import defer * as web3_utils from 'web3-utils'
+import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
+import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
+import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
+import { type TransactionDetail } from '../type.js'
 import type { InteractionItemProps } from './interaction.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -79,7 +80,10 @@ const approveParametersType = [
     },
 ]
 
+let mockingPrivyPid = Date.now() // Use unix timestamp as pid to avoid duplicate mocking
 export function TransactionRequest(props: InteractionItemProps) {
+    const wallet = useWallet()
+    const privyWallet = usePrivyWallet(wallet?.address)
     const { currentRequest: request, setConfirmAction, paymentToken, setPaymentToken } = props
     const { classes, cx } = useStyles()
     const [gasConfig, _setGasConfig] = useState<GasConfig | undefined>()
@@ -123,6 +127,17 @@ export function TransactionRequest(props: InteractionItemProps) {
     }
 
     setConfirmAction(async () => {
+        if (privyWallet) {
+            const provider = await privyWallet.getEthereumProvider()
+            const result: string = await provider.request(request.request.arguments)
+            mockingPrivyPid += 1
+            await Message?.updateMessage(request.ID, {
+                request: request.request,
+                response: createJsonRpcResponse(mockingPrivyPid, result),
+                state: MessageStateType.APPROVED,
+            })
+            return
+        }
         let params = structuredClone(request.request.arguments.params)
         if (approvedAmount) {
             if (!transaction.formattedTransaction?._tx.data) return
@@ -174,7 +189,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             }),
         )
 
-        const response = await Message!.approveAndSendRequest(request.ID, {
+        const response = await Message?.approveAndSendRequest(request.ID, {
             arguments: {
                 ...request.request.arguments,
                 params,

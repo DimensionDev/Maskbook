@@ -22,6 +22,7 @@
         "/jQctM": ["To"],
         "/nT6AE": ["새로운 비밀번호"],
         "/riTT2": ["고정됩니다."],
+        "/uEw9z": ["Your X account authorization has timed out. Please try again."],
         "/vtDGO": [["0"], " is connected to these sites, they can view your account address."],
         "/xrk7I": ["FAQ&투토리얼"],
         "00b9QG": ["결제 비밀번호 설정"],
@@ -204,6 +205,7 @@
         "Appw6V": ["NFT가 없습니다."],
         "Aq+O0x": ["상태"],
         "AsN7HV": ["전화번호가 잘못되었습니다."],
+        "AuvDq6": ["This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"],
         "AwQpq/": ["Click on the down-arrow to see the private key."],
         "AyLiVq": ["QR 코드 스캔하여 결제하기"],
         "B6C0XJ": ["데이터 없음"],
@@ -354,6 +356,9 @@
         "LJkXYZ": ["새로운 Mask 아이디 만들기"],
         "LP+1Z7": ["네트워크 추가"],
         "LSwUJb": ["Select Liquidity"],
+        "LU3p9s": [
+            "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+        ],
         "LWJCIn": ["연결된 사이트"],
         "LcET2C": ["개인정보처리방침"],
         "LcZh+r": ["지원하지 않는 데이터 백업"],
@@ -400,6 +405,7 @@
         "OkofjH": ["Recover"],
         "On0aF2": ["웹사이트"],
         "OuUyzz": ["No contacts stored locally, you can try searching."],
+        "OzSOpz": ["Create a Privy wallet using an X account"],
         "P9wzG/": ["복구"],
         "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "PGdbc0": [
@@ -430,6 +436,7 @@
         "QrHM/A": ["Backup downloaded and merged to local successfully."],
         "QypSt2": ["Update X.com Permissions"],
         "R2K7XH": ["소결 미디어에서 웹3 앱을 탐색해 보세요."],
+        "RCBmDP": ["Follow @masknetwork to explore Web3."],
         "RH8jSA": ["데이터를 로컬 데이터베이스에 병합하기"],
         "RL5m+x": ["Generating your **accounts**"],
         "ROsDRH": ["Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"],
@@ -674,6 +681,7 @@
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "llLBQ1": ["a token"],
         "loCUuu": ["키스토어"],
+        "lvL4x0": ["Follow @masknetwork for Web3 updates and insights."],
         "m16xKo": ["추가"],
         "m2OZMI": ["최대 기스비는 최대 우선 가스비보다 낮을 수 없습니다"],
         "m3XvO+": ["월렛 불러오기"],
@@ -758,6 +766,7 @@
         "rLgPvm": ["백업"],
         "rQQGN1": ["최대 우선 가스비가 필요한 것보다 높아서 필요 이상으로 지불할 수 있습니다."],
         "rWE7Lq": ["Contact deleted."],
+        "rYFSec": ["Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."],
         "raCUEa": ["By granting permission, you are allowing the following <0/> contract to access your funds"],
         "rkMKQ0": [
             "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -844,6 +853,9 @@
         "y5aRAa": ["파일을 다운로드하려면 클라우드 백업 암호를 입력하세요."],
         "y62Dys": ["Network fee"],
         "y6VCOb": [["0"], " 분"],
+        "yC/GKd": [
+            "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."
+        ],
         "yD15Uj": ["이 월렛을 삭제하시겠습니까?"],
         "yFpcbN": ["This request may be a phishing attach. I understand this and want to continue."],
         "yFrxQj": ["니모닉 단어"],
@@ -874,6 +886,7 @@
         ],
         "yz7wBu": ["닫기"],
         "yzF66j": ["링크"],
+        "z9HeHt": ["Create a Privy Wallet"],
         "zBUJYA": ["The approval for this contract will be revoked in case of the amount is 0."],
         "zPar3e": ["수집품"],
         "zga9sT": ["확인"],

@@ -51,7 +51,6 @@ const domainIconMap: Record<string, GeneratedIcon> = {
     'minds.com': Icons.MindsRound,
     'instagram.com': Icons.InstagramRoundColored,
     'opensea.io': Icons.OpenSeaColored,
-    'mirror.xyz': Icons.Mirror,
 }
 
 const domainNameMap: Record<string, string> = {
@@ -60,7 +59,6 @@ const domainNameMap: Record<string, string> = {
     'minds.com': 'Minds',
     'instagram.com': 'Instagram',
     'opensea.io': 'OpenSea',
-    'mirror.xyz': 'Mirror',
 }
 
 const OriginCard = memo(function OriginCard({ origin }: OriginCardProps) {

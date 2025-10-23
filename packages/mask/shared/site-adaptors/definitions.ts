@@ -1,7 +1,6 @@
 import { FacebookAdaptor } from './implementations/facebook.com.js'
 import { InstagramAdaptor } from './implementations/instagram.com.js'
 import { MindsAdaptor } from './implementations/minds.com.js'
-import { MirrorAdaptor } from './implementations/mirror.xyz.js'
 import { TwitterAdaptor } from './implementations/twitter.com.js'
 import type { SiteAdaptor } from './types.js'
 
@@ -14,7 +13,6 @@ function defineSiteAdaptor(UI: SiteAdaptor.Definition) {
 defineSiteAdaptor(FacebookAdaptor)
 defineSiteAdaptor(InstagramAdaptor)
 defineSiteAdaptor(MindsAdaptor)
-defineSiteAdaptor(MirrorAdaptor)
 defineSiteAdaptor(TwitterAdaptor)
 
 function matches(url: string, pattern: string) {

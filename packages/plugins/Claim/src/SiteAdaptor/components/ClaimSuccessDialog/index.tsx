@@ -79,7 +79,7 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
         if (!amount || !tokenDetail) return
 
         share?.(
-            t`I just claimed airdrop with ${amount} ${tokenDetail.symbol} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.
+            t`I just claimed airdrop with ${amount} ${tokenDetail.symbol} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.
  Install https://mask.io to explore more airdrop activities.`,
         )
     }, [amount, tokenDetail?.symbol])

@@ -99,7 +99,7 @@ export enum SearchResultType {
     NonFungibleToken = 'NonFungibleToken',
     // e.g., #punks
     NonFungibleCollection = 'NonFungibleCollection',
-    // e.g., realMaskNetwork
+    // e.g., masknetwork
     CollectionListByTwitterHandle = 'CollectionListByTwitterHandle',
     // e.g., PancakeSwap
     DAO = 'DAO',
@@ -518,7 +518,7 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     side?: OrderSide
     /** the account make the order */
     maker?: Identity
-    /** the account fullfil the order */
+    /** the account fulfill the order */
     taker?: Identity
     /** unix timestamp */
     createdAt?: number
@@ -550,7 +550,7 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     hash?: string
     /** the account make the order */
     from?: Identity
-    /** the account fullfil the order */
+    /** the account fulfill the order */
     to?: Identity
     /** the account who send the token */
     send?: Identity

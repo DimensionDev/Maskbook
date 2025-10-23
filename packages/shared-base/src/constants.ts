@@ -9,7 +9,6 @@ export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.Instagram]: 'Instagram',
     [EnhanceableSite.OpenSea]: 'OpenSea',
     [EnhanceableSite.Localhost]: 'Localhost',
-    [EnhanceableSite.Mirror]: 'Mirror',
 }
 
 export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {

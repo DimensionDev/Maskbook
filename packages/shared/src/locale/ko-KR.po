@@ -363,8 +363,8 @@ msgid "Confirm"
 msgstr "확인"
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx
-msgid "Confirm Risk Warning"
-msgstr "리스크 경고 확인"
+#~ msgid "Confirm Risk Warning"
+#~ msgstr "리스크 경고 확인"
 
 #: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Confirm this transaction in your wallet"

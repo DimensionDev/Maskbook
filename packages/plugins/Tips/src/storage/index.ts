@@ -18,9 +18,7 @@ interface GuideStorage {
 }
 
 export const guideStorageDefaultValue: GuideStorage = {
-    userGuide: {
-        'mirror.xyz': undefined,
-    },
+    userGuide: {},
 }
 
 let storage: ScopedStorage<StorageValue> = null!

@@ -49,7 +49,6 @@ patchedDependencies:
   gulp: patches/gulp.patch
   ts-results-es: patches/ts-results-es.patch
   '@lingui/cli': patches/@lingui__cli.patch
-  webpack: patches/webpack.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:

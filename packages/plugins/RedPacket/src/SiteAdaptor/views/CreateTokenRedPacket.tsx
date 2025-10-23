@@ -11,7 +11,7 @@ import {
     useAvailableBalance,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { EnhanceableSite, getEnhanceableSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
 import { useChainContext, useEnvironmentContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
@@ -145,7 +145,6 @@ const useStyles = makeStyles()((theme) => ({
 export function CreateTokenRedPacket() {
     const { t } = useLingui()
     const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
     const [gasOption, setGasOption] = useState<GasConfig>()
     const { classes, cx } = useStyles()
     const theme = useTheme()
@@ -389,8 +388,7 @@ export function CreateTokenRedPacket() {
                 <PluginWalletStatusBar
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={chainId}
-                    actualPluginID={pluginID}
-                    disableSwitchAccount={isFirefly}>
+                    actualPluginID={pluginID}>
                     <EthereumERC20TokenApprovedBoundary
                         amount={totalAmount.toFixed()}
                         balance={balance}
@@ -411,8 +409,7 @@ export function CreateTokenRedPacket() {
                             forceShowingWrongNetworkButton>
                             <WalletConnectedBoundary
                                 noGasText={t`Insufficient Balance for Gas Fee`}
-                                expectedChainId={chainId}
-                                hideRiskWarningConfirmed={isFirefly}>
+                                expectedChainId={chainId}>
                                 <ActionButton
                                     size="medium"
                                     className={classes.button}

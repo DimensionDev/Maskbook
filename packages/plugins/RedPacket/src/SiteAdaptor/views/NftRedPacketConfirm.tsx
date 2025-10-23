@@ -159,7 +159,7 @@ export function NftRedPacketConfirm() {
     const compositionType = useContext(CompositionTypeContext)
     const themeId = theme?.tid
 
-    const post = t`Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.
+    const post = t`Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.
 
 🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`
     const onSendPost = useCallback(

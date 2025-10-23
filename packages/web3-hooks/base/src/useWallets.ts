@@ -8,7 +8,7 @@ export function useWallets() {
     const wallets = usePersistSubscription('@@mask-wallets', MaskWalletProvider.subscription.wallets ?? EMPTY_LIST)
 
     return useMemo(() => {
-        return [...wallets]
+        return wallets
             .map((w) => {
                 // Could be serialized by react query persist client
                 if (w.createdAt instanceof Date && w.updatedAt instanceof Date) return w

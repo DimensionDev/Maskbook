@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Alert, IconButton, Link, Typography } from '@mui/material'
-import { useChainId, useNetwork, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainId, useNetwork, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from 'react-use'
 import { NetworkIcon } from '@masknet/shared'
@@ -28,6 +28,8 @@ const useStyle = makeStyles()({
 })
 export function SwitchChainRequest(props: InteractionItemProps) {
     const { t } = useLingui()
+    const wallet = useWallet()
+    const privyWallet = usePrivyWallet(wallet?.address)
     const { setConfirmAction } = props
     const { classes } = useStyle()
     const origin = props.currentRequest.origin
@@ -45,6 +47,11 @@ export function SwitchChainRequest(props: InteractionItemProps) {
     if (!origin) return null
     setConfirmAction(async () => {
         if (!nextNetwork) return
+        if (privyWallet) {
+            await Network!.switchNetwork(nextNetwork.ID)
+            await privyWallet.switchChain(nextNetwork.chainId)
+            return
+        }
         await Network!.switchNetwork(nextNetwork.ID)
         await EVMWeb3.switchChain(nextNetwork.chainId, {
             providerType: ProviderType.MaskWallet,

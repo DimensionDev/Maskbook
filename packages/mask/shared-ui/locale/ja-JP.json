@@ -24,6 +24,7 @@
         "/jQctM": ["宛先："],
         "/nT6AE": ["新しいパスワード"],
         "/riTT2": ["ピン留めが完了しました"],
+        "/uEw9z": ["Your X account authorization has timed out. Please try again."],
         "/vtDGO": [["0"], " is connected to these sites, they can view your account address."],
         "/xrk7I": ["よくある質問と回答"],
         "00b9QG": ["支払いパスワードを設定"],
@@ -208,6 +209,7 @@
         "Appw6V": ["NFTが見つかりません。"],
         "Aq+O0x": ["ステータス："],
         "AsN7HV": ["電話番号が間違っています。"],
+        "AuvDq6": ["This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"],
         "AwQpq/": ["Click on the down-arrow to see the private key."],
         "AyLiVq": ["QRコードをスキャンして支払いを受け取る"],
         "B6C0XJ": ["データなし"],
@@ -358,6 +360,9 @@
         "LJkXYZ": ["新規Mask IDを作成"],
         "LP+1Z7": ["ネットワークを追加"],
         "LSwUJb": ["Select Liquidity"],
+        "LU3p9s": [
+            "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+        ],
         "LWJCIn": ["接続されたサイト"],
         "LcET2C": ["プライバシー・ポリシー（個人情報に関する方針）"],
         "LcZh+r": ["サポートされていないバックアップ"],
@@ -404,6 +409,7 @@
         "OkofjH": ["Recover"],
         "On0aF2": ["ウェブサイト"],
         "OuUyzz": ["No contacts stored locally, you can try searching."],
+        "OzSOpz": ["Create a Privy wallet using an X account"],
         "P9wzG/": ["復旧"],
         "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "PGdbc0": [
@@ -434,6 +440,7 @@
         "QrHM/A": ["Backup downloaded and merged to local successfully."],
         "QypSt2": ["Update X.com Permissions"],
         "R2K7XH": ["ソーシャルメディアで Web3 dApps の機能を探索してみてください。"],
+        "RCBmDP": ["Follow @masknetwork to explore Web3."],
         "RH8jSA": ["ローカルデータベースにデータを統合"],
         "RL5m+x": ["Generating your **accounts**"],
         "ROsDRH": ["Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"],
@@ -678,6 +685,7 @@
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "llLBQ1": ["トークン"],
         "loCUuu": ["キーストア："],
+        "lvL4x0": ["Follow @masknetwork for Web3 updates and insights."],
         "m16xKo": ["追加"],
         "m2OZMI": ["最大手数料は最大優先手数料より低くすることはできません"],
         "m3XvO+": ["インポートされたウォレット"],
@@ -762,6 +770,7 @@
         "rLgPvm": ["バックアップ"],
         "rQQGN1": ["最大優先料金は必要以上に高いです。必要以上に支払うになります。"],
         "rWE7Lq": ["Contact deleted."],
+        "rYFSec": ["Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."],
         "raCUEa": ["By granting permission, you are allowing the following <0/> contract to access your funds"],
         "rkMKQ0": [
             "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -848,6 +857,9 @@
         "y5aRAa": ["ファイルをダウンロードするには、クラウドバックアップパスワードを入力してください。"],
         "y62Dys": ["Network fee"],
         "y6VCOb": [["0"], " 分"],
+        "yC/GKd": [
+            "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."
+        ],
         "yD15Uj": ["このウォレットを削除してもよろしいですか？"],
         "yFpcbN": ["このリクエストはフィッシングの添付かもしれません。私はこれを理解し続けたいです。"],
         "yFrxQj": ["ニーモニック単語"],
@@ -878,6 +890,7 @@
         ],
         "yz7wBu": ["閉じる"],
         "yzF66j": ["リンク"],
+        "z9HeHt": ["Create a Privy Wallet"],
         "zBUJYA": ["The approval for this contract will be revoked in case of the amount is 0."],
         "zPar3e": ["コレクティブ"],
         "zga9sT": ["OK"],

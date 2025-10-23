@@ -1,4 +1,5 @@
 export * from './useAccount.js'
+export * from './usePrivyWallet.js'
 export * from './useContacts.js'
 export * from './useAddressType.js'
 export * from './useNetwork.js'

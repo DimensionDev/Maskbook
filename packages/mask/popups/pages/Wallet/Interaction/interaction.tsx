@@ -1,24 +1,24 @@
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { delay } from '@masknet/kit'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { type ReasonableMessage } from '@masknet/web3-shared-base'
 import { EthereumMethodType, type MessageRequest } from '@masknet/web3-shared-evm'
-import React, { memo, startTransition, useCallback, useRef, useState, type ReactNode } from 'react'
-import type { JsonRpcResponse } from 'web3-core-helpers'
-import { WatchTokenRequest } from './WatchTokenRequest.js'
-import { WalletSignRequest } from './WalletSignRequest.js'
-import { TransactionRequest } from './TransactionRequest.js'
 import { Box, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, Typography } from '@mui/material'
-import { BottomController } from '../../../components/BottomController/index.js'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { useAsyncFn } from 'react-use'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import Services from '#services'
+import React, { memo, startTransition, useCallback, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
+import type { JsonRpcResponse } from 'web3-core-helpers'
+import { BottomController } from '../../../components/BottomController/index.js'
+import { AddChainRequest } from './AddChainRequest.js'
 import { PermissionRequest } from './PermissionRequest.js'
 import { SwitchChainRequest } from './SwitchChainRequest.js'
-import { AddChainRequest } from './AddChainRequest.js'
-import { delay } from '@masknet/kit'
-import { Trans } from '@lingui/react/macro'
+import { TransactionRequest } from './TransactionRequest.js'
+import { WalletSignRequest } from './WalletSignRequest.js'
+import { WatchTokenRequest } from './WatchTokenRequest.js'
 
 const useStyles = makeStyles()({
     left: {
@@ -46,7 +46,7 @@ interface InteractionProps {
     setPendingAction: (pendingAction: undefined | Promise<void>) => void
 }
 
-export const Interaction = memo((props: InteractionProps) => {
+export const Interaction = memo(function Interaction(props: InteractionProps) {
     const { currentRequest } = props
     const navigate = useNavigate()
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -130,12 +130,12 @@ export const Interaction = memo((props: InteractionProps) => {
             {confirmVerb}
         </ActionButton>
     )
-    const InteractionItem = getInteractionComponent(props.currentRequest.request.arguments.method)
+    const InteractionComponent = getInteractionComponent(props.currentRequest.request.arguments.method)
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
             <Box p={2} display="flex" flexDirection="column" flex={1} maxHeight="calc(100vh - 142px)" overflow="auto">
-                <InteractionItem
+                <InteractionComponent
                     paymentToken={props.paymentToken}
                     setPaymentToken={props.setPaymentToken}
                     setConfirmDisabled={setConfirmDisabled}
@@ -146,13 +146,13 @@ export const Interaction = memo((props: InteractionProps) => {
                 />
                 <Pager {...props} />
             </Box>
-            {dangerDialogOpen ?
-                <DangerDialog cancel={ConfirmButton} confirm={CancelButton} />
-            :   null}
             <BottomController>
                 {CancelButton}
                 {ConfirmButton}
             </BottomController>
+            {dangerDialogOpen ?
+                <DangerDialog cancel={ConfirmButton} confirm={CancelButton} />
+            :   null}
         </Box>
     )
 })
@@ -188,7 +188,7 @@ function getInteractionComponent(type: EthereumMethodType) {
     }
 }
 
-const Pager = memo((props: InteractionProps) => {
+const Pager = memo(function Pager(props: InteractionProps) {
     const { currentMessageIndex, currentRequest, setMessageIndex, totalMessages } = props
     const { classes } = useStyles()
     const navigate = useNavigate()

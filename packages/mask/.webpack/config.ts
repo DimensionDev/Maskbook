@@ -1,6 +1,6 @@
 /* spell-checker: disable */
 import type webpack from 'webpack'
-import type rspack from '@rspack/core'
+import type { Configuration as RspackConfiguration } from '@rspack/core'
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
@@ -29,7 +29,7 @@ const patchesDir = join(import.meta.dirname, '../../../patches')
 export async function createConfiguration(
     isRspack: boolean,
     _inputFlags: BuildFlags,
-): Promise<webpack.Configuration | rspack.Configuration> {
+): Promise<webpack.Configuration | RspackConfiguration> {
     const webpack = isRspack ? undefined! : await import('webpack')
     const rspack = isRspack ? await import('@rspack/core') : undefined
     const VERSION = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf-8')).version
@@ -50,7 +50,9 @@ export async function createConfiguration(
                 console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
                 WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
             }
-        } catch (err) {}
+        } catch (err) {
+            console.error('Environment variable WEB3_CONSTANTS_RPC is not valid JSON')
+        }
     }
     const baseConfig = {
         name: 'mask',
@@ -79,7 +81,7 @@ export async function createConfiguration(
                 patches: await pnpmPatches,
             },
             version: cacheKey,
-        },
+        } satisfies webpack.Configuration['cache'] as any,
         resolve: {
             extensionAlias: {
                 '.js': ['.js', '.tsx', '.ts'],
@@ -124,9 +126,7 @@ export async function createConfiguration(
             },
             rules: [
                 // Source map for libraries
-                !rspack && computedFlags.sourceMapKind ?
-                    { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
-                :   null,
+                !rspack && computedFlags.sourceMapKind ? { test: /\.js$/, extractSourceMap: true } : null,
                 // TypeScript
                 {
                     test: /\.[mc]?[jt]sx?$/i,
@@ -237,6 +237,10 @@ export async function createConfiguration(
                 SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
                 GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID) || '',
+                LOAD_KEY: process.env.LOAD_KEY || '',
+                FIREFLY_X_CLIENT_ID: process.env.FIREFLY_X_CLIENT_ID || '',
+                FIREFLY_X_CLIENT_SECRET: process.env.FIREFLY_X_CLIENT_SECRET || '',
+                PRIVY_APP_ID: process.env.PRIVY_APP_ID || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',
@@ -417,12 +421,11 @@ export async function createConfiguration(
             client: flags.hmr ? undefined : false,
         } as DevServerConfiguration,
         stats: flags.mode === 'production' ? 'errors-only' : undefined,
-    } satisfies webpack.Configuration & rspack.Configuration
+    } satisfies webpack.Configuration & RspackConfiguration
 
     if (rspack) {
         // @ts-expect-error
         delete baseConfig.optimization.flagIncludedChunks
-        // @ts-expect-error
         delete baseConfig.cache
     }
 

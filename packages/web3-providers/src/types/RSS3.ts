@@ -405,7 +405,6 @@ export namespace RSS3BaseAPI {
         | 'Lido'
         | 'LooksRare'
         | 'Matters'
-        | 'Mirror'
         | 'OpenSea'
         | 'Optimism'
         | 'Paragraph'

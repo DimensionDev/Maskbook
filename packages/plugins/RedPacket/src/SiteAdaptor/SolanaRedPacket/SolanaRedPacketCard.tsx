@@ -93,7 +93,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const sender = payload.sender.name.replace(/^@/u, '')
-        const account = isOnTwitter ? 'realMaskNetwork' : 'masknetwork'
+        const account = 'masknetwork'
 
         const claimed = _(msg`I just claimed a lucky drop from @${sender} on Solana.`)
         return isOnTwitter || isOnFacebook ?

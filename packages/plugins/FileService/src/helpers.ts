@@ -13,6 +13,10 @@ import schemaV1 from './schema-v1.json' with { type: 'json' }
 import schemaV2 from './schema-v2.json' with { type: 'json' }
 import schemaV3 from './schema-v3.json' with { type: 'json' }
 
+// Load legacy detection + gateway
+export const LOAD_LEGACY_ID_REGEX = /^0x[a-f0-9]{64}$/iu
+export const LOAD_LEGACY_GATEWAY_URL = 'https://load0.network/download'
+
 // Note: if the latest version has been changed, please update packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
 const reader_v2 = createTypedMessageMetadataReader<FileInfo>(META_KEY_2, schemaV2)
@@ -61,7 +65,12 @@ export function makeFileKey(length = 16) {
 }
 
 export function downloadFile(file: FileInfo) {
-    const gateway = resolveGatewayAPI(file.provider)
+    let gateway = resolveGatewayAPI(file.provider)
+
+    if (file.provider === Provider.Load && LOAD_LEGACY_ID_REGEX.test(String(file.landingTxID ?? ''))) {
+        gateway = LOAD_LEGACY_GATEWAY_URL
+    }
+
     let link = urlcat(gateway, '/:txId', { txId: file.landingTxID })
     if (isAfter(new Date(2022, 8, 1), new Date(file.createdAt))) {
         link = urlcat(RECOVERY_PAGE, {

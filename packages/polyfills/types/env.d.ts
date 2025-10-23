@@ -5,6 +5,8 @@ declare module NodeJS {
         readonly MASK_SENTRY: 'enabled' | 'disabled'
         readonly MASK_MIXPANEL: 'enabled' | 'disabled'
         readonly GOOGLE_CLIENT_ID: string
+        readonly FIREFLY_X_CLIENT_ID: string
+        readonly FIREFLY_X_CLIENT_SECRET: string
         /**
          * Run skip tests like
          * RUN_SKIP_TESTS=1 pnpm test

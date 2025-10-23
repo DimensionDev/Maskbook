@@ -15,6 +15,7 @@ import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { BaseHostedProvider, type BaseHostedStorage } from './BaseHosted.js'
+import { Privy } from '@masknet/web3-providers'
 
 export let MaskWalletProviderInstance: MaskWalletProvider
 export function setMaskWalletProviderInstance(mask: MaskWalletProvider) {
@@ -37,10 +38,7 @@ export class MaskWalletProvider extends BaseHostedProvider {
         const wallets = this.context.wallets.getCurrentValue()
 
         // update local wallets immediately
-        this.ref.value = sortBy(
-            uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
-            (x) => !!x.owner,
-        )
+        this.ref.value = uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address))
     }
 
     private async update() {
@@ -49,12 +47,29 @@ export class MaskWalletProvider extends BaseHostedProvider {
 
         const wallets = this.context.wallets.getCurrentValue()
 
-        const result = uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address))
+        const now = new Date()
+
+        const privyWallets = await Privy.getEvmWallets()
+        const formattedPrivyWallets: Wallet[] = privyWallets.map((wallet) => ({
+            id: wallet.address,
+            name: 'Privy Wallet',
+            source: ImportSource.Privy,
+            address: wallet.address,
+            configurable: false,
+            createdAt: new Date(wallet.first_verified_at as number),
+            updatedAt: now,
+            hasStoredKeyInfo: false,
+            hasDerivationPath: false,
+        }))
+
+        const result = uniqWith([...formattedPrivyWallets, ...super.wallets, ...wallets], (a, b) =>
+            isSameAddress(a.address, b.address),
+        )
 
         if (!isEqual(result, super.wallets)) {
             await this.updateWallets(result)
         }
-        this.ref.value = sortBy(result, (x) => !!x.owner)
+        this.ref.value = result
     }
 
     override get subscription() {
@@ -73,7 +88,6 @@ export class MaskWalletProvider extends BaseHostedProvider {
 
         this.subscription.wallets.subscribe(async () => {
             const primaryWallet = first(this.wallets)
-
             if (!this.hostedAccount && primaryWallet) {
                 await this.switchAccount(primaryWallet.address)
                 await this.switchChain(ChainId.Mainnet)
@@ -95,8 +109,6 @@ export class MaskWalletProvider extends BaseHostedProvider {
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
-        const scWallets = this.wallets.filter((x) => isSameAddress(x.owner, address))
-        if (scWallets.length) await super.removeWallets(scWallets)
         if (isSameAddress(this.hostedAccount, address)) await this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
         await this.context.removeWallet(address, password)
@@ -106,7 +118,7 @@ export class MaskWalletProvider extends BaseHostedProvider {
         await super.removeWallets(wallets)
         for (const wallet of wallets) {
             if (isSameAddress(this.hostedAccount, wallet.address)) await this.walletStorage?.account.setValue('')
-            if (!wallet.owner) await this.context.removeWallet(wallet.address)
+            await this.context.removeWallet(wallet.address)
         }
     }
 

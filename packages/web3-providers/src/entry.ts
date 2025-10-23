@@ -13,7 +13,6 @@ export { Twitter } from './Twitter/index.js'
 export { Minds } from './Minds/index.js'
 export { Instagram } from './Instagram/index.js'
 export { DSearch } from './DSearch/index.js'
-export { Mirror } from './Mirror/index.js'
 export { CryptoScamDB } from './CryptoScamDB/index.js'
 export { Multicall } from './Multicall/index.js'
 export { LensV3 } from './LensV3/index.js'
@@ -48,6 +47,9 @@ export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 
 export { SolanaChainResolver, SolanaExplorerResolver } from './Web3/Solana/apis/ResolverAPI.js'
 export { SOLWeb3 } from './Web3/Solana/apis/ConnectionAPI.js'
+
+// Privy
+export * from './Privy/index.js'
 
 // NextID
 export { NextIDProof } from './NextID/index.js'

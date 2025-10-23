@@ -22,6 +22,7 @@
         "/jQctM": ["至"],
         "/nT6AE": ["新密码"],
         "/riTT2": ["固定成功。"],
+        "/uEw9z": ["Your X account authorization has timed out. Please try again."],
         "/vtDGO": [["0"], " is connected to these sites, they can view your account address."],
         "/xrk7I": ["FAQ&Tutorial"],
         "00b9QG": ["设置支付密码"],
@@ -200,6 +201,7 @@
         "Appw6V": ["没有找到任何NFT。"],
         "Aq+O0x": ["状态"],
         "AsN7HV": ["此手机号码不正确。"],
+        "AuvDq6": ["This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"],
         "AwQpq/": ["Click on the down-arrow to see the private key."],
         "AyLiVq": ["扫描二维码以接收付款"],
         "B6C0XJ": ["暂无数据"],
@@ -350,6 +352,9 @@
         "LJkXYZ": ["创建新的 MASK 身份"],
         "LP+1Z7": ["添加网络"],
         "LSwUJb": ["Select Liquidity"],
+        "LU3p9s": [
+            "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+        ],
         "LWJCIn": ["已连接的网站"],
         "LcET2C": ["隐私政策"],
         "LcZh+r": ["不支持的数据备份格式"],
@@ -396,6 +401,7 @@
         "OkofjH": ["Recover"],
         "On0aF2": ["网站"],
         "OuUyzz": ["No contacts stored locally, you can try searching."],
+        "OzSOpz": ["Create a Privy wallet using an X account"],
         "P9wzG/": ["恢复"],
         "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "PGdbc0": [
@@ -426,6 +432,7 @@
         "QrHM/A": ["Backup downloaded and merged to local successfully."],
         "QypSt2": ["Update X.com Permissions"],
         "R2K7XH": ["尝试探索社交媒体上的 Web3 dApps 功能。"],
+        "RCBmDP": ["Follow @masknetwork to explore Web3."],
         "RH8jSA": ["合并数据到本地数据库"],
         "RL5m+x": ["Generating your **accounts**"],
         "ROsDRH": ["Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"],
@@ -670,6 +677,7 @@
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "llLBQ1": ["代币"],
         "loCUuu": ["密钥库"],
+        "lvL4x0": ["Follow @masknetwork for Web3 updates and insights."],
         "m16xKo": ["添加"],
         "m2OZMI": ["Max fee 不能低于 Max priority fee"],
         "m3XvO+": ["导入钱包"],
@@ -752,6 +760,7 @@
         "rLgPvm": ["备份"],
         "rQQGN1": ["Max priority fee过高。您或许支付了超过需要的费用。"],
         "rWE7Lq": ["Contact deleted."],
+        "rYFSec": ["Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."],
         "raCUEa": ["By granting permission, you are allowing the following <0/> contract to access your funds"],
         "rkMKQ0": [
             "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -838,6 +847,9 @@
         "y5aRAa": ["请输入云备份密码以下载文件。"],
         "y62Dys": ["Network fee"],
         "y6VCOb": [["0"], " 分钟"],
+        "yC/GKd": [
+            "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."
+        ],
         "yD15Uj": ["您确定要删除此钱包吗？"],
         "yFpcbN": ["This request may be a phishing attach. I understand this and want to continue."],
         "yFrxQj": ["助记词"],
@@ -868,6 +880,7 @@
         ],
         "yz7wBu": ["关闭"],
         "yzF66j": ["交易记录"],
+        "z9HeHt": ["Create a Privy Wallet"],
         "zBUJYA": ["The approval for this contract will be revoked in case of the amount is 0."],
         "zPar3e": ["收藏品"],
         "zga9sT": ["好的"],
