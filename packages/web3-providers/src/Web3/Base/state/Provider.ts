@@ -154,20 +154,11 @@ export abstract class ProviderState<ChainId extends number, ProviderType extends
         return this.providers[providerType].readyPromise
     }
 
-    async connect(
-        providerType: ProviderType,
-        chainId: ChainId,
-        address?: string,
-        owner?: {
-            account: string
-            identifier?: ECKeyIdentifier
-        },
-        silent?: boolean,
-    ) {
+    async connect(providerType: ProviderType, chainId: ChainId, address?: string, silent?: boolean) {
         const provider = this.providers[providerType]
 
         // compose the connection result
-        const result = await provider.connect(chainId, address, owner, silent)
+        const result = await provider.connect(chainId, address, silent)
 
         // failed to connect provider
         if (!result.account) throw new Error('Failed to connect provider.')

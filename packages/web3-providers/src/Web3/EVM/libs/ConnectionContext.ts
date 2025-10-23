@@ -142,24 +142,6 @@ export class ConnectionContext {
         return this.id
     }
 
-    /**
-     * Abstract account owner address
-     */
-    get owner() {
-        return this.payloadEditor.owner || this._options?.owner || this._init?.getDefaultOwner?.(this.providerType)
-    }
-
-    /**
-     * Abstract account owner persona public key
-     */
-    get identifier() {
-        return (
-            this.payloadEditor.identifier ||
-            this._options?.identifier ||
-            this._init?.getDefaultIdentifier?.(this.providerType)
-        )
-    }
-
     get paymentToken() {
         return this._options?.paymentToken
     }

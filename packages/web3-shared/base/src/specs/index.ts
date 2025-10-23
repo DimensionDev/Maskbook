@@ -1292,10 +1292,6 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
         providerType: ProviderType,
         chainId: ChainId,
         account?: string,
-        owner?: {
-            account: string
-            identifier?: ECKeyIdentifier
-        },
         silent?: boolean,
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */

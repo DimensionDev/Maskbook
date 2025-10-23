@@ -39,7 +39,6 @@ class NonceAPI implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         // set a nonce for Mask wallets
         if (
-            !context.owner &&
             context.account &&
             context.providerType === ProviderType.MaskWallet &&
             context.method === EthereumMethodType.eth_sendTransaction

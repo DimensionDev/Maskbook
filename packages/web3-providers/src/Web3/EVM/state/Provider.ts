@@ -64,10 +64,6 @@ export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkTyp
         providerType: ProviderType,
         chainId: ChainId,
         address?: string | undefined,
-        owner?: {
-            account: string
-            identifier?: ECKeyIdentifier
-        },
         silent?: boolean,
     ): Promise<Account<ChainId>> {
         // Disconnect WalletConnect, prevents its session lasting too long.
@@ -79,6 +75,6 @@ export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkTyp
             }
         }
 
-        return super.connect(providerType, chainId, address, owner, silent)
+        return super.connect(providerType, chainId, address, silent)
     }
 }

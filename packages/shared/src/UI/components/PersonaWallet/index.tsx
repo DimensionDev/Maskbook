@@ -25,31 +25,6 @@ const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
         fontSize: 12,
         color: theme.palette.maskColor.primary,
     },
-    wallets: {
-        gridGap: '12px 12px',
-        display: 'grid',
-        gridTemplateColumns: `repeat(${props.length > 1 ? 2 : 1}, 1fr)`,
-        marginTop: 12,
-        padding: 0,
-    },
-    wallet: {
-        padding: '8px',
-        display: 'flex',
-        gap: 8,
-        backgroundColor: MaskColorVar.primaryBackground2,
-        borderRadius: 8,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    link: {
-        cursor: 'pointer',
-        zIndex: 1,
-        '&:hover': {
-            textDecoration: 'none',
-        },
-        lineHeight: 0,
-        marginLeft: 6,
-    },
 }))
 
 interface ManageWalletProps {

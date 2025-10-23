@@ -72,8 +72,6 @@ export class Popups implements Middleware<ConnectionContext> {
                     arguments: context.requestArguments,
                     options: {
                         silent: context.silent,
-                        owner: context.owner,
-                        identifier: context.identifier?.toText(),
                         providerURL: context.providerURL,
                         gasOptionType: context.gasOptionType,
                     },

@@ -18,7 +18,7 @@ import { PasswordField } from '../../../components/PasswordField/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { useTitle } from '../../../hooks/index.js'
 
-const useStyles = makeStyles<void, 'singleWallet'>()((theme, _, refs) => ({
+const useStyles = makeStyles()((theme, _, refs) => ({
     infoBox: {
         background: theme.palette.maskColor.modalTitleBg,
         borderRadius: 8,
@@ -27,38 +27,6 @@ const useStyles = makeStyles<void, 'singleWallet'>()((theme, _, refs) => ({
         alignItems: 'center',
         columnGap: theme.spacing(1),
     },
-    wallets: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: theme.spacing(1.5),
-        [`&.${refs.singleWallet}`]: {
-            gridTemplateColumns: '1fr',
-        },
-    },
-    wallet: {
-        border: `1px solid ${theme.palette.maskColor.line}`,
-        padding: theme.spacing(1.5),
-        borderRadius: 8,
-        display: 'flex',
-        gap: theme.spacing(1),
-        alignItems: 'center',
-    },
-    singleWallet: {},
-    walletName: {
-        fontSize: 14,
-        fontWeight: 700,
-        lineHeight: '20px',
-    },
-    walletAddress: {
-        fontSize: 10,
-        color: theme.palette.maskColor.second,
-        lineHeight: '10px',
-        fontWeight: 700,
-        display: 'flex',
-        alignItems: 'center',
-        gap: theme.spacing(0.5),
-    },
-
     tips: {
         fontSize: 14,
         lineHeight: '20px',
