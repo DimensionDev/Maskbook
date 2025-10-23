@@ -1,5 +1,4 @@
 import {
-    type ECKeyIdentifier,
     mapSubscription,
     mergeSubscription,
     type Account,

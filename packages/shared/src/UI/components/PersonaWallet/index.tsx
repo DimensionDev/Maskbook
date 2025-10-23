@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { type PersonaInformation, formatPersonaFingerprint, type Wallet } from '@masknet/shared-base'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Stack, Typography, ListItem, List, Link } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { FormattedAddress } from '../../../index.js'
 
 const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
@@ -38,8 +38,7 @@ export function ManageWallet({ manageWallets, persona, name, address }: ManageWa
     const { classes } = useWalletsStyles({ length: manageWallets.length })
 
     return (
-        <>
-            <Box className={classes.persona}>
+        <Box className={classes.persona}>
                 <Box>
                     <Icons.Masks />
                 </Box>
@@ -54,6 +53,5 @@ export function ManageWallet({ manageWallets, persona, name, address }: ManageWa
                     </Typography>
                 </Stack>
             </Box>
-        </>
     )
 }

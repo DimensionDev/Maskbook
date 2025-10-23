@@ -1,6 +1,6 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { EVMWeb3, RedPacket, TheGraphRedPacket } from '@masknet/web3-providers'
+import { EVMWeb3, RedPacket } from '@masknet/web3-providers'
 import type { NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { getNftRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'

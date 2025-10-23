@@ -14,7 +14,6 @@ import {
     GasEditor,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
 

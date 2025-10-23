@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID, RedPacketNftMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { isZero } from '@masknet/web3-shared-base'
 import { alpha, Box, Link, Paper, Typography } from '@mui/material'

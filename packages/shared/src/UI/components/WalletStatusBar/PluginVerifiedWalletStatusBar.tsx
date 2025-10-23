@@ -12,7 +12,6 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useRecentTransactions,
-    useWallets,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'

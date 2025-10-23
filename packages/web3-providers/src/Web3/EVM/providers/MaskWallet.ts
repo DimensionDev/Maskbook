@@ -1,4 +1,4 @@
-import { debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
+import { debounce, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,

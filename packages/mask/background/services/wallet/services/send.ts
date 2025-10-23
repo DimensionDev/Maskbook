@@ -6,7 +6,6 @@ import {
     createJsonRpcResponse,
     ErrorEditor,
     EthereumMethodType,
-    isValidAddress,
     PayloadEditor,
     type TransactionOptions,
     Signer,

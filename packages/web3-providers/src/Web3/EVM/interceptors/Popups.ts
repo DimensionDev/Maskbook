@@ -1,26 +1,15 @@
-import { BigNumber } from 'bignumber.js'
 import {
     ErrorEditor,
     type Middleware,
-    getMaskTokenAddress,
-    getSmartPayConstants,
-    PayloadEditor,
     EthereumMethodType,
     type MessageRequest,
     type MessageResponse,
-    isNativeTokenAddress,
-    getNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import {
     MessageStateType,
-    isGreaterThan,
-    isZero,
-    toFixed,
     type TransferableMessage,
     isSameURL,
 } from '@masknet/web3-shared-base'
-import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
-import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { MaskWalletProviderInstance } from '../providers/index.js'

@@ -3,7 +3,6 @@ import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
 import {
     type Account,
-    type ECKeyIdentifier,
     getSiteType,
     mapSubscription,
     mergeSubscription,

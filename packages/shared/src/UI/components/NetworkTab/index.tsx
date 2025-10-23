@@ -5,7 +5,6 @@ import {
     useChainContext,
     useNetworkContext,
     useNetworkDescriptors,
-    useWallet,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'

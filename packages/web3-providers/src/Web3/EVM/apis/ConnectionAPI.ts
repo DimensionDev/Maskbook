@@ -1,7 +1,7 @@
 import defer * as web3_utils from 'web3-utils'
 import { delay } from '@masknet/kit'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import type { Account, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,

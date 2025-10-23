@@ -2,9 +2,7 @@ import { makeStyles, ActionButton, type ActionButtonProps } from '@masknet/theme
 import { isZero } from '@masknet/web3-shared-base'
 import {
     useChainContext,
-    useNetworkContext,
     useNativeTokenBalance,
-    useRiskWarningApproved,
     useWallet,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
