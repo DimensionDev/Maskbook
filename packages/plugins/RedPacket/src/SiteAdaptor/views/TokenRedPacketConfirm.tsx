@@ -11,7 +11,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useNativeTokenPrice, useSmartPayChainId, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMExplorerResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { isZero } from '@masknet/web3-shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
@@ -185,8 +185,6 @@ export function TokenRedPacketConfirm() {
 
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
-    const wallet = useWallet()
-    const smartPayChainId = useSmartPayChainId()
 
     const loading = creatingPubkey || isCreating || isWaitGasBeMinus
     const disabled = isBalanceInsufficient || loading
@@ -258,7 +256,6 @@ export function TokenRedPacketConfirm() {
                             className={classes.fieldValue}
                             nativeToken={nativeTokenDetailed}
                             nativeTokenPrice={nativeTokenPrice}
-                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                             gasConfig={gasOption}
                             gasLimit={Number.parseInt(gas ?? '0', 10)}
                             onChange={setGasOption}

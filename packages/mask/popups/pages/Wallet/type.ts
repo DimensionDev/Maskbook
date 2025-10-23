@@ -35,9 +35,6 @@ export type GasSetting = {
 }
 
 export type TransactionDetail = {
-    owner?: string
-    paymentToken?: string
-    allowMaskAsGas?: boolean
     gasOptionType?: GasOptionType
     payload: JsonRpcPayload
     computedPayload: Partial<Transaction>

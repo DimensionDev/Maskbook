@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID, RedPacketNftMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useNativeTokenPrice, useSmartPayChainId, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { isZero } from '@masknet/web3-shared-base'
 import { alpha, Box, Link, Paper, Typography } from '@mui/material'
@@ -118,9 +118,7 @@ export function NftRedPacketConfirm() {
 
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
-    const wallet = useWallet()
     const { account: redpacketPubkey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])!
-    const smartPayChainId = useSmartPayChainId()
 
     const duration = 60 * 60 * 24
 
@@ -238,7 +236,6 @@ export function NftRedPacketConfirm() {
                             className={classes.fieldValue}
                             nativeToken={nativeTokenDetailed}
                             nativeTokenPrice={nativeTokenPrice}
-                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                             gasConfig={gasOption}
                             gasLimit={gasLimit ?? 0}
                             onChange={setGasOption}

@@ -94,18 +94,13 @@ const useStyles = makeStyles()((theme) => ({
 
 interface UnlockERC721TokenProps {
     transaction: TransactionDetail
-
-    paymentToken?: string
     onConfigChange: (config: GasConfig) => void
-    onPaymentTokenChange: (paymentToken: string) => void
 }
 
 export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC721Token({
     transaction,
 
     onConfigChange,
-    onPaymentTokenChange,
-    paymentToken,
 }) {
     const { pluginID } = useNetworkContext()
     const { classes } = useStyles()
@@ -226,10 +221,6 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                         defaultGasLimit={transaction.computedPayload.gas}
                         defaultGasConfig={initConfig}
                         onChange={onConfigChange}
-                        onPaymentTokenChange={onPaymentTokenChange}
-                        owner={transaction.owner}
-                        paymentToken={paymentToken}
-                        allowMaskAsGas={transaction.allowMaskAsGas}
                     />
                 :   null}
             </Box>

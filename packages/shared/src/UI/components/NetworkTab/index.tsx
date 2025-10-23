@@ -5,7 +5,6 @@ import {
     useChainContext,
     useNetworkContext,
     useNetworkDescriptors,
-    useSmartPayChainId,
     useWallet,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
@@ -35,14 +34,9 @@ export const NetworkTab = memo(function NetworkTab({
     const { pluginID: networkPluginID } = useNetworkContext(pluginID)
     const { chainId, setChainId, setNetworkType } = useChainContext()
     const networks = useNetworkDescriptors(networkPluginID)
-    const wallet = useWallet()
     const Utils = useWeb3Utils()
-    const smartPaySupportChainId = useSmartPayChainId()
 
-    const supportedChains = useMemo(() => {
-        if (!wallet?.owner || requireChains) return chains
-        return chains.filter((x) => x === smartPaySupportChainId)
-    }, [smartPaySupportChainId, wallet, chains, requireChains])
+    const supportedChains = chains
 
     const usedNetworks = networks.filter((x) => supportedChains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())

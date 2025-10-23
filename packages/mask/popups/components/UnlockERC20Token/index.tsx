@@ -274,10 +274,6 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         defaultGasLimit={transaction.computedPayload.gas}
                         defaultGasConfig={initConfig}
                         onChange={onConfigChange}
-                        onPaymentTokenChange={onPaymentTokenChange}
-                        owner={transaction.owner}
-                        paymentToken={paymentToken}
-                        allowMaskAsGas={transaction.allowMaskAsGas}
                     />
                 :   null}
             </Box>

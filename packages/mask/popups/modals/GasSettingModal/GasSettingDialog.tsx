@@ -32,7 +32,6 @@ import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/materi
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
-import { useGasRatio } from '../../hooks/useGasRatio.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { Trans } from '@lingui/react/macro'
 
@@ -84,7 +83,6 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 }) {
     const theme = useTheme()
     const { classes } = useStyles()
-    const gasRatio = useGasRatio(config.paymentToken)
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
     const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -125,9 +123,8 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             gasLimit || defaultGas || ZERO,
         )
 
-        if (!gasRatio) return toFixed(result)
-        return toFixed(result.multipliedBy(gasRatio))
-    }, [gasPrice, gasLimit, maxFeePerGas, isSupport1559, gasRatio])
+        return toFixed(result)
+    }, [gasPrice, gasLimit, maxFeePerGas, isSupport1559])
 
     const gasLimitError = (() => {
         if (!gasLimit) return

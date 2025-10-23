@@ -12,7 +12,6 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useRecentTransactions,
-    useSmartPayChainId,
     useWallets,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
@@ -77,10 +76,8 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const account = useAccount()
         const globalChainId = useChainId()
         const { chainId } = useChainContext()
-        const allWallets = useWallets()
+
         const { pluginID: currentPluginID } = useNetworkContext()
-        const isSmartPay = !!allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
-        const smartPaySupportChainId = useSmartPayChainId()
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
@@ -167,7 +164,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         onChangeWallet={onChangeWallet ? onChangeWallet : () => SelectProviderModal.open()}
                         selected={isSameAddress(descriptionProps.address, account)}
                         onSelect={onSelect}
-                        expectedChainId={isSmartPay ? smartPaySupportChainId : globalChainId}
+                        expectedChainId={globalChainId}
                     />
                 :   <MenuItem key="connect">
                         <Button

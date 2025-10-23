@@ -7,7 +7,6 @@ import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { delay } from '@masknet/kit'
 import { useAsync, useAsyncFn } from 'react-use'
-import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
 import { Trans } from '@lingui/react/macro'
 
@@ -53,10 +52,6 @@ export function Component() {
                     return
                 }
 
-                const chainId = await SmartPayBundler.getSupportedChainId()
-                const accounts =
-                    result?.address ? await SmartPayOwner.getAccountsByOwner(chainId, result.address) : EMPTY_LIST
-
                 let identifier: ECKeyIdentifier
                 if (state.mnemonic) {
                     identifier = await createPersona(state.mnemonic.join(' '), personaName)
@@ -73,7 +68,7 @@ export function Component() {
                 await delay(300)
                 navigate(
                     urlcat(DashboardRoutes.SignUpPersonaOnboarding, {
-                        count: accounts.filter((x) => x.deployed).length,
+                        count: 0,
                     }),
                     { replace: true },
                 )

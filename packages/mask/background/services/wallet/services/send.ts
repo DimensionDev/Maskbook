@@ -1,6 +1,6 @@
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
-import { EVMRequestReadonly, SmartPayAccount, EVMWeb3Readonly } from '@masknet/web3-providers'
+import { EVMRequestReadonly, EVMWeb3Readonly } from '@masknet/web3-providers'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -40,22 +40,13 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             if (!signableConfig) throw new Error('No transaction to be sent.')
 
             try {
-                if (owner && paymentToken) {
-                    return createJsonRpcResponse(
-                        pid,
-                        await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, {
-                            paymentToken,
-                        }),
-                    )
-                } else {
-                    return createJsonRpcResponse(
-                        pid,
-                        await EVMWeb3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
-                            chainId,
-                            providerURL,
-                        }),
-                    )
-                }
+                return createJsonRpcResponse(
+                    pid,
+                    await EVMWeb3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
+                        chainId,
+                        providerURL,
+                    }),
+                )
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to send transaction.').error
             }
@@ -80,14 +71,6 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
                 return createJsonRpcResponse(pid, await signer.signTransaction(signableConfig))
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to sign transaction.').error
-            }
-        case EthereumMethodType.MASK_DEPLOY:
-            try {
-                const [owner] = payload.params as [string]
-                if (!isValidAddress(owner)) throw new Error('Invalid sender address.')
-                return createJsonRpcResponse(pid, await SmartPayAccount.deploy(chainId, owner, signer))
-            } catch (error) {
-                throw ErrorEditor.from(error, null, 'Failed to deploy.').error
             }
         default:
             try {

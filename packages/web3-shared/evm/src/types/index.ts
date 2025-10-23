@@ -271,7 +271,6 @@ export enum EthereumMethodType {
 
     // Mask Network
     MASK_ADD_WALLET = 'MASK_ADD_WALLET',
-    MASK_DEPLOY = 'mask_deploy',
     MASK_FUND = 'mask_fund',
     MASK_LOGIN = 'MASK_LOGIN',
     MASK_LOGOUT = 'MASK_LOGOUT',
@@ -386,8 +385,6 @@ export interface RequestOptions {
     silent?: boolean
     owner?: string
     identifier?: string
-    paymentToken?: string
-    allowMaskAsGas?: boolean
     providerURL?: string
     gasOptionType?: GasOptionType
     maxFeePerGas?: string
@@ -452,8 +449,6 @@ export interface TransactionOptions {
     chainId?: ChainId
     owner?: string
     identifier?: string
-    paymentToken?: string
-    allowMaskAsGas?: boolean
     providerURL?: string
 
     // popups control

@@ -239,10 +239,6 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     defaultGasLimit={transaction.computedPayload.gas}
                     defaultGasConfig={initConfig}
                     onChange={onConfigChange}
-                    paymentToken={paymentToken}
-                    allowMaskAsGas={transaction.allowMaskAsGas}
-                    owner={transaction.owner}
-                    onPaymentTokenChange={onPaymentTokenChange}
                 />
             </Box>
         </Box>
