@@ -52,7 +52,7 @@ export const SelectProvider = memo(function SelectProvider() {
     const onClick = useCallback(
         async (providerType: ProviderType) => {
             if (providerType === ProviderType.MaskWallet) {
-                const hasWallets = wallets.filter((x) => !x.owner).length
+                const hasWallets = wallets.length
                 navigate(
                     hasWallets ?
                         urlcat(PopupRoutes.SelectWallet, {

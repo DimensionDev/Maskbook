@@ -118,14 +118,12 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     expectedAddress={account}>
                     <Button
                         fullWidth
-                        disabled={isPending || !selected || !!wallet?.owner}
+                        disabled={isPending || !selected}
                         onClick={() => {
                             if (!selected?.metadata?.imageURL) return
                             onChange(selected.metadata.imageURL)
                         }}>
-                        {wallet?.owner ?
-                            <Trans>Coming soon</Trans>
-                        :   <Trans>Confirm</Trans>}
+                        <Trans>Confirm</Trans>
                     </Button>
                 </PluginVerifiedWalletStatusBar>
             </Box>

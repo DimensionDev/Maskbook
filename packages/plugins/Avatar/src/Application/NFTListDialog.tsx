@@ -236,13 +236,8 @@ export function NFTListDialog() {
                             <Button disabled fullWidth>
                                 <Trans>EVM Chains only</Trans>
                             </Button>
-                        :   <Button
-                                onClick={onSave}
-                                disabled={disabled || !selectedToken || !!targetWallet?.owner}
-                                fullWidth>
-                                {targetWallet?.owner ?
-                                    <Trans>Coming soon</Trans>
-                                : pfpType === PFP_TYPE.PFP ?
+                        :   <Button onClick={onSave} disabled={disabled || !selectedToken} fullWidth>
+                                {pfpType === PFP_TYPE.PFP ?
                                     <Trans>Set NFT PFP</Trans>
                                 :   <Trans>Set NFT NFT Background</Trans>}
                             </Button>

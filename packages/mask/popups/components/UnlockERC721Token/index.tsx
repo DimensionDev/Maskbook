@@ -99,7 +99,6 @@ interface UnlockERC721TokenProps {
 
 export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC721Token({
     transaction,
-
     onConfigChange,
 }) {
     const { pluginID } = useNetworkContext()

@@ -277,9 +277,7 @@ export const GasSetting1559 = memo(() => {
 
             await Services.Wallet.updateUnconfirmedRequest({
                 ...value.payload,
-                owner: value.owner,
                 identifier: value.identifier?.toText(),
-                paymentToken: value.paymentToken,
                 params: config,
             })
             navigate(-1)

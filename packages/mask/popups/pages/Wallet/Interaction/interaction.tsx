@@ -40,9 +40,6 @@ interface InteractionProps {
     currentMessageIndex: number
     setMessageIndex(count: number): void
 
-    paymentToken: string
-    setPaymentToken: (paymentToken: string) => void
-
     setPendingAction: (pendingAction: undefined | Promise<void>) => void
 }
 
@@ -136,8 +133,6 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
         <Box flex={1} display="flex" flexDirection="column">
             <Box p={2} display="flex" flexDirection="column" flex={1} maxHeight="calc(100vh - 142px)" overflow="auto">
                 <InteractionComponent
-                    paymentToken={props.paymentToken}
-                    setPaymentToken={props.setPaymentToken}
                     setConfirmDisabled={setConfirmDisabled}
                     currentRequest={currentRequest}
                     setConfirmVerb={setConfirmVerb}
@@ -164,10 +159,6 @@ export interface InteractionItemProps {
     setConfirmVerb(verb: ReactNode): void
     setConfirmAction(action: (isLastRequest: boolean) => Promise<void>): void
     setConfirmDisabled(disabled: boolean): void
-
-    // transaction only
-    paymentToken: string
-    setPaymentToken: (paymentToken: string) => void
 }
 function getInteractionComponent(type: EthereumMethodType) {
     switch (type) {

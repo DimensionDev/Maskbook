@@ -55,7 +55,6 @@ export const Component = memo(function SelectWallet() {
 
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const { smartPayChainId } = PopupContext.useContainer()
 
     const { value: localWallets = EMPTY_LIST } = useAsync(async () => Services.Wallet.getWallets(), [])
 
@@ -105,37 +104,13 @@ export const Component = memo(function SelectWallet() {
         if (wallet && source) await Services.Wallet.internalWalletConnect(wallet.address, source)
 
         await Services.Wallet.resolveMaskAccount([
-            wallet?.owner ?
-                {
-                    address: selected,
-                    owner: wallet.owner,
-                    identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
-                }
-            :   {
-                    address: selected,
-                },
+            {
+                address: selected,
+            },
         ])
 
-        if (smartPayChainId && wallet?.owner && chainId !== smartPayChainId) {
-            await EVMWeb3.switchChain?.(smartPayChainId, {
-                providerType: ProviderType.MaskWallet,
-            })
-
-            const network = networks.find((x) => x.chainId === smartPayChainId)
-            if (network) await Network?.switchNetwork(network.ID)
-        }
         return Services.Helper.removePopupWindow()
-    }, [
-        source,
-        isVerifyWalletFlow,
-        selected,
-        chainId,
-        wallets,
-        smartPayChainId,
-        isSettingNFTAvatarFlow,
-        networks,
-        Network,
-    ])
+    }, [source, isVerifyWalletFlow, selected, chainId, wallets, isSettingNFTAvatarFlow, networks, Network])
 
     useTitle(t`Select Wallet`)
 
@@ -153,9 +128,8 @@ export const Component = memo(function SelectWallet() {
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
-                        if (x.owner && chainId !== ChainId.Polygon) return false
                         if (!isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
-                        return !x.owner
+                        return false
                     })
                     .map((item) => {
                         const disabled =
@@ -182,11 +156,7 @@ export const Component = memo(function SelectWallet() {
                 <ActionButton
                     fullWidth
                     onClick={handleConfirm}
-                    disabled={
-                        isVerifyWalletFlow ?
-                            !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
-                        :   false
-                    }>
+                    disabled={isVerifyWalletFlow ? !!wallets?.some((x) => isSameAddress(x.address, selected)) : false}>
                     <Trans>Confirm</Trans>
                 </ActionButton>
             </BottomController>

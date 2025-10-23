@@ -72,16 +72,12 @@ const useStyles = makeStyles()((theme) => ({
 
 interface TransactionPreviewProps {
     transaction: TransactionDetail
-    paymentToken?: string
     onConfigChange: (config: GasConfig) => void
-    onPaymentTokenChange: (paymentToken: string) => void
 }
 
 export const TransactionPreview = memo<TransactionPreviewProps>(function TransactionPreview({
     transaction,
     onConfigChange,
-    paymentToken,
-    onPaymentTokenChange,
 }) {
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

@@ -367,26 +367,6 @@ export class ConnectionAPI
         )
     }
 
-    override async fund(proof: Proof, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.MASK_FUND,
-                params: [proof],
-            },
-            initial,
-        )
-    }
-
-    override async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.MASK_DEPLOY,
-                params: [owner, identifier],
-            },
-            initial,
-        )
-    }
-
     override async connect(initial?: EVMConnectionOptions): Promise<Account<ChainId>> {
         return this.Request.request<Account<ChainId>>(
             {

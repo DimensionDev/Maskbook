@@ -21,7 +21,6 @@ export const useUnconfirmedRequest = () => {
         // eslint-disable-next-line react/no-missing-context-display-name
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
         return {
-            owner: payload.owner,
             identifier: payload.identifier ? ECKeyIdentifier.from(payload.identifier).unwrapOr(undefined) : undefined,
             payload: omit(payload, 'owner', 'identifier', 'paymentToken') as JsonRpcPayload,
             computedPayload,

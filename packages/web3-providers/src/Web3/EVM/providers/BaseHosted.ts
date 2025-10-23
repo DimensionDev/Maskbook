@@ -90,8 +90,6 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
                     {
                         ...x,
                         name: updates.name ?? x.name,
-                        owner: updates.owner ?? x.owner,
-                        identifier: updates.identifier ?? x.identifier,
                         createdAt: x.createdAt ?? now,
                         updatedAt: now,
                     }
@@ -108,8 +106,6 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
 
         if (isNameExists) throw new Error('The wallet name already exists.')
 
-        if (!this.walletStorage.wallets.value.find((x) => isSameAddress(x.address, address))?.owner)
-            await this.io_renameWallet(address, name)
         await this.updateWallet(address, {
             name,
         })
@@ -124,10 +120,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
     async updateWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         const result = wallets.filter(
-            (x) =>
-                !this.walletStorage.wallets.value.find(
-                    (y) => isSameAddress(x.address, y.address) && isSameAddress(x.owner, y.owner),
-                ),
+            (x) => !this.walletStorage.wallets.value.find((y) => isSameAddress(x.address, y.address)),
         )
         await this.walletStorage.wallets.setValue(
             uniqWith([...this.walletStorage.wallets.value, ...result], (a, b) => isSameAddress(a.address, b.address)),

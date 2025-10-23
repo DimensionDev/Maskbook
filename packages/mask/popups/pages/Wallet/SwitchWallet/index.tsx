@@ -46,7 +46,6 @@ const SwitchWallet = memo(function SwitchWallet() {
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
     const { closeModal } = useActionModal()
-    const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet()
     const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -83,21 +82,14 @@ const SwitchWallet = memo(function SwitchWallet() {
             const address = wallet.address
             await EVMWeb3.connect({
                 account: address,
-                chainId: wallet.owner && smartPayChainId ? smartPayChainId : chainId,
+                chainId,
                 providerType: ProviderType.MaskWallet,
-                owner: wallet.owner,
+
                 identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
             })
             closeModal()
-            if (wallet.owner && smartPayChainId) {
-                const network = networks.find((x) => x.chainId === smartPayChainId)
-                if (network) await Network?.switchNetwork(network.ID)
-                await EVMWeb3.switchChain?.(smartPayChainId, {
-                    providerType: ProviderType.MaskWallet,
-                })
-            }
         },
-        [smartPayChainId, chainId, closeModal, Network, networks],
+        [chainId, closeModal, Network, networks],
     )
 
     const handleClickSettings = useCallback(async () => {
@@ -162,17 +154,15 @@ const SwitchWallet = memo(function SwitchWallet() {
         <ActionModal header={<Trans>Wallet Account</Trans>} action={action}>
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    {wallets.map((item) =>
-                        item.owner && chainId !== ChainId.Polygon ?
-                            null
-                        :   <WalletItem
-                                key={item.address}
-                                wallet={item}
-                                onSelect={handleSelect}
-                                isSelected={isSameAddress(item.address, wallet?.address)}
-                                className={classes.walletItem}
-                            />,
-                    )}
+                    {wallets.map((item) => (
+                        <WalletItem
+                            key={item.address}
+                            wallet={item}
+                            onSelect={handleSelect}
+                            isSelected={isSameAddress(item.address, wallet?.address)}
+                            className={classes.walletItem}
+                        />
+                    ))}
                 </List>
             </div>
         </ActionModal>

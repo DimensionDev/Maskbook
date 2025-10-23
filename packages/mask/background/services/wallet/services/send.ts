@@ -18,7 +18,7 @@ import { signWithPersona } from '../../identity/persona/sign.js'
  * The entrance of all RPC requests to MaskWallet.
  */
 export async function send(payload: JsonRpcPayload, options?: TransactionOptions) {
-    const { owner, paymentToken, providerURL } = options ?? {}
+    const { owner, providerURL } = options ?? {}
     const {
         pid = 0,
         from,

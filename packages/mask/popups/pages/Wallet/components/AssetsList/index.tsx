@@ -188,12 +188,7 @@ export const AssetsList = memo(function AssetsList() {
         navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))
     }, [])
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
-    const isSmartPay = !!useWallet()?.owner
-    const filteredAssets = useMemo(() => {
-        if (isSmartPay) return assets.filter((x) => x.chainId === ChainId.Polygon)
-        return assets
-    }, [assets, isSmartPay])
-
+    const filteredAssets = assets
     const hasLowValueToken = useMemo(() => {
         return !!filteredAssets.find((x) => {
             if (isNativeTokenAddress(x.address)) return false

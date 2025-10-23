@@ -271,7 +271,6 @@ export enum EthereumMethodType {
 
     // Mask Network
     MASK_ADD_WALLET = 'MASK_ADD_WALLET',
-    MASK_FUND = 'mask_fund',
     MASK_LOGIN = 'MASK_LOGIN',
     MASK_LOGOUT = 'MASK_LOGOUT',
     MASK_REMOVE_WALLET = 'MASK_REMOVE_WALLET',

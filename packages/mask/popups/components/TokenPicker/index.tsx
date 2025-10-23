@@ -185,12 +185,11 @@ export const TokenPicker = memo(function TokenPicker({
         return fuse.search(keyword).map((x) => x.item)
     }, [fuse, keyword])
 
-    const isSmartPay = !!useWallet()?.owner
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const filteredNetworks = useMemo(() => {
-        const list = isSmartPay ? networks.filter((x) => x.chainId === ChainId.Polygon && !x.isCustomized) : networks
+        const list = networks
         return chains ? list.filter((x) => chains.includes(x.chainId)) : list
-    }, [chains, networks, isSmartPay])
+    }, [chains, networks])
     const selectedIndex = filteredAssets.findIndex((x) => x.chainId === chainId && isSameAddress(x.address, address))
 
     return (
