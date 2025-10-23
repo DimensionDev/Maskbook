@@ -885,8 +885,8 @@ msgstr "현재 기초 기스비는 {0} Gwei"
 #~ msgstr "현재 관리자 계정"
 
 #: popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
-msgstr ""
+#~ msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
+#~ msgstr ""
 
 #: popups/components/GasSettingMenu/index.tsx
 #: popups/hooks/useGasOptionsMenu.tsx
@@ -2429,8 +2429,8 @@ msgid "Remove Wallet"
 msgstr "월렛 삭제"
 
 #: popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Remove Wallet?"
-msgstr "월렛을 삭제하시겠습니까?"
+#~ msgid "Remove Wallet?"
+#~ msgstr "월렛을 삭제하시겠습니까?"
 
 #: popups/modals/PersonaRenameModal/index.tsx
 #: popups/pages/Wallet/CreateWallet/Derive.tsx

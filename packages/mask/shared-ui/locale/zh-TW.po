@@ -885,8 +885,8 @@ msgstr ""
 #~ msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
-msgstr ""
+#~ msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
+#~ msgstr ""
 
 #: popups/components/GasSettingMenu/index.tsx
 #: popups/hooks/useGasOptionsMenu.tsx
@@ -2429,8 +2429,8 @@ msgid "Remove Wallet"
 msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Remove Wallet?"
-msgstr ""
+#~ msgid "Remove Wallet?"
+#~ msgstr ""
 
 #: popups/modals/PersonaRenameModal/index.tsx
 #: popups/pages/Wallet/CreateWallet/Derive.tsx
