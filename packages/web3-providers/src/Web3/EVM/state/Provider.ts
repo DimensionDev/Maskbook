@@ -1,9 +1,4 @@
-import {
-    mapSubscription,
-    mergeSubscription,
-    type Account,
-    type StorageObject,
-} from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, type Account, type StorageObject } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     type ChainId,

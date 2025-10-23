@@ -1,12 +1,7 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { MaskTabList, useTabs, type MaskTabListProps } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    useChainContext,
-    useNetworkContext,
-    useNetworkDescriptors,
-    useWeb3Utils,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useNetworkDescriptors, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'

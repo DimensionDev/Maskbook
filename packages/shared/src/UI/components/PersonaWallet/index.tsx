@@ -39,19 +39,19 @@ export function ManageWallet({ manageWallets, persona, name, address }: ManageWa
 
     return (
         <Box className={classes.persona}>
-                <Box>
-                    <Icons.Masks />
-                </Box>
-                <Stack justifyContent="center">
-                    <Typography variant="body1" className={classes.nickname}>
-                        {persona?.nickname || name}
-                    </Typography>
-                    <Typography variant="caption" className={classes.finger}>
-                        {persona?.identifier.rawPublicKey ?
-                            formatPersonaFingerprint(persona.identifier.rawPublicKey || '')
-                        :   <FormattedAddress address={address} size={10} formatter={formatEthereumAddress} />}
-                    </Typography>
-                </Stack>
+            <Box>
+                <Icons.Masks />
             </Box>
+            <Stack justifyContent="center">
+                <Typography variant="body1" className={classes.nickname}>
+                    {persona?.nickname || name}
+                </Typography>
+                <Typography variant="caption" className={classes.finger}>
+                    {persona?.identifier.rawPublicKey ?
+                        formatPersonaFingerprint(persona.identifier.rawPublicKey || '')
+                    :   <FormattedAddress address={address} size={10} formatter={formatEthereumAddress} />}
+                </Typography>
+            </Stack>
+        </Box>
     )
 }

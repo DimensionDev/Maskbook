@@ -593,8 +593,8 @@ msgid "Collectible"
 msgstr ""
 
 #: popups/components/NFTAvatarPicker/index.tsx
-msgid "Coming soon"
-msgstr ""
+#~ msgid "Coming soon"
+#~ msgstr ""
 
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx

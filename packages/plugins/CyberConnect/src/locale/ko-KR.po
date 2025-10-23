@@ -17,8 +17,8 @@ msgstr ""
 "X-Crowdin-File-ID: 960\n"
 
 #: src/SiteAdaptor/ConnectButton.tsx
-msgid "Coming soon"
-msgstr ""
+#~ msgid "Coming soon"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "CyberConnect"

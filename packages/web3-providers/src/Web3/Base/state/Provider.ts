@@ -1,13 +1,7 @@
 import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
-import {
-    type Account,
-    getSiteType,
-    mapSubscription,
-    mergeSubscription,
-    type StorageObject,
-} from '@masknet/shared-base'
+import { type Account, getSiteType, mapSubscription, mergeSubscription, type StorageObject } from '@masknet/shared-base'
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
 

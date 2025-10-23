@@ -5,11 +5,7 @@ import {
     type MessageRequest,
     type MessageResponse,
 } from '@masknet/web3-shared-evm'
-import {
-    MessageStateType,
-    type TransferableMessage,
-    isSameURL,
-} from '@masknet/web3-shared-base'
+import { MessageStateType, type TransferableMessage, isSameURL } from '@masknet/web3-shared-base'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { MaskWalletProviderInstance } from '../providers/index.js'
