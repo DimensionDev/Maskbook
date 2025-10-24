@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-10-24 02:54\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -23,3 +23,4 @@ msgstr "フィアット・オンランプ"
 #: src/SiteAdaptor/index.tsx
 msgid "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
 msgstr ""
+
