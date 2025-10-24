@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:56\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -27,3 +27,4 @@ msgstr "GitHubで報告"
 #: src/components/ErrorBoundary/CrashUI.tsx
 msgid "Try to recover"
 msgstr "復旧を試みます"
+
