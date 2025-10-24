@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-15 08:27\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -37,8 +37,8 @@ msgstr ""
 msgid "Can not follow: {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 #: src/SiteAdaptor/components/ProfilePopup.tsx
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 msgid "Change"
 msgstr "切换"
 
@@ -60,15 +60,15 @@ msgstr "当前钱包不支持与 Lens 协议交互。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Failed to set up Web3 Profile wallets. Please try again."
-#~ msgstr "无法设置 Web3 个人资料钱包。请重试。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "关注"
 
@@ -81,8 +81,8 @@ msgstr "关注"
 msgid "Follow Lens handle"
 msgstr "关注Lens handle"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Following"
 msgstr "已关注"
 
@@ -129,7 +129,7 @@ msgstr "先前的取消关注交易正在处理中，请稍候，然后重试。
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Save failed"
-#~ msgstr "保存失败"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Saved"
@@ -141,7 +141,7 @@ msgstr "设置钱包，在每个社交媒体帐户上显示 Web3 足迹和打赏
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Set up Web3 Profile wallets successfully."
-#~ msgstr "成功设置 Web3 个人资料钱包。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
@@ -185,7 +185,8 @@ msgstr "查看"
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr "Web3 名片"
+
