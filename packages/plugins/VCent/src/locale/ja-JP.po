@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:56\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -16,7 +16,6 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1004\n"
 
-#. placeholder {0}: tweet.amount_usd
 #: src/SiteAdaptor/TweetDialog.tsx
 msgid "<0>Latest offer at </0><1>${0}</1>"
 msgstr ""
@@ -33,3 +32,4 @@ msgstr "実行"
 #: src/SiteAdaptor/index.tsx
 msgid "Valuables"
 msgstr "貴重な"
+
