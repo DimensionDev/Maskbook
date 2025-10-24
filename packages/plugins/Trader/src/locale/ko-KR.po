@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -40,8 +40,8 @@ msgstr ""
 msgid "{0} Network fee"
 msgstr ""
 
-#. placeholder {0}: fromNetwork?.name || ''
-#. placeholder {0}: toNetwork?.name || ''
+#. placeholder {0}: fromNetwork?.name
+#. placeholder {0}: toNetwork?.name
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx
 msgid "{0} Pool"
@@ -49,8 +49,8 @@ msgstr ""
 
 #. placeholder {0}: fromNetwork?.fullName || '--'
 #. placeholder {1}: toNetwork?.fullName || '--'
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} to {1}"
 msgstr ""
 
@@ -59,15 +59,10 @@ msgstr ""
 msgid "{0}m"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
-msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom} other {}}"
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
 msgstr ""
-
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#~ msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
-#~ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "{mins}min"
@@ -107,8 +102,8 @@ msgstr "활동"
 msgid "Aggregator"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Approving"
 msgstr ""
 
@@ -121,15 +116,15 @@ msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridge"
 msgstr ""
 
@@ -157,8 +152,8 @@ msgstr "바로 구매"
 msgid "Check on Explorer"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Checking Approve"
 msgstr ""
 
@@ -166,8 +161,8 @@ msgstr ""
 msgid "Complete"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 #: src/SiteAdaptor/trader/views/SelectLiquidity.tsx
+#: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Confirm"
 msgstr ""
 
@@ -185,8 +180,8 @@ msgstr "스왑 확인"
 msgid "Custom"
 msgstr "커스텀"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Data"
 msgstr ""
 
@@ -203,8 +198,8 @@ msgstr ""
 msgid "DSearch"
 msgstr ""
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: src/SiteAdaptor/trader/hooks/useSwappable.ts
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Enter an Amount"
 msgstr ""
 
@@ -213,10 +208,10 @@ msgid "Enter gas limit"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx
-#: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingView.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Exchange"
 msgstr "스왑"
 
@@ -224,8 +219,8 @@ msgstr "스왑"
 msgid "Failed"
 msgstr "실패"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Failed to bridge"
 msgstr ""
 
@@ -241,16 +236,16 @@ msgstr "빠름"
 msgid "Fastest"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TrendingView.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
+#: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Floor Price"
 msgstr "바닥 가격"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "From"
 msgstr "보낸 사람"
 
@@ -284,14 +279,13 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-msgid ""
-"In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
+msgid "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
 "than estimated, and any unused funds will remain in the original address."
 msgstr ""
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: src/SiteAdaptor/trader/hooks/useSwappable.ts
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
@@ -303,8 +297,8 @@ msgstr "아이템"
 msgid "Load failed"
 msgstr "로딩 실패"
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Loading"
 msgstr "로딩 중"
 
@@ -346,22 +340,22 @@ msgstr "방법"
 msgid "Minimum received"
 msgstr ""
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: src/SiteAdaptor/trader/hooks/useSwappable.ts
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Missing dex contract address"
 msgstr ""
 
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Network"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Network fee"
 msgstr ""
 
@@ -373,9 +367,9 @@ msgstr ""
 msgid "NFTs"
 msgstr ""
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-#: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "No Data"
 msgstr "데이터 없음"
 
@@ -419,8 +413,8 @@ msgstr ""
 msgid "Powered by"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingView.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Price"
 msgstr "가격"
 
@@ -428,8 +422,8 @@ msgstr "가격"
 msgid "Priority fee"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Quote expired. Update to receive a new quote."
 msgstr ""
 
@@ -451,10 +445,10 @@ msgstr ""
 msgid "Rank #{0}"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Rate"
 msgstr ""
 
@@ -466,8 +460,8 @@ msgstr ""
 msgid "Select Liquidity"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Sending"
 msgstr ""
 
@@ -489,14 +483,14 @@ msgstr ""
 msgid "Slow"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Swap"
 msgstr "스왑"
 
@@ -525,8 +519,8 @@ msgstr ""
 msgid "The custom amount entered may be higher than the required network fee."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."
 msgstr ""
 
@@ -542,10 +536,10 @@ msgstr ""
 msgid "Time"
 msgstr "시간"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "To"
 msgstr "받는 사람"
 
@@ -578,8 +572,8 @@ msgstr ""
 msgid "Transaction in progress. Thank you for your patience."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Transaction rejected"
 msgstr ""
 
@@ -605,8 +599,8 @@ msgstr ""
 msgid "Try token from different chains"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Update Quote"
 msgstr ""
 
@@ -641,3 +635,4 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Your transaction should be done in <0/>"
 msgstr ""
+
