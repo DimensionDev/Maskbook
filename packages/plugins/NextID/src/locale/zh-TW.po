@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-10-24 02:56\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -92,3 +92,4 @@ msgstr "簽署失敗"
 #: src/components/BindDialog.tsx
 msgid "Wallet sign succeeded."
 msgstr "簽署成功"
+
