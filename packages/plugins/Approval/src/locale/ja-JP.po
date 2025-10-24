@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-10-24 02:54\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -24,7 +24,7 @@ msgstr "承認"
 
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #~ msgid "Approved Amount"
-#~ msgstr "承認済み金額"
+#~ msgstr ""
 
 #. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
@@ -70,3 +70,4 @@ msgstr "取り消し"
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr "トークン"
+
