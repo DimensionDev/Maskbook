@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:47\n"
+"PO-Revision-Date: 2025-10-24 02:56\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -17,8 +17,8 @@ msgstr ""
 "X-Crowdin-File-ID: 960\n"
 
 #: src/SiteAdaptor/ConnectButton.tsx
-msgid "Coming soon"
-msgstr "crwdns32836:0crwdne32836:0"
+#~ msgid "Coming soon"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "CyberConnect"
