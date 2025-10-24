@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-10-24 02:54\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -176,3 +176,4 @@ msgstr "エクスプローラーで表示"
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
+
