@@ -19,7 +19,6 @@ export function useWallets() {
                 } as Wallet
             })
             .sort((a, b) => {
-                if (a.owner && !b.owner) return 1
                 const timestampA = a.createdAt.getTime()
                 const timestampB = b.createdAt.getTime()
                 if (timestampA - timestampB > 10000) {

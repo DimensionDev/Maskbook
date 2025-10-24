@@ -1,9 +1,8 @@
-import { debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
+import { debounce, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
     type Wallet,
-    type ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
     ValueRef,
@@ -13,17 +12,16 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { BaseEIP4337WalletProvider, type EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import type { BaseHostedStorage } from './BaseHosted.js'
+import { BaseHostedProvider, type BaseHostedStorage } from './BaseHosted.js'
 import { Privy } from '@masknet/web3-providers'
 
 export let MaskWalletProviderInstance: MaskWalletProvider
 export function setMaskWalletProviderInstance(mask: MaskWalletProvider) {
     MaskWalletProviderInstance = mask
 }
-export class MaskWalletProvider extends BaseEIP4337WalletProvider {
+export class MaskWalletProvider extends BaseHostedProvider {
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
     private walletsSubscription = createSubscriptionFromValueRef(this.ref)
     protected override async io_renameWallet(address: string, name: string): Promise<void> {
@@ -32,19 +30,15 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     constructor(
         private context: WalletAPI.MaskWalletIOContext,
         walletStorage: BaseHostedStorage,
-        eip4337Storage: EIP4337ProviderStorage,
     ) {
-        super(ProviderType.MaskWallet, walletStorage, eip4337Storage)
+        super(ProviderType.MaskWallet, walletStorage)
     }
 
     private async updateImmediately() {
         const wallets = this.context.wallets.getCurrentValue()
 
         // update local wallets immediately
-        this.ref.value = sortBy(
-            uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
-            (x) => !!x.owner,
-        )
+        this.ref.value = uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address))
     }
 
     private async update() {
@@ -75,7 +69,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         if (!isEqual(result, super.wallets)) {
             await this.updateWallets(result)
         }
-        this.ref.value = sortBy(result, (x) => !!x.owner)
+        this.ref.value = result
     }
 
     override get subscription() {
@@ -115,8 +109,6 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
-        const scWallets = this.wallets.filter((x) => isSameAddress(x.owner, address))
-        if (scWallets.length) await super.removeWallets(scWallets)
         if (isSameAddress(this.hostedAccount, address)) await this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
         await this.context.removeWallet(address, password)
@@ -126,7 +118,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         await super.removeWallets(wallets)
         for (const wallet of wallets) {
             if (isSameAddress(this.hostedAccount, wallet.address)) await this.walletStorage?.account.setValue('')
-            if (!wallet.owner) await this.context.removeWallet(wallet.address)
+            await this.context.removeWallet(wallet.address)
         }
     }
 
@@ -144,15 +136,12 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     override async connect(
         chainId: ChainId,
         address?: string,
-        owner?: {
-            account: string
-            identifier?: ECKeyIdentifier
-        },
+
         silent?: boolean,
     ) {
         if (getExtensionSiteType() === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
-                await this.switchAccount(address, owner)
+                await this.switchAccount(address)
                 await this.switchChain(chainId)
 
                 return {
@@ -172,15 +161,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
 
         // switch account
         if (!isSameAddress(this.hostedAccount, account?.address)) {
-            await this.switchAccount(
-                account.address,
-                account.owner ?
-                    {
-                        account: account.owner,
-                        identifier: account.identifier,
-                    }
-                :   undefined,
-            )
+            await this.switchAccount(account.address)
         }
 
         // switch chain

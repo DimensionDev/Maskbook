@@ -13,13 +13,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
-import {
-    useChainContext,
-    useEnvironmentContext,
-    useNativeTokenPrice,
-    useSmartPayChainId,
-    useWallet,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useEnvironmentContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import {
@@ -175,7 +169,6 @@ export function CreateTokenRedPacket() {
     const wallet = useWallet()
     const { pluginID } = useEnvironmentContext()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
-    const smartPayChainId = useSmartPayChainId()
 
     // #region select token
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
@@ -357,7 +350,6 @@ export function CreateTokenRedPacket() {
                             classes={{ label: classes.label, root: classes.gasSettings }}
                             nativeToken={nativeToken}
                             nativeTokenPrice={nativeTokenPrice}
-                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                             gasConfig={gasOption}
                             gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
                             onChange={setGasOption}

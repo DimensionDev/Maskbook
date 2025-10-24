@@ -1,14 +1,10 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import defer * as web3_utils from 'web3-utils'
-import type { AbiItem } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
-import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json' with { type: 'json' }
-import { isValidChainId } from '../helpers/isValidChainId.js'
+import type { Wallet } from '@masknet/shared-base'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { parseChainId } from '../helpers/parseChainId.js'
 import { createJsonRpcPayload } from '../helpers/createJsonRpcPayload.js'
-import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
 import {
     type Transaction,
     type TransactionOptions,
@@ -16,7 +12,6 @@ import {
     type EIP3085Descriptor,
     EthereumMethodType,
 } from '../types/index.js'
-import { abiCoder } from '../helpers/abiCoder.js'
 import { readonlyMethodType } from '../helpers/isReadonlyMethodType.js'
 import { riskyMethodType } from '../helpers/isRiskyMethodType.js'
 import { gasConsumingMethodType } from '../helpers/isGasConsumingMethodType.js'
@@ -53,30 +48,8 @@ export class PayloadEditor {
         }
     }
 
-    get owner() {
-        const { method, params } = this.payload
-        switch (method) {
-            case EthereumMethodType.MASK_FUND:
-                const [proof] = params as [Proof]
-                const { ownerAddress } = JSON.parse(proof.payload) as ProofPayload
-                return ownerAddress
-            case EthereumMethodType.MASK_DEPLOY:
-                const [owner] = params as [string, ECKeyIdentifier]
-                return owner
-            default:
-                return
-        }
-    }
-
     get identifier() {
-        const { method, params } = this.payload
-        switch (method) {
-            case EthereumMethodType.MASK_DEPLOY:
-                const [_, identifier] = params as [string, ECKeyIdentifier]
-                return identifier
-            default:
-                return
-        }
+        return
     }
 
     get chainId() {
@@ -104,43 +77,6 @@ export class PayloadEditor {
                 return (params as [Transaction])[0]
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 return (params as [string, Transaction])[1]
-            case EthereumMethodType.MASK_DEPLOY: {
-                const chainId = this.options?.chainId
-                if (!isValidChainId(chainId)) throw new Error('Unknown chain id.')
-
-                const [owner] = params as [string]
-
-                // compose a fake transaction to be accepted by Transaction Watcher
-
-                return {
-                    from: owner,
-                    to: getSmartPayConstant(chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
-                    chainId,
-                    data: abiCoder.encodeFunctionCall(
-                        CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
-                        ['0x', web3_utils.toHex(0)],
-                    ),
-                }
-            }
-            case EthereumMethodType.MASK_FUND: {
-                const chainId = this.options?.chainId
-                if (!isValidChainId(chainId)) throw new Error('Unknown chain id.')
-
-                const [proof] = params as [Proof]
-                const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
-
-                // compose a fake transaction to be accepted by Transaction Watcher
-                return {
-                    from: ownerAddress,
-                    // it's a not-exist address, use the zero address as a placeholder
-                    to: ZERO_ADDRESS,
-                    chainId,
-                    data: abiCoder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem, [
-                        ownerAddress,
-                        web3_utils.toHex(nonce),
-                    ]),
-                }
-            }
             default:
                 return
         }
@@ -184,13 +120,7 @@ export class PayloadEditor {
     }
 
     get proof() {
-        const { method, params } = this.payload
-        switch (method) {
-            case EthereumMethodType.MASK_FUND:
-                return (params as [Proof])[0]
-            default:
-                return
-        }
+        return
     }
 
     get signableMessage() {

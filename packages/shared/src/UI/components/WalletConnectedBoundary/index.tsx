@@ -1,6 +1,6 @@
 import { makeStyles, ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
-import { useChainContext, useNativeTokenBalance, useWallet, useSmartPayChainId } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenBalance, useWallet } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SelectProviderModal } from '../../modals/modals.js'
 import { Trans } from '@lingui/react/macro'
@@ -26,7 +26,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
 
     const { account, chainId: chainIdValid } = useChainContext({ chainId: expectedChainId })
     const wallet = useWallet()
-    const smartPayChainId = useSmartPayChainId()
 
     const nativeTokenBalance = useNativeTokenBalance(undefined, {
         chainId: chainIdValid,
@@ -46,7 +45,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
             </ActionButton>
         )
 
-    if (!(wallet?.owner && chainIdValid === smartPayChainId) && isZero(nativeTokenBalance.value ?? '0') && !offChain)
+    if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <ActionButton
                 className={buttonClass}

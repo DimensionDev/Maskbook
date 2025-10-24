@@ -1,10 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { ConfirmDialog } from '@masknet/shared'
 import { EMPTY_LIST, PopupModalRoutes } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
@@ -14,7 +12,6 @@ import { WalletRemoveModal } from '../../../modals/modal-controls.js'
 import { AutoLock } from './AutoLock.js'
 import { ChangeCurrency } from './ChangeCurrency.js'
 import { ChangeNetwork } from './ChangeNetwork.js'
-import { ChangeOwner } from './ChangeOwner.js'
 import { ChangePaymentPassword } from './ChangePaymentPassword.js'
 import { ConnectedOrigins } from './ConnectedOrigins.js'
 import { Contacts } from './Contacts.js'
@@ -68,9 +65,7 @@ export const Component = memo(function WalletSettings() {
         <div className={classes.content}>
             <Box className={cx(classes.item, classes.primaryItem)} onClick={handleSwitchWallet}>
                 <Box className={classes.primaryItemBox}>
-                    {wallet.owner ?
-                        <Icons.SmartPay size={24} />
-                    :   <Icons.MaskBlue size={24} className={classes.maskBlue} />}
+                    <Icons.MaskBlue size={24} className={classes.maskBlue} />
                     <div className={classes.walletInfo}>
                         <Typography className={classes.primaryItemText}>{wallet.name}</Typography>
                         <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
@@ -79,72 +74,33 @@ export const Component = memo(function WalletSettings() {
                 <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
             </Box>
             <List dense className={classes.list} data-hide-scrollbar>
-                {wallet.owner ?
-                    <ChangeOwner />
-                :   null}
                 <Rename />
                 <Contacts />
                 <HidingScamTx />
                 <DisablePermit />
-                {wallet.owner ? null : <ConnectedOrigins />}
+                <ConnectedOrigins />
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />
-                {wallet.owner ? null : (
-                    <>
-                        <ShowPrivateKey />
-                        <ChangeNetwork />
-                    </>
-                )}
+                <ShowPrivateKey />
+                <ChangeNetwork />
             </List>
-            {wallet.owner ? null : (
-                <Box className={classes.bottomAction}>
-                    <ActionButton
-                        fullWidth
-                        disabled={isTheFirstWallet}
-                        onClick={async () => {
-                            const ownedWallets =
-                                !wallet?.address ? [] : allWallets.filter((x) => isSameAddress(x.owner, wallet.address))
-                            if (ownedWallets.length) {
-                                const currentWallet = formatEthereumAddress(wallet.address, 4)
-                                const other_wallets = ownedWallets
-                                    .map((x) => formatEthereumAddress(x.address, 4))
-                                    .join(',')
-                                const confirmed = await ConfirmDialog.openAndWaitForClose({
-                                    title: <Trans>Remove Wallet?</Trans>,
-                                    message: (
-                                        <Typography className={classes.confirmMessage}>
-                                            <Trans>
-                                                Current wallet (
-                                                <Typography className={classes.bold} component="span">
-                                                    {currentWallet}
-                                                </Typography>
-                                                ) is the management account of SmartPay wallet (
-                                                <Typography className={classes.bold} component="span">
-                                                    {other_wallets}
-                                                </Typography>
-                                                ).
-                                                <br />
-                                                Deleting the current wallet will result in the deletion of the SmartPay
-                                                wallet simultaneously.
-                                            </Trans>
-                                        </Typography>
-                                    ),
-                                })
-                                if (!confirmed) return
-                            }
-                            await WalletRemoveModal.openAndWaitForClose({
-                                title: <Trans>Remove</Trans>,
-                                wallet,
-                            })
-                        }}
-                        width={368}
-                        color="error"
-                        className={classes.removeWalletButton}>
-                        <Trans>Remove Wallet</Trans>
-                    </ActionButton>
-                </Box>
-            )}
+            <Box className={classes.bottomAction}>
+                <ActionButton
+                    fullWidth
+                    disabled={isTheFirstWallet}
+                    onClick={async () => {
+                        await WalletRemoveModal.openAndWaitForClose({
+                            title: <Trans>Remove</Trans>,
+                            wallet,
+                        })
+                    }}
+                    width={368}
+                    color="error"
+                    className={classes.removeWalletButton}>
+                    <Trans>Remove Wallet</Trans>
+                </ActionButton>
+            </Box>
         </div>
     )
 })

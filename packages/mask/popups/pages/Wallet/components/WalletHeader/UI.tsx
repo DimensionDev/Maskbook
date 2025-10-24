@@ -154,7 +154,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                 <div
                     className={classes.networkSelector}
                     onClick={(event) => {
-                        if (!(!disabled && !wallet.owner)) return
+                        if (disabled) return
                         onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork?.iconUrl ?
@@ -168,7 +168,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     {networkName}
                                 </Typography>
                             </TextOverflowTooltip>
-                            {!disabled && !wallet.owner ?
+                            {!disabled ?
                                 <Icons.ArrowDrop
                                     size={20}
                                     className={classes.arrow}
@@ -199,9 +199,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         if (disabled) return
                         onActionClick()
                     }}>
-                    {wallet.owner ?
-                        <Icons.SmartPay size={30} />
-                    :   <Icons.MaskBlue size={30} />}
+                    <Icons.MaskBlue size={30} />
                     <Box ml={0.5} overflow="hidden">
                         <TextOverflowTooltip title={wallet.name}>
                             <Typography className={classes.nickname}>{wallet.name}</Typography>

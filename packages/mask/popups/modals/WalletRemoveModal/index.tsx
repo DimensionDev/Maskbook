@@ -39,9 +39,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 return
             }
             const index = wallets.findIndex((x) => isSameAddress(x.address, wallet.address))
-            const remainWallets = wallets.filter(
-                (x) => !isSameAddress(x.address, wallet.address) && !isSameAddress(x.owner, wallet.address),
-            )
+            const remainWallets = wallets.filter((x) => !isSameAddress(x.address, wallet.address))
             let nextWallet = wallets[index + 1] || wallets[0]
             if (!remainWallets.includes(nextWallet)) nextWallet = remainWallets[0]
 

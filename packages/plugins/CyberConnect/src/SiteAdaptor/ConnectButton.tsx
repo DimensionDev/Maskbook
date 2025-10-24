@@ -96,11 +96,8 @@ export default function ConnectButton({ address }: { address: string }) {
                     loading={isLoading}
                     className={cx(classes.button, { [classes.isFollowing]: isFollowing })}
                     onClick={handleClick}
-                    variant="roundedContained"
-                    disabled={!!wallet?.owner}>
-                    {wallet?.owner ?
-                        <Trans>Coming soon</Trans>
-                    : !isFollowing ?
+                    variant="roundedContained">
+                    {!isFollowing ?
                         <Trans>Follow Now</Trans>
                     :   <Trans>Unfollow</Trans>}
                 </ActionButton>

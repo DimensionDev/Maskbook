@@ -96,17 +96,13 @@ const useStyles = makeStyles()((theme) => ({
 interface UnlockERC20TokenProps {
     transaction: TransactionDetail
     handleChange: (amount: string) => void
-    paymentToken?: string
     onConfigChange: (config: GasConfig) => void
-    onPaymentTokenChange: (paymentToken: string) => void
 }
 
 export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20Token({
     transaction,
     handleChange,
     onConfigChange,
-    onPaymentTokenChange,
-    paymentToken,
 }) {
     const { t } = useLingui()
     const { classes } = useStyles()
@@ -274,10 +270,6 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         defaultGasLimit={transaction.computedPayload.gas}
                         defaultGasConfig={initConfig}
                         onChange={onConfigChange}
-                        onPaymentTokenChange={onPaymentTokenChange}
-                        owner={transaction.owner}
-                        paymentToken={paymentToken}
-                        allowMaskAsGas={transaction.allowMaskAsGas}
                     />
                 :   null}
             </Box>

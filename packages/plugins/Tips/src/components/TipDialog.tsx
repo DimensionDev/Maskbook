@@ -12,8 +12,6 @@ import {
     useNetworkContext,
     useNonFungibleAsset,
     useReverseAddress,
-    useSmartPayChainId,
-    useWallet,
 } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -21,8 +19,6 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useMemo } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
@@ -90,7 +86,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     } = useTip()
     const { pluginID } = useNetworkContext()
     const { data: recipientEns } = useReverseAddress(pluginID, recipientAddress)
-    const wallet = useWallet()
     const { chainId } = useChainContext()
 
     const isTokenTip = tipType === TokenType.Fungible
@@ -158,15 +153,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginIDs = useValueRef(pluginIDsSettings)
 
     const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
-
-    const smartPayChainId = useSmartPayChainId()
-
-    const { setTargetChainId } = TargetRuntimeContext.useContainer()
-
-    useUpdateEffect(() => {
-        if (!(!!wallet?.owner && smartPayChainId)) return
-        setTargetChainId(smartPayChainId)
-    }, [!!wallet?.owner, smartPayChainId])
 
     useMountReport(EventID.EntryTimelineTipsOpen)
 

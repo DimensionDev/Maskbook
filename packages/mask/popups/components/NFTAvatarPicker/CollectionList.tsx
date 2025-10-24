@@ -82,7 +82,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
             {tokens.length ?
                 tokens.map((x, index) => {
                     const isSelected = isSameNFT(pluginID, x, selected)
-                    const disabled = (selected && !isSelected) || wallet?.owner
+                    const disabled = selected && !isSelected
                     return (
                         <CollectibleCard
                             className={cx(classes.item, disabled ? classes.disabled : undefined)}

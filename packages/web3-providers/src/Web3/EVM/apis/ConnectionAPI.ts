@@ -1,7 +1,7 @@
 import defer * as web3_utils from 'web3-utils'
 import { delay } from '@masknet/kit'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import type { Account, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
@@ -364,26 +364,6 @@ export class ConnectionAPI
                 ],
             },
             options,
-        )
-    }
-
-    override async fund(proof: Proof, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.MASK_FUND,
-                params: [proof],
-            },
-            initial,
-        )
-    }
-
-    override async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.MASK_DEPLOY,
-                params: [owner, identifier],
-            },
-            initial,
         )
     }
 

@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { useGasLimit } from '@masknet/web3-hooks-evm'
 import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
-import { SchemaType, isNativeTokenAddress, type GasConfig, getNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -22,7 +22,7 @@ import { useAsyncFn } from 'react-use'
 import { formatTokenBalance } from '../../../../shared/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
-import { useTokenParams, PopupContext } from '../../../hooks/index.js'
+import { useTokenParams } from '../../../hooks/index.js'
 import { ChooseTokenModal } from '../../../modals/modal-controls.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -76,10 +76,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { t } = useLingui()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
-    const { smartPayChainId } = PopupContext.useContainer()
+
     const recipient = params.get('recipient')
     const navigate = useNavigate()
-    const [paymentAddress, setPaymentAddress] = useState<string>()
 
     // Enter from wallet home page, sending token is not decided yet
     const undecided = params.get('undecided') === 'true'
@@ -139,10 +138,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { isPending: isLoadingGasLimit } = gasResult
     const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
     const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig | undefined>()
-    const patchedGasConfig = useMemo(
-        () => ({ gas: gasLimit, ...gasConfig, gasCurrency: paymentAddress }),
-        [gasConfig, paymentAddress, gasLimit],
-    )
+    const patchedGasConfig = useMemo(() => ({ gas: gasLimit, ...gasConfig }), [gasConfig, gasLimit])
     const {
         balance,
         isPending: isLoadingAvailableBalance,
@@ -164,14 +160,10 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
 
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
-        const nativeTokenAddress = getNativeTokenAddress(chainId)
+
         try {
             await Web3.transferFungibleToken(address, recipient, totalAmount, '', {
                 overrides: gasConfig,
-                paymentToken:
-                    paymentAddress ? paymentAddress
-                    : chainId === smartPayChainId ? nativeTokenAddress
-                    : undefined,
                 chainId,
                 gasOptionType: gasConfig?.gasOptionType,
                 providerURL: network?.rpcUrl,
@@ -181,17 +173,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             message = message.includes('"blockNumber":') ? '' : message
             showSnackbar(<Trans>Failed to transfer token: {message}</Trans>, { variant: 'error' })
         }
-    }, [
-        address,
-        chainId,
-        recipient,
-        totalAmount,
-        token?.decimals,
-        gasConfig,
-        paymentAddress,
-        network?.rpcUrl,
-        smartPayChainId,
-    ])
+    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, network?.rpcUrl])
 
     if (undecided)
         return (
@@ -280,10 +262,6 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         defaultGasConfig={gasConfig}
                         defaultGasLimit={gasLimit}
                         defaultChainId={chainId}
-                        paymentToken={paymentAddress}
-                        allowMaskAsGas
-                        onPaymentTokenChange={setPaymentAddress}
-                        owner={wallet?.owner}
                         onChange={setGasConfig}
                     />
                 </ChainContextProvider>

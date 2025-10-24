@@ -52,7 +52,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         messages: {},
     }).storage
 
-    const [address, network, token, settings, provider, { baseHostedStorage, eip4337Storage }] = await Promise.all([
+    const [address, network, token, settings, provider, { baseHostedStorage }] = await Promise.all([
         addressStorage(NetworkPluginID.PLUGIN_EVM),
         networkStorage(NetworkPluginID.PLUGIN_EVM),
         tokenStorage(NetworkPluginID.PLUGIN_EVM),
@@ -68,7 +68,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
 
     const state: Web3State = lazyObject({
         Settings: () => new Settings.EVMSettings(settings),
-        Provider: () => new Provider.EVMProvider(context, provider, baseHostedStorage, eip4337Storage),
+        Provider: () => new Provider.EVMProvider(context, provider, baseHostedStorage),
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
         BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),
         Network: () => new Network.EVMNetwork(NetworkPluginID.PLUGIN_EVM, network.networkID, network.networks),

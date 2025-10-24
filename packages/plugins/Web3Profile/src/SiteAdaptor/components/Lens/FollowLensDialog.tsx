@@ -186,8 +186,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         [handleFollow, handleUnfollow, isFollowing, showSnackbar],
     )
 
-    const accountConditions =
-        !walletAccount || !currentAccount || !!wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM
+    const accountConditions = !walletAccount || !currentAccount || pluginID !== NetworkPluginID.PLUGIN_EVM
     const operationConditions = followLoading || unfollowLoading
     const disabled = accountConditions || operationConditions
 
@@ -208,7 +207,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     }, [isFollowing, isHovering, lensAccount])
 
     const tips = useMemo(() => {
-        if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM)
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM)
             return <Trans>Current wallet does not support to interact with Lens protocol.</Trans>
         else if (lensAccount?.operations?.canFollow.__typename === 'AccountFollowOperationValidationFailed')
             return <Trans>Can not follow: {lensAccount.operations.canFollow.reason}</Trans>
@@ -216,7 +215,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             return <Trans>The current wallet does not hold a lens and cannot follow/unfollow</Trans>
         }
         return
-    }, [wallet?.owner, lensAccount, pluginID, currentAccount])
+    }, [lensAccount, pluginID, currentAccount])
 
     const avatar = lensAccount?.metadata?.picture
 

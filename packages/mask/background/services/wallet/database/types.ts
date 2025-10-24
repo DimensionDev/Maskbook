@@ -3,10 +3,7 @@ import type { EIP2255Permission } from '@masknet/sdk'
 import type { LegacyWalletRecord } from '@masknet/shared-base'
 
 export interface RequestPayload extends JsonRpcPayload {
-    owner?: string
     identifier?: string
-    paymentToken?: string
-    allowMaskAsGas?: boolean
 }
 interface UnconfirmedRequestChunkRecord {
     /** A chunk of unconfirmed rpc requests */

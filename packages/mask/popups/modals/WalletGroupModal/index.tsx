@@ -6,7 +6,6 @@ import { makeStyles } from '@masknet/theme'
 import { WalletItem } from '../../components/WalletItem/index.js'
 import { useChainContext, useNetworks, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { PopupContext } from '../../hooks/usePopupContext.js'
 import { ECKeyIdentifier, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -35,7 +34,7 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
     const { classes } = useStyles()
     const walletGroup = useWalletGroup()
     const currentWallet = useWallet()
-    const { smartPayChainId } = PopupContext.useContainer()
+
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -48,21 +47,13 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
             const address = wallet.address
             await EVMWeb3.connect({
                 account: address,
-                chainId: wallet.owner && smartPayChainId ? smartPayChainId : chainId,
+                chainId,
                 providerType: ProviderType.MaskWallet,
-                owner: wallet.owner,
                 identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
             })
             closeModal()
-            if (wallet.owner && smartPayChainId) {
-                const network = networks.find((x) => x.chainId === smartPayChainId)
-                if (network) await Network?.switchNetwork(network.ID)
-                await EVMWeb3.switchChain?.(smartPayChainId, {
-                    providerType: ProviderType.MaskWallet,
-                })
-            }
         },
-        [smartPayChainId, chainId, closeModal, Network, networks],
+        [chainId, closeModal, Network, networks],
     )
 
     if (!walletGroup) return

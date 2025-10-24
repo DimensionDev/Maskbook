@@ -4,10 +4,8 @@ import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'
 import { WalletConnect } from '../interceptors/WalletConnect.js'
 import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
-import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 import { CustomNetwork } from '../interceptors/CustomNetwork.js'
-import defer * as SmartPay from '../../../SmartPay/index.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
@@ -17,18 +15,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
             [ProviderType.BitGet]: Composer.from(new MetaMaskLike(ProviderType.BitGet)),
             [ProviderType.Browser]: null,
             [ProviderType.Coinbase]: null,
-            [ProviderType.MaskWallet]: Composer.from(
-                new Popups(),
-                CustomNetwork,
-                new ContractWallet(
-                    ProviderType.MaskWallet,
-                    SmartPay.SmartPayAccount,
-                    SmartPay.SmartPayBundler,
-                    SmartPay.SmartPayFunder,
-                    this.signWithPersona,
-                ),
-                new MaskWallet(),
-            ),
+            [ProviderType.MaskWallet]: Composer.from(new Popups(), CustomNetwork, new MaskWallet()),
             [ProviderType.CustomEvent]: Composer.from(new MetaMaskLike(ProviderType.CustomEvent)),
             [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
             [ProviderType.OKX]: Composer.from(new MetaMaskLike(ProviderType.OKX)),

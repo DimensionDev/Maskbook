@@ -107,15 +107,7 @@ export namespace WalletAPI {
         /** Switch to the designate chain. */
         switchChain(chainId: ChainId): Promise<void>
         /** Create the connection. */
-        connect(
-            chainId?: ChainId,
-            address?: string,
-            owner?: {
-                account: string
-                identifier?: ECKeyIdentifier
-            },
-            silent?: boolean,
-        ): Promise<Account<ChainId>>
+        connect(chainId?: ChainId, address?: string, silent?: boolean): Promise<Account<ChainId>>
         /** Dismiss the connection. */
         disconnect(): Promise<void>
     }

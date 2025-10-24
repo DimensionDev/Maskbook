@@ -1,6 +1,4 @@
 import { ProviderType, ChainId, type RequestArguments } from '@masknet/web3-shared-evm'
-import { EVMWalletProviders } from '../providers/index.js'
-import type { BaseEIP4337WalletProvider } from '../providers/BaseContractWallet.js'
 import { evm } from '../../../Manager/registry.js'
 import { ConnectionContext } from '../libs/ConnectionContext.js'
 import type { EVMConnectionOptions } from '../types/index.js'
@@ -16,14 +14,6 @@ const initializer = {
     },
     getDefaultProviderType() {
         return evm.state?.Provider?.providerType?.getCurrentValue()
-    },
-    getDefaultOwner(providerType: ProviderType) {
-        const provider = EVMWalletProviders[providerType] as BaseEIP4337WalletProvider | undefined
-        return provider?.ownerAccount
-    },
-    getDefaultIdentifier(providerType: ProviderType) {
-        const provider = EVMWalletProviders[providerType] as BaseEIP4337WalletProvider | undefined
-        return provider?.ownerIdentifier
     },
 }
 

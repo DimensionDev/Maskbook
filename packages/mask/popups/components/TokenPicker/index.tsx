@@ -5,7 +5,7 @@ import { EmptyStatus, SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTextField } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useFungibleAssets, useNetworks, useUserTokenBalances, useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useFungibleAssets, useNetworks, useUserTokenBalances } from '@masknet/web3-hooks-base'
 import { useOKXTokenList } from '@masknet/web3-hooks-evm'
 import {
     isEqual,
@@ -15,7 +15,7 @@ import {
     rightShift,
     type ReasonableNetwork,
 } from '@masknet/web3-shared-base'
-import { ChainId, getMaskTokenAddress, getNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, getMaskTokenAddress, getNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, type BoxProps } from '@mui/material'
 import Fuse from 'fuse.js'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -185,12 +185,11 @@ export const TokenPicker = memo(function TokenPicker({
         return fuse.search(keyword).map((x) => x.item)
     }, [fuse, keyword])
 
-    const isSmartPay = !!useWallet()?.owner
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const filteredNetworks = useMemo(() => {
-        const list = isSmartPay ? networks.filter((x) => x.chainId === ChainId.Polygon && !x.isCustomized) : networks
+        const list = networks
         return chains ? list.filter((x) => chains.includes(x.chainId)) : list
-    }, [chains, networks, isSmartPay])
+    }, [chains, networks])
     const selectedIndex = filteredAssets.findIndex((x) => x.chainId === chainId && isSameAddress(x.address, address))
 
     return (

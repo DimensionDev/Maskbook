@@ -18,7 +18,6 @@ import { MaskWalletProvider, setMaskWalletProviderInstance } from './MaskWallet.
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
-import type { EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { TrustProvider } from './Trust.js'
 import { TokenPocketProvider } from './TokenPocket.js'
 import { CryptoProvider } from './Crypto.js'
@@ -30,14 +29,10 @@ export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderT
 
 export { MaskWalletProviderInstance } from './MaskWallet.js'
 export let EVMWalletProviders: ReturnType<typeof createEVMWalletProviders>
-export function createEVMWalletProviders(
-    context: WalletAPI.IOContext,
-    hostStorage: BaseHostedStorage,
-    eip4337Storage: EIP4337ProviderStorage,
-) {
+export function createEVMWalletProviders(context: WalletAPI.IOContext, hostStorage: BaseHostedStorage) {
     const p = {
         [ProviderType.None]: new EVMNoneProvider(),
-        [ProviderType.MaskWallet]: new MaskWalletProvider(context.MaskWalletContext, hostStorage, eip4337Storage),
+        [ProviderType.MaskWallet]: new MaskWalletProvider(context.MaskWalletContext, hostStorage),
         [ProviderType.Browser]: new BrowserProvider(),
         [ProviderType.MetaMask]: new MetaMaskProvider(),
         [ProviderType.WalletConnect]:

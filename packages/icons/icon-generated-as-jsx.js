@@ -3646,11 +3646,6 @@ export const SignUpAccount = /*#__PURE__*/ __createIcon('SignUpAccount', [
         u: () => new URL('./general/SignUpAccount.png', import.meta.url).href,
     },
 ])
-export const SmartPay = /*#__PURE__*/ __createIcon('SmartPay', [
-    {
-        u: () => new URL('./general/SmartPay.svg', import.meta.url).href,
-    },
-])
 export const Star = /*#__PURE__*/ __createIcon('Star', [
     {
         j: () =>

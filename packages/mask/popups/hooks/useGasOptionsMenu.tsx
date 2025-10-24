@@ -45,7 +45,6 @@ const useStyles = makeStyles()((theme) => ({
 export function useGasOptionsMenu(
     gasLimit: string | undefined,
     callback: (config: GasConfig, type: GasOptionType) => void,
-    paymentToken?: string,
 ) {
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -58,7 +57,7 @@ export function useGasOptionsMenu(
     const handleClickCustom = useCallback(async () => {
         const result = await GasSettingModal.openAndWaitForClose({
             chainId,
-            config: { gasLimit, paymentToken, ...customGasConfig },
+            config: { gasLimit, ...customGasConfig },
         })
         if (!result) return
 
@@ -79,7 +78,7 @@ export function useGasOptionsMenu(
             })
         }
         callback(result, GasOptionType.CUSTOM)
-    }, [chainId, gasLimit, callback, customGasConfig, paymentToken])
+    }, [chainId, gasLimit, callback, customGasConfig])
 
     const handleClick = useCallback(
         (type: GasOptionType, option: GasOption | undefined) => {

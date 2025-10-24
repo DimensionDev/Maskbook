@@ -8,7 +8,6 @@ export function generateUniqueWalletName(wallets: Wallet[], name: string) {
     const maxIndex =
         max([
             ...wallets
-                .filter((x) => !x.owner)
                 .map((x) => x.name.split(`${baseName} `)[1]?.match(/\((\d+)\)/u)?.[1])
                 .filter((x) => x && !Number.isNaN(x))
                 .map(Number),

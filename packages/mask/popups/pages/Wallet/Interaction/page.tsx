@@ -28,8 +28,6 @@ export const Component = memo(function InteractionPage() {
         }
     }
 
-    const [paymentToken, setPaymentToken] = useState('')
-
     useEffect(() => {
         if (messages.length) return
         navigate(PopupRoutes.Wallet, { replace: true })
@@ -40,8 +38,6 @@ export const Component = memo(function InteractionPage() {
         <Suspense fallback={<LoadingPlaceholder />}>
             <Interaction
                 key={currentRequest.ID}
-                paymentToken={paymentToken}
-                setPaymentToken={setPaymentToken}
                 currentRequest={currentRequest}
                 totalMessages={messages.length}
                 currentMessageIndex={messageIndex}

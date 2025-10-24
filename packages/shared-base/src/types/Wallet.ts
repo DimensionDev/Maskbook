@@ -31,10 +31,6 @@ export interface Wallet {
     createdAt: Date
     /** record updated at */
     updatedAt: Date
-    /** an abstract wallet has a owner */
-    owner?: string
-    /** an abstract wallet has been deployed */
-    deployed?: boolean
     /** persona identifier */
     identifier?: string
     /**
@@ -44,7 +40,7 @@ export interface Wallet {
     mnemonicId?: string
 }
 
-export type UpdatableWallet = Pick<Wallet, 'address' | 'name' | 'owner' | 'identifier'>
+export type UpdatableWallet = Pick<Wallet, 'address' | 'name' | 'identifier'>
 
 export interface LegacyWalletRecord {
     /** ethereum hex address */

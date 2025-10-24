@@ -4,13 +4,12 @@ import { useAsync, useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
 import { toBlob } from 'html-to-image'
 import { Icons } from '@masknet/icons'
-import { timeout } from '@masknet/kit'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { MaskWalletProvider, EVMWeb3 } from '@masknet/web3-providers'
-import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import { generateNewWalletName } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -166,17 +165,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-async function pollResult(address: string) {
-    const subscription = MaskWalletProvider.subscription.wallets
-    if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
-    const { promise, resolve } = Promise.withResolvers()
-    const unsubscribe = subscription.subscribe(() => {
-        if (!subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
-        resolve(true)
-    })
-    return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
-}
-
 export const Component = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
@@ -216,7 +204,6 @@ export const Component = memo(function CreateMnemonic() {
         const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
         if (!result) return
         const address = await Services.Wallet.createWalletFromMnemonicWords(walletName, words.join(' '))
-        await pollResult(address)
         await EVMWeb3.connect({
             silent: true,
             providerType: ProviderType.MaskWallet,

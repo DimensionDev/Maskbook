@@ -81,7 +81,6 @@ export enum PopupRoutes {
     ConnectWallet = '/personas/connect-wallet',
     PersonaSignRequest = '/personas/sign-request',
     RequestPermission = '/request-permission',
-    ChangeOwner = '/wallet/change-owner',
     Friends = '/friends',
     FriendsDetail = '/friends/detail',
     Settings = '/settings',
@@ -121,6 +120,5 @@ export interface PopupRoutesParamsMap {
         close_after_unlock?: boolean
         from?: string | null
     }
-    [PopupRoutes.ChangeOwner]: { contractAccount: string | undefined }
     [PopupRoutes.Contacts]: { selectedToken: string | undefined }
 }

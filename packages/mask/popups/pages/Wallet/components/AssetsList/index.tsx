@@ -3,10 +3,10 @@ import { FormattedCurrency, NetworkIcon, ProgressiveText, TokenIcon } from '@mas
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useFungibleTokenBalance, useNetworks, useWallet } from '@masknet/web3-hooks-base'
+import { useFungibleTokenBalance, useNetworks } from '@masknet/web3-hooks-base'
 import { debank } from '@masknet/web3-providers/helpers'
 import { formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
-import { ChainId, isNativeTokenAddress, type SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, isNativeTokenAddress, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
@@ -188,12 +188,7 @@ export const AssetsList = memo(function AssetsList() {
         navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))
     }, [])
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
-    const isSmartPay = !!useWallet()?.owner
-    const filteredAssets = useMemo(() => {
-        if (isSmartPay) return assets.filter((x) => x.chainId === ChainId.Polygon)
-        return assets
-    }, [assets, isSmartPay])
-
+    const filteredAssets = assets
     const hasLowValueToken = useMemo(() => {
         return !!filteredAssets.find((x) => {
             if (isNativeTokenAddress(x.address)) return false

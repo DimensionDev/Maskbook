@@ -84,7 +84,7 @@ let mockingPrivyPid = Date.now() // Use unix timestamp as pid to avoid duplicate
 export function TransactionRequest(props: InteractionItemProps) {
     const wallet = useWallet()
     const privyWallet = usePrivyWallet(wallet?.address)
-    const { currentRequest: request, setConfirmAction, paymentToken, setPaymentToken } = props
+    const { currentRequest: request, setConfirmAction } = props
     const { classes, cx } = useStyles()
     const [gasConfig, _setGasConfig] = useState<GasConfig | undefined>()
     const [approvedAmount, setApproveAmount] = useState('')
@@ -119,11 +119,6 @@ export function TransactionRequest(props: InteractionItemProps) {
         useEffect(() => {
             client.refetchQueries({ queryKey: latest.current })
         }, [TransactionFormatter, client])
-    }
-
-    // update default payment token from transaction
-    if (!paymentToken && transaction.paymentToken) {
-        setPaymentToken(transaction.paymentToken)
     }
 
     setConfirmAction(async () => {
@@ -196,7 +191,6 @@ export function TransactionRequest(props: InteractionItemProps) {
             },
             options: {
                 ...request.request.options,
-                paymentToken,
             },
         })
         const editor = response ? ErrorEditor.from(null, response) : undefined
@@ -289,26 +283,9 @@ export function TransactionRequest(props: InteractionItemProps) {
 
     const main =
         isUnlockERC20 ?
-            <UnlockERC20Token
-                onConfigChange={setGasConfig}
-                paymentToken={paymentToken}
-                onPaymentTokenChange={setPaymentToken}
-                transaction={transaction}
-                handleChange={setApproveAmount}
-            />
-        : isUnlockERC721 ?
-            <UnlockERC721Token
-                onConfigChange={setGasConfig}
-                paymentToken={paymentToken}
-                onPaymentTokenChange={setPaymentToken}
-                transaction={transaction}
-            />
-        :   <TransactionPreview
-                transaction={transaction}
-                onConfigChange={setGasConfig}
-                paymentToken={paymentToken}
-                onPaymentTokenChange={setPaymentToken}
-            />
+            <UnlockERC20Token onConfigChange={setGasConfig} transaction={transaction} handleChange={setApproveAmount} />
+        : isUnlockERC721 ? <UnlockERC721Token onConfigChange={setGasConfig} transaction={transaction} />
+        : <TransactionPreview transaction={transaction} onConfigChange={setGasConfig} />
     return (
         <>
             {main}

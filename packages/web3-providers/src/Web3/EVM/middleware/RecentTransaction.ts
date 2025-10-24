@@ -8,7 +8,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import defer * as UserTransaction from '../../../SmartPay/libs/UserTransaction.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
@@ -27,27 +26,6 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                     const account = context.config.from ?? context.account
                     const chainId = context.config.chainId ?? context.chainId
                     await Transaction?.addTransaction?.(chainId, account, tx, { ...context.config, draftedAt })
-                    break
-                case EthereumMethodType.MASK_DEPLOY:
-                case EthereumMethodType.MASK_FUND:
-                    const tx_ = context.result as string
-                    if (!tx_ || !context.config) return
-                    await Transaction?.addTransaction?.(context.chainId, '', tx_, {
-                        ...context.config,
-                        from: '',
-                        draftedAt,
-                    })
-                    break
-                case EthereumMethodType.eth_sendUserOperation:
-                    if (!context.userOperation || typeof context.result !== 'string') return
-                    const transaction = UserTransaction.UserTransaction.toTransaction(
-                        context.chainId,
-                        context.userOperation,
-                    )
-                    await Transaction?.addTransaction?.(context.chainId, context.account, context.result, {
-                        ...transaction,
-                        draftedAt,
-                    })
                     break
                 case EthereumMethodType.eth_getTransactionReceipt:
                     const receipt = context.result as TransactionReceipt | null

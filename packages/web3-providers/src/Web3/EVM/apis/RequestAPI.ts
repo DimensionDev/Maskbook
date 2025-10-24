@@ -38,12 +38,6 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                                             options.providerType,
                                             options.chainId,
                                             options.account,
-                                            options.owner ?
-                                                {
-                                                    account: options.owner,
-                                                    identifier: options.identifier,
-                                                }
-                                            :   undefined,
                                             options.silent,
                                         ),
                                     )

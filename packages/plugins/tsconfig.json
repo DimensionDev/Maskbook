@@ -21,7 +21,6 @@
     { "path": "./Savings/tsconfig.json" },
     { "path": "./ScamSniffer/tsconfig.json" },
     { "path": "./ScamWarning/tsconfig.json" },
-    { "path": "./SmartPay/tsconfig.json" },
     { "path": "./Snapshot/tsconfig.json" },
     { "path": "./SwitchLogo/tsconfig.json" },
     { "path": "./Tips/tsconfig.json" },

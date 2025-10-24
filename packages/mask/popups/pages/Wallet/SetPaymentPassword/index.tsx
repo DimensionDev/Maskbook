@@ -130,8 +130,8 @@ interface WalletItemProps {
 
 const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
     const { classes } = useStyles({})
-    const { address, owner } = wallet
-    const chainId = owner ? ChainId.Polygon : ChainId.Mainnet
+    const { address } = wallet
+    const chainId = ChainId.Mainnet
     const { data: balance = '0', isPending } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
         chainId,
@@ -142,9 +142,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 
     return (
         <Box className={classes.addWalletWrapper}>
-            {owner ?
-                <Icons.SmartPay size={30} />
-            :   <Icons.ETH size={30} />}
+            <Icons.ETH size={30} />
             <div>
                 <Typography className={classes.subTitle}>
                     {domain || formatEthereumAddress(address, 4)}{' '}
@@ -160,12 +158,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                     </Link>
                 </Typography>
                 <ProgressiveText loading={isPending} className={classes.description} fontSize={12} skeletonWidth={50}>
-                    <FormattedBalance
-                        value={balance}
-                        decimals={18}
-                        symbol={owner ? 'Polygon' : 'ETH'}
-                        formatter={formatBalance}
-                    />
+                    <FormattedBalance value={balance} decimals={18} symbol={'ETH'} formatter={formatBalance} />
                 </ProgressiveText>
             </div>
         </Box>
