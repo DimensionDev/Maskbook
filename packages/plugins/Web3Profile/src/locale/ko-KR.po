@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-15 08:27\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -37,8 +37,8 @@ msgstr ""
 msgid "Can not follow: {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 #: src/SiteAdaptor/components/ProfilePopup.tsx
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 msgid "Change"
 msgstr "변경"
 
@@ -60,15 +60,15 @@ msgstr "현재 월렛은 Lens protocol과의 상호작용을 지원하지 않습
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Failed to set up Web3 Profile wallets. Please try again."
-#~ msgstr "Web3 Profile 월렛의 설정이 실패합니다. 다시 시도하세요."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "팔로우"
 
@@ -81,8 +81,8 @@ msgstr "팔로우"
 msgid "Follow Lens handle"
 msgstr "Lens 핸들 팔로우"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Following"
 msgstr "팔로잉"
 
@@ -129,7 +129,7 @@ msgstr "이전의 언팔로우 트랜잭션이 진행하고 있습니다. 다시
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Save failed"
-#~ msgstr "저장 실패"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Saved"
@@ -141,7 +141,7 @@ msgstr "Web3 발자국을 표시하고 각 소셜 미디어 계정에 팁을 받
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Set up Web3 Profile wallets successfully."
-#~ msgstr "Web3 Profile 설정 성공"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
@@ -185,7 +185,8 @@ msgstr "살펴보기"
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"
+
