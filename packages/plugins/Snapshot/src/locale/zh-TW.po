@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-10-24 02:56\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -101,8 +101,8 @@ msgstr ""
 msgid "My vote"
 msgstr ""
 
-#: src/SiteAdaptor/Snapshot.tsx
 #: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/Snapshot.tsx
 msgid "No power"
 msgstr ""
 
@@ -153,10 +153,10 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx
-#: src/SiteAdaptor/PluginDescriptor.tsx
-#: src/SiteAdaptor/ProfileView.tsx
 #: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/ProfileView.tsx
+#: src/SiteAdaptor/PluginDescriptor.tsx
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "Snapshot"
 msgstr ""
 
@@ -176,10 +176,10 @@ msgstr ""
 msgid "View"
 msgstr ""
 
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Vote"
 msgstr ""
 
@@ -212,3 +212,4 @@ msgstr ""
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
 msgstr ""
+
