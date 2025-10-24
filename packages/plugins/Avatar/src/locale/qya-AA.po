@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-10-24 02:56\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -29,8 +29,8 @@ msgid "Change"
 msgstr "crwdns28374:0crwdne28374:0"
 
 #: src/Application/NFTListDialog.tsx
-msgid "Coming soon"
-msgstr "crwdns31328:0crwdne31328:0"
+#~ msgid "Coming soon"
+#~ msgstr ""
 
 #: src/Application/PersonaPage.tsx
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
@@ -39,6 +39,10 @@ msgstr "crwdns28376:0crwdne28376:0"
 #: src/Application/RouterDialog.tsx
 msgid "Edit Profile"
 msgstr "crwdns28380:0crwdne28380:0"
+
+#: src/Application/NFTListDialog.tsx
+msgid "EVM Chains only"
+msgstr "crwdns37413:0crwdne37413:0"
 
 #: src/Application/NFTListDialog.tsx
 msgid "Failed to download image"
