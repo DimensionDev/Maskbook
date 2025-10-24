@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-10-21 08:48\n"
+"PO-Revision-Date: 2025-10-24 02:54\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -495,7 +495,6 @@ msgstr ""
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: popups/pages/Personas/PersonaSignRequest/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: popups/pages/Wallet/EditNetwork/index.tsx
@@ -524,7 +523,6 @@ msgid "Chain ID: {0}"
 msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Change"
 msgstr "更改"
 
@@ -543,8 +541,8 @@ msgstr ""
 
 #: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Wallet/WalletSettings/ChangeOwner.tsx
-msgid "Change Owner"
-msgstr ""
+#~ msgid "Change Owner"
+#~ msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 #: popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
@@ -595,8 +593,8 @@ msgid "Collectible"
 msgstr ""
 
 #: popups/components/NFTAvatarPicker/index.tsx
-msgid "Coming soon"
-msgstr ""
+#~ msgid "Coming soon"
+#~ msgstr ""
 
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -883,12 +881,12 @@ msgid "Current base fee is {0} Gwei"
 msgstr ""
 
 #: popups/pages/Wallet/ChangeOwner/index.tsx
-msgid "Current Management Account"
-msgstr ""
+#~ msgid "Current Management Account"
+#~ msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
-msgstr ""
+#~ msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
+#~ msgstr ""
 
 #: popups/components/GasSettingMenu/index.tsx
 #: popups/hooks/useGasOptionsMenu.tsx
@@ -1310,7 +1308,6 @@ msgstr ""
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/UnlockERC721Token/index.tsx
 #: popups/modals/GasSettingModal/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Gas Fee"
 msgstr ""
@@ -1555,7 +1552,6 @@ msgid "Incorrect Mnemonic Words."
 msgstr ""
 
 #: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 #: popups/pages/Wallet/Unlock/index.tsx
 msgid "Incorrect password"
 msgstr ""
@@ -1572,8 +1568,8 @@ msgid "Incorrect Password"
 msgstr ""
 
 #: popups/pages/Personas/Logout/index.tsx
-msgid "Incorrect payment password."
-msgstr ""
+#~ msgid "Incorrect payment password."
+#~ msgstr ""
 
 #: popups/modals/ShowPrivateKeyModal/index.tsx
 #: popups/modals/WalletRemoveModal/index.tsx
@@ -1714,8 +1710,8 @@ msgid "Local Backup"
 msgstr ""
 
 #: popups/pages/Wallet/ChangeOwner/index.tsx
-msgid "Local persona or wallet only"
-msgstr ""
+#~ msgid "Local persona or wallet only"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Locale Backup"
@@ -2251,23 +2247,20 @@ msgid "Please enter the correct mnemonic words, private key, or upload the corre
 msgstr ""
 
 #: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 msgid "Please enter your backup password."
 msgstr ""
 
 #: popups/pages/Personas/Logout/index.tsx
-msgid "Please enter your payment password."
-msgstr ""
+#~ msgid "Please enter your payment password."
+#~ msgstr ""
 
 #: popups/modals/ConnectProvider/index.tsx
 msgid "Please install your metamask wallet and set up your first wallet."
 msgstr ""
 
-#. placeholder {0}: currentPersona.nickname
-#. placeholder {1}: manageWallets.length
 #: popups/pages/Personas/Logout/index.tsx
-msgid "Please note: This Persona {0} is the management account of above listed SmartPay {1, plural, one {wallet} other {wallets}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona."
-msgstr ""
+#~ msgid "Please note: This Persona {0} is the management account of above listed SmartPay {1, plural, one {wallet} other {wallets}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona."
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Please select the appropriate method to restore your personal data."
@@ -2436,8 +2429,8 @@ msgid "Remove Wallet"
 msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Remove Wallet?"
-msgstr ""
+#~ msgid "Remove Wallet?"
+#~ msgstr ""
 
 #: popups/modals/PersonaRenameModal/index.tsx
 #: popups/pages/Wallet/CreateWallet/Derive.tsx
@@ -2603,8 +2596,8 @@ msgid "Service Agreement"
 msgstr ""
 
 #: popups/pages/Wallet/ChangeOwner/index.tsx
-msgid "Set a New Management Account"
-msgstr ""
+#~ msgid "Set a New Management Account"
+#~ msgstr ""
 
 #: content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
 msgid "Set NFT Photo"
@@ -3199,8 +3192,6 @@ msgstr ""
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "View on Explorer"
 msgstr ""
