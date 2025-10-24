@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-15 08:27\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -37,8 +37,8 @@ msgstr ""
 msgid "Can not follow: {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 #: src/SiteAdaptor/components/ProfilePopup.tsx
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 msgid "Change"
 msgstr "変更"
 
@@ -60,15 +60,15 @@ msgstr "現在のウォレットはレンズプロトコルとのやり取りを
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Failed to set up Web3 Profile wallets. Please try again."
-#~ msgstr "Web3 プロファイルウォレットのセットアップに失敗しました。もう一度やり直してください。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "フォロー"
 
@@ -81,8 +81,8 @@ msgstr "フォロー"
 msgid "Follow Lens handle"
 msgstr "レンズの指示に従ってください"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Following"
 msgstr "フォロー中"
 
@@ -129,7 +129,7 @@ msgstr "以前のフォロー解除トランザクションが処理中です。
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Save failed"
-#~ msgstr "保存できませんでした"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Saved"
@@ -141,7 +141,7 @@ msgstr "Web3フットプリントを表示し、各ソーシャルメディア�
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #~ msgid "Set up Web3 Profile wallets successfully."
-#~ msgstr "Web3 プロファイルウォレットを正常にセットアップしました。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
@@ -185,7 +185,8 @@ msgstr "表示"
 msgid "View your profile in firefly"
 msgstr "あなたのプロフィールをFireflyで見る"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr "Web3 プロフィール"
+
