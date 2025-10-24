@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -17,8 +17,8 @@ msgstr ""
 "X-Crowdin-File-ID: 960\n"
 
 #: src/SiteAdaptor/ConnectButton.tsx
-msgid "Coming soon"
-msgstr ""
+#~ msgid "Coming soon"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "CyberConnect"
@@ -56,3 +56,4 @@ msgstr "没有关注任何人"
 #: src/SiteAdaptor/ConnectButton.tsx
 msgid "Unfollow"
 msgstr "取消关注"
+
