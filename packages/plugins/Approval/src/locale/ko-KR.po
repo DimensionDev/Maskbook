@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-10-24 02:55\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -24,7 +24,7 @@ msgstr "승인"
 
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #~ msgid "Approved Amount"
-#~ msgstr "승인된 금액"
+#~ msgstr ""
 
 #. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
@@ -70,3 +70,4 @@ msgstr "취소 중"
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr "토큰"
+
