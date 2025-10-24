@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-10-24 02:56\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -29,8 +29,8 @@ msgid "Change"
 msgstr ""
 
 #: src/Application/NFTListDialog.tsx
-msgid "Coming soon"
-msgstr ""
+#~ msgid "Coming soon"
+#~ msgstr ""
 
 #: src/Application/PersonaPage.tsx
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
@@ -132,3 +132,4 @@ msgstr ""
 #: src/Application/UploadAvatarDialog.tsx
 msgid "You have set NFT PFP successfully."
 msgstr ""
+
