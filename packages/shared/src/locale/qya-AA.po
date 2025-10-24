@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-10-21 04:18\n"
+"PO-Revision-Date: 2025-10-24 02:54\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -186,8 +186,8 @@ msgid "Approve"
 msgstr "crwdns30778:0crwdne30778:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Approve MASK?"
-msgstr "crwdns30780:0crwdne30780:0"
+#~ msgid "Approve MASK?"
+#~ msgstr ""
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
 #. placeholder {1}: collection?.name || ''
@@ -244,7 +244,6 @@ msgid "By confirming means that you agree to bear the possible risks above."
 msgstr "crwdns32494:0crwdne32494:0"
 
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
@@ -352,8 +351,6 @@ msgstr "crwdns30820:0crwdne30820:0"
 msgid "Community"
 msgstr "crwdns30824:0crwdne30824:0"
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
@@ -578,8 +575,8 @@ msgid "Dismiss"
 msgstr "crwdns30874:0crwdne30874:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Do you want to use MASK tokens to pay gas fee?"
-msgstr "crwdns32504:0crwdne32504:0"
+#~ msgid "Do you want to use MASK tokens to pay gas fee?"
+#~ msgstr ""
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "Domain Request"
@@ -654,8 +651,8 @@ msgid "Enter a max priority fee"
 msgstr "crwdns30906:0crwdne30906:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Enter an amount"
-msgstr "crwdns30908:0crwdne30908:0"
+#~ msgid "Enter an amount"
+#~ msgstr ""
 
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "EVM"
@@ -705,8 +702,8 @@ msgid "Failed to load {0}. Click to retry."
 msgstr "crwdns30912:0{0}crwdne30912:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Failed to load MASK. Click to retry."
-msgstr "crwdns30914:0crwdne30914:0"
+#~ msgid "Failed to load MASK. Click to retry."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Failed to refund Lucky Drop."
@@ -1365,8 +1362,8 @@ msgstr "crwdns32558:0crwdne32558:0"
 #~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
-msgstr "crwdns31154:0crwdne31154:0"
+#~ msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
@@ -1443,8 +1440,8 @@ msgid "Unlisted"
 msgstr "crwdns31172:0crwdne31172:0"
 
 #: src/hooks/useGasCurrencyMenu.tsx
-msgid "Unlock"
-msgstr "crwdns31174:0crwdne31174:0"
+#~ msgid "Unlock"
+#~ msgstr ""
 
 #. placeholder {0}: token.symbol
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
