@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-10-24 02:54\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -24,7 +24,6 @@ msgstr ""
 msgid "contributions"
 msgstr ""
 
-#. placeholder {0}: format(project.metadata.createdAt, 'MMMM do, yyyy')
 #: src/SiteAdaptor/PreviewCard.tsx
 msgid "Created on: {0}"
 msgstr ""
@@ -68,3 +67,4 @@ msgstr ""
 #: src/SiteAdaptor/PreviewCard.tsx
 msgid "View"
 msgstr ""
+
