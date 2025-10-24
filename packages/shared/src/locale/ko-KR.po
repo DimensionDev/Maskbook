@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-10-21 04:18\n"
+"PO-Revision-Date: 2025-10-24 02:54\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -186,8 +186,8 @@ msgid "Approve"
 msgstr "승인"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Approve MASK?"
-msgstr "MASK 승인"
+#~ msgid "Approve MASK?"
+#~ msgstr ""
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
 #. placeholder {1}: collection?.name || ''
@@ -244,7 +244,6 @@ msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
@@ -352,8 +351,6 @@ msgstr "클릭하여 재시도하기"
 msgid "Community"
 msgstr "커뮤니티"
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
@@ -578,8 +575,8 @@ msgid "Dismiss"
 msgstr "확인"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Do you want to use MASK tokens to pay gas fee?"
-msgstr ""
+#~ msgid "Do you want to use MASK tokens to pay gas fee?"
+#~ msgstr ""
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "Domain Request"
@@ -654,8 +651,8 @@ msgid "Enter a max priority fee"
 msgstr "최대 우선 가스비 입력"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Enter an amount"
-msgstr "금액 입력"
+#~ msgid "Enter an amount"
+#~ msgstr ""
 
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "EVM"
@@ -705,8 +702,8 @@ msgid "Failed to load {0}. Click to retry."
 msgstr "{0} 로드 실패. 다시 시도하세요."
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Failed to load MASK. Click to retry."
-msgstr ""
+#~ msgid "Failed to load MASK. Click to retry."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Failed to refund Lucky Drop."
@@ -1365,8 +1362,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
-msgstr "Polygon 네트워크와 상호작용하기 위해서는 MATIC 토큰을 사용하여 가스비로 결제해야 하며, SmartPay를 통해 Polygon 네트워크에서 MASK 토큰으로 가스 요금을 결제할 수 있습니다."
+#~ msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
@@ -1443,8 +1440,8 @@ msgid "Unlisted"
 msgstr ""
 
 #: src/hooks/useGasCurrencyMenu.tsx
-msgid "Unlock"
-msgstr "언락"
+#~ msgid "Unlock"
+#~ msgstr ""
 
 #. placeholder {0}: token.symbol
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
