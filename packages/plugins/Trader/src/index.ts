@@ -1,5 +1,4 @@
 export * from './messages.js'
-export * from './locale/languages.js'
 export * from './config.js'
 
 export * from './SiteAdaptor/trader/contexts/index.js'

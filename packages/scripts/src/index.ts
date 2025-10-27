@@ -4,8 +4,6 @@ export { buildCloudflare } from './cloudflare/index.ts'
 
 // Tools
 export { clean, syncDevelop, changesetRelease } from './commands/index.ts'
-export { syncLanguages } from './locale-kit-next/index.ts'
-export { runLinguiExtract, runLinguiCompile } from './locale-kit-next/run-lingui.ts'
 export { reorderSpellcheck } from './spellcheck/index.ts'
 
 // Sub-projects build commands

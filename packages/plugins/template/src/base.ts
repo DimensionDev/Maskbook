@@ -1,7 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
-import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -18,5 +17,4 @@ export const base: Plugin.Shared.Definition = {
         target: 'beta',
     },
     experimentalMark: true,
-    i18n: languages,
 }

@@ -2,15 +2,8 @@
 import './register.js'
 import { Emitter } from '@servie/events'
 import type { Plugin } from '@masknet/plugin-infra'
-import {
-    BooleanPreference,
-    MaskMessages,
-    createI18NBundle,
-    InMemoryStorages,
-    PersistentStorages,
-} from '@masknet/shared-base'
+import { BooleanPreference, MaskMessages, InMemoryStorages, PersistentStorages } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
-import { i18n } from '@lingui/core'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {
@@ -53,9 +46,6 @@ export function createPluginHost<Definition, Context>(
         signal,
         disabled,
         minimalMode,
-        addI18NResource(plugin, resource) {
-            createI18NBundle(resource)(i18n)
-        },
         createContext,
         permission,
     }

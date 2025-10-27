@@ -78,11 +78,10 @@ export function createManager<
         extraCheck?: (id: string) => boolean,
     ) {
         _host = host
-        const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
+        const { signal = new AbortController().signal, minimalMode } = _host
         const removeListener1 = minimalMode.events.on('enabled', (id) => updateCompositedMinimalMode(id))
         const removeListener2 = minimalMode.events.on('disabled', (id) => updateCompositedMinimalMode(id))
         const removeListener3 = onNewPluginRegistered((id, define) => {
-            define.i18n && addI18NResource(id, define.i18n)
             checkRequirementAndStartOrStop()
         })
 
@@ -97,9 +96,6 @@ export function createManager<
             { once: true },
         )
 
-        for (const [, plugin] of registeredPlugins.getCurrentValue()) {
-            plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)
-        }
         checkRequirementAndStartOrStop().then().catch(console.error)
 
         async function checkRequirementAndStartOrStop() {

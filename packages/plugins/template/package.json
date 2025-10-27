@@ -18,32 +18,5 @@
   "dependencies": {
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared-base": "workspace:^"
-  },
-  "lingui": {
-    "compileNamespace": "json",
-    "locales": [
-      "en-US",
-      "ja-JP",
-      "ko-KR",
-      "zh-CN",
-      "zh-TW"
-    ],
-    "fallbackLocales": {
-      "zh-CN": "zh-TW",
-      "zh-TW": "zh-CN",
-      "default": "en-US"
-    },
-    "formatOptions": {
-      "origins": true,
-      "lineNumbers": false
-    },
-    "catalogs": [
-      {
-        "path": "src/locale/{locale}",
-        "include": [
-          "src"
-        ]
-      }
-    ]
   }
 }

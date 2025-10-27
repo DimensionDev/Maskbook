@@ -1,7 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { ARTBLOCKS_PLUGIN_ID, PLUGIN_NAME, URL_PATTERN } from './constants.js'
-import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: ARTBLOCKS_PLUGIN_ID,
@@ -23,5 +22,4 @@ export const base: Plugin.Shared.Definition = {
     contribution: {
         postContent: new Set([URL_PATTERN]),
     },
-    i18n: languages,
 }

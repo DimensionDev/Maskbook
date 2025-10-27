@@ -1,7 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginID.Handle,
@@ -26,5 +25,4 @@ export const base: Plugin.Shared.Definition = {
             [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
-    i18n: languages,
 }

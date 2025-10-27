@@ -31,32 +31,5 @@
     "date-fns": "^2.30.0",
     "linkify-react": "^4.1.1",
     "linkifyjs": "^4.1.1"
-  },
-  "lingui": {
-    "compileNamespace": "json",
-    "locales": [
-      "en-US",
-      "ja-JP",
-      "ko-KR",
-      "zh-CN",
-      "zh-TW"
-    ],
-    "fallbackLocales": {
-      "zh-CN": "zh-TW",
-      "zh-TW": "zh-CN",
-      "default": "en-US"
-    },
-    "formatOptions": {
-      "origins": true,
-      "lineNumbers": false
-    },
-    "catalogs": [
-      {
-        "path": "src/locale/{locale}",
-        "include": [
-          "src"
-        ]
-      }
-    ]
   }
 }

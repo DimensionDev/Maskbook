@@ -28,8 +28,8 @@
     "test": "vitest",
     "spellcheck": "cspell lint --no-must-find-files",
     "clean": "gulp clean",
-    "lingui:compile": "gulp lingui-compile",
-    "lingui:extract": "gulp lingui-extract",
+    "lingui:compile": "lingui compile",
+    "lingui:extract": "lingui extract",
     "lingui": "pnpm run lingui:extract && pnpm run lingui:compile"
   },
   "dependencies": {
@@ -98,5 +98,31 @@
     "typescript-eslint": "^8.39.0",
     "vite": "^6.2.0",
     "vitest": "^3.0.7"
+  },
+  "lingui": {
+    "compileNamespace": "json",
+    "locales": [
+      "en-US",
+      "ja-JP",
+      "ko-KR",
+      "zh-CN",
+      "zh-TW"
+    ],
+    "fallbackLocales": {
+      "zh-CN": "zh-TW",
+      "zh-TW": "zh-CN",
+      "default": "en-US"
+    },
+    "formatOptions": {
+      "origins": true,
+      "lineNumbers": false
+    },
+    "catalogs": [
+      {
+        "path": "./packages/shared-base-ui/src/locale/{locale}",
+        "include": ["<rootDir>"],
+        "exclude": ["**/node_modules/**", "**/*.d.ts", "**/dist/**"]
+      }
+    ]
   }
 }
