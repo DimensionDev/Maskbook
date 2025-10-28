@@ -37,7 +37,6 @@ export function PageUIProvider({ children, useTheme, fallback }: PageUIProviderP
                     {children}
                 </CustomSnackbarProvider>
             </SharedContextProvider>
-            ,
         </>,
     )
 }
