@@ -64,6 +64,10 @@ interface Props extends BoxProps {
 }
 
 async function loginFirefly() {
+    try {
+        await Services.Helper.loginFireflyViaTwitter()
+        return
+    } catch {}
     const result = await Services.Helper.requestXOAuthToken()
     if (result) {
         await Services.Helper.loginFireflyViaTwitter()
