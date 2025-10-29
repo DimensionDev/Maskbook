@@ -1,14 +1,15 @@
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import { timeout } from '@masknet/kit'
+import { LoadingStatus } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { alpha, Box, Typography, type BoxProps } from '@mui/material'
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import Services from '#services'
 import urlcat from 'urlcat'
-import { Trans } from '@lingui/react/macro'
-import { LoadingStatus } from '@masknet/shared'
-import { timeout } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -75,6 +76,7 @@ async function loginFirefly() {
 }
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose, ...props }) {
     const { classes, cx, theme } = useStyles()
+    const [params, setParams] = useSearchParams()
     const [, handleChoose] = useAsyncFn(
         async (route: DashboardRoutes) => {
             const hasPassword = await Services.Wallet.hasPassword()
@@ -94,18 +96,32 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
     const [{ loading: creatingPrivy, error }, createPrivyWallet] = useAsyncFn(async () => {
         return timeout(loginFirefly(), 3 * 60 * 1000, timeoutMessage)
     }, [])
+
+    const isCreatingFireflyWallet = !!params.get('isCreating')
+    useEffect(() => {
+        if (!isCreatingFireflyWallet) return
+        createPrivyWallet()
+        setParams({}, { replace: true })
+    }, [isCreatingFireflyWallet])
     const oauthTimeout = error?.message === timeoutMessage
 
     return (
         <Box display="flex" flexDirection="column" gap={1.5} position="relative" {...props}>
-            <Box className={classes.addWalletWrapper} onClick={createPrivyWallet}>
+            <Box
+                className={classes.addWalletWrapper}
+                onClick={async () => {
+                    await browser.tabs.create({
+                        active: true,
+                        url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.CreateFireflyWallet}`),
+                    })
+                }}>
                 <div
                     className={classes.iconWrapper}
                     style={{
                         boxShadow: '0 6px 12px 0 rgba(0, 0, 0, 0.20)',
                         backdropFilter: 'blur(8px)',
                     }}>
-                    <Icons.TwitterXRound size={30} color={theme.palette.maskColor.white} />
+                    <Icons.Firefly size={30} />
                 </div>
                 <div>
                     <Typography className={classes.subTitle}>

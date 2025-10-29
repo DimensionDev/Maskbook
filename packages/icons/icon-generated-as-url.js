@@ -108,8 +108,7 @@ export function twitter_colored_url() { return new URL("./brands/TwitterColored.
 export function twitter_other_colored_url() { return new URL("./brands/TwitterOtherColored.svg", import.meta.url).href }
 export function twitter_round_url() { return new URL("./brands/TwitterRound.svg", import.meta.url).href }
 export function twitter_round_gray_url() { return new URL("./brands/TwitterRoundGray.svg", import.meta.url).href }
-export function twitter_x_dark_url() { return new URL("./brands/TwitterX.dark.svg", import.meta.url).href }
-export function twitter_x_light_url() { return new URL("./brands/TwitterX.light.svg", import.meta.url).href }
+export function twitter_x_url() { return new URL("./brands/TwitterX.svg", import.meta.url).href }
 export function twitter_x_round_dark_url() { return new URL("./brands/TwitterXRound.dark.svg", import.meta.url).href }
 export function twitter_x_round_light_url() { return new URL("./brands/TwitterXRound.light.svg", import.meta.url).href }
 export function uniswap_url() { return new URL("./brands/Uniswap.svg", import.meta.url).href }

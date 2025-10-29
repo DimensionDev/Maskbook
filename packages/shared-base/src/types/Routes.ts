@@ -25,6 +25,7 @@ export enum DashboardRoutes {
     Personas = '/personas',
     CreateMaskWallet = '/create-mask-wallet',
     CreateMaskWalletForm = '/create-mask-wallet/form',
+    CreateFireflyWallet = '/create-mask-wallet/firefly',
     RecoveryMaskWallet = '/create-mask-wallet/recovery',
     CreateMaskWalletMnemonic = '/create-mask-wallet/mnemonic',
     AddDeriveWallet = '/create-mask-wallet/add-derive-wallet',

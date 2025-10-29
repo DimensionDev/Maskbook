@@ -11,6 +11,7 @@ export const walletRoutes: RouteObject[] = [
     { path: r(DashboardRoutes.SignUpMaskWalletOnboarding), lazy: () => import('./Onboarding/index.js') },
     { path: r(DashboardRoutes.RecoveryMaskWallet), lazy: () => import('./Recovery/index.js') },
     { path: r(DashboardRoutes.AddDeriveWallet), lazy: () => import('./AddDeriveWallet/index.js') },
+    { path: r(DashboardRoutes.CreateFireflyWallet), lazy: () => import('./FireflyWallet/index.js') },
 ]
 
 export function WalletFrame() {

@@ -10,6 +10,7 @@ const routes: RouteObject[] = [
     { path: DashboardRoutes.Setup, element: <PersonaFrame />, children: personaRoutes },
     { path: DashboardRoutes.SignUp, element: <SignUpFrame />, children: signUpRoutes },
     { path: DashboardRoutes.CreateMaskWallet, element: <WalletFrame />, children: walletRoutes },
+    { path: DashboardRoutes.CreateFireflyWallet, element: <WalletFrame />, children: walletRoutes },
 ]
 const rootElement = (
     <>
