@@ -1,14 +1,19 @@
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { useWallets } from '@privy-io/react-auth'
+import { timeout } from '@masknet/kit'
+import { LoadingStatus } from '@masknet/shared'
+import { DashboardRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { alpha, Box, Typography, type BoxProps } from '@mui/material'
-import { memo } from 'react'
-import { useAsyncFn } from 'react-use'
-import Services from '#services'
+import { memo, useCallback } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
-import { Trans } from '@lingui/react/macro'
-import { LoadingStatus } from '@masknet/shared'
-import { timeout } from '@masknet/kit'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -64,6 +69,10 @@ interface Props extends BoxProps {
 }
 
 async function loginFirefly() {
+    try {
+        await Services.Helper.loginFireflyViaTwitter()
+        return
+    } catch {}
     const result = await Services.Helper.requestXOAuthToken()
     if (result) {
         await Services.Helper.loginFireflyViaTwitter()
@@ -71,6 +80,9 @@ async function loginFirefly() {
 }
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose, ...props }) {
     const { classes, cx, theme } = useStyles()
+    const [params] = useSearchParams()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const navigate = useNavigate()
     const [, handleChoose] = useAsyncFn(
         async (route: DashboardRoutes) => {
             const hasPassword = await Services.Wallet.hasPassword()
@@ -90,18 +102,48 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
     const [{ loading: creatingPrivy, error }, createPrivyWallet] = useAsyncFn(async () => {
         return timeout(loginFirefly(), 3 * 60 * 1000, timeoutMessage)
     }, [])
+
+    const isCreatingFireflyWallet = !!params.get('creatingFireflyWallet')
+    const { wallets } = useWallets()
+    const selectPrivyWallet = useCallback(async () => {
+        if (!wallets.length) return
+        if (wallets.length > 1) {
+            navigate(PopupRoutes.SelectWallet)
+            return
+        }
+        await EVMWeb3.connect({
+            account: wallets[0].address,
+            chainId,
+            providerType: ProviderType.MaskWallet,
+        })
+        navigate(PopupRoutes.Wallet)
+    }, [wallets, chainId])
+
+    useAsync(async () => {
+        if (!isCreatingFireflyWallet) return
+        await createPrivyWallet()
+        await selectPrivyWallet()
+    }, [isCreatingFireflyWallet, selectPrivyWallet])
+
     const oauthTimeout = error?.message === timeoutMessage
 
     return (
         <Box display="flex" flexDirection="column" gap={1.5} position="relative" {...props}>
-            <Box className={classes.addWalletWrapper} onClick={createPrivyWallet}>
+            <Box
+                className={classes.addWalletWrapper}
+                onClick={async () => {
+                    await browser.tabs.create({
+                        active: true,
+                        url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.CreateFireflyWallet}`),
+                    })
+                }}>
                 <div
                     className={classes.iconWrapper}
                     style={{
                         boxShadow: '0 6px 12px 0 rgba(0, 0, 0, 0.20)',
                         backdropFilter: 'blur(8px)',
                     }}>
-                    <Icons.TwitterXRound size={30} color={theme.palette.maskColor.white} />
+                    <Icons.Firefly size={30} />
                 </div>
                 <div>
                     <Typography className={classes.subTitle}>

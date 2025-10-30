@@ -169,13 +169,7 @@ export const Component = memo(function Onboarding() {
                 <PrimaryButton
                     onClick={onSetupTwitter}
                     size="large"
-                    startIcon={
-                        <Icons.TwitterX
-                            variant={theme.palette.mode === 'dark' ? 'light' : 'dark'}
-                            className={classes.twitter}
-                            size={20}
-                        />
-                    }>
+                    startIcon={<Icons.TwitterX className={classes.twitter} size={20} />}>
                     <Trans>Experience in X</Trans>
                 </PrimaryButton>
                 {!isCreate && count && !isZero(count) ?

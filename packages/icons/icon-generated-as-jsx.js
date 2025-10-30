@@ -605,12 +605,17 @@ export const TwitterRoundGray = /*#__PURE__*/ __createIcon('TwitterRoundGray', [
 ])
 export const TwitterX = /*#__PURE__*/ __createIcon('TwitterX', [
     {
-        c: ['dark'],
-        u: () => new URL('./brands/TwitterX.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./brands/TwitterX.light.svg', import.meta.url).href,
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'M13.882 10.46 21.313 2h-1.76l-6.456 7.344L7.944 2H2l7.793 11.107L2 21.977h1.76l6.814-7.757 5.443 7.757h5.944L13.88 10.46Zm-2.413 2.744-.79-1.107L4.395 3.3H7.1l5.071 7.103.788 1.106 6.592 9.232h-2.705l-5.378-7.537Z',
+                }),
+            }),
+        s: true,
     },
 ])
 export const TwitterXRound = /*#__PURE__*/ __createIcon('TwitterXRound', [

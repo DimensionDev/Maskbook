@@ -42,7 +42,6 @@ jobs:
       - run: pnpm exec gulp codegen
       - run: pnpm run lingui:extract
       - run: pnpm run lingui:compile
-      - run: pnpm exec gulp sync-languages
       - run: pnpm exec gulp lint-package-json
       - run: pnpm exec gulp fix-plugins-tsconfig
       - run: pnpx prettier@3.6.2 --write .

@@ -63,13 +63,6 @@ export const Component = memo(function Welcome() {
             Services.Settings.setTelemetryEnabled(true)
         }
         setAgreed(true)
-        const from = params.get('from')
-        const hasRedirect = from && from !== DashboardRoutes.Personas
-        if (hasRedirect) {
-            const search = params.get('search') || ''
-            navigate(from + search)
-            return
-        }
 
         try {
             const granted = await requestPermissionFromExtensionPage(
@@ -77,11 +70,18 @@ export const Component = memo(function Welcome() {
             )
             if (!granted) return
             if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
-            navigate(DashboardRoutes.SignUpPersona, { replace: true })
         } catch (err) {
             snackbar.showSnackbar(t`Failed to get permissions`, { variant: 'error' })
             throw err
         }
+        const from = params.get('from')
+        const hasRedirect = from && from !== DashboardRoutes.Personas
+        if (hasRedirect) {
+            const search = params.get('search') || ''
+            navigate(from + search)
+            return
+        }
+        navigate(DashboardRoutes.SignUpPersona, { replace: true })
     }, [params, allowedToCollect])
 
     return (

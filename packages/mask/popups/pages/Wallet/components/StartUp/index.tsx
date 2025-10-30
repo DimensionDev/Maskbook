@@ -47,6 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStartUp = memo(function WalletStartUp() {
     const { classes } = useStyles()
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
+    const matchCreateWallet = useMatch(PopupRoutes.CreateWallet)
 
     const [, onEnterCreateWallet] = useAsyncFn(async () => {
         if (Sniffings.is_firefox) {
@@ -58,7 +59,7 @@ export const WalletStartUp = memo(function WalletStartUp() {
 
     return (
         <Box className={classes.container} data-hide-scrollbar>
-            <WalletSetupHeaderUI showBack={!!matchResetWallet}>
+            <WalletSetupHeaderUI showBack={!!matchResetWallet || !!matchCreateWallet}>
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>
                         <Trans>Add Wallet</Trans>

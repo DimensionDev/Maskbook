@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: ko-KR\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
@@ -895,6 +901,7 @@ msgid "Approval"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/modals/UpdatePermissionModal/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 #: packages/shared/src/UI/components/GrantPermission/index.tsx
@@ -1293,6 +1300,7 @@ msgstr ""
 #: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/modals/ConfirmModal/index.tsx
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Permissions/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Welcome/index.tsx
 #: packages/mask/popups/modals/AddContactModal/index.tsx
@@ -1909,6 +1917,7 @@ msgstr ""
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -2016,6 +2025,14 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
+msgstr ""
+
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Create a Firefly.social wallet"
+msgstr ""
+
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Create a Firefly.social wallet using an X account"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
@@ -2827,6 +2844,10 @@ msgstr ""
 #. placeholder {0}: token.symbol ?? token.name ?? 'Token'
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Failed to load {0}. Click to retry."
+msgstr ""
+
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Failed to login firefly"
 msgstr ""
 
 #: packages/shared/src/UI/translate.ts
@@ -3946,6 +3967,7 @@ msgstr ""
 msgid "Mask Community $ARB Giveaway"
 msgstr ""
 
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Mask needs the following permissions"
 msgstr ""
@@ -5792,6 +5814,7 @@ msgstr ""
 msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
 msgstr ""
 
+#: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Sites"
 msgstr ""
