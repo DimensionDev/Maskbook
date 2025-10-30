@@ -204,12 +204,7 @@ msgid "{0} Platform costs"
 msgstr ""
 
 #. placeholder {0}: fromNetwork?.name || ''
-#. placeholder {0}: fromNetwork?.name||""
 #. placeholder {0}: toNetwork?.name || ''
-#: build/bundled/109.js
-#: build/bundled/109.js
-#: build/entry/popups.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/TradingRoute.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/TradingRoute.tsx
 msgid "{0} Pool"
@@ -253,9 +248,6 @@ msgid "{0} withdrawn."
 msgstr ""
 
 #. placeholder {0}: mins.replace(/\.?0+$/u, '')
-#. placeholder {0}: mins.replace(/\.?0+$/u,"")
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/helpers/formatTime.ts
 msgid "{0}m"
 msgstr ""
@@ -297,7 +289,6 @@ msgstr ""
 msgid "{context, select, mint {<0>{to}</0> minted <1>{value} {symbol}</1>} send {<2>{from}</2> sent <3>{asset}</3> to <4>{to}</4>} claim {<5>{to}</5> claimed from <6>{from}</6>} burn {<7>{from}</7> burned <8>{value} {symbol}</8>} deposit {<9>{from}</9> deposited on <10>{exchange}</10>} withdraw {<11>{from}</11> withdrew on <12>{exchange}</12>} other {}}"
 msgstr ""
 
-#: build/bundled/201.js
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "{count, plural, one {You have recovered **# Wallet 🚀**} other {You have recovered **# Wallets 🚀**}}"
 msgstr ""
@@ -307,8 +298,6 @@ msgstr ""
 msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom} other {}}"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "{mins}min"
 msgstr ""
@@ -317,14 +306,10 @@ msgstr ""
 msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/helpers/formatTime.ts
 msgid "{seconds}s"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "{seconds}sec"
 msgstr ""
@@ -581,7 +566,6 @@ msgstr ""
 msgid "<0>USD Value</0><1>${0}</1>"
 msgstr ""
 
-#: build/bundled/168.js
 #: packages/mask/content-script/site-adaptors/twitter.com/customization/i18n.ts
 msgid "🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
 msgstr ""
@@ -996,7 +980,6 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: build/bundled/51.js
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Authorization Failed"
 msgstr ""
@@ -1155,11 +1138,6 @@ msgstr ""
 msgid "Be careful what you visit and sign!"
 msgstr ""
 
-#: build/bundled/101.js
-#: build/bundled/101.js
-#: build/bundled/101.js
-#: build/bundled/101.js
-#: build/bundled/101.js
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/PreviewNftRedPacket.tsx
@@ -1192,10 +1170,6 @@ msgstr ""
 msgid "Blocto only supports the Flow chain."
 msgstr ""
 
-#: build/bundled/109.js
-#: build/bundled/109.js
-#: build/entry/popups.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -1214,8 +1188,6 @@ msgstr ""
 msgid "Bridge anyway"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/contexts/TradeProvider.tsx
 msgid "Bridge between this token pair are't supported at the moment."
 msgstr ""
@@ -1462,7 +1434,6 @@ msgstr ""
 msgid "Choose Token"
 msgstr ""
 
-#: build/bundled/212.js
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
 msgid "Chrome - external extension"
 msgstr ""
@@ -1698,8 +1669,6 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -1715,8 +1684,6 @@ msgstr ""
 msgid "Confirm Payment Password"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
@@ -1956,7 +1923,6 @@ msgstr ""
 msgid "Contract Interaction"
 msgstr ""
 
-#: build/bundled/120.js
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/CheckSecurityDialog.tsx
 msgid "Contract Not Found"
 msgstr ""
@@ -2079,7 +2045,6 @@ msgstr ""
 msgid "Create Smart Pay wallet"
 msgstr ""
 
-#: build/bundled/101.js
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -2640,10 +2605,6 @@ msgstr ""
 msgid "Enter an amount"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/bundled/109.js
-#: build/entry/popups.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
 msgid "Enter an Amount"
@@ -2715,10 +2676,6 @@ msgstr ""
 msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
 
-#: build/bundled/109.js
-#: build/bundled/109.js
-#: build/entry/popups.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/index.tsx
@@ -2773,7 +2730,6 @@ msgstr ""
 msgid "Failed to add the wallet, please try again."
 msgstr ""
 
-#: build/bundled/51.js
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Failed to authorize Google Drive. Please try again."
 msgstr ""
@@ -2795,7 +2751,6 @@ msgstr ""
 msgid "Failed to create Lucky Drop."
 msgstr ""
 
-#: build/bundled/101.js
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 msgid "Failed to create theme."
 msgstr ""
@@ -2830,13 +2785,10 @@ msgstr ""
 msgid "Failed to download image"
 msgstr ""
 
-#: build/bundled/198.js
 #: packages/mask/dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Failed to get permissions"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Failed to get quote information"
 msgstr ""
@@ -2933,8 +2885,6 @@ msgstr ""
 msgid "Fast"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx
 msgid "Fastest"
 msgstr ""
@@ -3303,11 +3253,11 @@ msgid ""
 msgstr ""
 
 #: build/bundled/101.js
-msgid ""
-"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
-"\n"
-"🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
-msgstr ""
+#~ msgid ""
+#~ "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
+#~ "\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
+#~ msgstr ""
 
 #. placeholder {0}: promote.amount
 #. placeholder {1}: promote.symbol
@@ -3370,8 +3320,6 @@ msgstr ""
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
@@ -3637,10 +3585,6 @@ msgstr ""
 msgid "Insufficient {0} Balance"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/bundled/109.js
-#: build/entry/popups.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
 msgid "Insufficient {symbol} Balance"
@@ -3656,7 +3600,6 @@ msgstr ""
 msgid "Insufficient balance"
 msgstr ""
 
-#: build/bundled/101.js
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -3665,7 +3608,6 @@ msgstr ""
 msgid "Insufficient Balance"
 msgstr ""
 
-#: build/bundled/101.js
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -3999,8 +3941,6 @@ msgstr ""
 msgid "MAX"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx
 msgid "Max amount"
 msgstr ""
@@ -4160,10 +4100,6 @@ msgstr ""
 msgid "Minted:"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/bundled/109.js
-#: build/entry/popups.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
 msgid "Missing dex contract address"
@@ -4221,7 +4157,6 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: build/entry/popups.js
 #: packages/mask/popups/components/TokenPicker/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/index.tsx
 msgid "Name or Contract address e.g. USDC or 0x234..."
@@ -4261,8 +4196,6 @@ msgstr ""
 msgid "Network error, try again: {0}"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -4532,8 +4465,6 @@ msgstr ""
 msgid "No proxy"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/History.tsx
 msgid "No recent transactions"
 msgstr ""
@@ -4951,7 +4882,6 @@ msgstr ""
 msgid "Please enter the correct mnemonic words, private key, or upload the correct keystore file."
 msgstr ""
 
-#: build/bundled/120.js
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SearchBox.tsx
 msgid "Please enter token contract address."
 msgstr ""
@@ -5199,10 +5129,6 @@ msgstr ""
 msgid "Quote route"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/bundled/109.js
-#: build/entry/popups.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -5361,8 +5287,6 @@ msgstr ""
 msgid "Request Source"
 msgstr ""
 
-#: build/bundled/111.js
-#: build/bundled/111.js
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/useFinanceFeeds.ts
 #: packages/plugins/RSS3/src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
 msgid "Request timed out"
@@ -5514,7 +5438,6 @@ msgstr ""
 msgid "Scam tx"
 msgstr ""
 
-#: build/bundled/143.js
 #: packages/plugins/ScamWarning/src/SiteAdaptor/components/WarningCard.tsx
 msgid "Scam Warning"
 msgstr ""
@@ -5567,7 +5490,6 @@ msgstr ""
 msgid "Select a token"
 msgstr ""
 
-#: build/bundled/101.js
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -5612,8 +5534,6 @@ msgstr ""
 msgid "Select liquidity"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Select Liquidity"
@@ -5832,8 +5752,6 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/Quote.tsx
@@ -6023,8 +5941,6 @@ msgstr ""
 msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/mask/popups/pages/Wallet/components/ActionGroup/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -6064,8 +5980,6 @@ msgstr ""
 msgid "Swapping"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/contexts/TradeProvider.tsx
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr ""
@@ -6182,15 +6096,10 @@ msgstr ""
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "The custom amount entered may be higher than the required network fee."
 msgstr ""
 
-#: build/bundled/176.js
-#: build/bundled/51.js
-#: build/bundled/91.js
 #: packages/mask/dashboard/utils/api.ts
 msgid "The download link is expired"
 msgstr ""
@@ -6393,7 +6302,6 @@ msgstr ""
 msgid "This network name already exists"
 msgstr ""
 
-#: build/bundled/101.js
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/SelectCollectibles.tsx
 msgid "This NFT contract cannot be modified now."
 msgstr ""
@@ -6478,8 +6386,8 @@ msgid "This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"
 msgstr ""
 
 #: build/bundled/168.js
-msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
-msgstr ""
+#~ msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 msgid "This wallet address has already been connected."
@@ -6571,7 +6479,6 @@ msgstr ""
 msgid "Token ID"
 msgstr ""
 
-#: build/bundled/67.js
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Token ID separated by comma, e.g. 1223,1224,"
 msgstr ""
@@ -6651,8 +6558,6 @@ msgstr ""
 msgid "Trading route"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Trading Route"
@@ -6672,8 +6577,6 @@ msgstr ""
 msgid "Transaction cost"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -6701,8 +6604,6 @@ msgstr ""
 msgid "Transaction Hash"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/History.tsx
 msgid "Transaction history is only stored locally and will be deleted if you clear your browser data."
 msgstr ""
@@ -6764,8 +6665,6 @@ msgstr ""
 msgid "Try to recover"
 msgstr ""
 
-#: build/bundled/109.js
-#: build/entry/popups.js
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Try token from different chains"
 msgstr ""
@@ -6809,10 +6708,6 @@ msgstr ""
 msgid "Unlikely to be a honeypot."
 msgstr ""
 
-#: build/bundled/101.js
-#: build/bundled/102.js
-#: build/bundled/178.js
-#: build/bundled/191.js
 #: packages/shared/src/UI/components/UploadDropArea/index.tsx
 msgid "unlimited"
 msgstr ""
@@ -7011,7 +6906,6 @@ msgstr ""
 msgid "Version"
 msgstr ""
 
-#: build/bundled/101.js
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 #: packages/plugins/NextID/src/SiteAdaptor/VerificationPayload.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
@@ -7199,7 +7093,6 @@ msgstr ""
 msgid "Web3 Profile Card"
 msgstr ""
 
-#: build/bundled/212.js
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
@@ -7244,7 +7137,6 @@ msgstr ""
 msgid "Who can claim?"
 msgstr ""
 
-#: build/bundled/100.js
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Why I can't vote?"
 msgstr ""
