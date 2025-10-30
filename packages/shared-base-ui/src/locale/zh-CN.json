@@ -1,1 +1,6761 @@
-{"messages":{"++B0oY":["This function has been turned off in the App settings. Enable plugins to fully access."],"+01Ill":["Change to Solana Wallet"],"+5hgHR":["Are your sure you want to disconnect? You may lose part of functionalities of this website."],"+95jK3":["Gas Limit过低有几率会导致交易失败。"],"+A4TPN":[["0"]," NFT contract"],"+CzAt9":["先前的取消关注交易正在处理中，请稍候，然后重试。"],"+IEBAO":["已批准的金额"],"+K0AvT":["断开"],"+POswt":["Sell Tax: ",["0"]],"+Qcnh5":["请选择合适的方法来恢复个人数据。"],"+W8dUJ":["Tap to view the private key <0/> Make sure no one is looking at your screen"],"+XyQiK":["同意"],"+Zuhm7":["支持身份代码、私钥、本地备份或云备份以访问您的个人数据。"],"+adBn3":["Chrome - external extension"],"+b7T3G":["已更新"],"+fTqvl":["<0>",["user"],"</0> sold ",["0","select",{"name":["<1>",["1"]," </1>"],"nft":["<2>an NFT </2>"],"other":[]}]," to <3>",["recipient"],"</3> for <4>",["2"]," ",["symbolName"],"</4>"],"+hwfjv":["请选择钱包以在保存设置后激活功能。"],"+m7PfT":["成功删除"],"+m7x4e":["Backup Successful"],"+q+Wa9":["Swap anyway"],"+uISZO":["密码不正确"],"+ubcPw":["没有投票权"],"+xKN8I":["<0>Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:</0><1>1. Make sure network is working;</1><2>2. Make sure the chain network or token address is correct;</2><3>3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.</3>"],"/2nH6X":["Make another Bridge"],"/7tku+":["试一下"],"/BI0y9":["Refunded"],"/Dk+nX":["更多关于 ",["0"]],"/I3RSJ":["举报垃圾"],"/JOEaC":["Deploy Smarty Pay wallet"],"/KseE7":["删除文件"],"/LkuGq":["从以前的数据库备份恢复"],"/OPmPQ":["验证 ",["0"]],"/Swcdo":["Failed to swap"],"/WfDJy":["If you forget payment password, you can type 'RESET' to reset your wallet. <0>Remember, this action will erase all your previous wallets.</0>"],"/capO6":["Failed to deposit ",["0"],"."],"/eguJc":["正在上传"],"/fo6Dv":["Gas 限制(Gwei)"],"/giXwU":["中等风险"],"/hKQcr":[["seconds"],"s"],"/jQctM":["发送至"],"/nT6AE":["新密码"],"/riTT2":["固定成功。"],"/uEw9z":["Your X account authorization has timed out. Please try again."],"/vtDGO":[["0"]," is connected to these sites, they can view your account address."],"/xrk7I":["FAQ&Tutorial"],"/y/pZ3":["选择代币"],"0+3dvg":["此 NFT 没有任何报价。"],"0/eoR6":["撤销中"],"00b9QG":["设置支付密码"],"01DWy7":["Click the settings icon to list it on the App board."],"04MqGo":["发布内容："],"09vHB+":["Failed to decrypt."],"0C6WdO":["上传备份"],"0D4bav":["代币代号名称或合约地址"],"0F4ogS":["支付密码应该介于 6 到 20 个字符之间。"],"0HnKBn":["Hide mnemonic words"],"0Lp4o6":["加载失败"],"0M//Nn":["The Persona is connected to the following accounts: ",["list"]],"0ZC72+":["Connected successfully."],"0bKGbK":["No past rounds found."],"0caMy7":["历史"],"0dFHbr":["确认兑换风险"],"0fljZe":["Trading Route"],"0hFUd/":["您必须授予 ",["0"]," 智能合约权限才能使用您的 ",["1"]," 。每个代币只需要授权一次。"],"0jddIP":[["0"]," 位成员"],"0lBTmP":["You need to hold any of the following tokens."],"0oFu/K":["No Lucky Drops claimed"],"0oMKRL":["删除联系人"],"0tdB+o":["Enable the ",["name"]," Wallet extension and disable other wallet extensions"],"0wJVK+":["基础"],"0wdd7X":["加入"],"0wzWAN":["Why I can't vote?"],"0xXDLS":["View your profile in firefly"],"0yPSCj":["高风险"],"0yf3iU":["您的钱包取消了此签名"],"1+6BOG":["下载备份"],"1+P9RR":["切换到 ",["0"]],"11kmCI":["We are not aware of any code that prevents the sale of tokens."],"199DuV":["在社交媒体上直接展示Gitcoin项目的具体信息。"],"1DwbcE":["加载中...."],"1EOhmY":["Rank #",["0"]],"1LkMSp":["Add Suggested Token"],"1M8xFP":["若设置的滑点过低，在流动性极低的情况下交易可能会被退回。"],"1QJyuR":["At most ",["RED_PACKET_MAX_SHARES"]," recipients"],"1QfxQT":["关闭"],"1R2W/B":["This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <0> Global Backup </0>"],"1TNIig":["打开"],"1TaavV":["注意：如果您使用最后一次导入中的助记词，您可以恢复来自该助记词句的钱包。"],"1Uqt6P":["断开钱包?"],"1Wbxhe":["This profile can not be followed: ",["0"]],"1Z++2X":["The Persona is not connected to any accounts."],"1agbuA":["Functions that can suspend trading"],"1bTY60":["Token Value"],"1kE7ob":["Network saved"],"1mjyN6":["Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."],"1nMGEs":["身份"],"1njn7W":["浅色"],"1on6yK":["How to use ",["0"]," Wallet?"],"1rsf+c":["After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."],"1xwmzN":["Switch to other accounts"],"2/N/mr":["Connect with ",["providerName"]],"22QmCQ":["The contract owner is not known to be able to modify the transaction tax. If the tax is increased to more than 49%, the tokens will not be able to be traded, which is a honeypot risk."],"28ABhV":["Connect EVM Wallet"],"29b5Sq":["Blocto 只支持 Flow 链。"],"2CMLgZ":["Token ID separated by comma, e.g. 1223,1224,"],"2FYpfJ":["更多"],"2GHENQ":["Web3 名片"],"2J5wRx":["Failed to get quote information"],"2Lr4ie":["The maximum number of NFTs to be sold in one collection lucky drop contract is 255."],"2MPu+c":["优先费用 (GWEI)"],"2XVeKu":["Airdrop Scam"],"2Xze/r":["区块浏览器（可选）"],"2jQko7":["关联账户"],"2kXxch":["对不起，签名失败！请再试一次。"],"2p7WMm":["Give permission to access <0/> your ",["0"],"?"],"2saF1j":["Tax can be modified"],"2wxgft":["重命名"],"3/0KF0":["Create a Firefly.social wallet using an X account"],"34UMci":["钱包设置"],"38C83c":["身份助记词"],"39ohdf":["活动"],"3A/gtD":["无效 RPC URL 。"],"3A/mG4":["更换钱包"],"3AP6p1":["Public Key: <0>",["publicKey"],"</0>"],"3B4jmY":["数据关联"],"3CR0qY":["Above 10% may be considered a high tax rate. More than 50% tax rate means may not be tradable."],"3J+S3n":["Search Next.ID, X, Lens, ENS or Address"],"3OhjJ4":["Powered by <0>Mask Network<1><2/></1></0>"],"3Q5eQl":["Please click the \"Post\" button to open the compose dialog."],"3Q8dPe":["The website (",["messageOrigin"],") is asking you to sign in to another domain (",["0"],"). This may be a phishing attack."],"3SiDD1":["<0>",["user"],"</0> burned <1>",["1","select",{"nft":["an NFT"],"name":[["0"]],"other":[]}],"</1>"],"3ThLdM":["在 GitHub 上报告"],"3WZ1WL":["请输入导出个人私钥的备份密码。"],"3YDnov":["Token now is hidden."],"3ZgRKI":[["type","select",{"post":["<0>",["user"],"</0> publish a post on ",["platform"]],"mint":["<1>",["user"],"</1> minted a post on ",["platform"]],"revise":["<2>",["user"],"</2> revised a post on ",["platform"]],"share":["<3>",["user"],"</3> shared a post on ",["platform"]],"other":[]}]],"3awOET":["Rank"],"3bGj61":["Claim on Firefly"],"3cAxpB":["There is no proxy in the contract. A proxy contract means the contract owner can modify the function of the token and possibly effect the price."],"3cw8FQ":["要参与空投，您的钱包必须有足够的原生代币来支付交易成本。"],"3dAaqV":["📃📃📃 Try to permanently use decentralized file storage on ",["sns"],". Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions."],"3fpIq1":["至: ",["0"]],"3iUAE7":["Backup to Google Drive"],"3kbpgO":["Gas 限制"],"3lUGN0":["切换 Persona"],"3pqzUK":["Contact added."],"3qe4O9":["最大费用"],"3uBJPr":["File delete"],"3uQmjD":["Average"],"3ublvs":["Try token from different chains"],"3yLqgI":["Name or contract address eg. PUNK or 0x234..."],"4+VnE8":["ENS"],"42yL2J":["Decrypt this post with #mask_io! 🎭🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install Mask.io to send your first encrypted tweet. ",["encrypted"]],"43g2kf":["只对您可见"],"44bNbA":["选择 NFT 合约"],"4DIYdt":["No associated wallet. <0>Add Wallet.</0>"],"4EN5JL":["Your Persona has been successfully created."],"4FvVUv":["重置钱包"],"4GBOoi":["Failed to create theme."],"4Gz2wC":["Failed to upload file"],"4HavhE":["Powered by <0>Mask Network</0>"],"4HtGBb":["MAX"],"4JCJIV":["什么是 Web3 文件服务？"],"4coHVU":["Lens 取消关注"],"4lm4o+":["Solana"],"4na5mr":["This message contains a invalid EIP-4361 message. It is better to reject this request."],"4ojMOt":["输入您的密码"],"4pSxwB":["开始"],"4zgT9K":["使用您的钱包连接Mask Network账户。"],"50QwC8":["价值"],"51TkMy":["Claiming will be live until: <0> ",["days"]," d ",["0"]," h ",["1"]," m</0>"],"51cT/A":["The minimum amount for each share is ",["0"]," ",["1"]],"51rAFB":["Please copy the following text and image (if there is one) and publish it."],"52nzPV":["Data source is retrieved from ",["0","select",{"twitter":["Twitter profile"],"facebook":["Facebook profile"],"other":[]}],"."],"55/jcy":["Hi friends, I just withdrew my deposit ",["0"]," ",["1"]," on ",["2"],". Follow @",["3"]," to find more staking projects."],"5Dz44N":["设置支付密码"],"5E57TU":["Max priority fee 在当前网络环境下过低"],"5G0lxx":["Powered by <0>Scamsniffer</0>"],"5H/4VW":["Create a Firefly.social wallet"],"5HVoyc":["Transaction Details"],"5Jczad":["I just claimed a lucky drop from @",["0"]," on ",["1"]," network."],"5N3b5J":["市值"],"5O5enn":["输入支付密码"],"5QfZ6O":["Contract source code verified"],"5YfW3S":["Add an encrypted comment..."],"5ZzgbQ":["连接到 ",["0"]],"5e22kj":["邮箱验证码"],"5hFImX":["Deploy Contract"],"5i1JPS":["Never share 12-word secret mnemonic with anyone!"],"5iHe/7":["网络错误，请重试"],"5o2pdQ":["创建身份"],"5s6EhU":[["count","plural",{"one":["You have recovered **","#"," Wallet 🚀**"],"other":["You have recovered **","#"," Wallets 🚀**"]}]],"5sIdhw":["分享与"],"5uFQ9j":["Please create a persona and verify your account to use this."],"623chP":["信息资料"],"66J/I3":["交易费"],"678PKt":["网络名称"],"68FuwU":["URL要求合适的 HTTPS 前缀。"],"68m9Nl":["向现有组添加新地址"],"6B+2/d":["Stay on top of NFT trending information, hot projects, notable transactions, etc."],"6DvbLh":["请安装您的 metamask 钱包并设置您的第一个钱包。"],"6HT670":["功能：",["0"]],"6IHgRq":["Backup to the Cloud"],"6IvSyW":["代币标准"],"6RDwJM":["代币"],"6U+PWG":["Total NFTs"],"6Uau97":["跳过"],"6V3Ea3":["已复制"],"6VJnE7":["注意：扫描检测可能无法保证100%准确。"],"6YASel":["网络无效"],"6YtxFj":["名称"],"6ZZ+4S":["Load Network"],"6foA8n":["Are you sure?"],"6gRgw8":["重试"],"6k8iqO":[["0"]," ",["1"]," bridge completed successfully."],"6knJVf":["This NFT contract cannot be modified now."],"6s8L6f":["切换网络"],"6sbLuF":["当前结果"],"6ulv1U":["合同所有者"],"6vVuTX":["This domain or address is currently on the Mask Network warning list which may include malicious entries, phishing or scams."],"7+2e01":["Network removed."],"70wH1Q":["年利率"],"76Ml+j":[["0"]," NFT Lucky Drop created."],"76gPWk":["好的"],"78Kj7O":[["0"]," NFT transferred."],"7Ae1jc":["True Token"],"7Bj3x9":["失败"],"7PPwVf":["用户只能删除这些文件的本地链接。去中心化存储协议中的文件不能被删除。"],"7PgtYC":["设置 NFT 头像"],"7QptC5":["自动锁定时间"],"7R2WG+":["由Mask解密："],"7VpPHA":["确认"],"7c99ux":["Contract Deployment ",["0"]],"7cg5cq":["unique contributors"],"7eFA2G":["Failed to revoke token contract."],"7hZyUn":["存入操作处理中"],"7k2lei":["Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."],"7lnlzl":["Claimed ",["amount"]," $",["0"]," successfully."],"7qUM2b":["打开一个钱包"],"7s5tLo":["Allow this site to switch the network?"],"7w1rTm":["The download link is expired"],"7yziEn":["This request has been expired."],"8+xvyR":["区块链"],"82+n6o":["Quote Route"],"869iq0":["Transferring asset across to the ",["0"]," network via the ",["1"],"cross-chain bridge"],"87Poy7":[["0"]," ",["1"]," NFT contract."],"88+Eku":["Provide you with fast, reliable and convenient security services."],"89kDhv":["NFT collection"],"8BsgdX":["Failed to get permissions"],"8C8O9E":["Provided by plugin \"",["0"],"\""],"8Dh77Z":["NFTs"],"8IN0ph":["No more data available."],"8J7y6E":["Deposit ",["0"]," for savings."],"8Kly2P":["Mint function is transparent or non-existent. Hidden mint functions may increase the amount of tokens in circulation and effect the price of the token."],"8MJFvR":[["0"]," 个有风险的因素"],"8N1Wbf":["此 Token 没有风险或关注因素。"],"8RF/Sx":["添加成功"],"8S5o5V":["保存后分享并推荐此功能。"],"8TMaZI":["Timestamp"],"8Tg/JR":["自定义"],"8WLjqx":["Never share the 12-word secret mnemonic words with anyone!"],"8ZsakT":["密码"],"8bgRf6":["Can not follow: ",["0"]],"8djViz":["Step ",["step"],"/",["step"]],"8glx+u":["Token ID"],"8rElAH":["Image copied!"],"8wEOMN":["🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."],"9+VwX/":["添加 NFT"],"9KKhJV":["正在签名..."],"9VcshJ":["启用自动粘贴"],"9Y1kXO":["Payment password stored locally and you could try as many as you want to unlock your wallet."],"9bG48P":["Sending"],"9cDpsw":["许可权限"],"9cSIbb":["Click on <0/> at the top-right of your browser."],"9d/Qe4":["服务协议"],"9hg9mc":["正在下载"],"9hzYBR":["Failed to download and merge the backup: ",["0"]],"9jba96":["当前只支持输入消息文本。"],"9kIgHE":["此 JSON 文件使用您当前的支付密码加密。导入此钱包时解密需要相同的密码。"],"9lqqpY":["Invalid email address."],"9oP21f":["我的投票"],"9oq2rm":["Functions with retrievable ownership"],"9q+I38":["您的投票权"],"9r9nwF":["平分"],"9sjcnZ":["Disconnected."],"9tG0uf":["请验证您的社交账户"],"9uYu7e":["您尚未上传任何文件。"],"9w2hgY":["手动粘贴"],"9xaUMG":["General user"],"A+Ijr2":["关闭[检查安全]？"],"A0VzMm":["使用 Token 名称、 NFT 收藏品、 ENS 域名或钱包地址优化搜索结果。"],"A1bmDM":["在此找不到已验证的帐户。"],"A1taO8":["搜索"],"A3Ndml":["Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send approved NFTs to the participants of Lucky Drop."],"A4vJQr":["Set your NFT as profile picture with exclusive aura."],"A6JChW":["The transaction was complete and has been recorded on blockchain at ",["0"]],"A9tojF":["密码不正确"],"AElxM7":["Transfer ",["0"]," NFT."],"AJNYYr":["Refund Lucky drop"],"AKLbfQ":["恢复数据库"],"AMJWWT":["Likely in < ",["estimateSecond"]," seconds"],"ANYjcp":[["shareWithNum","plural",{"one":["1 friend"],"other":["#"," friends"]}]],"ANk/Zy":["Incorrect Backup Password"],"AOPSKq":["Deposit ",["0"]],"ASNDad":["Hide ",["name"]],"AV+9wg":["重新输入"],"Ah4d0u":["安全检测"],"AjVXBS":["日历"],"Ap948/":["显示"],"Appw6V":["没有找到任何NFT。"],"Aq+O0x":["状态"],"AuXfDa":["Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."],"AuvDq6":["This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"],"AwQpq/":["Click on the down-arrow to see the private key."],"AxPAXW":["未找到结果"],"AxdOHo":["交易对"],"Axp2cZ":["24h 交易总额"],"AyLiVq":["扫描二维码以接收付款"],"B1T4nn":["红包详情"],"B6C0XJ":["暂无数据"],"B8B8TU":["Verified by ",["0"]],"BAvIGC":["Withdraw token"],"BFhvNB":[["0"]," ",["1"]," NFT contract successfully."],"BMCVM3":["钱包签名"],"BQHQ9v":["No websites connected to this wallet"],"BQi2Kk":[["0"]," were claimed"],"BUXiPs":["This Chain ID is currently used by the ",["0"]," network. "],"BWSJkS":["No Airdrop Scam"],"BXixGM":["使用 Persona 来加密和解密社交媒体帖子和消息。"],"Ba6uFH":["Create your NFT Lucky Drop."],"BaU+dx":["连接您的社交媒体帐户。"],"Baj2MJ":["储蓄"],"BaoXTT":["<0>Powered by</0><1>OKX<2/></1>"],"BiGQfG":["交易哈希"],"BkN2qg":["<0>Service Agreement</0> and <1>Privacy Policy</1>"],"BmN4Bk":["Aggregator"],"ByAMF+":["风险提示"],"ByPj1d":["Request ID"],"BzEFor":["or"],"BzfzPK":["条目"],"C0JhYS":["更改网络"],"C2/uLW":["Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."],"C3Wgzy":["You have claimed ",["0"]," $ARB."],"CCIrQ8":["Fake Token"],"CE+M2e":["信息资料"],"CEk7Nc":["至少6个字符"],"CFPbpH":["新密码不匹配"],"CJviCK":["<0>",["user"],"</0> proposed"],"CK1KXz":["最大"],"CMHmbm":["Slippage"],"CMfM6C":["没有足够的 Gas 费"],"CP3D8G":["进度"],"CT10+i":["No Lucky Drops created. Select 🎁 when you compose a post to start your first drop."],"CTSEx8":["<0/> publish a post on ",["0"]],"CU3U3d":["尝试恢复"],"CWsYB3":["欢迎回来"],"CXHRbe":["钱包请求超时"],"CYRJEX":["拥有者"],"CZSWya":["NFTs added"],"CZmSbe":["Request is valid not before"],"Cf/0to":["数据来源于",["0"]," 。"],"Citz6F":["兑换"],"CkLMZ2":["File delete failed"],"CmMDVW":["<0>Dear Users,</0><1>Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.</1>"],"CpciBt":["切换到 Polygon 并关注"],"CtByM7":["连接钱包"],"Cwxng+":["Supported formats: JPEG, PNG<0/> Size limit: ",["0"]],"Cy19fm":["鼠标悬停于头像右下角的 Mask 图标或时间线上的代币话题标签，浏览多元化账户的 Web3 足迹。"],"CygwLN":["Swap completed successfully."],"Cz6Lx7":["加密方式"],"D79cZK":["即时"],"D9iWaX":["请检查 ToS 文档"],"D9za/8":["Missing dex contract address"],"DA2uGM":["Click the application icon to hide in the App list."],"DAFhfT":["There is an up bound of token transactions. If this kind of limit exists, the token might not be tradable after hitting the limit, which is a honeypot risk."],"DC3sw8":["Two entered passwords are different."],"DHhJ7s":["上一页"],"DKBbsW":["Gas Price 必须大于 0 Gwei。"],"DPfwMq":["完成"],"DYoO0m":["Token quantity greater than"],"DdUFp+":["The transaction was confirmed at ",["0"]],"Dk6Non":["Whitelist function"],"DkHkqH":["Recommended dimensions: 1016 × 672 px"],"DnmyoA":["Priority fee should be greater than 0."],"DoQ5Lj":["RPC URL"],"Dpe+e3":["添加您的钱包将允许您通过Next.ID服务拥有、查看和使用您的数字身份。 请注意，您必须签名并认证交易，以证明您的钱包的所有权。"],"DtZDW+":[["0"]," (UTC+8)"],"Du6bPw":["地址"],"DuIDTw":["To verify your X account and record it on the NextID, please send this post for the verification."],"Dz56Ua":["加密"],"E399AQ":["<0>",["user"],"</0> bridged <1>",["amount"]," ",["symbol"],"</1> from <2>",["source"],"</2> to <3>",["target"],"</3>"],"E6HGuD":["Check out the official website"],"E6Sqiu":["加载 ",["0"]," 失败，请点击重试。"],"E6YUtc":["Merge to Browser"],"E7prOW":["<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"],"EBC6hj":["本地备份"],"EGWr+Q":["Web3 名片"],"EJRk0x":[["gasOptionType","select",{"slow":["Slow"],"normal":["Average"],"fast":["Fast"],"custom":["Custom"],"other":[]}]],"ELQ256":["Make another Swap"],"EMLHjH":["详细信息"],"ENIvoT":["请在自动锁定您的钱包之前设置时间。"],"ERYJcj":["备份密码必须是 8-20 个字符，包括大写、小写、特殊字符和数字。"],"EStYiZ":["No proxy"],"EVFPUv":["Transfer NFT"],"EYwKb0":["Gas 价格 (gwei)"],"Ea4oxV":["跟随系统"],"EbE80y":["Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post."],"EbVCxG":["<0/>",["txType","select",{"deploy":["deployed"],"execute":["executed"],"other":[]}],"<1/>"],"Eda+dy":["🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",["encrypted"]," to send your first encrypted tweet."],"Eefe1a":["The input is not a single file."],"EfAke+":["<0>",["user"],"</0> voted for <1>",["option"],"</1> on <2>",["platform"],"</2>"],"Eh4m6e":["<0>USD Value</0><1>$",["0"],"</1>"],"Enb3Qk":["You claimed 1."],"EoKe5U":["Domain"],"EsKgLS":["点击这里快速开始。"],"Ev2r9A":["没有任何结果。"],"EwiD7E":["再次输入支付密码"],"F/pYeX":["Create NFT Lucky Drop"],"F3bW6y":["Platform"],"F4Igxz":["Quote route"],"F7U8uz":["Creating your **wallet**"],"F8VT6y":["Failed to transfer NFT."],"F8Wc3I":["将您的文件拖放到此处"],"FAKSZG":["Add google Drive"],"FC17bL":["<0>Powered by </0><1>Mask Network</1>"],"FGceVy":["Owner can't change balance"],"FMQ6p2":["You've already claimed the lucky drop"],"FR2cx3":["Anti_whale(Limited number of transactions)"],"FY2gWe":["合约地址不正确或此 NFT 不属于您。"],"FZg3wM":["操作"],"FfJy7A":["管理网络"],"FgAxTj":["登出"],"Fgyfqo":["每个金额"],"FiKDfi":["Failed to unlock NFT contract."],"FiYmUY":["无关联账号"],"Fim3FY":["下载 https://mask.io，在Twitter上尝试更强大的工具。"],"Fn9Tvh":["交易量 (24h)"],"FnQek5":["Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."],"FnjSI+":["非当前帐户。请切换到此帐户以设置 NFT 头像。"],"Fs/bd5":["无效的块浏览器URL。"],"FzzpXs":["出售结束于 ",["0"]],"G+XYfT":["Do you want to delete file <0>",["0"],"</0>"],"G4NrhP":["Persona created."],"GAZNIW":["价格统计数据"],"GAvnvl":["支付密码"],"GDe4XX":["Please connect wallet to check if you are eligible to claim $ARB."],"GEL05h":["WalletConnect"],"GExRUL":["备份密码"],"GHvzdC":["最近两周没有内容。"],"GK6Tzr":["身份签名"],"GLDuz6":["May be a honeypot."],"GRLMKx":["Winners"],"GS+Mus":["导出"],"GS0ldX":["不支持的网络类型"],"GShMK6":["退款中"],"GTJCth":["The contract owner is not known to be able to modify the balance of the token of other addresses."],"GWCG6Y":["复制图片"],"GWKfFr":["To use Lido, you need to wait ",["0"]," days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."],"GWMpIa":[["0"]," 个有风险的因素"],"GXhrYw":["1. If you haven't installed the ",["name"]," Wallet"],"GXsAby":["撤销"],"GZzKYx":["Buy Tax: ",["0"]],"GaH2JF":["Suggest to send transactions and sign messages"],"Gia1VG":["文件服务"],"Gmmd6d":["Verify your X ID"],"GrTvoo":["Transaction in progress. Thank you for your patience."],"GtJJAj":["添加钱包"],"Gw91G1":["This request should only be sign in the future."],"GyvZPz":["Token ID should be separated by comma, e.g. 1223,1224,"],"H1v3zR":[["0"]," 余额不足"],"H8rw2f":["(名称由网站设置)"],"HCKlXm":["Token 合约地址"],"HF6C2L":["Phone Number"],"HFVck2":["Lucky Drop with ",["0"]," refunded."],"HGTZAO":["Step 2/2"],"HH25qd":["No wallet selected."],"HIq3th":["Cannot switch to a unknown network."],"HKH+W+":["数据"],"HTX2HV":["Minimum received"],"HVRhUV":["继续执行表示您同意"],"Hp1l6f":["当前"],"HpK/8d":["重新加载"],"HqiAyF":["Gwei"],"HvDfH/":["已导入"],"HvUm3m":["Choose and show your Web3 footprints on X."],"I4caYo":["验证码错误。"],"I5kL4f":["活动日志"],"I7z//Y":["Trading route"],"IBAx3U":["确认保存"],"IF7RiR":["Cover"],"IGbphl":["Unlocking ALL..."],"ILvrUp":["Unlikely to be a honeypot."],"IMX4sR":["Blacklist function"],"IQ3gAw":["上传文件"],"ITBQO3":["Max priority fee必须大于 0 GWEI"],"IUG86v":["The Persona is connected to the account @$",["0"],"."],"IUp08P":["当前钱包没有 Lens ，无法关注/取消关注"],"IX1M/E":["地板价"],"IXbRbM":["切换钱包"],"If2v4h":["红包"],"IhnvgP":["Change to EVM Wallet"],"ImhKg5":["无法获取链 ID。您的 RPC URL 正确吗？"],"IoAuJG":["发送中..."],"IrI9pg":["结束日期"],"Iu4Ja9":["请输入合约地址。"],"J05/Al":["Set NFT NFT Background"],"J0LAHU":["退款"],"J0Mxpc":["The ",["0"]," is in progress. You can check its status in History after exiting this page."],"J24FyN":["Bridge"],"J2eKUI":["文件"],"JA8K9s":["Unpacking"],"JGds+N":["缺少数字、字母或特殊字符。"],"JGpseC":[["0","plural",{"one":["This domain is"],"other":["These domains are"]}]," currently on the Mask Network warning list which may include malicious entries, phishing or scams."],"JLiwYz":["Mask Network requires the permission of following websites before using it."],"JOP9uZ":["Transaction has been rejected!"],"JPHuMW":["Swapping"],"JUcj/I":["切换 X 标志"],"JXJlYD":["设置您的角色名称"],"JbKZsv":["Scan the QR code with a WalletConnect-compatible wallet"],"JeHCi7":["No function found that retrieves ownership"],"JfI60y":["支付密码错误。"],"Jg5pf7":["当前基础手续费是 ",["0"]," Gwei"],"JiIKww":["高阶设置"],"JlFcis":["发送"],"JlIzk8":["浏览文件"],"Jnjbl3":["You need to follow <0>@",["twitterHandle"],"</0>"],"Js4Nk0":[["0","select",{"finding_post_key":["Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you."],"finding_person_public_key":["Mask is looking for the public key of the author..."],"other":["Mask is decrypting..."]}]],"JuVC24":["Deposit token"],"JwzZmt":["to <0>",["toAddress"],"</0>"],"K1tshY":["Failed to download image"],"K5a6t1":["该身份已存在。"],"K7tIrx":["Category"],"K8jCIB":["Data backed up successfully!"],"KAS4UW":[["0"]," 个需要关注的因素"],"KCeSRZ":["We will need to verify your Twitter account and record it on the NextID. Please post it for validation."],"KFYFgI":["签名失败"],"KFwID2":["Restore Failed"],"KGHnSc":["锁定钱包"],"KJGKkh":["EVM Chains only"],"KMgp2+":[["0"]," 可用"],"KPUGxy":["随机金额"],"KRz1oj":["Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."],"KTfagY":["Lucky drop with ",["0"]," created."],"KVAoFR":["unlimited"],"KVkke3":["设置 NFT 头像"],"KWeNH6":["Unlocking ",["hasSymbolName"],"..."],"KisOjk":["恢复身份"],"Kj4oEm":["创建一个新的身份"],"Kl9gHp":["钱包组 #",["0"]],"KmQ25M":["最大优先费用在当前网络环境下过高。"],"KnidLU":["Not Connected"],"Ko4L/B":["此接收地址为合约地址，请重新检查。"],"KojyJ4":["网络错误"],"Koz2Rg":[["0","plural",{"one":["Action"],"other":["Actions"]}]],"KtMMzG":["Wallet disconnected"],"KwJJLb":["<0>Powered by </0><1>",["0"],"</1>"],"Ky09J8":["先前的关注交易正在处理中，请稍候，然后重试。"],"KziH2K":["快速"],"Kzu9r9":["24H 交易量"],"L+bpwv":["请在导出私钥之前设置您的备份密码。"],"L4vN0F":["EVM"],"L82H5Z":["Creating your **identity**"],"L87Mfu":["This is unlikely to be an airdrop scam. Many scams attract users through airdrops."],"L96aan":["查看交易详情"],"LBtfmO":["Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."],"LJkXYZ":["创建新的 MASK 身份"],"LLf+t1":["未找到存款协议。"],"LNItR6":["You have set NFT PFP successfully."],"LP+1Z7":["添加网络"],"LSwUJb":["Select Liquidity"],"LU3p9s":["Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."],"LWJCIn":["已连接的网站"],"La9ArN":["<0>Powered by </0>",["publisherNode"]],"LcET2C":["隐私政策"],"LcZh+r":["不支持的数据备份格式"],"LhMjLm":["时间"],"Lho4Qd":["DSearch"],"LiE5z4":["Max base fee should be greater than 0"],"LigbuA":["在 Web3 中，您可以给已安装Mask Network的好友展示接收小费的地址，NFT 收藏品，捐赠记录和其他链上信息。"],"LkYKvc":["Please select the correct words in the correct order."],"LqWHk1":["隐藏 ",["0"]],"Lx4CpL":["文件名必须介于 3 到 20 个字符之间。"],"Lz7CzN":["No mint function"],"Lzo8mb":["Claimed: <0>",["claim_numbers"],"/",["total_numbers"],"</0> <1>",["0"],"/",["1"],"</1><2><3>",["tokenSymbol"],"</3></2>"],"M0FgOk":["添加联系人"],"M1RnFv":["已过期"],"M1ts1r":["View your address"],"M24E85":["此地址是合同地址。"],"M4g1UJ":["合约交互"],"M7ZGdw":["2. If you have installed the ",["name"]," Wallet"],"M9OYUo":["如果您未投票，请再试一次。"],"MC00Lm":["Scan QR code with WalletConnect-compatible wallet"],"MEIAzV":["未命名的"],"MKEPCY":["关注"],"MOHcKb":["请输入Max priority fee"],"MQ9hQ4":["DAO"],"MR/0Va":["All Mask Network users"],"MTqQMG":["未设置"],"Mh3RsB":["最好的祝福！"],"Mi8ATZ":["The token approval revoked."],"Midntl":["下载报告"],"Mm1aH+":["Proxy contract"],"MpnSqP":[["0"]," Pending"],"MqdtT5":[["0"]," Bridge Network fee"],"MyjAbr":["重新发送"],"N/fqDa":["Ens或地址(0x)"],"N0YrmD":["贵重物品"],"N0tcou":["认领中..."],"N2DUxS":["余额不足"],"N2S1rs":["空的"],"N2aeX8":["未检测到有效的钱包。请先连接钱包或验证钱包。"],"N40H+G":["所有人"],"N5GKfB":["Tax cannot be modified"],"N6/RZd":["抱歉，保存 NFT 头像失败。请重新设置。"],"N931rj":["Your transaction should be done in <0/>"],"NERSN2":["or Holding NFT"],"NJbBmC":["切换 Twitter 标志"],"NOi+Fr":["This QR includes your identity, please keep it safely."],"NTnXx/":["<0/> unapproved <1>",["0"],"</1>"],"NVt/wW":["A whitelist is found. Some addresses may not be able to trade normally, which is a honeypot risk."],"NWqhru":["重新选择"],"NZ7wlC":[["0"]," Holder"],"Na6Ytj":["更改 NFT 头像"],"NaZTE7":["Incorrect Mnemonic Words."],"NdlvGd":["Claim Details"],"NfxOUe":["输入总数"],"Ng063n":["Donate"],"Nhp9Kw":["Exceeded the maximum file size of ",["fileSize"],"."],"NkgvWN":["登出失败"],"NloaHG":["备份密码"],"Ns5WaC":["没有发现备份"],"Nu4oKW":["描述"],"NwibRO":["Supported contracts"],"NzlE6O":["By granting permission, you are allowing the following <0/> contract to access your NFTs."],"Nzm8dm":["示例：Alice"],"Nzwli2":["基础信息"],"O2XHf2":["Check ",["providerName"]," to confirm connect."],"O3Nzf+":["Bridge between this token pair are't supported at the moment."],"O3oNi5":["电子邮箱"],"O86J+j":["This token contract has source code available. You can check the contract code to verify if it has malicious functions. Token contracts with no source code available are likely to be a fraud."],"O8PsYe":["Add the file to Chrome's database"],"OAZ+tI":[["attentionFactors","plural",{"one":["#"," Attention item"],"other":["#"," Attention items"]}]],"OAfk3i":["Hash"],"OCJdad":["<0>To</0>: <1>",["to"],"</1>"],"OLUEnY":["when you click Add Google Drive button，you will be forwarded to Google authorization pages."],"OLY2Jk":["Gas 价格"],"OQEwR/":["Create Lucky Drop"],"OR475H":["网络"],"OcvI49":["No blacklist"],"OeD4sM":["Failed to login firefly"],"OfhWJH":["重置"],"OgPkDe":["货币符号(可选)"],"OgohfQ":["File Key: <0>",["0"],"</0>"],"OhgYJS":["基础设置"],"OkofjH":["Recover"],"On0aF2":["网站"],"OsyKSt":["提取"],"OuUyzz":["No contacts stored locally, you can try searching."],"OzSOpz":["Create a Privy wallet using an X account"],"P+K/3O":["确认中"],"P7S/hC":["最大优先费用必须大于 0 Gwei。"],"P9wzG/":["恢复"],"PByO0X":["投票"],"PDW/HG":["Your Persona is on **ready 🚀**"],"PGdbc0":["Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."],"PHM7OA":["所支持的网站"],"PI/VCJ":["Select the wallet(s) to use on this site. You should not connect to website you don't trust."],"PIG043":["Gitcoin"],"PLWaf6":["下一步"],"PNZOzY":["<0>",["user"],"</0> sold ",["0","select",{"name":["<1>",["1"]," </1>"],"nft":["<2>an NFT </2>"],"other":[]}]," to <3>",["recipient"],"</3> for <4>",["2"]," ",["symbolName"],"</4> on <5>",["3"],"</5>"],"PRkIUI":["Gas 费"],"PTXNyo":["Waiting for ",["providerType"]],"Pd3dlq":["流通总量"],"PeT3a5":["You have successfully restored the backup from Google Drive to your browser."],"PiH3UR":["已复制"],"PjBWOL":["创建您的身份以开始"],"PlE+Fs":["Connect and Verify ",["0"]],"PsQmAw":["任何用户可见"],"Pt3n39":["没有备份"],"PwjgPX":["请创建您的身份以使用 Web3 个人资料。"],"Q0IFtx":["The custom amount entered may be higher than the required network fee."],"Q2lUR2":["货币"],"Q68Nuc":["Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."],"QF9SdB":["拆分模式"],"QHZRmq":["站点"],"QHcLEN":["Connected"],"QJQd1J":["编辑个人资料"],"QQPCqQ":["备份钱包"],"QRsMow":["交易已确认"],"QU9aqK":["You have signed with your wallet."],"QUBIav":["Failed to bridge"],"QWxok/":["Connect with Mask Wallet"],"QXDgyQ":["请按正确顺序写下以下单词。保证安全，不与任何人分享！"],"Qbo7Ev":["写下助记词"],"QcVZFH":["Step ",["step"],"/",["totalSteps"]],"Qd0xFm":["Refund your expired Lucky Drop."],"QowPFh":["NFT"],"QpgBEp":[["0"]," days"],"QsVbHo":["Sending address"],"QyZU8V":[["riskyFactors","plural",{"one":["#"," 个风险条目"],"other":["#"," 个风险条目"]}]],"QypSt2":["Update X.com Permissions"],"Qz8niP":["You may lose your assets if you give approval to the website of this token."],"R/Pfmp":[["amount"]," ",["0"]," tips sent."],"R2K7XH":["尝试探索社交媒体上的 Web3 dApps 功能。"],"R9aEN5":["Send ",["0"]],"RCBmDP":["Follow @masknetwork to explore Web3."],"REeHKm":["<0/> ",["txType","select",{"trade":["traded"],"mint":["minted"],"other":["traded"]}]," <1>",["0"]," ",["1"],"</1> for <2>",["2"]," ",["3"],"</2>"],"RH8jSA":["合并数据到本地数据库"],"RHSlVw":["Follow @masknetwork (mask.io) to claim NFT lucky drops."],"RL5m+x":["Generating your **accounts**"],"RLBjfU":["Attached File: ",["name"]," (",["size"],")"],"RNfEI8":["You canceled the request."],"ROWd/9":["Leave blank to allow any amount; enter a number to set a minimum holding requirement."],"ROWeBX":["正在关注"],"ROsDRH":["Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"],"RRw7LE":["身份助记词"],"RUYsn0":["全部清除"],"RW1HJz":["接收地址可能是恶意地址。"],"RWoEqV":["Failed to transfer token: ",["message"]],"RZOA0N":["Find Mask Network in the extension list and click the <0/> button."],"RdfrN2":["铸造地址"],"Re7Oex":["Transaction submitted."],"RhCL4z":["Max amount"],"RiLzWA":["Please switch to this network in the mobile application wallet you are connected to."],"RiQQyz":["This allows the third party to spend ",["value"]," ",["0"]," from your current balance."],"Rm3JCH":["文件名必须介于 3 到 20 个字符之间。"],"RqRRf6":["Created by <0>",["0"],"</0> • <1>Website</1>"],"RrGhwo":["File ",["0"]," deleted."],"RuO5md":[["seconds"],"sec"],"Rx8sxX":["Select liquidity"],"RxlKnY":["Lens"],"Ry8TiY":["Create Smart Pay wallet"],"S0CsaV":["创建新钱包"],"S0vyIh":["Owner changed."],"S2JNMm":["Your file has been successfully restore into the browser data."],"S33tz3":["未连接"],"S6Qdlo":["Scam Warning"],"SDrb6I":["Artblocks 依托算法生成内容技术，给用户提供随心铸造 NFT 的体验。"],"SGVkVp":["Two entered passwords are not the same."],"SIrUT3":["Grant access to your ",["0"]," for the Lucky Drop Smart contract. You only have to do this once per token."],"SLEDBF":["添加钱包失败，请重试。"],"SNZM71":[["0"]," withdrawn."],"SREKz9":["报告 NFT Scam 合约吗？"],"SUqBr9":["Refund ",["0"]," ",["tokenSymbol"]," Successfully"],"SX2UXi":["Your vote has been successful."],"SYGo/R":["导入钱包"],"SYgxDf":["Slow"],"Sfu/we":["Failed to delete, please try again."],"ShHV7X":["云端备份"],"ShmUTn":["Add a Custom Cover"],"Sitstz":["Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund."],"Sjplg3":["在区块链浏览器查看"],"SlxhDh":["验证您的钱包"],"Sp69uH":["The web site can"],"T0W3Z8":["Gas 不足。"],"T0Y2+3":["选择代币"],"T3EPqL":["Max base fee"],"T3dlAs":["Quote expired. Update to receive a new quote."],"TA4fAr":["该钱包名称已经存在。"],"TFEJcT":["Set NFT PFP"],"TIIaK1":[["2","select",{"approve":["<0>",["user"],"</0> approved ",["0"]," to <1>",["contract"],"</1>"],"revoke":["<2>",["user"],"</2> approved ",["1"]," to <3>",["contract"],"</3>"],"other":[]}]],"TJt1iY":["以用户为中心的去中心化的Web3社交图协议."],"TNFd5O":["View real-time crypto prices, market cap, trading volume, etc."],"TP9/K5":["Token"],"TRoDRd":["Failed to deposit token."],"TYTRNP":["有资格领取"],"TZDLPg":["可领取"],"Tfxac6":["This token is issued by its declared team. Some scams will create a fake token with a well-known token name to cheat users."],"Tg003Y":["已连接的钱包设置"],"Tl3Zls":["This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee."],"TnHNX9":["Update permission for X.com"],"ToePai":["支出限额请求者"],"TppkTk":["<0>",["user"],"</0> carried out an activity to <1>",["target"],"</1> on <2>",["platform"],"</2>"],"TpqeIh":["Error: ",["0"]],"Tuc34V":["Confirm Bridge"],"Tx/jsw":["您需要手动粘贴加密内容吗？"],"Tz0i8g":["设置"],"TzarJw":["Bridging"],"UBzbea":["恢复钱包"],"UDKbPj":["Your file has been successfully merged into the browser data."],"UFzLh1":["When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of ",["0"],". Please reduce the number of NFTs selected."],"UO7xDp":[["0"]," Pool"],"UPJjXF":["Network error, try again: ",["0"]],"URAE3q":["已暂停"],"URmyfc":["详情"],"UUfXpm":["Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."],"UWxJIW":["由Celer提供支持，支持 $MASK！"],"UXBK7e":["<0>",["user"],"</0>sent",["0","select",{"verbose":["<1>",["1"]," </1>"],"simple":["<2>an NFT </2>"],"other":[]}],"to <3>",["formattedAddress"],"</3>",["2","select",{"cost":[" for ",["3"]," ",["4"]],"free":[],"other":[]}]],"UaXeX3":["Okay"],"UbRKMZ":["待定"],"Udf/Es":["永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。"],"UfJmJU":["无效的滑点容许值"],"UjJCIX":["Contract source code not verified"],"UjRxho":["您的恢复口令"],"UmVZrM":["Failed to create Lucky Drop."],"UpqenY":["We recommend new Web3 users to keep [Check Security] open."],"UqJ0W/":["Cancel Transaction"],"Usynqd":["Gas price is too low and will cause the transaction fail"],"UtKGok":["备份身份"],"UvJiVZ":["There's no feed associated with this address."],"UxJ2jd":["Display Snapshot proposals on the X of the respective project or protocol."],"UxYZfY":["Revoke the approval for ",["0"],"."],"V+1pjj":["Back Up Your Data Your Way"],"V+ZuGt":["You claimed ",["0"]," $",["1"],"."],"V6YDUB":["<0>",["user"],"</0> donated <1>",["costValue"]," ",["costSymbol"],"</1>"],"V6wYl1":["Total amount"],"V8j2d/":["App list"],"VAOn4r":["解锁"],"VECuJk":["钱包账户"],"VHShJf":["请点击浏览文件按钮选择要上传的文件。"],"VHVdS1":["No votes"],"VP4HYe":["Next.ID"],"VSx1eg":["最大优先费"],"VbeIOx":["作者"],"VcPDSd":["不支持的密钥存储数据"],"VdhBp2":["The chainID is not equal to the currently connected one."],"VdkQUC":["Please sign up or login ",["siteName"]," to connect Mask Network."],"Vj7ma7":["Support mnemonic phrase, private key or keystore file."],"VlpdUm":["设置 NFT 头像"],"VsHxv+":["复制文本"],"VvGC/Y":[["0"]," Network fee"],"VvPeyR":[["0"]," unlocked"],"VzQ7uf":["Unknown EIP-4361 message version."],"VzQOL2":["这允许第三方使用您所有的代币余额，直到达到上限或您取消支出上限为止。 如果不打算这样做，则考虑设定较低的支出上限。"],"W0uonA":["This QR includes your mnemonic words, please keep it safely."],"W2es+t":["Oops, it seems you don't have any voting power at block ",["0"],". <0>Learn more</0>"],"W5OcTk":["暂无授权合约记录。"],"W7e3zN":["Are you sure to remove the connected wallet <0>",["0"],"</0>?"],"W7rMXF":["Failed to send token."],"WAjFYI":["开始日期"],"WDcQq9":["隐藏"],"WKG5E8":["You need to hold at least ",["quantity"]," of any of the following tokens."],"WLMjwL":["Confirm to hide ",["0"],"? You can redisplay it by re-adding this token at any time."],"WS7EYf":[["0","select",{"Post":["<0/><1>",["handle"],"</1> published a post on <2>",["1"],"</2>"],"Comment":["<3/><4>",["handle"],"</4> made a comment on <5>",["2"],"</5>"],"Mirror":["<6/><7>",["3"],"</7> mirrored a post post by<8/><9>",["handle"],"</9> on <10>",["4"],"</10>"],"Quote":["<11/><12>",["handle"],"</12> quoted a post post on <13>",["5"],"</13>"],"other":["<14/><15>",["handle"],"</15> post stuff on <16>",["6"],"</16>"]}]],"WWPi4P":["无效钱包地址。"],"WY8amq":["数字无效"],"WZcvLm":["立即关注"],"WeNxrL":[["0"]," 个需要关注的因素"],"Weq9zb":["概况"],"WmXCMa":["切换帐号"],"Wqoa0p":["连接身份"],"WqzYn1":["<0>",["user"],"</0> donated <1>",["costValue"]," ",["costSymbol"],"</1> to <2>",["project"],"</2>"],"WsNUie":["Claimed: <0>",["0"],"/",["1"],"</0> <1>",["2"],"</1>"],"Wvnsx1":["自动锁定"],"Wy16g8":["给任意用户发送Token或者NFT，先到先得"],"X0PXso":["Swap duration"],"X200Sr":["设置支付密码?"],"X3X0nY":["在当前滑点设置下，您可能会少接收 ",["0"]," %的期待数额。"],"X6ujRd":["Be aware, check the token before adding it."],"X8N33g":["Transaction history is only stored locally and will be deleted if you clear your browser data."],"X8w6bW":["输入最大支出限额"],"XA8JXM":["添加 NFT"],"XB3tfc":["Encrypting your **data**"],"XC7RGa":["恢复数据"],"XDtQ7t":["在您的 Web3 个人资料页面上显示以下地址并使用它来接收打赏。"],"XGRJzS":["在新分页中打开"],"XGqAnD":["This token contract has code that prevent selling. This might is a honeypot."],"XQDdOC":["No friends are stored locally, please try search one."],"XQQx83":["<0>",["user"],"</0> ",["0","select",{"supply":["supplied"],"add":["added"],"repay":["repaid"],"withdraw":["withdrew"],"collect":["collected"],"remove":["removed"],"borrow":["borrowed"],"other":[]}]," liquidity on <1>",["1"],"</1>"],"XUKicg":["Step 1/2"],"XYLcNv":["支持"],"XZ/B+f":["找不到您的NFT？"],"XcWehA":["Update Quote"],"Xftpm5":["Select Collection"],"XjDSdO":["原支付密码"],"Xlpdi1":["on ",["fromNetworkName"]],"Xprzee":["输入 Gas 价格"],"XrH+JC":["IPFS"],"XrlvqN":["Who can claim?"],"XsyYEe":["此 NFT 没有任何交易动态。"],"XyAmgg":["添加钱包"],"Y7N0Sj":["View your account balance and history"],"Y9mYPy":["Powered By ",["0"]],"YF8jon":["Ended ",["relativeEndTime"]],"YKSmxE":["Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."],"YLObqx":["均分金额"],"YOacnL":["Tell friends what's happening..."],"YOnK5s":["<0>",["user"],"</0> registered ",["0","select",{"name":["<1>",["1"]," </1>"],"nft":["<2>an ENS </2>"],"other":[]}],"for <3>",["costValue"]," ",["costSymbol"],"</3>"],"YPNSH3":["Connect Solana Wallet"],"YSi9PS":["Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."],"YW51YO":["24小时销售"],"YXIpYp":["Please verify the current persona with a social media account before using dApps."],"Yckw2R":["法币入金"],"YdCB5X":["复制私钥"],"YiPiv6":["There is no up bound of token transactions. If this kind of limit exists, the token might not be tradable after hitting the limit, which is a honeypot risk."],"YirHq7":["问题反馈"],"YnqCPK":["连接并验证成功。"],"Yp8yB4":[["0"]," to ",["1"]],"Ywu8Rl":["Please connect ",["0"]," and send a proof post before using dApps."],"Z/tioj":["兑换 ",["0"]],"Z16qyu":["身份名称"],"Z3+V9p":["Restore backup failed."],"Z33XCd":["输入合约地址"],"Z3FXyt":["加载中..."],"Z3S6Dx":["Step 1/3"],"Z3y+8t":["此网络尚不支持"],"Z6siIw":["在经典的 Twitter 标志和新的 X 标志之间切换。"],"Z7ZXbT":["授权"],"Z8+FzC":["Connecting your ",["providerType"]," wallet"],"Z8G4E5":["Change to Flow Wallet"],"Z8lGw6":["分享"],"ZAVklK":["或"],"ZDcdss":["Claim Conditions"],"ZHsD28":["Enable the plugin"],"ZIsLZh":["Size limit: 10 MB"],"ZK75iC":["Choose a Cover"],"ZKAj6+":["设置钱包，在每个社交媒体帐户上显示 Web3 足迹和打赏地址。"],"ZQbnxO":["未找到任何 NFT。"],"ZQr5hT":["Unlock Token"],"ZSWUwq":[["0"],"m"],"ZSgQgC":["Max fee 在当前网络环境下过低"],"ZTXjJ3":["By continuing to the app, you agree to these <0>Service Agreement</0> and <1>Privacy Policy</1>."],"ZTmzRV":["最高价格"],"ZdnQsW":["<0/> interacted with <1/>"],"ZgFWrp":["<0>Powered by</0><1>Go+</1>"],"ZhrWG1":["创建身份"],"ZrZMJ6":["Backup failed, <0>try again</0>"],"ZsjtYe":["加载头像失败。"],"Zypku0":["By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."],"a1S2x7":["Data source is retrieved from ",["0","select",{"other":[],"twitter":["Twitter profile and "]}],["sources"],"."],"a1SmQh":["选择钱包"],"a23gJr":["密码不正确。"],"a33WQ+":["Download the ",["name"]," Wallet here"],"a4C0ak":["没有足够的 Gas 费"],"a4N/Bg":["加载更多"],"a5t/N3":["花费更多的交易费用来取消以前的交易。"],"a6ONsz":["Unlock ",["0"],"."],"a7u1N9":["价格"],"a9X8Om":["举报失败。"],"aAIQg2":["外观"],"aEgiLS":["contributions"],"aF8kci":["Creation Completed"],"aFJrEy":["You need to hold any of the following NFTs in your wallet."],"aFht5e":["Connected ",["0"]," with ",["walletName"],"."],"aTzTyw":["添加资产"],"aVI2qx":["点击应用图标将会在应用列表中显示。"],"aYT9SD":["最大费用"],"acK3j2":["输入您的私钥"],"agPptk":["中等"],"ah8/4v":["地板价"],"ahNa7P":["NFT Holder"],"ahpgxl":["Please create a Persona and verify your account to use this."],"ai3VNq":["已连接的钱包"],"ajKdns":["此钱包地址已经被绑定。"],"apl8rz":["Failed to withdraw ",["0"],"."],"aqop4L":["Check on Explorer"],"awW7ak":["移除钱包"],"ayxkVX":["交易记录"],"b+scYY":["Requesting Connection"],"b/mMOj":[["0"]," ",["1"]," approval successfully."],"bBzHQT":["输入金额低于最低金额"],"bD8I7O":["Complete"],"bEPPWi":["Connect Flow Wallet"],"bGMpPD":["Unlock NFT Contract"],"bIpwjD":["钱包"],"bKGn4N":["<0/> minted",["0","select",{"name":["<1>",["1"]," </1>"],"nft":["<2>an NFT </2>"],"other":[]}]],"bLJivk":["选择 NFT 合约持有者"],"bLmWH9":["Bridge anyway"],"bLqb2p":["<0>Latest offer at </0><1>$",["0"],"</1>"],"bLvQvN":["照片库："],"bQXBhp":["Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the nature of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."],"bTQliy":["This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."],"bUUVED":["资产"],"bapItf":["备份密码错误。"],"bassMa":["云备份密码不正确，请重试。"],"bbS8qf":["1 NFT claimed."],"bdIrOO":["Verification code has been sent to your email. Please check your mailbox."],"bfNmSO":["设置支付密码成功。"],"bnfo6T":["Sent verification post successfully."],"bnuQy5":["已选择 ",["0"]," 个文件"],"bwlRe8":["Selecting NFTs"],"c+Fnce":["签名"],"c+XaKf":["<0>",["formattedUser"],"</0> ",["0","select",{"follow":["followed"],"unfollow":["un-followed"],"other":[]}]," <1>",["other"],"</1> on <2>",["1"],"</2>"],"c19z3W":["可用余额"],"c2MkCo":["Payment password must be 6 to 20 characters."],"cD0wgO":["Do you want to remove the verified association between the X account @<0>",["0"],"</0> and ",["1"],"?"],"cFDjd3":["Transaction type"],"cJv4Ca":["第三方钱包中取消了连接操作。"],"cM1qH2":["直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体信息，并提供报价及竞标功能。"],"cNJNBU":["Get optimized search results when you're looking for a token."],"cQYjZe":["To verify your X account and record it on the NextID, you will need to send a post for the verification."],"cVit2/":["请设置备份密码"],"caP+Xq":["Crypto Holder"],"cbzSv5":["Max fee should be greater than base fee of ",["0"]," Gwei."],"chL5IG":["社区"],"clw/Xh":[["0"]," sent."],"cm4E8+":["Twitter体验"],"cmKQl+":["Failed to save the file. Please try again."],"cmNbUB":["Not found your ",["providerType"]," wallet"],"cnGeoo":["删除"],"crVIc7":["Locale Backup"],"ctb8Cs":["Dex/Est received (",["0"],")"],"cvCD4e":["合约创建者"],"d0aemb":["请创建一个身份访问 Dapps。"],"d6nk2t":[["0"]," 平台成本"],"dAMTl9":["RPC URL已经被",["0"]," 网络使用"],"dCpOJ5":["<0/> 已通过 <1/> 批准"],"dCvyk/":["Change another account and try again."],"dEgA5A":["取消"],"dXFgcm":["Transfer Token"],"daEP1M":["Token 信息"],"dajsth":["Keystore 密码不正确。"],"du/tmd":["Create your Lucky Drop."],"dyNKut":["Browse Files"],"dzAth+":[["0"]," ",["1"]," swap completed successfully."],"e0E1XI":["最大手续费 (GWEI)"],"e1vdXO":["Arweave"],"e34ZOD":["Waiting time"],"e3I0CA":["Failed to restore the backup: ",["0"]],"e3hCsY":["Lido Exchange Rate"],"e4yrZ/":["Token Address"],"eC1gV9":["Invalid file type"],"eDT+Oh":["The contract owner is known to be able to modify the balance of the token of other addresses, which may result in a loss of assets."],"eE0JZ4":["Version"],"eEeK5j":["<0>Expires in </0>",["0"]],"ePK91l":["编辑"],"eWczg7":["仅自己可见"],"eaLSW8":["身份名称必须介于 1 到 24 个字符之间。"],"ecqLr0":["I just tipped a ",["NFT_Name"]," to @",["recipientUserId"],"'s ",["0","select",{"name":["wallet"],"address":["wallet address"],"other":["wallet"]}]," ",["recipientAddress"],"\n\nInstall https://mask.io/download-links to send your first tip."],"eeYVJ5":["注意你的访问和签名！"],"ejVYRQ":["从"],"elyK4N":["Failed to unlock token contract."],"eoeq4k":["<0>",["user"],"</0> made a comment on ",["platform"]],"ep2Wyh":["1 ",["0"]," tips sent."],"erRCKP":["File saved"],"es4h+b":["仍要兑换"],"ezYNcH":["将 Mask Network 固定到工具栏以便更容易访问："],"f5AidZ":["Write down recovery phrase"],"f61qKX":["Deploy a SmartPay wallet on Polygon network."],"f6pX67":["<0>0</0> Followers <1>0</1> Following"],"fDP2k4":["修改支付密码"],"fFGPy6":["或者创建一个新的钱包组"],"fFYJ8f":["欢迎来到 Mask Network！"],"fL7WXr":["应用程序"],"fRQP7E":["<0>Granted to </0><1>",["0"],"</1>"],"fRUjl7":["Please switch to <0>@",["expectAccount"],"</0> to continue the account verification progress."],"fUn3xA":["生成一个新的钱包地址"],"fc4PdK":["The RPC URL you have entered returned a different chain ID (",["rpcChainId"],"). Please update the Chain ID to match the RPC URL of the network you are trying to add."],"fdqDgM":["Ended on <0>",["0"],"</0>"],"fiPesM":["操作"],"fj5byd":["没有"],"foOw00":["Balance(",["symbol"],")"],"fqDzSu":["Rate"],"fsBGk0":["余额"],"fsUPaG":["恭喜您！"],"fvRGyC":["Trying exploring more features powered by Mask Network."],"fx6pOQ":["Balance: <0/>"],"fza4cg":["导入钱包"],"g/1WbH":["from <0>",["fromAddress"],"</0>"],"g/i+bG":["Transaction rejected"],"g2UNkE":["Powered by"],"gC2WI+":["身份"],"gERRYE":["Artblocks"],"gHM62X":["Payment password changed."],"gM+Nj7":["Are you sure to report ",["0","select",{"hasName":[["1"]],"noName":["this NFT"],"other":["this NFT"]}],"? After confirmed, this NFT will be marked as spam."],"gT+8Dk":["Confirm to hide ",["name"],"? You can redisplay it by re-adding this NFT at any time."],"gUuuBi":["安全检查"],"gVfVfe":["联系人"],"gWcGl/":["你的钱包已取消交易。"],"gdnEab":["助记词不正确。"],"ggdga4":["用户尚未设置此项。"],"ghVDTt":["rounds"],"ghZx62":["Unlock token"],"gk7J2q":[["0","select",{"other":["<0>Size limit: ",["fileSize"],"</0>"],"omit":[]}]],"gkLviK":["This token is not issued by its declared team. Some scams will create a fake token with a well-known token name to cheat users."],"gmOW42":["ENS 或钱包地址"],"gnSRSG":["隐藏Scam 交易"],"gp6A8z":["Authorization Failed"],"gtdJ43":["My wallet"],"gwuMzD":["<0>",["user"],"</0> appointed a proxy on <1>",["platform"],"</1>"],"gxV9O8":["投出您的票"],"h/b9lY":["无关注者"],"h0qYUk":["使用ENS域名或钱包地址搜索以获得最优结果。"],"h3bIHg":["断开社交账户?"],"h53LoU":["社交账户"],"h5Dtc5":["funding received"],"h69WC6":["Sent"],"h7+V7K":["备份恢复"],"hEpXzO":["欢迎来到 Mask Network！"],"hG89Ed":["图片"],"hHLRGW":["隐藏价值小于 $1 的代币"],"hRWvpI":["Claimed"],"hRtIgr":["应用列表"],"hTbvD9":["对不起，您没有资格在此活动中领取 $ARB。"],"hUF4dG":["备份密码设置成功。"],"hWUuAb":["Already following"],"hXzOVo":["下一步"],"hYgDIe":["创建"],"he3ygx":["复制"],"heVBR8":["输入每个金额"],"hehnjM":["金额"],"hg5QeV":["总花费"],"hhtbAs":["取消关注Lens Handle"],"hj39w+":["Loading failed due to Snapshot API service breakdown."],"hom7qf":["领取"],"hpxXOD":[["context","select",{"approve":["<0>",["user"],"</0> approved <1>",["amount"]," ",["symbol"],"</1> to <2>",["contract"],"</2>"],"revoke":["<3>",["user"],"</3> revoked the approval of <4>",["amount"]," ",["symbol"],"</4> to <5>",["contract"],"</5>"],"other":[]}]],"hxHyfs":["我刚刚使用 Mask Network 插件把T witter X 图标替换成了原来的蓝鸟图标。"],"hxdOdX":["Owner can change balance"],"hzTib5":["选择 NFT 合约持有者"],"i2x+p1":["取出操作处理中"],"i4umqX":["The following wallets are not installed or in conflict with others"],"i6OT6/":[["subject"]," 发生错误"],"i70ilP":[["0"]," NFT contract unlocked."],"iCb44o":["Created on: ",["0"]],"iF9x7r":["Trading mode"],"iH8itU":["连接您的钱包"],"iH8pgl":["返回"],"iJLEZF":["教我怎么做"],"iNIdDX":["请输入有效的代币合约地址"],"iPMIoT":["输入金额"],"iSLIjg":["连接"],"iT0Qmd":["交易失败"],"iTiwqa":["Asset is hidden."],"iZLoa2":["eg: X accounts, persona public keys, wallet addresses or ENS"],"ia3Lqp":["The contract may contain additional issuance functions, which could maybe generate a large number of tokens, resulting in significant fluctuations in token prices. It is recommended to confirm with the project team whether it complies with the token issuance instructions."],"ie2c+s":["我刚刚在",["0"]," 使用",["1"]," ",["2"]," 购买了一件美丽的艺术品。欢迎加入！"],"ileX7U":["No recent transactions"],"imDvP9":["Gas limit must be smaller than ",["maxGas"],"."],"iobEyh":["By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."],"iuCSJl":["钱包已经链接到当前的身份",["0"],"。"],"iuJFAy":["Low Risk"],"iwiSFA":["类似项目"],"j2Uisd":["Approving"],"j2a+h4":["Past rounds"],"j4TRxD":["选择地址"],"j8MqhB":["CyberConnect"],"jEDiuG":["Network added"],"jICk7g":["网络或RPC提供方出现错误，请稍后再试 ！"],"jIWgmE":["Entered passwords are inconsistent."],"jJPsrT":["Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."],"jJrqb1":["Token 名称"],"jK7nvW":["Failed to disconnect wallet"],"jRcH7y":["头像设置"],"jRfanQ":["所用 Gas (单位)"],"jXWnN0":[["0","plural",{"one":["Strategy"],"other":["Strategies"]}]],"jZQU+o":["最初发布于 ",["0"]],"ja6Tyz":["使用 NFT 集合的名称或符号搜索以获得最佳结果。"],"jaH9PD":["Hi friends, I just created ",["token"]," Lucky Drop. Download Mask.io to claim."],"jas0vv":["断开所有社交账户"],"jbc0gF":["设置密码"],"jeLXsu":["Who can claim"],"jfJkBQ":["Gas price 在当前网络环境下过低。"],"jh0i4n":["请在您的钱包确认此签名"],"jhoAzY":["Mask Network Cloud"],"jjCXPD":["Starts ",["relativeStartTime"]],"jpctdh":["查看"],"jt/0L2":["You've saved ",["0"]," to Web3 file service."],"jt/cjR":["安全警告"],"jtExaD":["Not supported yet."],"jygqM9":["Loading account information..."],"jzLzy/":["No whitelist"],"k/sb6z":["选择语言"],"k/vATR":["Token unlocked"],"k0USDt":["Account connected.<0/><1/>Try to explore more features powered by Mask Network."],"k1pJQo":[["0"]," network is not added to the wallet. Please add it and try again."],"k28Qhe":["Failed to save file"],"k57+C7":[["walletLength","plural",{"one":["#"," Wallet"],"other":["#"," Wallets"]}]],"k7u9V5":["Incorrect words selected. Please try again!"],"kCAzy/":["NFT 系列授权"],"kG0n0M":["网络错误或用户取消进程。"],"kHDhjV":["I just claimed airdrop with ",["amount"]," ",["0"]," on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n Install https://mask.io to explore more airdrop activities."],"kKY8Re":["The contract owner is known to be able to modify the transaction tax. If the tax is increased to more than 49%, the tokens will not be able to be traded, which is a honeypot risk."],"kPQQEW":["Enter an Amount"],"kV9Qeo":["You have donated ",["0"]," ",["1"]],"kWJmRL":["您"],"kbfp5m":["可见范围"],"kdW3qS":["Nonce"],"kePpfU":["更新 NFT 头像成功！"],"kf/5Ap":["点击这里快速访问主要功能。"],"kf83Ld":["出现了一些问题。"],"kg/ict":["Lucky Drop claimed."],"kj3M8S":["存入"],"kjBSDT":["<0>",["user"],"</0> minted ",["0","select",{"name":["<1>",["1"]," </1>"],"nft":["<2>an NFT </2>"],"other":[]}],"for <3>",["value"]," ",["symbolName"],"</3>"],"ks5OGD":["合约"],"kx0s+n":["结果"],"l/UFPv":["属性"],"l3s5ri":["导入"],"lCF0wC":["刷新"],"lCHQzJ":["此地址可能是欺诈地址。"],"lCfoWv":["Select NFTs"],"lDgVWA":["接收"],"lET9my":["Mask Network需要以下权限"],"lErh77":["Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."],"lKldOY":["请选择恢复备份的正确方法。"],"lO/vMB":["OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."],"lPJwNU":["Persona: ",["personaName"]],"lPsa94":["Merge Completed"],"lQXQKs":["投票"],"lU6uRb":["Choose from multiple backup options, now including encrypted storage via your authorized Google Drive for added security and flexibility."],"lWOC+h":["Mask Network requires you to authorize the following websites before using it."],"ldI18s":["已铸造："],"lhvy2j":["Firefly"],"llLBQ1":["代币"],"lmYQuN":["At most ",["SOL_REDPACKET_MAX_SHARES"]," recipients"],"loCUuu":["密钥库"],"lqTDfd":["滑点容许值"],"lqW7eD":["In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\nThe actual cost may be lower\nthan estimated, and any unused funds will remain in the original address."],"lr8uE3":["Holding ",["0"]],"lvL4x0":["Follow @masknetwork for Web3 updates and insights."],"lxJU2w":["输入份数"],"lyjM6U":["Wait too long for the confirmation."],"m+uuUE":["跨链"],"m/TPEz":["（测试版）"],"m16xKo":["添加"],"m2OZMI":["Max fee 不能低于 Max priority fee"],"m2pyX2":["立即购买"],"m3VOQq":["当前钱包不支持与 Lens 协议交互。"],"m3XvO+":["导入钱包"],"m3akOw":["I just claimed a lucky drop from @",["sender"]," on Solana."],"m3cvPZ":["Payment password set."],"m3pz1u":["Insufficient ",["symbol"]," Balance"],"m64f3d":["Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."],"mCB6Je":["全选"],"mGHHf5":["在连接和验证您的身份后，您可以设置相关的地址来显示您的 web3 足迹或接收打赏。"],"mHWsOq":["Failed to confirm"],"mNUsxu":["Tx Fee"],"mPxxVq":["输入Gas Limit"],"mQpWAe":["编辑联系人"],"mT57+Q":["前往设置"],"mUJUVX":["Claim your NFT Lucky Drop"],"mW8F64":["This project is no longer active"],"mYGY3B":["Date"],"mZ04KC":["Overall Best"],"ma8rSx":["Your transaction has been confirmed!"],"mc68kY":["新支付密码"],"md5sZ/":["This token contract has not been verified. We cannot check the contract code for details. Token contracts with no source code available are likely to be a fraud."],"mfwfMR":["You can claim the lucky drop by holding the required amount of any selected token."],"mhNIiJ":["Gas price过高。您或许支付了超过需要的费用。"],"mrAv9J":["无法保存网络"],"msszNj":["<0/> approved <1>",["0"]," ",["1"],"</1>"],"muQqQY":["购买和销售由其原创作者发布的推文。"],"mzI/c+":["下载"],"n+ObkB":["检测用户发布的加密网站是否有风险或恶意。帮助您保护数字资产。"],"n1gwuy":["on ",["toNetworkName"]],"n2HnVK":["如果您决定关闭 [检查安全] 应用，关闭后与任何有潜在风险的合约或地址进行互动时将无法看到相关安全提示。"],"n42fmQ":["请输入Max fee"],"nDzNGQ":["Follow User"],"nE/lLr":["仅选定的联系人可见"],"nFjzvC":["Approved Amount ",["0"]],"nGl2Ng":["Restore Completed"],"nKLBYz":["We are pleased to inform you that the update for X (formerly named Twitter) website has been completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"],"nMUHWK":[["claimed"]," Follow @",["0"]," (mask.io) to claim lucky drops."],"nMkx7r":[["0","plural",{"one":["#"," Hour"],"other":["#"," Hours"]}]],"nOCyT5":["显示价值小于$1 的代币"],"nOhz3x":["Logout"],"nSkB8g":["信息"],"nTFx7o":["新头像设置成功"],"nTWWCZ":["低"],"nTif4K":["选择并连接到你的钱包"],"nUWEsV":["Max fee 高于必要值"],"nUeoRs":["消息签名"],"nV/wXH":["此个人信息不能被关注。"],"nWDO1P":["<0/> ",["txType","select",{"burn":["burned"],"deposit":["deposited"],"mint":["minted"],"receive":["received"],"send":["sent"],"withdraw":["withdrawn"],"other":[]}]," <1>",["0"]," ",["1"],"</1> "],"ndRqFD":["Chain ID"],"neBDpj":["请连接钱包"],"ngWO+e":["缺失本地密钥"],"njSHJP":["You didn't approve ",["0"],". Please do not set spending cap to 0 and try it again."],"nqL5WA":["Claim Lucky Drop"],"nqagQ8":["签名消息 (十六进制)"],"nvAt0H":["Resource"],"nvV/Td":["Balance: <0>",["0"],"</0>"],"nwSp3U":["I just tipped ",["amount"]," ",["0","select",{"namedToken":[["1"]],"other":["token"]}]," to @",["recipientUserId"],"'s ",["2","select",{"name":["wallet"],"address":["wallet address"],"other":["wallet"]}]," ",["3"],"\n\nInstall https://mask.io/download-links to send your first tip."],"nzBzok":["创建时间："],"o+XJ9D":["切换"],"o+zDNQ":["The mnemonic word has been copied, please keep it in a safe place."],"o4Iu2W":["退出成功"],"o4NrTC":["Confirm this Signature in your wallet."],"o66hO5":["Discovered a LuckyDrop event on the FireFly website."],"o9pabc":["No codes found to suspend trading."],"oCBTyI":["This will overwrite the existing cloud backup with the local data, this cannot be undo."],"oDMfB1":["A blacklist is found. Some addresses may not be able to trade normally, which is a honeypot risk."],"oDSXfc":["新密码与当前密码不可相同。"],"oG26Rt":["请在您的钱包中确认这笔交易"],"oG67vO":["Available to Everyone"],"oIsL5E":["Chain ID: ",["0"]],"oJIW7I":[["context","select",{"mint":["<0>",["to"],"</0> minted <1>",["value"]," ",["symbol"],"</1>"],"send":["<2>",["from"],"</2> sent <3>",["asset"],"</3> to <4>",["to"],"</4>"],"claim":["<5>",["to"],"</5> claimed from <6>",["from"],"</6>"],"burn":["<7>",["from"],"</7> burned <8>",["value"]," ",["symbol"],"</8>"],"deposit":["<9>",["from"],"</9> deposited on <10>",["exchange"],"</10>"],"withdraw":["<11>",["from"],"</11> withdrew on <12>",["exchange"],"</12>"],"other":[]}]],"oMx/mL":["Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."],"oN9XHJ":["Start Time: <0>",["0"],"</0>"],"oOQfsI":["Current account is not the verifying account."],"oTLFeN":["The Lucky Drop can't be sent due to data damage."],"oX+QCa":["<0>Powered by</0><1>Mask Network</1>"],"oYzol6":["NFT"],"oZw0Iw":["This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"],"ocYse8":["Failed to refund Lucky Drop."],"oe5xh9":["备份解密失败，请检查密码"],"of3mx/":["<0>",["user"],"</0> swapped <1>",["from_value"]," ",["from_symbol"],"</1> to <2>",["to_value"]," ",["to_symbol"],"</2> on <3>",["platform"],"</3>"],"ofUcbc":["随机"],"ohUJJM":["插件"],"ojlMCx":["Minimum withdraw amount is ",["MINIMUM_AMOUNT"]," ",["0"]],"olEUh2":["Successful"],"ooHEV6":["1 ",["0"]," NFT Lucky Drop claimed."],"osXsDn":["导入 NFT"],"ou+PEI":["个人头像"],"ouAjo6":["Gas费用不足"],"ovBPCi":["默认"],"oxKup1":["Insufficient $",["0"]," balance"],"p+ngUo":["取消关注"],"p1/7GX":["未找到合约"],"p2/GCq":["确认密码"],"p3TX0l":["Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."],"p7l2aC":["合约："],"p8Aea2":["此身份名称已存在"],"p8OYBy":["@",["sender"]," is sending an NFT lucky drop on ",["networkName"]," network. ",["account_promote"]," ",["promote_short"]," #mask_io #LuckyDrop ",["0"]],"pG7O41":["Fastest"],"pGElS5":["助记词"],"pHfBGz":["Gas费用更新中…"],"pIyHYi":["Lens 关注"],"pLHDrO":["Holding NFT"],"pOE8Vh":["空格"],"pa3wn3":["It remains unclaimed."],"pbOGiB":["Revoke Token"],"pbYUPI":["Text copied!"],"pi+hn/":["Ethereum ",["HD_PATH_WITHOUT_INDEX_ETHEREUM"]],"pjrgRd":["私钥不正确"],"pkyWdU":["Keystore密码"],"poYLOl":["新标志"],"ps1+DX":["设置您的身份名称，最大长度为24个字符"],"pu3rTn":["GWEI"],"puUEU3":["修改备份密码"],"put3ex":["Request is valid not after"],"pv5v6j":["About Permit"],"pvnfJD":["深色"],"py6hU8":["签名请求"],"pzO3Xa":["总供应量"],"q+O14e":["探索范围"],"q+hNag":["Nft 系列"],"q/ao7A":["每份铸造的价格"],"q5+UWM":["Contact edited."],"qAbGIK":["Issued at"],"qCMUPH":["解锁 ",["0"]],"qDIxZ+":["Failed to restore the backup from Google Drive to your browser. Please try again."],"qHqI+o":["<0>Powered by</0> <1>Mask Network</1>"],"qI8U4x":["最大手续费不能低于最大优先级费用。"],"qIL7PI":["报价"],"qJb6G2":["Try Again"],"qNiGUh":["大小"],"qT8oOt":["必须拥有身份"],"qWMpAl":["最多 ",["0"]," Gwei"],"qYuscr":["最大优先费"],"qZ6p7p":["Backup on ",["0"]],"qcqdIh":["You need to open the dApp to view the specific content."],"qcybNQ":["提案"],"qdyV/M":["新闻"],"qhKyO3":["提取 ",["0"]],"qkhZxp":["Created a SmartPay wallet on Polygon network."],"qp8fKi":["By confirming means that you agree to bear the possible risks above."],"qqWcBV":["已完成"],"r3OcML":[["mins"],"min"],"r92tNP":["Failed to authorize Google Drive. Please try again."],"rBLzKv":["最大手续费高于必要值。"],"rCsoea":["编辑代币列表"],"rG3WVm":["选择代币"],"rJZPaP":["未找到活动"],"rKY/BK":["经典标志"],"rLgPvm":["备份"],"rQQGN1":["Max priority fee过高。您或许支付了超过需要的费用。"],"rR6iwH":["域名请求"],"rWE7Lq":["Contact deleted."],"rWqyF3":["Gas limit should be between ",["minGasLimit"]," and 15.00M"],"rYFSec":["Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."],"rZ0rgl":["成交量"],"raCUEa":["By granting permission, you are allowing the following <0/> contract to access your funds"],"rcNnsQ":["价格："],"re2nOO":["已上传的文件"],"rkMKQ0":["The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."],"rm0yu/":["About ",["collectionName"]],"rqV4QH":["This swap isn’t supported"],"rrvbCi":["网络错误或执行智能合同失败。"],"rulocO":["Checking Approve"],"ryWxhG":["恭喜！"],"s/8SJ+":["View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."],"s4Omor":["To <0>",["0"],"</0>"],"sGkv/+":["Hi friends, I just deposit ",["0"]," ",["1"]," on ",["2"],". Follow @",["3"]," to find more staking projects."],"sOYKMU":["[检查安全] 提供迅速、可靠和方便的 Web3 安全服务。"],"sOcZTR":["Contract Deployment"],"sQJ3RN":["最大优先费用在当前网络环境下过低。"],"sQTDWu":["Allow us to collect your usage information to help us improve Mask."],"sSkbaZ":["Request timed out."],"sWsox7":["关注Lens handle"],"saHPqg":["Claim your Lucky Drop."],"sb9Y58":["钱包"],"siroPf":["Mask Network"],"sxkWRg":["高阶"],"szNWi8":["If this kind of code exists, the token maybe be frozen to buy or sell, which is a honeypot risk."],"t+A5fr":["Gas 价格必须大于 0。"],"t/YqKh":["移除"],"t2prdI":["找不到搜索结果。"],"t3rUZr":["Sign-in Request"],"t6bQQD":["Send authors tips by using Mask Network's Tips function."],"t6md+W":[["0","select",{"create":["<0>",["user"],"</0> created a profile on <1>",["platform"],"</1>"],"update":["<2>",["user"],"</2> updated a profile on <3>",["platform"],"</3>"],"other":[]}]],"t8dIOP":["垃圾"],"t91sWs":[["actionType","select",{"stake":["<0>",["user"],"</0> staked <1>",["symbol"],"</1>"],"claim":["<2>",["user"],"</2> claimed <3>",["symbol"],"</3>"],"unstake":["<4>",["user"],"</4> un-staked <5>",["symbol"],"</5>"],"other":[]}]],"t9m1iP":["Spam reported."],"tARYn/":["NFTs Profile"],"tCAZi9":["Browse the Web3 footprints of your X friends, enjoy the freedom of Web3."],"tG9G+b":["文件服务"],"tHoyBc":["请在使用 dApp之前连接到 ",["0"]," 。"],"tIW5Jt":["No matched tokens"],"tKJ7ee":["Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."],"tOL6AP":["Adjust Selection"],"tOMnvw":["Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on those websites."],"tPeNU7":["此网络名称已存在"],"tRRE1h":["1 ",["0"]," claimed."],"tXkhj/":["开始"],"tbOs8j":["确认兑换"],"tcHpvG":["Change Owner"],"tfDRzk":["保存"],"thX7xs":["The network with chain ID ",["formChainId"]," may use a different currency symbol (",["0"],") than the one you have entered. Please check."],"tiX/tO":["Address: <0>",["address"],"</0>"],"tj48De":["连接社交账户"],"tjbyOy":["Project details"],"tk+uyz":["You've approved ",["0"]," for ",["1"],". If you want to revoke this token, please set spending cap amount to 0."],"toDFSK":["签名成功"],"tst44n":["Events"],"tuOw4x":["进行加密"],"tx1x9k":["I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io."],"txEVTf":["没有任何上架信息"],"ty2gt9":["You need to follow the creator of the lucky drop."],"u2OWVJ":["断开连接失败。"],"u2Srv1":["确认领取空投"],"u3ZeYl":["Transaction failed"],"u689pQ":["Ends in ",["relativeEndTime"]],"uAQUqI":["Status"],"uBAxNB":["编辑器"],"uF9ruK":["Saving"],"uJQLj9":["点击这里连接您的钱包。您可以在此选择网络或更改您的钱包。"],"uSMfoN":["验证"],"uip9JY":["I wrote down those words in the correct order"],"ujpEaI":["请连接您的钱包"],"uqF4Nm":["区块链："],"usVwcn":["No anti_whale(Unlimited number of transactions)"],"uv94aG":["由用户添加"],"uv9cwh":["Bridge Network fee"],"uyJsf6":["关于"],"v01kR+":["NFT 头像"],"v7U98p":["Failed to claim Lucky Drop."],"vH2C/2":["兑换"],"vLXevL":["Transaction cost"],"vOx+Me":["You can withdraw the remaining balance 24 hours after sending the lucky drop."],"vVEene":["View your Tokens and NFTs"],"vXIe7J":["语言"],"vXygio":["没有足够可显示的数据"],"vel6Z1":["请求源"],"vhlM+H":["Withdraw ",["0"]," for savings."],"vhqFTT":["Can't find a valid user address data source."],"vutynE":["开启插件"],"w0e0yw":["Gas limit 必须至少 ",["0"]],"w1ctdJ":["加密贴文"],"w3t1Hw":["Powered by <0>Go+</0>"],"w4oOEJ":["Mask Community $ARB Giveaway"],"w9Xmw/":["Google Drive"],"wCtp6y":["Your Wallet is on **ready 🚀**"],"wDnczW":["Optimize the display of search results about ENS in social media."],"wGtbaw":["单个红包数额"],"wMHvYH":["价值"],"wNecg9":["多笔交易请求 ",["0"],"/ ",["1"]],"wNxsb2":["Reject ",["totalMessages"]," Transactions"],"wThGrS":["App Settings"],"wUlAUI":["<0>@",["currentUserId"],"</0> connected already."],"wYA1q/":["自动报告欺诈链接到MetaMask"],"waXvJd":["NFT还没有被铸造。"],"wbDTs9":["Request timed out"],"wqppGn":["Permissions List"],"wvJOId":["此ENS不存在或未被解析。"],"wxZZWc":["You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."],"wxfXhJ":["Scam tx"],"x0PhCN":["Disconnected successfully."],"x4f8pZ":["小费"],"x5LEuB":["粉丝"],"x6rEou":["<0>",["user"],"</0> claimed ",["0","select",{"verbose":["<1>",["1"]," </1>"],"simple":["<2>an NFT </2>"],"other":[]}],"from <3>",["formattedAddress"],"</3>",["2","select",{"cost":[" for ",["3"]," ",["4"]],"free":[],"other":[]}]],"xBXg0L":["No whitelist is included. If there is a whitelist, some addresses may not be able to trade normally, which is a honeypot risk."],"xC6eGY":["Mint function"],"xCJdfg":["清除"],"xCcvjC":["NFT 头像设置成功"],"xDAtGP":["信息"],"xDO6ZN":["Plugin switch"],"xEQZ4z":["使用文本加密"],"xEX/9S":["No blacklist is found. If there is a blacklist, some addresses may be unable to trade normally, which is a honeypot risk."],"xFCCR4":["Please enter the correct mnemonic words, private key, or upload the correct keystore file."],"xGVfLh":["继续"],"xH6cn+":["选择代币"],"xIxVmH":["Unlock ",["0"]," NFT contract."],"xPSvu3":["<0>",["websiteCount"],"</0> ",["0","plural",{"one":["Website"],"other":["Websites"]}]],"xTQLHC":["I just purchased a beautiful piece of art from {0} collection for ",["1"]," ",["2"],". Install @masknetwork to get yours."],"xeiujy":["文本"],"xjhtsV":["链"],"xoKE3v":["Disable Permit"],"xuKB2x":[["0"]," deposited."],"xupcu9":["加速"],"y/+ReV":["No any collectible is available for preview. Please add your collectible here."],"y/kxxM":["Priority fee"],"y2i17G":["通过连接社交账户自定义NFT体验。享受具有 Web3 氛围的 Web2 。"],"y3juHh":["Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."],"y3qyKP":["NFT Lucky Drop created."],"y49awp":["设置 NFT 头像"],"y5aRAa":["请输入云备份密码以下载文件。"],"y62Dys":["Network fee"],"y6VCOb":[["0"]," 分钟"],"y6sq5j":["已关注"],"yC/GKd":["Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."],"yD15Uj":["您确定要删除此钱包吗？"],"yDUr0V":["Lucky Drop refunded."],"yFpcbN":["This request may be a phishing attach. I understand this and want to continue."],"yFrxQj":["助记词"],"yGyJ1l":["You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."],"yHrAv+":["Claim Lucky Drop with ",["0"]," claimed."],"yKu/3Y":["恢复"],"yNBZ3N":["Enter gas limit"],"yNu9vD":["该钱包地址已经存在。"],"yQE2r9":["加载中"],"yQqkIK":["24H平均价格"],"yRuvmU":["The mnemonic words has been copied, please keep it in a safe place."],"yTZe+y":["Snapshot"],"yVnV6H":["Please write down or copy these words and save them in a secure place."],"yVzBCJ":["NFT Lucky Drop claimed."],"yZhedI":["Gas 费用设置"],"yb/fjw":["授权"],"ybuu1v":["对不起，我们没有找到任何结果。"],"ygW4tI":["请连接您的身份"],"yik0Qu":["私钥"],"ykiu3o":["NFT 详细信息"],"ylUhBz":["点击重试"],"ylXk9u":["Encrypt the message in an image"],"yqc6uX":["This contract is an Admin Upgradeable Proxy. A proxy contract means the contract owner can modify the function of the token and could possibly effect the price. It is possible for the team to rug or scam. Please confirm the details with the project team before investing."],"ywDBfs":["发生未知错误。"],"yx/fMc":["高速"],"yz7wBu":["关闭"],"yzF66j":["交易记录"],"z+H8bd":["Your wallet does not meet the eligibility criteria for claiming."],"z/3+av":["许可证："],"z1i6et":["Failed to ",["0"]," NFT contract."],"z27gFg":["If this kind of function exists, it is possible for the project owner to regain ownership even after relinquishing it."],"z7Fh2l":["Base fee required: ",["MIN_BASE_FEE"]," Gwei"],"z9HeHt":["Create a Privy Wallet"],"zBPjcC":["Revoke the approval for token"],"zBUJYA":["The approval for this contract will be revoked in case of the amount is 0."],"zBftr8":["Claim NFT Lucky Drop"],"zEZe86":["You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."],"zGTAja":[["claimed"]," Follow @",["account"]," (mask.io) to claim lucky drops."],"zJlXbX":["NFT"],"zPar3e":["收藏品"],"zX9KdB":["没有关注任何人"],"zXagFp":["复制地址"],"zZk9Yz":["购买"],"zga9sT":["好的"],"zgqgNP":["购买中..."],"zkEW09":["You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"],"znqB4T":["余额不足"],"zp7Ha3":["备份失败"],"zwBp5t":["私密"],"zxrGeO":["Gas limit must be bigger than ",["minGas"],"."],"zzDlyQ":["成功"]}}
+{
+    "messages": {
+        "++B0oY": [
+            ""
+        ],
+        "+01Ill": [
+            ""
+        ],
+        "+5hgHR": [
+            ""
+        ],
+        "+95jK3": [
+            "Gas Limit过低有几率会导致交易失败。"
+        ],
+        "+A4TPN": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "+CzAt9": [
+            "先前的取消关注交易正在处理中，请稍候，然后重试。"
+        ],
+        "+IEBAO": [
+            "已批准的金额"
+        ],
+        "+K0AvT": [
+            "断开"
+        ],
+        "+POswt": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "+Qcnh5": [
+            "请选择合适的方法来恢复个人数据。"
+        ],
+        "+W8dUJ": [
+            ""
+        ],
+        "+XyQiK": [
+            "同意"
+        ],
+        "+Zuhm7": [
+            "支持身份代码、私钥、本地备份或云备份以访问您的个人数据。"
+        ],
+        "+adBn3": [
+            ""
+        ],
+        "+b7T3G": [
+            "已更新"
+        ],
+        "+fTqvl": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "name": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "nft": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "+hwfjv": [
+            "请选择钱包以在保存设置后激活功能。"
+        ],
+        "+m7PfT": [
+            "成功删除"
+        ],
+        "+m7x4e": [
+            ""
+        ],
+        "+q+Wa9": [
+            ""
+        ],
+        "+uISZO": [
+            "密码不正确"
+        ],
+        "+ubcPw": [
+            "没有投票权"
+        ],
+        "+xKN8I": [
+            ""
+        ],
+        "/2nH6X": [
+            ""
+        ],
+        "/7tku+": [
+            "试一下"
+        ],
+        "/BI0y9": [
+            ""
+        ],
+        "/Dk+nX": [
+            "更多关于 ",
+            [
+                ""
+            ]
+        ],
+        "/I3RSJ": [
+            "举报垃圾"
+        ],
+        "/JOEaC": [
+            ""
+        ],
+        "/KseE7": [
+            "删除文件"
+        ],
+        "/LkuGq": [
+            "从以前的数据库备份恢复"
+        ],
+        "/OPmPQ": [
+            "验证 ",
+            [
+                ""
+            ]
+        ],
+        "/Swcdo": [
+            ""
+        ],
+        "/WfDJy": [
+            ""
+        ],
+        "/capO6": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "/eguJc": [
+            "正在上传"
+        ],
+        "/fo6Dv": [
+            "Gas 限制(Gwei)"
+        ],
+        "/giXwU": [
+            "中等风险"
+        ],
+        "/hKQcr": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "/jQctM": [
+            "发送至"
+        ],
+        "/nT6AE": [
+            "新密码"
+        ],
+        "/riTT2": [
+            "固定成功。"
+        ],
+        "/uEw9z": [
+            ""
+        ],
+        "/vtDGO": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "/xrk7I": [
+            ""
+        ],
+        "/y/pZ3": [
+            "选择代币"
+        ],
+        "0+3dvg": [
+            "此 NFT 没有任何报价。"
+        ],
+        "0/eoR6": [
+            "撤销中"
+        ],
+        "00b9QG": [
+            "设置支付密码"
+        ],
+        "01DWy7": [
+            ""
+        ],
+        "04MqGo": [
+            "发布内容："
+        ],
+        "09vHB+": [
+            ""
+        ],
+        "0C6WdO": [
+            "上传备份"
+        ],
+        "0D4bav": [
+            "代币代号名称或合约地址"
+        ],
+        "0F4ogS": [
+            "支付密码应该介于 6 到 20 个字符之间。"
+        ],
+        "0HnKBn": [
+            ""
+        ],
+        "0Lp4o6": [
+            "加载失败"
+        ],
+        "0M//Nn": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "0ZC72+": [
+            ""
+        ],
+        "0bKGbK": [
+            ""
+        ],
+        "0caMy7": [
+            "历史"
+        ],
+        "0dFHbr": [
+            "确认兑换风险"
+        ],
+        "0fljZe": [
+            ""
+        ],
+        "0hFUd/": [
+            "您必须授予 ",
+            [
+                ""
+            ],
+            " 智能合约权限才能使用您的 ",
+            [
+                ""
+            ],
+            " 。每个代币只需要授权一次。"
+        ],
+        "0jddIP": [
+            [
+                ""
+            ],
+            " 位成员"
+        ],
+        "0lBTmP": [
+            ""
+        ],
+        "0oFu/K": [
+            ""
+        ],
+        "0oMKRL": [
+            "删除联系人"
+        ],
+        "0tdB+o": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "0wJVK+": [
+            "基础"
+        ],
+        "0wdd7X": [
+            "加入"
+        ],
+        "0wzWAN": [
+            ""
+        ],
+        "0xXDLS": [
+            ""
+        ],
+        "0yPSCj": [
+            "高风险"
+        ],
+        "0yf3iU": [
+            "您的钱包取消了此签名"
+        ],
+        "1+6BOG": [
+            "下载备份"
+        ],
+        "1+P9RR": [
+            "切换到 ",
+            [
+                ""
+            ]
+        ],
+        "11kmCI": [
+            ""
+        ],
+        "199DuV": [
+            "在社交媒体上直接展示Gitcoin项目的具体信息。"
+        ],
+        "1DwbcE": [
+            "加载中...."
+        ],
+        "1EOhmY": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "1LkMSp": [
+            ""
+        ],
+        "1M8xFP": [
+            "若设置的滑点过低，在流动性极低的情况下交易可能会被退回。"
+        ],
+        "1QJyuR": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "1QfxQT": [
+            "关闭"
+        ],
+        "1R2W/B": [
+            ""
+        ],
+        "1TNIig": [
+            "打开"
+        ],
+        "1TaavV": [
+            "注意：如果您使用最后一次导入中的助记词，您可以恢复来自该助记词句的钱包。"
+        ],
+        "1Uqt6P": [
+            "断开钱包?"
+        ],
+        "1Wbxhe": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "1Z++2X": [
+            ""
+        ],
+        "1agbuA": [
+            ""
+        ],
+        "1bTY60": [
+            ""
+        ],
+        "1kE7ob": [
+            ""
+        ],
+        "1mjyN6": [
+            ""
+        ],
+        "1nMGEs": [
+            "身份"
+        ],
+        "1njn7W": [
+            "浅色"
+        ],
+        "1on6yK": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "1rsf+c": [
+            ""
+        ],
+        "1xwmzN": [
+            ""
+        ],
+        "2/N/mr": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "22QmCQ": [
+            ""
+        ],
+        "28ABhV": [
+            ""
+        ],
+        "29b5Sq": [
+            "Blocto 只支持 Flow 链。"
+        ],
+        "2CMLgZ": [
+            ""
+        ],
+        "2FYpfJ": [
+            "更多"
+        ],
+        "2GHENQ": [
+            "Web3 名片"
+        ],
+        "2J5wRx": [
+            ""
+        ],
+        "2Lr4ie": [
+            ""
+        ],
+        "2MPu+c": [
+            "优先费用 (GWEI)"
+        ],
+        "2XVeKu": [
+            ""
+        ],
+        "2Xze/r": [
+            "区块浏览器（可选）"
+        ],
+        "2jQko7": [
+            "关联账户"
+        ],
+        "2kXxch": [
+            "对不起，签名失败！请再试一次。"
+        ],
+        "2p7WMm": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "2saF1j": [
+            ""
+        ],
+        "2wxgft": [
+            "重命名"
+        ],
+        "3/0KF0": [
+            ""
+        ],
+        "34UMci": [
+            "钱包设置"
+        ],
+        "38C83c": [
+            "身份助记词"
+        ],
+        "39ohdf": [
+            "活动"
+        ],
+        "3A/gtD": [
+            "无效 RPC URL 。"
+        ],
+        "3A/mG4": [
+            "更换钱包"
+        ],
+        "3AP6p1": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "3B4jmY": [
+            "数据关联"
+        ],
+        "3CR0qY": [
+            ""
+        ],
+        "3J+S3n": [
+            ""
+        ],
+        "3OhjJ4": [
+            ""
+        ],
+        "3Q5eQl": [
+            ""
+        ],
+        "3Q8dPe": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "3SiDD1": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "nft": [
+                        ""
+                    ],
+                    "name": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "other": []
+                }
+            ],
+            ""
+        ],
+        "3ThLdM": [
+            "在 GitHub 上报告"
+        ],
+        "3WZ1WL": [
+            "请输入导出个人私钥的备份密码。"
+        ],
+        "3YDnov": [
+            ""
+        ],
+        "3ZgRKI": [
+            [
+                "",
+                "",
+                {
+                    "post": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ]
+                    ],
+                    "mint": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ]
+                    ],
+                    "revise": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ]
+                    ],
+                    "share": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ]
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "3awOET": [
+            ""
+        ],
+        "3bGj61": [
+            ""
+        ],
+        "3cAxpB": [
+            ""
+        ],
+        "3cw8FQ": [
+            "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。"
+        ],
+        "3dAaqV": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "3fpIq1": [
+            "至: ",
+            [
+                ""
+            ]
+        ],
+        "3iUAE7": [
+            ""
+        ],
+        "3kbpgO": [
+            "Gas 限制"
+        ],
+        "3lUGN0": [
+            "切换 Persona"
+        ],
+        "3pqzUK": [
+            ""
+        ],
+        "3qe4O9": [
+            "最大费用"
+        ],
+        "3uBJPr": [
+            ""
+        ],
+        "3uQmjD": [
+            ""
+        ],
+        "3ublvs": [
+            ""
+        ],
+        "3yLqgI": [
+            ""
+        ],
+        "4+VnE8": [
+            ""
+        ],
+        "42yL2J": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "43g2kf": [
+            "只对您可见"
+        ],
+        "44bNbA": [
+            "选择 NFT 合约"
+        ],
+        "4DIYdt": [
+            ""
+        ],
+        "4EN5JL": [
+            ""
+        ],
+        "4FvVUv": [
+            "重置钱包"
+        ],
+        "4GBOoi": [
+            ""
+        ],
+        "4Gz2wC": [
+            ""
+        ],
+        "4HavhE": [
+            ""
+        ],
+        "4HtGBb": [
+            ""
+        ],
+        "4JCJIV": [
+            "什么是 Web3 文件服务？"
+        ],
+        "4coHVU": [
+            "Lens 取消关注"
+        ],
+        "4lm4o+": [
+            ""
+        ],
+        "4na5mr": [
+            ""
+        ],
+        "4ojMOt": [
+            "输入您的密码"
+        ],
+        "4pSxwB": [
+            "开始"
+        ],
+        "4zgT9K": [
+            "使用您的钱包连接Mask Network账户。"
+        ],
+        "50QwC8": [
+            "价值"
+        ],
+        "51TkMy": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "51cT/A": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "51rAFB": [
+            ""
+        ],
+        "52nzPV": [
+            "",
+            [
+                "",
+                "",
+                {
+                    "twitter": [
+                        ""
+                    ],
+                    "facebook": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            ""
+        ],
+        "55/jcy": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "5Dz44N": [
+            "设置支付密码"
+        ],
+        "5E57TU": [
+            "Max priority fee 在当前网络环境下过低"
+        ],
+        "5G0lxx": [
+            ""
+        ],
+        "5H/4VW": [
+            ""
+        ],
+        "5HVoyc": [
+            ""
+        ],
+        "5Jczad": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "5N3b5J": [
+            "市值"
+        ],
+        "5O5enn": [
+            "输入支付密码"
+        ],
+        "5QfZ6O": [
+            ""
+        ],
+        "5YfW3S": [
+            ""
+        ],
+        "5ZzgbQ": [
+            "连接到 ",
+            [
+                ""
+            ]
+        ],
+        "5e22kj": [
+            "邮箱验证码"
+        ],
+        "5hFImX": [
+            ""
+        ],
+        "5i1JPS": [
+            ""
+        ],
+        "5iHe/7": [
+            "网络错误，请重试"
+        ],
+        "5o2pdQ": [
+            "创建身份"
+        ],
+        "5s6EhU": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        "",
+                        "",
+                        ""
+                    ],
+                    "other": [
+                        "",
+                        "",
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "5sIdhw": [
+            "分享与"
+        ],
+        "5uFQ9j": [
+            ""
+        ],
+        "623chP": [
+            "信息资料"
+        ],
+        "66J/I3": [
+            "交易费"
+        ],
+        "678PKt": [
+            "网络名称"
+        ],
+        "68FuwU": [
+            "URL要求合适的 HTTPS 前缀。"
+        ],
+        "68m9Nl": [
+            "向现有组添加新地址"
+        ],
+        "6B+2/d": [
+            ""
+        ],
+        "6DvbLh": [
+            "请安装您的 metamask 钱包并设置您的第一个钱包。"
+        ],
+        "6HT670": [
+            "功能：",
+            [
+                ""
+            ]
+        ],
+        "6IHgRq": [
+            ""
+        ],
+        "6IvSyW": [
+            "代币标准"
+        ],
+        "6RDwJM": [
+            "代币"
+        ],
+        "6U+PWG": [
+            ""
+        ],
+        "6Uau97": [
+            "跳过"
+        ],
+        "6V3Ea3": [
+            "已复制"
+        ],
+        "6VJnE7": [
+            "注意：扫描检测可能无法保证100%准确。"
+        ],
+        "6YASel": [
+            "网络无效"
+        ],
+        "6YtxFj": [
+            "名称"
+        ],
+        "6ZZ+4S": [
+            ""
+        ],
+        "6foA8n": [
+            ""
+        ],
+        "6gRgw8": [
+            "重试"
+        ],
+        "6k8iqO": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "6knJVf": [
+            ""
+        ],
+        "6s8L6f": [
+            "切换网络"
+        ],
+        "6sbLuF": [
+            "当前结果"
+        ],
+        "6ulv1U": [
+            "合同所有者"
+        ],
+        "6vVuTX": [
+            ""
+        ],
+        "7+2e01": [
+            ""
+        ],
+        "70wH1Q": [
+            "年利率"
+        ],
+        "76Ml+j": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "76gPWk": [
+            "好的"
+        ],
+        "78Kj7O": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "7Ae1jc": [
+            ""
+        ],
+        "7Bj3x9": [
+            "失败"
+        ],
+        "7PPwVf": [
+            "用户只能删除这些文件的本地链接。去中心化存储协议中的文件不能被删除。"
+        ],
+        "7PgtYC": [
+            "设置 NFT 头像"
+        ],
+        "7QptC5": [
+            "自动锁定时间"
+        ],
+        "7R2WG+": [
+            "由Mask解密："
+        ],
+        "7VpPHA": [
+            "确认"
+        ],
+        "7c99ux": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "7cg5cq": [
+            ""
+        ],
+        "7eFA2G": [
+            ""
+        ],
+        "7hZyUn": [
+            "存入操作处理中"
+        ],
+        "7k2lei": [
+            ""
+        ],
+        "7lnlzl": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "7qUM2b": [
+            "打开一个钱包"
+        ],
+        "7s5tLo": [
+            ""
+        ],
+        "7w1rTm": [
+            ""
+        ],
+        "7yziEn": [
+            ""
+        ],
+        "8+xvyR": [
+            "区块链"
+        ],
+        "82+n6o": [
+            ""
+        ],
+        "869iq0": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "87Poy7": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "88+Eku": [
+            ""
+        ],
+        "89kDhv": [
+            ""
+        ],
+        "8BsgdX": [
+            ""
+        ],
+        "8C8O9E": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "8Dh77Z": [
+            ""
+        ],
+        "8IN0ph": [
+            ""
+        ],
+        "8J7y6E": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "8Kly2P": [
+            ""
+        ],
+        "8MJFvR": [
+            [
+                ""
+            ],
+            " 个有风险的因素"
+        ],
+        "8N1Wbf": [
+            "此 Token 没有风险或关注因素。"
+        ],
+        "8RF/Sx": [
+            "添加成功"
+        ],
+        "8S5o5V": [
+            "保存后分享并推荐此功能。"
+        ],
+        "8TMaZI": [
+            ""
+        ],
+        "8Tg/JR": [
+            "自定义"
+        ],
+        "8WLjqx": [
+            ""
+        ],
+        "8ZsakT": [
+            "密码"
+        ],
+        "8bgRf6": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "8djViz": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "8glx+u": [
+            ""
+        ],
+        "8rElAH": [
+            ""
+        ],
+        "8wEOMN": [
+            ""
+        ],
+        "9+VwX/": [
+            "添加 NFT"
+        ],
+        "9KKhJV": [
+            "正在签名..."
+        ],
+        "9VcshJ": [
+            "启用自动粘贴"
+        ],
+        "9Y1kXO": [
+            ""
+        ],
+        "9bG48P": [
+            ""
+        ],
+        "9cDpsw": [
+            "许可权限"
+        ],
+        "9cSIbb": [
+            ""
+        ],
+        "9d/Qe4": [
+            "服务协议"
+        ],
+        "9hg9mc": [
+            "正在下载"
+        ],
+        "9hzYBR": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "9jba96": [
+            "当前只支持输入消息文本。"
+        ],
+        "9kIgHE": [
+            "此 JSON 文件使用您当前的支付密码加密。导入此钱包时解密需要相同的密码。"
+        ],
+        "9lqqpY": [
+            ""
+        ],
+        "9oP21f": [
+            "我的投票"
+        ],
+        "9oq2rm": [
+            ""
+        ],
+        "9q+I38": [
+            "您的投票权"
+        ],
+        "9r9nwF": [
+            "平分"
+        ],
+        "9sjcnZ": [
+            ""
+        ],
+        "9tG0uf": [
+            "请验证您的社交账户"
+        ],
+        "9uYu7e": [
+            "您尚未上传任何文件。"
+        ],
+        "9w2hgY": [
+            "手动粘贴"
+        ],
+        "9xaUMG": [
+            ""
+        ],
+        "A+Ijr2": [
+            "关闭[检查安全]？"
+        ],
+        "A0VzMm": [
+            "使用 Token 名称、 NFT 收藏品、 ENS 域名或钱包地址优化搜索结果。"
+        ],
+        "A1bmDM": [
+            "在此找不到已验证的帐户。"
+        ],
+        "A1taO8": [
+            "搜索"
+        ],
+        "A3Ndml": [
+            ""
+        ],
+        "A4vJQr": [
+            ""
+        ],
+        "A6JChW": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "A9tojF": [
+            "密码不正确"
+        ],
+        "AElxM7": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "AJNYYr": [
+            ""
+        ],
+        "AKLbfQ": [
+            "恢复数据库"
+        ],
+        "AMJWWT": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "ANYjcp": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        ""
+                    ],
+                    "other": [
+                        "",
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "ANk/Zy": [
+            ""
+        ],
+        "AOPSKq": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "ASNDad": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "AV+9wg": [
+            "重新输入"
+        ],
+        "Ah4d0u": [
+            "安全检测"
+        ],
+        "AjVXBS": [
+            "日历"
+        ],
+        "Ap948/": [
+            "显示"
+        ],
+        "Appw6V": [
+            "没有找到任何NFT。"
+        ],
+        "Aq+O0x": [
+            "状态"
+        ],
+        "AuXfDa": [
+            ""
+        ],
+        "AuvDq6": [
+            ""
+        ],
+        "AwQpq/": [
+            ""
+        ],
+        "AxPAXW": [
+            "未找到结果"
+        ],
+        "AxdOHo": [
+            "交易对"
+        ],
+        "Axp2cZ": [
+            "24h 交易总额"
+        ],
+        "AyLiVq": [
+            "扫描二维码以接收付款"
+        ],
+        "B1T4nn": [
+            "红包详情"
+        ],
+        "B6C0XJ": [
+            "暂无数据"
+        ],
+        "B8B8TU": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "BAvIGC": [
+            ""
+        ],
+        "BFhvNB": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "BMCVM3": [
+            "钱包签名"
+        ],
+        "BQHQ9v": [
+            ""
+        ],
+        "BQi2Kk": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "BUXiPs": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "BWSJkS": [
+            ""
+        ],
+        "BXixGM": [
+            "使用 Persona 来加密和解密社交媒体帖子和消息。"
+        ],
+        "Ba6uFH": [
+            ""
+        ],
+        "BaU+dx": [
+            "连接您的社交媒体帐户。"
+        ],
+        "Baj2MJ": [
+            "储蓄"
+        ],
+        "BaoXTT": [
+            ""
+        ],
+        "BiGQfG": [
+            "交易哈希"
+        ],
+        "BkN2qg": [
+            ""
+        ],
+        "BmN4Bk": [
+            ""
+        ],
+        "ByAMF+": [
+            "风险提示"
+        ],
+        "ByPj1d": [
+            ""
+        ],
+        "BzEFor": [
+            ""
+        ],
+        "BzfzPK": [
+            "条目"
+        ],
+        "C0JhYS": [
+            "更改网络"
+        ],
+        "C2/uLW": [
+            ""
+        ],
+        "C3Wgzy": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "CCIrQ8": [
+            ""
+        ],
+        "CE+M2e": [
+            "信息资料"
+        ],
+        "CEk7Nc": [
+            "至少6个字符"
+        ],
+        "CFPbpH": [
+            "新密码不匹配"
+        ],
+        "CJviCK": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "CK1KXz": [
+            "最大"
+        ],
+        "CMHmbm": [
+            ""
+        ],
+        "CMfM6C": [
+            "没有足够的 Gas 费"
+        ],
+        "CP3D8G": [
+            "进度"
+        ],
+        "CT10+i": [
+            ""
+        ],
+        "CTSEx8": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "CU3U3d": [
+            "尝试恢复"
+        ],
+        "CWsYB3": [
+            "欢迎回来"
+        ],
+        "CXHRbe": [
+            "钱包请求超时"
+        ],
+        "CYRJEX": [
+            "拥有者"
+        ],
+        "CZSWya": [
+            ""
+        ],
+        "CZmSbe": [
+            ""
+        ],
+        "Cf/0to": [
+            "数据来源于",
+            [
+                ""
+            ],
+            " 。"
+        ],
+        "Citz6F": [
+            "兑换"
+        ],
+        "CkLMZ2": [
+            ""
+        ],
+        "CmMDVW": [
+            ""
+        ],
+        "CpciBt": [
+            "切换到 Polygon 并关注"
+        ],
+        "CtByM7": [
+            "连接钱包"
+        ],
+        "Cwxng+": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "Cy19fm": [
+            "鼠标悬停于头像右下角的 Mask 图标或时间线上的代币话题标签，浏览多元化账户的 Web3 足迹。"
+        ],
+        "CygwLN": [
+            ""
+        ],
+        "Cz6Lx7": [
+            "加密方式"
+        ],
+        "D79cZK": [
+            "即时"
+        ],
+        "D9iWaX": [
+            "请检查 ToS 文档"
+        ],
+        "D9za/8": [
+            ""
+        ],
+        "DA2uGM": [
+            ""
+        ],
+        "DAFhfT": [
+            ""
+        ],
+        "DC3sw8": [
+            ""
+        ],
+        "DHhJ7s": [
+            "上一页"
+        ],
+        "DKBbsW": [
+            "Gas Price 必须大于 0 Gwei。"
+        ],
+        "DPfwMq": [
+            "完成"
+        ],
+        "DYoO0m": [
+            ""
+        ],
+        "DdUFp+": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "Dk6Non": [
+            ""
+        ],
+        "DkHkqH": [
+            ""
+        ],
+        "DnmyoA": [
+            ""
+        ],
+        "DoQ5Lj": [
+            ""
+        ],
+        "Dpe+e3": [
+            "添加您的钱包将允许您通过Next.ID服务拥有、查看和使用您的数字身份。 请注意，您必须签名并认证交易，以证明您的钱包的所有权。"
+        ],
+        "DtZDW+": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "Du6bPw": [
+            "地址"
+        ],
+        "DuIDTw": [
+            ""
+        ],
+        "Dz56Ua": [
+            "加密"
+        ],
+        "E399AQ": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "E6HGuD": [
+            ""
+        ],
+        "E6Sqiu": [
+            "加载 ",
+            [
+                ""
+            ],
+            " 失败，请点击重试。"
+        ],
+        "E6YUtc": [
+            ""
+        ],
+        "E7prOW": [
+            ""
+        ],
+        "EBC6hj": [
+            "本地备份"
+        ],
+        "EGWr+Q": [
+            "Web3 名片"
+        ],
+        "EJRk0x": [
+            [
+                "",
+                "",
+                {
+                    "slow": [
+                        ""
+                    ],
+                    "normal": [
+                        ""
+                    ],
+                    "fast": [
+                        ""
+                    ],
+                    "custom": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "ELQ256": [
+            ""
+        ],
+        "EMLHjH": [
+            "详细信息"
+        ],
+        "ENIvoT": [
+            "请在自动锁定您的钱包之前设置时间。"
+        ],
+        "ERYJcj": [
+            "备份密码必须是 8-20 个字符，包括大写、小写、特殊字符和数字。"
+        ],
+        "EStYiZ": [
+            ""
+        ],
+        "EVFPUv": [
+            ""
+        ],
+        "EYwKb0": [
+            "Gas 价格 (gwei)"
+        ],
+        "Ea4oxV": [
+            "跟随系统"
+        ],
+        "EbE80y": [
+            ""
+        ],
+        "EbVCxG": [
+            "",
+            [
+                "",
+                "",
+                {
+                    "deploy": [
+                        ""
+                    ],
+                    "execute": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            ""
+        ],
+        "Eda+dy": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Eefe1a": [
+            ""
+        ],
+        "EfAke+": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Eh4m6e": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Enb3Qk": [
+            ""
+        ],
+        "EoKe5U": [
+            ""
+        ],
+        "EsKgLS": [
+            "点击这里快速开始。"
+        ],
+        "Ev2r9A": [
+            "没有任何结果。"
+        ],
+        "EwiD7E": [
+            "再次输入支付密码"
+        ],
+        "F/pYeX": [
+            ""
+        ],
+        "F3bW6y": [
+            ""
+        ],
+        "F4Igxz": [
+            ""
+        ],
+        "F7U8uz": [
+            ""
+        ],
+        "F8VT6y": [
+            ""
+        ],
+        "F8Wc3I": [
+            "将您的文件拖放到此处"
+        ],
+        "FAKSZG": [
+            ""
+        ],
+        "FC17bL": [
+            ""
+        ],
+        "FGceVy": [
+            ""
+        ],
+        "FMQ6p2": [
+            ""
+        ],
+        "FR2cx3": [
+            ""
+        ],
+        "FY2gWe": [
+            "合约地址不正确或此 NFT 不属于您。"
+        ],
+        "FZg3wM": [
+            "操作"
+        ],
+        "FfJy7A": [
+            "管理网络"
+        ],
+        "FgAxTj": [
+            "登出"
+        ],
+        "Fgyfqo": [
+            "每个金额"
+        ],
+        "FiKDfi": [
+            ""
+        ],
+        "FiYmUY": [
+            "无关联账号"
+        ],
+        "Fim3FY": [
+            "下载 https://mask.io，在Twitter上尝试更强大的工具。"
+        ],
+        "Fn9Tvh": [
+            "交易量 (24h)"
+        ],
+        "FnQek5": [
+            ""
+        ],
+        "FnjSI+": [
+            "非当前帐户。请切换到此帐户以设置 NFT 头像。"
+        ],
+        "Fs/bd5": [
+            "无效的块浏览器URL。"
+        ],
+        "FzzpXs": [
+            "出售结束于 ",
+            [
+                ""
+            ]
+        ],
+        "G+XYfT": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "G4NrhP": [
+            ""
+        ],
+        "GAZNIW": [
+            "价格统计数据"
+        ],
+        "GAvnvl": [
+            "支付密码"
+        ],
+        "GDe4XX": [
+            ""
+        ],
+        "GEL05h": [
+            ""
+        ],
+        "GExRUL": [
+            "备份密码"
+        ],
+        "GHvzdC": [
+            "最近两周没有内容。"
+        ],
+        "GK6Tzr": [
+            "身份签名"
+        ],
+        "GLDuz6": [
+            ""
+        ],
+        "GRLMKx": [
+            ""
+        ],
+        "GS+Mus": [
+            "导出"
+        ],
+        "GS0ldX": [
+            "不支持的网络类型"
+        ],
+        "GShMK6": [
+            "退款中"
+        ],
+        "GTJCth": [
+            ""
+        ],
+        "GWCG6Y": [
+            "复制图片"
+        ],
+        "GWKfFr": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "GWMpIa": [
+            [
+                ""
+            ],
+            " 个有风险的因素"
+        ],
+        "GXhrYw": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "GXsAby": [
+            "撤销"
+        ],
+        "GZzKYx": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "GaH2JF": [
+            ""
+        ],
+        "Gia1VG": [
+            "文件服务"
+        ],
+        "Gmmd6d": [
+            ""
+        ],
+        "GrTvoo": [
+            ""
+        ],
+        "GtJJAj": [
+            "添加钱包"
+        ],
+        "Gw91G1": [
+            ""
+        ],
+        "GyvZPz": [
+            ""
+        ],
+        "H1v3zR": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "H8rw2f": [
+            "(名称由网站设置)"
+        ],
+        "HCKlXm": [
+            "Token 合约地址"
+        ],
+        "HF6C2L": [
+            ""
+        ],
+        "HFVck2": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "HGTZAO": [
+            ""
+        ],
+        "HH25qd": [
+            ""
+        ],
+        "HIq3th": [
+            ""
+        ],
+        "HKH+W+": [
+            "数据"
+        ],
+        "HTX2HV": [
+            ""
+        ],
+        "HVRhUV": [
+            "继续执行表示您同意"
+        ],
+        "Hp1l6f": [
+            "当前"
+        ],
+        "HpK/8d": [
+            "重新加载"
+        ],
+        "HqiAyF": [
+            ""
+        ],
+        "HvDfH/": [
+            "已导入"
+        ],
+        "HvUm3m": [
+            ""
+        ],
+        "I4caYo": [
+            "验证码错误。"
+        ],
+        "I5kL4f": [
+            "活动日志"
+        ],
+        "I7z//Y": [
+            ""
+        ],
+        "IBAx3U": [
+            "确认保存"
+        ],
+        "IF7RiR": [
+            ""
+        ],
+        "IGbphl": [
+            ""
+        ],
+        "ILvrUp": [
+            ""
+        ],
+        "IMX4sR": [
+            ""
+        ],
+        "IQ3gAw": [
+            "上传文件"
+        ],
+        "ITBQO3": [
+            "Max priority fee必须大于 0 GWEI"
+        ],
+        "IUG86v": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "IUp08P": [
+            "当前钱包没有 Lens ，无法关注/取消关注"
+        ],
+        "IX1M/E": [
+            "地板价"
+        ],
+        "IXbRbM": [
+            "切换钱包"
+        ],
+        "If2v4h": [
+            "红包"
+        ],
+        "IhnvgP": [
+            ""
+        ],
+        "ImhKg5": [
+            "无法获取链 ID。您的 RPC URL 正确吗？"
+        ],
+        "IoAuJG": [
+            "发送中..."
+        ],
+        "IrI9pg": [
+            "结束日期"
+        ],
+        "Iu4Ja9": [
+            "请输入合约地址。"
+        ],
+        "J05/Al": [
+            ""
+        ],
+        "J0LAHU": [
+            "退款"
+        ],
+        "J0Mxpc": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "J24FyN": [
+            ""
+        ],
+        "J2eKUI": [
+            "文件"
+        ],
+        "JA8K9s": [
+            ""
+        ],
+        "JGds+N": [
+            "缺少数字、字母或特殊字符。"
+        ],
+        "JGpseC": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ],
+            ""
+        ],
+        "JLiwYz": [
+            ""
+        ],
+        "JOP9uZ": [
+            ""
+        ],
+        "JPHuMW": [
+            ""
+        ],
+        "JUcj/I": [
+            "切换 X 标志"
+        ],
+        "JXJlYD": [
+            "设置您的角色名称"
+        ],
+        "JbKZsv": [
+            ""
+        ],
+        "JeHCi7": [
+            ""
+        ],
+        "JfI60y": [
+            "支付密码错误。"
+        ],
+        "Jg5pf7": [
+            "当前基础手续费是 ",
+            [
+                ""
+            ],
+            ""
+        ],
+        "JiIKww": [
+            "高阶设置"
+        ],
+        "JlFcis": [
+            "发送"
+        ],
+        "JlIzk8": [
+            "浏览文件"
+        ],
+        "Jnjbl3": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Js4Nk0": [
+            [
+                "",
+                "",
+                {
+                    "finding_post_key": [
+                        ""
+                    ],
+                    "finding_person_public_key": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "JuVC24": [
+            ""
+        ],
+        "JwzZmt": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "K1tshY": [
+            ""
+        ],
+        "K5a6t1": [
+            "该身份已存在。"
+        ],
+        "K7tIrx": [
+            ""
+        ],
+        "K8jCIB": [
+            ""
+        ],
+        "KAS4UW": [
+            [
+                ""
+            ],
+            " 个需要关注的因素"
+        ],
+        "KCeSRZ": [
+            ""
+        ],
+        "KFYFgI": [
+            "签名失败"
+        ],
+        "KFwID2": [
+            ""
+        ],
+        "KGHnSc": [
+            "锁定钱包"
+        ],
+        "KJGKkh": [
+            ""
+        ],
+        "KMgp2+": [
+            [
+                ""
+            ],
+            " 可用"
+        ],
+        "KPUGxy": [
+            "随机金额"
+        ],
+        "KRz1oj": [
+            ""
+        ],
+        "KTfagY": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "KVAoFR": [
+            ""
+        ],
+        "KVkke3": [
+            "设置 NFT 头像"
+        ],
+        "KWeNH6": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "KisOjk": [
+            "恢复身份"
+        ],
+        "Kj4oEm": [
+            "创建一个新的身份"
+        ],
+        "Kl9gHp": [
+            "钱包组 #",
+            [
+                ""
+            ]
+        ],
+        "KmQ25M": [
+            "最大优先费用在当前网络环境下过高。"
+        ],
+        "KnidLU": [
+            ""
+        ],
+        "Ko4L/B": [
+            "此接收地址为合约地址，请重新检查。"
+        ],
+        "KojyJ4": [
+            "网络错误"
+        ],
+        "Koz2Rg": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "KtMMzG": [
+            ""
+        ],
+        "KwJJLb": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Ky09J8": [
+            "先前的关注交易正在处理中，请稍候，然后重试。"
+        ],
+        "KziH2K": [
+            "快速"
+        ],
+        "Kzu9r9": [
+            "24H 交易量"
+        ],
+        "L+bpwv": [
+            "请在导出私钥之前设置您的备份密码。"
+        ],
+        "L4vN0F": [
+            ""
+        ],
+        "L82H5Z": [
+            ""
+        ],
+        "L87Mfu": [
+            ""
+        ],
+        "L96aan": [
+            "查看交易详情"
+        ],
+        "LBtfmO": [
+            ""
+        ],
+        "LJkXYZ": [
+            "创建新的 MASK 身份"
+        ],
+        "LLf+t1": [
+            "未找到存款协议。"
+        ],
+        "LNItR6": [
+            ""
+        ],
+        "LP+1Z7": [
+            "添加网络"
+        ],
+        "LSwUJb": [
+            ""
+        ],
+        "LU3p9s": [
+            ""
+        ],
+        "LWJCIn": [
+            "已连接的网站"
+        ],
+        "La9ArN": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "LcET2C": [
+            "隐私政策"
+        ],
+        "LcZh+r": [
+            "不支持的数据备份格式"
+        ],
+        "LhMjLm": [
+            "时间"
+        ],
+        "Lho4Qd": [
+            ""
+        ],
+        "LiE5z4": [
+            ""
+        ],
+        "LigbuA": [
+            "在 Web3 中，您可以给已安装Mask Network的好友展示接收小费的地址，NFT 收藏品，捐赠记录和其他链上信息。"
+        ],
+        "LkYKvc": [
+            ""
+        ],
+        "LqWHk1": [
+            "隐藏 ",
+            [
+                ""
+            ]
+        ],
+        "Lx4CpL": [
+            "文件名必须介于 3 到 20 个字符之间。"
+        ],
+        "Lz7CzN": [
+            ""
+        ],
+        "Lzo8mb": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "M0FgOk": [
+            "添加联系人"
+        ],
+        "M1RnFv": [
+            "已过期"
+        ],
+        "M1ts1r": [
+            ""
+        ],
+        "M24E85": [
+            "此地址是合同地址。"
+        ],
+        "M4g1UJ": [
+            "合约交互"
+        ],
+        "M7ZGdw": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "M9OYUo": [
+            "如果您未投票，请再试一次。"
+        ],
+        "MC00Lm": [
+            ""
+        ],
+        "MEIAzV": [
+            "未命名的"
+        ],
+        "MKEPCY": [
+            "关注"
+        ],
+        "MOHcKb": [
+            "请输入Max priority fee"
+        ],
+        "MQ9hQ4": [
+            ""
+        ],
+        "MR/0Va": [
+            ""
+        ],
+        "MTqQMG": [
+            "未设置"
+        ],
+        "Mh3RsB": [
+            "最好的祝福！"
+        ],
+        "Mi8ATZ": [
+            ""
+        ],
+        "Midntl": [
+            "下载报告"
+        ],
+        "Mm1aH+": [
+            ""
+        ],
+        "MpnSqP": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "MqdtT5": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "MyjAbr": [
+            "重新发送"
+        ],
+        "N/fqDa": [
+            "Ens或地址(0x)"
+        ],
+        "N0YrmD": [
+            "贵重物品"
+        ],
+        "N0tcou": [
+            "认领中..."
+        ],
+        "N2DUxS": [
+            "余额不足"
+        ],
+        "N2S1rs": [
+            "空的"
+        ],
+        "N2aeX8": [
+            "未检测到有效的钱包。请先连接钱包或验证钱包。"
+        ],
+        "N40H+G": [
+            "所有人"
+        ],
+        "N5GKfB": [
+            ""
+        ],
+        "N6/RZd": [
+            "抱歉，保存 NFT 头像失败。请重新设置。"
+        ],
+        "N931rj": [
+            ""
+        ],
+        "NERSN2": [
+            ""
+        ],
+        "NJbBmC": [
+            "切换 Twitter 标志"
+        ],
+        "NOi+Fr": [
+            ""
+        ],
+        "NTnXx/": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "NVt/wW": [
+            ""
+        ],
+        "NWqhru": [
+            "重新选择"
+        ],
+        "NZ7wlC": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "Na6Ytj": [
+            "更改 NFT 头像"
+        ],
+        "NaZTE7": [
+            ""
+        ],
+        "NdlvGd": [
+            ""
+        ],
+        "NfxOUe": [
+            "输入总数"
+        ],
+        "Ng063n": [
+            ""
+        ],
+        "Nhp9Kw": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "NkgvWN": [
+            "登出失败"
+        ],
+        "NloaHG": [
+            "备份密码"
+        ],
+        "Ns5WaC": [
+            "没有发现备份"
+        ],
+        "Nu4oKW": [
+            "描述"
+        ],
+        "NwibRO": [
+            ""
+        ],
+        "NzlE6O": [
+            ""
+        ],
+        "Nzm8dm": [
+            "示例：Alice"
+        ],
+        "Nzwli2": [
+            "基础信息"
+        ],
+        "O2XHf2": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "O3Nzf+": [
+            ""
+        ],
+        "O3oNi5": [
+            "电子邮箱"
+        ],
+        "O86J+j": [
+            ""
+        ],
+        "O8PsYe": [
+            ""
+        ],
+        "OAZ+tI": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        "",
+                        ""
+                    ],
+                    "other": [
+                        "",
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "OAfk3i": [
+            ""
+        ],
+        "OCJdad": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "OLUEnY": [
+            ""
+        ],
+        "OLY2Jk": [
+            "Gas 价格"
+        ],
+        "OQEwR/": [
+            ""
+        ],
+        "OR475H": [
+            "网络"
+        ],
+        "OcvI49": [
+            ""
+        ],
+        "OeD4sM": [
+            ""
+        ],
+        "OfhWJH": [
+            "重置"
+        ],
+        "OgPkDe": [
+            "货币符号(可选)"
+        ],
+        "OgohfQ": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "OhgYJS": [
+            "基础设置"
+        ],
+        "OkofjH": [
+            ""
+        ],
+        "On0aF2": [
+            "网站"
+        ],
+        "OsyKSt": [
+            "提取"
+        ],
+        "OuUyzz": [
+            ""
+        ],
+        "OzSOpz": [
+            ""
+        ],
+        "P+K/3O": [
+            "确认中"
+        ],
+        "P7S/hC": [
+            "最大优先费用必须大于 0 Gwei。"
+        ],
+        "P9wzG/": [
+            "恢复"
+        ],
+        "PByO0X": [
+            "投票"
+        ],
+        "PDW/HG": [
+            ""
+        ],
+        "PGdbc0": [
+            ""
+        ],
+        "PHM7OA": [
+            "所支持的网站"
+        ],
+        "PI/VCJ": [
+            ""
+        ],
+        "PIG043": [
+            ""
+        ],
+        "PLWaf6": [
+            "下一步"
+        ],
+        "PNZOzY": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "name": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "nft": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "PRkIUI": [
+            "Gas 费"
+        ],
+        "PTXNyo": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "Pd3dlq": [
+            "流通总量"
+        ],
+        "PeT3a5": [
+            ""
+        ],
+        "PiH3UR": [
+            "已复制"
+        ],
+        "PjBWOL": [
+            "创建您的身份以开始"
+        ],
+        "PlE+Fs": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "PsQmAw": [
+            "任何用户可见"
+        ],
+        "Pt3n39": [
+            "没有备份"
+        ],
+        "PwjgPX": [
+            "请创建您的身份以使用 Web3 个人资料。"
+        ],
+        "Q0IFtx": [
+            ""
+        ],
+        "Q2lUR2": [
+            "货币"
+        ],
+        "Q68Nuc": [
+            ""
+        ],
+        "QF9SdB": [
+            "拆分模式"
+        ],
+        "QHZRmq": [
+            "站点"
+        ],
+        "QHcLEN": [
+            ""
+        ],
+        "QJQd1J": [
+            "编辑个人资料"
+        ],
+        "QQPCqQ": [
+            "备份钱包"
+        ],
+        "QRsMow": [
+            "交易已确认"
+        ],
+        "QU9aqK": [
+            ""
+        ],
+        "QUBIav": [
+            ""
+        ],
+        "QWxok/": [
+            ""
+        ],
+        "QXDgyQ": [
+            "请按正确顺序写下以下单词。保证安全，不与任何人分享！"
+        ],
+        "Qbo7Ev": [
+            "写下助记词"
+        ],
+        "QcVZFH": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "Qd0xFm": [
+            ""
+        ],
+        "QowPFh": [
+            "NFT"
+        ],
+        "QpgBEp": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "QsVbHo": [
+            ""
+        ],
+        "QyZU8V": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        "",
+                        " 个风险条目"
+                    ],
+                    "other": [
+                        "",
+                        " 个风险条目"
+                    ]
+                }
+            ]
+        ],
+        "QypSt2": [
+            ""
+        ],
+        "Qz8niP": [
+            ""
+        ],
+        "R/Pfmp": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "R2K7XH": [
+            "尝试探索社交媒体上的 Web3 dApps 功能。"
+        ],
+        "R9aEN5": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "RCBmDP": [
+            ""
+        ],
+        "REeHKm": [
+            "",
+            [
+                "",
+                "",
+                {
+                    "trade": [
+                        ""
+                    ],
+                    "mint": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "RH8jSA": [
+            "合并数据到本地数据库"
+        ],
+        "RHSlVw": [
+            ""
+        ],
+        "RL5m+x": [
+            ""
+        ],
+        "RLBjfU": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "RNfEI8": [
+            ""
+        ],
+        "ROWd/9": [
+            ""
+        ],
+        "ROWeBX": [
+            "正在关注"
+        ],
+        "ROsDRH": [
+            ""
+        ],
+        "RRw7LE": [
+            "身份助记词"
+        ],
+        "RUYsn0": [
+            "全部清除"
+        ],
+        "RW1HJz": [
+            "接收地址可能是恶意地址。"
+        ],
+        "RWoEqV": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "RZOA0N": [
+            ""
+        ],
+        "RdfrN2": [
+            "铸造地址"
+        ],
+        "Re7Oex": [
+            ""
+        ],
+        "RhCL4z": [
+            ""
+        ],
+        "RiLzWA": [
+            ""
+        ],
+        "RiQQyz": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Rm3JCH": [
+            "文件名必须介于 3 到 20 个字符之间。"
+        ],
+        "RqRRf6": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "RrGhwo": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "RuO5md": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "Rx8sxX": [
+            ""
+        ],
+        "RxlKnY": [
+            ""
+        ],
+        "Ry8TiY": [
+            ""
+        ],
+        "S0CsaV": [
+            "创建新钱包"
+        ],
+        "S0vyIh": [
+            ""
+        ],
+        "S2JNMm": [
+            ""
+        ],
+        "S33tz3": [
+            "未连接"
+        ],
+        "S6Qdlo": [
+            ""
+        ],
+        "SDrb6I": [
+            "Artblocks 依托算法生成内容技术，给用户提供随心铸造 NFT 的体验。"
+        ],
+        "SGVkVp": [
+            ""
+        ],
+        "SIrUT3": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "SLEDBF": [
+            "添加钱包失败，请重试。"
+        ],
+        "SNZM71": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "SREKz9": [
+            "报告 NFT Scam 合约吗？"
+        ],
+        "SUqBr9": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "SX2UXi": [
+            ""
+        ],
+        "SYGo/R": [
+            "导入钱包"
+        ],
+        "SYgxDf": [
+            ""
+        ],
+        "Sfu/we": [
+            ""
+        ],
+        "ShHV7X": [
+            "云端备份"
+        ],
+        "ShmUTn": [
+            ""
+        ],
+        "Sitstz": [
+            ""
+        ],
+        "Sjplg3": [
+            "在区块链浏览器查看"
+        ],
+        "SlxhDh": [
+            "验证您的钱包"
+        ],
+        "Sp69uH": [
+            ""
+        ],
+        "T0W3Z8": [
+            "Gas 不足。"
+        ],
+        "T0Y2+3": [
+            "选择代币"
+        ],
+        "T3EPqL": [
+            ""
+        ],
+        "T3dlAs": [
+            ""
+        ],
+        "TA4fAr": [
+            "该钱包名称已经存在。"
+        ],
+        "TFEJcT": [
+            ""
+        ],
+        "TIIaK1": [
+            [
+                "",
+                "",
+                {
+                    "approve": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "revoke": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "TJt1iY": [
+            "以用户为中心的去中心化的Web3社交图协议."
+        ],
+        "TNFd5O": [
+            ""
+        ],
+        "TP9/K5": [
+            ""
+        ],
+        "TRoDRd": [
+            ""
+        ],
+        "TYTRNP": [
+            "有资格领取"
+        ],
+        "TZDLPg": [
+            "可领取"
+        ],
+        "Tfxac6": [
+            ""
+        ],
+        "Tg003Y": [
+            "已连接的钱包设置"
+        ],
+        "Tl3Zls": [
+            ""
+        ],
+        "TnHNX9": [
+            ""
+        ],
+        "ToePai": [
+            "支出限额请求者"
+        ],
+        "TppkTk": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "TpqeIh": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "Tuc34V": [
+            ""
+        ],
+        "Tx/jsw": [
+            "您需要手动粘贴加密内容吗？"
+        ],
+        "Tz0i8g": [
+            "设置"
+        ],
+        "TzarJw": [
+            ""
+        ],
+        "UBzbea": [
+            "恢复钱包"
+        ],
+        "UDKbPj": [
+            ""
+        ],
+        "UFzLh1": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "UO7xDp": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "UPJjXF": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "URAE3q": [
+            "已暂停"
+        ],
+        "URmyfc": [
+            "详情"
+        ],
+        "UUfXpm": [
+            ""
+        ],
+        "UWxJIW": [
+            "由Celer提供支持，支持 $MASK！"
+        ],
+        "UXBK7e": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "verbose": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "simple": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "cost": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ]
+                    ],
+                    "free": [],
+                    "other": []
+                }
+            ]
+        ],
+        "UaXeX3": [
+            ""
+        ],
+        "UbRKMZ": [
+            "待定"
+        ],
+        "Udf/Es": [
+            "永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。"
+        ],
+        "UfJmJU": [
+            "无效的滑点容许值"
+        ],
+        "UjJCIX": [
+            ""
+        ],
+        "UjRxho": [
+            "您的恢复口令"
+        ],
+        "UmVZrM": [
+            ""
+        ],
+        "UpqenY": [
+            ""
+        ],
+        "UqJ0W/": [
+            ""
+        ],
+        "Usynqd": [
+            ""
+        ],
+        "UtKGok": [
+            "备份身份"
+        ],
+        "UvJiVZ": [
+            ""
+        ],
+        "UxJ2jd": [
+            ""
+        ],
+        "UxYZfY": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "V+1pjj": [
+            ""
+        ],
+        "V+ZuGt": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "V6YDUB": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "V6wYl1": [
+            ""
+        ],
+        "V8j2d/": [
+            ""
+        ],
+        "VAOn4r": [
+            "解锁"
+        ],
+        "VECuJk": [
+            "钱包账户"
+        ],
+        "VHShJf": [
+            "请点击浏览文件按钮选择要上传的文件。"
+        ],
+        "VHVdS1": [
+            ""
+        ],
+        "VP4HYe": [
+            ""
+        ],
+        "VSx1eg": [
+            "最大优先费"
+        ],
+        "VbeIOx": [
+            "作者"
+        ],
+        "VcPDSd": [
+            "不支持的密钥存储数据"
+        ],
+        "VdhBp2": [
+            ""
+        ],
+        "VdkQUC": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Vj7ma7": [
+            ""
+        ],
+        "VlpdUm": [
+            "设置 NFT 头像"
+        ],
+        "VsHxv+": [
+            "复制文本"
+        ],
+        "VvGC/Y": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "VvPeyR": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "VzQ7uf": [
+            ""
+        ],
+        "VzQOL2": [
+            "这允许第三方使用您所有的代币余额，直到达到上限或您取消支出上限为止。 如果不打算这样做，则考虑设定较低的支出上限。"
+        ],
+        "W0uonA": [
+            ""
+        ],
+        "W2es+t": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "W5OcTk": [
+            "暂无授权合约记录。"
+        ],
+        "W7e3zN": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "W7rMXF": [
+            ""
+        ],
+        "WAjFYI": [
+            "开始日期"
+        ],
+        "WDcQq9": [
+            "隐藏"
+        ],
+        "WKG5E8": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "WLMjwL": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "WS7EYf": [
+            [
+                "",
+                "",
+                {
+                    "Post": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "Comment": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "Mirror": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "Quote": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "other": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "WWPi4P": [
+            "无效钱包地址。"
+        ],
+        "WY8amq": [
+            "数字无效"
+        ],
+        "WZcvLm": [
+            "立即关注"
+        ],
+        "WeNxrL": [
+            [
+                ""
+            ],
+            " 个需要关注的因素"
+        ],
+        "Weq9zb": [
+            "概况"
+        ],
+        "WmXCMa": [
+            "切换帐号"
+        ],
+        "Wqoa0p": [
+            "连接身份"
+        ],
+        "WqzYn1": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "WsNUie": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Wvnsx1": [
+            "自动锁定"
+        ],
+        "Wy16g8": [
+            "给任意用户发送Token或者NFT，先到先得"
+        ],
+        "X0PXso": [
+            ""
+        ],
+        "X200Sr": [
+            "设置支付密码?"
+        ],
+        "X3X0nY": [
+            "在当前滑点设置下，您可能会少接收 ",
+            [
+                ""
+            ],
+            " %的期待数额。"
+        ],
+        "X6ujRd": [
+            ""
+        ],
+        "X8N33g": [
+            ""
+        ],
+        "X8w6bW": [
+            "输入最大支出限额"
+        ],
+        "XA8JXM": [
+            "添加 NFT"
+        ],
+        "XB3tfc": [
+            ""
+        ],
+        "XC7RGa": [
+            "恢复数据"
+        ],
+        "XDtQ7t": [
+            "在您的 Web3 个人资料页面上显示以下地址并使用它来接收打赏。"
+        ],
+        "XGRJzS": [
+            "在新分页中打开"
+        ],
+        "XGqAnD": [
+            ""
+        ],
+        "XQDdOC": [
+            ""
+        ],
+        "XQQx83": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "supply": [
+                        ""
+                    ],
+                    "add": [
+                        ""
+                    ],
+                    "repay": [
+                        ""
+                    ],
+                    "withdraw": [
+                        ""
+                    ],
+                    "collect": [
+                        ""
+                    ],
+                    "remove": [
+                        ""
+                    ],
+                    "borrow": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "XUKicg": [
+            ""
+        ],
+        "XYLcNv": [
+            "支持"
+        ],
+        "XZ/B+f": [
+            "找不到您的NFT？"
+        ],
+        "XcWehA": [
+            ""
+        ],
+        "Xftpm5": [
+            ""
+        ],
+        "XjDSdO": [
+            "原支付密码"
+        ],
+        "Xlpdi1": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "Xprzee": [
+            "输入 Gas 价格"
+        ],
+        "XrH+JC": [
+            ""
+        ],
+        "XrlvqN": [
+            ""
+        ],
+        "XsyYEe": [
+            "此 NFT 没有任何交易动态。"
+        ],
+        "XyAmgg": [
+            "添加钱包"
+        ],
+        "Y7N0Sj": [
+            ""
+        ],
+        "Y9mYPy": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "YF8jon": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "YKSmxE": [
+            ""
+        ],
+        "YLObqx": [
+            "均分金额"
+        ],
+        "YOacnL": [
+            ""
+        ],
+        "YOnK5s": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "name": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "nft": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "YPNSH3": [
+            ""
+        ],
+        "YSi9PS": [
+            ""
+        ],
+        "YW51YO": [
+            "24小时销售"
+        ],
+        "YXIpYp": [
+            ""
+        ],
+        "Yckw2R": [
+            "法币入金"
+        ],
+        "YdCB5X": [
+            "复制私钥"
+        ],
+        "YiPiv6": [
+            ""
+        ],
+        "YirHq7": [
+            "问题反馈"
+        ],
+        "YnqCPK": [
+            "连接并验证成功。"
+        ],
+        "Yp8yB4": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "Ywu8Rl": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Z/tioj": [
+            "兑换 ",
+            [
+                ""
+            ]
+        ],
+        "Z16qyu": [
+            "身份名称"
+        ],
+        "Z3+V9p": [
+            ""
+        ],
+        "Z33XCd": [
+            "输入合约地址"
+        ],
+        "Z3FXyt": [
+            "加载中..."
+        ],
+        "Z3S6Dx": [
+            ""
+        ],
+        "Z3y+8t": [
+            "此网络尚不支持"
+        ],
+        "Z6siIw": [
+            "在经典的 Twitter 标志和新的 X 标志之间切换。"
+        ],
+        "Z7ZXbT": [
+            "授权"
+        ],
+        "Z8+FzC": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "Z8G4E5": [
+            ""
+        ],
+        "Z8lGw6": [
+            "分享"
+        ],
+        "ZAVklK": [
+            "或"
+        ],
+        "ZDcdss": [
+            ""
+        ],
+        "ZHsD28": [
+            ""
+        ],
+        "ZIsLZh": [
+            ""
+        ],
+        "ZK75iC": [
+            ""
+        ],
+        "ZKAj6+": [
+            "设置钱包，在每个社交媒体帐户上显示 Web3 足迹和打赏地址。"
+        ],
+        "ZQbnxO": [
+            "未找到任何 NFT。"
+        ],
+        "ZQr5hT": [
+            ""
+        ],
+        "ZSWUwq": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "ZSgQgC": [
+            "Max fee 在当前网络环境下过低"
+        ],
+        "ZTXjJ3": [
+            ""
+        ],
+        "ZTmzRV": [
+            "最高价格"
+        ],
+        "ZdnQsW": [
+            ""
+        ],
+        "ZgFWrp": [
+            ""
+        ],
+        "ZhrWG1": [
+            "创建身份"
+        ],
+        "ZrZMJ6": [
+            ""
+        ],
+        "ZsjtYe": [
+            "加载头像失败。"
+        ],
+        "Zypku0": [
+            ""
+        ],
+        "a1S2x7": [
+            "",
+            [
+                "",
+                "",
+                {
+                    "other": [],
+                    "twitter": [
+                        ""
+                    ]
+                }
+            ],
+            [
+                ""
+            ],
+            ""
+        ],
+        "a1SmQh": [
+            "选择钱包"
+        ],
+        "a23gJr": [
+            "密码不正确。"
+        ],
+        "a33WQ+": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "a4C0ak": [
+            "没有足够的 Gas 费"
+        ],
+        "a4N/Bg": [
+            "加载更多"
+        ],
+        "a5t/N3": [
+            "花费更多的交易费用来取消以前的交易。"
+        ],
+        "a6ONsz": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "a7u1N9": [
+            "价格"
+        ],
+        "a9X8Om": [
+            "举报失败。"
+        ],
+        "aAIQg2": [
+            "外观"
+        ],
+        "aEgiLS": [
+            ""
+        ],
+        "aF8kci": [
+            ""
+        ],
+        "aFJrEy": [
+            ""
+        ],
+        "aFht5e": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "aTzTyw": [
+            "添加资产"
+        ],
+        "aVI2qx": [
+            "点击应用图标将会在应用列表中显示。"
+        ],
+        "aYT9SD": [
+            "最大费用"
+        ],
+        "acK3j2": [
+            "输入您的私钥"
+        ],
+        "agPptk": [
+            "中等"
+        ],
+        "ah8/4v": [
+            "地板价"
+        ],
+        "ahNa7P": [
+            ""
+        ],
+        "ahpgxl": [
+            ""
+        ],
+        "ai3VNq": [
+            "已连接的钱包"
+        ],
+        "ajKdns": [
+            "此钱包地址已经被绑定。"
+        ],
+        "apl8rz": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "aqop4L": [
+            ""
+        ],
+        "awW7ak": [
+            "移除钱包"
+        ],
+        "ayxkVX": [
+            "交易记录"
+        ],
+        "b+scYY": [
+            ""
+        ],
+        "b/mMOj": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "bBzHQT": [
+            "输入金额低于最低金额"
+        ],
+        "bD8I7O": [
+            ""
+        ],
+        "bEPPWi": [
+            ""
+        ],
+        "bGMpPD": [
+            ""
+        ],
+        "bIpwjD": [
+            "钱包"
+        ],
+        "bKGn4N": [
+            "",
+            [
+                "",
+                "",
+                {
+                    "name": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "nft": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "bLJivk": [
+            "选择 NFT 合约持有者"
+        ],
+        "bLmWH9": [
+            ""
+        ],
+        "bLqb2p": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "bLvQvN": [
+            "照片库："
+        ],
+        "bQXBhp": [
+            ""
+        ],
+        "bTQliy": [
+            ""
+        ],
+        "bUUVED": [
+            "资产"
+        ],
+        "bapItf": [
+            "备份密码错误。"
+        ],
+        "bassMa": [
+            "云备份密码不正确，请重试。"
+        ],
+        "bbS8qf": [
+            ""
+        ],
+        "bdIrOO": [
+            ""
+        ],
+        "bfNmSO": [
+            "设置支付密码成功。"
+        ],
+        "bnfo6T": [
+            ""
+        ],
+        "bnuQy5": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "bwlRe8": [
+            ""
+        ],
+        "c+Fnce": [
+            "签名"
+        ],
+        "c+XaKf": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "follow": [
+                        ""
+                    ],
+                    "unfollow": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "c19z3W": [
+            "可用余额"
+        ],
+        "c2MkCo": [
+            ""
+        ],
+        "cD0wgO": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "cFDjd3": [
+            ""
+        ],
+        "cJv4Ca": [
+            "第三方钱包中取消了连接操作。"
+        ],
+        "cM1qH2": [
+            "直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体信息，并提供报价及竞标功能。"
+        ],
+        "cNJNBU": [
+            ""
+        ],
+        "cQYjZe": [
+            ""
+        ],
+        "cVit2/": [
+            "请设置备份密码"
+        ],
+        "caP+Xq": [
+            ""
+        ],
+        "cbzSv5": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "chL5IG": [
+            "社区"
+        ],
+        "clw/Xh": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "cm4E8+": [
+            "Twitter体验"
+        ],
+        "cmKQl+": [
+            ""
+        ],
+        "cmNbUB": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "cnGeoo": [
+            "删除"
+        ],
+        "crVIc7": [
+            ""
+        ],
+        "ctb8Cs": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "cvCD4e": [
+            "合约创建者"
+        ],
+        "d0aemb": [
+            "请创建一个身份访问 Dapps。"
+        ],
+        "d6nk2t": [
+            [
+                ""
+            ],
+            " 平台成本"
+        ],
+        "dAMTl9": [
+            "RPC URL已经被",
+            [
+                ""
+            ],
+            " 网络使用"
+        ],
+        "dCpOJ5": [
+            "<0/> 已通过 <1/> 批准"
+        ],
+        "dCvyk/": [
+            ""
+        ],
+        "dEgA5A": [
+            "取消"
+        ],
+        "dXFgcm": [
+            ""
+        ],
+        "daEP1M": [
+            "Token 信息"
+        ],
+        "dajsth": [
+            "Keystore 密码不正确。"
+        ],
+        "du/tmd": [
+            ""
+        ],
+        "dyNKut": [
+            ""
+        ],
+        "dzAth+": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "e0E1XI": [
+            "最大手续费 (GWEI)"
+        ],
+        "e1vdXO": [
+            ""
+        ],
+        "e34ZOD": [
+            ""
+        ],
+        "e3I0CA": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "e3hCsY": [
+            ""
+        ],
+        "e4yrZ/": [
+            ""
+        ],
+        "eC1gV9": [
+            ""
+        ],
+        "eDT+Oh": [
+            ""
+        ],
+        "eE0JZ4": [
+            ""
+        ],
+        "eEeK5j": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "ePK91l": [
+            "编辑"
+        ],
+        "eWczg7": [
+            "仅自己可见"
+        ],
+        "eaLSW8": [
+            "身份名称必须介于 1 到 24 个字符之间。"
+        ],
+        "ecqLr0": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "name": [
+                        ""
+                    ],
+                    "address": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "eeYVJ5": [
+            "注意你的访问和签名！"
+        ],
+        "ejVYRQ": [
+            "从"
+        ],
+        "elyK4N": [
+            ""
+        ],
+        "eoeq4k": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "ep2Wyh": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "erRCKP": [
+            ""
+        ],
+        "es4h+b": [
+            "仍要兑换"
+        ],
+        "ezYNcH": [
+            "将 Mask Network 固定到工具栏以便更容易访问："
+        ],
+        "f5AidZ": [
+            ""
+        ],
+        "f61qKX": [
+            ""
+        ],
+        "f6pX67": [
+            ""
+        ],
+        "fDP2k4": [
+            "修改支付密码"
+        ],
+        "fFGPy6": [
+            "或者创建一个新的钱包组"
+        ],
+        "fFYJ8f": [
+            "欢迎来到 Mask Network！"
+        ],
+        "fL7WXr": [
+            "应用程序"
+        ],
+        "fRQP7E": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "fRUjl7": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "fUn3xA": [
+            "生成一个新的钱包地址"
+        ],
+        "fc4PdK": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "fdqDgM": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "fiPesM": [
+            "操作"
+        ],
+        "fj5byd": [
+            "没有"
+        ],
+        "foOw00": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "fqDzSu": [
+            ""
+        ],
+        "fsBGk0": [
+            "余额"
+        ],
+        "fsUPaG": [
+            "恭喜您！"
+        ],
+        "fvRGyC": [
+            ""
+        ],
+        "fx6pOQ": [
+            ""
+        ],
+        "fza4cg": [
+            "导入钱包"
+        ],
+        "g/1WbH": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "g/i+bG": [
+            ""
+        ],
+        "g2UNkE": [
+            ""
+        ],
+        "gC2WI+": [
+            "身份"
+        ],
+        "gERRYE": [
+            ""
+        ],
+        "gHM62X": [
+            ""
+        ],
+        "gM+Nj7": [
+            "",
+            [
+                "",
+                "",
+                {
+                    "hasName": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "noName": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ],
+            ""
+        ],
+        "gT+8Dk": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "gUuuBi": [
+            "安全检查"
+        ],
+        "gVfVfe": [
+            "联系人"
+        ],
+        "gWcGl/": [
+            "你的钱包已取消交易。"
+        ],
+        "gdnEab": [
+            "助记词不正确。"
+        ],
+        "ggdga4": [
+            "用户尚未设置此项。"
+        ],
+        "ghVDTt": [
+            ""
+        ],
+        "ghZx62": [
+            ""
+        ],
+        "gk7J2q": [
+            [
+                "",
+                "",
+                {
+                    "other": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "omit": []
+                }
+            ]
+        ],
+        "gkLviK": [
+            ""
+        ],
+        "gmOW42": [
+            "ENS 或钱包地址"
+        ],
+        "gnSRSG": [
+            "隐藏Scam 交易"
+        ],
+        "gp6A8z": [
+            ""
+        ],
+        "gtdJ43": [
+            ""
+        ],
+        "gwuMzD": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "gxV9O8": [
+            "投出您的票"
+        ],
+        "h/b9lY": [
+            "无关注者"
+        ],
+        "h0qYUk": [
+            "使用ENS域名或钱包地址搜索以获得最优结果。"
+        ],
+        "h3bIHg": [
+            "断开社交账户?"
+        ],
+        "h53LoU": [
+            "社交账户"
+        ],
+        "h5Dtc5": [
+            ""
+        ],
+        "h69WC6": [
+            ""
+        ],
+        "h7+V7K": [
+            "备份恢复"
+        ],
+        "hEpXzO": [
+            "欢迎来到 Mask Network！"
+        ],
+        "hG89Ed": [
+            "图片"
+        ],
+        "hHLRGW": [
+            "隐藏价值小于 $1 的代币"
+        ],
+        "hRWvpI": [
+            ""
+        ],
+        "hRtIgr": [
+            "应用列表"
+        ],
+        "hTbvD9": [
+            "对不起，您没有资格在此活动中领取 $ARB。"
+        ],
+        "hUF4dG": [
+            "备份密码设置成功。"
+        ],
+        "hWUuAb": [
+            ""
+        ],
+        "hXzOVo": [
+            "下一步"
+        ],
+        "hYgDIe": [
+            "创建"
+        ],
+        "he3ygx": [
+            "复制"
+        ],
+        "heVBR8": [
+            "输入每个金额"
+        ],
+        "hehnjM": [
+            "金额"
+        ],
+        "hg5QeV": [
+            "总花费"
+        ],
+        "hhtbAs": [
+            "取消关注Lens Handle"
+        ],
+        "hj39w+": [
+            ""
+        ],
+        "hom7qf": [
+            "领取"
+        ],
+        "hpxXOD": [
+            [
+                "",
+                "",
+                {
+                    "approve": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "revoke": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "hxHyfs": [
+            "我刚刚使用 Mask Network 插件把T witter X 图标替换成了原来的蓝鸟图标。"
+        ],
+        "hxdOdX": [
+            ""
+        ],
+        "hzTib5": [
+            "选择 NFT 合约持有者"
+        ],
+        "i2x+p1": [
+            "取出操作处理中"
+        ],
+        "i4umqX": [
+            ""
+        ],
+        "i6OT6/": [
+            [
+                ""
+            ],
+            " 发生错误"
+        ],
+        "i70ilP": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "iCb44o": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "iF9x7r": [
+            ""
+        ],
+        "iH8itU": [
+            "连接您的钱包"
+        ],
+        "iH8pgl": [
+            "返回"
+        ],
+        "iJLEZF": [
+            "教我怎么做"
+        ],
+        "iNIdDX": [
+            "请输入有效的代币合约地址"
+        ],
+        "iPMIoT": [
+            "输入金额"
+        ],
+        "iSLIjg": [
+            "连接"
+        ],
+        "iT0Qmd": [
+            "交易失败"
+        ],
+        "iTiwqa": [
+            ""
+        ],
+        "iZLoa2": [
+            ""
+        ],
+        "ia3Lqp": [
+            ""
+        ],
+        "ie2c+s": [
+            "我刚刚在",
+            [
+                "0"
+            ],
+            "",
+            [
+                "1"
+            ],
+            " "
+        ],
+        "ileX7U": [
+            ""
+        ],
+        "imDvP9": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "iobEyh": [
+            ""
+        ],
+        "iuCSJl": [
+            "钱包已经链接到当前的身份",
+            [
+                ""
+            ],
+            "。"
+        ],
+        "iuJFAy": [
+            ""
+        ],
+        "iwiSFA": [
+            "类似项目"
+        ],
+        "j2Uisd": [
+            ""
+        ],
+        "j2a+h4": [
+            ""
+        ],
+        "j4TRxD": [
+            "选择地址"
+        ],
+        "j8MqhB": [
+            ""
+        ],
+        "jEDiuG": [
+            ""
+        ],
+        "jICk7g": [
+            "网络或RPC提供方出现错误，请稍后再试 ！"
+        ],
+        "jIWgmE": [
+            ""
+        ],
+        "jJPsrT": [
+            ""
+        ],
+        "jJrqb1": [
+            "Token 名称"
+        ],
+        "jK7nvW": [
+            ""
+        ],
+        "jRcH7y": [
+            "头像设置"
+        ],
+        "jRfanQ": [
+            "所用 Gas (单位)"
+        ],
+        "jXWnN0": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "jZQU+o": [
+            "最初发布于 ",
+            [
+                ""
+            ]
+        ],
+        "ja6Tyz": [
+            "使用 NFT 集合的名称或符号搜索以获得最佳结果。"
+        ],
+        "jaH9PD": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "jas0vv": [
+            "断开所有社交账户"
+        ],
+        "jbc0gF": [
+            "设置密码"
+        ],
+        "jeLXsu": [
+            ""
+        ],
+        "jfJkBQ": [
+            "Gas price 在当前网络环境下过低。"
+        ],
+        "jh0i4n": [
+            "请在您的钱包确认此签名"
+        ],
+        "jhoAzY": [
+            ""
+        ],
+        "jjCXPD": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "jpctdh": [
+            "查看"
+        ],
+        "jt/0L2": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "jt/cjR": [
+            "安全警告"
+        ],
+        "jtExaD": [
+            ""
+        ],
+        "jygqM9": [
+            ""
+        ],
+        "jzLzy/": [
+            ""
+        ],
+        "k/sb6z": [
+            "选择语言"
+        ],
+        "k/vATR": [
+            ""
+        ],
+        "k0USDt": [
+            ""
+        ],
+        "k1pJQo": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "k28Qhe": [
+            ""
+        ],
+        "k57+C7": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        "",
+                        ""
+                    ],
+                    "other": [
+                        "",
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "k7u9V5": [
+            ""
+        ],
+        "kCAzy/": [
+            "NFT 系列授权"
+        ],
+        "kG0n0M": [
+            "网络错误或用户取消进程。"
+        ],
+        "kHDhjV": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "kKY8Re": [
+            ""
+        ],
+        "kPQQEW": [
+            ""
+        ],
+        "kV9Qeo": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "kWJmRL": [
+            "您"
+        ],
+        "kbfp5m": [
+            "可见范围"
+        ],
+        "kdW3qS": [
+            ""
+        ],
+        "kePpfU": [
+            "更新 NFT 头像成功！"
+        ],
+        "kf/5Ap": [
+            "点击这里快速访问主要功能。"
+        ],
+        "kf83Ld": [
+            "出现了一些问题。"
+        ],
+        "kg/ict": [
+            ""
+        ],
+        "kj3M8S": [
+            "存入"
+        ],
+        "kjBSDT": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "name": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "nft": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "ks5OGD": [
+            "合约"
+        ],
+        "kx0s+n": [
+            "结果"
+        ],
+        "l/UFPv": [
+            "属性"
+        ],
+        "l3s5ri": [
+            "导入"
+        ],
+        "lCF0wC": [
+            "刷新"
+        ],
+        "lCHQzJ": [
+            "此地址可能是欺诈地址。"
+        ],
+        "lCfoWv": [
+            ""
+        ],
+        "lDgVWA": [
+            "接收"
+        ],
+        "lET9my": [
+            "Mask Network需要以下权限"
+        ],
+        "lErh77": [
+            ""
+        ],
+        "lKldOY": [
+            "请选择恢复备份的正确方法。"
+        ],
+        "lO/vMB": [
+            ""
+        ],
+        "lPJwNU": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "lPsa94": [
+            ""
+        ],
+        "lQXQKs": [
+            "投票"
+        ],
+        "lU6uRb": [
+            ""
+        ],
+        "lWOC+h": [
+            ""
+        ],
+        "ldI18s": [
+            "已铸造："
+        ],
+        "lhvy2j": [
+            ""
+        ],
+        "llLBQ1": [
+            "代币"
+        ],
+        "lmYQuN": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "loCUuu": [
+            "密钥库"
+        ],
+        "lqTDfd": [
+            "滑点容许值"
+        ],
+        "lqW7eD": [
+            ""
+        ],
+        "lr8uE3": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "lvL4x0": [
+            ""
+        ],
+        "lxJU2w": [
+            "输入份数"
+        ],
+        "lyjM6U": [
+            ""
+        ],
+        "m+uuUE": [
+            "跨链"
+        ],
+        "m/TPEz": [
+            "（测试版）"
+        ],
+        "m16xKo": [
+            "添加"
+        ],
+        "m2OZMI": [
+            "Max fee 不能低于 Max priority fee"
+        ],
+        "m2pyX2": [
+            "立即购买"
+        ],
+        "m3VOQq": [
+            "当前钱包不支持与 Lens 协议交互。"
+        ],
+        "m3XvO+": [
+            "导入钱包"
+        ],
+        "m3akOw": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "m3cvPZ": [
+            ""
+        ],
+        "m3pz1u": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "m64f3d": [
+            ""
+        ],
+        "mCB6Je": [
+            "全选"
+        ],
+        "mGHHf5": [
+            "在连接和验证您的身份后，您可以设置相关的地址来显示您的 web3 足迹或接收打赏。"
+        ],
+        "mHWsOq": [
+            ""
+        ],
+        "mNUsxu": [
+            ""
+        ],
+        "mPxxVq": [
+            "输入Gas Limit"
+        ],
+        "mQpWAe": [
+            "编辑联系人"
+        ],
+        "mT57+Q": [
+            "前往设置"
+        ],
+        "mUJUVX": [
+            ""
+        ],
+        "mW8F64": [
+            ""
+        ],
+        "mYGY3B": [
+            ""
+        ],
+        "mZ04KC": [
+            ""
+        ],
+        "ma8rSx": [
+            ""
+        ],
+        "mc68kY": [
+            "新支付密码"
+        ],
+        "md5sZ/": [
+            ""
+        ],
+        "mfwfMR": [
+            ""
+        ],
+        "mhNIiJ": [
+            "Gas price过高。您或许支付了超过需要的费用。"
+        ],
+        "mrAv9J": [
+            "无法保存网络"
+        ],
+        "msszNj": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "muQqQY": [
+            "购买和销售由其原创作者发布的推文。"
+        ],
+        "mzI/c+": [
+            "下载"
+        ],
+        "n+ObkB": [
+            "检测用户发布的加密网站是否有风险或恶意。帮助您保护数字资产。"
+        ],
+        "n1gwuy": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "n2HnVK": [
+            "如果您决定关闭 [检查安全] 应用，关闭后与任何有潜在风险的合约或地址进行互动时将无法看到相关安全提示。"
+        ],
+        "n42fmQ": [
+            "请输入Max fee"
+        ],
+        "nDzNGQ": [
+            ""
+        ],
+        "nE/lLr": [
+            "仅选定的联系人可见"
+        ],
+        "nFjzvC": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "nGl2Ng": [
+            ""
+        ],
+        "nKLBYz": [
+            ""
+        ],
+        "nMUHWK": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "nMkx7r": [
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        "",
+                        ""
+                    ],
+                    "other": [
+                        "",
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "nOCyT5": [
+            "显示价值小于$1 的代币"
+        ],
+        "nOhz3x": [
+            ""
+        ],
+        "nSkB8g": [
+            "信息"
+        ],
+        "nTFx7o": [
+            "新头像设置成功"
+        ],
+        "nTWWCZ": [
+            "低"
+        ],
+        "nTif4K": [
+            "选择并连接到你的钱包"
+        ],
+        "nUWEsV": [
+            "Max fee 高于必要值"
+        ],
+        "nUeoRs": [
+            "消息签名"
+        ],
+        "nV/wXH": [
+            "此个人信息不能被关注。"
+        ],
+        "nWDO1P": [
+            "",
+            [
+                "",
+                "",
+                {
+                    "burn": [
+                        ""
+                    ],
+                    "deposit": [
+                        ""
+                    ],
+                    "mint": [
+                        ""
+                    ],
+                    "receive": [
+                        ""
+                    ],
+                    "send": [
+                        ""
+                    ],
+                    "withdraw": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "ndRqFD": [
+            ""
+        ],
+        "neBDpj": [
+            "请连接钱包"
+        ],
+        "ngWO+e": [
+            "缺失本地密钥"
+        ],
+        "njSHJP": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "nqL5WA": [
+            ""
+        ],
+        "nqagQ8": [
+            "签名消息 (十六进制)"
+        ],
+        "nvAt0H": [
+            ""
+        ],
+        "nvV/Td": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "nwSp3U": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "namedToken": [
+                        [
+                            ""
+                        ]
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "name": [
+                        ""
+                    ],
+                    "address": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "nzBzok": [
+            "创建时间："
+        ],
+        "o+XJ9D": [
+            "切换"
+        ],
+        "o+zDNQ": [
+            ""
+        ],
+        "o4Iu2W": [
+            "退出成功"
+        ],
+        "o4NrTC": [
+            ""
+        ],
+        "o66hO5": [
+            ""
+        ],
+        "o9pabc": [
+            ""
+        ],
+        "oCBTyI": [
+            ""
+        ],
+        "oDMfB1": [
+            ""
+        ],
+        "oDSXfc": [
+            "新密码与当前密码不可相同。"
+        ],
+        "oG26Rt": [
+            "请在您的钱包中确认这笔交易"
+        ],
+        "oG67vO": [
+            ""
+        ],
+        "oIsL5E": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "oJIW7I": [
+            [
+                "",
+                "",
+                {
+                    "mint": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "send": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "claim": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "burn": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "deposit": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "withdraw": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "oMx/mL": [
+            ""
+        ],
+        "oN9XHJ": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "oOQfsI": [
+            ""
+        ],
+        "oTLFeN": [
+            ""
+        ],
+        "oX+QCa": [
+            ""
+        ],
+        "oYzol6": [
+            "NFT"
+        ],
+        "oZw0Iw": [
+            ""
+        ],
+        "ocYse8": [
+            ""
+        ],
+        "oe5xh9": [
+            "备份解密失败，请检查密码"
+        ],
+        "of3mx/": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "ofUcbc": [
+            "随机"
+        ],
+        "ohUJJM": [
+            "插件"
+        ],
+        "ojlMCx": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "olEUh2": [
+            ""
+        ],
+        "ooHEV6": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "osXsDn": [
+            "导入 NFT"
+        ],
+        "ou+PEI": [
+            "个人头像"
+        ],
+        "ouAjo6": [
+            "Gas费用不足"
+        ],
+        "ovBPCi": [
+            "默认"
+        ],
+        "oxKup1": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "p+ngUo": [
+            "取消关注"
+        ],
+        "p1/7GX": [
+            "未找到合约"
+        ],
+        "p2/GCq": [
+            "确认密码"
+        ],
+        "p3TX0l": [
+            ""
+        ],
+        "p7l2aC": [
+            "合约："
+        ],
+        "p8Aea2": [
+            "此身份名称已存在"
+        ],
+        "p8OYBy": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ]
+        ],
+        "pG7O41": [
+            ""
+        ],
+        "pGElS5": [
+            "助记词"
+        ],
+        "pHfBGz": [
+            "Gas费用更新中…"
+        ],
+        "pIyHYi": [
+            "Lens 关注"
+        ],
+        "pLHDrO": [
+            ""
+        ],
+        "pOE8Vh": [
+            "空格"
+        ],
+        "pa3wn3": [
+            ""
+        ],
+        "pbOGiB": [
+            ""
+        ],
+        "pbYUPI": [
+            ""
+        ],
+        "pi+hn/": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "pjrgRd": [
+            "私钥不正确"
+        ],
+        "pkyWdU": [
+            "Keystore密码"
+        ],
+        "poYLOl": [
+            "新标志"
+        ],
+        "ps1+DX": [
+            "设置您的身份名称，最大长度为24个字符"
+        ],
+        "pu3rTn": [
+            ""
+        ],
+        "puUEU3": [
+            "修改备份密码"
+        ],
+        "put3ex": [
+            ""
+        ],
+        "pv5v6j": [
+            ""
+        ],
+        "pvnfJD": [
+            "深色"
+        ],
+        "py6hU8": [
+            "签名请求"
+        ],
+        "pzO3Xa": [
+            "总供应量"
+        ],
+        "q+O14e": [
+            "探索范围"
+        ],
+        "q+hNag": [
+            "Nft 系列"
+        ],
+        "q/ao7A": [
+            "每份铸造的价格"
+        ],
+        "q5+UWM": [
+            ""
+        ],
+        "qAbGIK": [
+            ""
+        ],
+        "qCMUPH": [
+            "解锁 ",
+            [
+                ""
+            ]
+        ],
+        "qDIxZ+": [
+            ""
+        ],
+        "qHqI+o": [
+            ""
+        ],
+        "qI8U4x": [
+            "最大手续费不能低于最大优先级费用。"
+        ],
+        "qIL7PI": [
+            "报价"
+        ],
+        "qJb6G2": [
+            ""
+        ],
+        "qNiGUh": [
+            "大小"
+        ],
+        "qT8oOt": [
+            "必须拥有身份"
+        ],
+        "qWMpAl": [
+            "最多 ",
+            [
+                ""
+            ],
+            ""
+        ],
+        "qYuscr": [
+            "最大优先费"
+        ],
+        "qZ6p7p": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "qcqdIh": [
+            ""
+        ],
+        "qcybNQ": [
+            "提案"
+        ],
+        "qdyV/M": [
+            "新闻"
+        ],
+        "qhKyO3": [
+            "提取 ",
+            [
+                ""
+            ]
+        ],
+        "qkhZxp": [
+            ""
+        ],
+        "qp8fKi": [
+            ""
+        ],
+        "qqWcBV": [
+            "已完成"
+        ],
+        "r3OcML": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "r92tNP": [
+            ""
+        ],
+        "rBLzKv": [
+            "最大手续费高于必要值。"
+        ],
+        "rCsoea": [
+            "编辑代币列表"
+        ],
+        "rG3WVm": [
+            "选择代币"
+        ],
+        "rJZPaP": [
+            "未找到活动"
+        ],
+        "rKY/BK": [
+            "经典标志"
+        ],
+        "rLgPvm": [
+            "备份"
+        ],
+        "rQQGN1": [
+            "Max priority fee过高。您或许支付了超过需要的费用。"
+        ],
+        "rR6iwH": [
+            "域名请求"
+        ],
+        "rWE7Lq": [
+            ""
+        ],
+        "rWqyF3": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "rYFSec": [
+            ""
+        ],
+        "rZ0rgl": [
+            "成交量"
+        ],
+        "raCUEa": [
+            ""
+        ],
+        "rcNnsQ": [
+            "价格："
+        ],
+        "re2nOO": [
+            "已上传的文件"
+        ],
+        "rkMKQ0": [
+            ""
+        ],
+        "rm0yu/": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "rqV4QH": [
+            ""
+        ],
+        "rrvbCi": [
+            "网络错误或执行智能合同失败。"
+        ],
+        "rulocO": [
+            ""
+        ],
+        "ryWxhG": [
+            "恭喜！"
+        ],
+        "s/8SJ+": [
+            ""
+        ],
+        "s4Omor": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "sGkv/+": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "sOYKMU": [
+            "[检查安全] 提供迅速、可靠和方便的 Web3 安全服务。"
+        ],
+        "sOcZTR": [
+            ""
+        ],
+        "sQJ3RN": [
+            "最大优先费用在当前网络环境下过低。"
+        ],
+        "sQTDWu": [
+            ""
+        ],
+        "sSkbaZ": [
+            ""
+        ],
+        "sWsox7": [
+            "关注Lens handle"
+        ],
+        "saHPqg": [
+            ""
+        ],
+        "sb9Y58": [
+            "钱包"
+        ],
+        "siroPf": [
+            ""
+        ],
+        "sxkWRg": [
+            "高阶"
+        ],
+        "szNWi8": [
+            ""
+        ],
+        "t+A5fr": [
+            "Gas 价格必须大于 0。"
+        ],
+        "t/YqKh": [
+            "移除"
+        ],
+        "t2prdI": [
+            "找不到搜索结果。"
+        ],
+        "t3rUZr": [
+            ""
+        ],
+        "t6bQQD": [
+            ""
+        ],
+        "t6md+W": [
+            [
+                "",
+                "",
+                {
+                    "create": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "update": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "t8dIOP": [
+            "垃圾"
+        ],
+        "t91sWs": [
+            [
+                "",
+                "",
+                {
+                    "stake": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "claim": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "unstake": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "other": []
+                }
+            ]
+        ],
+        "t9m1iP": [
+            ""
+        ],
+        "tARYn/": [
+            ""
+        ],
+        "tCAZi9": [
+            ""
+        ],
+        "tG9G+b": [
+            "文件服务"
+        ],
+        "tHoyBc": [
+            "请在使用 dApp之前连接到 ",
+            [
+                ""
+            ],
+            " 。"
+        ],
+        "tIW5Jt": [
+            ""
+        ],
+        "tKJ7ee": [
+            ""
+        ],
+        "tOL6AP": [
+            ""
+        ],
+        "tOMnvw": [
+            ""
+        ],
+        "tPeNU7": [
+            "此网络名称已存在"
+        ],
+        "tRRE1h": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "tXkhj/": [
+            "开始"
+        ],
+        "tbOs8j": [
+            "确认兑换"
+        ],
+        "tcHpvG": [
+            ""
+        ],
+        "tfDRzk": [
+            "保存"
+        ],
+        "thX7xs": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "tiX/tO": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "tj48De": [
+            "连接社交账户"
+        ],
+        "tjbyOy": [
+            ""
+        ],
+        "tk+uyz": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "toDFSK": [
+            "签名成功"
+        ],
+        "tst44n": [
+            ""
+        ],
+        "tuOw4x": [
+            "进行加密"
+        ],
+        "tx1x9k": [
+            ""
+        ],
+        "txEVTf": [
+            "没有任何上架信息"
+        ],
+        "ty2gt9": [
+            ""
+        ],
+        "u2OWVJ": [
+            "断开连接失败。"
+        ],
+        "u2Srv1": [
+            "确认领取空投"
+        ],
+        "u3ZeYl": [
+            ""
+        ],
+        "u689pQ": [
+            "",
+            [
+                ""
+            ]
+        ],
+        "uAQUqI": [
+            ""
+        ],
+        "uBAxNB": [
+            "编辑器"
+        ],
+        "uF9ruK": [
+            ""
+        ],
+        "uJQLj9": [
+            "点击这里连接您的钱包。您可以在此选择网络或更改您的钱包。"
+        ],
+        "uSMfoN": [
+            "验证"
+        ],
+        "uip9JY": [
+            ""
+        ],
+        "ujpEaI": [
+            "请连接您的钱包"
+        ],
+        "uqF4Nm": [
+            "区块链："
+        ],
+        "usVwcn": [
+            ""
+        ],
+        "uv94aG": [
+            "由用户添加"
+        ],
+        "uv9cwh": [
+            ""
+        ],
+        "uyJsf6": [
+            "关于"
+        ],
+        "v01kR+": [
+            "NFT 头像"
+        ],
+        "v7U98p": [
+            ""
+        ],
+        "vH2C/2": [
+            "兑换"
+        ],
+        "vLXevL": [
+            ""
+        ],
+        "vOx+Me": [
+            ""
+        ],
+        "vVEene": [
+            ""
+        ],
+        "vXIe7J": [
+            "语言"
+        ],
+        "vXygio": [
+            "没有足够可显示的数据"
+        ],
+        "vel6Z1": [
+            "请求源"
+        ],
+        "vhlM+H": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "vhqFTT": [
+            ""
+        ],
+        "vutynE": [
+            "开启插件"
+        ],
+        "w0e0yw": [
+            "Gas limit 必须至少 ",
+            [
+                ""
+            ]
+        ],
+        "w1ctdJ": [
+            "加密贴文"
+        ],
+        "w3t1Hw": [
+            ""
+        ],
+        "w4oOEJ": [
+            ""
+        ],
+        "w9Xmw/": [
+            ""
+        ],
+        "wCtp6y": [
+            ""
+        ],
+        "wDnczW": [
+            ""
+        ],
+        "wGtbaw": [
+            "单个红包数额"
+        ],
+        "wMHvYH": [
+            "价值"
+        ],
+        "wNecg9": [
+            "多笔交易请求 ",
+            [
+                ""
+            ],
+            "/ ",
+            [
+                ""
+            ]
+        ],
+        "wNxsb2": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "wThGrS": [
+            ""
+        ],
+        "wUlAUI": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "wYA1q/": [
+            "自动报告欺诈链接到MetaMask"
+        ],
+        "waXvJd": [
+            "NFT还没有被铸造。"
+        ],
+        "wbDTs9": [
+            ""
+        ],
+        "wqppGn": [
+            ""
+        ],
+        "wvJOId": [
+            "此ENS不存在或未被解析。"
+        ],
+        "wxZZWc": [
+            ""
+        ],
+        "wxfXhJ": [
+            ""
+        ],
+        "x0PhCN": [
+            ""
+        ],
+        "x4f8pZ": [
+            "小费"
+        ],
+        "x5LEuB": [
+            "粉丝"
+        ],
+        "x6rEou": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "verbose": [
+                        "",
+                        [
+                            ""
+                        ],
+                        ""
+                    ],
+                    "simple": [
+                        ""
+                    ],
+                    "other": []
+                }
+            ],
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "cost": [
+                        "",
+                        [
+                            ""
+                        ],
+                        "",
+                        [
+                            ""
+                        ]
+                    ],
+                    "free": [],
+                    "other": []
+                }
+            ]
+        ],
+        "xBXg0L": [
+            ""
+        ],
+        "xC6eGY": [
+            ""
+        ],
+        "xCJdfg": [
+            "清除"
+        ],
+        "xCcvjC": [
+            "NFT 头像设置成功"
+        ],
+        "xDAtGP": [
+            "信息"
+        ],
+        "xDO6ZN": [
+            ""
+        ],
+        "xEQZ4z": [
+            "使用文本加密"
+        ],
+        "xEX/9S": [
+            ""
+        ],
+        "xFCCR4": [
+            ""
+        ],
+        "xGVfLh": [
+            "继续"
+        ],
+        "xH6cn+": [
+            "选择代币"
+        ],
+        "xIxVmH": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "xPSvu3": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                "",
+                "",
+                {
+                    "one": [
+                        ""
+                    ],
+                    "other": [
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "xTQLHC": [
+            "",
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "xeiujy": [
+            "文本"
+        ],
+        "xjhtsV": [
+            "链"
+        ],
+        "xoKE3v": [
+            ""
+        ],
+        "xuKB2x": [
+            [
+                ""
+            ],
+            ""
+        ],
+        "xupcu9": [
+            "加速"
+        ],
+        "y/+ReV": [
+            ""
+        ],
+        "y/kxxM": [
+            ""
+        ],
+        "y2i17G": [
+            "通过连接社交账户自定义NFT体验。享受具有 Web3 氛围的 Web2 。"
+        ],
+        "y3juHh": [
+            ""
+        ],
+        "y3qyKP": [
+            ""
+        ],
+        "y49awp": [
+            "设置 NFT 头像"
+        ],
+        "y5aRAa": [
+            "请输入云备份密码以下载文件。"
+        ],
+        "y62Dys": [
+            ""
+        ],
+        "y6VCOb": [
+            [
+                ""
+            ],
+            " 分钟"
+        ],
+        "y6sq5j": [
+            "已关注"
+        ],
+        "yC/GKd": [
+            ""
+        ],
+        "yD15Uj": [
+            "您确定要删除此钱包吗？"
+        ],
+        "yDUr0V": [
+            ""
+        ],
+        "yFpcbN": [
+            ""
+        ],
+        "yFrxQj": [
+            "助记词"
+        ],
+        "yGyJ1l": [
+            ""
+        ],
+        "yHrAv+": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "yKu/3Y": [
+            "恢复"
+        ],
+        "yNBZ3N": [
+            ""
+        ],
+        "yNu9vD": [
+            "该钱包地址已经存在。"
+        ],
+        "yQE2r9": [
+            "加载中"
+        ],
+        "yQqkIK": [
+            "24H平均价格"
+        ],
+        "yRuvmU": [
+            ""
+        ],
+        "yTZe+y": [
+            ""
+        ],
+        "yVnV6H": [
+            ""
+        ],
+        "yVzBCJ": [
+            ""
+        ],
+        "yZhedI": [
+            "Gas 费用设置"
+        ],
+        "yb/fjw": [
+            "授权"
+        ],
+        "ybuu1v": [
+            "对不起，我们没有找到任何结果。"
+        ],
+        "ygW4tI": [
+            "请连接您的身份"
+        ],
+        "yik0Qu": [
+            "私钥"
+        ],
+        "ykiu3o": [
+            "NFT 详细信息"
+        ],
+        "ylUhBz": [
+            "点击重试"
+        ],
+        "ylXk9u": [
+            ""
+        ],
+        "yqc6uX": [
+            ""
+        ],
+        "ywDBfs": [
+            "发生未知错误。"
+        ],
+        "yx/fMc": [
+            "高速"
+        ],
+        "yz7wBu": [
+            "关闭"
+        ],
+        "yzF66j": [
+            "交易记录"
+        ],
+        "z+H8bd": [
+            ""
+        ],
+        "z/3+av": [
+            "许可证："
+        ],
+        "z1i6et": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "z27gFg": [
+            ""
+        ],
+        "z7Fh2l": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "z9HeHt": [
+            ""
+        ],
+        "zBPjcC": [
+            ""
+        ],
+        "zBUJYA": [
+            ""
+        ],
+        "zBftr8": [
+            ""
+        ],
+        "zEZe86": [
+            ""
+        ],
+        "zGTAja": [
+            [
+                ""
+            ],
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "zJlXbX": [
+            ""
+        ],
+        "zPar3e": [
+            "收藏品"
+        ],
+        "zX9KdB": [
+            "没有关注任何人"
+        ],
+        "zXagFp": [
+            "复制地址"
+        ],
+        "zZk9Yz": [
+            "购买"
+        ],
+        "zga9sT": [
+            "好的"
+        ],
+        "zgqgNP": [
+            "购买中..."
+        ],
+        "zkEW09": [
+            ""
+        ],
+        "znqB4T": [
+            "余额不足"
+        ],
+        "zp7Ha3": [
+            "备份失败"
+        ],
+        "zwBp5t": [
+            "私密"
+        ],
+        "zxrGeO": [
+            "",
+            [
+                ""
+            ],
+            ""
+        ],
+        "zzDlyQ": [
+            "成功"
+        ]
+    }
+}
