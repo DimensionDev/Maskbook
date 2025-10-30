@@ -121,7 +121,7 @@
       {
         "path": "./packages/shared-base-ui/src/locale/{locale}",
         "include": ["<rootDir>"],
-        "exclude": ["**/node_modules/**", "**/*.d.ts", "**/dist/**"]
+        "exclude": ["**/node_modules/**", "**/*.d.ts", "**/dist/**", "**/build/**"]
       }
     ]
   }
