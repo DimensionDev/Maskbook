@@ -52,7 +52,7 @@ export class MaskWalletProvider extends BaseHostedProvider {
         const privyWallets = await Privy.getEvmWallets()
         const formattedPrivyWallets: Wallet[] = privyWallets.map((wallet) => ({
             id: wallet.address,
-            name: 'Privy Wallet',
+            name: '',
             source: ImportSource.Privy,
             address: wallet.address,
             configurable: false,

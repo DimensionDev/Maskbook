@@ -1,20 +1,25 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useStyles } from './useStyles.js'
 import { ShowPrivateKeyModal } from '../../../modals/modal-controls.js'
-import { Trans } from '@lingui/react/macro'
+import { useStyles } from './useStyles.js'
 
-export function ShowPrivateKey() {
+interface Props {
+    disabled?: boolean
+}
+export const ShowPrivateKey = function ShowPrivateKey({ disabled }: Props) {
     const { classes, theme } = useStyles()
 
     return (
         <ListItem
             className={classes.item}
-            onClick={() =>
+            sx={disabled ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+            onClick={() => {
+                if (disabled) return
                 ShowPrivateKeyModal.open({
                     title: <Trans>Enter Payment Password</Trans>,
                 })
-            }>
+            }}>
             <Box className={classes.itemBox}>
                 <Icons.PublicKey2 size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
