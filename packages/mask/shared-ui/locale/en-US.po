@@ -1224,6 +1224,10 @@ msgstr ""
 msgid "Failed to get permissions"
 msgstr ""
 
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Failed to login firefly"
+msgstr ""
+
 #: dashboard/components/GoogleDriveLogin.tsx
 #~ msgid "Failed to login: {0}"
 #~ msgstr ""
