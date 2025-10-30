@@ -2,11 +2,7 @@ preserve_hierarchy: true
 pull_request_title: 'docs(i18n): sync i18n files from Crowdin'
 commit_message: 'docs(i18n): sync translation %original_file_name% for %language%'
 files:
-  - source: /packages/**/locales/en-US.json
-    translation: /packages/**/locales/%locale%.json
-    update_option: 'update_as_unapproved'
-    skip_untranslated_strings: true
-  - source: /packages/**/locale/en-US.po
-    translation: /packages/**/locale/%locale%.po
+  - source: /packages/shared-base-ui/src/locale/en-US.json
+    translation: /packages/shared-base-ui/src/locale/%locale%.json
     update_option: 'update_as_unapproved'
     skip_untranslated_strings: true
