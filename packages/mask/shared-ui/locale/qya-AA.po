@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-10-30 06:47\n"
+"PO-Revision-Date: 2025-10-30 09:09\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1228,6 +1228,10 @@ msgstr "crwdns37234:0{0}crwdne37234:0"
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Failed to get permissions"
 msgstr "crwdns37745:0crwdne37745:0"
+
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Failed to login firefly"
+msgstr "crwdns38963:0crwdne38963:0"
 
 #: dashboard/components/GoogleDriveLogin.tsx
 #~ msgid "Failed to login: {0}"
