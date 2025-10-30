@@ -2,7 +2,7 @@ import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PopupRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { memo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
@@ -113,6 +113,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function CreateWalletForm() {
     const { classes, cx } = useStyles()
     const [open, setOpen] = useState(false)
+    const { showSnackbar } = useCustomSnackbar()
 
     const { retry, value: hasPermission } = useAsyncRetry(() => {
         const hasPermission = browser.permissions.contains({
@@ -134,6 +135,12 @@ export const Component = memo(function CreateWalletForm() {
                 creatingFireflyWallet: true,
             })
         } catch (err) {
+            if ((err as Error).message === 'X OAuth token not found') {
+                const result = await Services.Helper.requestXOAuthToken()
+                if (result) await Services.Helper.loginFireflyViaTwitter()
+                return
+            }
+            showSnackbar(<Trans>Failed to login firefly</Trans>, { variant: 'error', content: (err as Error).message })
             console.error('Failed to login firefly', err)
         }
     }, [hasPermission])
