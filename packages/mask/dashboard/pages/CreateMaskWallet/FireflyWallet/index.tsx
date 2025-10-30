@@ -115,35 +115,44 @@ export const Component = memo(function CreateWalletForm() {
     const [open, setOpen] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
 
-    const { retry, value: hasPermission } = useAsyncRetry(() => {
-        const hasPermission = browser.permissions.contains({
+    const {
+        retry,
+        loading: loadingPermissions,
+        value: hasPermission,
+    } = useAsyncRetry(async () => {
+        const hasPermission = await browser.permissions.contains({
             origins: XOAuthRequestOrigins,
         })
         setOpen(!hasPermission)
         return hasPermission
     }, [])
 
-    const [{ loading }, request] = useAsyncFn(async () => {
+    const [{ loading: requesting }, request] = useAsyncFn(async () => {
         if (!hasPermission) {
             setOpen(true)
             return
         }
         try {
-            const data = await Services.Helper.loginFireflyViaTwitter()
-            if (!data) return
-            await Services.Helper.openPopupWindow(PopupRoutes.CreateWallet, {
-                creatingFireflyWallet: true,
-            })
+            await Services.Helper.loginFireflyViaTwitter()
         } catch (err) {
             if ((err as Error).message === 'X OAuth token not found') {
                 const result = await Services.Helper.requestXOAuthToken()
                 if (result) await Services.Helper.loginFireflyViaTwitter()
-                return
+            } else {
+                showSnackbar(<Trans>Failed to login firefly</Trans>, {
+                    variant: 'error',
+                    content: (err as Error).message,
+                })
+                console.error('Failed to login firefly', err)
             }
-            showSnackbar(<Trans>Failed to login firefly</Trans>, { variant: 'error', content: (err as Error).message })
-            console.error('Failed to login firefly', err)
         }
+        await Services.Helper.openPopupWindow(PopupRoutes.CreateWallet, {
+            creatingFireflyWallet: true,
+        })
+        window.close()
     }, [hasPermission])
+
+    const loading = requesting || loadingPermissions
 
     return (
         <div className={classes.container}>
