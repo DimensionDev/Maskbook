@@ -1,7 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST, PopupModalRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, PersistentStorages, PopupModalRoutes } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { useWallets as usePrivyWallets } from '@privy-io/react-auth'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, List, Typography } from '@mui/material'
 import { first } from 'lodash-es'
@@ -21,6 +22,8 @@ import { useStyles } from './useStyles.js'
 import { HidingScamTx } from './HidingScamTx.js'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { DisablePermit } from './DisablePermit.js'
+import { useSubscription } from 'use-subscription'
+import { WalletAvatar } from '../../../components/WalletAvatar/index.js'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
@@ -33,6 +36,12 @@ export const Component = memo(function WalletSettings() {
     const modalNavigate = useModalNavigate()
     const wallet = useWallet()
     const allWallets = useWallets()
+    const { wallets: fireflyWallets } = usePrivyWallets()
+    const isFireflyWallet = useMemo(
+        () => fireflyWallets.some((w) => isSameAddress(w.address, wallet?.address)),
+        [fireflyWallets, wallet?.address],
+    )
+    const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
 
     const handleSwitchWallet = useCallback(() => {
         modalNavigate(PopupModalRoutes.WalletAccount)
@@ -65,9 +74,11 @@ export const Component = memo(function WalletSettings() {
         <div className={classes.content}>
             <Box className={cx(classes.item, classes.primaryItem)} onClick={handleSwitchWallet}>
                 <Box className={classes.primaryItemBox}>
-                    <Icons.MaskBlue size={24} className={classes.maskBlue} />
+                    <WalletAvatar size={24} address={wallet.address} />
                     <div className={classes.walletInfo}>
-                        <Typography className={classes.primaryItemText}>{wallet.name}</Typography>
+                        <Typography className={classes.primaryItemText}>
+                            {isFireflyWallet ? fireflyAccount.displayName : wallet.name}
+                        </Typography>
                         <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
                     </div>
                 </Box>
@@ -82,7 +93,7 @@ export const Component = memo(function WalletSettings() {
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />
-                <ShowPrivateKey />
+                <ShowPrivateKey disabled={isFireflyWallet} />
                 <ChangeNetwork />
             </List>
             <Box className={classes.bottomAction}>

@@ -13,11 +13,12 @@ import { Trans } from '@lingui/react/macro'
 
 interface WalletRenameDrawerProps extends BottomDrawerProps {
     wallet?: Wallet
+    walletName?: string
 }
 
-function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
+function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerProps) {
     const theme = useTheme()
-    const [name, setName] = useState('')
+    const [name, setName] = useState(walletName || '')
     const [error, setError] = useState<ReactNode>()
     const contacts = useContacts()
 
@@ -60,7 +61,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={wallet?.name}
+                    placeholder={walletName || wallet?.name}
                     error={!!error}
                     value={name}
                     onChange={(e) => {
