@@ -1,7 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
 import { SNAPSHOT_PLUGIN_ID } from './constants.js'
-import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: SNAPSHOT_PLUGIN_ID,
@@ -22,5 +21,4 @@ export const base: Plugin.Shared.Definition = {
     contribution: {
         postContent: new Set([/https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+/u]),
     },
-    i18n: languages,
 }

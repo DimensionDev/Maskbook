@@ -1,4 +1,3 @@
-export * from './locale/languages.js'
 export * from './hooks/index.js'
 export { attachNextIDToProfile } from './utils/attachNextIDToProfile.js'
 export { queryPersistOptions } from './utils/persistOptions.js'

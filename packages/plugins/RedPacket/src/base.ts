@@ -9,7 +9,6 @@ import {
 } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketPluginID } from './constants.js'
-import { languages } from './locale/languages.js'
 
 export const base = {
     ID: RedPacketPluginID,
@@ -55,5 +54,4 @@ export const base = {
     contribution: {
         metadataKeys: new Set([RedPacketMetaKey, SolanaRedPacketMetaKey, RedPacketNftMetaKey]),
     },
-    i18n: languages,
 } satisfies Plugin.Shared.Definition

@@ -126,8 +126,6 @@ export namespace Plugin.Shared {
          * If the plugin is in the minimal mode by default.
          */
         inMinimalModeByDefault?: boolean
-        /** i18n resources of this plugin */
-        i18n?: I18NResource
         /**
          * Declare what this plugin provides.
          *
@@ -1102,8 +1100,6 @@ export namespace Plugin.__Host {
          * Control if the plugin is disabled or not.
          */
         disabled: EnabledStatusReporter
-
-        addI18NResource(pluginID: string, resources: Shared.I18NResource): void
 
         createContext(id: string, definition: Definition, signal: AbortSignal): Context
 

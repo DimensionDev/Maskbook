@@ -2,7 +2,6 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { NFTSCAN_CHAIN_IDS } from '@masknet/web3-providers'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
-import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -31,5 +30,4 @@ export const base: Plugin.Shared.Definition = {
             /opensea.io\/assets\/ethereum\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         ]),
     },
-    i18n: languages,
 }

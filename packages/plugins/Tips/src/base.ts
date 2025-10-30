@@ -1,7 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { NFTSCAN_CHAIN_IDS } from '@masknet/web3-providers'
-import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginID.Tips,
@@ -26,5 +25,4 @@ export const base: Plugin.Shared.Definition = {
             [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
-    i18n: languages,
 }

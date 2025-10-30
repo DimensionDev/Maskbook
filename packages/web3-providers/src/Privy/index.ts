@@ -1,4 +1,4 @@
-import { assert, Sniffings } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/shared-base'
 import { getAccessToken } from '@privy-io/react-auth'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers/fetchJSON.js'
@@ -12,7 +12,9 @@ class PrivyAPI {
             // eslint-disable-next-line no-restricted-globals
             return localStorage.getItem('privy:refresh_token')
         const url = urlcat(PRIVY_AUTH_HOST, '/v1/custom_jwt_account/authenticate')
-        assert(process.env.PRIVY_APP_ID, 'Missing PRIVY_APP_ID')
+        if (!process.env.PRIVY_APP_ID) {
+            throw new Error('Missing PRIVY_APP_ID')
+        }
         const token = await getAccessToken()
         const json = await fetchJSON<PrivySession>(url, {
             method: 'POST',
@@ -35,7 +37,9 @@ class PrivyAPI {
         if (!this.refreshToken) throw new Error('No refresh token')
         const url = urlcat(PRIVY_AUTH_HOST, '/v1/sessions')
         const token = await getAccessToken()
-        assert(process.env.PRIVY_APP_ID, 'Missing PRIVY_APP_ID')
+        if (!process.env.PRIVY_APP_ID) {
+            throw new Error('Missing PRIVY_APP_ID')
+        }
         const json = await fetchJSON<PrivySession>(url, {
             method: 'POST',
             headers: {
