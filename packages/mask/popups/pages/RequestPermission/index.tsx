@@ -2,15 +2,10 @@ import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
-import { RequestPermission } from './RequestPermission.js'
 import type { Manifest } from 'webextension-polyfill'
+import { CanRequestDynamically } from '../../../shared/definitions/extension.js'
+import { RequestPermission } from './RequestPermission.js'
 
-const CanRequestDynamically: readonly Manifest.OptionalPermission[] = [
-    'clipboardRead',
-    'clipboardWrite',
-    'notifications',
-    'webRequestBlocking',
-]
 function canRequestDynamically(x: string): x is Manifest.OptionalPermission {
     return (CanRequestDynamically as string[]).includes(x)
 }

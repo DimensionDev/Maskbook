@@ -1,13 +1,14 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { memo } from 'react'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
+import { memo, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useAsyncFn } from 'react-use'
-import { PopupRoutes } from '@masknet/shared-base'
+import { XOAuthRequestOrigins } from '../../../../shared/definitions/extension.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -63,20 +64,79 @@ const useStyles = makeStyles()((theme) => ({
             listStyle: 'disc',
         },
     },
+    dialog: {
+        width: 600,
+        boxSizing: 'border-box',
+        padding: 24,
+        borderRadius: 12,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 24,
+    },
+    dialogTitle: {
+        color: theme.palette.maskColor.main,
+        fontSize: 18,
+        fontWeight: 700,
+        lineHeight: '22px',
+        padding: 0,
+    },
+    dialogContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        padding: 0,
+    },
+    permissions: {
+        backgroundColor: theme.palette.maskColor.bg,
+        padding: 12,
+        borderRadius: 8,
+        height: 212,
+        boxSizing: 'border-box',
+        minHeight: 0,
+        flexGrow: 1,
+        overflow: 'auto',
+    },
+    dialogActions: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: 12,
+        padding: 0,
+    },
+    actionButton: {
+        minWidth: 110,
+        '&&': {
+            marginLeft: 0,
+        },
+    },
 }))
 
 export const Component = memo(function CreateWalletForm() {
     const { classes, cx } = useStyles()
+    const [open, setOpen] = useState(false)
+
+    const { retry, value: hasPermission } = useAsyncRetry(() => {
+        const hasPermission = browser.permissions.contains({
+            origins: XOAuthRequestOrigins,
+        })
+        setOpen(!hasPermission)
+        return hasPermission
+    }, [])
+
     const [{ loading }, request] = useAsyncFn(async () => {
+        if (!hasPermission) {
+            setOpen(true)
+            return
+        }
         try {
             const data = await Services.Helper.loginFireflyViaTwitter()
-            console.log('login data', data)
             if (!data) return
-            await Services.Helper.openPopupWindow(PopupRoutes.CreateWallet, undefined)
+            await Services.Helper.openPopupWindow(PopupRoutes.CreateWallet, {
+                creatingFireflyWallet: true,
+            })
         } catch (err) {
-            console.log('login error', err)
+            console.error('Failed to login firefly', err)
         }
-    }, [])
+    }, [hasPermission])
 
     return (
         <div className={classes.container}>
@@ -121,6 +181,41 @@ export const Component = memo(function CreateWalletForm() {
                     <Trans>Continue</Trans>
                 </PrimaryButton>
             </SetupFrameController>
+            <Dialog
+                open={open}
+                PaperProps={{
+                    elevation: 0,
+                    className: classes.dialog,
+                }}>
+                <DialogTitle className={classes.dialogTitle}>
+                    <Trans>Mask needs the following permissions</Trans>
+                </DialogTitle>
+                <DialogContent className={classes.dialogContent}>
+                    <Typography>
+                        <Trans>Sites</Trans>
+                    </Typography>
+                    <div className={classes.permissions} data-hide-scrollbar>
+                        {XOAuthRequestOrigins.map((origin) => (
+                            <Typography key={origin} lineHeight="18px">
+                                {origin}
+                            </Typography>
+                        ))}
+                    </div>
+                </DialogContent>
+                <DialogActions className={classes.dialogActions}>
+                    <Button onClick={() => setOpen(false)} variant="outlined" className={classes.actionButton}>
+                        <Trans>Cancel</Trans>
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            browser.permissions.request({ origins: XOAuthRequestOrigins }).finally(retry)
+                        }}
+                        variant="contained"
+                        className={classes.actionButton}>
+                        <Trans>Approve</Trans>
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 })

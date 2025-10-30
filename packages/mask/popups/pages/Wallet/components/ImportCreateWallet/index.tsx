@@ -1,15 +1,19 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import { useWallets } from '@privy-io/react-auth'
 import { timeout } from '@masknet/kit'
 import { LoadingStatus } from '@masknet/shared'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { alpha, Box, Typography, type BoxProps } from '@mui/material'
-import { memo, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { useAsyncFn } from 'react-use'
+import { memo, useCallback } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -76,7 +80,9 @@ async function loginFirefly() {
 }
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose, ...props }) {
     const { classes, cx, theme } = useStyles()
-    const [params, setParams] = useSearchParams()
+    const [params] = useSearchParams()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const navigate = useNavigate()
     const [, handleChoose] = useAsyncFn(
         async (route: DashboardRoutes) => {
             const hasPassword = await Services.Wallet.hasPassword()
@@ -97,12 +103,28 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
         return timeout(loginFirefly(), 3 * 60 * 1000, timeoutMessage)
     }, [])
 
-    const isCreatingFireflyWallet = !!params.get('isCreating')
-    useEffect(() => {
+    const isCreatingFireflyWallet = !!params.get('creatingFireflyWallet')
+    const { wallets } = useWallets()
+    const selectPrivyWallet = useCallback(async () => {
+        if (!wallets.length) return
+        if (wallets.length > 1) {
+            navigate(PopupRoutes.SelectWallet)
+            return
+        }
+        await EVMWeb3.connect({
+            account: wallets[0].address,
+            chainId,
+            providerType: ProviderType.MaskWallet,
+        })
+        navigate(PopupRoutes.Wallet)
+    }, [wallets, chainId])
+
+    useAsync(async () => {
         if (!isCreatingFireflyWallet) return
-        createPrivyWallet()
-        setParams({}, { replace: true })
-    }, [isCreatingFireflyWallet])
+        await createPrivyWallet()
+        await selectPrivyWallet()
+    }, [isCreatingFireflyWallet, selectPrivyWallet])
+
     const oauthTimeout = error?.message === timeoutMessage
 
     return (
