@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-10-24 02:54\n"
+"PO-Revision-Date: 2025-10-30 06:47\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -270,6 +270,7 @@ msgid "Appearance"
 msgstr "crwdns29900:0crwdne29900:0"
 
 #: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: popups/modals/UpdatePermissionModal/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Approve"
@@ -484,6 +485,7 @@ msgstr "crwdns32010:0crwdne32010:0"
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: popups/modals/AddContactModal/index.tsx
@@ -757,6 +759,7 @@ msgstr "crwdns29570:0crwdne29570:0"
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -806,6 +809,14 @@ msgstr "crwdns30040:0crwdne30040:0"
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
 msgstr "crwdns29574:0crwdne29574:0"
+
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Create a Firefly.social wallet"
+msgstr "crwdns38959:0crwdne38959:0"
+
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Create a Firefly.social wallet using an X account"
+msgstr "crwdns38961:0crwdne38961:0"
 
 #: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Create a New Wallet"
@@ -1759,6 +1770,7 @@ msgstr "crwdns30288:0crwdne30288:0"
 msgid "Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on those websites."
 msgstr "crwdns32082:0crwdne32082:0"
 
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Mask needs the following permissions"
 msgstr "crwdns30300:0crwdne30300:0"
@@ -2679,6 +2691,7 @@ msgstr "crwdns30562:0crwdne30562:0"
 msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
 msgstr "crwdns32138:0crwdne32138:0"
 
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Sites"
 msgstr "crwdns30564:0crwdne30564:0"
