@@ -2,16 +2,21 @@ msgid ""
 msgstr ""
 "POT-Creation-Date: 2025-10-27 22:51+0800\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: ko-KR\n"
-"Project-Id-Version: \n"
+"Language: ko\n"
+"Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2025-10-30 13:58\n"
 "Last-Translator: \n"
-"Language-Team: \n"
-"Plural-Forms: \n"
+"Language-Team: Korean\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared-base-ui/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 1010\n"
 
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
@@ -108,17 +113,17 @@ msgstr ""
 #. placeholder {0}: attentionFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factor"
-msgstr ""
+msgstr "{0} 주의 인자"
 
 #. placeholder {0}: attentionFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factors"
-msgstr ""
+msgstr "{0} 주의 인자"
 
 #. placeholder {0}: formatTokenBalance(tokenBalance, token?.decimals)
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
-msgstr ""
+msgstr "{0} 이용가능"
 
 #. placeholder {0}: bridge?.router.bridgeName
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -138,7 +143,7 @@ msgstr ""
 #. placeholder {0}: count.toString()
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileChip.tsx
 msgid "{0} files selected"
-msgstr ""
+msgstr "{0} 파일 선택됨"
 
 #. placeholder {0}: conditions.join('/')
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
@@ -153,12 +158,12 @@ msgstr ""
 #. placeholder {0}: formatCount(currentSpace.followersCount, 1)
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "{0} members"
-msgstr ""
+msgstr "{0} 맴버"
 
 #. placeholder {0}: millisecondsToMinutes(value)
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
-msgstr ""
+msgstr "{0} 분"
 
 #. placeholder {0}: fromNetwork?.name
 #. placeholder {0}: toNetwork?.name
@@ -201,7 +206,7 @@ msgstr ""
 #. placeholder {0}: sourceType ?? SourceType.NFTScan
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "{0} Platform costs"
-msgstr ""
+msgstr "{0} 플랫폼 비용"
 
 #. placeholder {0}: fromNetwork?.name || ''
 #. placeholder {0}: toNetwork?.name || ''
@@ -213,12 +218,12 @@ msgstr ""
 #. placeholder {0}: riskyFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factor"
-msgstr ""
+msgstr "{0} 리스크 인자"
 
 #. placeholder {0}: riskyFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factors"
-msgstr ""
+msgstr "{0} 리스크 인자"
 
 #. placeholder {0}: message.token
 #: packages/shared/src/UI/translate.ts
@@ -607,7 +612,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "12-word recovery phrase is used to recover your persona data."
-msgstr ""
+msgstr "12개 복구 문구로 페르소나 데어터를 복구할 수 있습니다."
 
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "2. If you have installed the {name} Wallet"
@@ -616,19 +621,19 @@ msgstr ""
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "24 Hour Trading Vol"
-msgstr ""
+msgstr "24 시간 거래량"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Average Price"
-msgstr ""
+msgstr "24H 평균 가격"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H sale"
-msgstr ""
+msgstr "24H 판매"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Traded Volume"
-msgstr ""
+msgstr "24H 거래액"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "A blacklist is found. Some addresses may not be able to trade normally, which is a honeypot risk."
@@ -647,7 +652,7 @@ msgstr ""
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "About"
-msgstr ""
+msgstr "알아보기"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "About {collectionName}"
@@ -672,14 +677,14 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
 msgid "Account successfully connected to persona"
-msgstr ""
+msgstr "소결 미디어에서 웹3 앱을 탐색해 보세요."
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Activities"
-msgstr ""
+msgstr "활동"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Activity Log"
@@ -689,7 +694,7 @@ msgstr ""
 #: packages/mask/popups/pages/Friends/ContactCard/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
 msgid "Add"
-msgstr ""
+msgstr "추가"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Add a Custom Cover"
@@ -701,18 +706,18 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 msgid "Add Assets"
-msgstr ""
+msgstr "자산 추가"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/Tips/src/components/NFTSection/index.tsx
 #: packages/shared/src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx
 msgid "Add Collectibles"
-msgstr ""
+msgstr "수장품 추가"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "Add Contact"
-msgstr ""
+msgstr "연락처 추가"
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Add google Drive"
@@ -721,16 +726,16 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 #: packages/mask/popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Add Network"
-msgstr ""
+msgstr "네트워크 추가"
 
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Add new address to an existing group"
-msgstr ""
+msgstr "현존 그룹에 새로운 주소 추가"
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
-msgstr ""
+msgstr "NFT 추가"
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Add Suggested Token"
@@ -742,7 +747,7 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "Add wallet"
-msgstr ""
+msgstr "월렛 추가"
 
 #: packages/mask/popups/pages/Wallet/components/StartUp/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
@@ -750,27 +755,27 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Add Wallet"
-msgstr ""
+msgstr "월렛 추가"
 
 #: packages/mask/popups/components/TokenPicker/TokenItem.tsx
 #: packages/mask/popups/pages/Wallet/components/AssetsList/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Added by user"
-msgstr ""
+msgstr "사용자별추가"
 
 #: packages/mask/popups/pages/Friends/ContactCard/index.tsx
 msgid "Added successfully"
-msgstr ""
+msgstr "추가 완료"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Adding your wallets will allow you to own, view, and utilize your digital identities via Next.ID service. Note that you will be required to sign and authenticate the transaction to prove ownership of your wallet."
-msgstr ""
+msgstr "월렛을 추가하면 Next.ID 서비스를 통해 디지털 ID를 소유, 열람 및 활용할 수 있습니다. 월렛 소유권을 증명하기 위해 거래에 서명하고 인증해야 합니다."
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/shared/src/UI/components/TokenWithSocialGroupMenu/index.tsx
 #: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
 msgid "Address"
-msgstr ""
+msgstr "주소"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
 msgid "Address: <0>{address}</0>"
@@ -783,15 +788,15 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 msgid "Advanced"
-msgstr ""
+msgstr "고급"
 
 #: packages/shared/src/UI/modals/SelectAdvancedSettingsDialog/SelectGasSettingsDialog.tsx
 msgid "Advanced Settings"
-msgstr ""
+msgstr "고급 설정"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 msgid "After connecting and verifying your persona, you can set up associated address for displaying your web3 footprints or receiving tips."
-msgstr ""
+msgstr "자신의 페르소나를 연결하고 확인한 후, 웹3 풋프린트를 표시하거나 팁을 받기 위한 관련 주소를 설정할 수 있습니다."
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
@@ -805,7 +810,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Permissions/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Agree"
-msgstr ""
+msgstr "동의"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Airdrop Scam"
@@ -814,7 +819,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "All"
-msgstr ""
+msgstr "전체"
 
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "All Mask Network users"
@@ -836,17 +841,17 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Amount"
-msgstr ""
+msgstr "금액"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Amount Each"
-msgstr ""
+msgstr "하나의 금액"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Amount per Share"
-msgstr ""
+msgstr "한 지분 금액"
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "an NFT"
@@ -862,7 +867,7 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "APP list"
-msgstr ""
+msgstr "앱 리스트"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -872,17 +877,17 @@ msgstr ""
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Appearance"
-msgstr ""
+msgstr "화면"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Applications"
-msgstr ""
+msgstr "어플리케이션"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalDialog.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/index.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/index.tsx
 msgid "Approval"
-msgstr ""
+msgstr "승인"
 
 #: packages/mask/content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
@@ -890,11 +895,11 @@ msgstr ""
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 #: packages/shared/src/UI/components/GrantPermission/index.tsx
 msgid "Approve"
-msgstr ""
+msgstr "승인"
 
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Approve amount"
-msgstr ""
+msgstr "금액 승인"
 
 #. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
@@ -918,7 +923,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 msgid "Are you sure to remove this wallet?"
-msgstr ""
+msgstr "이 월렛을 삭제하시겠습니까?"
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
 #. placeholder {1}: collection?.name || ''
@@ -940,7 +945,7 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/index.tsx
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
-msgstr ""
+msgstr "Artblocks는 마음에 드는 스타일을 골라 작업비를 지불하고 무작위로 생성된 콘텐츠 버전이 알고리즘에 의해 생성돼 이더리움 계정으로 전송를 지원하는 겁니다."
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Arweave"
@@ -948,7 +953,7 @@ msgstr ""
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Asset"
-msgstr ""
+msgstr "자산"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Asset is hidden."
@@ -956,13 +961,13 @@ msgstr ""
 
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 msgid "Associated Accounts"
-msgstr ""
+msgstr "관련 계정"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "At least 6 characters"
-msgstr ""
+msgstr "최소 8 글자 이상 이용하세요"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "At most {RED_PACKET_MAX_SHARES} recipients"
@@ -978,7 +983,7 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "Author"
-msgstr ""
+msgstr "작성자"
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Authorization Failed"
@@ -986,7 +991,7 @@ msgstr ""
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
 msgid "Auto report the scam links to MetaMask"
-msgstr ""
+msgstr "MetaMask에 스캠 링크 자동 보고"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
@@ -994,11 +999,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock Time"
-msgstr ""
+msgstr "Auto-lock 시간"
 
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
-msgstr ""
+msgstr "사용 가능한 잔액"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Available to Everyone"
@@ -1006,7 +1011,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Avatar set successfully"
-msgstr ""
+msgstr "아바타 설정 성공"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Average"
@@ -1018,7 +1023,7 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Back"
-msgstr ""
+msgstr "뒤로"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Back Up Your Data Your Way"
@@ -1029,15 +1034,15 @@ msgstr ""
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Backup"
-msgstr ""
+msgstr "백업"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Backup & Recovery"
-msgstr ""
+msgstr "백업 맟 복구"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Failed"
-msgstr ""
+msgstr "백업 실패"
 
 #: packages/shared/src/UI/components/QRCode/index.tsx
 msgid "Backup failed, <0>try again</0>"
@@ -1048,12 +1053,12 @@ msgstr ""
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Backup on {0}"
-msgstr ""
+msgstr "백업 시간 {0}"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Backup password"
-msgstr ""
+msgstr "비밀번호 백업"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
@@ -1061,22 +1066,22 @@ msgstr ""
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Backup Password"
-msgstr ""
+msgstr "비밀번호 백업"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password must be 8-20 characters, including uppercase, lowercase, special characters and numbers."
-msgstr ""
+msgstr "백업 비밀번호는 대문자, 소문자, 특수 문자 및 숫자를 포함하여 8-20자여야 합니다."
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password set successfully"
-msgstr ""
+msgstr "백업 비밀번호가 설정되었습니다."
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Backup Persona"
-msgstr ""
+msgstr "페르소나 백업"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Successful"
@@ -1093,12 +1098,12 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
 msgid "Backup Wallet"
-msgstr ""
+msgstr "지갑 백업"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Balance"
-msgstr ""
+msgstr "잔액"
 
 #: packages/shared/src/UI/components/TokenAmountPanel/index.tsx
 msgid "Balance: <0/>"
@@ -1115,7 +1120,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Base"
-msgstr ""
+msgstr "베이스"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Base fee required: {MIN_BASE_FEE} Gwei"
@@ -1123,12 +1128,12 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 msgid "Basic"
-msgstr ""
+msgstr "기본"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Basic setting"
-msgstr ""
+msgstr "기본 설정"
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Be aware, check the token before adding it."
@@ -1136,7 +1141,7 @@ msgstr ""
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
 msgid "Be careful what you visit and sign!"
-msgstr ""
+msgstr "사이트 방운하가나 사인할 때 조심하시길 바랍니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
@@ -1148,7 +1153,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/contexts/SolRedpacketContext.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Best Wishes!"
-msgstr ""
+msgstr "행운을 빌어요!"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Blacklist function"
@@ -1160,15 +1165,15 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Blockchain"
-msgstr ""
+msgstr "불록체인"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Blockchain:"
-msgstr ""
+msgstr "불록체인:"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Blocto only supports the Flow chain."
-msgstr ""
+msgstr "Blocto는 Flow에만 지원합니다."
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -1210,15 +1215,15 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Browser File"
-msgstr ""
+msgstr "브라우저 파일"
 
 #: packages/plugins/VCent/src/SiteAdaptor/index.tsx
 msgid "Buy & sell tweets autographed by their original creators."
-msgstr ""
+msgstr "크리에이터가 서명한 트윗을 구입 및 판매하기"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Buy Now"
-msgstr ""
+msgstr "바로 구매"
 
 #. placeholder {0}: percentageToNumber(info.sell_tax)
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
@@ -1248,7 +1253,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "By proceeding you agree to the"
-msgstr ""
+msgstr "계속하면 다음을 동의합니다:"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
@@ -1257,7 +1262,7 @@ msgstr ""
 #: packages/plugins/Calendar/src/SiteAdaptor/components/Footer.tsx
 #: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
 msgid "Calendar"
-msgstr ""
+msgstr "캘린더"
 
 #. placeholder {0}: lensAccount.operations.canFollow.reason
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
@@ -1304,7 +1309,7 @@ msgstr ""
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
-msgstr ""
+msgstr "취소"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Cancel Transaction"
@@ -1317,7 +1322,7 @@ msgstr ""
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Cast your vote"
-msgstr ""
+msgstr "투표하세요."
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Category"
@@ -1325,12 +1330,12 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Chain"
-msgstr ""
+msgstr "체인"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Chain ID"
-msgstr ""
+msgstr "체인 ID"
 
 #. placeholder {0}: currentNetwork?.chainId ?? currentChainId
 #. placeholder {0}: nextNetwork?.chainId ?? nextChainId
@@ -1347,7 +1352,7 @@ msgstr ""
 #: packages/shared/src/UI/components/WalletStatusBar/WalletMenuItem.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "Change"
-msgstr ""
+msgstr "바꾸기"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Change another account and try again."
@@ -1356,15 +1361,15 @@ msgstr ""
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Change Backup Password"
-msgstr ""
+msgstr "백업 비밀번호 변경"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangeNetwork.tsx
 msgid "Change Network"
-msgstr ""
+msgstr "네트워크 전환"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "Change NFT PFP"
-msgstr ""
+msgstr "NFT PFP 변경"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Change Owner"
@@ -1373,7 +1378,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 msgid "Change Payment Password"
-msgstr ""
+msgstr "결제 비밀번호 변경"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Change to EVM Wallet"
@@ -1389,7 +1394,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Change Wallet"
-msgstr ""
+msgstr "월렛 변경"
 
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Check {providerName} to confirm connect."
@@ -1406,7 +1411,7 @@ msgstr ""
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/CheckSecurityDialog.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/index.tsx
 msgid "Check Security"
-msgstr ""
+msgstr "보안 확인"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
@@ -1424,7 +1429,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Choose another wallet"
-msgstr ""
+msgstr "다른 월렛을 선택하세요"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Choose from multiple backup options, now including encrypted storage via your authorized Google Drive for added security and flexibility."
@@ -1432,7 +1437,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ChooseToken/index.tsx
 msgid "Choose Token"
-msgstr ""
+msgstr "토큰 선택"
 
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
 msgid "Chrome - external extension"
@@ -1441,7 +1446,7 @@ msgstr ""
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Circulating Supply"
-msgstr ""
+msgstr "유통량"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimDialog/index.tsx
@@ -1452,7 +1457,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claim"
-msgstr ""
+msgstr "수령"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
@@ -1484,7 +1489,7 @@ msgstr ""
 #: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Claim your Airdrop"
-msgstr ""
+msgstr "에어드랍 수령"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Claim your Lucky Drop."
@@ -1496,7 +1501,7 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Claimable"
-msgstr ""
+msgstr "수령 가능"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Claimed"
@@ -1530,23 +1535,23 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claiming..."
-msgstr ""
+msgstr "수령 중..."
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Classics Logo"
-msgstr ""
+msgstr "클래식 로고"
 
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Clear"
-msgstr ""
+msgstr "지우기"
 
 #: packages/shared/src/UI/components/WalletStatusBox/usePendingTransactions.tsx
 msgid "Clear All"
-msgstr ""
+msgstr "모두 지우기"
 
 #: packages/mask/content-script/components/InjectedComponents/PostDialogHint.tsx
 msgid "Click here to have a quick start."
-msgstr ""
+msgstr "퀵 스타트"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Click on <0/> at the top-right of your browser."
@@ -1562,7 +1567,7 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to list it on the App board."
-msgstr ""
+msgstr "애프리케이션 아이콘을 클릭하여 앱 보드에 리스트됩니다."
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Click the settings icon to list it on the App board."
@@ -1570,47 +1575,47 @@ msgstr ""
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Click to retry"
-msgstr ""
+msgstr "클릭하여 재시도하기"
 
 #: packages/mask/content-script/components/InjectedComponents/PageInspector.tsx
 #: packages/plugins/Tips/src/SiteAdaptor/components/TipsRealmContent/index.tsx
 msgid "Close"
-msgstr ""
+msgstr "닫기"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "Close [Check Security]?"
-msgstr ""
+msgstr "[Check Security] 닫기"
 
 #: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Cloud Backup"
-msgstr ""
+msgstr "클라우드 백업"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Collectible"
-msgstr ""
+msgstr "수집품"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalDialog.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Collectibles"
-msgstr ""
+msgstr "수집품"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Collection"
-msgstr ""
+msgstr "수집품"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Collection Approval"
-msgstr ""
+msgstr "컬렉션 승인"
 
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Community"
-msgstr ""
+msgstr "커뮤니티"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Complete"
@@ -1620,7 +1625,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 msgid "Completed"
-msgstr ""
+msgstr "완료됨"
 
 #: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/modals/ConfirmModal/index.tsx
@@ -1667,7 +1672,7 @@ msgstr ""
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
-msgstr ""
+msgstr "확인"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -1678,26 +1683,26 @@ msgstr ""
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
-msgstr ""
+msgstr "비밀번호 확인"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Confirm Payment Password"
-msgstr ""
+msgstr "결재 비밀번호 다시 설정"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Confirm Swap"
-msgstr ""
+msgstr "스왑 확인"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 #: packages/plugins/GoPlusSecurity/src/UI/TokenSecurityBoundary.tsx
 msgid "Confirm swap risk"
-msgstr ""
+msgstr "스왑 리스크 확인"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Confirm the Lucky Drop"
-msgstr ""
+msgstr "행운 드랍 디테일"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Confirm this Signature in your wallet."
@@ -1705,11 +1710,11 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Confirm this transaction in your wallet"
-msgstr ""
+msgstr "이 거래를 월렛에서 확인하세요"
 
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 msgid "Confirm this transaction in your wallet."
-msgstr ""
+msgstr "이 거래를 월렛에서 확인하세요."
 
 #. placeholder {0}: asset.symbol
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
@@ -1724,11 +1729,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirming"
-msgstr ""
+msgstr "확인 중"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Congratulations"
-msgstr ""
+msgstr "축하합니다"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
@@ -1736,14 +1741,14 @@ msgstr ""
 #: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 #: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 msgid "Congratulations!"
-msgstr ""
+msgstr "축하합니다!"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
 #: packages/mask/popups/components/SocialAccounts/index.tsx
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 msgid "Connect"
-msgstr ""
+msgstr "연결"
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
@@ -1753,7 +1758,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Connect and switch between your wallets."
-msgstr ""
+msgstr "여기서 월렛을 연결하세요. 여기서 네트워크나 월렛을 바꿀 수 있습니다."
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
@@ -1770,16 +1775,16 @@ msgstr ""
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 msgid "Connect Mask Network Account using your wallet."
-msgstr ""
+msgstr "Mask Network 계정을 연결하여 월렛을 사용합니다."
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Connect Persona"
-msgstr ""
+msgstr "페로소나 연결하기"
 
 #: packages/mask/popups/modals/ConnectSocialAccountModal/index.tsx
 msgid "Connect Social Account"
-msgstr ""
+msgstr "소셜 계정 연결"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Connect Solana Wallet"
@@ -1798,7 +1803,7 @@ msgstr ""
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "Connect Wallet"
-msgstr ""
+msgstr "월렛을 연결하기"
 
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Connect with {providerName}"
@@ -1813,13 +1818,13 @@ msgstr ""
 
 #: packages/mask/popups/components/SocialAccounts/index.tsx
 msgid "Connect your social platform accounts."
-msgstr ""
+msgstr "소셜 미디어 계정을 연결하기"
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connect your wallet"
-msgstr ""
+msgstr "월렛 연결"
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
 msgid "Connected"
@@ -1833,7 +1838,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ConnectedSites/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 msgid "Connected sites"
-msgstr ""
+msgstr "연결된 사이트"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Connected successfully."
@@ -1845,15 +1850,15 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Connected Wallet"
-msgstr ""
+msgstr "연결된 월렛"
 
 #: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connected wallets settings"
-msgstr ""
+msgstr "웰렛 연결 설정"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Connecting operation cancelled in third-party wallet."
-msgstr ""
+msgstr "연결 작업은 제3자 월렛에서 최소되었습니다."
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Connecting your {providerType} wallet"
@@ -1877,7 +1882,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/Contacts.tsx
 msgid "Contacts"
-msgstr ""
+msgstr "연락처"
 
 #: packages/mask/dashboard/components/Restore/RestoreFromMnemonic.tsx
 #: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
@@ -1893,7 +1898,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Continue"
-msgstr ""
+msgstr "다음"
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 #: packages/mask/popups/components/UnlockERC721Token/index.tsx
@@ -1903,11 +1908,11 @@ msgstr ""
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Contract"
-msgstr ""
+msgstr "컨트랙트"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Creator"
-msgstr ""
+msgstr "컨트랙트 창조자"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Contract Deployment"
@@ -1921,15 +1926,15 @@ msgstr ""
 #: packages/mask/popups/components/TransactionPreview/index.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Contract Interaction"
-msgstr ""
+msgstr "컨트렉트 인터액션"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/CheckSecurityDialog.tsx
 msgid "Contract Not Found"
-msgstr ""
+msgstr "캔트랙트 찾지 않음"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Owner"
-msgstr ""
+msgstr "컨트랙트 소유자"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Contract source code not verified"
@@ -1941,7 +1946,7 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Contract:"
-msgstr ""
+msgstr "컨트랙트:"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "contributions"
@@ -1950,36 +1955,36 @@ msgstr ""
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copied"
-msgstr ""
+msgstr "복사됨"
 
 #: packages/shared/src/UI/components/CopyButton/index.tsx
 msgid "Copied!"
-msgstr ""
+msgstr "복사됨"
 
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 #: packages/shared/src/UI/components/CopyButton/index.tsx
 msgid "Copy"
-msgstr ""
+msgstr "복사"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Copy Address"
-msgstr ""
+msgstr "주소 복사"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Copy image"
-msgstr ""
+msgstr "이미지 복사"
 
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 msgid "Copy private key"
-msgstr ""
+msgstr "개인 키 복사"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Copy text"
-msgstr ""
+msgstr "문자 복사"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
-msgstr ""
+msgstr "체인 ID를 가져올 수 없습니다. RPC URL이 맞는지 확인하시길 바랍니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
@@ -1991,7 +1996,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
-msgstr ""
+msgstr "만들기"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 msgid "Create a Firefly.social wallet"
@@ -2003,7 +2008,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Create a New Wallet"
-msgstr ""
+msgstr "새로운 월렛 만들기"
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Create a Privy Wallet"
@@ -2019,7 +2024,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
-msgstr ""
+msgstr "새로운 Mask 아이디 만들기"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create NFT Lucky Drop"
@@ -2027,19 +2032,19 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Create Password"
-msgstr ""
+msgstr "비밀번호 생성"
 
 #: packages/shared/src/hooks/useCurrentPersonaConnectStatus.ts
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Create persona"
-msgstr ""
+msgstr "페르소나 만들기"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Create Persona"
-msgstr ""
+msgstr "페르소나 만들기"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create Smart Pay wallet"
@@ -2050,11 +2055,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Create the Lucky Drop"
-msgstr ""
+msgstr "다음"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
 msgid "Create time:"
-msgstr ""
+msgstr "생성 시간:"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create your Lucky Drop."
@@ -2066,7 +2071,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
-msgstr ""
+msgstr "이용하기 전에 페르소나 한번 만들어 보세요"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Created a SmartPay wallet on Polygon network."
@@ -2110,15 +2115,15 @@ msgstr ""
 #: packages/mask/popups/modals/ChooseCurrencyModal/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 msgid "Currency"
-msgstr ""
+msgstr "통화"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Currency Symbol (Optional)"
-msgstr ""
+msgstr "통화 기호(옵션)"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Current"
-msgstr ""
+msgstr "현재"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Current account is not the verifying account."
@@ -2129,17 +2134,17 @@ msgstr ""
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Current base fee is {0} Gwei"
-msgstr ""
+msgstr "현재 기초 기스비는 {0} Gwei"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Current results"
-msgstr ""
+msgstr "현재 결과"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Current wallet does not support to interact with Lens protocol."
-msgstr ""
+msgstr "현재 월렛은 Lens protocol과의 상호작용을 지원하지 않습니다."
 
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
@@ -2150,11 +2155,11 @@ msgstr ""
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
-msgstr ""
+msgstr "커스텀"
 
 #: packages/plugins/Avatar/src/Application/PersonaPage.tsx
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
-msgstr ""
+msgstr "소셜 계정을 연결하여 맞춤형 NFT를 경험합니다. 새로운 웹3 바이브로 웹2를 즐기세요."
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
 msgid "CyberConnect"
@@ -2167,13 +2172,13 @@ msgstr ""
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Dark"
-msgstr ""
+msgstr "다크"
 
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Data"
-msgstr ""
+msgstr "데이터"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Data backed up successfully!"
@@ -2181,7 +2186,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Data correlation"
-msgstr ""
+msgstr "데이터 수정"
 
 #. placeholder {0}: fromTwitter ? AddressPlatform.Twitter : 'normal'
 #: packages/shared/src/UI/components/AccountIcons/index.tsx
@@ -2198,7 +2203,7 @@ msgstr ""
 #: packages/shared/src/UI/components/AccountIcons/index.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
-msgstr ""
+msgstr "데이터 소스가 {0}에서 검색됩니다."
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Date"
@@ -2210,16 +2215,16 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/index.tsx
 msgid "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network."
-msgstr ""
+msgstr "탈중앙화 영구적 파일 저장. Arweave Network를 통해 파일을 업로드하고 Mask 친구에게 공유합니다."
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
 msgid "Decentralized social graph protocol for user-centric Web3."
-msgstr ""
+msgstr "사용자 중심 웹3를 위한 탈중앙화 소셜 그래프 프로토콜"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 msgid "Decrypt failed, please check password"
-msgstr ""
+msgstr "해독 실패, 비밀번호를 확인하세요"
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "Decrypt this post with #mask_io! 🎭🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install Mask.io to send your first encrypted tweet. {encrypted}"
@@ -2227,30 +2232,30 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "Decrypted by Mask Network"
-msgstr ""
+msgstr "Mask로 해독되었습니다:"
 
 #: packages/shared/src/UI/components/MaskPluginWrapper/index.tsx
 msgid "Default"
-msgstr ""
+msgstr "디폴트"
 
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Delete"
-msgstr ""
+msgstr "삭제"
 
 #: packages/mask/popups/modals/DeleteContactModal/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "Delete Contact"
-msgstr ""
+msgstr "연락처 삭제"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 msgid "Delete File"
-msgstr ""
+msgstr "파일 삭제"
 
 #: packages/mask/popups/pages/Friends/Detail/index.tsx
 msgid "Deleted successfully"
-msgstr ""
+msgstr "삭제 성공"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Deploy a SmartPay wallet on Polygon network."
@@ -2268,7 +2273,7 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/SavingsRow.tsx
 msgid "Deposit"
-msgstr ""
+msgstr "입금"
 
 #. placeholder {0}: protocol.bareToken.symbol
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
@@ -2288,7 +2293,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DescriptionCard.tsx
 msgid "Description"
-msgstr ""
+msgstr "설명"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
@@ -2298,11 +2303,11 @@ msgstr ""
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/SocialFeedDetailsModal/DetailDialog.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Details"
-msgstr ""
+msgstr "디테일"
 
 #: packages/plugins/ScamWarning/src/SiteAdaptor/index.tsx
 msgid "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets."
-msgstr ""
+msgstr "사용자가 게시한 암호화 웹 사이트가 위험한지 악의적인지 탐지합니다. 디지털 자산을 저장하는 데 도움이 됩니다."
 
 #. placeholder {0}: quote?.toToken.tokenSymbol
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/QuoteRoute.tsx
@@ -2316,24 +2321,24 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "Disconnect"
-msgstr ""
+msgstr "연결 해제"
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Disconnect all accounts"
-msgstr ""
+msgstr "모두 계정 연결 해제"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect failed."
-msgstr ""
+msgstr "연결 해제 실패"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect Social Account?"
-msgstr ""
+msgstr "소셜 계정 연결 해제"
 
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
 msgid "Disconnect Wallet?"
-msgstr ""
+msgstr "월렛 연결을 해제하시겠습니까?"
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
@@ -2352,7 +2357,7 @@ msgstr ""
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 #: packages/shared/src/UI/contexts/components/InjectedDialog.tsx
 msgid "Dismiss"
-msgstr ""
+msgstr "확인"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/index.tsx
 msgid "Display Snapshot proposals on the X of the respective project or protocol."
@@ -2360,19 +2365,19 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
-msgstr ""
+msgstr "OpenSea 및 Rarible에서 수집품의 정보를 전시하고 소셜 미디어에서 경매합니다."
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/index.tsx
 msgid "Display specific information of Gitcoin projects, donate to a project directly on social media."
-msgstr ""
+msgstr "Gitcoin의 지정 정보를 표시하고 소셜미디어에서 프로젝트에게 적접 기부합니다."
 
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Display the following address on your Web3 profile page and use it to receive tips."
-msgstr ""
+msgstr "웹3 프로필 페이지에 다음 주소를 표시하고 팁을 받는 데 사용합니다."
 
 #: packages/mask/content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Do you need to paste encrypted content manually?"
-msgstr ""
+msgstr "암호화된 내용을 수동으로 붙여넣으세요?"
 
 #. placeholder {0}: file.name
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
@@ -2391,7 +2396,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "Domain Request"
-msgstr ""
+msgstr "도메인 요청"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."
@@ -2399,7 +2404,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
 msgid "Don't see your NFT?"
-msgstr ""
+msgstr "NFT를 보셨나요?"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Donate"
@@ -2421,26 +2426,26 @@ msgstr ""
 #: packages/shared/src/hooks/useSnackbarCallback.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Done"
-msgstr ""
+msgstr "완료"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Download"
-msgstr ""
+msgstr "다운로드"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Download Backup"
-msgstr ""
+msgstr "백업 다운로드"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Download https://mask.io to try more powerful tools on Twitter."
-msgstr ""
+msgstr "Twitter에서 더 많은 도구를 사용해 보려면 https://mask.io 을 다운로드하세요."
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Download report"
-msgstr ""
+msgstr "리포트 다운로드"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Download the {name} Wallet here"
@@ -2448,12 +2453,12 @@ msgstr ""
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Downloading"
-msgstr ""
+msgstr "다운로드 중"
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: packages/shared/src/UI/components/UploadDropArea/index.tsx
 msgid "Drag & Drop your file here"
-msgstr ""
+msgstr "파일을 끌어서 여기에 놓으세요"
 
 #: packages/plugins/Handle/src/SiteAdaptor/PluginHeader.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/PluginDescriptor.tsx
@@ -2466,19 +2471,19 @@ msgstr ""
 #: packages/shared/src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
-msgstr ""
+msgstr "편집"
 
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit Contact"
-msgstr ""
+msgstr "연락처 편집"
 
 #: packages/plugins/Avatar/src/Application/RouterDialog.tsx
 msgid "Edit Profile"
-msgstr ""
+msgstr "프로필 편집"
 
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Editor"
-msgstr ""
+msgstr "에디터"
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -2487,29 +2492,29 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Eligible to claim"
-msgstr ""
+msgstr "수령 가능"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Email"
-msgstr ""
+msgstr "이메일"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Email verification code"
-msgstr ""
+msgstr "메일 인증번호"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Empty"
-msgstr ""
+msgstr "비어 있음"
 
 #: packages/mask/content-script/components/CompositionDialog/CompositionUI.tsx
 msgid "Enable auto paste"
-msgstr ""
+msgstr "자동 붙이기 지원"
 
 #: packages/shared/src/UI/components/PluginEnableBoundary/index.tsx
 msgid "Enable plugin"
-msgstr ""
+msgstr "플러그인 활성화"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Enable the {name} Wallet extension and disable other wallet extensions"
@@ -2522,7 +2527,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/CompositionUI.tsx
 #: packages/shared/src/UI/components/CompositionDialog/CompositionUI.tsx
 msgid "Encrypt"
-msgstr ""
+msgstr "끝내기"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Encrypt the message in an image"
@@ -2530,7 +2535,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/Composition.tsx
 msgid "Encrypted Post"
-msgstr ""
+msgstr "Mask: 편집"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -2539,11 +2544,11 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Encryption Method"
-msgstr ""
+msgstr "암호화 방식"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "End date"
-msgstr ""
+msgstr "종료 날짜"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Ended {relativeEndTime}"
@@ -2564,11 +2569,11 @@ msgstr ""
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 msgid "Ens or Address(0x)"
-msgstr ""
+msgstr "Ens 나 주소(0x)"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "ENS or Wallet Address"
-msgstr ""
+msgstr "ENS나 월렛 주소"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
@@ -2576,34 +2581,34 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
-msgstr ""
+msgstr "기스비 한도 입력"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
-msgstr ""
+msgstr "가스비 입력"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max fee"
-msgstr ""
+msgstr "최대 가스비 입력"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max priority fee"
-msgstr ""
+msgstr "최대 우선 가스비 입력"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Enter Amount Each"
-msgstr ""
+msgstr "하나의 금액 입력"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Enter an amount"
-msgstr ""
+msgstr "수액 입력"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
@@ -2616,21 +2621,21 @@ msgstr ""
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 msgid "Enter Max spend limit"
-msgstr ""
+msgstr "최대 지불 제한 입력"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Enter Number of Winners"
-msgstr ""
+msgstr "공유 수량 입력"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
 msgid "Enter Payment Password"
-msgstr ""
+msgstr "결제 비밀번호 입력"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Enter Total Amount"
-msgstr ""
+msgstr "총금액 입력"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Entered passwords are inconsistent."
@@ -2639,7 +2644,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Equal Amount"
-msgstr ""
+msgstr "동일한 금액"
 
 #. placeholder {0}: rejection.message
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
@@ -2658,7 +2663,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Everyone"
-msgstr ""
+msgstr "공개"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "EVM"
@@ -2670,7 +2675,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Example: Alice"
-msgstr ""
+msgstr "예: Alice"
 
 #: packages/shared/src/UI/components/UploadDropArea/index.tsx
 msgid "Exceeded the maximum file size of {fileSize}."
@@ -2684,12 +2689,12 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Exchange"
-msgstr ""
+msgstr "스왑"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
-msgstr ""
+msgstr "트위터에서 체험하기"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
@@ -2697,16 +2702,16 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Expired"
-msgstr ""
+msgstr "만료됨"
 
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Explore multi-chain dApps."
-msgstr ""
+msgstr "클릭하여 메인 기능을 확인하세요."
 
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Export"
-msgstr ""
+msgstr "내보내기"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
@@ -2719,7 +2724,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
-msgstr ""
+msgstr "실패"
 
 #. placeholder {0}: message.action
 #: packages/shared/src/UI/translate.ts
@@ -2728,7 +2733,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Failed to add the wallet, please try again."
-msgstr ""
+msgstr "월렛 추가 실패, 다시 시도하기"
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Failed to authorize Google Drive. Please try again."
@@ -2796,7 +2801,7 @@ msgstr ""
 #. placeholder {0}: token.symbol ?? token.name ?? 'Token'
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Failed to load {0}. Click to retry."
-msgstr ""
+msgstr "{0} 로드 실패. 다시 시도하세요."
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 msgid "Failed to login firefly"
@@ -2808,7 +2813,7 @@ msgstr ""
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Failed to report spam."
-msgstr ""
+msgstr "신고 실패"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
@@ -2829,7 +2834,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Failed to save network"
-msgstr ""
+msgstr "네트워크 저장 실패"
 
 #: packages/plugins/FileService/src/SiteAdaptor/FileViewer.tsx
 msgid "Failed to save the file. Please try again."
@@ -2842,7 +2847,7 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Failed to set Avatar."
-msgstr ""
+msgstr "아바타 설정 실패"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Failed to swap"
@@ -2879,11 +2884,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "FAQ&Tutorial"
-msgstr ""
+msgstr "FAQ&투토리얼"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Fast"
-msgstr ""
+msgstr "빠름"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx
 msgid "Fastest"
@@ -2891,7 +2896,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Feedback"
-msgstr ""
+msgstr "피드백"
 
 #: packages/plugins/Transak/src/SiteAdaptor/index.tsx
 msgid "Fiat On-Ramp"
@@ -2903,7 +2908,7 @@ msgstr ""
 
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 msgid "File"
-msgstr ""
+msgstr "파일"
 
 #. placeholder {0}: file.name
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
@@ -2927,7 +2932,7 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 msgid "File name must between 3 to 20 characters."
-msgstr ""
+msgstr "파일 이름은 3~20 글자 이내로 입력해주세요."
 
 #: packages/plugins/FileService/src/SiteAdaptor/FileViewer.tsx
 msgid "File saved"
@@ -2935,7 +2940,7 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/index.tsx
 msgid "File Service"
-msgstr ""
+msgstr "파일 서비스"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Find Mask Network in the extension list and click the <0/> button."
@@ -2947,19 +2952,19 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Floor price"
-msgstr ""
+msgstr "최저 가격"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Floor Price"
-msgstr ""
+msgstr "바닥 가격"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Follow"
-msgstr ""
+msgstr "팔로우"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
@@ -2976,18 +2981,18 @@ msgstr ""
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
 msgid "Follow Lens handle"
-msgstr ""
+msgstr "Lens 핸들 팔로우"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
 msgid "Follow Now"
-msgstr ""
+msgstr "바로 팔로우하기"
 
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Follow System"
-msgstr ""
+msgstr "시스템에 따라 설정"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Follow User"
@@ -2995,21 +3000,21 @@ msgstr ""
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "Followers"
-msgstr ""
+msgstr "팔로워"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Following"
-msgstr ""
+msgstr "팔로잉"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "Followings"
-msgstr ""
+msgstr "팔로잉"
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Forgot payment password?"
-msgstr ""
+msgstr "결제 비밀번호를 잊었습니까?"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivityCard.tsx
@@ -3022,7 +3027,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "From"
-msgstr ""
+msgstr "보낸 사람"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "from <0>{fromAddress}</0>"
@@ -3053,13 +3058,13 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/shared/src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Gas Fee"
-msgstr ""
+msgstr "가스비"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSettingModal.tsx
 msgid "Gas fee settings"
-msgstr ""
+msgstr "기스비 설정"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
@@ -3073,11 +3078,11 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Limit"
-msgstr ""
+msgstr "가스 한도"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Limit (Units)"
-msgstr ""
+msgstr "가스 한도(Units)"
 
 #. placeholder {0}: String(minGasLimit)
 #. placeholder {0}: minGasLimit.toFixed()
@@ -3102,7 +3107,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas limit too low will cause the transaction to fail."
-msgstr ""
+msgstr "가스 한도가 너무 낮으면 거래가 실패할 수 있습니다."
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
@@ -3111,15 +3116,15 @@ msgstr ""
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Price"
-msgstr ""
+msgstr "가스 가격"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Price (GWEI)"
-msgstr ""
+msgstr "가스 가격(GWEI)"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price is higher than necessary. You may pay more than needed."
-msgstr ""
+msgstr "가스비가 필요한 것보다 높아서 필요 이상으로 지불할 수 있습니다."
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas price is too low and will cause the transaction fail"
@@ -3127,25 +3132,25 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price is too low for network conditions."
-msgstr ""
+msgstr "네트워크 컨디션에 대한 가스비가 매우 낮습니다."
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price must be greater than 0 Gwei."
-msgstr ""
+msgstr "가스 가격은 0Gwei보다 높어야합니다."
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/schema.ts
 msgid "Gas price should be greater than 0"
-msgstr ""
+msgstr "가스 가격은 0보다 높어야합니다."
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Used (Units)"
-msgstr ""
+msgstr "이용된 가스(Units)"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "General"
-msgstr ""
+msgstr "일반"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "General user"
@@ -3153,11 +3158,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Generate a new persona"
-msgstr ""
+msgstr "새로운 페르소나 생성"
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Generate a new wallet address"
-msgstr ""
+msgstr "새로운 월렛 주소 생성"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -3174,7 +3179,7 @@ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 msgid "Gift crypto or NFTs to any users, first come, first served."
-msgstr ""
+msgstr "크립토나 NFT를 다른 이용자에게 보낼 수 있습니다."
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/index.tsx
 msgid "Gitcoin"
@@ -3193,7 +3198,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Go to Settings"
-msgstr ""
+msgstr "설정으로 가기"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
@@ -3204,7 +3209,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Got it"
-msgstr ""
+msgstr "알겠습니다"
 
 #. placeholder {0}: token.symbol
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -3291,7 +3296,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/AssetsList/MoreBar.tsx
 msgid "Hide tokens with value less than $1"
-msgstr ""
+msgstr "잔액 $1 미만인 토큰 숨기기"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/HidingScamTx.tsx
 msgid "Hiding Scam Transactions"
@@ -3305,16 +3310,16 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "High"
-msgstr ""
+msgstr "높음"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/constants.tsx
 msgid "High Risk"
-msgstr ""
+msgstr "높은 리스크"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Highest Price"
-msgstr ""
+msgstr "최고 가격"
 
 #: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
@@ -3325,7 +3330,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "History"
-msgstr ""
+msgstr "역사 기록"
 
 #. placeholder {0}: tokenQuantity ? `${tokenQuantity}+` : 'any'
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
@@ -3370,11 +3375,11 @@ msgstr ""
 #. placeholder {2}: token?.symbol || ''
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
-msgstr ""
+msgstr "'{0}' 컬렉션에서 {1} {2} 가격로 아름다운 예술품을 구매했습니다."
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "I just replaced Twitter X logo with the original blue bird one with Mask Network extension."
-msgstr ""
+msgstr "Mask Network 확장으로 트위터 X 로고를 블루버드 로고로 교체했습니다."
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 msgid "I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io."
@@ -3406,11 +3411,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Identical"
-msgstr ""
+msgstr "평균"
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
-msgstr ""
+msgstr "아이디"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
@@ -3424,7 +3429,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses."
-msgstr ""
+msgstr "[Check Security] 닫기로 결정한 경우 의심스럽거나 블랙리스트에 있거나 사기 가능성이 있는 컨트랙트 및 주소와 상호 작용할 때 보안 알림이 더 이상 표시되지 않습니다."
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "If you forget payment password, you can type 'RESET' to reset your wallet. <0>Remember, this action will erase all your previous wallets.</0>"
@@ -3434,7 +3439,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Image"
-msgstr ""
+msgstr "이미지"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Image copied!"
@@ -3443,27 +3448,27 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Import"
-msgstr ""
+msgstr "불러오기"
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
 msgid "Import NFT"
-msgstr ""
+msgstr "NFT 불러오기"
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Import Wallet"
-msgstr ""
+msgstr "월렛 불러오기"
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Import Wallets"
-msgstr ""
+msgstr "월렛 불러오기"
 
 #: packages/mask/popups/components/WalletItem/index.tsx
 msgid "Imported"
-msgstr ""
+msgstr "불러오기 완료됨"
 
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
 msgid "Imported Wallets"
-msgstr ""
+msgstr "월렛 불러오기"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -3475,7 +3480,7 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
-msgstr ""
+msgstr "Web3 탭에서는 Mask 확장 기능을 설치한 친구에게 NFT 컬렉션, 기부 기록 및 기타 온체인 피드에 대한 지갑 주소를 표시할 수 있습니다."
 
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
 msgid "Incorrect Backup Password"
@@ -3484,25 +3489,25 @@ msgstr ""
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Incorrect backup password."
-msgstr ""
+msgstr "잘못된 비밀번호."
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Incorrect Backup Password."
-msgstr ""
+msgstr "잘못된 백업 비밀번호."
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
-msgstr ""
+msgstr "잘못된 클라우드 백업 비밀번호입니다. 다시 시도하세요."
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/index.tsx
 msgid "Incorrect contract address."
-msgstr ""
+msgstr "잘못된 컨트렉트 주소"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Keystore Password."
-msgstr ""
+msgstr "잘못된 키스토어 비밀번호."
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Mnemonic Words."
@@ -3511,7 +3516,7 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Incorrect password"
-msgstr ""
+msgstr "잘못된 비밀번호"
 
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
@@ -3522,26 +3527,26 @@ msgstr ""
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Incorrect Password"
-msgstr ""
+msgstr "잘못된 비밀번호"
 
 #: packages/mask/popups/modals/ShowPrivateKeyModal/index.tsx
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 msgid "Incorrect Payment Password."
-msgstr ""
+msgstr "잘못된 결제 비밀번호"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Incorrect Private Key"
-msgstr ""
+msgstr "잘못된 아이디 코드"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Phrase.tsx
 msgid "Incorrect recovery phrase."
-msgstr ""
+msgstr "잘못된 복구 문구"
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 msgid "Incorrect wallet address."
-msgstr ""
+msgstr "잘못된 월렛 주소."
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Incorrect words selected. Please try again!"
@@ -3550,40 +3555,40 @@ msgstr ""
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Info"
-msgstr ""
+msgstr "정보"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "Information"
-msgstr ""
+msgstr "정보"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Infos"
-msgstr ""
+msgstr "정보"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
-msgstr ""
+msgstr "입력 금액은 최소 금액 이하입니다."
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 msgid "Input contract address"
-msgstr ""
+msgstr "컨트랙트 주소 입력"
 
 #: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Input your Private Key"
-msgstr ""
+msgstr "개인 키 입력하기"
 
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
 #: packages/shared/src/UI/components/SettingsBoard/Context.tsx
 msgid "Instant"
-msgstr ""
+msgstr "즉시"
 
 #. placeholder {0}: token?.symbol
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient {0} Balance"
-msgstr ""
+msgstr "{0} 잔액 부족"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
@@ -3598,7 +3603,7 @@ msgstr ""
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #: packages/plugins/Tips/src/contexts/Tip/useTipValidate.ts
 msgid "Insufficient balance"
-msgstr ""
+msgstr "잔액 부족"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
@@ -3606,7 +3611,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient Balance"
-msgstr ""
+msgstr "잔액 부족"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -3615,15 +3620,15 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient Balance for Gas Fee"
-msgstr ""
+msgstr "가스비 부족"
 
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Insufficient funds for gas."
-msgstr ""
+msgstr "자산이나 가스비가 부족합니다."
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid Block Explorer URL."
-msgstr ""
+msgstr "무효한 Block Explorer URL."
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid email address."
@@ -3637,23 +3642,23 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/shared/src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Invalid Network"
-msgstr ""
+msgstr "무효한 네트워크"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid number"
-msgstr ""
+msgstr "잘못된 번호"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid RPC URL."
-msgstr ""
+msgstr "무효한 RPC URL"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useSlippageToleranceSchema.ts
 msgid "Invalid slippage tolerance."
-msgstr ""
+msgstr "무효한 슬리피지 톨러런스"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid verification code."
-msgstr ""
+msgstr "유효하지 않은 인증 코드입니다."
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
@@ -3670,44 +3675,44 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Items"
-msgstr ""
+msgstr "아이템"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "Join"
-msgstr ""
+msgstr "참가"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Just Me"
-msgstr ""
+msgstr "나만 보기"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Just Selected Contacts"
-msgstr ""
+msgstr "선정된 연락처에게만 공유"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
-msgstr ""
+msgstr "안전 보관"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
-msgstr ""
+msgstr "키스토어"
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Keystore password"
-msgstr ""
+msgstr "키스토어 비밀번호"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Lack of number, letter or special character."
-msgstr ""
+msgstr "숫자, 문자 또는 특수 문자가 부족합니다."
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Leave blank to allow any amount; enter a number to set a minimum holding requirement."
@@ -3719,19 +3724,19 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens Follow"
-msgstr ""
+msgstr "Lens 팔로우"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens Unfollow"
-msgstr ""
+msgstr "Lens 언팔로우"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Library:"
-msgstr ""
+msgstr "라이브러리:"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "License:"
-msgstr ""
+msgstr "라이센스:"
 
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Lido Exchange Rate"
@@ -3740,7 +3745,7 @@ msgstr ""
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Light"
-msgstr ""
+msgstr "라이트"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Likely in < {estimateSecond} seconds"
@@ -3748,7 +3753,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Link"
-msgstr ""
+msgstr "링크"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Listed"
@@ -3762,11 +3767,11 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/FailedTrendingView.tsx
 #: packages/shared/src/UI/components/ReloadStatus/index.tsx
 msgid "Load failed"
-msgstr ""
+msgstr "로딩 실패"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/OffersList.tsx
 msgid "Load More"
-msgstr ""
+msgstr "추가 로드"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Load Network"
@@ -3780,7 +3785,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewSkeleton.tsx
 #: packages/shared/src/UI/components/LoadingStatus/index.tsx
 msgid "Loading"
-msgstr ""
+msgstr "로딩 중"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
 msgid "Loading account information..."
@@ -3792,16 +3797,16 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTBadge.tsx
 msgid "Loading..."
-msgstr ""
+msgstr "로딩 중"
 
 #: packages/shared/src/UI/components/PluginCardFrame/index.tsx
 msgid "Loading...."
-msgstr ""
+msgstr "로딩 중...."
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Local Backup"
-msgstr ""
+msgstr "로컬 백업"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Locale Backup"
@@ -3809,13 +3814,13 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Lock Wallet"
-msgstr ""
+msgstr "로컬 월렛"
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Log out"
-msgstr ""
+msgstr "로그아웃"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
@@ -3825,18 +3830,18 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Logout failed"
-msgstr ""
+msgstr "로그아웃 실패"
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Logout successfully"
-msgstr ""
+msgstr "로그아웃 성공"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Low"
-msgstr ""
+msgstr "낮음"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/constants.tsx
 msgid "Low Risk"
@@ -3849,7 +3854,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 msgid "Lucky Drop"
-msgstr ""
+msgstr "행운 드랍"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Lucky Drop claimed."
@@ -3883,12 +3888,12 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Make It Encrypted"
-msgstr ""
+msgstr "암호화하기"
 
 #: packages/mask/popups/modals/ChooseNetworkModal/index.tsx
 #: packages/mask/popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Manage Network"
-msgstr ""
+msgstr "네트워크 관리"
 
 #: packages/mask/popups/modals/SupportedSitesModal/index.tsx
 msgid "Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on those websites."
@@ -3896,14 +3901,14 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Manage Token List"
-msgstr ""
+msgstr "토큰 목록 관리"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Market Cap"
-msgstr ""
+msgstr "시가 총액"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Mask Community $ARB Giveaway"
@@ -3912,7 +3917,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Mask needs the following permissions"
-msgstr ""
+msgstr "Mask가 아래 권한을 요청합니다."
 
 #: packages/mask/content-script/components/InjectedComponents/PostDialogHint.tsx
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
@@ -3934,7 +3939,7 @@ msgstr ""
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Max"
-msgstr ""
+msgstr "최대치"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
@@ -3956,39 +3961,39 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee"
-msgstr ""
+msgstr "최대 가스비"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Fee"
-msgstr ""
+msgstr "최대 가스비"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Max Fee (GWEI)"
-msgstr ""
+msgstr "최대 요금(GWEI)"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee cannot be lower than max priority fee"
-msgstr ""
+msgstr "최대 기스비는 최대 우선 가스비보다 낮을 수 없습니다"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee cannot be lower than max priority fee."
-msgstr ""
+msgstr "최대 기스비는 최대 우선 가스비보다 낮을 수 없습니다."
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max fee is higher than necessary"
-msgstr ""
+msgstr "최대 가스비는 필요한 것보다 높습니다."
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is higher than necessary."
-msgstr ""
+msgstr "최대 가스비가 필요한 것보다 높습니다."
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is too low for network conditions."
-msgstr ""
+msgstr "현재 네트워크 컨디션에서 최대 가스비가 너무 낮습니다."
 
 #. placeholder {0}: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2, BigNumber.ROUND_UP)
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
@@ -3997,40 +4002,40 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max priority fee"
-msgstr ""
+msgstr "최대 우선 가스비"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Priority Fee"
-msgstr ""
+msgstr "최대 우선 가스비"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is higher than necessary. You may pay more than needed."
-msgstr ""
+msgstr "최대 우선 가스비가 필요한 것보다 높아서 필요 이상으로 지불할 수 있습니다."
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max priority fee is too high for network conditions."
-msgstr ""
+msgstr "현재 네트워크 컨디션에 대한 최대 가스비가 너무 높습니다."
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max priority fee is too low for network conditions"
-msgstr ""
+msgstr "현재 네트워크 컨디션에서 최대 우선 가스비가 부족합니다"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is too low for network conditions."
-msgstr ""
+msgstr "네트워크 컨디션에 대한 최대 우선 가스비는 매우 낮습니다."
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max priority fee must be greater than 0 GWEI"
-msgstr ""
+msgstr "최대 우선 가스비는 0 GWEI보다 높아야 합니다"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee must be greater than 0 Gwei."
-msgstr ""
+msgstr "최대 우선 가스비는 0 Gwei보다 높아야 합니다."
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "May be a honeypot."
@@ -4044,12 +4049,12 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Medium"
-msgstr ""
+msgstr "보통"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/constants.tsx
 msgid "Medium Risk"
-msgstr ""
+msgstr "중간 리스크"
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Merge Completed"
@@ -4058,7 +4063,7 @@ msgstr ""
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Merge data to local database"
-msgstr ""
+msgstr "데이터를 로컬 데이터베이스에 병합하기"
 
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
@@ -4069,11 +4074,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Message"
-msgstr ""
+msgstr "메시지"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Method"
-msgstr ""
+msgstr "방법"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Minimum received"
@@ -4086,7 +4091,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Mint Address"
-msgstr ""
+msgstr "민팅 주소"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Mint function"
@@ -4098,7 +4103,7 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Minted:"
-msgstr ""
+msgstr "민팅 완료"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
@@ -4108,34 +4113,34 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
-msgstr ""
+msgstr "니모닉"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
 msgid "Mnemonic word"
-msgstr ""
+msgstr "니모닉 단어"
 
 #: packages/shared/src/UI/components/TokenSecurity/index.tsx
 msgid "More"
-msgstr ""
+msgstr "더 보기"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "More Details"
-msgstr ""
+msgstr "상세 정보"
 
 #. placeholder {0}: asset.data.source === SourceType.NFTScan ? resolveSourceTypeName(asset.data.source) : 'platform'
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "More on {0}"
-msgstr ""
+msgstr "{0}"
 
 #. placeholder {0}: String(currentMessageIndex + 1)
 #. placeholder {1}: String(totalMessages)
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Multiple transaction requests {0} / {1}"
-msgstr ""
+msgstr "멀티 거래 요청 {0} / {1}"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "My vote"
-msgstr ""
+msgstr "나의 투표"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ClaimRecord.tsx
 msgid "My wallet"
@@ -4143,7 +4148,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "My Wallets"
-msgstr ""
+msgstr "나의 월렛"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
@@ -4160,7 +4165,7 @@ msgstr ""
 #: packages/mask/popups/components/TokenPicker/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/index.tsx
 msgid "Name or Contract address e.g. USDC or 0x234..."
-msgstr ""
+msgstr "토큰 이름이나 컨트렉트 주소"
 
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Name or contract address eg. PUNK or 0x234..."
@@ -4173,7 +4178,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Network"
-msgstr ""
+msgstr "네트워크"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network added"
@@ -4181,15 +4186,15 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Network error or execute smart contract failed."
-msgstr ""
+msgstr "네트워크나 컨트랙트 오류"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
-msgstr ""
+msgstr "네트워크 오류 또는 사용자가 프로세스를 취소합니다."
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Network error, try again"
-msgstr ""
+msgstr "네트워크 오류입니다. 다시 시도하세요."
 
 #. placeholder {0}: error.message
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
@@ -4207,7 +4212,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network Name"
-msgstr ""
+msgstr "네트워크 이름"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network removed."
@@ -4227,30 +4232,30 @@ msgstr ""
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "New Logo"
-msgstr ""
+msgstr "새 로고"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "New password"
-msgstr ""
+msgstr "새로운 비밀번호"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "New password cannot be the same as your current password."
-msgstr ""
+msgstr "새 비밀번호는 현재 비밀번호와 같을 수 없습니다."
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "New Payment Password"
-msgstr ""
+msgstr "새로운 결제 비밀번호"
 
 #: packages/plugins/Calendar/src/SiteAdaptor/CalendarContent.tsx
 msgid "News"
-msgstr ""
+msgstr "뉴스"
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Next"
-msgstr ""
+msgstr "다음"
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 msgid "Next.ID"
@@ -4262,7 +4267,7 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 msgid "NFT Avatar Setting"
-msgstr ""
+msgstr "NFT 아바타 설정"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "NFT collection"
@@ -4270,7 +4275,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "NFT Details"
-msgstr ""
+msgstr "NFT 세부 정보"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "NFT Holder"
@@ -4278,7 +4283,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 msgid "NFT is not minted yet."
-msgstr ""
+msgstr "NFT가 민팅되지 않습니다."
 
 #: packages/shared/src/UI/translate.ts
 msgid "NFT Lucky Drop claimed."
@@ -4314,7 +4319,7 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "No activities found."
-msgstr ""
+msgstr "사용 활동을 찾을 수 없습니다"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No Airdrop Scam"
@@ -4331,11 +4336,11 @@ msgstr ""
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "No approved contract records."
-msgstr ""
+msgstr "승인된 컨트렉트 기록이 없습니다."
 
 #: packages/mask/popups/pages/Friends/Detail/UI.tsx
 msgid "No associated accounts"
-msgstr ""
+msgstr "관련 계정 없음"
 
 #: packages/mask/popups/components/WalletSettingList/index.tsx
 msgid "No associated wallet. <0>Add Wallet.</0>"
@@ -4344,12 +4349,12 @@ msgstr ""
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "No back up"
-msgstr ""
+msgstr "백업 없음"
 
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "No backups found"
-msgstr ""
+msgstr "백업 없음"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No blacklist"
@@ -4366,7 +4371,7 @@ msgstr ""
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/shared/src/UI/components/CollectibleList/CollectibleList.tsx
 msgid "No collectible found."
-msgstr ""
+msgstr "수집품이 없습니다."
 
 #: packages/mask/popups/pages/Friends/Contacts/index.tsx
 msgid "No contacts stored locally, you can try searching."
@@ -4375,7 +4380,7 @@ msgstr ""
 #: packages/plugins/Calendar/src/SiteAdaptor/components/EventList.tsx
 #: packages/plugins/Calendar/src/SiteAdaptor/components/NewsList.tsx
 msgid "No content for the last two weeks."
-msgstr ""
+msgstr "지난 2주 동안 내용이 없습니다."
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
@@ -4383,27 +4388,27 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 #: packages/shared/src/UI/components/EmptyStatus/index.tsx
 msgid "No Data"
-msgstr ""
+msgstr "데이터 없음"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 msgid "No deposit protocols found."
-msgstr ""
+msgstr "입금 프로토컬 찾지 않습니다."
 
 #: packages/shared/src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "No Enough Gas Fee"
-msgstr ""
+msgstr "가스비가 없습니다"
 
 #: packages/plugins/Tips/src/contexts/Tip/useTipValidate.ts
 msgid "No Enough Gas Fees"
-msgstr ""
+msgstr "가스비 부족"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "No followers."
-msgstr ""
+msgstr "팔로워가 없습니다."
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "No following friends."
-msgstr ""
+msgstr "팔로잉 친구가 없습니다."
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -4416,11 +4421,11 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/PriceCard.tsx
 msgid "No Listings"
-msgstr ""
+msgstr "리스팅 없음"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "No local key"
-msgstr ""
+msgstr "로컬 키 없음"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/History.tsx
 msgid "No Lucky Drops claimed"
@@ -4450,7 +4455,7 @@ msgstr ""
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 msgid "No NFTs found."
-msgstr ""
+msgstr "NFT가 없습니다."
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "No past rounds found."
@@ -4459,7 +4464,7 @@ msgstr ""
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "No power"
-msgstr ""
+msgstr "파워없음"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No proxy"
@@ -4474,23 +4479,23 @@ msgstr ""
 #: packages/shared/src/UI/components/CountryCodePicker/index.tsx
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "No results"
-msgstr ""
+msgstr "결과 없음."
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 msgid "No results found"
-msgstr ""
+msgstr "검색 결과가 없습니다."
 
 #: packages/mask/popups/pages/Friends/SearchList/index.tsx
 msgid "No search results"
-msgstr ""
+msgstr "검색 결과가 없습니다."
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
-msgstr ""
+msgstr "월렛이 검색되지 않았습니다. 먼저 월렛을 연결하거나 월렛을 확인하세요."
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
-msgstr ""
+msgstr "확인된 계정이 없습니다."
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "No votes"
@@ -4520,7 +4525,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Not connected"
-msgstr ""
+msgstr "연결되지 않았습니다"
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
 msgid "Not Connected"
@@ -4528,11 +4533,11 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/PersonaItem.tsx
 msgid "Not current account. Please switch to this account to set up NFTs Profile."
-msgstr ""
+msgstr "해당 계정으로 변경하고 NFT 프로필을 설정하세요."
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Not enough data to present."
-msgstr ""
+msgstr "제시할 데이터가 부족합니다."
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Not found your {providerType} wallet"
@@ -4540,7 +4545,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Not set"
-msgstr ""
+msgstr "설정되지 않음"
 
 #: packages/mask/popups/components/NFTAvatarPicker/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
@@ -4549,11 +4554,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
-msgstr ""
+msgstr "참고: 마지막 불러오기에서 니모닉 문구를 사용하면 해당 니모닉 문구에서 파생된 월렛을 복구할 수 있습니다."
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/DefaultPlaceholder.tsx
 msgid "Note: Scams detections might not be 100% guaranteed."
-msgstr ""
+msgstr "참고: 스캠 탐지가 100% 보장되지 않을 수 있습니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
@@ -4565,12 +4570,12 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 msgid "Offers"
-msgstr ""
+msgstr "오퍼"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
-msgstr ""
+msgstr "확인"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/DisablePermit.tsx
 msgid "Okay"
@@ -4582,7 +4587,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "Old Payment Password"
-msgstr ""
+msgstr "지난 결제 비밀번호"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "on {fromNetworkName}"
@@ -4594,11 +4599,11 @@ msgstr ""
 
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
-msgstr ""
+msgstr "현재 TypedMessageText만 지원합니다."
 
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "Only visible to yourself"
-msgstr ""
+msgstr "나에게만 보이기"
 
 #. placeholder {0}: formatWithCommas(snapshot)
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
@@ -4607,28 +4612,28 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileView.tsx
 msgid "Oops, we can't find any results."
-msgstr ""
+msgstr "해당한 결과가 없습니다."
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Open"
-msgstr ""
+msgstr "열기"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Open in a new tab"
-msgstr ""
+msgstr "새로운 탭에서 열기"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Open Mask Wallet"
-msgstr ""
+msgstr "Mask 월렛 열기"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 #: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
 msgid "Operation"
-msgstr ""
+msgstr "진행"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
-msgstr ""
+msgstr "토큰 이름, NFT 컬렉션, ENS 도메인 또는 월렛 주소를 사용하여 검색 결과를 최적화합니다."
 
 #: packages/plugins/Handle/src/SiteAdaptor/index.tsx
 msgid "Optimize the display of search results about ENS in social media."
@@ -4641,11 +4646,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Or"
-msgstr ""
+msgstr "또는"
 
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Or create a new wallet group"
-msgstr ""
+msgstr "혹은 새로운 월렛 그룹을 만듭니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "or Holding NFT"
@@ -4678,17 +4683,17 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Owners"
-msgstr ""
+msgstr "소유자"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Pair"
-msgstr ""
+msgstr "페어"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Password"
-msgstr ""
+msgstr "비밀번호"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "Past rounds"
@@ -4696,11 +4701,11 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Paste manually"
-msgstr ""
+msgstr "수동으로 붙여넣기"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 msgid "Paused"
-msgstr ""
+msgstr "일시 정지"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
@@ -4708,7 +4713,7 @@ msgstr ""
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Payment Password"
-msgstr ""
+msgstr "결재 비밀번호"
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "Payment password changed."
@@ -4728,7 +4733,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Payment Password should be between 6 and 20 characters."
-msgstr ""
+msgstr "결제 비밀번호는 8~20자 사이어야 합니다."
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Payment password stored locally and you could try as many as you want to unlock your wallet."
@@ -4738,11 +4743,11 @@ msgstr ""
 #: packages/shared/src/UI/components/WalletStatusBar/WalletDescription.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Pending"
-msgstr ""
+msgstr "대기중"
 
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Permissions"
-msgstr ""
+msgstr "사용 권한"
 
 #: packages/mask/popups/modals/UpdatePermissionModal/index.tsx
 msgid "Permissions List"
@@ -4754,11 +4759,11 @@ msgstr ""
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 #: packages/shared/src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 msgid "Persona"
-msgstr ""
+msgstr "페르소나"
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Persona already exists."
-msgstr ""
+msgstr "이미 존재된 페르소나입니다."
 
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaRecovery.tsx
 msgid "Persona created."
@@ -4767,23 +4772,23 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Persona Name"
-msgstr ""
+msgstr "페르소나 이름"
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 msgid "Persona name must between 1 to 24 characters."
-msgstr ""
+msgstr "페르소나 이름은 1~24자 이내로 입력해주세요."
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Persona Recovery Phrase"
-msgstr ""
+msgstr "페르소나 복구 문구"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Persona required."
-msgstr ""
+msgstr "페르소나가 필요합니다."
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 msgid "Persona Sign"
-msgstr ""
+msgstr "페르소나 사인"
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Persona: {personaName}"
@@ -4791,7 +4796,7 @@ msgstr ""
 
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 msgid "Personas"
-msgstr ""
+msgstr "나의 페르소나"
 
 #: packages/shared/src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -4801,11 +4806,11 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Pin Mask Network to the toolbar for easier access:"
-msgstr ""
+msgstr "Mask Network를 툴바에 고정하여 보다 쉽게 액세스할 수 있습니다:"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Pinned successfully."
-msgstr ""
+msgstr "고정됩니다."
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Platform"
@@ -4813,11 +4818,11 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Please check ToS document"
-msgstr ""
+msgstr "ToS 파일을 확인하세요"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Please click Browse Files button to select files to upload."
-msgstr ""
+msgstr "파일 브러우저 버튼을 클릭하여 업로드할 파일을 선택하세요."
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 #: packages/mask/content-script/site-adaptors/facebook.com/injection/Composition.tsx
@@ -4832,11 +4837,11 @@ msgstr ""
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
-msgstr ""
+msgstr "디엡을 이용하기 전에 {0} 연결하세요."
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "Please connect wallet"
-msgstr ""
+msgstr "월렛을 연결하세요"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Please connect wallet to check if you are eligible to claim $ARB."
@@ -4844,11 +4849,11 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your persona"
-msgstr ""
+msgstr "페르소나를 연결하세요."
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your wallet"
-msgstr ""
+msgstr "월렛을 연결하세요"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Please copy the following text and image (if there is one) and publish it."
@@ -4864,19 +4869,19 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please create a persona for accessing Dapps."
-msgstr ""
+msgstr "디앱을 연결하기 위해 페르소나를 맏드세요."
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "Please create your persona to use Web3 Profile."
-msgstr ""
+msgstr "Web3 프로필로 페르소나를 맏드세요."
 
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Please enter backup password to export persona private key."
-msgstr ""
+msgstr "백업 비밀번호를 입력하고 페르소나 개인키를 내보낼 수 있습니다."
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
-msgstr ""
+msgstr "파일을 다운로드하려면 클라우드 백업 암호를 입력하세요."
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Please enter the correct mnemonic words, private key, or upload the correct keystore file."
@@ -4884,19 +4889,19 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SearchBox.tsx
 msgid "Please enter token contract address."
-msgstr ""
+msgstr "토큰 컨트랙트 주소를 입력하세요."
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Please enter your backup password."
-msgstr ""
+msgstr "비밀번호 입력"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Please install your metamask wallet and set up your first wallet."
-msgstr ""
+msgstr "Metamask 월렛을 설치하고 첫 월렛을 설정하세요."
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Please select the appropriate method to restore your personal data."
-msgstr ""
+msgstr "12개 복구 문구로 페르소나 데어터를 복구할 수 있습니다."
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please select the correct words in the correct order."
@@ -4904,20 +4909,20 @@ msgstr ""
 
 #: packages/shared/src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
-msgstr ""
+msgstr "설정 저장 후 이 기능을 활성화하는 데 사용할 월렛을 선택하세요."
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Please set the backup password to back up"
-msgstr ""
+msgstr "백업 비밀번호를 설정하세요."
 
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Please set up backup password to export private key."
-msgstr ""
+msgstr "백업 비밀번호를 설정하고 개인키를 내보낼 수 있습니다."
 
 #: packages/mask/popups/modals/WalletAutoLockSettingModal/index.tsx
 msgid "Please set up the amount of time before we automatically lock your wallet."
-msgstr ""
+msgstr "월렛이 자동으로 잠기기 전까지의 시간을 설정해 주시기 바랍니다."
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Please sign up or login {siteName} to connect Mask Network."
@@ -4934,7 +4939,7 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Please try again if you failed to vote."
-msgstr ""
+msgstr "투표가 실패하면 다시 시도하세요."
 
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please verify the current persona with a social media account before using dApps."
@@ -4942,7 +4947,7 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please verify your social account"
-msgstr ""
+msgstr "소셜 계정을 검증하세요."
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please write down or copy these words and save them in a secure place."
@@ -4950,7 +4955,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Please write down the following words in correct order. Keep it safe and do not share with anyone!"
-msgstr ""
+msgstr "다음 단어를 정확한 순서로 적어주세요. 안전하게 보관하고 다른 사람과 공유하지 마세요!"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -4960,7 +4965,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/CompositionUI.tsx
 #: packages/shared/src/UI/components/CompositionDialog/CompositionUI.tsx
 msgid "Plugins"
-msgstr ""
+msgstr "플러그인"
 
 #: packages/plugins/Trader/src/SiteAdaptor/index.tsx
 msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
@@ -5004,33 +5009,33 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
-msgstr ""
+msgstr "이전"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
-msgstr ""
+msgstr "이전의 팔로우 트랜잭션이 진행하고 있습니다. 다시 시도 하시길 바랍니다."
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous unfollow transaction is in processing, please wait and try again."
-msgstr ""
+msgstr "이전의 언팔로우 트랜잭션이 진행하고 있습니다. 다시 시도 하시길 바랍니다."
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Price"
-msgstr ""
+msgstr "가격"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Price per mint"
-msgstr ""
+msgstr "민팅 가격(1 NFT)"
 
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Price Statistic"
-msgstr ""
+msgstr "가격 통계"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Price:"
-msgstr ""
+msgstr "가격:"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Priority fee"
@@ -5038,7 +5043,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Priority Fee (GWEI)"
-msgstr ""
+msgstr "우선 비용(GWEI)"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Priority fee should be greater than 0."
@@ -5046,12 +5051,12 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Privacy Policy"
-msgstr ""
+msgstr "개인정보처리방침"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Private"
-msgstr ""
+msgstr "비공개"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
@@ -5059,25 +5064,25 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
-msgstr ""
+msgstr "개인 키"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Deposit"
-msgstr ""
+msgstr "입금 진행"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Withdrawal"
-msgstr ""
+msgstr "철회 진행"
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Profile Photo"
-msgstr ""
+msgstr "프로필 사진"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 msgid "Progress"
-msgstr ""
+msgstr "진행"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "Project details"
@@ -5087,11 +5092,11 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/PropertiesCard.tsx
 msgid "Properties"
-msgstr ""
+msgstr "속성"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 msgid "Proposal"
-msgstr ""
+msgstr "프로포절"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/index.tsx
 msgid "Provide you with fast, reliable and convenient security services."
@@ -5114,11 +5119,11 @@ msgstr ""
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchase"
-msgstr ""
+msgstr "구매"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchasing...."
-msgstr ""
+msgstr "구매 진행 중"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
@@ -5139,12 +5144,12 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Random"
-msgstr ""
+msgstr "렌덤"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Random Amount"
-msgstr ""
+msgstr "랜덤 금액"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "Rank"
@@ -5165,12 +5170,12 @@ msgstr ""
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
-msgstr ""
+msgstr "다시 입력"
 
 #: packages/mask/popups/pages/Wallet/components/ActionGroup/index.tsx
 #: packages/mask/popups/pages/Wallet/Receive/index.tsx
 msgid "Receive"
-msgstr ""
+msgstr "받기"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 msgid "Recommended dimensions: 1016 × 672 px"
@@ -5183,31 +5188,31 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recover your data"
-msgstr ""
+msgstr "데어터 복구"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Recover your wallet"
-msgstr ""
+msgstr "월렛 복구"
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 msgid "Recovery"
-msgstr ""
+msgstr "복구"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recovery Phrase"
-msgstr ""
+msgstr "복구 문구"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Refresh"
-msgstr ""
+msgstr "새로고침"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refund"
-msgstr ""
+msgstr "리펀"
 
 #. placeholder {0}: formatBalance(remain.toString(), tokenDecimals, { significant: 2, isPrecise: true })
 #: packages/plugins/RedPacket/src/SiteAdaptor/hooks/useRefundCallback.tsx
@@ -5228,7 +5233,7 @@ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refunding"
-msgstr ""
+msgstr "환급 중"
 
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Reject {totalMessages} Transactions"
@@ -5238,17 +5243,17 @@ msgstr ""
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
 #: packages/shared/src/UI/components/ReloadStatus/index.tsx
 msgid "Reload"
-msgstr ""
+msgstr "다시 로드"
 
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Remove"
-msgstr ""
+msgstr "삭제"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Remove Wallet"
-msgstr ""
+msgstr "월렛 삭제"
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
@@ -5257,19 +5262,19 @@ msgstr ""
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Rename"
-msgstr ""
+msgstr "이름 변경"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Report NFT Scam Contract?"
-msgstr ""
+msgstr "NFT 사기 컨트랙트 신고"
 
 #: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 msgid "Report on GitHub"
-msgstr ""
+msgstr "GitHub에서 보고하기"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Report Spam"
-msgstr ""
+msgstr "스팸 신고"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Request ID"
@@ -5285,7 +5290,7 @@ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Request Source"
-msgstr ""
+msgstr "소스 요청"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/useFinanceFeeds.ts
 #: packages/plugins/RSS3/src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
@@ -5302,21 +5307,21 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Reselect"
-msgstr ""
+msgstr "다시 선택"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Resend"
-msgstr ""
+msgstr "다시 보내기"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Reset"
-msgstr ""
+msgstr "초기화"
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Reset Wallet"
-msgstr ""
+msgstr "월렛 리셋"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Resource"
@@ -5325,7 +5330,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Restore"
-msgstr ""
+msgstr "복원하기"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Restore backup failed."
@@ -5337,7 +5342,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Restore Database"
-msgstr ""
+msgstr "데이터베이스 복원"
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Restore Failed"
@@ -5345,24 +5350,24 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Restore from a previous database backup"
-msgstr ""
+msgstr "이전의 데이터베이스 백업에서 복원하기"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Restore or Login"
-msgstr ""
+msgstr "등록 또는 로그인"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Results"
-msgstr ""
+msgstr "결과"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Retry"
-msgstr ""
+msgstr "다시 시도"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
@@ -5373,7 +5378,7 @@ msgstr ""
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoke"
-msgstr ""
+msgstr "취소"
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
@@ -5393,13 +5398,13 @@ msgstr ""
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoking"
-msgstr ""
+msgstr "취소 중"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
-msgstr ""
+msgstr "리스크 경고"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "rounds"
@@ -5411,19 +5416,19 @@ msgstr ""
 
 #: packages/plugins/ScamWarning/src/SiteAdaptor/index.tsx
 msgid "Safety Warning"
-msgstr ""
+msgstr "안전 경고"
 
 #. placeholder {0}: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss')
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 msgid "Sale ends in {0}"
-msgstr ""
+msgstr "세일 종료 시간: {0}"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Save"
-msgstr ""
+msgstr "저장"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 msgid "Saving"
@@ -5432,11 +5437,11 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/index.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsDialog.tsx
 msgid "Savings"
-msgstr ""
+msgstr "저금"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "Scam tx"
-msgstr ""
+msgstr "사기 거래"
 
 #: packages/plugins/ScamWarning/src/SiteAdaptor/components/WarningCard.tsx
 msgid "Scam Warning"
@@ -5444,7 +5449,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Receive/index.tsx
 msgid "Scan QR code to receive payment"
-msgstr ""
+msgstr "QR 코드 스캔하여 결제하기"
 
 #: packages/mask/popups/pages/Personas/WalletConnect/index.tsx
 msgid "Scan QR code with WalletConnect-compatible wallet"
@@ -5457,11 +5462,11 @@ msgstr ""
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SearchBox.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Search"
-msgstr ""
+msgstr "검색"
 
 #: packages/shared/src/UI/components/CountryCodePicker/index.tsx
 msgid "Search Area"
-msgstr ""
+msgstr "지역 찾기"
 
 #: packages/mask/popups/pages/Friends/Search/index.tsx
 msgid "Search Next.ID, X, Lens, ENS or Address"
@@ -5469,58 +5474,58 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Search with an ENS domain or wallet address to get optimized results."
-msgstr ""
+msgstr "최적화된 결과를 얻으려면 ENS 도메인 또는 월렛 주소로 검색하세요."
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Search with the name of an NFT collection or its symbol to get optimized results."
-msgstr ""
+msgstr "최적화된 결과를 얻으려면 NFT 컬렉션 이름 또는 해당 심벌을 사용하여 검색하세요."
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Security Detection"
-msgstr ""
+msgstr "보안 탐지"
 
 #: packages/mask/popups/pages/Trader/useImplementRuntime.tsx
 #: packages/shared/src/UI/components/SelectTokenChip/index.tsx
 #: packages/shared/src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Select"
-msgstr ""
+msgstr "토큰 선택"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Select a token"
-msgstr ""
+msgstr "토큰 선택"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Select a Token"
-msgstr ""
+msgstr "토큰 선택"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Select Address"
-msgstr ""
+msgstr "주소 선택"
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Select All"
-msgstr ""
+msgstr "전체 선택"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract"
-msgstr ""
+msgstr "NFT 컨트렉트를 선택하세요."
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract Operator"
-msgstr ""
+msgstr "NFT 컨트렉트 오퍼레이터"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract Owner"
-msgstr ""
+msgstr "NFT 컨트렉트 소유자를 선택하세요."
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 msgid "Select and Connect to your wallet"
-msgstr ""
+msgstr "월렛 선택 및 연결"
 
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Select Collection"
@@ -5528,7 +5533,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
 msgid "Select language"
-msgstr ""
+msgstr "언어 선택"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Select liquidity"
@@ -5550,7 +5555,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 msgid "Select Wallet"
-msgstr ""
+msgstr "월렛 선택"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Selecting NFTs"
@@ -5576,7 +5581,7 @@ msgstr ""
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
-msgstr ""
+msgstr "보내기"
 
 #. placeholder {0}: message.token
 #: packages/shared/src/UI/translate.ts
@@ -5598,7 +5603,7 @@ msgstr ""
 
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Sending..."
-msgstr ""
+msgstr "발송 중..."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Sent"
@@ -5610,11 +5615,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Service Agreement"
-msgstr ""
+msgstr "서비스 약관"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 msgid "Set NFT Avatar"
-msgstr ""
+msgstr "NFT 아바타 설정"
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
 msgid "Set NFT NFT Background"
@@ -5626,11 +5631,11 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/NFTInfo.tsx
 msgid "Set NFT PFPs"
-msgstr ""
+msgstr "NFT PFP 설정"
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
 msgid "Set NFT Photo"
-msgstr ""
+msgstr "NFT 사진 설정"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -5638,19 +5643,19 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
-msgstr ""
+msgstr "결제 비밀번호 설정"
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set payment password successfully."
-msgstr ""
+msgstr "결제 비밀번호 설정 성공"
 
 #: packages/plugins/Avatar/src/Application/NFTInfo.tsx
 msgid "Set up NFT PFP successfully"
-msgstr ""
+msgstr "NFT PFP 설정 성공"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
-msgstr ""
+msgstr "Web3 발자국을 표시하고 각 소셜 미디어 계정에 팁을 받을 수 있는 지갑을 설정합니다."
 
 #: packages/plugins/Avatar/src/SiteAdaptor/index.tsx
 msgid "Set your NFT as profile picture with exclusive aura."
@@ -5658,19 +5663,19 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Set Your Payment Password"
-msgstr ""
+msgstr "결제 비밀번호 설정"
 
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Set Your Persona Name"
-msgstr ""
+msgstr "페르소나 이름 설정하기"
 
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Set your persona name with maximum length of 24 characters"
-msgstr ""
+msgstr "최대 24자로 페로소나 이름 설정합니다"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
@@ -5680,31 +5685,31 @@ msgstr ""
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 #: packages/shared/src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "Share"
-msgstr ""
+msgstr "공유"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Share and recommend this feature after saving."
-msgstr ""
+msgstr "저장 후 이 기능을 공유합니다."
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Share with"
-msgstr ""
+msgstr "공유 대상:"
 
 #: packages/mask/content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Show me how"
-msgstr ""
+msgstr "방법을 알려주세요."
 
 #: packages/mask/popups/pages/Wallet/components/AssetsList/MoreBar.tsx
 msgid "Show tokens with value less than $1"
-msgstr ""
+msgstr "잔액 $1 미만인 토큰 표시"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaSignRequest/index.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/WalletSignRequest.tsx
 msgid "Sign"
-msgstr ""
+msgstr "사인"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
@@ -5712,11 +5717,11 @@ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Signature Request"
-msgstr ""
+msgstr "시그너쳐 요청"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Signing ..."
-msgstr ""
+msgstr "진행중..."
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Signing Message (Raw)"
@@ -5724,11 +5729,11 @@ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Signing Message (Text)"
-msgstr ""
+msgstr "사인 메시지"
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
 msgid "Similar Project"
-msgstr ""
+msgstr "유사한 프로젝트"
 
 #: packages/mask/popups/modals/UpdatePermissionModal/index.tsx
 msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
@@ -5737,7 +5742,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Sites"
-msgstr ""
+msgstr "사이트"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "size"
@@ -5750,7 +5755,7 @@ msgstr ""
 #: packages/mask/content-script/components/GuideStep/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Skip"
-msgstr ""
+msgstr "넘어가기"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -5765,7 +5770,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
-msgstr ""
+msgstr "슬리피지 톨러런스"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Slow"
@@ -5776,12 +5781,12 @@ msgstr ""
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileView.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Snapshot"
-msgstr ""
+msgstr "스냅숏"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
-msgstr ""
+msgstr "소셜 계정"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/index.tsx
 msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
@@ -5793,32 +5798,32 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
 msgid "Something went wrong!"
-msgstr ""
+msgstr "오류가 발생합니다."
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Something went wrong."
-msgstr ""
+msgstr "오류가 발생합니다."
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 msgid "Sorry, failed to save NFT Avatar. Please set again."
-msgstr ""
+msgstr "NFT 아바타 저장 실패, 다시 시도"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Sorry, signature failed! Please try signing again."
-msgstr ""
+msgstr "사인 살패, 다시 시도하기"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Sorry, you are not eligible to claim $ARB in this campaign."
-msgstr ""
+msgstr "$ARB 수령하는 자격이 없습니다."
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/SpaceMenu.tsx
 msgid "Space"
-msgstr ""
+msgstr "스페이스"
 
 #: packages/shared/src/UI/components/TokenSecurity/index.tsx
 msgid "Spam"
-msgstr ""
+msgstr "스팸"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Spam reported."
@@ -5828,29 +5833,29 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Speed Up"
-msgstr ""
+msgstr "가속하기"
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 #: packages/mask/popups/components/UnlockERC721Token/index.tsx
 msgid "Spend limit requested by"
-msgstr ""
+msgstr "지불 제한을 요청하는 이용자:"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Spend more transaction fees to cancel the previous transaction."
-msgstr ""
+msgstr "더 많은 기스비를 지불하여 지난 거래를 최소합니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Split Mode"
-msgstr ""
+msgstr "스플릿 모드"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Start"
-msgstr ""
+msgstr "시작"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "Start date"
-msgstr ""
+msgstr "시작 날짜"
 
 #. placeholder {0}: format(startTime, 'MM-dd-yyyy HH:mm')
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
@@ -5863,7 +5868,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "status"
-msgstr ""
+msgstr "상태"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -5899,7 +5904,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Success"
-msgstr ""
+msgstr "성공"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -5912,11 +5917,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Support"
-msgstr ""
+msgstr "지원"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Support Identity code, private key, local backups or cloud backups to access your personal data."
-msgstr ""
+msgstr "아이디 코드, 개인키, 로컬 백업이나 클라우드 백업으로 개인 데이터 접근을 지원합니다."
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Support mnemonic phrase, private key or keystore file."
@@ -5935,7 +5940,7 @@ msgstr ""
 #: packages/mask/popups/modals/SupportedSitesModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Supported Sites"
-msgstr ""
+msgstr "지원되는 사이트"
 
 #: packages/mask/popups/pages/Wallet/components/StartUp/index.tsx
 msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
@@ -5953,12 +5958,12 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Swap"
-msgstr ""
+msgstr "스왑"
 
 #. placeholder {0}: protocol.bareToken.symbol
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Swap {0}"
-msgstr ""
+msgstr "스왑 {0}"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "Swap anyway"
@@ -5966,7 +5971,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Swap Anyway"
-msgstr ""
+msgstr "계속 스왑"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Swap completed successfully."
@@ -5986,20 +5991,20 @@ msgstr ""
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/index.tsx
 msgid "Switch between the classic Twitter logo and the new one."
-msgstr ""
+msgstr "클래식 트위터 로고와 새로운 트위터 로고 사이를 바꿉니다."
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Switch Network"
-msgstr ""
+msgstr "네트워크 변경"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Switch other account"
-msgstr ""
+msgstr "사용자 계정 전환"
 
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 msgid "Switch Persona"
-msgstr ""
+msgstr "페르소나 전환"
 
 #. placeholder {0}: expectedChainName ?? ''
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
@@ -6012,15 +6017,15 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
-msgstr ""
+msgstr "Polygon으로 전환하고 팔로우합니다."
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Switch Twitter Logo"
-msgstr ""
+msgstr "트위터 로고 전환"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/index.tsx
 msgid "Switch X Logo"
-msgstr ""
+msgstr "트위터 로고 전환"
 
 #: packages/mask/popups/components/MnemonicDisplay/index.tsx
 msgid "Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"
@@ -6045,7 +6050,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Text"
-msgstr ""
+msgstr "텍스트"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Text copied!"
@@ -6053,7 +6058,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."
-msgstr ""
+msgstr "[Check Security] dApp은 빠르고, 신뢰할 수 있는 웹3 보안 서비스를 제공합니다."
 
 #. placeholder {0}: isSwap ? 'swap' : 'bridge'
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
@@ -6070,7 +6075,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 msgid "The contract address is incorrect or the collection does not belong to you."
-msgstr ""
+msgstr "컨트랙트 조소가 잘못되거나 월렛에 해당 수집품이 없습니다."
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "The contract may contain additional issuance functions, which could maybe generate a large number of tokens, resulting in significant fluctuations in token prices. It is recommended to confirm with the project team whether it complies with the token issuance instructions."
@@ -6094,7 +6099,7 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
-msgstr ""
+msgstr "이 월렛에서 lens가 없어서 팔로우나 언팔로우를 할 수 없습니다."
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "The custom amount entered may be higher than the required network fee."
@@ -6142,7 +6147,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "The new passwords don't match"
-msgstr ""
+msgstr "새로운 비밀번호가 일치하지 않습니다"
 
 #. placeholder {0}: profile.identifier.userId
 #: packages/mask/content-script/components/shared/SelectRecipients/ProfileInList.tsx
@@ -6159,15 +6164,15 @@ msgstr ""
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 msgid "The persona name already exists."
-msgstr ""
+msgstr "이미 존재된 페르소나입니다"
 
 #: packages/plugins/Tips/src/contexts/Tip/useRecipientValidate.ts
 msgid "The receiving address is a contract address. Please check again."
-msgstr ""
+msgstr "받는 주소는 컨트랙트 주소입니다. 다시 확인해 주세요."
 
 #: packages/plugins/Tips/src/contexts/Tip/useRecipientValidate.ts
 msgid "The receiving address may be a malicious address."
-msgstr ""
+msgstr "받는 주소는 악의적인 주소일 수 있습니다."
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
@@ -6189,7 +6194,7 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "The user has not set this."
-msgstr ""
+msgstr "해당 사용자가 이것을 설치하지 않습니다."
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -6197,13 +6202,13 @@ msgstr ""
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 msgid "The wallet address already exists."
-msgstr ""
+msgstr "이 월렛 주소가 이미 존재합니다."
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/EditContactModal/index.tsx
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
 msgid "The wallet name already exists."
-msgstr ""
+msgstr "이미 존재된 이름입니다."
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "The web site can"
@@ -6228,7 +6233,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "There was a network or RPC provider error, please try again later!"
-msgstr ""
+msgstr "네트워크나 RPC 제공자 오류입니다. 다시 시도하세요!"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/index.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/SocialFeeds/index.tsx
@@ -6237,11 +6242,11 @@ msgstr ""
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 msgid "This address is a contract address."
-msgstr ""
+msgstr "이 주소는 연락처 주소입니다."
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 msgid "This address may be a scam address."
-msgstr ""
+msgstr "이 주소는 사기 주소일 수 있습니다."
 
 #. placeholder {0}: String(token?.symbol)
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
@@ -6250,7 +6255,7 @@ msgstr ""
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 msgid "This allows the third party to spend all your token balance until it reaches the cap or you revoke the spending cap. If this is not intended, consider setting a lower spending cap."
-msgstr ""
+msgstr "이를 통해 제3자가 한도액에 도달하거나 사용자가 지출 한도액을 취소할 때까지 토큰 잔액을 모두 사용할 수 있습니다. 만약 이것이 의도된 것이 아니라면, 지출 한도액을 낮추는 것을 고려하시길 바랍니다."
 
 #. placeholder {0}: duplicated.name
 #: packages/mask/popups/pages/Wallet/EditNetwork/useWarnings.ts
@@ -6267,7 +6272,7 @@ msgstr ""
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 msgid "This ENS does not exist or not be resolved."
-msgstr ""
+msgstr "해당 ENS가 존재하지 않습니다."
 
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <0> Global Backup </0>"
@@ -6292,7 +6297,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "This JSON file is encrypted with your current payment password. The same password is required for decryption when importing this wallet."
-msgstr ""
+msgstr "이 JSON 파일은 현재 결제 비밀번호로 암호화되어 있습니다. 이 월렛을 불러올 때 복호화에 동일한 비밀번호가 필요합니다."
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "This message contains a invalid EIP-4361 message. It is better to reject this request."
@@ -6300,7 +6305,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This network name already exists"
-msgstr ""
+msgstr "이미 존재된 네트워크입니다"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/SelectCollectibles.tsx
 msgid "This NFT contract cannot be modified now."
@@ -6308,11 +6313,11 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivitiesList.tsx
 msgid "This NFT didn't have any activities."
-msgstr ""
+msgstr "해당 NFT에 대한 오버가 없습니다."
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/OffersList.tsx
 msgid "This NFT didn't have any offers."
-msgstr ""
+msgstr "해당 NFT에 대한 오버가 없습니다."
 
 #. placeholder {0}: lensAccount.operations.canFollow.reason
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
@@ -6321,7 +6326,7 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "This profile can not be followed."
-msgstr ""
+msgstr "이 프로필을 팔로우할 수 없습니다."
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
@@ -6351,7 +6356,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This RPC URL is currently used by the {0} network"
-msgstr ""
+msgstr "이 RPC URL는 {0} 네트워크에서 사용되고 있습니다."
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "This swap isn’t supported"
@@ -6371,7 +6376,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "This token has no risky or attention factors."
-msgstr ""
+msgstr "이 토큰에는 위험 요소나 주의 요소가 없습니다."
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "This token is issued by its declared team. Some scams will create a fake token with a well-known token name to cheat users."
@@ -6391,12 +6396,12 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 msgid "This wallet address has already been connected."
-msgstr ""
+msgstr "이미 연결된 주소입니다."
 
 #. placeholder {0}: String(currentPersona?.nickname)
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."
-msgstr ""
+msgstr "이 월렛은 현재 페르소나 {0} 에 연결됩니다."
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
@@ -6404,7 +6409,7 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Time"
-msgstr ""
+msgstr "시간"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -6414,7 +6419,7 @@ msgstr ""
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Tips"
-msgstr ""
+msgstr "팁"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
@@ -6426,14 +6431,14 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "To"
-msgstr ""
+msgstr "받는 사람"
 
 #. placeholder {0}: formatDomainName(domain)
 #. placeholder {0}: formatEthereumAddress(toAddress, 4)
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "to {0}"
-msgstr ""
+msgstr "받는 주소: {0}"
 
 #. placeholder {0}: type === ActivityType.Mint ? Utils.formatAddress(activity.from?.address, 4) : activity.receive.nickname || (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivityCard.tsx
@@ -6446,7 +6451,7 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
-msgstr ""
+msgstr "에어드롭에 참여하기 위해서는 거래 비용을 충당할 수 있는 네이티브 토큰이 지정된 네트워크의 월렛에 충분히 있어야 합니다."
 
 #. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
@@ -6465,7 +6470,7 @@ msgstr ""
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
-msgstr ""
+msgstr "토큰"
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Token Address"
@@ -6473,11 +6478,11 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Contract Address"
-msgstr ""
+msgstr "토큰 컨트랙트 주소"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token ID"
-msgstr ""
+msgstr "토큰 ID"
 
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Token ID separated by comma, e.g. 1223,1224,"
@@ -6489,11 +6494,11 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Token info"
-msgstr ""
+msgstr "토큰 정보"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Name"
-msgstr ""
+msgstr "토큰 이름"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Token now is hidden."
@@ -6505,7 +6510,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
-msgstr ""
+msgstr "토큰 표준"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Token unlocked"
@@ -6523,7 +6528,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Tokens"
-msgstr ""
+msgstr "토큰"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -6533,7 +6538,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Total cost"
-msgstr ""
+msgstr "총 비용"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Total NFTs"
@@ -6543,11 +6548,11 @@ msgstr ""
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Total Supply"
-msgstr ""
+msgstr "총 공급량"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Total Volume"
-msgstr ""
+msgstr "총 거래량"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/Quote.tsx
@@ -6565,11 +6570,11 @@ msgstr ""
 
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 msgid "Transaction"
-msgstr ""
+msgstr "거래"
 
 #: packages/shared/src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Transaction Confirmed"
-msgstr ""
+msgstr "거래 확인 완료"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
@@ -6590,11 +6595,11 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Transaction Failed"
-msgstr ""
+msgstr "거래 실패"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Transaction Fee"
-msgstr ""
+msgstr "거래 수수료"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Transaction has been rejected!"
@@ -6628,7 +6633,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
-msgstr ""
+msgstr "슬리피지 허용 범위 나무 낮으면 거래가 실패할 수 있습니다."
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
@@ -6655,7 +6660,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
 msgid "Try"
-msgstr ""
+msgstr "시도"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Try Again"
@@ -6663,7 +6668,7 @@ msgstr ""
 
 #: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 msgid "Try to recover"
-msgstr ""
+msgstr "복구하기"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Try token from different chains"
@@ -6690,11 +6695,11 @@ msgstr ""
 #: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
-msgstr ""
+msgstr "언팔로우"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Unfollow lens handle"
-msgstr ""
+msgstr "Lens 핸들 언팔로우"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "unique contributors"
@@ -6718,7 +6723,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Unlock"
-msgstr ""
+msgstr "언락"
 
 #. placeholder {0}: token.symbol
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
@@ -6759,7 +6764,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Unnamed"
-msgstr ""
+msgstr "이름없음"
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -6769,28 +6774,28 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Unsupported data backup"
-msgstr ""
+msgstr "지원하지 않는 데이터 백업"
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Unsupported key store data"
-msgstr ""
+msgstr "지원하지 않는 키스토어 데이터"
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 msgid "Unsupported Network"
-msgstr ""
+msgstr "지원되지 않는 네트워크"
 
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 msgid "Unsupported network type"
-msgstr ""
+msgstr "지원되지 않는 네트워크"
 
 #. placeholder {0}: formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), '')
 #: packages/shared/src/UI/components/SettingsBoard/GasOption.tsx
 msgid "up to {0} Gwei"
-msgstr ""
+msgstr "최대 {0} Gwei"
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 msgid "Update NFT Avatar Success!"
-msgstr ""
+msgstr "NFT 아바타 업데이트 성공"
 
 #: packages/mask/dashboard/pages/SetupPersona/Permissions/index.tsx
 msgid "Update permission for X.com"
@@ -6807,61 +6812,61 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Updated"
-msgstr ""
+msgstr "업데이트"
 
 #: packages/shared/src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Updating Gas Fee…"
-msgstr ""
+msgstr "가스비 업데이트 중..."
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Upload backup"
-msgstr ""
+msgstr "백업 업로드"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Upload File"
-msgstr ""
+msgstr "파일 업로드"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Uploaded files"
-msgstr ""
+msgstr "파일 업로드"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Uploading"
-msgstr ""
+msgstr "업로딩중"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "URLs require the appropriate HTTPS prefix."
-msgstr ""
+msgstr "URL에는 적절한 HTTPS 접두사가 필요합니다."
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx
 msgid "Use NFT"
-msgstr ""
+msgstr "NFT 이용"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Use Persona to encrypt and decrypt social media posts & messages."
-msgstr ""
+msgstr "페르소나로 소셜 미디어 게시글 맟 메시지를 암호화하거나 복호화합니다."
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Use text encryption"
-msgstr ""
+msgstr "텍스 암호화 이용"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
-msgstr ""
+msgstr "사용자는 이러한 파일의 로컬 링크만 삭제할 수 있습니다. 탈중앙화 스토리지 프로토콜의 파일은 삭제할 수 없습니다."
 
 #: packages/plugins/VCent/src/SiteAdaptor/index.tsx
 #: packages/plugins/VCent/src/SiteAdaptor/index.tsx
 msgid "Valuables"
-msgstr ""
+msgstr "가치"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "value"
-msgstr ""
+msgstr "값"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Value"
-msgstr ""
+msgstr "값"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Verification code has been sent to your email. Please check your mailbox."
@@ -6882,7 +6887,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Verify"
-msgstr ""
+msgstr "인증"
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
@@ -6891,11 +6896,11 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
 msgid "Verify Account"
-msgstr ""
+msgstr "인증 및 연결 성공"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 msgid "Verify your wallet"
-msgstr ""
+msgstr "월렛 인증"
 
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
@@ -6914,15 +6919,15 @@ msgstr ""
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "View"
-msgstr ""
+msgstr "살펴보기"
 
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "View full transaction details"
-msgstr ""
+msgstr "거래 세부 내역 보기"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
-msgstr ""
+msgstr "아바타 오른쪽 아래에 있는 미니 Mask 아이콘이나 타임라인의 토큰 태그 위에 마우스를 올려놓아 여러 계정의 웹3 프로필을 볼 수 있습니다."
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
@@ -6933,7 +6938,7 @@ msgstr ""
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "View on Explorer"
-msgstr ""
+msgstr "Explorer에서 보기"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "View real-time crypto prices, market cap, trading volume, etc."
@@ -6961,24 +6966,24 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Visible To"
-msgstr ""
+msgstr "공개 대상"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Volume (24h)"
-msgstr ""
+msgstr "거래량(24h)"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Vote"
-msgstr ""
+msgstr "투표"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "Votes"
-msgstr ""
+msgstr "투표"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Wait too long for the confirmation."
@@ -6997,13 +7002,13 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Wallet"
-msgstr ""
+msgstr "월렛"
 
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/shared/src/UI/modals/WalletStatusModal/WalletStatusDialog.tsx
 msgid "Wallet Account"
-msgstr ""
+msgstr "월렛 계정"
 
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
 msgid "Wallet disconnected"
@@ -7013,21 +7018,21 @@ msgstr ""
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Wallet Group #{0}"
-msgstr ""
+msgstr "월렛 그룹 #{0}"
 
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
 msgid "Wallet name must between 3 to 18 characters."
-msgstr ""
+msgstr "월렛 이름은 3~18자 이내로 입력해주세요."
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Wallet request timed out"
-msgstr ""
+msgstr "월렛 요청 시간 초과"
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Wallet Settings"
-msgstr ""
+msgstr "월렛 설정"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 #: packages/plugins/NextID/src/components/BindDialog.tsx
@@ -7035,19 +7040,19 @@ msgstr ""
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 msgid "Wallet Sign"
-msgstr ""
+msgstr "월렛 사인"
 
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 msgid "Wallet sign cancelled."
-msgstr ""
+msgstr "월렛 사인 취소"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 msgid "Wallet sign failed."
-msgstr ""
+msgstr "월렛 사인 실패"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 msgid "Wallet sign succeeded."
-msgstr ""
+msgstr "월렛 사인 성공"
 
 #: packages/mask/popups/pages/Personas/WalletConnect/index.tsx
 #: packages/shared/src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
@@ -7074,7 +7079,7 @@ msgstr ""
 #: packages/plugins/FileService/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/index.tsx
 msgid "Web3 File Service"
-msgstr ""
+msgstr "웹3 파일 서비스"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
@@ -7085,36 +7090,36 @@ msgstr ""
 #: packages/plugins/Web3Profile/src/SiteAdaptor/index.tsx
 #: packages/shared/src/UI/components/PluginCardFrame/index.tsx
 msgid "Web3 Profile"
-msgstr ""
+msgstr "웹3 프로필"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/index.tsx
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/PluginDescriptor.tsx
 msgid "Web3 Profile Card"
-msgstr ""
+msgstr "웹3 프로필 카드"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Website"
-msgstr ""
+msgstr "웹사이트"
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Welcome Back"
-msgstr ""
+msgstr "환영합니다"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Welcome to Mask Network"
-msgstr ""
+msgstr "환영합니다"
 
 #: packages/mask/dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Welcome to use Mask Network"
-msgstr ""
+msgstr "환영합니다"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 msgid "What is Web3 File Service?"
-msgstr ""
+msgstr "웹2 파일 서비스가 무엇입니까?"
 
 #. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -7152,14 +7157,14 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw"
-msgstr ""
+msgstr "철회"
 
 #. placeholder {0}: protocol.bareToken.symbol ?? ''
 #. placeholder {0}: protocol.stakeToken.symbol
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
-msgstr ""
+msgstr "출금 {0}"
 
 #. placeholder {0}: message.token
 #: packages/shared/src/UI/translate.ts
@@ -7172,7 +7177,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Write down mnemonic words"
-msgstr ""
+msgstr "니모닉 단어를 적어두세요"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Write down recovery phrase"
@@ -7180,7 +7185,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Wrong Network"
-msgstr ""
+msgstr "잘못된 네트워크"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "You"
@@ -7254,12 +7259,12 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 msgid "You haven't uploaded any files yet."
-msgstr ""
+msgstr "업로드된 파일이 없습니다."
 
 #. placeholder {0}: tolerance.toString()
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "You may have {0}% less received with this level of slippage tolerance."
-msgstr ""
+msgstr "현재 슬리피지 허용 범위 안에 {0}% 적게 받을 수 있습니다."
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "You may lose your assets if you give approval to the website of this token."
@@ -7269,7 +7274,7 @@ msgstr ""
 #. placeholder {1}: token.symbol
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
-msgstr ""
+msgstr "{0} 에게 {1} 이용할 수 있는 스마트 컨트랙트 권한을 줘야 합니다. 다른 토큰을 이용할 때 이 작업을 다시 해야 합니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to follow <0>@{twitterHandle}</0>"
@@ -7353,11 +7358,11 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
-msgstr ""
+msgstr "투표 파워"
 
 #: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
 msgid "Your wallet cancelled the transaction."
-msgstr ""
+msgstr "월렛은 이미 해당 거래를 취소했습니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."

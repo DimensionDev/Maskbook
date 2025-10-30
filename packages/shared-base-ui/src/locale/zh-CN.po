@@ -2,25 +2,30 @@ msgid ""
 msgstr ""
 "POT-Creation-Date: 2025-10-27 22:51+0800\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: zh-CN\n"
-"Project-Id-Version: \n"
+"Language: zh\n"
+"Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2025-10-30 13:58\n"
 "Last-Translator: \n"
-"Language-Team: \n"
-"Plural-Forms: \n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared-base-ui/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 1010\n"
 
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "(beta)"
-msgstr ""
+msgstr "（测试版）"
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "(the name is set by the web site)"
-msgstr ""
+msgstr "(名称由网站设置)"
 
 #. placeholder {0}: millisecondsToHours(value)
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
@@ -108,17 +113,17 @@ msgstr ""
 #. placeholder {0}: attentionFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factor"
-msgstr ""
+msgstr "{0} 个需要关注的因素"
 
 #. placeholder {0}: attentionFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factors"
-msgstr ""
+msgstr "{0} 个需要关注的因素"
 
 #. placeholder {0}: formatTokenBalance(tokenBalance, token?.decimals)
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
-msgstr ""
+msgstr "{0} 可用"
 
 #. placeholder {0}: bridge?.router.bridgeName
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -138,7 +143,7 @@ msgstr ""
 #. placeholder {0}: count.toString()
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileChip.tsx
 msgid "{0} files selected"
-msgstr ""
+msgstr "已选择 {0} 个文件"
 
 #. placeholder {0}: conditions.join('/')
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
@@ -153,12 +158,12 @@ msgstr ""
 #. placeholder {0}: formatCount(currentSpace.followersCount, 1)
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "{0} members"
-msgstr ""
+msgstr "{0} 位成员"
 
 #. placeholder {0}: millisecondsToMinutes(value)
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
-msgstr ""
+msgstr "{0} 分钟"
 
 #. placeholder {0}: fromNetwork?.name
 #. placeholder {0}: toNetwork?.name
@@ -201,7 +206,7 @@ msgstr ""
 #. placeholder {0}: sourceType ?? SourceType.NFTScan
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "{0} Platform costs"
-msgstr ""
+msgstr "{0} 平台成本"
 
 #. placeholder {0}: fromNetwork?.name || ''
 #. placeholder {0}: toNetwork?.name || ''
@@ -213,12 +218,12 @@ msgstr ""
 #. placeholder {0}: riskyFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factor"
-msgstr ""
+msgstr "{0} 个有风险的因素"
 
 #. placeholder {0}: riskyFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factors"
-msgstr ""
+msgstr "{0} 个有风险的因素"
 
 #. placeholder {0}: message.token
 #: packages/shared/src/UI/translate.ts
@@ -304,7 +309,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/TokenSecurity/index.tsx
 msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
-msgstr ""
+msgstr "{riskyFactors, plural, one {# 个风险条目} other {# 个风险条目}}"
 
 #: packages/plugins/Trader/src/helpers/formatTime.ts
 msgid "{seconds}s"
@@ -320,7 +325,7 @@ msgstr ""
 
 #: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 msgid "{subject} has an error"
-msgstr ""
+msgstr "{subject} 发生错误"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/NoteAction.tsx
 msgid "{type, select, post {<0>{user}</0> publish a post on {platform}} mint {<1>{user}</1> minted a post on {platform}} revise {<2>{user}</2> revised a post on {platform}} share {<3>{user}</3> shared a post on {platform}} other {}}"
@@ -357,7 +362,7 @@ msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/> approved with <1/>"
-msgstr ""
+msgstr "<0/> 已通过 <1/> 批准"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/> interacted with <1/>"
@@ -607,7 +612,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "12-word recovery phrase is used to recover your persona data."
-msgstr ""
+msgstr "请选择恢复备份的正确方法。"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "2. If you have installed the {name} Wallet"
@@ -616,19 +621,19 @@ msgstr ""
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "24 Hour Trading Vol"
-msgstr ""
+msgstr "24h 交易总额"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Average Price"
-msgstr ""
+msgstr "24H平均价格"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H sale"
-msgstr ""
+msgstr "24小时销售"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Traded Volume"
-msgstr ""
+msgstr "24H 交易量"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "A blacklist is found. Some addresses may not be able to trade normally, which is a honeypot risk."
@@ -636,7 +641,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "a token"
-msgstr ""
+msgstr "代币"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "A whitelist is found. Some addresses may not be able to trade normally, which is a honeypot risk."
@@ -647,7 +652,7 @@ msgstr ""
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "About"
-msgstr ""
+msgstr "关于"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "About {collectionName}"
@@ -672,24 +677,24 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
 msgid "Account successfully connected to persona"
-msgstr ""
+msgstr "尝试探索社交媒体上的 Web3 dApps 功能。"
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Activities"
-msgstr ""
+msgstr "活动"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Activity Log"
-msgstr ""
+msgstr "活动日志"
 
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 #: packages/mask/popups/pages/Friends/ContactCard/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
 msgid "Add"
-msgstr ""
+msgstr "添加"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Add a Custom Cover"
@@ -701,18 +706,18 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 msgid "Add Assets"
-msgstr ""
+msgstr "添加资产"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/Tips/src/components/NFTSection/index.tsx
 #: packages/shared/src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx
 msgid "Add Collectibles"
-msgstr ""
+msgstr "添加 NFT"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "Add Contact"
-msgstr ""
+msgstr "添加联系人"
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Add google Drive"
@@ -721,16 +726,16 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 #: packages/mask/popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Add Network"
-msgstr ""
+msgstr "添加网络"
 
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Add new address to an existing group"
-msgstr ""
+msgstr "向现有组添加新地址"
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
-msgstr ""
+msgstr "添加 NFT"
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Add Suggested Token"
@@ -742,7 +747,7 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "Add wallet"
-msgstr ""
+msgstr "添加钱包"
 
 #: packages/mask/popups/pages/Wallet/components/StartUp/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
@@ -750,27 +755,27 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Add Wallet"
-msgstr ""
+msgstr "添加钱包"
 
 #: packages/mask/popups/components/TokenPicker/TokenItem.tsx
 #: packages/mask/popups/pages/Wallet/components/AssetsList/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Added by user"
-msgstr ""
+msgstr "由用户添加"
 
 #: packages/mask/popups/pages/Friends/ContactCard/index.tsx
 msgid "Added successfully"
-msgstr ""
+msgstr "添加成功"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Adding your wallets will allow you to own, view, and utilize your digital identities via Next.ID service. Note that you will be required to sign and authenticate the transaction to prove ownership of your wallet."
-msgstr ""
+msgstr "添加您的钱包将允许您通过Next.ID服务拥有、查看和使用您的数字身份。 请注意，您必须签名并认证交易，以证明您的钱包的所有权。"
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/shared/src/UI/components/TokenWithSocialGroupMenu/index.tsx
 #: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
 msgid "Address"
-msgstr ""
+msgstr "地址"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
 msgid "Address: <0>{address}</0>"
@@ -783,15 +788,15 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 msgid "Advanced"
-msgstr ""
+msgstr "高阶"
 
 #: packages/shared/src/UI/modals/SelectAdvancedSettingsDialog/SelectGasSettingsDialog.tsx
 msgid "Advanced Settings"
-msgstr ""
+msgstr "高阶设置"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 msgid "After connecting and verifying your persona, you can set up associated address for displaying your web3 footprints or receiving tips."
-msgstr ""
+msgstr "在连接和验证您的身份后，您可以设置相关的地址来显示您的 web3 足迹或接收打赏。"
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
@@ -805,7 +810,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Permissions/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Agree"
-msgstr ""
+msgstr "同意"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Airdrop Scam"
@@ -814,7 +819,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "All"
-msgstr ""
+msgstr "所有人"
 
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "All Mask Network users"
@@ -836,21 +841,21 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Amount"
-msgstr ""
+msgstr "金额"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Amount Each"
-msgstr ""
+msgstr "每个金额"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Amount per Share"
-msgstr ""
+msgstr "单个红包数额"
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "an NFT"
-msgstr ""
+msgstr "NFT"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Anti_whale(Limited number of transactions)"
@@ -862,7 +867,7 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "APP list"
-msgstr ""
+msgstr "应用列表"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -872,17 +877,17 @@ msgstr ""
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Appearance"
-msgstr ""
+msgstr "外观"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Applications"
-msgstr ""
+msgstr "应用程序"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalDialog.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/index.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/index.tsx
 msgid "Approval"
-msgstr ""
+msgstr "授权"
 
 #: packages/mask/content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
@@ -890,11 +895,11 @@ msgstr ""
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 #: packages/shared/src/UI/components/GrantPermission/index.tsx
 msgid "Approve"
-msgstr ""
+msgstr "授权"
 
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Approve amount"
-msgstr ""
+msgstr "已批准的金额"
 
 #. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
@@ -909,7 +914,7 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 msgid "APR"
-msgstr ""
+msgstr "年利率"
 
 #. placeholder {0}: formatEthereumAddress(wallet.identity, 4)
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
@@ -918,7 +923,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 msgid "Are you sure to remove this wallet?"
-msgstr ""
+msgstr "您确定要删除此钱包吗？"
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
 #. placeholder {1}: collection?.name || ''
@@ -940,7 +945,7 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/index.tsx
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
-msgstr ""
+msgstr "Artblocks 依托算法生成内容技术，给用户提供随心铸造 NFT 的体验。"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Arweave"
@@ -948,7 +953,7 @@ msgstr ""
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Asset"
-msgstr ""
+msgstr "资产"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Asset is hidden."
@@ -956,13 +961,13 @@ msgstr ""
 
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 msgid "Associated Accounts"
-msgstr ""
+msgstr "关联账户"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "At least 6 characters"
-msgstr ""
+msgstr "至少6个字符"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "At most {RED_PACKET_MAX_SHARES} recipients"
@@ -978,7 +983,7 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "Author"
-msgstr ""
+msgstr "作者"
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Authorization Failed"
@@ -986,19 +991,19 @@ msgstr ""
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
 msgid "Auto report the scam links to MetaMask"
-msgstr ""
+msgstr "自动报告欺诈链接到MetaMask"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
-msgstr ""
+msgstr "自动锁定"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock Time"
-msgstr ""
+msgstr "自动锁定时间"
 
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
-msgstr ""
+msgstr "可用余额"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Available to Everyone"
@@ -1006,7 +1011,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Avatar set successfully"
-msgstr ""
+msgstr "新头像设置成功"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Average"
@@ -1018,7 +1023,7 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Back"
-msgstr ""
+msgstr "返回"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Back Up Your Data Your Way"
@@ -1029,15 +1034,15 @@ msgstr ""
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Backup"
-msgstr ""
+msgstr "备份"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Backup & Recovery"
-msgstr ""
+msgstr "备份恢复"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Failed"
-msgstr ""
+msgstr "备份失败"
 
 #: packages/shared/src/UI/components/QRCode/index.tsx
 msgid "Backup failed, <0>try again</0>"
@@ -1053,7 +1058,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Backup password"
-msgstr ""
+msgstr "备份密码"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
@@ -1061,22 +1066,22 @@ msgstr ""
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Backup Password"
-msgstr ""
+msgstr "备份密码"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password must be 8-20 characters, including uppercase, lowercase, special characters and numbers."
-msgstr ""
+msgstr "备份密码必须是 8-20 个字符，包括大写、小写、特殊字符和数字。"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password set successfully"
-msgstr ""
+msgstr "备份密码设置成功。"
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Backup Persona"
-msgstr ""
+msgstr "备份身份"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Successful"
@@ -1093,12 +1098,12 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
 msgid "Backup Wallet"
-msgstr ""
+msgstr "备份钱包"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Balance"
-msgstr ""
+msgstr "余额"
 
 #: packages/shared/src/UI/components/TokenAmountPanel/index.tsx
 msgid "Balance: <0/>"
@@ -1115,7 +1120,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Base"
-msgstr ""
+msgstr "基础信息"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Base fee required: {MIN_BASE_FEE} Gwei"
@@ -1123,12 +1128,12 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 msgid "Basic"
-msgstr ""
+msgstr "基础"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Basic setting"
-msgstr ""
+msgstr "基础设置"
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Be aware, check the token before adding it."
@@ -1136,7 +1141,7 @@ msgstr ""
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
 msgid "Be careful what you visit and sign!"
-msgstr ""
+msgstr "注意你的访问和签名！"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
@@ -1148,7 +1153,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/contexts/SolRedpacketContext.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Best Wishes!"
-msgstr ""
+msgstr "最好的祝福！"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Blacklist function"
@@ -1156,19 +1161,19 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Block Explorer URL"
-msgstr ""
+msgstr "区块浏览器（可选）"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Blockchain"
-msgstr ""
+msgstr "区块链"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Blockchain:"
-msgstr ""
+msgstr "区块链："
 
 #: packages/shared/src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Blocto only supports the Flow chain."
-msgstr ""
+msgstr "Blocto 只支持 Flow 链。"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -1210,15 +1215,15 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Browser File"
-msgstr ""
+msgstr "浏览文件"
 
 #: packages/plugins/VCent/src/SiteAdaptor/index.tsx
 msgid "Buy & sell tweets autographed by their original creators."
-msgstr ""
+msgstr "购买和销售由其原创作者发布的推文。"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Buy Now"
-msgstr ""
+msgstr "立即购买"
 
 #. placeholder {0}: percentageToNumber(info.sell_tax)
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
@@ -1248,7 +1253,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "By proceeding you agree to the"
-msgstr ""
+msgstr "继续执行表示您同意"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
@@ -1257,7 +1262,7 @@ msgstr ""
 #: packages/plugins/Calendar/src/SiteAdaptor/components/Footer.tsx
 #: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
 msgid "Calendar"
-msgstr ""
+msgstr "日历"
 
 #. placeholder {0}: lensAccount.operations.canFollow.reason
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
@@ -1304,7 +1309,7 @@ msgstr ""
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Cancel Transaction"
@@ -1317,7 +1322,7 @@ msgstr ""
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Cast your vote"
-msgstr ""
+msgstr "投出您的票"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Category"
@@ -1325,7 +1330,7 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Chain"
-msgstr ""
+msgstr "链"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
@@ -1347,7 +1352,7 @@ msgstr ""
 #: packages/shared/src/UI/components/WalletStatusBar/WalletMenuItem.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "Change"
-msgstr ""
+msgstr "切换"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Change another account and try again."
@@ -1356,15 +1361,15 @@ msgstr ""
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Change Backup Password"
-msgstr ""
+msgstr "修改备份密码"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangeNetwork.tsx
 msgid "Change Network"
-msgstr ""
+msgstr "更改网络"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "Change NFT PFP"
-msgstr ""
+msgstr "更改 NFT 头像"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Change Owner"
@@ -1373,7 +1378,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 msgid "Change Payment Password"
-msgstr ""
+msgstr "修改支付密码"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Change to EVM Wallet"
@@ -1389,7 +1394,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Change Wallet"
-msgstr ""
+msgstr "更换钱包"
 
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Check {providerName} to confirm connect."
@@ -1406,7 +1411,7 @@ msgstr ""
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/CheckSecurityDialog.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/index.tsx
 msgid "Check Security"
-msgstr ""
+msgstr "安全检查"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
@@ -1424,7 +1429,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Choose another wallet"
-msgstr ""
+msgstr "切换钱包"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Choose from multiple backup options, now including encrypted storage via your authorized Google Drive for added security and flexibility."
@@ -1432,7 +1437,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ChooseToken/index.tsx
 msgid "Choose Token"
-msgstr ""
+msgstr "选择代币"
 
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
 msgid "Chrome - external extension"
@@ -1441,7 +1446,7 @@ msgstr ""
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Circulating Supply"
-msgstr ""
+msgstr "流通总量"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimDialog/index.tsx
@@ -1452,7 +1457,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claim"
-msgstr ""
+msgstr "领取"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
@@ -1484,7 +1489,7 @@ msgstr ""
 #: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Claim your Airdrop"
-msgstr ""
+msgstr "确认领取空投"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Claim your Lucky Drop."
@@ -1496,7 +1501,7 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Claimable"
-msgstr ""
+msgstr "可领取"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Claimed"
@@ -1530,23 +1535,23 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claiming..."
-msgstr ""
+msgstr "认领中..."
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Classics Logo"
-msgstr ""
+msgstr "经典标志"
 
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Clear"
-msgstr ""
+msgstr "清除"
 
 #: packages/shared/src/UI/components/WalletStatusBox/usePendingTransactions.tsx
 msgid "Clear All"
-msgstr ""
+msgstr "全部清除"
 
 #: packages/mask/content-script/components/InjectedComponents/PostDialogHint.tsx
 msgid "Click here to have a quick start."
-msgstr ""
+msgstr "点击这里快速开始。"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Click on <0/> at the top-right of your browser."
@@ -1562,7 +1567,7 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to list it on the App board."
-msgstr ""
+msgstr "点击应用图标将会在应用列表中显示。"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Click the settings icon to list it on the App board."
@@ -1570,47 +1575,47 @@ msgstr ""
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Click to retry"
-msgstr ""
+msgstr "点击重试"
 
 #: packages/mask/content-script/components/InjectedComponents/PageInspector.tsx
 #: packages/plugins/Tips/src/SiteAdaptor/components/TipsRealmContent/index.tsx
 msgid "Close"
-msgstr ""
+msgstr "关闭"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "Close [Check Security]?"
-msgstr ""
+msgstr "关闭[检查安全]？"
 
 #: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Cloud Backup"
-msgstr ""
+msgstr "云端备份"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Collectible"
-msgstr ""
+msgstr "收藏品"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalDialog.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Collectibles"
-msgstr ""
+msgstr "NFT"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Collection"
-msgstr ""
+msgstr "Nft 系列"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Collection Approval"
-msgstr ""
+msgstr "NFT 系列授权"
 
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Community"
-msgstr ""
+msgstr "社区"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Complete"
@@ -1620,7 +1625,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 msgid "Completed"
-msgstr ""
+msgstr "已完成"
 
 #: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/modals/ConfirmModal/index.tsx
@@ -1667,7 +1672,7 @@ msgstr ""
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
-msgstr ""
+msgstr "确认"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -1678,26 +1683,26 @@ msgstr ""
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
-msgstr ""
+msgstr "确认密码"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Confirm Payment Password"
-msgstr ""
+msgstr "再次输入支付密码"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Confirm Swap"
-msgstr ""
+msgstr "确认兑换"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 #: packages/plugins/GoPlusSecurity/src/UI/TokenSecurityBoundary.tsx
 msgid "Confirm swap risk"
-msgstr ""
+msgstr "确认兑换风险"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Confirm the Lucky Drop"
-msgstr ""
+msgstr "红包详情"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Confirm this Signature in your wallet."
@@ -1705,11 +1710,11 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Confirm this transaction in your wallet"
-msgstr ""
+msgstr "请在您的钱包中确认这笔交易"
 
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 msgid "Confirm this transaction in your wallet."
-msgstr ""
+msgstr "请在您的钱包确认此签名"
 
 #. placeholder {0}: asset.symbol
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
@@ -1724,11 +1729,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirming"
-msgstr ""
+msgstr "确认中"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Congratulations"
-msgstr ""
+msgstr "恭喜您！"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
@@ -1736,24 +1741,24 @@ msgstr ""
 #: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 #: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 msgid "Congratulations!"
-msgstr ""
+msgstr "恭喜！"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
 #: packages/mask/popups/components/SocialAccounts/index.tsx
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 msgid "Connect"
-msgstr ""
+msgstr "连接"
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Connect {0}"
-msgstr ""
+msgstr "连接到 {0}"
 
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Connect and switch between your wallets."
-msgstr ""
+msgstr "点击这里连接您的钱包。您可以在此选择网络或更改您的钱包。"
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
@@ -1770,16 +1775,16 @@ msgstr ""
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 msgid "Connect Mask Network Account using your wallet."
-msgstr ""
+msgstr "使用您的钱包连接Mask Network账户。"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Connect Persona"
-msgstr ""
+msgstr "连接身份"
 
 #: packages/mask/popups/modals/ConnectSocialAccountModal/index.tsx
 msgid "Connect Social Account"
-msgstr ""
+msgstr "连接社交账户"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Connect Solana Wallet"
@@ -1798,7 +1803,7 @@ msgstr ""
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "Connect Wallet"
-msgstr ""
+msgstr "连接钱包"
 
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Connect with {providerName}"
@@ -1813,13 +1818,13 @@ msgstr ""
 
 #: packages/mask/popups/components/SocialAccounts/index.tsx
 msgid "Connect your social platform accounts."
-msgstr ""
+msgstr "连接您的社交媒体帐户。"
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connect your wallet"
-msgstr ""
+msgstr "连接您的钱包"
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
 msgid "Connected"
@@ -1833,7 +1838,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ConnectedSites/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 msgid "Connected sites"
-msgstr ""
+msgstr "已连接的网站"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Connected successfully."
@@ -1845,15 +1850,15 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Connected Wallet"
-msgstr ""
+msgstr "已连接的钱包"
 
 #: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connected wallets settings"
-msgstr ""
+msgstr "已连接的钱包设置"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Connecting operation cancelled in third-party wallet."
-msgstr ""
+msgstr "第三方钱包中取消了连接操作。"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Connecting your {providerType} wallet"
@@ -1877,7 +1882,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/Contacts.tsx
 msgid "Contacts"
-msgstr ""
+msgstr "联系人"
 
 #: packages/mask/dashboard/components/Restore/RestoreFromMnemonic.tsx
 #: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
@@ -1893,7 +1898,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 #: packages/mask/popups/components/UnlockERC721Token/index.tsx
@@ -1903,11 +1908,11 @@ msgstr ""
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Contract"
-msgstr ""
+msgstr "合约"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Creator"
-msgstr ""
+msgstr "合约创建者"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Contract Deployment"
@@ -1921,15 +1926,15 @@ msgstr ""
 #: packages/mask/popups/components/TransactionPreview/index.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Contract Interaction"
-msgstr ""
+msgstr "合约交互"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/CheckSecurityDialog.tsx
 msgid "Contract Not Found"
-msgstr ""
+msgstr "未找到合约"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Owner"
-msgstr ""
+msgstr "合同所有者"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Contract source code not verified"
@@ -1941,7 +1946,7 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Contract:"
-msgstr ""
+msgstr "合约："
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "contributions"
@@ -1950,36 +1955,36 @@ msgstr ""
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copied"
-msgstr ""
+msgstr "已复制"
 
 #: packages/shared/src/UI/components/CopyButton/index.tsx
 msgid "Copied!"
-msgstr ""
+msgstr "已复制"
 
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 #: packages/shared/src/UI/components/CopyButton/index.tsx
 msgid "Copy"
-msgstr ""
+msgstr "复制"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Copy Address"
-msgstr ""
+msgstr "复制地址"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Copy image"
-msgstr ""
+msgstr "复制图片"
 
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 msgid "Copy private key"
-msgstr ""
+msgstr "复制私钥"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Copy text"
-msgstr ""
+msgstr "复制文本"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
-msgstr ""
+msgstr "无法获取链 ID。您的 RPC URL 正确吗？"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
@@ -1991,7 +1996,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
-msgstr ""
+msgstr "创建"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 msgid "Create a Firefly.social wallet"
@@ -2003,7 +2008,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Create a New Wallet"
-msgstr ""
+msgstr "创建新钱包"
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Create a Privy Wallet"
@@ -2019,7 +2024,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
-msgstr ""
+msgstr "创建新的 MASK 身份"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create NFT Lucky Drop"
@@ -2027,19 +2032,19 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Create Password"
-msgstr ""
+msgstr "设置密码"
 
 #: packages/shared/src/hooks/useCurrentPersonaConnectStatus.ts
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Create persona"
-msgstr ""
+msgstr "创建身份"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Create Persona"
-msgstr ""
+msgstr "创建身份"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create Smart Pay wallet"
@@ -2050,11 +2055,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Create the Lucky Drop"
-msgstr ""
+msgstr "下一步"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
 msgid "Create time:"
-msgstr ""
+msgstr "创建时间："
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create your Lucky Drop."
@@ -2066,7 +2071,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
-msgstr ""
+msgstr "创建您的身份以开始"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Created a SmartPay wallet on Polygon network."
@@ -2101,7 +2106,7 @@ msgstr ""
 #: packages/plugins/CrossChainBridge/src/SiteAdaptor/CrossChainBridgeDialog.tsx
 #: packages/plugins/CrossChainBridge/src/SiteAdaptor/index.tsx
 msgid "Cross-chain"
-msgstr ""
+msgstr "跨链"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Crypto Holder"
@@ -2110,15 +2115,15 @@ msgstr ""
 #: packages/mask/popups/modals/ChooseCurrencyModal/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 msgid "Currency"
-msgstr ""
+msgstr "货币"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Currency Symbol (Optional)"
-msgstr ""
+msgstr "货币符号(可选)"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Current"
-msgstr ""
+msgstr "当前"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Current account is not the verifying account."
@@ -2129,17 +2134,17 @@ msgstr ""
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Current base fee is {0} Gwei"
-msgstr ""
+msgstr "当前基础手续费是 {0} Gwei"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Current results"
-msgstr ""
+msgstr "当前结果"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Current wallet does not support to interact with Lens protocol."
-msgstr ""
+msgstr "当前钱包不支持与 Lens 协议交互。"
 
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
@@ -2150,11 +2155,11 @@ msgstr ""
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 #: packages/plugins/Avatar/src/Application/PersonaPage.tsx
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
-msgstr ""
+msgstr "通过连接社交账户自定义NFT体验。享受具有 Web3 氛围的 Web2 。"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
 msgid "CyberConnect"
@@ -2167,13 +2172,13 @@ msgstr ""
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Dark"
-msgstr ""
+msgstr "深色"
 
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Data"
-msgstr ""
+msgstr "数据"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Data backed up successfully!"
@@ -2181,7 +2186,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Data correlation"
-msgstr ""
+msgstr "数据关联"
 
 #. placeholder {0}: fromTwitter ? AddressPlatform.Twitter : 'normal'
 #: packages/shared/src/UI/components/AccountIcons/index.tsx
@@ -2198,7 +2203,7 @@ msgstr ""
 #: packages/shared/src/UI/components/AccountIcons/index.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
-msgstr ""
+msgstr "数据来源于{0} 。"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Date"
@@ -2210,16 +2215,16 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/index.tsx
 msgid "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network."
-msgstr ""
+msgstr "永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
 msgid "Decentralized social graph protocol for user-centric Web3."
-msgstr ""
+msgstr "以用户为中心的去中心化的Web3社交图协议."
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 msgid "Decrypt failed, please check password"
-msgstr ""
+msgstr "备份解密失败，请检查密码"
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "Decrypt this post with #mask_io! 🎭🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install Mask.io to send your first encrypted tweet. {encrypted}"
@@ -2227,30 +2232,30 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "Decrypted by Mask Network"
-msgstr ""
+msgstr "由Mask解密："
 
 #: packages/shared/src/UI/components/MaskPluginWrapper/index.tsx
 msgid "Default"
-msgstr ""
+msgstr "默认"
 
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: packages/mask/popups/modals/DeleteContactModal/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "Delete Contact"
-msgstr ""
+msgstr "删除联系人"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 msgid "Delete File"
-msgstr ""
+msgstr "删除文件"
 
 #: packages/mask/popups/pages/Friends/Detail/index.tsx
 msgid "Deleted successfully"
-msgstr ""
+msgstr "成功删除"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Deploy a SmartPay wallet on Polygon network."
@@ -2268,7 +2273,7 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/SavingsRow.tsx
 msgid "Deposit"
-msgstr ""
+msgstr "存入"
 
 #. placeholder {0}: protocol.bareToken.symbol
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
@@ -2288,7 +2293,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DescriptionCard.tsx
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
@@ -2298,11 +2303,11 @@ msgstr ""
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/SocialFeedDetailsModal/DetailDialog.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Details"
-msgstr ""
+msgstr "详情"
 
 #: packages/plugins/ScamWarning/src/SiteAdaptor/index.tsx
 msgid "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets."
-msgstr ""
+msgstr "检测用户发布的加密网站是否有风险或恶意。帮助您保护数字资产。"
 
 #. placeholder {0}: quote?.toToken.tokenSymbol
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/QuoteRoute.tsx
@@ -2316,24 +2321,24 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "Disconnect"
-msgstr ""
+msgstr "断开"
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Disconnect all accounts"
-msgstr ""
+msgstr "断开所有社交账户"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect failed."
-msgstr ""
+msgstr "断开连接失败。"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect Social Account?"
-msgstr ""
+msgstr "断开社交账户?"
 
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
 msgid "Disconnect Wallet?"
-msgstr ""
+msgstr "断开钱包?"
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
@@ -2352,7 +2357,7 @@ msgstr ""
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 #: packages/shared/src/UI/contexts/components/InjectedDialog.tsx
 msgid "Dismiss"
-msgstr ""
+msgstr "关闭"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/index.tsx
 msgid "Display Snapshot proposals on the X of the respective project or protocol."
@@ -2360,19 +2365,19 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
-msgstr ""
+msgstr "直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体信息，并提供报价及竞标功能。"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/index.tsx
 msgid "Display specific information of Gitcoin projects, donate to a project directly on social media."
-msgstr ""
+msgstr "在社交媒体上直接展示Gitcoin项目的具体信息。"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Display the following address on your Web3 profile page and use it to receive tips."
-msgstr ""
+msgstr "在您的 Web3 个人资料页面上显示以下地址并使用它来接收打赏。"
 
 #: packages/mask/content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Do you need to paste encrypted content manually?"
-msgstr ""
+msgstr "您需要手动粘贴加密内容吗？"
 
 #. placeholder {0}: file.name
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
@@ -2391,7 +2396,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "Domain Request"
-msgstr ""
+msgstr "域名请求"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."
@@ -2399,7 +2404,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
 msgid "Don't see your NFT?"
-msgstr ""
+msgstr "找不到您的NFT？"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Donate"
@@ -2421,26 +2426,26 @@ msgstr ""
 #: packages/shared/src/hooks/useSnackbarCallback.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Done"
-msgstr ""
+msgstr "完成"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Download Backup"
-msgstr ""
+msgstr "下载备份"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Download https://mask.io to try more powerful tools on Twitter."
-msgstr ""
+msgstr "下载 https://mask.io，在Twitter上尝试更强大的工具。"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Download report"
-msgstr ""
+msgstr "下载报告"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Download the {name} Wallet here"
@@ -2448,12 +2453,12 @@ msgstr ""
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Downloading"
-msgstr ""
+msgstr "正在下载"
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: packages/shared/src/UI/components/UploadDropArea/index.tsx
 msgid "Drag & Drop your file here"
-msgstr ""
+msgstr "将您的文件拖放到此处"
 
 #: packages/plugins/Handle/src/SiteAdaptor/PluginHeader.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/PluginDescriptor.tsx
@@ -2466,19 +2471,19 @@ msgstr ""
 #: packages/shared/src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit Contact"
-msgstr ""
+msgstr "编辑联系人"
 
 #: packages/plugins/Avatar/src/Application/RouterDialog.tsx
 msgid "Edit Profile"
-msgstr ""
+msgstr "编辑个人资料"
 
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Editor"
-msgstr ""
+msgstr "编辑器"
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -2487,29 +2492,29 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Eligible to claim"
-msgstr ""
+msgstr "有资格领取"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Email"
-msgstr ""
+msgstr "电子邮箱"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Email verification code"
-msgstr ""
+msgstr "邮箱验证码"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Empty"
-msgstr ""
+msgstr "空的"
 
 #: packages/mask/content-script/components/CompositionDialog/CompositionUI.tsx
 msgid "Enable auto paste"
-msgstr ""
+msgstr "启用自动粘贴"
 
 #: packages/shared/src/UI/components/PluginEnableBoundary/index.tsx
 msgid "Enable plugin"
-msgstr ""
+msgstr "开启插件"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Enable the {name} Wallet extension and disable other wallet extensions"
@@ -2522,7 +2527,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/CompositionUI.tsx
 #: packages/shared/src/UI/components/CompositionDialog/CompositionUI.tsx
 msgid "Encrypt"
-msgstr ""
+msgstr "加密"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Encrypt the message in an image"
@@ -2530,7 +2535,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/Composition.tsx
 msgid "Encrypted Post"
-msgstr ""
+msgstr "加密贴文"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -2539,11 +2544,11 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Encryption Method"
-msgstr ""
+msgstr "加密方式"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "End date"
-msgstr ""
+msgstr "结束日期"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Ended {relativeEndTime}"
@@ -2564,11 +2569,11 @@ msgstr ""
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 msgid "Ens or Address(0x)"
-msgstr ""
+msgstr "Ens或地址(0x)"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "ENS or Wallet Address"
-msgstr ""
+msgstr "ENS 或钱包地址"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
@@ -2576,34 +2581,34 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
-msgstr ""
+msgstr "输入Gas Limit"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
-msgstr ""
+msgstr "输入 Gas 价格"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max fee"
-msgstr ""
+msgstr "请输入Max fee"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max priority fee"
-msgstr ""
+msgstr "请输入Max priority fee"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Enter Amount Each"
-msgstr ""
+msgstr "输入每个金额"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Enter an amount"
-msgstr ""
+msgstr "输入金额"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
@@ -2616,21 +2621,21 @@ msgstr ""
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 msgid "Enter Max spend limit"
-msgstr ""
+msgstr "输入最大支出限额"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Enter Number of Winners"
-msgstr ""
+msgstr "输入份数"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
 msgid "Enter Payment Password"
-msgstr ""
+msgstr "输入支付密码"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Enter Total Amount"
-msgstr ""
+msgstr "输入总数"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Entered passwords are inconsistent."
@@ -2639,7 +2644,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Equal Amount"
-msgstr ""
+msgstr "均分金额"
 
 #. placeholder {0}: rejection.message
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
@@ -2658,7 +2663,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Everyone"
-msgstr ""
+msgstr "任何用户可见"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "EVM"
@@ -2670,7 +2675,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Example: Alice"
-msgstr ""
+msgstr "示例：Alice"
 
 #: packages/shared/src/UI/components/UploadDropArea/index.tsx
 msgid "Exceeded the maximum file size of {fileSize}."
@@ -2684,12 +2689,12 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Exchange"
-msgstr ""
+msgstr "兑换"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
-msgstr ""
+msgstr "Twitter体验"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
@@ -2697,16 +2702,16 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Expired"
-msgstr ""
+msgstr "已过期"
 
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Explore multi-chain dApps."
-msgstr ""
+msgstr "点击这里快速访问主要功能。"
 
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Export"
-msgstr ""
+msgstr "导出"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
@@ -2719,7 +2724,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
-msgstr ""
+msgstr "失败"
 
 #. placeholder {0}: message.action
 #: packages/shared/src/UI/translate.ts
@@ -2728,7 +2733,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Failed to add the wallet, please try again."
-msgstr ""
+msgstr "添加钱包失败，请重试。"
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Failed to authorize Google Drive. Please try again."
@@ -2796,7 +2801,7 @@ msgstr ""
 #. placeholder {0}: token.symbol ?? token.name ?? 'Token'
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Failed to load {0}. Click to retry."
-msgstr ""
+msgstr "加载 {0} 失败，请点击重试。"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 msgid "Failed to login firefly"
@@ -2808,7 +2813,7 @@ msgstr ""
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Failed to report spam."
-msgstr ""
+msgstr "举报失败。"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
@@ -2829,7 +2834,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Failed to save network"
-msgstr ""
+msgstr "无法保存网络"
 
 #: packages/plugins/FileService/src/SiteAdaptor/FileViewer.tsx
 msgid "Failed to save the file. Please try again."
@@ -2842,7 +2847,7 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Failed to set Avatar."
-msgstr ""
+msgstr "加载头像失败。"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Failed to swap"
@@ -2883,7 +2888,7 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Fast"
-msgstr ""
+msgstr "快速"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx
 msgid "Fastest"
@@ -2891,11 +2896,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Feedback"
-msgstr ""
+msgstr "问题反馈"
 
 #: packages/plugins/Transak/src/SiteAdaptor/index.tsx
 msgid "Fiat On-Ramp"
-msgstr ""
+msgstr "法币入金"
 
 #: packages/plugins/Transak/src/SiteAdaptor/index.tsx
 msgid "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
@@ -2903,7 +2908,7 @@ msgstr ""
 
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 msgid "File"
-msgstr ""
+msgstr "文件"
 
 #. placeholder {0}: file.name
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
@@ -2927,7 +2932,7 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 msgid "File name must between 3 to 20 characters."
-msgstr ""
+msgstr "文件名必须介于 3 到 20 个字符之间。"
 
 #: packages/plugins/FileService/src/SiteAdaptor/FileViewer.tsx
 msgid "File saved"
@@ -2935,7 +2940,7 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/index.tsx
 msgid "File Service"
-msgstr ""
+msgstr "文件服务"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Find Mask Network in the extension list and click the <0/> button."
@@ -2947,19 +2952,19 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Floor price"
-msgstr ""
+msgstr "地板价"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Floor Price"
-msgstr ""
+msgstr "地板价"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Follow"
-msgstr ""
+msgstr "关注"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
@@ -2976,18 +2981,18 @@ msgstr ""
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
 msgid "Follow Lens handle"
-msgstr ""
+msgstr "关注Lens handle"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
 msgid "Follow Now"
-msgstr ""
+msgstr "立即关注"
 
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Follow System"
-msgstr ""
+msgstr "跟随系统"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Follow User"
@@ -2995,21 +3000,21 @@ msgstr ""
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "Followers"
-msgstr ""
+msgstr "粉丝"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Following"
-msgstr ""
+msgstr "已关注"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "Followings"
-msgstr ""
+msgstr "正在关注"
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Forgot payment password?"
-msgstr ""
+msgstr "设置支付密码?"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivityCard.tsx
@@ -3022,7 +3027,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "From"
-msgstr ""
+msgstr "从"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "from <0>{fromAddress}</0>"
@@ -3031,7 +3036,7 @@ msgstr ""
 #. placeholder {0}: transaction.formattedTransaction.popup.method
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Function: {0}"
-msgstr ""
+msgstr "功能：{0}"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Functions that can suspend trading"
@@ -3053,13 +3058,13 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/shared/src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Gas Fee"
-msgstr ""
+msgstr "Gas 费"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSettingModal.tsx
 msgid "Gas fee settings"
-msgstr ""
+msgstr "Gas 费用设置"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
@@ -3073,11 +3078,11 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Limit"
-msgstr ""
+msgstr "Gas 限制"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Limit (Units)"
-msgstr ""
+msgstr "Gas 限制(Gwei)"
 
 #. placeholder {0}: String(minGasLimit)
 #. placeholder {0}: minGasLimit.toFixed()
@@ -3086,7 +3091,7 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
-msgstr ""
+msgstr "Gas limit 必须至少 {0}"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas limit must be bigger than {minGas}."
@@ -3102,7 +3107,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas limit too low will cause the transaction to fail."
-msgstr ""
+msgstr "Gas Limit过低有几率会导致交易失败。"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
@@ -3111,15 +3116,15 @@ msgstr ""
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Price"
-msgstr ""
+msgstr "Gas 价格"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Price (GWEI)"
-msgstr ""
+msgstr "Gas 价格 (gwei)"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price is higher than necessary. You may pay more than needed."
-msgstr ""
+msgstr "Gas price过高。您或许支付了超过需要的费用。"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas price is too low and will cause the transaction fail"
@@ -3127,25 +3132,25 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price is too low for network conditions."
-msgstr ""
+msgstr "Gas price 在当前网络环境下过低。"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price must be greater than 0 Gwei."
-msgstr ""
+msgstr "Gas Price 必须大于 0 Gwei。"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/schema.ts
 msgid "Gas price should be greater than 0"
-msgstr ""
+msgstr "Gas 价格必须大于 0。"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Used (Units)"
-msgstr ""
+msgstr "所用 Gas (单位)"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "General"
-msgstr ""
+msgstr "概况"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "General user"
@@ -3153,11 +3158,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Generate a new persona"
-msgstr ""
+msgstr "创建一个新的身份"
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Generate a new wallet address"
-msgstr ""
+msgstr "生成一个新的钱包地址"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -3174,7 +3179,7 @@ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 msgid "Gift crypto or NFTs to any users, first come, first served."
-msgstr ""
+msgstr "给任意用户发送Token或者NFT，先到先得"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/index.tsx
 msgid "Gitcoin"
@@ -3189,11 +3194,11 @@ msgstr ""
 
 #: packages/plugins/VCent/src/SiteAdaptor/TweetDialog.tsx
 msgid "Go"
-msgstr ""
+msgstr "开始"
 
 #: packages/shared/src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Go to Settings"
-msgstr ""
+msgstr "前往设置"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
@@ -3204,7 +3209,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Got it"
-msgstr ""
+msgstr "好的"
 
 #. placeholder {0}: token.symbol
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -3279,7 +3284,7 @@ msgstr ""
 #. placeholder {0}: asset.symbol
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Hide {0}"
-msgstr ""
+msgstr "隐藏 {0}"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Hide {name}"
@@ -3291,11 +3296,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/AssetsList/MoreBar.tsx
 msgid "Hide tokens with value less than $1"
-msgstr ""
+msgstr "隐藏价值小于 $1 的代币"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/HidingScamTx.tsx
 msgid "Hiding Scam Transactions"
-msgstr ""
+msgstr "隐藏Scam 交易"
 
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
@@ -3305,16 +3310,16 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "High"
-msgstr ""
+msgstr "高速"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/constants.tsx
 msgid "High Risk"
-msgstr ""
+msgstr "高风险"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Highest Price"
-msgstr ""
+msgstr "最高价格"
 
 #: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
@@ -3325,7 +3330,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "History"
-msgstr ""
+msgstr "历史"
 
 #. placeholder {0}: tokenQuantity ? `${tokenQuantity}+` : 'any'
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
@@ -3370,11 +3375,11 @@ msgstr ""
 #. placeholder {2}: token?.symbol || ''
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
-msgstr ""
+msgstr "我刚刚在{0} 使用{1} {2} 购买了一件美丽的艺术品。欢迎加入！"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "I just replaced Twitter X logo with the original blue bird one with Mask Network extension."
-msgstr ""
+msgstr "我刚刚使用 Mask Network 插件把T witter X 图标替换成了原来的蓝鸟图标。"
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 msgid "I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io."
@@ -3406,11 +3411,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Identical"
-msgstr ""
+msgstr "平分"
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
-msgstr ""
+msgstr "身份助记词"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
@@ -3424,7 +3429,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses."
-msgstr ""
+msgstr "如果您决定关闭 [检查安全] 应用，关闭后与任何有潜在风险的合约或地址进行互动时将无法看到相关安全提示。"
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "If you forget payment password, you can type 'RESET' to reset your wallet. <0>Remember, this action will erase all your previous wallets.</0>"
@@ -3434,7 +3439,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Image"
-msgstr ""
+msgstr "图片"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Image copied!"
@@ -3443,27 +3448,27 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Import"
-msgstr ""
+msgstr "导入"
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
 msgid "Import NFT"
-msgstr ""
+msgstr "导入 NFT"
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Import Wallet"
-msgstr ""
+msgstr "导入钱包"
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Import Wallets"
-msgstr ""
+msgstr "导入钱包"
 
 #: packages/mask/popups/components/WalletItem/index.tsx
 msgid "Imported"
-msgstr ""
+msgstr "已导入"
 
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
 msgid "Imported Wallets"
-msgstr ""
+msgstr "导入钱包"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -3475,7 +3480,7 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
-msgstr ""
+msgstr "在 Web3 中，您可以给已安装Mask Network的好友展示接收小费的地址，NFT 收藏品，捐赠记录和其他链上信息。"
 
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
 msgid "Incorrect Backup Password"
@@ -3484,25 +3489,25 @@ msgstr ""
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Incorrect backup password."
-msgstr ""
+msgstr "密码不正确。"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Incorrect Backup Password."
-msgstr ""
+msgstr "备份密码错误。"
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
-msgstr ""
+msgstr "云备份密码不正确，请重试。"
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/index.tsx
 msgid "Incorrect contract address."
-msgstr ""
+msgstr "请输入有效的代币合约地址"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Keystore Password."
-msgstr ""
+msgstr "Keystore 密码不正确。"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Mnemonic Words."
@@ -3511,7 +3516,7 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Incorrect password"
-msgstr ""
+msgstr "密码不正确"
 
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
@@ -3522,26 +3527,26 @@ msgstr ""
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Incorrect Password"
-msgstr ""
+msgstr "密码不正确"
 
 #: packages/mask/popups/modals/ShowPrivateKeyModal/index.tsx
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 msgid "Incorrect Payment Password."
-msgstr ""
+msgstr "支付密码错误。"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Incorrect Private Key"
-msgstr ""
+msgstr "私钥不正确"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Phrase.tsx
 msgid "Incorrect recovery phrase."
-msgstr ""
+msgstr "助记词不正确。"
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 msgid "Incorrect wallet address."
-msgstr ""
+msgstr "无效钱包地址。"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Incorrect words selected. Please try again!"
@@ -3550,40 +3555,40 @@ msgstr ""
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Info"
-msgstr ""
+msgstr "信息资料"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "Information"
-msgstr ""
+msgstr "信息"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Infos"
-msgstr ""
+msgstr "信息资料"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
-msgstr ""
+msgstr "输入金额低于最低金额"
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 msgid "Input contract address"
-msgstr ""
+msgstr "输入合约地址"
 
 #: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Input your Private Key"
-msgstr ""
+msgstr "输入您的私钥"
 
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
 #: packages/shared/src/UI/components/SettingsBoard/Context.tsx
 msgid "Instant"
-msgstr ""
+msgstr "即时"
 
 #. placeholder {0}: token?.symbol
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient {0} Balance"
-msgstr ""
+msgstr "{0} 余额不足"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
@@ -3598,7 +3603,7 @@ msgstr ""
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #: packages/plugins/Tips/src/contexts/Tip/useTipValidate.ts
 msgid "Insufficient balance"
-msgstr ""
+msgstr "余额不足"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
@@ -3606,7 +3611,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient Balance"
-msgstr ""
+msgstr "余额不足"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -3615,15 +3620,15 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient Balance for Gas Fee"
-msgstr ""
+msgstr "没有足够的 Gas 费"
 
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Insufficient funds for gas."
-msgstr ""
+msgstr "Gas 不足。"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid Block Explorer URL."
-msgstr ""
+msgstr "无效的块浏览器URL。"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid email address."
@@ -3637,23 +3642,23 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/shared/src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Invalid Network"
-msgstr ""
+msgstr "网络无效"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid number"
-msgstr ""
+msgstr "数字无效"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid RPC URL."
-msgstr ""
+msgstr "无效 RPC URL 。"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useSlippageToleranceSchema.ts
 msgid "Invalid slippage tolerance."
-msgstr ""
+msgstr "无效的滑点容许值"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid verification code."
-msgstr ""
+msgstr "验证码错误。"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
@@ -3670,44 +3675,44 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Items"
-msgstr ""
+msgstr "条目"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "Join"
-msgstr ""
+msgstr "加入"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Just Me"
-msgstr ""
+msgstr "仅自己可见"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Just Selected Contacts"
-msgstr ""
+msgstr "仅选定的联系人可见"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
-msgstr ""
+msgstr "确认保存"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
-msgstr ""
+msgstr "密钥库"
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Keystore password"
-msgstr ""
+msgstr "Keystore密码"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Lack of number, letter or special character."
-msgstr ""
+msgstr "缺少数字、字母或特殊字符。"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Leave blank to allow any amount; enter a number to set a minimum holding requirement."
@@ -3719,19 +3724,19 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens Follow"
-msgstr ""
+msgstr "Lens 关注"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens Unfollow"
-msgstr ""
+msgstr "Lens 取消关注"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Library:"
-msgstr ""
+msgstr "照片库："
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "License:"
-msgstr ""
+msgstr "许可证："
 
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Lido Exchange Rate"
@@ -3740,7 +3745,7 @@ msgstr ""
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Light"
-msgstr ""
+msgstr "浅色"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Likely in < {estimateSecond} seconds"
@@ -3748,11 +3753,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Link"
-msgstr ""
+msgstr "交易记录"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Listed"
-msgstr ""
+msgstr "显示"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
@@ -3762,11 +3767,11 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/FailedTrendingView.tsx
 #: packages/shared/src/UI/components/ReloadStatus/index.tsx
 msgid "Load failed"
-msgstr ""
+msgstr "加载失败"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/OffersList.tsx
 msgid "Load More"
-msgstr ""
+msgstr "加载更多"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Load Network"
@@ -3780,7 +3785,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewSkeleton.tsx
 #: packages/shared/src/UI/components/LoadingStatus/index.tsx
 msgid "Loading"
-msgstr ""
+msgstr "加载中"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
 msgid "Loading account information..."
@@ -3792,16 +3797,16 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTBadge.tsx
 msgid "Loading..."
-msgstr ""
+msgstr "加载中..."
 
 #: packages/shared/src/UI/components/PluginCardFrame/index.tsx
 msgid "Loading...."
-msgstr ""
+msgstr "加载中...."
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Local Backup"
-msgstr ""
+msgstr "本地备份"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Locale Backup"
@@ -3809,13 +3814,13 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Lock Wallet"
-msgstr ""
+msgstr "锁定钱包"
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Log out"
-msgstr ""
+msgstr "登出"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
@@ -3825,18 +3830,18 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Logout failed"
-msgstr ""
+msgstr "登出失败"
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Logout successfully"
-msgstr ""
+msgstr "退出成功"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/constants.tsx
 msgid "Low Risk"
@@ -3849,7 +3854,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 msgid "Lucky Drop"
-msgstr ""
+msgstr "红包"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Lucky Drop claimed."
@@ -3883,12 +3888,12 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Make It Encrypted"
-msgstr ""
+msgstr "进行加密"
 
 #: packages/mask/popups/modals/ChooseNetworkModal/index.tsx
 #: packages/mask/popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Manage Network"
-msgstr ""
+msgstr "管理网络"
 
 #: packages/mask/popups/modals/SupportedSitesModal/index.tsx
 msgid "Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on those websites."
@@ -3896,14 +3901,14 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Manage Token List"
-msgstr ""
+msgstr "编辑代币列表"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Market Cap"
-msgstr ""
+msgstr "市值"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Mask Community $ARB Giveaway"
@@ -3912,7 +3917,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Mask needs the following permissions"
-msgstr ""
+msgstr "Mask Network需要以下权限"
 
 #: packages/mask/content-script/components/InjectedComponents/PostDialogHint.tsx
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
@@ -3934,7 +3939,7 @@ msgstr ""
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Max"
-msgstr ""
+msgstr "最大"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
@@ -3956,39 +3961,39 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee"
-msgstr ""
+msgstr "最大费用"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Fee"
-msgstr ""
+msgstr "最大费用"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Max Fee (GWEI)"
-msgstr ""
+msgstr "最大手续费 (GWEI)"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee cannot be lower than max priority fee"
-msgstr ""
+msgstr "Max fee 不能低于 Max priority fee"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee cannot be lower than max priority fee."
-msgstr ""
+msgstr "最大手续费不能低于最大优先级费用。"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max fee is higher than necessary"
-msgstr ""
+msgstr "Max fee 高于必要值"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is higher than necessary."
-msgstr ""
+msgstr "最大手续费高于必要值。"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is too low for network conditions."
-msgstr ""
+msgstr "Max fee 在当前网络环境下过低"
 
 #. placeholder {0}: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2, BigNumber.ROUND_UP)
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
@@ -3997,40 +4002,40 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max priority fee"
-msgstr ""
+msgstr "最大优先费"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Priority Fee"
-msgstr ""
+msgstr "最大优先费"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is higher than necessary. You may pay more than needed."
-msgstr ""
+msgstr "Max priority fee过高。您或许支付了超过需要的费用。"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max priority fee is too high for network conditions."
-msgstr ""
+msgstr "最大优先费用在当前网络环境下过高。"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max priority fee is too low for network conditions"
-msgstr ""
+msgstr "Max priority fee 在当前网络环境下过低"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is too low for network conditions."
-msgstr ""
+msgstr "最大优先费用在当前网络环境下过低。"
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max priority fee must be greater than 0 GWEI"
-msgstr ""
+msgstr "Max priority fee必须大于 0 GWEI"
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee must be greater than 0 Gwei."
-msgstr ""
+msgstr "最大优先费用必须大于 0 Gwei。"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "May be a honeypot."
@@ -4044,12 +4049,12 @@ msgstr ""
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Medium"
-msgstr ""
+msgstr "中等"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/constants.tsx
 msgid "Medium Risk"
-msgstr ""
+msgstr "中等风险"
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Merge Completed"
@@ -4058,7 +4063,7 @@ msgstr ""
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Merge data to local database"
-msgstr ""
+msgstr "合并数据到本地数据库"
 
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
@@ -4069,11 +4074,11 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Message"
-msgstr ""
+msgstr "信息"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Method"
-msgstr ""
+msgstr "操作"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Minimum received"
@@ -4086,7 +4091,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Mint Address"
-msgstr ""
+msgstr "铸造地址"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Mint function"
@@ -4098,7 +4103,7 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Minted:"
-msgstr ""
+msgstr "已铸造："
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
@@ -4108,34 +4113,34 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
-msgstr ""
+msgstr "助记词"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
 msgid "Mnemonic word"
-msgstr ""
+msgstr "助记词"
 
 #: packages/shared/src/UI/components/TokenSecurity/index.tsx
 msgid "More"
-msgstr ""
+msgstr "更多"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "More Details"
-msgstr ""
+msgstr "详细信息"
 
 #. placeholder {0}: asset.data.source === SourceType.NFTScan ? resolveSourceTypeName(asset.data.source) : 'platform'
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "More on {0}"
-msgstr ""
+msgstr "更多关于 {0}"
 
 #. placeholder {0}: String(currentMessageIndex + 1)
 #. placeholder {1}: String(totalMessages)
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Multiple transaction requests {0} / {1}"
-msgstr ""
+msgstr "多笔交易请求 {0}/ {1}"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "My vote"
-msgstr ""
+msgstr "我的投票"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ClaimRecord.tsx
 msgid "My wallet"
@@ -4143,24 +4148,24 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 msgid "My Wallets"
-msgstr ""
+msgstr "钱包"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "N/A"
-msgstr ""
+msgstr "没有"
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/EditContactModal/index.tsx
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: packages/mask/popups/components/TokenPicker/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/index.tsx
 msgid "Name or Contract address e.g. USDC or 0x234..."
-msgstr ""
+msgstr "代币代号名称或合约地址"
 
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Name or contract address eg. PUNK or 0x234..."
@@ -4173,7 +4178,7 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Network"
-msgstr ""
+msgstr "网络"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network added"
@@ -4181,15 +4186,15 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Network error or execute smart contract failed."
-msgstr ""
+msgstr "网络错误或执行智能合同失败。"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
-msgstr ""
+msgstr "网络错误或用户取消进程。"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Network error, try again"
-msgstr ""
+msgstr "网络错误，请重试"
 
 #. placeholder {0}: error.message
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
@@ -4207,7 +4212,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network Name"
-msgstr ""
+msgstr "网络名称"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network removed."
@@ -4227,30 +4232,30 @@ msgstr ""
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "New Logo"
-msgstr ""
+msgstr "新标志"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "New password"
-msgstr ""
+msgstr "新密码"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "New password cannot be the same as your current password."
-msgstr ""
+msgstr "新密码与当前密码不可相同。"
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "New Payment Password"
-msgstr ""
+msgstr "新支付密码"
 
 #: packages/plugins/Calendar/src/SiteAdaptor/CalendarContent.tsx
 msgid "News"
-msgstr ""
+msgstr "新闻"
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Next"
-msgstr ""
+msgstr "下一步"
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 msgid "Next.ID"
@@ -4262,7 +4267,7 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 msgid "NFT Avatar Setting"
-msgstr ""
+msgstr "头像设置"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "NFT collection"
@@ -4270,7 +4275,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "NFT Details"
-msgstr ""
+msgstr "NFT 详细信息"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "NFT Holder"
@@ -4278,7 +4283,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 msgid "NFT is not minted yet."
-msgstr ""
+msgstr "NFT还没有被铸造。"
 
 #: packages/shared/src/UI/translate.ts
 msgid "NFT Lucky Drop claimed."
@@ -4291,7 +4296,7 @@ msgstr ""
 #: packages/plugins/Avatar/src/Application/RouterDialog.tsx
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
-msgstr ""
+msgstr "NFT 头像"
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
@@ -4314,7 +4319,7 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "No activities found."
-msgstr ""
+msgstr "未找到活动"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No Airdrop Scam"
@@ -4331,11 +4336,11 @@ msgstr ""
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "No approved contract records."
-msgstr ""
+msgstr "暂无授权合约记录。"
 
 #: packages/mask/popups/pages/Friends/Detail/UI.tsx
 msgid "No associated accounts"
-msgstr ""
+msgstr "无关联账号"
 
 #: packages/mask/popups/components/WalletSettingList/index.tsx
 msgid "No associated wallet. <0>Add Wallet.</0>"
@@ -4344,12 +4349,12 @@ msgstr ""
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "No back up"
-msgstr ""
+msgstr "没有备份"
 
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "No backups found"
-msgstr ""
+msgstr "没有发现备份"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No blacklist"
@@ -4366,7 +4371,7 @@ msgstr ""
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/shared/src/UI/components/CollectibleList/CollectibleList.tsx
 msgid "No collectible found."
-msgstr ""
+msgstr "未找到任何 NFT。"
 
 #: packages/mask/popups/pages/Friends/Contacts/index.tsx
 msgid "No contacts stored locally, you can try searching."
@@ -4375,7 +4380,7 @@ msgstr ""
 #: packages/plugins/Calendar/src/SiteAdaptor/components/EventList.tsx
 #: packages/plugins/Calendar/src/SiteAdaptor/components/NewsList.tsx
 msgid "No content for the last two weeks."
-msgstr ""
+msgstr "最近两周没有内容。"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
@@ -4383,27 +4388,27 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 #: packages/shared/src/UI/components/EmptyStatus/index.tsx
 msgid "No Data"
-msgstr ""
+msgstr "暂无数据"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 msgid "No deposit protocols found."
-msgstr ""
+msgstr "未找到存款协议。"
 
 #: packages/shared/src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "No Enough Gas Fee"
-msgstr ""
+msgstr "Gas费用不足"
 
 #: packages/plugins/Tips/src/contexts/Tip/useTipValidate.ts
 msgid "No Enough Gas Fees"
-msgstr ""
+msgstr "没有足够的 Gas 费"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "No followers."
-msgstr ""
+msgstr "无关注者"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 msgid "No following friends."
-msgstr ""
+msgstr "没有关注任何人"
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -4416,11 +4421,11 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/PriceCard.tsx
 msgid "No Listings"
-msgstr ""
+msgstr "没有任何上架信息"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "No local key"
-msgstr ""
+msgstr "缺失本地密钥"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/History.tsx
 msgid "No Lucky Drops claimed"
@@ -4450,7 +4455,7 @@ msgstr ""
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 msgid "No NFTs found."
-msgstr ""
+msgstr "没有找到任何NFT。"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "No past rounds found."
@@ -4459,7 +4464,7 @@ msgstr ""
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "No power"
-msgstr ""
+msgstr "没有投票权"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No proxy"
@@ -4474,23 +4479,23 @@ msgstr ""
 #: packages/shared/src/UI/components/CountryCodePicker/index.tsx
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "No results"
-msgstr ""
+msgstr "没有任何结果。"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 msgid "No results found"
-msgstr ""
+msgstr "未找到结果"
 
 #: packages/mask/popups/pages/Friends/SearchList/index.tsx
 msgid "No search results"
-msgstr ""
+msgstr "找不到搜索结果。"
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
-msgstr ""
+msgstr "未检测到有效的钱包。请先连接钱包或验证钱包。"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
-msgstr ""
+msgstr "在此找不到已验证的帐户。"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "No votes"
@@ -4520,7 +4525,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Not connected"
-msgstr ""
+msgstr "未连接"
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
 msgid "Not Connected"
@@ -4528,11 +4533,11 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/PersonaItem.tsx
 msgid "Not current account. Please switch to this account to set up NFTs Profile."
-msgstr ""
+msgstr "非当前帐户。请切换到此帐户以设置 NFT 头像。"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Not enough data to present."
-msgstr ""
+msgstr "没有足够可显示的数据"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Not found your {providerType} wallet"
@@ -4540,7 +4545,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Not set"
-msgstr ""
+msgstr "未设置"
 
 #: packages/mask/popups/components/NFTAvatarPicker/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
@@ -4549,11 +4554,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
-msgstr ""
+msgstr "注意：如果您使用最后一次导入中的助记词，您可以恢复来自该助记词句的钱包。"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/DefaultPlaceholder.tsx
 msgid "Note: Scams detections might not be 100% guaranteed."
-msgstr ""
+msgstr "注意：扫描检测可能无法保证100%准确。"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
@@ -4565,12 +4570,12 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 msgid "Offers"
-msgstr ""
+msgstr "报价"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
-msgstr ""
+msgstr "好的"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/DisablePermit.tsx
 msgid "Okay"
@@ -4582,7 +4587,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "Old Payment Password"
-msgstr ""
+msgstr "原支付密码"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "on {fromNetworkName}"
@@ -4594,11 +4599,11 @@ msgstr ""
 
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
-msgstr ""
+msgstr "当前只支持输入消息文本。"
 
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "Only visible to yourself"
-msgstr ""
+msgstr "只对您可见"
 
 #. placeholder {0}: formatWithCommas(snapshot)
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
@@ -4607,28 +4612,28 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileView.tsx
 msgid "Oops, we can't find any results."
-msgstr ""
+msgstr "对不起，我们没有找到任何结果。"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Open in a new tab"
-msgstr ""
+msgstr "在新分页中打开"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Open Mask Wallet"
-msgstr ""
+msgstr "打开一个钱包"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 #: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
 msgid "Operation"
-msgstr ""
+msgstr "操作"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
-msgstr ""
+msgstr "使用 Token 名称、 NFT 收藏品、 ENS 域名或钱包地址优化搜索结果。"
 
 #: packages/plugins/Handle/src/SiteAdaptor/index.tsx
 msgid "Optimize the display of search results about ENS in social media."
@@ -4641,11 +4646,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Or"
-msgstr ""
+msgstr "或"
 
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Or create a new wallet group"
-msgstr ""
+msgstr "或者创建一个新的钱包组"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "or Holding NFT"
@@ -4654,7 +4659,7 @@ msgstr ""
 #. placeholder {0}: author.userId
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/authorDifferentMessage.tsx
 msgid "Originally posted by {0}"
-msgstr ""
+msgstr "最初发布于 {0}"
 
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
@@ -4678,17 +4683,17 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Owners"
-msgstr ""
+msgstr "拥有者"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Pair"
-msgstr ""
+msgstr "交易对"
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "Past rounds"
@@ -4696,11 +4701,11 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Paste manually"
-msgstr ""
+msgstr "手动粘贴"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 msgid "Paused"
-msgstr ""
+msgstr "已暂停"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
@@ -4708,7 +4713,7 @@ msgstr ""
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Payment Password"
-msgstr ""
+msgstr "支付密码"
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "Payment password changed."
@@ -4728,7 +4733,7 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Payment Password should be between 6 and 20 characters."
-msgstr ""
+msgstr "支付密码应该介于 6 到 20 个字符之间。"
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Payment password stored locally and you could try as many as you want to unlock your wallet."
@@ -4738,11 +4743,11 @@ msgstr ""
 #: packages/shared/src/UI/components/WalletStatusBar/WalletDescription.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Pending"
-msgstr ""
+msgstr "待定"
 
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Permissions"
-msgstr ""
+msgstr "许可权限"
 
 #: packages/mask/popups/modals/UpdatePermissionModal/index.tsx
 msgid "Permissions List"
@@ -4754,11 +4759,11 @@ msgstr ""
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 #: packages/shared/src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 msgid "Persona"
-msgstr ""
+msgstr "身份"
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Persona already exists."
-msgstr ""
+msgstr "该身份已存在。"
 
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaRecovery.tsx
 msgid "Persona created."
@@ -4767,23 +4772,23 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Persona Name"
-msgstr ""
+msgstr "身份名称"
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 msgid "Persona name must between 1 to 24 characters."
-msgstr ""
+msgstr "身份名称必须介于 1 到 24 个字符之间。"
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Persona Recovery Phrase"
-msgstr ""
+msgstr "您的恢复口令"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Persona required."
-msgstr ""
+msgstr "必须拥有身份"
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 msgid "Persona Sign"
-msgstr ""
+msgstr "身份签名"
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Persona: {personaName}"
@@ -4791,7 +4796,7 @@ msgstr ""
 
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 msgid "Personas"
-msgstr ""
+msgstr "身份"
 
 #: packages/shared/src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -4801,11 +4806,11 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Pin Mask Network to the toolbar for easier access:"
-msgstr ""
+msgstr "将 Mask Network 固定到工具栏以便更容易访问："
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Pinned successfully."
-msgstr ""
+msgstr "固定成功。"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Platform"
@@ -4813,11 +4818,11 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Please check ToS document"
-msgstr ""
+msgstr "请检查 ToS 文档"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Please click Browse Files button to select files to upload."
-msgstr ""
+msgstr "请点击浏览文件按钮选择要上传的文件。"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 #: packages/mask/content-script/site-adaptors/facebook.com/injection/Composition.tsx
@@ -4832,11 +4837,11 @@ msgstr ""
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
-msgstr ""
+msgstr "请在使用 dApp之前连接到 {0} 。"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "Please connect wallet"
-msgstr ""
+msgstr "请连接钱包"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Please connect wallet to check if you are eligible to claim $ARB."
@@ -4844,11 +4849,11 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your persona"
-msgstr ""
+msgstr "请连接您的身份"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your wallet"
-msgstr ""
+msgstr "请连接您的钱包"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Please copy the following text and image (if there is one) and publish it."
@@ -4864,19 +4869,19 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please create a persona for accessing Dapps."
-msgstr ""
+msgstr "请创建一个身份访问 Dapps。"
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "Please create your persona to use Web3 Profile."
-msgstr ""
+msgstr "请创建您的身份以使用 Web3 个人资料。"
 
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Please enter backup password to export persona private key."
-msgstr ""
+msgstr "请输入导出个人私钥的备份密码。"
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
-msgstr ""
+msgstr "请输入云备份密码以下载文件。"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Please enter the correct mnemonic words, private key, or upload the correct keystore file."
@@ -4884,19 +4889,19 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SearchBox.tsx
 msgid "Please enter token contract address."
-msgstr ""
+msgstr "请输入合约地址。"
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Please enter your backup password."
-msgstr ""
+msgstr "输入您的密码"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Please install your metamask wallet and set up your first wallet."
-msgstr ""
+msgstr "请安装您的 metamask 钱包并设置您的第一个钱包。"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Please select the appropriate method to restore your personal data."
-msgstr ""
+msgstr "请选择合适的方法来恢复个人数据。"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please select the correct words in the correct order."
@@ -4904,20 +4909,20 @@ msgstr ""
 
 #: packages/shared/src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
-msgstr ""
+msgstr "请选择钱包以在保存设置后激活功能。"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Please set the backup password to back up"
-msgstr ""
+msgstr "请设置备份密码"
 
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Please set up backup password to export private key."
-msgstr ""
+msgstr "请在导出私钥之前设置您的备份密码。"
 
 #: packages/mask/popups/modals/WalletAutoLockSettingModal/index.tsx
 msgid "Please set up the amount of time before we automatically lock your wallet."
-msgstr ""
+msgstr "请在自动锁定您的钱包之前设置时间。"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Please sign up or login {siteName} to connect Mask Network."
@@ -4934,7 +4939,7 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Please try again if you failed to vote."
-msgstr ""
+msgstr "如果您未投票，请再试一次。"
 
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please verify the current persona with a social media account before using dApps."
@@ -4942,7 +4947,7 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please verify your social account"
-msgstr ""
+msgstr "请验证您的社交账户"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please write down or copy these words and save them in a secure place."
@@ -4950,7 +4955,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Please write down the following words in correct order. Keep it safe and do not share with anyone!"
-msgstr ""
+msgstr "请按正确顺序写下以下单词。保证安全，不与任何人分享！"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -4960,7 +4965,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/CompositionUI.tsx
 #: packages/shared/src/UI/components/CompositionDialog/CompositionUI.tsx
 msgid "Plugins"
-msgstr ""
+msgstr "插件"
 
 #: packages/plugins/Trader/src/SiteAdaptor/index.tsx
 msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
@@ -4971,7 +4976,7 @@ msgstr ""
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Post content:"
-msgstr ""
+msgstr "发布内容："
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDescriptor.tsx
 msgid "Powered by"
@@ -5000,37 +5005,37 @@ msgstr ""
 
 #: packages/plugins/CrossChainBridge/src/SiteAdaptor/components/BridgeStack.tsx
 msgid "Powered by Celer Network. Support $MASK!"
-msgstr ""
+msgstr "由Celer提供支持，支持 $MASK！"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
-msgstr ""
+msgstr "上一页"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
-msgstr ""
+msgstr "先前的关注交易正在处理中，请稍候，然后重试。"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous unfollow transaction is in processing, please wait and try again."
-msgstr ""
+msgstr "先前的取消关注交易正在处理中，请稍候，然后重试。"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Price"
-msgstr ""
+msgstr "价格"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Price per mint"
-msgstr ""
+msgstr "每份铸造的价格"
 
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Price Statistic"
-msgstr ""
+msgstr "价格统计数据"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 msgid "Price:"
-msgstr ""
+msgstr "价格："
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Priority fee"
@@ -5038,7 +5043,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Priority Fee (GWEI)"
-msgstr ""
+msgstr "优先费用 (GWEI)"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Priority fee should be greater than 0."
@@ -5046,12 +5051,12 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Privacy Policy"
-msgstr ""
+msgstr "隐私政策"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Private"
-msgstr ""
+msgstr "私密"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
@@ -5059,25 +5064,25 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
-msgstr ""
+msgstr "私钥"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Deposit"
-msgstr ""
+msgstr "存入操作处理中"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Withdrawal"
-msgstr ""
+msgstr "取出操作处理中"
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Profile Photo"
-msgstr ""
+msgstr "个人头像"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 msgid "Progress"
-msgstr ""
+msgstr "进度"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "Project details"
@@ -5087,11 +5092,11 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/PropertiesCard.tsx
 msgid "Properties"
-msgstr ""
+msgstr "属性"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 msgid "Proposal"
-msgstr ""
+msgstr "提案"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/index.tsx
 msgid "Provide you with fast, reliable and convenient security services."
@@ -5114,11 +5119,11 @@ msgstr ""
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchase"
-msgstr ""
+msgstr "购买"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchasing...."
-msgstr ""
+msgstr "购买中..."
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
@@ -5139,12 +5144,12 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Random"
-msgstr ""
+msgstr "随机"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Random Amount"
-msgstr ""
+msgstr "随机金额"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "Rank"
@@ -5165,12 +5170,12 @@ msgstr ""
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
-msgstr ""
+msgstr "重新输入"
 
 #: packages/mask/popups/pages/Wallet/components/ActionGroup/index.tsx
 #: packages/mask/popups/pages/Wallet/Receive/index.tsx
 msgid "Receive"
-msgstr ""
+msgstr "接收"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 msgid "Recommended dimensions: 1016 × 672 px"
@@ -5183,31 +5188,31 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recover your data"
-msgstr ""
+msgstr "恢复数据"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Recover your wallet"
-msgstr ""
+msgstr "恢复钱包"
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 msgid "Recovery"
-msgstr ""
+msgstr "恢复"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recovery Phrase"
-msgstr ""
+msgstr "身份助记词"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Refresh"
-msgstr ""
+msgstr "刷新"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refund"
-msgstr ""
+msgstr "退款"
 
 #. placeholder {0}: formatBalance(remain.toString(), tokenDecimals, { significant: 2, isPrecise: true })
 #: packages/plugins/RedPacket/src/SiteAdaptor/hooks/useRefundCallback.tsx
@@ -5228,7 +5233,7 @@ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refunding"
-msgstr ""
+msgstr "退款中"
 
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Reject {totalMessages} Transactions"
@@ -5238,17 +5243,17 @@ msgstr ""
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
 #: packages/shared/src/UI/components/ReloadStatus/index.tsx
 msgid "Reload"
-msgstr ""
+msgstr "重新加载"
 
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Remove Wallet"
-msgstr ""
+msgstr "移除钱包"
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
@@ -5257,19 +5262,19 @@ msgstr ""
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Rename"
-msgstr ""
+msgstr "重命名"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Report NFT Scam Contract?"
-msgstr ""
+msgstr "报告 NFT Scam 合约吗？"
 
 #: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 msgid "Report on GitHub"
-msgstr ""
+msgstr "在 GitHub 上报告"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Report Spam"
-msgstr ""
+msgstr "举报垃圾"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Request ID"
@@ -5285,7 +5290,7 @@ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Request Source"
-msgstr ""
+msgstr "请求源"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/useFinanceFeeds.ts
 #: packages/plugins/RSS3/src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
@@ -5302,21 +5307,21 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Reselect"
-msgstr ""
+msgstr "重新选择"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Resend"
-msgstr ""
+msgstr "重新发送"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Reset"
-msgstr ""
+msgstr "重置"
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Reset Wallet"
-msgstr ""
+msgstr "重置钱包"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Resource"
@@ -5325,7 +5330,7 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Restore"
-msgstr ""
+msgstr "恢复"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Restore backup failed."
@@ -5337,7 +5342,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Restore Database"
-msgstr ""
+msgstr "恢复数据库"
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Restore Failed"
@@ -5345,24 +5350,24 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Restore from a previous database backup"
-msgstr ""
+msgstr "从以前的数据库备份恢复"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Restore or Login"
-msgstr ""
+msgstr "恢复身份"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Results"
-msgstr ""
+msgstr "结果"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
@@ -5373,7 +5378,7 @@ msgstr ""
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoke"
-msgstr ""
+msgstr "撤销"
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
@@ -5393,13 +5398,13 @@ msgstr ""
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoking"
-msgstr ""
+msgstr "撤销中"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
-msgstr ""
+msgstr "风险提示"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "rounds"
@@ -5411,19 +5416,19 @@ msgstr ""
 
 #: packages/plugins/ScamWarning/src/SiteAdaptor/index.tsx
 msgid "Safety Warning"
-msgstr ""
+msgstr "安全警告"
 
 #. placeholder {0}: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss')
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 msgid "Sale ends in {0}"
-msgstr ""
+msgstr "出售结束于 {0}"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 msgid "Saving"
@@ -5432,7 +5437,7 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/index.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsDialog.tsx
 msgid "Savings"
-msgstr ""
+msgstr "储蓄"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "Scam tx"
@@ -5444,7 +5449,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Receive/index.tsx
 msgid "Scan QR code to receive payment"
-msgstr ""
+msgstr "扫描二维码以接收付款"
 
 #: packages/mask/popups/pages/Personas/WalletConnect/index.tsx
 msgid "Scan QR code with WalletConnect-compatible wallet"
@@ -5457,11 +5462,11 @@ msgstr ""
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SearchBox.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Search"
-msgstr ""
+msgstr "搜索"
 
 #: packages/shared/src/UI/components/CountryCodePicker/index.tsx
 msgid "Search Area"
-msgstr ""
+msgstr "探索范围"
 
 #: packages/mask/popups/pages/Friends/Search/index.tsx
 msgid "Search Next.ID, X, Lens, ENS or Address"
@@ -5469,58 +5474,58 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Search with an ENS domain or wallet address to get optimized results."
-msgstr ""
+msgstr "使用ENS域名或钱包地址搜索以获得最优结果。"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Search with the name of an NFT collection or its symbol to get optimized results."
-msgstr ""
+msgstr "使用 NFT 集合的名称或符号搜索以获得最佳结果。"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Security Detection"
-msgstr ""
+msgstr "安全检测"
 
 #: packages/mask/popups/pages/Trader/useImplementRuntime.tsx
 #: packages/shared/src/UI/components/SelectTokenChip/index.tsx
 #: packages/shared/src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Select"
-msgstr ""
+msgstr "选择代币"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Select a token"
-msgstr ""
+msgstr "选择代币"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Select a Token"
-msgstr ""
+msgstr "选择代币"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Select Address"
-msgstr ""
+msgstr "选择地址"
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Select All"
-msgstr ""
+msgstr "全选"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract"
-msgstr ""
+msgstr "选择 NFT 合约"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract Operator"
-msgstr ""
+msgstr "选择 NFT 合约持有者"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract Owner"
-msgstr ""
+msgstr "选择 NFT 合约持有者"
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 msgid "Select and Connect to your wallet"
-msgstr ""
+msgstr "选择并连接到你的钱包"
 
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Select Collection"
@@ -5528,7 +5533,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
 msgid "Select language"
-msgstr ""
+msgstr "选择语言"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Select liquidity"
@@ -5550,7 +5555,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 msgid "Select Wallet"
-msgstr ""
+msgstr "选择钱包"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Selecting NFTs"
@@ -5576,7 +5581,7 @@ msgstr ""
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
-msgstr ""
+msgstr "发送"
 
 #. placeholder {0}: message.token
 #: packages/shared/src/UI/translate.ts
@@ -5598,7 +5603,7 @@ msgstr ""
 
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Sending..."
-msgstr ""
+msgstr "发送中..."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Sent"
@@ -5610,11 +5615,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Service Agreement"
-msgstr ""
+msgstr "服务协议"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 msgid "Set NFT Avatar"
-msgstr ""
+msgstr "设置 NFT 头像"
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
 msgid "Set NFT NFT Background"
@@ -5626,11 +5631,11 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/NFTInfo.tsx
 msgid "Set NFT PFPs"
-msgstr ""
+msgstr "设置 NFT 头像"
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
 msgid "Set NFT Photo"
-msgstr ""
+msgstr "设置 NFT 头像"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -5638,19 +5643,19 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
-msgstr ""
+msgstr "设置支付密码"
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set payment password successfully."
-msgstr ""
+msgstr "设置支付密码成功。"
 
 #: packages/plugins/Avatar/src/Application/NFTInfo.tsx
 msgid "Set up NFT PFP successfully"
-msgstr ""
+msgstr "NFT 头像设置成功"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
-msgstr ""
+msgstr "设置钱包，在每个社交媒体帐户上显示 Web3 足迹和打赏地址。"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/index.tsx
 msgid "Set your NFT as profile picture with exclusive aura."
@@ -5658,19 +5663,19 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Set Your Payment Password"
-msgstr ""
+msgstr "设置支付密码"
 
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Set Your Persona Name"
-msgstr ""
+msgstr "设置您的角色名称"
 
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Set your persona name with maximum length of 24 characters"
-msgstr ""
+msgstr "设置您的身份名称，最大长度为24个字符"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
@@ -5680,31 +5685,31 @@ msgstr ""
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 #: packages/shared/src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "Share"
-msgstr ""
+msgstr "分享"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Share and recommend this feature after saving."
-msgstr ""
+msgstr "保存后分享并推荐此功能。"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Share with"
-msgstr ""
+msgstr "分享与"
 
 #: packages/mask/content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Show me how"
-msgstr ""
+msgstr "教我怎么做"
 
 #: packages/mask/popups/pages/Wallet/components/AssetsList/MoreBar.tsx
 msgid "Show tokens with value less than $1"
-msgstr ""
+msgstr "显示价值小于$1 的代币"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaSignRequest/index.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/WalletSignRequest.tsx
 msgid "Sign"
-msgstr ""
+msgstr "签名"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
@@ -5712,23 +5717,23 @@ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Signature Request"
-msgstr ""
+msgstr "签名请求"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Signing ..."
-msgstr ""
+msgstr "正在签名..."
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Signing Message (Raw)"
-msgstr ""
+msgstr "签名消息 (十六进制)"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Signing Message (Text)"
-msgstr ""
+msgstr "消息签名"
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
 msgid "Similar Project"
-msgstr ""
+msgstr "类似项目"
 
 #: packages/mask/popups/modals/UpdatePermissionModal/index.tsx
 msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
@@ -5737,11 +5742,11 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Sites"
-msgstr ""
+msgstr "站点"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "size"
-msgstr ""
+msgstr "大小"
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Size limit: 10 MB"
@@ -5750,7 +5755,7 @@ msgstr ""
 #: packages/mask/content-script/components/GuideStep/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Skip"
-msgstr ""
+msgstr "跳过"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -5765,7 +5770,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
-msgstr ""
+msgstr "滑点容许值"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Slow"
@@ -5781,7 +5786,7 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
-msgstr ""
+msgstr "社交账户"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/index.tsx
 msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
@@ -5793,32 +5798,32 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
 msgid "Something went wrong!"
-msgstr ""
+msgstr "发生未知错误。"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Something went wrong."
-msgstr ""
+msgstr "出现了一些问题。"
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 msgid "Sorry, failed to save NFT Avatar. Please set again."
-msgstr ""
+msgstr "抱歉，保存 NFT 头像失败。请重新设置。"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Sorry, signature failed! Please try signing again."
-msgstr ""
+msgstr "对不起，签名失败！请再试一次。"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Sorry, you are not eligible to claim $ARB in this campaign."
-msgstr ""
+msgstr "对不起，您没有资格在此活动中领取 $ARB。"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/SpaceMenu.tsx
 msgid "Space"
-msgstr ""
+msgstr "空格"
 
 #: packages/shared/src/UI/components/TokenSecurity/index.tsx
 msgid "Spam"
-msgstr ""
+msgstr "垃圾"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 msgid "Spam reported."
@@ -5828,29 +5833,29 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Speed Up"
-msgstr ""
+msgstr "加速"
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 #: packages/mask/popups/components/UnlockERC721Token/index.tsx
 msgid "Spend limit requested by"
-msgstr ""
+msgstr "支出限额请求者"
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Spend more transaction fees to cancel the previous transaction."
-msgstr ""
+msgstr "花费更多的交易费用来取消以前的交易。"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Split Mode"
-msgstr ""
+msgstr "拆分模式"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Start"
-msgstr ""
+msgstr "开始"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "Start date"
-msgstr ""
+msgstr "开始日期"
 
 #. placeholder {0}: format(startTime, 'MM-dd-yyyy HH:mm')
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
@@ -5863,7 +5868,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "status"
-msgstr ""
+msgstr "状态"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -5899,7 +5904,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -5912,11 +5917,11 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Support"
-msgstr ""
+msgstr "支持"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Support Identity code, private key, local backups or cloud backups to access your personal data."
-msgstr ""
+msgstr "支持身份代码、私钥、本地备份或云备份以访问您的个人数据。"
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Support mnemonic phrase, private key or keystore file."
@@ -5935,7 +5940,7 @@ msgstr ""
 #: packages/mask/popups/modals/SupportedSitesModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Supported Sites"
-msgstr ""
+msgstr "所支持的网站"
 
 #: packages/mask/popups/pages/Wallet/components/StartUp/index.tsx
 msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
@@ -5953,12 +5958,12 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Swap"
-msgstr ""
+msgstr "兑换"
 
 #. placeholder {0}: protocol.bareToken.symbol
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Swap {0}"
-msgstr ""
+msgstr "兑换 {0}"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "Swap anyway"
@@ -5966,7 +5971,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Swap Anyway"
-msgstr ""
+msgstr "仍要兑换"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Swap completed successfully."
@@ -5986,25 +5991,25 @@ msgstr ""
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/index.tsx
 msgid "Switch between the classic Twitter logo and the new one."
-msgstr ""
+msgstr "在经典的 Twitter 标志和新的 X 标志之间切换。"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Switch Network"
-msgstr ""
+msgstr "切换网络"
 
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Switch other account"
-msgstr ""
+msgstr "切换帐号"
 
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 msgid "Switch Persona"
-msgstr ""
+msgstr "切换 Persona"
 
 #. placeholder {0}: expectedChainName ?? ''
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Switch to {0}"
-msgstr ""
+msgstr "切换到 {0}"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 msgid "Switch to other accounts"
@@ -6012,15 +6017,15 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
-msgstr ""
+msgstr "切换到 Polygon 并关注"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Switch Twitter Logo"
-msgstr ""
+msgstr "切换 Twitter 标志"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/index.tsx
 msgid "Switch X Logo"
-msgstr ""
+msgstr "切换 X 标志"
 
 #: packages/mask/popups/components/MnemonicDisplay/index.tsx
 msgid "Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"
@@ -6045,7 +6050,7 @@ msgstr ""
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Text"
-msgstr ""
+msgstr "文本"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Text copied!"
@@ -6053,7 +6058,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."
-msgstr ""
+msgstr "[检查安全] 提供迅速、可靠和方便的 Web3 安全服务。"
 
 #. placeholder {0}: isSwap ? 'swap' : 'bridge'
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
@@ -6070,7 +6075,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 msgid "The contract address is incorrect or the collection does not belong to you."
-msgstr ""
+msgstr "合约地址不正确或此 NFT 不属于您。"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "The contract may contain additional issuance functions, which could maybe generate a large number of tokens, resulting in significant fluctuations in token prices. It is recommended to confirm with the project team whether it complies with the token issuance instructions."
@@ -6094,7 +6099,7 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
-msgstr ""
+msgstr "当前钱包没有 Lens ，无法关注/取消关注"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "The custom amount entered may be higher than the required network fee."
@@ -6142,7 +6147,7 @@ msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "The new passwords don't match"
-msgstr ""
+msgstr "新密码不匹配"
 
 #. placeholder {0}: profile.identifier.userId
 #: packages/mask/content-script/components/shared/SelectRecipients/ProfileInList.tsx
@@ -6159,15 +6164,15 @@ msgstr ""
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 msgid "The persona name already exists."
-msgstr ""
+msgstr "此身份名称已存在"
 
 #: packages/plugins/Tips/src/contexts/Tip/useRecipientValidate.ts
 msgid "The receiving address is a contract address. Please check again."
-msgstr ""
+msgstr "此接收地址为合约地址，请重新检查。"
 
 #: packages/plugins/Tips/src/contexts/Tip/useRecipientValidate.ts
 msgid "The receiving address may be a malicious address."
-msgstr ""
+msgstr "接收地址可能是恶意地址。"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
@@ -6189,7 +6194,7 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
 msgid "The user has not set this."
-msgstr ""
+msgstr "用户尚未设置此项。"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -6197,13 +6202,13 @@ msgstr ""
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 msgid "The wallet address already exists."
-msgstr ""
+msgstr "该钱包地址已经存在。"
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/EditContactModal/index.tsx
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
 msgid "The wallet name already exists."
-msgstr ""
+msgstr "该钱包名称已经存在。"
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "The web site can"
@@ -6228,7 +6233,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "There was a network or RPC provider error, please try again later!"
-msgstr ""
+msgstr "网络或RPC提供方出现错误，请稍后再试 ！"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/index.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/SocialFeeds/index.tsx
@@ -6237,11 +6242,11 @@ msgstr ""
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 msgid "This address is a contract address."
-msgstr ""
+msgstr "此地址是合同地址。"
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 msgid "This address may be a scam address."
-msgstr ""
+msgstr "此地址可能是欺诈地址。"
 
 #. placeholder {0}: String(token?.symbol)
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
@@ -6250,7 +6255,7 @@ msgstr ""
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 msgid "This allows the third party to spend all your token balance until it reaches the cap or you revoke the spending cap. If this is not intended, consider setting a lower spending cap."
-msgstr ""
+msgstr "这允许第三方使用您所有的代币余额，直到达到上限或您取消支出上限为止。 如果不打算这样做，则考虑设定较低的支出上限。"
 
 #. placeholder {0}: duplicated.name
 #: packages/mask/popups/pages/Wallet/EditNetwork/useWarnings.ts
@@ -6267,7 +6272,7 @@ msgstr ""
 
 #: packages/mask/popups/hooks/useContactsContext.ts
 msgid "This ENS does not exist or not be resolved."
-msgstr ""
+msgstr "此ENS不存在或未被解析。"
 
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <0> Global Backup </0>"
@@ -6292,7 +6297,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "This JSON file is encrypted with your current payment password. The same password is required for decryption when importing this wallet."
-msgstr ""
+msgstr "此 JSON 文件使用您当前的支付密码加密。导入此钱包时解密需要相同的密码。"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "This message contains a invalid EIP-4361 message. It is better to reject this request."
@@ -6300,7 +6305,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This network name already exists"
-msgstr ""
+msgstr "此网络名称已存在"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/SelectCollectibles.tsx
 msgid "This NFT contract cannot be modified now."
@@ -6308,11 +6313,11 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivitiesList.tsx
 msgid "This NFT didn't have any activities."
-msgstr ""
+msgstr "此 NFT 没有任何交易动态。"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/OffersList.tsx
 msgid "This NFT didn't have any offers."
-msgstr ""
+msgstr "此 NFT 没有任何报价。"
 
 #. placeholder {0}: lensAccount.operations.canFollow.reason
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
@@ -6321,7 +6326,7 @@ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "This profile can not be followed."
-msgstr ""
+msgstr "此个人信息不能被关注。"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
@@ -6351,7 +6356,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This RPC URL is currently used by the {0} network"
-msgstr ""
+msgstr "RPC URL已经被{0} 网络使用"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "This swap isn’t supported"
@@ -6371,7 +6376,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "This token has no risky or attention factors."
-msgstr ""
+msgstr "此 Token 没有风险或关注因素。"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "This token is issued by its declared team. Some scams will create a fake token with a well-known token name to cheat users."
@@ -6391,12 +6396,12 @@ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 msgid "This wallet address has already been connected."
-msgstr ""
+msgstr "此钱包地址已经被绑定。"
 
 #. placeholder {0}: String(currentPersona?.nickname)
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."
-msgstr ""
+msgstr "钱包已经链接到当前的身份{0}。"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
@@ -6404,7 +6409,7 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Time"
-msgstr ""
+msgstr "时间"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -6414,7 +6419,7 @@ msgstr ""
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Tips"
-msgstr ""
+msgstr "小费"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
@@ -6426,14 +6431,14 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "To"
-msgstr ""
+msgstr "发送至"
 
 #. placeholder {0}: formatDomainName(domain)
 #. placeholder {0}: formatEthereumAddress(toAddress, 4)
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "to {0}"
-msgstr ""
+msgstr "至: {0}"
 
 #. placeholder {0}: type === ActivityType.Mint ? Utils.formatAddress(activity.from?.address, 4) : activity.receive.nickname || (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivityCard.tsx
@@ -6446,7 +6451,7 @@ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
-msgstr ""
+msgstr "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。"
 
 #. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
@@ -6473,7 +6478,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Contract Address"
-msgstr ""
+msgstr "Token 合约地址"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token ID"
@@ -6489,11 +6494,11 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Token info"
-msgstr ""
+msgstr "Token 信息"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Name"
-msgstr ""
+msgstr "Token 名称"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Token now is hidden."
@@ -6505,7 +6510,7 @@ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
-msgstr ""
+msgstr "代币标准"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Token unlocked"
@@ -6523,7 +6528,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Tokens"
-msgstr ""
+msgstr "代币"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -6533,7 +6538,7 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Total cost"
-msgstr ""
+msgstr "总花费"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Total NFTs"
@@ -6543,11 +6548,11 @@ msgstr ""
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Total Supply"
-msgstr ""
+msgstr "总供应量"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Total Volume"
-msgstr ""
+msgstr "成交量"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/Quote.tsx
@@ -6565,11 +6570,11 @@ msgstr ""
 
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 msgid "Transaction"
-msgstr ""
+msgstr "交易记录"
 
 #: packages/shared/src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Transaction Confirmed"
-msgstr ""
+msgstr "交易已确认"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
@@ -6590,11 +6595,11 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Transaction Failed"
-msgstr ""
+msgstr "交易失败"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Transaction Fee"
-msgstr ""
+msgstr "交易费"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Transaction has been rejected!"
@@ -6602,7 +6607,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Transaction Hash"
-msgstr ""
+msgstr "交易哈希"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/History.tsx
 msgid "Transaction history is only stored locally and will be deleted if you clear your browser data."
@@ -6628,7 +6633,7 @@ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
-msgstr ""
+msgstr "若设置的滑点过低，在流动性极低的情况下交易可能会被退回。"
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
@@ -6655,7 +6660,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
 msgid "Try"
-msgstr ""
+msgstr "试一下"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Try Again"
@@ -6663,7 +6668,7 @@ msgstr ""
 
 #: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 msgid "Try to recover"
-msgstr ""
+msgstr "尝试恢复"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Try token from different chains"
@@ -6690,11 +6695,11 @@ msgstr ""
 #: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
-msgstr ""
+msgstr "取消关注"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Unfollow lens handle"
-msgstr ""
+msgstr "取消关注Lens Handle"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "unique contributors"
@@ -6714,16 +6719,16 @@ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Unlisted"
-msgstr ""
+msgstr "隐藏"
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Unlock"
-msgstr ""
+msgstr "解锁"
 
 #. placeholder {0}: token.symbol
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Unlock {0}"
-msgstr ""
+msgstr "解锁 {0}"
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
@@ -6759,7 +6764,7 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Unnamed"
-msgstr ""
+msgstr "未命名的"
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -6769,28 +6774,28 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Unsupported data backup"
-msgstr ""
+msgstr "不支持的数据备份格式"
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Unsupported key store data"
-msgstr ""
+msgstr "不支持的密钥存储数据"
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 msgid "Unsupported Network"
-msgstr ""
+msgstr "此网络尚不支持"
 
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 msgid "Unsupported network type"
-msgstr ""
+msgstr "不支持的网络类型"
 
 #. placeholder {0}: formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), '')
 #: packages/shared/src/UI/components/SettingsBoard/GasOption.tsx
 msgid "up to {0} Gwei"
-msgstr ""
+msgstr "最多 {0} Gwei"
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 msgid "Update NFT Avatar Success!"
-msgstr ""
+msgstr "更新 NFT 头像成功！"
 
 #: packages/mask/dashboard/pages/SetupPersona/Permissions/index.tsx
 msgid "Update permission for X.com"
@@ -6807,61 +6812,61 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Updated"
-msgstr ""
+msgstr "已更新"
 
 #: packages/shared/src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Updating Gas Fee…"
-msgstr ""
+msgstr "Gas费用更新中…"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Upload backup"
-msgstr ""
+msgstr "上传备份"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Upload File"
-msgstr ""
+msgstr "上传文件"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Uploaded files"
-msgstr ""
+msgstr "已上传的文件"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Uploading"
-msgstr ""
+msgstr "正在上传"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "URLs require the appropriate HTTPS prefix."
-msgstr ""
+msgstr "URL要求合适的 HTTPS 前缀。"
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx
 msgid "Use NFT"
-msgstr ""
+msgstr "设置 NFT 头像"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Use Persona to encrypt and decrypt social media posts & messages."
-msgstr ""
+msgstr "使用 Persona 来加密和解密社交媒体帖子和消息。"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Use text encryption"
-msgstr ""
+msgstr "使用文本加密"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
-msgstr ""
+msgstr "用户只能删除这些文件的本地链接。去中心化存储协议中的文件不能被删除。"
 
 #: packages/plugins/VCent/src/SiteAdaptor/index.tsx
 #: packages/plugins/VCent/src/SiteAdaptor/index.tsx
 msgid "Valuables"
-msgstr ""
+msgstr "贵重物品"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "value"
-msgstr ""
+msgstr "价值"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Value"
-msgstr ""
+msgstr "价值"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Verification code has been sent to your email. Please check your mailbox."
@@ -6882,20 +6887,20 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Verify"
-msgstr ""
+msgstr "验证"
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Verify {0}"
-msgstr ""
+msgstr "验证 {0}"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
 msgid "Verify Account"
-msgstr ""
+msgstr "连接并验证成功。"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 msgid "Verify your wallet"
-msgstr ""
+msgstr "验证您的钱包"
 
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
@@ -6914,15 +6919,15 @@ msgstr ""
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "View"
-msgstr ""
+msgstr "查看"
 
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "View full transaction details"
-msgstr ""
+msgstr "查看交易详情"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
-msgstr ""
+msgstr "鼠标悬停于头像右下角的 Mask 图标或时间线上的代币话题标签，浏览多元化账户的 Web3 足迹。"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
@@ -6933,7 +6938,7 @@ msgstr ""
 #: packages/shared/src/hooks/useOpenShareTxDialog.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "View on Explorer"
-msgstr ""
+msgstr "在区块链浏览器查看"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "View real-time crypto prices, market cap, trading volume, etc."
@@ -6961,24 +6966,24 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Visible To"
-msgstr ""
+msgstr "可见范围"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Volume (24h)"
-msgstr ""
+msgstr "交易量 (24h)"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Vote"
-msgstr ""
+msgstr "投票"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "Votes"
-msgstr ""
+msgstr "投票"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Wait too long for the confirmation."
@@ -6997,13 +7002,13 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Wallet"
-msgstr ""
+msgstr "钱包"
 
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/shared/src/UI/modals/WalletStatusModal/WalletStatusDialog.tsx
 msgid "Wallet Account"
-msgstr ""
+msgstr "钱包账户"
 
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
 msgid "Wallet disconnected"
@@ -7013,21 +7018,21 @@ msgstr ""
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Wallet Group #{0}"
-msgstr ""
+msgstr "钱包组 #{0}"
 
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
 msgid "Wallet name must between 3 to 18 characters."
-msgstr ""
+msgstr "文件名必须介于 3 到 20 个字符之间。"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Wallet request timed out"
-msgstr ""
+msgstr "钱包请求超时"
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Wallet Settings"
-msgstr ""
+msgstr "钱包设置"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 #: packages/plugins/NextID/src/components/BindDialog.tsx
@@ -7035,19 +7040,19 @@ msgstr ""
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 msgid "Wallet Sign"
-msgstr ""
+msgstr "钱包签名"
 
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 msgid "Wallet sign cancelled."
-msgstr ""
+msgstr "您的钱包取消了此签名"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 msgid "Wallet sign failed."
-msgstr ""
+msgstr "签名失败"
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 msgid "Wallet sign succeeded."
-msgstr ""
+msgstr "签名成功"
 
 #: packages/mask/popups/pages/Personas/WalletConnect/index.tsx
 #: packages/shared/src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
@@ -7074,7 +7079,7 @@ msgstr ""
 #: packages/plugins/FileService/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/index.tsx
 msgid "Web3 File Service"
-msgstr ""
+msgstr "文件服务"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
@@ -7085,36 +7090,36 @@ msgstr ""
 #: packages/plugins/Web3Profile/src/SiteAdaptor/index.tsx
 #: packages/shared/src/UI/components/PluginCardFrame/index.tsx
 msgid "Web3 Profile"
-msgstr ""
+msgstr "Web3 名片"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/index.tsx
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/PluginDescriptor.tsx
 msgid "Web3 Profile Card"
-msgstr ""
+msgstr "Web3 名片"
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Website"
-msgstr ""
+msgstr "网站"
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Welcome Back"
-msgstr ""
+msgstr "欢迎回来"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Welcome to Mask Network"
-msgstr ""
+msgstr "欢迎来到 Mask Network！"
 
 #: packages/mask/dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Welcome to use Mask Network"
-msgstr ""
+msgstr "欢迎来到 Mask Network！"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 msgid "What is Web3 File Service?"
-msgstr ""
+msgstr "什么是 Web3 文件服务？"
 
 #. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -7152,14 +7157,14 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw"
-msgstr ""
+msgstr "提取"
 
 #. placeholder {0}: protocol.bareToken.symbol ?? ''
 #. placeholder {0}: protocol.stakeToken.symbol
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
-msgstr ""
+msgstr "提取 {0}"
 
 #. placeholder {0}: message.token
 #: packages/shared/src/UI/translate.ts
@@ -7172,7 +7177,7 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Write down mnemonic words"
-msgstr ""
+msgstr "写下助记词"
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Write down recovery phrase"
@@ -7180,11 +7185,11 @@ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Wrong Network"
-msgstr ""
+msgstr "网络错误"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "You"
-msgstr ""
+msgstr "您"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
@@ -7254,12 +7259,12 @@ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 msgid "You haven't uploaded any files yet."
-msgstr ""
+msgstr "您尚未上传任何文件。"
 
 #. placeholder {0}: tolerance.toString()
 #: packages/shared/src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "You may have {0}% less received with this level of slippage tolerance."
-msgstr ""
+msgstr "在当前滑点设置下，您可能会少接收 {0} %的期待数额。"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "You may lose your assets if you give approval to the website of this token."
@@ -7269,7 +7274,7 @@ msgstr ""
 #. placeholder {1}: token.symbol
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
-msgstr ""
+msgstr "您必须授予 {0} 智能合约权限才能使用您的 {1} 。每个代币只需要授权一次。"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to follow <0>@{twitterHandle}</0>"
@@ -7353,11 +7358,11 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
-msgstr ""
+msgstr "您的投票权"
 
 #: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
 msgid "Your wallet cancelled the transaction."
-msgstr ""
+msgstr "你的钱包已取消交易。"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
