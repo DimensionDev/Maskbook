@@ -1,16 +1,19 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
-import type { Wallet } from '@masknet/shared-base'
+import { PersistentStorages, type Wallet } from '@masknet/shared-base'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
-import type { ReasonableNetwork } from '@masknet/web3-shared-base'
+import { isSameAddress, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
-import { memo, type MouseEvent } from 'react'
+import { memo, useMemo, type MouseEvent } from 'react'
 import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
-import { Trans } from '@lingui/react/macro'
+import { useWallets } from '@privy-io/react-auth'
+import { useSubscription } from 'use-subscription'
+import { WalletAvatar } from '../../../../components/WalletAvatar/index.js'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
     const isDark = theme.palette.mode === 'dark'
@@ -144,7 +147,13 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
 }) {
     const { classes, cx } = useStyles({ disabled })
     const { data: connectedWallets, isPending } = useConnectedWallets(origin)
+    const { wallets: fireflyWallets } = useWallets()
     const connected = connectedWallets?.has(wallet.address)
+    const isFireflyWallet = useMemo(
+        () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),
+        [fireflyWallets, wallet.address],
+    )
+    const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
     const addressLink = EVMExplorerResolver.addressLink(chainId, wallet.address)
 
     const networkName = currentNetwork?.name || currentNetwork?.fullName
@@ -199,10 +208,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         if (disabled) return
                         onActionClick()
                     }}>
-                    <Icons.MaskBlue size={30} />
+                    <WalletAvatar address={wallet.address} size={30} />
                     <Box ml={0.5} overflow="hidden">
                         <TextOverflowTooltip title={wallet.name}>
-                            <Typography className={classes.nickname}>{wallet.name}</Typography>
+                            <Typography className={classes.nickname}>
+                                {isFireflyWallet ? fireflyAccount.displayName : wallet.name}
+                            </Typography>
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
