@@ -122,4 +122,5 @@ export interface PopupRoutesParamsMap {
         from?: string | null
     }
     [PopupRoutes.Contacts]: { selectedToken: string | undefined }
+    [PopupRoutes.CreateWallet]: { creatingFireflyWallet?: boolean }
 }

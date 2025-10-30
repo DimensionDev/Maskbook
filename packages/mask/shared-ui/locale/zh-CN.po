@@ -270,6 +270,7 @@ msgid "Appearance"
 msgstr "外观"
 
 #: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: popups/modals/UpdatePermissionModal/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Approve"
@@ -484,6 +485,7 @@ msgstr ""
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: popups/modals/AddContactModal/index.tsx
@@ -757,6 +759,7 @@ msgstr "联系人"
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -806,6 +809,14 @@ msgstr "无法获取链 ID。您的 RPC URL 正确吗？"
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
 msgstr "创建"
+
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Create a Firefly.social wallet"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
+msgid "Create a Firefly.social wallet using an X account"
+msgstr ""
 
 #: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Create a New Wallet"
@@ -1759,6 +1770,7 @@ msgstr "管理网络"
 msgid "Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on those websites."
 msgstr ""
 
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Mask needs the following permissions"
 msgstr "Mask Network需要以下权限"
@@ -2679,6 +2691,7 @@ msgstr "消息签名"
 msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
 msgstr ""
 
+#: dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Sites"
 msgstr "站点"

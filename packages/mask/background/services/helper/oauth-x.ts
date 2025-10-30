@@ -1,5 +1,6 @@
 import { timeout } from '@masknet/kit'
 import { requestExtensionPermissionFromContentScript } from './request-permission.js'
+import { XOAuthRequestOrigins } from '../../../shared/definitions/extension.js'
 
 /** Modified from https://github.com/ddo/oauth-1.0a/blob/master/oauth-1.0a.js */
 class OAuth {
@@ -184,15 +185,7 @@ const client = new OAuth(process.env.FIREFLY_X_CLIENT_ID, process.env.FIREFLY_X_
 let pendingOAuth: PromiseWithResolvers<{ oauth_verifier: string; oauth_token: string }> | undefined
 export async function requestXOAuthToken() {
     await requestExtensionPermissionFromContentScript({
-        origins: [
-            // In order to send API request without CORS limit
-            'https://api.twitter.com/*',
-            // In order to run content script on it
-            'https://firefly.social/api/mask/delegate-x-token',
-            'https://firefly.social/api/auth/callback/twitter',
-            'https://canary.firefly.social/api/mask/delegate-x-token',
-            'https://canary.firefly.social/api/auth/callback/twitter',
-        ],
+        origins: XOAuthRequestOrigins,
     })
     await Promise.all([
         fetch('https://firefly.social/api/mask/delegate-x-token'),
