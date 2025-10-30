@@ -3251,7 +3251,9 @@ msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim.
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n\n"
+msgid ""
+"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n"
+"\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
 
@@ -3356,7 +3358,8 @@ msgstr ""
 
 #. placeholder {0}: tokenDetail.symbol
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
+msgid ""
+"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
 " Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
@@ -3387,13 +3390,17 @@ msgstr ""
 #. placeholder {2}: recipientName ? 'name' : 'address'
 #. placeholder {3}: recipientName || recipientAddress
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\n\n"
+msgid ""
+"I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\n"
+"\n"
 "Install https://mask.io/download-links to send your first tip."
 msgstr ""
 
 #. placeholder {0}: recipientName ? 'name' : 'address'
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\n\n"
+msgid ""
+"I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\n"
+"\n"
 "Install https://mask.io/download-links to send your first tip."
 msgstr ""
 
@@ -3465,7 +3472,8 @@ msgstr "월렛 불러오기"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-msgid "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
+msgid ""
+"In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
 "than estimated, and any unused funds will remain in the original address."
 msgstr ""
@@ -7367,4 +7375,3 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Your X account authorization has timed out. Please try again."
 msgstr ""
-
