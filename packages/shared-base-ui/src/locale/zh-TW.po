@@ -5588,6 +5588,10 @@ msgstr "發送"
 msgid "Send {0}"
 msgstr ""
 
+#: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
+msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
+msgstr ""
+
 #: packages/plugins/Tips/src/SiteAdaptor/components/TipsRealmContent/index.tsx
 msgid "Send authors tips by using Mask Network's Tips function."
 msgstr ""
