@@ -323,7 +323,7 @@ declare module '@blocto/fcl' {
 
     /**
      * Allows you to submit transactions to the blockchain to potentially mutate the state.
-     * ⚠️When being used in the browser, `fcl.mutate` uses the built-in `fcl.authz` function
+     * When being used in the browser, `fcl.mutate` uses the built-in `fcl.authz` function
      * to produce the authorization (signatures) for the current user.
      * When calling this method from Node.js, you will need to supply your own custom authorization function.
      * @param options
@@ -372,7 +372,7 @@ declare module '@blocto/fcl' {
 
     /**
      * A builder function that returns the interaction to get an account by address.
-     * ⚠️Consider using the pre-built interaction {@link account} if you do not need to pair with any other builders.
+     * Consider using the pre-built interaction {@link account} if you do not need to pair with any other builders.
      * @param address Address of the user account with or without a prefix (both formats are supported).
      * @returns A JSON representation of a user account.
      * @see {@link https://docs.onflow.org/fcl/reference/api/#getaccount}
@@ -383,7 +383,7 @@ declare module '@blocto/fcl' {
      * A builder function that returns the interaction to get the latest block.
      * 📣 Use with {@link atBlockId} and {@link atBlockHeight} when building
      * the interaction to get information for older blocks.
-     * ⚠️Consider using the pre-built interaction {@link latestBlock}
+     * Consider using the pre-built interaction {@link latestBlock}
      * if you do not need to pair with any other builders.
      * @param isSealed If the latest block should be sealed or not.
      * @returns The latest block if not used with any other builders.
@@ -393,7 +393,7 @@ declare module '@blocto/fcl' {
 
     /**
      * A builder function that returns a partial interaction to a block at a specific height.
-     * ⚠️Use with other interactions like {@link getBlock} to get a full interaction at the specified block height.
+     * Use with other interactions like {@link getBlock} to get a full interaction at the specified block height.
      * @param blockHeight The height of the block to execute the interaction at.
      * @returns A partial interaction to be paired with another interaction such as {@link getBlock} or {@link getAccount}.
      * @see {@link https://docs.onflow.org/fcl/reference/api/#atblockheight}
@@ -402,7 +402,7 @@ declare module '@blocto/fcl' {
 
     /**
      * A builder function that returns a partial interaction to a block at a specific block ID.
-     * ⚠️Use with other interactions like {@link getBlock} to get a full interaction at the specified block block ID.
+     * Use with other interactions like {@link getBlock} to get a full interaction at the specified block block ID.
      * @param blockId The ID of the block to execute the interaction at.
      * @returns A partial interaction to be paired with another interaction such as {@link getBlock} or {@link getAccount}.
      * @see {@link https://docs.onflow.org/fcl/reference/api/#atblockid}
@@ -420,8 +420,8 @@ declare module '@blocto/fcl' {
 
     /**
      * A builder function that returns all instances of a particular event (by name) within a height range.
-     * ⚠️The block range provided must be from the current spork.
-     * ⚠️The block range provided must be 250 blocks or lower per request.
+     * The block range provided must be from the current spork.
+     * The block range provided must be 250 blocks or lower per request.
      * @param eventName The name of the event.
      * @param fromBlockHeight The height of the block to start looking for events (inclusive).
      * @param toBlockHeight The height of the block to stop looking for events (inclusive).
@@ -437,7 +437,7 @@ declare module '@blocto/fcl' {
     /**
      * A builder function that returns all instances of a particular event (by name)
      * within a set of blocks, specified by block ids.
-     * ⚠️The block range provided must be from the current spork.
+     * The block range provided must be from the current spork.
      * @param eventName The name of the event.
      * @param blockIds The ids of the blocks to scan for events.
      * @returns An array of events that matched the eventName.
@@ -447,7 +447,7 @@ declare module '@blocto/fcl' {
 
     /**
      * A builder function that returns all a collection containing a list of transaction ids by its collection id.
-     * ⚠️The block range provided must be from the current spork.
+     * The block range provided must be from the current spork.
      * All events emitted during past sporks is current unavailable.
      * @param collectionID The id of the collection.
      * @returns An object with the id and a list of transactions within the requested collection.
@@ -456,7 +456,7 @@ declare module '@blocto/fcl' {
 
     /**
      * A builder function that returns the status of transaction.
-     * ⚠️The transactionID provided must be from the current spork.
+     * The transactionID provided must be from the current spork.
      * 📣 Consider [subscribing to the transaction from fcl.tx(id)]{@link tx} instead of calling this method directly.
      * @param transactionId The transactionID returned when submitting a transaction. Example: 9dda5f281897389b99f103a1c6b180eec9dac870de846449a302103ce38453f3
      * @see {@link https://docs.onflow.org/fcl/reference/api/#gettransactionstatus}
@@ -470,7 +470,7 @@ declare module '@blocto/fcl' {
 
     /**
      * A builder function that returns a {@link TransactionObject} once decoded.
-     * ⚠️The transactionID provided must be from the current spork.
+     * The transactionID provided must be from the current spork.
      * 📣 Consider using {@link tx} instead of calling this method directly.
      * @param transactionId The transactionID returned when submitting a transaction. Example: 9dda5f281897389b99f103a1c6b180eec9dac870de846449a302103ce38453f3
      * @see {@link https://docs.onflow.org/fcl/reference/api/#gettransaction}
@@ -505,7 +505,7 @@ declare module '@blocto/fcl' {
 
     /**
      * A template builder to use a Cadence transaction for an interaction.
-     * ⚠️Must be used with {@link payer}, {@link proposer}, {@link authorizations}
+     * Must be used with {@link payer}, {@link proposer}, {@link authorizations}
      * to produce a valid interaction before sending to the chain.
      * 📣 Use with {@link args} to pass in arguments dynamically.
      * @param CODE Should be valid a Cadence transaction.
@@ -568,7 +568,7 @@ declare module '@blocto/fcl' {
     /**
      * A utility function that lets you set the transaction to get subsequent status
      * updates (via polling) and the finalized result once available.
-     * ⚠️The poll rate is set at 10000ms and will update at that interval for getting new events.
+     * The poll rate is set at 10000ms and will update at that interval for getting new events.
      * @param eventName A valid event name.
      * @see {@link https://docs.onflow.org/fcl/reference/api/#events}
      */
