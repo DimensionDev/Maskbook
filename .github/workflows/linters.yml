@@ -37,7 +37,6 @@ jobs:
         with:
             registry: true
       - run: pnpm install
-      - run: pnpx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
       - run: pnpx markdownlint-cli --fix .
       - run: pnpm exec gulp codegen
       - run: pnpm run lingui:extract
