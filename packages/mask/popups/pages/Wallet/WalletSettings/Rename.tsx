@@ -1,14 +1,14 @@
-import { Icons } from '@masknet/icons'
-import { useWallet } from '@masknet/web3-hooks-base'
-import { Box, ListItem, Typography } from '@mui/material'
-import { useStyles } from './useStyles.js'
-import { WalletRenameModal } from '../../../modals/modal-controls.js'
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { PersistentStorages } from '@masknet/shared-base'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { Box, ListItem, Typography } from '@mui/material'
 import { useWallets } from '@privy-io/react-auth'
 import { useMemo } from 'react'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSubscription } from 'use-subscription'
-import { PersistentStorages } from '@masknet/shared-base'
+import { WalletRenameModal } from '../../../modals/modal-controls.js'
+import { useStyles } from './useStyles.js'
 
 export function Rename() {
     const wallet = useWallet()
@@ -22,13 +22,14 @@ export function Rename() {
 
     if (!wallet) return null
 
+    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
     return (
         <ListItem
             className={classes.item}
             onClick={() =>
                 WalletRenameModal.open({
                     wallet,
-                    walletName: wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name),
+                    walletName,
                     title: <Trans>Rename</Trans>,
                 })
             }>
@@ -39,9 +40,7 @@ export function Rename() {
                 </Typography>
             </Box>
             <Box className={classes.itemBox}>
-                <Typography className={classes.itemText}>
-                    {isFireflyWallet ? fireflyAccount.displayName : wallet.name}
-                </Typography>
+                <Typography className={classes.itemText}>{walletName}</Typography>
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>

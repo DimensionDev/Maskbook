@@ -157,6 +157,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     const addressLink = EVMExplorerResolver.addressLink(chainId, wallet.address)
 
     const networkName = currentNetwork?.name || currentNetwork?.fullName
+    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
     return (
         <Box className={classes.container}>
             <div className={classes.topBar}>
@@ -211,9 +212,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     <WalletAvatar address={wallet.address} size={30} />
                     <Box ml={0.5} overflow="hidden">
                         <TextOverflowTooltip title={wallet.name}>
-                            <Typography className={classes.nickname}>
-                                {isFireflyWallet ? fireflyAccount.displayName : wallet.name}
-                            </Typography>
+                            <Typography className={classes.nickname}>{walletName}</Typography>
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
