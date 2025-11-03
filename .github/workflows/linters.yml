@@ -37,7 +37,9 @@ jobs:
         with:
             registry: true
       - run: pnpm install
-      - run: pnpx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
+      - run: |
+          FILES=$(find packages -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' \) -path '*/src/*' -not -path '*/web3-utils/*' | tr '\n' ',' | sed 's/,$//')
+          pnpx anti-trojan-source --files="$FILES"
       - run: pnpx markdownlint-cli --fix .
       - run: pnpm exec gulp codegen
       - run: pnpm run lingui:extract
