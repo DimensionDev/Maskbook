@@ -6,6 +6,7 @@ import { Sniffings } from '@masknet/shared-base'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 
 const { signal } = hmr(import.meta.webpackHot)
+const envSupportPersistAcrossSessions = !Sniffings.is_firefox
 if (typeof browser.scripting?.registerContentScripts === 'function') {
     ;(async () => {
         await unregisterExistingScripts()
@@ -32,7 +33,7 @@ function prepareMainWorldScript(name: string, matches: string[], url: string): S
         id: 'injected_' + name,
         allFrames: true,
         js: [url],
-        persistAcrossSessions: false,
+        persistAcrossSessions: envSupportPersistAcrossSessions,
         // @ts-expect-error Chrome API
         world: 'MAIN',
         runAt: 'document_start',
@@ -47,7 +48,7 @@ async function prepareContentScript(matches: string[]): Promise<Scripting.Regist
         id: 'xray',
         allFrames: true,
         js: [injectedScriptURL],
-        persistAcrossSessions: false,
+        persistAcrossSessions: envSupportPersistAcrossSessions,
         // @ts-expect-error Chrome API
         world: 'ISOLATED',
         runAt: 'document_start',
@@ -57,7 +58,7 @@ async function prepareContentScript(matches: string[]): Promise<Scripting.Regist
         id: 'content',
         allFrames: true,
         js: contentScriptList,
-        persistAcrossSessions: false,
+        persistAcrossSessions: envSupportPersistAcrossSessions,
         // @ts-expect-error Chrome API
         world: 'ISOLATED',
         runAt: 'document_idle',
