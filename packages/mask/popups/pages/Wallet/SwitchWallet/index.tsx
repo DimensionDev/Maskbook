@@ -1,3 +1,5 @@
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { DashboardRoutes, ECKeyIdentifier, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
@@ -8,10 +10,8 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Services from '#services'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -48,24 +48,6 @@ const SwitchWallet = memo(function SwitchWallet() {
     const wallet = useWallet()
     const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
-    const handleClickCreate = useCallback(async () => {
-        if (!wallets.some((x) => !x.configurable)) {
-            const hasPaymentPassword = await Services.Wallet.hasPassword()
-            await browser.tabs.create({
-                active: true,
-                url: browser.runtime.getURL(
-                    `/dashboard.html#${
-                        hasPaymentPassword ?
-                            DashboardRoutes.CreateMaskWalletMnemonic
-                        :   DashboardRoutes.CreateMaskWalletForm
-                    }`,
-                ),
-            })
-        } else {
-            navigate(PopupRoutes.CreateWallet)
-        }
-    }, [wallets])
 
     const handleImport = useCallback(async () => {
         await browser.tabs.create({
@@ -107,7 +89,9 @@ const SwitchWallet = memo(function SwitchWallet() {
                 fullWidth
                 size="small"
                 variant="outlined"
-                onClick={handleClickCreate}>
+                onClick={() => {
+                    navigate(PopupRoutes.CreateWallet)
+                }}>
                 <Icons.Wallet size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     <Trans>Add Wallet</Trans>

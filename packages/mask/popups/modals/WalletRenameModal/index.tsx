@@ -22,7 +22,7 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
     const [error, setError] = useState<ReactNode>()
     const contacts = useContacts()
 
-    const [{ loading }, handleClick] = useAsyncFn(async () => {
+    const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (!name || !wallet) return
         const _name = name.trim()
         if (_name.length > 18 || _name.length < 3) {
@@ -92,7 +92,7 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
             <ActionButton
                 loading={loading}
                 disabled={loading || !name.length || !!error}
-                onClick={handleClick}
+                onClick={handleConfirm}
                 sx={{ marginTop: '16px' }}>
                 <Trans>Confirm</Trans>
             </ActionButton>

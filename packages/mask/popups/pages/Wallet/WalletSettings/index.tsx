@@ -1,13 +1,16 @@
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, PersistentStorages, PopupModalRoutes } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
-import { useWallets as usePrivyWallets } from '@privy-io/react-auth'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, List, Typography } from '@mui/material'
+import { useWallets as usePrivyWallets } from '@privy-io/react-auth'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
+import { useSubscription } from 'use-subscription'
 import { useModalNavigate } from '../../../components/index.js'
+import { WalletAvatar } from '../../../components/WalletAvatar/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletRemoveModal } from '../../../modals/modal-controls.js'
 import { AutoLock } from './AutoLock.js'
@@ -16,14 +19,11 @@ import { ChangeNetwork } from './ChangeNetwork.js'
 import { ChangePaymentPassword } from './ChangePaymentPassword.js'
 import { ConnectedOrigins } from './ConnectedOrigins.js'
 import { Contacts } from './Contacts.js'
+import { DisablePermit } from './DisablePermit.js'
+import { HidingScamTx } from './HidingScamTx.js'
 import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
-import { HidingScamTx } from './HidingScamTx.js'
-import { Trans, useLingui } from '@lingui/react/macro'
-import { DisablePermit } from './DisablePermit.js'
-import { useSubscription } from 'use-subscription'
-import { WalletAvatar } from '../../../components/WalletAvatar/index.js'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
@@ -66,6 +66,7 @@ export const Component = memo(function WalletSettings() {
     }, [allWallets, wallet?.mnemonicId])
 
     if (!wallet) return null
+    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
 
     // The wallet has derivationPath is also the one with minimum derivation path
     const isTheFirstWallet = wallet.mnemonicId ? isSameAddress(first(siblingWallets)?.address, wallet.address) : false
@@ -76,9 +77,7 @@ export const Component = memo(function WalletSettings() {
                 <Box className={classes.primaryItemBox}>
                     <WalletAvatar size={24} address={wallet.address} />
                     <div className={classes.walletInfo}>
-                        <Typography className={classes.primaryItemText}>
-                            {isFireflyWallet ? fireflyAccount.displayName : wallet.name}
-                        </Typography>
+                        <Typography className={classes.primaryItemText}>{walletName}</Typography>
                         <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
                     </div>
                 </Box>
