@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { FormattedAddress, PersonaContext, PopupHomeTabType, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, PersonaContext, PopupHomeTabType } from '@masknet/shared'
 import {
     MaskMessages,
     NextIDAction,
@@ -34,6 +34,7 @@ import { BottomController } from '../../../components/BottomController/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import { useTitle } from '../../../hooks/index.js'
+import { WalletAvatar } from '../../../components/WalletAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     provider: {
@@ -254,7 +255,7 @@ export const Component = memo(function ConnectWalletPage() {
                 <Box p={2}>
                     <Box className={classes.provider}>
                         <Box className={classes.accountInfo}>
-                            <WalletIcon size={30} mainIcon={providerDescriptor?.icon} />
+                            <WalletAvatar address={account} size={30} />
                             <Box>
                                 <Typography fontSize={14} fontWeight={700} lineHeight="18px">
                                     {walletAlias}
@@ -296,7 +297,7 @@ export const Component = memo(function ConnectWalletPage() {
                 </Box>
             :   <Box p={2} display="flex" flexDirection="column" alignItems="center">
                     <Typography sx={{ mt: 3, textAlign: 'center' }} fontSize={36}>
-                        &#x1F389;
+                        🎉
                     </Typography>
                     <Typography fontSize={24} lineHeight="120%" fontWeight={700} my={1.5}>
                         <Trans>Congratulations</Trans>
@@ -315,7 +316,7 @@ export const Component = memo(function ConnectWalletPage() {
                         </Box>
                         <Icons.Connect size={24} />
                         <Box className={classes.info}>
-                            <WalletIcon size={30} mainIcon={providerDescriptor?.icon} />
+                            <WalletAvatar address={account} size={30} />
                             <Typography className={classes.name}>{walletName}</Typography>
                         </Box>
                     </Box>
