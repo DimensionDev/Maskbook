@@ -41,8 +41,8 @@ export const Component = memo(function SelectWallet() {
     const [params] = useSearchParams()
     const source = params.get('source')
     const chainIdSearched = params.get('chainId')
-    const isVerifyWalletFlow = params.get('verifyWallet')
-    const isSettingNFTAvatarFlow = params.get('setNFTAvatar')
+    const isVerifyWalletFlow = params.has('verifyWallet')
+    const isSettingNFTAvatarFlow = params.has('setNFTAvatar')
 
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { proofs } = PersonaContext.useContainer()
@@ -64,8 +64,9 @@ export const Component = memo(function SelectWallet() {
         if (!allWallets.length && localWallets.length) return localWallets
         return allWallets
     }, [localWallets, allWallets])
-    const defaultWallet = params.get('address') || account || (first(wallets)?.address ?? '')
+    const defaultWallet = params.get('address') || account || first(wallets)?.address
     const [selected = defaultWallet, setSelected] = useState<string>()
+    console.log('bindingWallets', { bindingWallets, wallets, selected })
 
     const handleCancel = useCallback(async () => {
         if (isVerifyWalletFlow) {
@@ -103,11 +104,13 @@ export const Component = memo(function SelectWallet() {
 
         if (wallet && source) await Services.Wallet.internalWalletConnect(wallet.address, source)
 
-        await Services.Wallet.resolveMaskAccount([
-            {
-                address: selected,
-            },
-        ])
+        if (selected) {
+            await Services.Wallet.resolveMaskAccount([
+                {
+                    address: selected,
+                },
+            ])
+        }
 
         return Services.Helper.removePopupWindow()
     }, [source, isVerifyWalletFlow, selected, chainId, wallets, isSettingNFTAvatarFlow, networks, Network])
@@ -126,37 +129,29 @@ export const Component = memo(function SelectWallet() {
     return (
         <Box overflow="auto" data-hide-scrollbar>
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
-                {wallets
-                    .filter((x) => {
-                        if (!isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
-                        return false
-                    })
-                    .map((item) => {
-                        const disabled =
-                            isVerifyWalletFlow && bindingWallets?.some((x) => isSameAddress(x.identity, item.address))
+                {wallets.map((item) => {
+                    const disabled =
+                        isVerifyWalletFlow && bindingWallets?.some((x) => isSameAddress(x.identity, item.address))
 
-                        return (
-                            <WalletItem
-                                className={cx(classes.item, disabled ? classes.disabled : undefined)}
-                                wallet={item}
-                                key={item.address}
-                                isSelected={isSameAddress(item.address, selected)}
-                                onSelect={() => {
-                                    if (disabled) return
-                                    setSelected(item.address)
-                                }}
-                            />
-                        )
-                    })}
+                    return (
+                        <WalletItem
+                            className={cx(classes.item, disabled ? classes.disabled : undefined)}
+                            wallet={item}
+                            key={item.address}
+                            isSelected={isSameAddress(item.address, selected)}
+                            onSelect={() => {
+                                if (disabled) return
+                                setSelected(item.address)
+                            }}
+                        />
+                    )
+                })}
             </Box>
             <BottomController>
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
                     <Trans>Cancel</Trans>
                 </Button>
-                <ActionButton
-                    fullWidth
-                    onClick={handleConfirm}
-                    disabled={isVerifyWalletFlow ? !!wallets?.some((x) => isSameAddress(x.address, selected)) : false}>
+                <ActionButton fullWidth onClick={handleConfirm} disabled={!isVerifyWalletFlow}>
                     <Trans>Confirm</Trans>
                 </ActionButton>
             </BottomController>

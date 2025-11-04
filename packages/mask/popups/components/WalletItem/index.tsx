@@ -1,24 +1,24 @@
-import { memo, useCallback, useMemo } from 'react'
+import { Trans } from '@lingui/react/macro'
+import { FormattedAddress } from '@masknet/shared'
+import { ImportSource, NetworkPluginID, PersistentStorages, type Wallet } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, ImportSource, type Wallet, PersistentStorages } from '@masknet/shared-base'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import {
     Box,
     ListItem,
-    Typography,
-    type ListItemProps,
-    Tooltip,
     Radio,
+    Tooltip,
+    Typography,
     listItemSecondaryActionClasses,
+    type ListItemProps,
 } from '@mui/material'
-import { FormattedAddress } from '@masknet/shared'
-import { WalletBalance } from '../index.js'
-import { Trans } from '@lingui/react/macro'
-import { WalletAvatar } from '../WalletAvatar/index.js'
 import { useWallets } from '@privy-io/react-auth'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { memo, useCallback, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
+import { WalletBalance } from '../index.js'
+import { WalletAvatar } from '../WalletAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -118,6 +118,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
 
     if (wallet.owner) return null
 
+    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : `${wallet.name}${extraName}`)
     return (
         <ListItem
             className={cx(classes.item, className)}
@@ -128,9 +129,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
             <Box className={classes.text}>
                 <Box width={180} overflow="auto">
                     <Typography className={classes.mainLine} component="div">
-                        <Typography className={classes.name}>
-                            {isFireflyWallet ? fireflyAccount.displayName : `${wallet.name}${extraName}`}
-                        </Typography>
+                        <Typography className={classes.name}>{walletName}</Typography>
                         {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (
                             <Typography component="span" className={classes.badge}>
                                 <Trans>Imported</Trans>

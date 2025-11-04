@@ -1,7 +1,7 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { ConfirmDialog, FormattedAddress, ImageIcon, PersonaContext, ProgressiveText } from '@masknet/shared'
+import { ConfirmDialog, FormattedAddress, PersonaContext, ProgressiveText } from '@masknet/shared'
 import {
     MaskMessages,
     NetworkPluginID,
@@ -21,6 +21,7 @@ import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
 import { useVerifiedWallets } from '../../hooks/index.js'
 import { useModalNavigate } from '../ActionModal/index.js'
+import { WalletAvatar } from '../WalletAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletList: {
@@ -159,7 +160,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                 return (
                     <Box className={classes.wallet} key={index}>
                         <Box display="flex" alignItems="center">
-                            <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.walletIcon} />
+                            <WalletAvatar size={24} className={classes.walletIcon} address={wallet.identity} />
                             <Typography className={classes.walletInfo} component="div">
                                 <ProgressiveText
                                     className={classes.walletName}

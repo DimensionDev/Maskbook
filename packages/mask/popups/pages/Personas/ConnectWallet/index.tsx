@@ -1,38 +1,39 @@
-import { memo, useCallback } from 'react'
-import urlcat from 'urlcat'
-import { useAsync, useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { Avatar, Box, Button, Link, Typography } from '@mui/material'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import {
-    NextIDPlatform,
-    type NetworkPluginID,
-    NextIDAction,
-    SignType,
-    type NextIDPayload,
-    PopupRoutes,
-    PopupModalRoutes,
-    MaskMessages,
-} from '@masknet/shared-base'
-import { formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { Icons } from '@masknet/icons'
 import { FormattedAddress, PersonaContext, PopupHomeTabType, WalletIcon } from '@masknet/shared'
-import { EVMExplorerResolver, NextIDProof, EVMProviderResolver, EVMWeb3 } from '@masknet/web3-providers'
+import {
+    MaskMessages,
+    NextIDAction,
+    NextIDPlatform,
+    PopupModalRoutes,
+    PopupRoutes,
+    SignType,
+    type NetworkPluginID,
+    type NextIDPayload,
+} from '@masknet/shared-base'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import {
     useChainContext,
     useNetworkContext,
+    usePrivyWallet,
     useProviderDescriptor,
     useReverseAddress,
     useWallets,
 } from '@masknet/web3-hooks-base'
+import { EVMExplorerResolver, EVMProviderResolver, EVMWeb3, NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Icons } from '@masknet/icons'
+import { EthereumMethodType, formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { Avatar, Box, Button, Link, Typography } from '@mui/material'
+import { memo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
+import urlcat from 'urlcat'
 
-import { useTitle } from '../../../hooks/index.js'
-import { BottomController } from '../../../components/BottomController/index.js'
-import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import Services from '#services'
-import { useModalNavigate } from '../../../components/index.js'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { BottomController } from '../../../components/BottomController/index.js'
+import { useModalNavigate } from '../../../components/index.js'
+import { LoadingMask } from '../../../components/LoadingMask/index.js'
+import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     provider: {
@@ -158,6 +159,7 @@ export const Component = memo(function ConnectWalletPage() {
         [account, currentPersona],
     )
 
+    const privyWallet = usePrivyWallet(account)
     const [{ value: signResult, loading }, handleSign] = useAsyncFn(async () => {
         try {
             if (!currentPersona?.identifier || !account) return
@@ -178,12 +180,21 @@ export const Component = memo(function ConnectWalletPage() {
                 true,
             )
 
-            const walletSignature = await EVMWeb3.signMessage('message', payload.signPayload, {
-                chainId,
-                account,
-                providerType,
-                silent: providerType === ProviderType.MaskWallet,
-            })
+            let walletSignature = ''
+            if (privyWallet?.isConnected) {
+                const provider = await privyWallet.getEthereumProvider()
+                walletSignature = await provider.request({
+                    method: EthereumMethodType.personal_sign,
+                    params: [payload.signPayload, account],
+                })
+            } else {
+                walletSignature = await EVMWeb3.signMessage('message', payload.signPayload, {
+                    chainId,
+                    account,
+                    providerType,
+                    silent: providerType === ProviderType.MaskWallet,
+                })
+            }
 
             const result = await bindProof(payload, walletSignature, personaSignature)
 

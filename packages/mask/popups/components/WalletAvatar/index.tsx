@@ -4,7 +4,7 @@ import { PersistentStorages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useWallets } from '@privy-io/react-auth'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, type HTMLProps } from 'react'
 import { useSubscription } from 'use-subscription'
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,12 +20,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
+interface Props extends HTMLProps<HTMLDivElement> {
     size?: number
     address: string
 }
-export const WalletAvatar = memo<Props>(function WalletAvatar({ size = 30, address }) {
-    const { classes } = useStyles()
+export const WalletAvatar = memo<Props>(function WalletAvatar({ size = 30, address, ...rest }) {
+    const { classes, cx } = useStyles()
     const { wallets: fireflyWallets } = useWallets()
 
     const isFireflyWallet = useMemo(
@@ -36,10 +36,10 @@ export const WalletAvatar = memo<Props>(function WalletAvatar({ size = 30, addre
 
     if (isFireflyWallet && fireflyAccount)
         return (
-            <div className={classes.container}>
+            <div {...rest} className={cx(classes.container, rest.className)}>
                 <Image size={size} src={fireflyAccount.avatar} rounded />
                 <Icons.Firefly className={classes.badgeIcon} size={12} />
             </div>
         )
-    return <Icons.MaskBlue size={size} />
+    return <Icons.MaskBlue size={size} className={rest.className} />
 })
