@@ -29,6 +29,8 @@ export interface Wallet {
     storedKeyInfo?: api.IStoredKeyInfo
     /** record created at */
     createdAt: Date
+    /** an abstract wallet has a owner */
+    owner?: string
     /** record updated at */
     updatedAt: Date
     /** persona identifier */

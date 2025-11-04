@@ -17,7 +17,7 @@ import OpenOcean from '@masknet/web3-constants/evm/openocean.json' with { type: 
 import Pet from '@masknet/web3-constants/evm/pet.json' with { type: 'json' }
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json' with { type: 'json' }
 import BUILTIN_RPC from '@masknet/web3-constants/evm/rpc.json' with { type: 'json' }
-import SmartPay from '@masknet/web3-constants/evm/smart-pay.json' with { type: 'json' }
+
 import SpaceId from '@masknet/web3-constants/evm/space-id.json' with { type: 'json' }
 import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json' with { type: 'json' }
 import TokenList from '@masknet/web3-constants/evm/token-list.json' with { type: 'json' }
@@ -120,11 +120,6 @@ export const getPetConstant = transform(ChainId, Pet)
 export const getPetConstants = transformAll(ChainId, Pet)
 export const usePetConstant = transformHook(getPetConstants)
 export const usePetConstants = transformAllHook(getPetConstants)
-
-export const getSmartPayConstant = transform(ChainId, SmartPay)
-export const getSmartPayConstants = transformAll(ChainId, SmartPay)
-export const useSmartPayConstant = transformHook(getSmartPayConstants)
-export const useSmartPayConstants = transformAllHook(getSmartPayConstants)
 
 export const getENSConstants = transformAll(ChainId, ENS)
 export const getArbConstants = transformAll(ChainId, Arb)

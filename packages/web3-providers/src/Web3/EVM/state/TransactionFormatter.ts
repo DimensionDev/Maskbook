@@ -25,7 +25,6 @@ import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacke
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
 import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
 import { SavingsDescriptor } from './TransactionFormatter/descriptors/Savings.js'
-import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.js'
 import { LensDescriptor } from './TransactionFormatter/descriptors/Lens.js'
 import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js'
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
@@ -40,7 +39,6 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
             new SavingsDescriptor(),
             new GitcoinDescriptor(),
             new RedPacketDescriptor(),
-            new SmartPayDescriptor(),
             new ERC20Descriptor(),
             new ERC721Descriptor(),
             new BaseDescriptor(),

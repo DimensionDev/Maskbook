@@ -116,6 +116,8 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
     )
     const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
 
+    if (wallet.owner) return null
+
     return (
         <ListItem
             className={cx(classes.item, className)}
