@@ -39,5 +39,6 @@ export function useWallets() {
                     return 0
                 }
             })
+            .filter((x) => !x.owner)
     }, [wallets])
 }
