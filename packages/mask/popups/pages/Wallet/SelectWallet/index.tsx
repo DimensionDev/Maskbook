@@ -151,7 +151,7 @@ export const Component = memo(function SelectWallet() {
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
                     <Trans>Cancel</Trans>
                 </Button>
-                <ActionButton fullWidth onClick={handleConfirm} disabled={!isVerifyWalletFlow}>
+                <ActionButton fullWidth onClick={handleConfirm}>
                     <Trans>Confirm</Trans>
                 </ActionButton>
             </BottomController>
