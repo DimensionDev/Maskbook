@@ -4,8 +4,15 @@ import { Icons } from '@masknet/icons'
 import { ImageIcon, NetworkIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useBalance, useChainContext, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import { EVMWeb3 } from '@masknet/web3-providers'
+import {
+    useBalance,
+    useChainContext,
+    useNetwork,
+    useNetworks,
+    usePrivyWallet,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
+import { EVMWeb3, PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
 import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
@@ -28,6 +35,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         border: `1px solid ${theme.palette.maskColor.line}`,
         overflow: 'auto',
+    },
+    disabled: {
+        opacity: '0.5',
+        cursor: 'not-allowed',
     },
     icon: {
         width: 24,
@@ -61,9 +72,10 @@ const useStyles = makeStyles()((theme) => ({
 interface NetworkItemProps {
     currentNetworkId: string | undefined
     network: ReasonableNetwork<ChainId, SchemaType, NetworkType>
+    disabled?: boolean
 }
-const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: NetworkItemProps) {
-    const { classes, theme } = useStyles()
+const NetworkItem = memo(function NetworkItem({ network, currentNetworkId, disabled = false }: NetworkItemProps) {
+    const { classes, theme, cx } = useStyles()
     const { closeModal } = useActionModal()
     const chainId = network.chainId
     const selected = network.ID === currentNetworkId
@@ -78,7 +90,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
 
     return (
         <li
-            className={classes.network}
+            className={cx(classes.network, disabled ? classes.disabled : null)}
             role="option"
             ref={(element) => {
                 if (!element || !selected) return
@@ -89,6 +101,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                 }
             }}
             onClick={async () => {
+                if (disabled) return
                 await Network?.switchNetwork(network.ID)
                 await EVMWeb3.switchChain?.(chainId, {
                     providerType: ProviderType.MaskWallet,
@@ -132,9 +145,12 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
 export const ChooseNetworkModal = memo(function ChooseNetworkModal(props: ActionModalBaseProps) {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+
+    const privyWallet = usePrivyWallet(account)
+    const isPrivyWallet = !!privyWallet
 
     const action = (
         <ActionButton fullWidth onClick={() => navigate(PopupRoutes.NetworkManagement)}>
@@ -147,9 +163,17 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal(props: Action
     return (
         <ActionModal header={<Trans>Network</Trans>} action={action} keepMounted {...props}>
             <ul className={classes.networkList}>
-                {networks.map((network) => (
-                    <NetworkItem key={network.ID} currentNetworkId={currentNetworkId} network={network} />
-                ))}
+                {networks.map((network) => {
+                    const disabled = isPrivyWallet ? !PRIVY_SUPPORTED_CHAINS.includes(network.chainId) : false
+                    return (
+                        <NetworkItem
+                            key={network.ID}
+                            currentNetworkId={currentNetworkId}
+                            network={network}
+                            disabled={disabled}
+                        />
+                    )
+                })}
             </ul>
         </ActionModal>
     )

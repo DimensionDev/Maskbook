@@ -5638,7 +5638,6 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
-#: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
@@ -6661,6 +6660,7 @@ msgstr ""
 msgid "Try"
 msgstr ""
 
+#: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Try Again"
 msgstr ""

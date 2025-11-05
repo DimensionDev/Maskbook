@@ -13,6 +13,4 @@ export const XOAuthRequestOrigins: string[] = [
     // In order to run content script on it
     'https://firefly.social/api/mask/delegate-x-token',
     'https://firefly.social/api/auth/callback/twitter',
-    'https://canary.firefly.social/api/mask/delegate-x-token',
-    'https://canary.firefly.social/api/auth/callback/twitter',
 ]

@@ -187,10 +187,7 @@ export async function requestXOAuthToken() {
     await requestExtensionPermissionFromContentScript({
         origins: XOAuthRequestOrigins,
     })
-    await Promise.all([
-        fetch('https://firefly.social/api/mask/delegate-x-token'),
-        fetch('https://canary.firefly.social/api/mask/delegate-x-token'),
-    ])
+    await fetch('https://firefly.social/api/mask/delegate-x-token')
     const step1 = await getRequestToken(client)
     const step1_oauth_token = step1.get('oauth_token')
     pendingOAuth = Promise.withResolvers()

@@ -198,11 +198,11 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
                     {oauthTimeout ?
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Icons.Time size={32} color={theme.palette.maskColor.main} />
-                            <Typography color={theme.palette.maskColor.second} fontWeight={400} mt={1.5}>
+                            <Typography color={theme.palette.maskColor.second} fontWeight={400} my={1.5}>
                                 <Trans>Your X account authorization has timed out. Please try again.</Trans>
                             </Typography>
                             <ActionButton fullWidth onClick={createPrivyWallet}>
-                                <Trans>Set Payment Password</Trans>
+                                <Trans>Try Again</Trans>
                             </ActionButton>
                         </Box>
                     :   <LoadingStatus gap={3}>
