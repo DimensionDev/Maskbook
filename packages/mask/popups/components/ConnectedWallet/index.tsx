@@ -12,10 +12,10 @@ import {
     type PersonaInformation,
 } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useChainContext, useNetworkDescriptor, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
-import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
@@ -104,9 +104,6 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
             },
         })),
     })
-
-    // TODO: remove this after next dot id support multiple chain
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
 
     const handleConfirmDisconnect = useCallback(async (wallet: BindingProof, persona: PersonaInformation) => {
         try {

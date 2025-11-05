@@ -103,7 +103,11 @@ export const Component = memo(function WalletAssets() {
         [chainId, navigate],
     )
 
-    return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : <SelectWallet />
+    return wallet ?
+            <WalletAssetsUI onAddToken={handleAdd} />
+        :   <Box pb="72px" display="flex" flexGrow={1} minHeight={0}>
+                <SelectWallet flexGrow={1} embed />
+            </Box>
 })
 
 interface WalletAssetsUIProps {

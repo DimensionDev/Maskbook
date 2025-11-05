@@ -15,7 +15,6 @@ import {
     useChainContext,
     useNetworkContext,
     usePrivyWallet,
-    useProviderDescriptor,
     useReverseAddress,
     useWallets,
 } from '@masknet/web3-hooks-base'
@@ -107,7 +106,6 @@ export const Component = memo(function ConnectWalletPage() {
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wallets = useWallets()
 
-    const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const { data: domain } = useReverseAddress(pluginID, account)
     const { currentPersona } = PersonaContext.useContainer()
 
@@ -217,11 +215,14 @@ export const Component = memo(function ConnectWalletPage() {
             navigate(-1)
             return
         }
+        // reset to MaskWallet after cancellation
+        const maskAccount = wallets.some((x) => isSameAddress(x.address, account)) ? account : wallets[0].address
         await EVMWeb3.connect({
             providerType: ProviderType.MaskWallet,
+            account: maskAccount,
         })
         await Services.Helper.removePopupWindow()
-    }, [signResult])
+    }, [signResult, wallets, account, navigate, providerType])
 
     const handleChooseAnotherWallet = useCallback(() => {
         modalNavigate(PopupModalRoutes.SelectProvider)
