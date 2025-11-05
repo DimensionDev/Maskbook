@@ -66,7 +66,6 @@ export const Component = memo(function SelectWallet() {
     }, [localWallets, allWallets])
     const defaultWallet = params.get('address') || account || first(wallets)?.address
     const [selected = defaultWallet, setSelected] = useState<string>()
-    console.log('bindingWallets', { bindingWallets, wallets, selected })
 
     const handleCancel = useCallback(async () => {
         if (isVerifyWalletFlow) {

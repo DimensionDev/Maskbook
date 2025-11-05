@@ -12,6 +12,7 @@ import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
 import { WalletCollections } from './WalletCollections.js'
+import { Component as SelectWallet } from '../../SelectWallet/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -102,7 +103,7 @@ export const Component = memo(function WalletAssets() {
         [chainId, navigate],
     )
 
-    return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
+    return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : <SelectWallet />
 })
 
 interface WalletAssetsUIProps {
