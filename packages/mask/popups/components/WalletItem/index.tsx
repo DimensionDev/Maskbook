@@ -116,8 +116,6 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
     )
     const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
 
-    if (wallet.owner) return null
-
     const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : `${wallet.name}${extraName}`)
     return (
         <ListItem
