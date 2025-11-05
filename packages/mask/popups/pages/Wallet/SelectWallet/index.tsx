@@ -1,22 +1,21 @@
-import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
-import { first } from 'lodash-es'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { useChainContext, useChainIdValid, useNetworks, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
-import { Box, Button, Typography } from '@mui/material'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
-import { PersonaContext } from '@masknet/shared'
-import { EVMWeb3 } from '@masknet/web3-providers'
-import { useTitle, useVerifiedWallets } from '../../../hooks/index.js'
-import { WalletItem } from '../../../components/WalletItem/index.js'
-import { BottomController } from '../../../components/BottomController/index.js'
 import Services from '#services'
-import { ProfilePhotoType } from '../type.js'
-import urlcat from 'urlcat'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { PersonaContext } from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useChainContext, useChainIdValid, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
+import { Box, Button, Typography, type BoxProps } from '@mui/material'
+import { first } from 'lodash-es'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsync } from 'react-use'
+import urlcat from 'urlcat'
+import { WalletItem } from '../../../components/WalletItem/index.js'
+import { useTitle, useVerifiedWallets } from '../../../hooks/index.js'
+import { ProfilePhotoType } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -32,9 +31,20 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    actions: {
+        background: theme.palette.maskColor.secondaryBottom,
+        padding: theme.spacing(2),
+        boxShadow: theme.palette.maskColor.bottomBg,
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        columnGap: theme.spacing(2),
+    },
 }))
 
-export const Component = memo(function SelectWallet() {
+interface SelectWalletProps extends BoxProps {
+    embed?: boolean
+}
+export const Component = memo(function SelectWallet({ embed, ...props }: SelectWalletProps) {
     const { t } = useLingui()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
@@ -53,7 +63,6 @@ export const Component = memo(function SelectWallet() {
         chainId: chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
     })
 
-    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const { value: localWallets = EMPTY_LIST } = useAsync(async () => Services.Wallet.getWallets(), [])
@@ -66,7 +75,6 @@ export const Component = memo(function SelectWallet() {
     }, [localWallets, allWallets])
     const defaultWallet = params.get('address') || account || first(wallets)?.address
     const [selected = defaultWallet, setSelected] = useState<string>()
-    console.log('bindingWallets', { bindingWallets, wallets, selected })
 
     const handleCancel = useCallback(async () => {
         if (isVerifyWalletFlow) {
@@ -84,12 +92,14 @@ export const Component = memo(function SelectWallet() {
     }, [isVerifyWalletFlow])
 
     const handleConfirm = useCallback(async () => {
-        if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
+        if (isVerifyWalletFlow || isSettingNFTAvatarFlow || embed) {
             await EVMWeb3.connect({
                 account: selected,
                 chainId,
                 providerType: ProviderType.MaskWallet,
             })
+
+            if (embed) return
 
             navigate(
                 isSettingNFTAvatarFlow ?
@@ -113,13 +123,13 @@ export const Component = memo(function SelectWallet() {
         }
 
         return Services.Helper.removePopupWindow()
-    }, [source, isVerifyWalletFlow, selected, chainId, wallets, isSettingNFTAvatarFlow, networks, Network])
+    }, [source, isVerifyWalletFlow, selected, chainId, wallets, isSettingNFTAvatarFlow, Network, embed])
 
     useTitle(t`Select Wallet`)
 
     if (!chainIdValid)
         return (
-            <Box className={classes.placeholder}>
+            <Box {...props} className={cx(classes.placeholder, props.className)}>
                 <Typography>
                     <Trans>Unsupported network type</Trans>
                 </Typography>
@@ -127,8 +137,8 @@ export const Component = memo(function SelectWallet() {
         )
 
     return (
-        <Box overflow="auto" data-hide-scrollbar>
-            <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
+        <Box overflow="auto" display="flex" flexGrow={1} flexDirection="column" data-hide-scrollbar {...props}>
+            <Box pt={1} pb={9} px={2} display="flex" flexGrow={1} minHeight={0} flexDirection="column" rowGap="6px">
                 {wallets.map((item) => {
                     const disabled =
                         isVerifyWalletFlow && bindingWallets?.some((x) => isSameAddress(x.identity, item.address))
@@ -147,14 +157,14 @@ export const Component = memo(function SelectWallet() {
                     )
                 })}
             </Box>
-            <BottomController>
+            <div className={classes.actions}>
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
                     <Trans>Cancel</Trans>
                 </Button>
                 <ActionButton fullWidth onClick={handleConfirm}>
                     <Trans>Confirm</Trans>
                 </ActionButton>
-            </BottomController>
+            </div>
         </Box>
     )
 })

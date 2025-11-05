@@ -4,15 +4,15 @@ import { Icons } from '@masknet/icons'
 import { DashboardRoutes, ECKeyIdentifier, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { EVMWeb3 } from '@masknet/web3-providers'
+import { EVMWeb3, PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
+import { useWallets as usePrivyWallets } from '@privy-io/react-auth'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
-
 const useStyles = makeStyles()((theme) => ({
     content: {
         overflow: 'auto',
@@ -47,6 +47,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const { closeModal } = useActionModal()
     const wallet = useWallet()
     const wallets = useWallets()
+    const { wallets: privyWallets } = usePrivyWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const handleImport = useCallback(async () => {
@@ -61,9 +62,10 @@ const SwitchWallet = memo(function SwitchWallet() {
     const handleSelect = useCallback(
         async (wallet: Wallet) => {
             const address = wallet.address
+            const isPrivyWallet = privyWallets.some((x) => isSameAddress(x.address, address))
             await EVMWeb3.connect({
                 account: address,
-                chainId,
+                chainId: isPrivyWallet && !PRIVY_SUPPORTED_CHAINS.includes(chainId) ? ChainId.Mainnet : chainId,
                 providerType: ProviderType.MaskWallet,
 
                 identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
