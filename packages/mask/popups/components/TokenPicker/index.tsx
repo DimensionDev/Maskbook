@@ -5,7 +5,13 @@ import { EmptyStatus, SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTextField } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useFungibleAssets, useNetworks, useUserTokenBalances } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useFungibleAssets,
+    useNetworks,
+    usePrivyWallet,
+    useUserTokenBalances,
+} from '@masknet/web3-hooks-base'
 import { useOKXTokenList } from '@masknet/web3-hooks-evm'
 import {
     isEqual,
@@ -21,6 +27,7 @@ import Fuse from 'fuse.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { FixedSizeList, type ListChildComponentProps } from 'react-window'
 import { TokenItem, type TokenItemProps } from './TokenItem.js'
+import { PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
 
 type RowProps = ListChildComponentProps<{
     tokens: Array<Web3Helper.FungibleTokenAll | Web3Helper.FungibleAssetAll>
@@ -186,10 +193,12 @@ export const TokenPicker = memo(function TokenPicker({
     }, [fuse, keyword])
 
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
+    const isPrivyWallet = !!usePrivyWallet(account)
     const filteredNetworks = useMemo(() => {
-        const list = networks
-        return chains ? list.filter((x) => chains.includes(x.chainId)) : list
-    }, [chains, networks])
+        const list = chains ? networks.filter((x) => chains.includes(x.chainId)) : networks
+        return isPrivyWallet ? list.filter((x) => PRIVY_SUPPORTED_CHAINS.includes(x.chainId)) : list
+    }, [chains, networks, isPrivyWallet])
+
     const selectedIndex = filteredAssets.findIndex((x) => x.chainId === chainId && isSameAddress(x.address, address))
 
     return (
