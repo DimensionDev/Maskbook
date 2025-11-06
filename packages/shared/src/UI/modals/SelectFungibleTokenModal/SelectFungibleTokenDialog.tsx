@@ -4,7 +4,13 @@ import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@maskne
 import { useRowSize } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNativeTokenAddress, useNetworkContext, useNetworks } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useNativeTokenAddress,
+    useNetworkContext,
+    useNetworks,
+    usePrivyWallet,
+} from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, inputClasses, useMediaQuery, type Theme } from '@mui/material'
@@ -12,6 +18,7 @@ import { useMemo, useState } from 'react'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
+import { PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
 
 interface StyleProps {
     compact: boolean
@@ -127,10 +134,12 @@ export function SelectFungibleTokenDialog({
     const { classes, cx } = useStyles({ compact })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const isPrivyWallet = !!usePrivyWallet(account)
     const networks = useMemo(() => {
-        if (!chains) return allNetworks
-        return allNetworks.filter((network) => chains.includes(network.chainId))
-    }, [chains, allNetworks])
+        const list = chains ? allNetworks.filter((network) => chains.includes(network.chainId)) : allNetworks
+        return isPrivyWallet ? list.filter((x) => PRIVY_SUPPORTED_CHAINS.includes(x.chainId)) : list
+    }, [chains, allNetworks, isPrivyWallet])
 
     const rowSize = useRowSize()
 
