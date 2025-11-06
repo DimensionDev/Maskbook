@@ -201,7 +201,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     )
 }
 
-function RenderEntryComponent({ application }: { application: Application }) {
+function RenderEntryComponent({ application, style }: { application: Application; style?: React.CSSProperties }) {
     const Entry = application.entry.RenderEntryComponent!
 
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
@@ -252,7 +252,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
     })()
     // #endregion
 
-    return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
+    return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} style={style} />
 }
 
 interface ApplicationEntryStatusContextProps {

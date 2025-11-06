@@ -55,7 +55,7 @@ const useStyles = makeStyles()(() => {
 
 interface Props extends withClasses<'recommendFeatureAppListWrapper'> {
     recommendFeatureAppList: Application[]
-    RenderEntryComponent: (props: { application: Application }) => JSX.Element
+    RenderEntryComponent: (props: { application: Application; style?: React.CSSProperties }) => JSX.Element
     isCarouselReady?: () => boolean | null
     setIsHoveringCarousel: (hover: boolean) => void
     isHoveringCarousel: boolean
@@ -105,7 +105,11 @@ export function ApplicationRecommendArea(props: Props) {
                 </CarouselProvider>
             :   <Box className={classes.recommendFeatureAppListWrapper}>
                     {recommendFeatureAppList.map((application) => (
-                        <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
+                        <RenderEntryComponent
+                            key={application.entry.ApplicationEntryID}
+                            application={application}
+                            style={recommendFeatureAppList.length === 1 ? { width: '100%', marginRight: 0 } : undefined}
+                        />
                     ))}
                 </Box>
             }

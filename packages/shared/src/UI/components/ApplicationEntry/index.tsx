@@ -99,6 +99,7 @@ interface ApplicationEntryProps {
     iconFilterColor?: string
     tooltipHint?: React.ReactNode
     onClick: () => void
+    style?: React.CSSProperties
 }
 
 export function ApplicationEntry(props: ApplicationEntryProps) {
@@ -111,6 +112,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         tooltipHint,
         recommendFeature,
         iconFilterColor,
+        style,
     } = props
     const { classes, cx } = useStyles({ disabled, iconFilterColor })
     const popperProps = useBoundedPopperProps()
@@ -119,7 +121,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             <Button
                 variant="text"
                 // do not change to sx. the hover image will be changed in applicationBoxHover
-                style={{ background: recommendFeature.backgroundGradient }}
+                style={{ ...style, background: recommendFeature.backgroundGradient }}
                 disabled={disabled}
                 className={cx(
                     classes.recommendFeatureApplicationBox,
@@ -143,7 +145,8 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                 className={cx(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
                 onClick={disabled ? undefined : onClick}
                 variant="text"
-                disabled={disabled}>
+                disabled={disabled}
+                style={style}>
                 <div className={classes.iconWrapper}>{icon}</div>
                 <TextOverflowTooltip
                     title={title}
