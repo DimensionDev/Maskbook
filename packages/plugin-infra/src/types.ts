@@ -370,6 +370,7 @@ export namespace Plugin.SiteAdaptor {
             disabled: boolean
             tooltipHint?: React.ReactNode
             onClick?: (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) => void
+            style?: React.CSSProperties
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
