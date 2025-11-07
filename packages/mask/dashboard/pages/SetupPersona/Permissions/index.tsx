@@ -1,19 +1,20 @@
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
+import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { memo, useCallback } from 'react'
-import Services from '#services'
-import { useAsync } from 'react-use'
 import { sortBy } from 'lodash-es'
-import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
+import { memo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsync } from 'react-use'
+import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
+import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { useNavigate } from 'react-router-dom'
-import { Trans } from '@lingui/react/macro'
+import { XOAuthRequestOrigins } from '../../../../shared/definitions/extension.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -85,9 +86,8 @@ export const Component = memo(function Permission() {
     }, [])
 
     const handleAgree = useCallback(async () => {
-        const granted = await requestPermissionFromExtensionPage(
-            [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins),
-        )
+        const siteOrigins = [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins)
+        const granted = await requestPermissionFromExtensionPage([...siteOrigins, ...XOAuthRequestOrigins])
         if (!granted) return
         navigate(DashboardRoutes.PermissionsOnboarding, { replace: true })
     }, [])
