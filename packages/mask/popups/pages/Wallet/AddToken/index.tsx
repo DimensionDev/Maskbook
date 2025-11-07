@@ -1,20 +1,27 @@
-import { memo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { AddCollectibles, FungibleTokenList, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useBlockedFungibleTokens, useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import {
+    useBlockedFungibleTokens,
+    useChainContext,
+    useNetworks,
+    usePrivyWallet,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
+import { PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
 import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
+import { memo, useMemo, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }) => ({
     content: {
@@ -113,7 +120,12 @@ export const Component = memo(function AddToken() {
     const { classes } = useStyles({ searchError })
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
-    const supportedChains = allNetworks.map((x) => x.chainId)
+    const isPrivyWallet = !!usePrivyWallet(account)
+    const filteredNetworks = useMemo(() => {
+        return isPrivyWallet ? allNetworks.filter((x) => PRIVY_SUPPORTED_CHAINS.includes(x.chainId)) : allNetworks
+    }, [allNetworks, isPrivyWallet])
+
+    const supportedChains = filteredNetworks.map((x) => x.chainId)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
         defaultChainId && supportedChains.includes(Number.parseInt(defaultChainId, 10)) ?
             Number.parseInt(defaultChainId, 10)
@@ -165,7 +177,7 @@ export const Component = memo(function AddToken() {
                     className={classes.sidebar}
                     chainId={chainId}
                     onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                    networks={allNetworks}
+                    networks={filteredNetworks}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                 />
                 <div className={classes.main}>
