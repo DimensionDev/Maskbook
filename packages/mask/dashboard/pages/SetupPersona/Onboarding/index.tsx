@@ -1,22 +1,22 @@
-import { memo, useCallback, useEffect, useMemo } from 'react'
-import { Box, Typography, useTheme } from '@mui/material'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { Trend } from '../../../assets/index.js'
 import { CrossIsolationMessages, EnhanceableSite, PopupRoutes, userGuideStatus } from '@masknet/shared-base'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { memo, useCallback, useEffect, useMemo } from 'react'
+import { Trend } from '../../../assets/index.js'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
 import Services from '#services'
-import { delay } from '@masknet/kit'
-import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
-import { useSearchParams } from 'react-router-dom'
-import { isZero } from '@masknet/web3-shared-base'
-import { useAsyncRetry } from 'react-use'
-import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
-import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 import { plural } from '@lingui/core/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
+import { delay } from '@masknet/kit'
+import { isZero } from '@masknet/web3-shared-base'
+import { useSearchParams } from 'react-router-dom'
+import { useAsyncRetry } from 'react-use'
+import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
+import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
+import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -81,7 +81,6 @@ export const Component = memo(function Onboarding() {
 
     const [params] = useSearchParams()
     const { showSnackbar } = useCustomSnackbar()
-    const theme = useTheme()
     const isCreate = params.get('isCreate')
     const count = params.get('count')
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])

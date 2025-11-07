@@ -14,6 +14,7 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
 import { Article } from './Article.js'
+import { XOAuthRequestOrigins } from '../../../../shared/definitions/extension.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -65,9 +66,8 @@ export const Component = memo(function Welcome() {
         setAgreed(true)
 
         try {
-            const granted = await requestPermissionFromExtensionPage(
-                [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins),
-            )
+            const siteOrigins = [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins)
+            const granted = await requestPermissionFromExtensionPage([...siteOrigins, ...XOAuthRequestOrigins])
             if (!granted) return
             if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         } catch (err) {
