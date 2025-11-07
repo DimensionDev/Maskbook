@@ -1,6 +1,6 @@
 import { CrossIsolationMessages, EMPTY_LIST, PersistentStorages } from '@masknet/shared-base'
 import { usePersistSubscription } from '@masknet/shared-base-ui'
-import { useAccount } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext } from '@masknet/web3-hooks-base'
 import { EVMWeb3, MaskWalletProvider } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -30,14 +30,17 @@ export const PrivySetup = memo(function PrivySetup() {
         '@@mask-wallets',
         MaskWalletProvider.subscription.wallets ?? EMPTY_LIST,
     )
+    const { providerType } = useChainContext()
     useAsync(async () => {
         const newWallets = wallets.filter((x) => !existedWallets.find((y) => isSameAddress(y.address, x.address)))
         if (!newWallets.length) return
         CrossIsolationMessages.events.walletsUpdated.sendToAll()
+        if (providerType !== ProviderType.MaskWallet) return
         if (!existedWallets || !account) {
             await EVMWeb3.connect({
                 account: newWallets[0].address,
                 providerType: ProviderType.MaskWallet,
+                silent: true,
             })
         }
     }, [ready, wallets])
