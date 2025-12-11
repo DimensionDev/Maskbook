@@ -42,9 +42,7 @@ export const Services: ServicesType = {
 }
 setDebugObject('Services', Services)
 export default Services
-const x: number = ''
-;({ a: 1 }) as number
-console.log(x)
+
 export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> = add('GeneratorServices', true) as any
 
 /**
