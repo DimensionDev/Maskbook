@@ -4,7 +4,7 @@ import { typescriptWatch } from './typescript.ts'
 import { iconCodegen, iconCodegenWatch } from './icon-codegen.ts'
 
 // typescript is explicitly eliminated from this task.
-// our build process does not rely on tsc to give output, we have an extra check for tsc.
+// our build process does not rely on tsgo to give output, we have an extra check for tsgo.
 export const codegen: TaskFunction = series(iconCodegen)
 export const codegenWatch: TaskFunction = markTaskNeedCleanup(
     series(getProcessLock.bind(null, 'codegen'), parallel(typescriptWatch, iconCodegenWatch)),

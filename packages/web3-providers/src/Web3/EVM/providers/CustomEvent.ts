@@ -12,36 +12,32 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
     setup() {
         if (getSiteType() !== EnhanceableSite.Firefly) return
 
-        // @ts-expect-error TODO: define the custom event
-        document.addEventListener(
-            'mask_custom_event_provider_event',
-            (
-                event: CustomEvent<{
+        document.addEventListener('mask_custom_event_provider_event', (event) => {
+            const { type, payload } = (
+                event as CustomEvent<{
                     type: 'accountsChanged' | 'chainChanged' | 'disconnect' | 'connect'
                     payload?: unknown
-                }>,
-            ) => {
-                const { type, payload } = event.detail
+                }>
+            ).detail
 
-                switch (type) {
-                    case 'accountsChanged':
-                        this.emitter.emit('accounts', payload as string[])
-                        break
-                    case 'chainChanged':
-                        this.emitter.emit('chainId', payload as string)
-                        break
-                    case 'disconnect':
-                        this.emitter.emit('disconnect', this.providerType)
-                        break
-                    case 'connect':
-                        this.emitter.emit('connect', payload as Account<ChainId>)
-                        break
-                    default:
-                        safeUnreachable(type)
-                        break
-                }
-            },
-        )
+            switch (type) {
+                case 'accountsChanged':
+                    this.emitter.emit('accounts', payload as string[])
+                    break
+                case 'chainChanged':
+                    this.emitter.emit('chainId', payload as string)
+                    break
+                case 'disconnect':
+                    this.emitter.emit('disconnect', this.providerType)
+                    break
+                case 'connect':
+                    this.emitter.emit('connect', payload as Account<ChainId>)
+                    break
+                default:
+                    safeUnreachable(type)
+                    break
+            }
+        })
     }
 
     override async request<T>(requestArguments: RequestArguments): Promise<T> {
