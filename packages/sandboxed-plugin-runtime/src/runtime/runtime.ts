@@ -79,7 +79,7 @@ export class PluginRuntime {
             throw new SyntaxError('Import from other plugin is not supported. Try to import: ' + normalizedURL)
         }
 
-        const source: VirtualModuleRecord = await __mask__module__reflection__(normalizedURL)
+        const source = await __mask__module__reflection__(normalizedURL)
 
         return { normalizedURL, source }
     }

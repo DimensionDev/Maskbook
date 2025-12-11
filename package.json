@@ -76,6 +76,7 @@
     "@swc/core": "1.13.3",
     "@tanstack/eslint-plugin-query": "^5.83.1",
     "@types/lodash-es": "^4.17.12",
+    "@typescript/native-preview": "7.0.0-dev.20251211.1",
     "@vitest/ui": "^3.0.7",
     "cspell": "^8.17.5",
     "eslint": "9.32.0",
@@ -120,8 +121,15 @@
     "catalogs": [
       {
         "path": "./packages/shared-base-ui/src/locale/{locale}",
-        "include": ["<rootDir>"],
-        "exclude": ["**/node_modules/**", "**/*.d.ts", "**/dist/**", "**/build/**"]
+        "include": [
+          "<rootDir>"
+        ],
+        "exclude": [
+          "**/node_modules/**",
+          "**/*.d.ts",
+          "**/dist/**",
+          "**/build/**"
+        ]
       }
     ]
   }

@@ -206,6 +206,9 @@ importers:
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
+      '@typescript/native-preview':
+        specifier: 7.0.0-dev.20251211.1
+        version: 7.0.0-dev.20251211.1
       '@vitest/ui':
         specifier: ^3.0.7
         version: 3.0.7(vitest@3.0.7)
@@ -7337,6 +7340,45 @@ packages:
     resolution: {integrity: sha512-ldgiJ+VAhQCfIjeOgu8Kj5nSxds0ktPOSO9p4+0VDH2R2pLvQraaM5Oen2d7NxzMCm+Sn/vJT+mv2H5u6b/3fA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-0TSLj8s2M1eQXnQV0+DMFCnJF4vqNobTaeKzMpR8oHOsD2az93knOUixsZk0Nyf3jYzgszDakNXhp0K3fzWWAw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@typescript/native-preview-darwin-x64@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-Nv6+4H1SxjkbOLQZjbAjivTtFmPpeGiXKXh/8/UwkQW3Bom/L+owCfJNffsMKalKdDa/eYRW0uaoAk0dcU4c4A==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@typescript/native-preview-linux-arm64@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-sJapYFFiJnTeK/d2LmoQaTQKzMm8zquQAaAJaual+yu4sVKbP6sZRZ1GVS4FDISJvUrlajpLWxtfQTHR4dlgeQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@typescript/native-preview-linux-arm@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-6Y6VqTMfgvt8f1P5FHNIT/O/L0lSw5MHOcVOnrZEfvOAUXE+cCmC5VvtFh1Paa1Zu+oTBnCu5EvIwemHl4V73A==}
+    cpu: [arm]
+    os: [linux]
+
+  '@typescript/native-preview-linux-x64@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-bJfieFUeJRGsjByfeShQYXbFRbJ4k14/Sp1HQ2Eu8yOd+hUpOj7fsax7b5B2XvE4cSuC+dRV2FVOCZQNaL4u2Q==}
+    cpu: [x64]
+    os: [linux]
+
+  '@typescript/native-preview-win32-arm64@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-0vZ1NQmLyRf1bLaBjHFem1pLsJJnPMOCfScgM616cJpkbqqGEAgXfOnxKOUxiZ6X+hfx09gXn+5wq7zjaV0aag==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@typescript/native-preview-win32-x64@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-OUB0nNmzZeCl0KjxeG7R+Ey1gq8iaVoJJRJpwKiTj6Ws5voKOb6PxNoM2jMNqJV3R/d3PXfR7Y39/IINioa/CQ==}
+    cpu: [x64]
+    os: [win32]
+
+  '@typescript/native-preview@7.0.0-dev.20251211.1':
+    resolution: {integrity: sha512-RXuRj/zn2tWrria1eea1mzOVmUjNHdOZsxlcnXLy2BjXil+ncgdMFARWryeXP2+NPmGTwC+ERJ5YAuwU8n4nlg==}
+    hasBin: true
+
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
@@ -7547,9 +7589,11 @@ packages:
 
   '@walletconnect/ethereum-provider@2.21.1':
     resolution: {integrity: sha512-SSlIG6QEVxClgl1s0LMk4xr2wg4eT3Zn/Hb81IocyqNSGfXpjtawWxKxiC5/9Z95f1INyBD6MctJbL/R1oBwIw==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/ethereum-provider@2.21.7':
     resolution: {integrity: sha512-T+cBFCw095tDpR35WqwsTFod2ZsizmLfieSbTqpQDpNjhQyFwYf9d+tn2kcBFmxzENXAsWA8BIZK1tjRrXKtog==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/events@1.0.1':
     resolution: {integrity: sha512-NPTqaoi0oPBVNuLv7qPaJazmGHs5JGyO8eEAk5VGKmJzDR7AHzD4k6ilox5kxk1iwiOnFopBOOMLs86Oa76HpQ==}
@@ -7616,12 +7660,15 @@ packages:
 
   '@walletconnect/sign-client@2.21.0':
     resolution: {integrity: sha512-z7h+PeLa5Au2R591d/8ZlziE0stJvdzP9jNFzFolf2RG/OiXulgFKum8PrIyXy+Rg2q95U9nRVUF9fWcn78yBA==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/sign-client@2.21.1':
     resolution: {integrity: sha512-QaXzmPsMnKGV6tc4UcdnQVNOz4zyXgarvdIQibJ4L3EmLat73r5ZVl4c0cCOcoaV7rgM9Wbphgu5E/7jNcd3Zg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/sign-client@2.21.7':
     resolution: {integrity: sha512-9k/JEl9copR6nXRhqnmzWz2Zk1hiWysH+o6bp6Cqo8TgDUrZoMLBZMZ6qbo+2HLI54V02kKf0Vg8M81nNFOpjQ==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/socket-transport@1.8.0':
     resolution: {integrity: sha512-5DyIyWrzHXTcVp0Vd93zJ5XMW61iDM6bcWT4p8DTRfFsOtW46JquruMhxOLeCOieM4D73kcr3U7WtyR4JUsGuQ==}
@@ -7647,12 +7694,15 @@ packages:
 
   '@walletconnect/universal-provider@2.21.0':
     resolution: {integrity: sha512-mtUQvewt+X0VBQay/xOJBvxsB3Xsm1lTwFjZ6WUwSOTR1X+FNb71hSApnV5kbsdDIpYPXeQUbGt2se1n5E5UBg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/universal-provider@2.21.1':
     resolution: {integrity: sha512-Wjx9G8gUHVMnYfxtasC9poGm8QMiPCpXpbbLFT+iPoQskDDly8BwueWnqKs4Mx2SdIAWAwuXeZ5ojk5qQOxJJg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/universal-provider@2.21.7':
     resolution: {integrity: sha512-8PB+vA5VuR9PBqt5Y0xj4JC2doYNPlXLGQt3wJORVF9QC227Mm/8R1CAKpmneeLrUH02LkSRwx+wnN/pPnDiQA==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/utils@1.8.0':
     resolution: {integrity: sha512-zExzp8Mj1YiAIBfKNm5u622oNw44WOESzo6hj+Q3apSMIb0Jph9X3GDIdbZmvVZsNPxWDL7uodKgZcCInZv2vA==}
@@ -21282,7 +21332,7 @@ snapshots:
       '@reown/appkit-common': 1.7.8(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@reown/appkit-controllers': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@reown/appkit-ui': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
-      '@reown/appkit-utils': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(zod@3.24.4)
+      '@reown/appkit-utils': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628))(zod@3.24.4)
       lit: 3.3.0
       valtio: 1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628)
     transitivePeerDependencies:
@@ -21341,12 +21391,12 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@reown/appkit-scaffold-ui@1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(zod@3.24.4)':
+  '@reown/appkit-scaffold-ui@1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628))(zod@3.24.4)':
     dependencies:
       '@reown/appkit-common': 1.7.8(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@reown/appkit-controllers': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@reown/appkit-ui': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
-      '@reown/appkit-utils': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(zod@3.24.4)
+      '@reown/appkit-utils': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628))(zod@3.24.4)
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)
       lit: 3.3.0
     transitivePeerDependencies:
@@ -21461,7 +21511,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-utils@1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(zod@3.24.4)':
+  '@reown/appkit-utils@1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628))(zod@3.24.4)':
     dependencies:
       '@reown/appkit-common': 1.7.8(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@reown/appkit-controllers': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
@@ -21469,7 +21519,7 @@ snapshots:
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@walletconnect/logger': 2.1.2
       '@walletconnect/universal-provider': 2.21.0(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
-      valtio: 1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2)
+      valtio: 1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628)
       viem: 2.37.7(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -21542,9 +21592,9 @@ snapshots:
       '@reown/appkit-controllers': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@reown/appkit-pay': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@reown/appkit-polyfills': 1.7.8
-      '@reown/appkit-scaffold-ui': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(zod@3.24.4)
+      '@reown/appkit-scaffold-ui': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628))(zod@3.24.4)
       '@reown/appkit-ui': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
-      '@reown/appkit-utils': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(zod@3.24.4)
+      '@reown/appkit-utils': 1.7.8(@types/react@19.1.4)(bufferutil@4.0.8)(encoding@0.1.13)(react@0.0.0-experimental-58af67a8f8-20240628)(typescript@5.9.2)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628))(zod@3.24.4)
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@walletconnect/types': 2.21.0
       '@walletconnect/universal-provider': 2.21.0(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
@@ -23397,6 +23447,37 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.39.0
       eslint-visitor-keys: 4.2.1
+
+  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20251211.1':
+    optional: true
+
+  '@typescript/native-preview-darwin-x64@7.0.0-dev.20251211.1':
+    optional: true
+
+  '@typescript/native-preview-linux-arm64@7.0.0-dev.20251211.1':
+    optional: true
+
+  '@typescript/native-preview-linux-arm@7.0.0-dev.20251211.1':
+    optional: true
+
+  '@typescript/native-preview-linux-x64@7.0.0-dev.20251211.1':
+    optional: true
+
+  '@typescript/native-preview-win32-arm64@7.0.0-dev.20251211.1':
+    optional: true
+
+  '@typescript/native-preview-win32-x64@7.0.0-dev.20251211.1':
+    optional: true
+
+  '@typescript/native-preview@7.0.0-dev.20251211.1':
+    optionalDependencies:
+      '@typescript/native-preview-darwin-arm64': 7.0.0-dev.20251211.1
+      '@typescript/native-preview-darwin-x64': 7.0.0-dev.20251211.1
+      '@typescript/native-preview-linux-arm': 7.0.0-dev.20251211.1
+      '@typescript/native-preview-linux-arm64': 7.0.0-dev.20251211.1
+      '@typescript/native-preview-linux-x64': 7.0.0-dev.20251211.1
+      '@typescript/native-preview-win32-arm64': 7.0.0-dev.20251211.1
+      '@typescript/native-preview-win32-x64': 7.0.0-dev.20251211.1
 
   '@ungap/structured-clone@1.2.0': {}
 
@@ -27144,6 +27225,10 @@ snapshots:
   depd@2.0.0: {}
 
   dequal@2.0.3: {}
+
+  derive-valtio@0.1.0(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628)):
+    dependencies:
+      valtio: 1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628)
 
   derive-valtio@0.1.0(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2)):
     dependencies:
@@ -34797,7 +34882,7 @@ snapshots:
 
   valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
-      derive-valtio: 0.1.0(valtio@1.13.2(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))
+      derive-valtio: 0.1.0(valtio@1.13.2(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628))
       proxy-compare: 2.6.0
       use-sync-external-store: 1.2.0(react@0.0.0-experimental-58af67a8f8-20240628)
     optionalDependencies:
