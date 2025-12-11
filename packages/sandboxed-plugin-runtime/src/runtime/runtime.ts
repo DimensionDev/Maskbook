@@ -80,7 +80,6 @@ export class PluginRuntime {
         }
 
         const source = await __mask__module__reflection__(normalizedURL)
-
         return { normalizedURL, source }
     }
     async #importHook(referral: string | undefined, specifier: string): Promise<Module> {
