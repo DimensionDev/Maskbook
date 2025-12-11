@@ -411,9 +411,6 @@ importers:
       '@masknet/plugin-calendar':
         specifier: workspace:^
         version: link:../plugins/Calendar
-      '@masknet/plugin-claim':
-        specifier: workspace:^
-        version: link:../plugins/Claim
       '@masknet/plugin-collectible':
         specifier: workspace:^
         version: link:../plugins/Collectible

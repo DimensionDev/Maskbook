@@ -131,7 +131,6 @@
       "@masknet/plugin-transak": ["./packages/plugins/Transak/src/index.ts"],
       "@masknet/plugin-vcent": ["./packages/plugins/VCent/src/index.ts"],
       "@masknet/plugin-collectible": ["./packages/plugins/Collectible/src/index.ts"],
-      "@masknet/plugin-claim": ["./packages/plugins/Claim/src/index.ts"],
       "@masknet/plugin-artblocks": ["./packages/plugins/ArtBlocks/src/index.ts"],
       "@masknet/plugin-tips": ["./packages/plugins/Tips/src/index.ts"],
       "@masknet/plugin-nextid": ["./packages/plugins/NextID/src/index.ts"],
