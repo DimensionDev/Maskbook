@@ -136,7 +136,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
             status: SetupGuideStep.FindUsername,
             persona: currentPersonaIdentifier?.toText(),
-        })
+        }) as string
     }
 
     setupUIContext()

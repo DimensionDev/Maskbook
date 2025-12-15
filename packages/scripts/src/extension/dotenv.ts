@@ -4,7 +4,7 @@ import type { BuildFlags } from './flags.ts'
 import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 
 export function applyDotEnv(flags: BuildFlags) {
-    if (flags.mode === 'production') return
+    // if (flags.mode === 'production') return
 
     const { parsed, error } = config({ path: new URL('./.env/dev-preference', ROOT_PATH) })
     if (error && !error.message.includes('no such file or directory')) {

@@ -131,5 +131,5 @@ export async function connectSite(
         persona: identifier.toText(),
         username: profile?.userId,
         tabId: targetTab.id,
-    })
+    }) as string
 }
