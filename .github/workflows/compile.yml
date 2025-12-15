@@ -44,6 +44,7 @@ jobs:
         with:
           node-version-file: ".node-version"
           cache: 'pnpm'
+          cache-dpendency-path: 'pnpm-lock.yaml'
       - name: Authenticate NPM
         uses: DimensionDev/github-token-action@latest
         with:
