@@ -7,8 +7,9 @@ import { getAllFiles, setFileInfo, setupDatabase } from './database.js'
 const worker: Plugin.Worker.Definition = {
     ...base,
     init(signal, context) {
-        context.startService(import('./service.js').then(({ upload, ...rest }) => rest))
-        context.startGeneratorService(import('./service.js').then(({ upload }) => ({ upload })))
+        const mod = import('./service.js')
+        context.startService(mod.then(({ upload, ...rest }) => rest))
+        context.startGeneratorService(mod.then(({ upload }) => ({ upload })))
         setupDatabase(context.getDatabaseStorage())
     },
     backup: {
