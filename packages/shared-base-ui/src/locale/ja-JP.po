@@ -3660,7 +3660,6 @@ msgstr "無効なスリッページの許容範囲です。"
 msgid "Invalid verification code."
 msgstr "認証コードが無効です。"
 
-#: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "IPFS"
 msgstr ""

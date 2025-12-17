@@ -3660,7 +3660,6 @@ msgstr "无效的滑点容许值"
 msgid "Invalid verification code."
 msgstr "验证码错误。"
 
-#: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
 msgid "IPFS"
 msgstr ""
