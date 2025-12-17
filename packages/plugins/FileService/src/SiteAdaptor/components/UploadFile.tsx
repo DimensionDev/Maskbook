@@ -1,5 +1,6 @@
 // todo:the issue is potentially the file size limit
 
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { UploadDropArea } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -10,7 +11,6 @@ import { downloadFile } from '../../helpers.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList } from './FileList.js'
-import { Trans } from '@lingui/react/macro'
 
 interface ProviderConfig {
     name: ReactNode
@@ -91,10 +91,6 @@ export function UploadFile() {
         {
             provider: Provider.Arweave,
             name: <Trans>Arweave</Trans>,
-        },
-        {
-            provider: Provider.IPFS,
-            name: <Trans>IPFS</Trans>,
         },
         {
             provider: Provider.Load,

@@ -1,7 +1,7 @@
 // All imports must be deferred. This file loads in the very early stage.
 import defer * as lodash from 'lodash-es'
 import defer * as constants from '../constants.js'
-import defer * as stringify from 'json-stable-stringify'
+import stringify from 'json-stable-stringify'
 
 export type ValueComparer<T> = (a: T, b: T) => boolean
 const defaultComparer: ValueComparer<any> = (a, b) => a === b
@@ -64,7 +64,7 @@ export class ValueRefWithReady<T> extends ValueRef<T> {
  */
 export class ValueRefJSON<T extends object> extends ValueRefWithReady<string> {
     constructor(defaultValue: T) {
-        super(stringify.default(defaultValue), lodash.isEqual)
+        super(stringify(defaultValue), lodash.isEqual)
     }
     override get value(): string {
         return super.value
@@ -76,7 +76,7 @@ export class ValueRefJSON<T extends object> extends ValueRefWithReady<string> {
         }
         if (lodash.isEqual(this.asJSON, value)) return
         this.json = value
-        super.value = stringify.default(value)
+        super.value = stringify(value) as string
     }
     private json: Readonly<T> | undefined
     get asJSON(): Readonly<T> {
