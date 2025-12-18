@@ -2,9 +2,21 @@ import { Box, Alert, Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 
+async function getCookies(keys: string[]): Promise<Record<string, string>> {
+    const results = await Promise.allSettled(
+        keys.map((key) =>
+            browser.cookies.get({ name: key, url: 'https://x.com/' }).then((x) => ({ key, value: x?.value })),
+        ),
+    )
+    return results
+        .filter((x) => x.status === 'fulfilled')
+        .map((x) => x.value)
+        .reduce((x, y) => ({ ...x, [y.key]: y.value }), {})
+}
+
 export { TwitterTokenRequestPage as Component }
 export function TwitterTokenRequestPage() {
-    const [token, setToken] = useState<string | null>(null)
+    const [payload, setPayload] = useState<string>()
     return (
         <Box
             sx={{
@@ -26,14 +38,32 @@ export function TwitterTokenRequestPage() {
                 color="warning"
                 onClick={async () => {
                     if (!(await browser.permissions.request({ permissions: ['cookies'] }))) return
-                    const cookie = (await browser.cookies.get({ name: 'auth_token', url: 'https://x.com/' }))?.value
+                    const cookies = await getCookies([
+                        'guest_id_marketing',
+                        'guest_id_ads',
+                        'personalization_id',
+                        'guest_id',
+                        '__cf_bm',
+                        'gt',
+                        '__cuid',
+                        '_twitter_sess',
+                        'kdt',
+                        'twid',
+                        'ct0',
+                        'auth_token',
+                        'g_state',
+                        'lang',
+                        'connect',
+                        'cf_clearance',
+                        'lang',
+                    ])
                     await browser.permissions.remove({ permissions: ['cookies'] })
-                    setToken(cookie || null)
+                    setPayload(JSON.stringify(cookies))
                 }}>
                 Show my X (Twitter) Token
             </Button>
-            {token ?
-                <QRCode value={token} size={256} />
+            {payload ?
+                <QRCode value={payload} size={256} />
             :   null}
         </Box>
     )
