@@ -1,5 +1,5 @@
 import { PluginID } from '@masknet/shared-base'
-import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 /**
@@ -40,7 +40,7 @@ export const enum RoutePaths {
 }
 
 export const MAX_FILE_SIZE = 1.5 * 1024 * 1024
-export const DURATION = 60 * 60 * 24
+export const DURATION = DEFAULT_DURATION
 
 // Chains that supported by the intersection of NFTScan, Chainbase, and our deployed chains.
 export const NFT_DEFAULT_CHAINS = [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon, ChainId.Optimism]
