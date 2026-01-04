@@ -58,7 +58,7 @@ const SOURCEMAP_HEAD = '//# sourceMappingURL='
 async function generateIcons() {
     const { SourceMapGenerator } = await import('source-map')
     const { transform } = await import('@swc/core')
-    const { glob } = await import('glob')
+    const { glob } = await import('tinyglobby')
     const asJSX = {
         js: [
             //
@@ -79,7 +79,7 @@ async function generateIcons() {
 
     const relativePrefix = iconRoot.toString().length
     /* cspell:disable-next-line */
-    const filePaths = await glob(pattern, { cwd: ROOT_PATH, nodir: true })
+    const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true })
 
     const variants: Record<
         string,
