@@ -55,7 +55,7 @@
     "@servie/events": "^3.0.0",
     "@solana/buffer-layout": "^4.0.1",
     "@solana/spl-token": "^0.4.9",
-    "@solana/web3.js": "^1.75.0",
+    "@solana/web3.js": "^1.98.1",
     "@walletconnect/sign-client": "^2.10.5",
     "@walletconnect/utils": "^2.10.5",
     "bignumber.js": "9.1.2",
