@@ -4,7 +4,6 @@ declare module NodeJS {
         readonly MASK_SENTRY_DSN: string
         readonly MASK_SENTRY: 'enabled' | 'disabled'
         readonly MASK_MIXPANEL: 'enabled' | 'disabled'
-        readonly GOOGLE_CLIENT_ID: string
         readonly FIREFLY_X_CLIENT_ID: string
         readonly FIREFLY_X_CLIENT_SECRET: string
         /**
@@ -12,6 +11,11 @@ declare module NodeJS {
          * RUN_SKIP_TESTS=1 pnpm test
          */
         readonly RUN_SKIP_TESTS: string
+        readonly PRIVY_APP_ID: string
+        readonly WEB3_CONSTANTS_RPC: string
+        readonly NEXT_PUBLIC_FIREFLY_API_URL: string
+        readonly MASK_ENABLE_EXCHANGE: string
+        readonly SOLANA_DEFAULT_RPC_URL: string
     }
 }
 declare namespace NodeJS {
