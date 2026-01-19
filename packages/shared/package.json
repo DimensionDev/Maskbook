@@ -48,7 +48,7 @@
     "react-hook-form": "^7.52.0",
     "react-markdown": "^9.0.1",
     "react-qrcode-logo": "^3.0.0",
-    "react-router-dom": "^6.24.0",
+    "react-router-dom": "^6.30.3",
     "react-use": "^17.5.0",
     "rehype-external-links": "^3.0.0",
     "rehype-raw": "^7.0.0",
