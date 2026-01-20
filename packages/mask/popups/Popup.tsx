@@ -89,6 +89,7 @@ const router = createHashRouter([
                 ],
             },
             { path: PopupRoutes.RequestPermission, lazy: () => import('./pages/RequestPermission/index.js') },
+            { path: PopupRoutes.GetTwitterTokenByQR, lazy: () => import('./pages/GetTwitterTokenByQR/index.js') },
             { path: '*', element: <Navigate replace to={PopupRoutes.Personas} /> },
         ],
     },
