@@ -18,3 +18,15 @@ export { fetchSandboxedPluginManifest } from './sandboxed.js'
 export { getActiveTab } from './tabs.js'
 export { requestXOAuthToken, resolveXOAuth, resetXOAuth } from './oauth-x.js'
 export { loginFireflyViaTwitter } from './firefly.js'
+export {
+    encrypt,
+    getDesktopSyncLinkInfo,
+    getSyncChannelStatus,
+    confirmSyncChannel,
+    syncTwitterCookies,
+    type DesktopLinkInfoResponse,
+    type SyncChannelStatusResponse,
+    type TwitterCookiesPayload,
+    type ConfirmSyncChannelOperation,
+} from './firefly.js'
+export { getXOAuthToken } from './oauth-x.js'

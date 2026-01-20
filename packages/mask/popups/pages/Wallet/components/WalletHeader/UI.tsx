@@ -1,19 +1,21 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
-import { PersistentStorages, PrivyEnvGuard, type Wallet } from '@masknet/shared-base'
+import { PersistentStorages, PopupRoutes, PrivyEnvGuard, type Wallet } from '@masknet/shared-base'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
+import { useWallets } from '@privy-io/react-auth'
 import { memo, useMemo, type MouseEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSubscription } from 'use-subscription'
+import { WalletAvatar } from '../../../../components/WalletAvatar/index.js'
 import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
-import { useWallets } from '@privy-io/react-auth'
-import { useSubscription } from 'use-subscription'
-import { WalletAvatar } from '../../../../components/WalletAvatar/index.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
     const isDark = theme.palette.mode === 'dark'
@@ -42,7 +44,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             display: 'flex',
             alignItems: 'center',
             cursor: 'pointer',
-            maxWidth: '50%',
+            maxWidth: '60%',
             boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
             backdropFilter: 'blur(5px)',
         },
@@ -159,6 +161,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
 
         const networkName = currentNetwork?.name || currentNetwork?.fullName
         const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
+
+        const navigate = useNavigate()
+
         return (
             <Box className={classes.container}>
                 <div className={classes.topBar}>
@@ -232,6 +237,20 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                                 :   null}
                             </Typography>
                         </Box>
+                        {isFireflyWallet ?
+                            <Icons.QrcodeIcon
+                                size={20}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    navigate(
+                                        urlcat(PopupRoutes.SyncTwitterCookies, {
+                                            address: wallet.address,
+                                            name: walletName,
+                                        }),
+                                    )
+                                }}
+                            />
+                        :   null}
                         {!disabled ?
                             <Icons.ArrowDrop className={classes.arrow} />
                         :   null}

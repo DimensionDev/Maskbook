@@ -76,6 +76,7 @@ export enum PopupRoutes {
     Receive = '/wallet/receive',
     ExportWalletPrivateKey = '/wallet/export-private-key',
     ConnectedSites = '/wallet/connected-sites',
+    SyncTwitterCookies = '/wallet/sync-twitter-cookies',
     Personas = '/personas',
     Logout = '/personas/logout',
     AccountDetail = '/personas/accounts/detail',

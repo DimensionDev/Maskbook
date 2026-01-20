@@ -1295,6 +1295,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
@@ -1650,6 +1651,7 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
@@ -1814,6 +1816,10 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Connect with Mask Wallet"
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Connect your Firefly App"
 msgstr ""
 
 #: packages/mask/popups/components/SocialAccounts/index.tsx
@@ -3822,6 +3828,14 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Login failed. Please try again"
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Login request expired due to no confirmation. Please try again."
+msgstr ""
+
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
@@ -4199,6 +4213,10 @@ msgstr ""
 #. placeholder {0}: error.message
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
 msgid "Network error, try again: {0}"
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Network error. Please try again later."
 msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
@@ -5123,6 +5141,10 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchasing...."
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "QR code expired. Please try again."
 msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -6682,6 +6704,10 @@ msgstr ""
 msgid "Trying exploring more features powered by Mask Network."
 msgstr ""
 
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Twitter cookies synced successfully"
+msgstr ""
+
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Two entered passwords are different."
 msgstr ""
@@ -6853,6 +6879,10 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Use text encryption"
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Use the Firefly app to scan the QR code"
 msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileList.tsx
@@ -7317,6 +7347,10 @@ msgstr ""
 #. placeholder {1}: message.spender
 #: packages/shared/src/UI/translate.ts
 msgid "You've approved {0} for {1}. If you want to revoke this token, please set spending cap amount to 0."
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "You've received a login request from the Firefly app. If you want to sign in, please confirm."
 msgstr ""
 
 #. placeholder {0}: file.name
