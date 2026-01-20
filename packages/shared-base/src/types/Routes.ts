@@ -82,6 +82,7 @@ export enum PopupRoutes {
     ConnectWallet = '/personas/connect-wallet',
     PersonaSignRequest = '/personas/sign-request',
     RequestPermission = '/request-permission',
+    GetTwitterTokenByQR = '/twitter-token',
     Friends = '/friends',
     FriendsDetail = '/friends/detail',
     Settings = '/settings',
