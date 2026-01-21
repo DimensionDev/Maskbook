@@ -4,6 +4,25 @@ const FIREFLY_ROOT_URL = 'https://firefly.social'
 const FIREFLY_API_URL = 'https://api.firefly.land'
 const APP_LOGIN_ENCRYPT_IV = '0x4f05c37c16c801c2516b0338a8fd0cf9'
 
+// Types for desktop sync
+export interface SocialAccountTwitter {
+    type: 'x' // SourceInURL.X
+    user_id: string
+    handle: string
+    consumerKey: string
+    consumerKeySecret: string
+    accessToken: string
+    accessTokenSecret: string
+    cookie?: string
+}
+
+export interface TwitterOAuthData {
+    oauth_token: string
+    oauth_token_secret: string
+    user_id: string
+    screen_name: string
+}
+
 export async function loginFireflyViaTwitter() {
     const data = await browser.storage.local.get('firefly_x_oauth')
     if (!data?.firefly_x_oauth) throw new Error('X OAuth token not found')
@@ -128,14 +147,21 @@ export async function confirmSyncChannel(
 }
 
 export interface TwitterCookiesPayload {
-    cookies: string
+    twitterAccounts: SocialAccountTwitter[]
     fireflyAccountData: {
-        accessToken: string
-        accountId: string
-        uid: string
-        displayName: string
+        firefly_account_token: string
+        account_id: string
+        account_uid: string
+        display_name: string
         avatar: string
     }
+}
+
+// Helper function to get Twitter OAuth data from storage
+export async function getTwitterOAuthData(): Promise<TwitterOAuthData | null> {
+    const data = await browser.storage.local.get('firefly_x_oauth')
+    if (!data?.firefly_x_oauth) return null
+    return data.firefly_x_oauth as TwitterOAuthData
 }
 
 export async function syncTwitterCookies(

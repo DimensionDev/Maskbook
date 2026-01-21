@@ -23,8 +23,8 @@ function generateCryptoKey(): string {
     return number.toString().padStart(6, '0')
 }
 
-// Get Twitter cookies from browser
-async function getTwitterCookies(): Promise<Record<string, string>> {
+// Get Twitter cookies from browser as JSON string
+async function getTwitterCookiesString(): Promise<string> {
     // cSpell:disable
     const keys = [
         'guest_id_marketing',
@@ -50,11 +50,12 @@ async function getTwitterCookies(): Promise<Record<string, string>> {
             browser.cookies.get({ name: key, url: 'https://x.com/' }).then((x) => ({ key, value: x?.value })),
         ),
     )
-    return results
+    const cookies = results
         .filter((x) => x.status === 'fulfilled')
         .map((x) => (x as PromiseFulfilledResult<{ key: string; value?: string }>).value)
         .filter((x) => x.value !== undefined)
         .reduce((acc, x) => ({ ...acc, [x.key]: x.value }), {})
+    return JSON.stringify(cookies)
 }
 
 enum DesktopSyncChannelStatus {
@@ -305,6 +306,13 @@ export const Component = memo(function SyncTwitterCookies() {
         if (!session || !cryptoKey || !accessToken) return
 
         try {
+            // Get Twitter OAuth data from storage
+            const oauthData = await Services.Helper.getTwitterOAuthData()
+            if (!oauthData) {
+                throw new Error('Twitter OAuth data not found. Please login via Twitter OAuth first.')
+            }
+
+            // Request cookie permission
             const hasPermission = await browser.permissions.contains({ permissions: ['cookies'] })
             if (!hasPermission) {
                 const granted = await browser.permissions.request({ permissions: ['cookies'] })
@@ -313,19 +321,39 @@ export const Component = memo(function SyncTwitterCookies() {
                 }
             }
 
-            const cookies = await getTwitterCookies()
+            // Get cookies as JSON string
+            const cookiesString = await getTwitterCookiesString()
 
-            if (Object.keys(cookies).length === 0) {
-                throw new Error('No Twitter cookies found')
-            }
+            // Build SocialAccountTwitter array
+            const twitterAccounts: Array<{
+                type: 'x'
+                user_id: string
+                handle: string
+                consumerKey: string
+                consumerKeySecret: string
+                accessToken: string
+                accessTokenSecret: string
+                cookie: string
+            }> = [
+                {
+                    type: 'x',
+                    user_id: oauthData.user_id,
+                    handle: oauthData.screen_name,
+                    consumerKey: process.env.FIREFLY_X_CLIENT_ID || '',
+                    consumerKeySecret: process.env.FIREFLY_X_CLIENT_SECRET || '',
+                    accessToken: oauthData.oauth_token,
+                    accessTokenSecret: oauthData.oauth_token_secret,
+                    cookie: cookiesString,
+                },
+            ]
 
             const payload = JSON.stringify({
-                cookies: JSON.stringify(cookies),
+                twitterAccounts,
                 fireflyAccountData: {
-                    accessToken,
-                    accountId: fireflyAccount.accountId,
-                    uid: fireflyAccount.uid,
-                    displayName: fireflyAccount.displayName,
+                    firefly_account_token: accessToken,
+                    account_id: fireflyAccount.accountId,
+                    account_uid: fireflyAccount.uid,
+                    display_name: fireflyAccount.displayName,
                     avatar: fireflyAccount.avatar,
                 },
             })

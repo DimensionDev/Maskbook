@@ -24,9 +24,12 @@ export {
     getSyncChannelStatus,
     confirmSyncChannel,
     syncTwitterCookies,
+    getTwitterOAuthData,
     type DesktopLinkInfoResponse,
     type SyncChannelStatusResponse,
     type TwitterCookiesPayload,
+    type SocialAccountTwitter,
+    type TwitterOAuthData,
     type ConfirmSyncChannelOperation,
 } from './firefly.js'
 export { getXOAuthToken } from './oauth-x.js'
