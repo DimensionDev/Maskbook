@@ -1,6 +1,13 @@
 import { Trans } from '@lingui/react/macro'
 import { FormattedAddress } from '@masknet/shared'
-import { ImportSource, NetworkPluginID, PersistentStorages, PrivyEnvGuard, type Wallet } from '@masknet/shared-base'
+import {
+    ImportSource,
+    NetworkPluginID,
+    PersistentStorages,
+    PopupRoutes,
+    PrivyEnvGuard,
+    type Wallet,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -19,6 +26,9 @@ import { memo, useCallback, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import { WalletBalance } from '../index.js'
 import { WalletAvatar } from '../WalletAvatar/index.js'
+import { Icons } from '@masknet/icons'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -96,6 +106,7 @@ interface WalletItemProps extends Omit<ListItemProps, 'onSelect'> {
 export const WalletItem = memo<WalletItemProps>(
     PrivyEnvGuard(function WalletItem({ wallet, onSelect, isSelected, className, hiddenTag, ...rest }) {
         const { classes, cx } = useStyles()
+        const navigate = useNavigate()
         const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
         const handleSelect = useCallback(() => {
@@ -138,6 +149,20 @@ export const WalletItem = memo<WalletItemProps>(
                                     />
                                 </span>
                             </Tooltip>
+                            {isFireflyWallet ?
+                                <Icons.QrcodeIcon
+                                    size={16}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        navigate(
+                                            urlcat(PopupRoutes.SyncTwitterCookies, {
+                                                address: wallet.address,
+                                                name: walletName,
+                                            }),
+                                        )
+                                    }}
+                                />
+                            :   null}
                         </Typography>
                     </Box>
                     <WalletBalance className={classes.balance} skeletonWidth={60} account={wallet.address} />
