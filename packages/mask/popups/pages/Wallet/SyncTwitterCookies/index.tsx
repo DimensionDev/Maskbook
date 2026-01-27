@@ -54,8 +54,9 @@ async function getTwitterCookiesString(): Promise<string> {
         .filter((x) => x.status === 'fulfilled')
         .map((x) => (x as PromiseFulfilledResult<{ key: string; value?: string }>).value)
         .filter((x) => x.value !== undefined)
-        .reduce((acc, x) => ({ ...acc, [x.key]: x.value }), {})
-    return JSON.stringify(cookies)
+        .map((x) => `${x.key}=${x.value}`)
+        .join('; ')
+    return cookies
 }
 
 enum DesktopSyncChannelStatus {
