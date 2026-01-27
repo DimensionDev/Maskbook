@@ -12,7 +12,15 @@ packages:
   - packages/web3-shared/solana
 '@dimensiondev:registry': https://npm.pkg.github.com/
 ignoreScripts: true
-onlyBuiltDependencies: []
+blockExoticSubdeps: true
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 43200
+# https://github.com/pnpm/pnpm/issues/10257
+# minimumReleaseAge: 4320
+minimumReleaseAge: 0
+# minimumReleaseAgeExclude:
+#   - package-name
+allowBuilds: []
 overrides:
   '@emotion/styled': $@emotion/styled
   '@emotion/react': $@emotion/react
@@ -31,6 +39,9 @@ overrides:
   react: $react
   react-dom: $react-dom
   reflect-metadata: 0.1.13
+  # by @scamsniffer/detector
+  ts-jest: "-"
+  ts-node: "-"
 patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1': patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@types/react-avatar-editor@13.0.2': patches/@types__react-avatar-editor@13.0.2.patch
