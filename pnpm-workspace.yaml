@@ -40,8 +40,8 @@ overrides:
   react-dom: $react-dom
   reflect-metadata: 0.1.13
   # by @scamsniffer/detector
-  ts-jest: "-"
-  ts-node: "-"
+  ts-jest: '-'
+  ts-node: '-'
 patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1': patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@types/react-avatar-editor@13.0.2': patches/@types__react-avatar-editor@13.0.2.patch
