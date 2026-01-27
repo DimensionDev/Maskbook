@@ -1958,6 +1958,10 @@ msgstr "컨트랙트:"
 msgid "contributions"
 msgstr ""
 
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Cookie permission denied"
+msgstr ""
+
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copied"
@@ -6706,6 +6710,10 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 msgid "Twitter cookies synced successfully"
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "Twitter OAuth data not found. Please login via Twitter OAuth first."
 msgstr ""
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx

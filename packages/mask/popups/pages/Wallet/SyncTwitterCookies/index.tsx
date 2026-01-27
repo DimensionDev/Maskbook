@@ -23,7 +23,6 @@ function generateCryptoKey(): string {
     return number.toString().padStart(6, '0')
 }
 
-// Get Twitter cookies from browser as JSON string
 async function getTwitterCookiesString(): Promise<string> {
     // cSpell:disable
     const keys = [
@@ -310,7 +309,7 @@ export const Component = memo(function SyncTwitterCookies() {
             // Get Twitter OAuth data from storage
             const oauthData = await Services.Helper.getTwitterOAuthData()
             if (!oauthData) {
-                throw new Error('Twitter OAuth data not found. Please login via Twitter OAuth first.')
+                throw new Error(t`Twitter OAuth data not found. Please login via Twitter OAuth first.`)
             }
 
             // Request cookie permission
@@ -318,11 +317,10 @@ export const Component = memo(function SyncTwitterCookies() {
             if (!hasPermission) {
                 const granted = await browser.permissions.request({ permissions: ['cookies'] })
                 if (!granted) {
-                    throw new Error('Cookie permission denied')
+                    throw new Error(t`Cookie permission denied`)
                 }
             }
 
-            // Get cookies as JSON string
             const cookiesString = await getTwitterCookiesString()
 
             // Build SocialAccountTwitter array
