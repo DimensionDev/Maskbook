@@ -8,11 +8,12 @@ import { useWallets } from './useWallets.js'
  * @param pluginID
  * @returns
  */
-export function useWallet() {
+export function useWallet(address?: string) {
     const { account } = useChainContext()
     const wallets = useWallets()
 
+    const target = address ?? account
     return useMemo(() => {
-        return account ? (wallets.find((x) => isSameAddress(x.address, account)) ?? null) : null
-    }, [account, wallets])
+        return target ? (wallets.find((x) => isSameAddress(x.address, target)) ?? null) : null
+    }, [target, wallets])
 }

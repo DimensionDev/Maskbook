@@ -35,6 +35,7 @@ export const walletRoutes: RouteObject[] = [
             { path: r(PopupRoutes.Receive), lazy: () => import('./Receive/index.js') },
             { path: r(PopupRoutes.ExportWalletPrivateKey), lazy: () => import('./ExportPrivateKey/index.js') },
             { path: r(PopupRoutes.ConnectedSites), lazy: () => import('./ConnectedSites/index.js') },
+            { path: r(PopupRoutes.SyncTwitterCookies), lazy: () => import('./SyncTwitterCookies/index.js') },
         ],
     },
     {

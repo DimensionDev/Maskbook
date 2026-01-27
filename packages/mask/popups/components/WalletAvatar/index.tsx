@@ -22,9 +22,10 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends HTMLProps<HTMLDivElement> {
     size?: number
+    badgeSize?: number
     address: string
 }
-export const WalletAvatar = memo<Props>(function WalletAvatar({ size = 30, address, ...rest }) {
+export const WalletAvatar = memo<Props>(function WalletAvatar({ size = 30, address, badgeSize = 12, ...rest }) {
     const { classes, cx } = useStyles()
     const { wallets: fireflyWallets } = useWallets()
 
@@ -38,7 +39,7 @@ export const WalletAvatar = memo<Props>(function WalletAvatar({ size = 30, addre
         return (
             <div {...rest} className={cx(classes.container, rest.className)}>
                 <Image size={size} src={fireflyAccount.avatar} rounded />
-                <Icons.Firefly className={classes.badgeIcon} size={12} />
+                <Icons.Firefly className={classes.badgeIcon} size={badgeSize} />
             </div>
         )
     return <Icons.MaskBlue size={size} className={rest.className} />
