@@ -14,12 +14,9 @@ export function useNonFungibleEvents<T extends NetworkPluginID = NetworkPluginID
 ): UseInfiniteQueryResult<
     InfiniteData<
         Pageable<
-            NonFungibleTokenEvent<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-            unknown
-        >,
-        unknown
-    >,
-    Error
+            NonFungibleTokenEvent<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
+        >
+    >
 > {
     const { account } = useChainContext({ account: options?.account })
     const Hub = useWeb3Hub(pluginID, {
