@@ -76,6 +76,7 @@ const PopupShell = memo(function PopupShell() {
 const router = createHashRouter([
     {
         element: <PopupShell />,
+        hydrateFallbackElement: pending,
         errorElement: <ErrorPageBoundary />,
         children: [
             {
@@ -134,7 +135,7 @@ export default function Popups() {
                 <ReactQueryDevtools buttonPosition="bottom-right" />
             :   null}
             <PrivySetup />
-            <RouterProvider router={router} fallbackElement={pending} future={{ v7_startTransition: true }} />
+            <RouterProvider router={router} />
         </>,
     )
 }

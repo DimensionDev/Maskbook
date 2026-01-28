@@ -22,7 +22,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
 
     const decrypt = useCallback(async (account: string, password: string, encryptedValue: ArrayBuffer) => {
         try {
-            const decrypted = await decryptBackup(encode(account + password), encryptedValue)
+            const decrypted = await decryptBackup(encode(account + password) as Uint8Array<ArrayBuffer>, encryptedValue)
             return JSON.stringify(decode(decrypted))
         } catch {
             return null

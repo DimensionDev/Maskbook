@@ -101,7 +101,7 @@ export const Component = memo(function RecoveryLocalBackup() {
         try {
             setReadingFile(true)
             const [decrypted] = await Promise.all([
-                file.arrayBuffer().then((buffer) => decryptBackup(encode(password), buffer)),
+                file.arrayBuffer().then((buffer) => decryptBackup(encode(password) as Uint8Array<ArrayBuffer>, buffer)),
                 delay(1000),
             ])
             const decoded = decode(decrypted)

@@ -22,7 +22,7 @@
   "dependencies": {
     "@msgpack/msgpack": "^3.0.0-beta2",
     "anchorme": "^2.1.2",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "ts-results-es": "^4.2.0"
   },
   "files": [

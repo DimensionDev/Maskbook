@@ -11,7 +11,7 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "core-js": "3.41.0",
+    "core-js": "3.48.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
@@ -21,7 +21,7 @@
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-virtual": "^3.0.2",
     "@types/node": "22.13.9",
-    "core-js-compat": "3.41.0",
+    "core-js-compat": "3.48.0",
     "regenerator-runtime": "^0.14.1",
     "rollup": "^4.34.9",
     "rollup-plugin-swc3": "^0.12.1"

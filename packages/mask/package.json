@@ -122,7 +122,7 @@
     "react-hook-form": "7.52.0",
     "react-idle-timer": "^5.7.2",
     "react-qrcode-logo": "^3.0.0",
-    "react-router-dom": "^6.24.0",
+    "react-router-dom": "^7.13.0",
     "react-use": "^17.5.0",
     "react-window": "^1.8.10",
     "stream-browserify": "^3.0.0",

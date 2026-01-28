@@ -5,6 +5,6 @@
     "sideEffects": ["./index.ts"],
     "dependencies": {
         "msw": "2.3.1",
-        "core-js": "3.41.0"
+        "core-js": "3.48.0"
     }
 }

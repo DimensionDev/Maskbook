@@ -11,7 +11,7 @@ if (
         lockdown({
             // In production, we have CSP enforced no eval
             // In development, we use Trusted Types.
-            evalTaming: 'unsafeEval',
+            evalTaming: 'unsafe-eval',
             //
             overrideTaming: 'severe',
             consoleTaming: 'unsafe',
