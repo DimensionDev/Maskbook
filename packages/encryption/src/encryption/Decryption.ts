@@ -122,7 +122,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
 async function* v37ECDHE(
     io: DecryptIO,
     encryption: PayloadParseResult.EndToEndEncryption,
-    encrypted: Uint8Array,
+    encrypted: Uint8Array<ArrayBuffer>,
     signal: AbortSignal | undefined,
     report: ((message: TypedMessage) => void) | undefined,
 ) {
@@ -157,13 +157,13 @@ async function* v38To40StaticECDH(
     version: -38 | -39 | -40,
     io: DecryptIO,
     authorECPub: EC_Public_CryptoKey,
-    iv: Uint8Array,
-    encrypted: Uint8Array,
+    iv: Uint8Array<ArrayBuffer>,
+    encrypted: Uint8Array<ArrayBuffer>,
     signal: AbortSignal | undefined,
     report: ((message: TypedMessage) => void) | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
     const postKey = {
-        async *'-40'(iv: Uint8Array) {
+        async *'-40'(iv: Uint8Array<ArrayBuffer>) {
             const val = await io.queryPostKey_version40(iv)
             if (val) yield val
         },
@@ -179,7 +179,9 @@ async function* v38To40StaticECDH(
 }
 type StaticV38OrOlderECDH = {
     type: 'static-v38-or-older'
-    derive: (postKeyIV: Uint8Array) => Promise<Array<readonly [key: AESCryptoKey, iv: Uint8Array]>>
+    derive: (
+        postKeyIV: Uint8Array<ArrayBuffer>,
+    ) => Promise<Array<readonly [key: AESCryptoKey, iv: Uint8Array<ArrayBuffer>]>>
 }
 type EphemeralECDH = {
     type: 'ephemeral'
@@ -192,9 +194,9 @@ async function* decryptByECDH(
     io: DecryptIO,
     possiblePostKeyIterator: AsyncIterableIterator<DecryptEphemeralECDH_PostKey | DecryptStaticECDH_PostKey>,
     ecdhProvider: StaticV38OrOlderECDH | EphemeralECDH,
-    postKeyDecoder: (raw: Uint8Array) => Promise<Result<AESCryptoKey, unknown>>,
-    iv: Uint8Array,
-    encrypted: Uint8Array,
+    postKeyDecoder: (raw: Uint8Array<ArrayBuffer>) => Promise<Result<AESCryptoKey, unknown>>,
+    iv: Uint8Array<ArrayBuffer>,
+    encrypted: Uint8Array<ArrayBuffer>,
     report: ((message: TypedMessage) => void) | undefined,
 ) {
     const { derive, type } = ecdhProvider
@@ -202,7 +204,7 @@ async function* decryptByECDH(
         const { encryptedPostKey } = _
         // TODO: how to deal with signature?
         // TODO: what to do if provider throws?
-        const derivedKeys =
+        const derivedKeys: Array<readonly [AESCryptoKey, Uint8Array<ArrayBuffer>]> =
             type === 'static-v38-or-older' ?
                 await derive((_ as DecryptStaticECDH_PostKey).postKeyIV || iv)
             :   await derive((_ as DecryptEphemeralECDH_PostKey).ephemeralPublicKey).then((aesArr) =>
@@ -230,8 +232,8 @@ async function* decryptByECDH(
 async function* decryptWithPostAESKey(
     version: Version,
     postAESKey: AESCryptoKey,
-    iv: Uint8Array,
-    encrypted: Uint8Array,
+    iv: Uint8Array<ArrayBuffer>,
+    encrypted: Uint8Array<ArrayBuffer>,
     report: ((message: TypedMessage) => void) | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
     const _ = await decryptWithAES(postAESKey, iv, encrypted)
@@ -255,7 +257,7 @@ async function* parseTypedMessage(
 }
 
 // uint8 |> TextDecoder |> JSON.parse |> importAESKeyFromJWK
-function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
+function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array<ArrayBuffer>) {
     return Result.wrapAsync(async () => {
         const aes_text = new TextDecoder().decode(aes_raw)
         const aes_jwk = JSON.parse(aes_text) as JsonWebKey
@@ -264,7 +266,7 @@ function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
     })
 }
 
-function importAESKeyFromRaw(aes_raw: Uint8Array) {
+function importAESKeyFromRaw(aes_raw: Uint8Array<ArrayBuffer>) {
     return Result.wrapAsync(async () => {
         return crypto.subtle.importKey('raw', aes_raw, { name: 'AES-GCM', length: 256 }, true, [
             'decrypt',

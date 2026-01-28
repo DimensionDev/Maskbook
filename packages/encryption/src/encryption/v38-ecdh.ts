@@ -24,8 +24,8 @@ const IV = decodeArrayBuffer('IV')
 export async function deriveAESByECDH_version38OrOlderExtraSteps(
     deriveAESByECDH: (key: EC_Public_CryptoKey) => Promise<AESCryptoKey[]>,
     pub: EC_Public_CryptoKey,
-    iv: Uint8Array,
-): Promise<Array<readonly [key: AESCryptoKey, iv: Uint8Array]>> {
+    iv: Uint8Array<ArrayBuffer>,
+): Promise<Array<readonly [key: AESCryptoKey, iv: Uint8Array<ArrayBuffer>]>> {
     const deriveResult = await deriveAESByECDH(pub)
     const extraSteps = deriveResult.map(async (key) => {
         const derivedKeyRaw = await crypto.subtle.exportKey('raw', key)
@@ -51,7 +51,7 @@ export async function deriveAESByECDH_version38OrOlderExtraSteps(
 
 /** @internal */
 export async function v38_addReceiver(
-    postKeyEncoded: Promise<Uint8Array>,
+    postKeyEncoded: Promise<Uint8Array<ArrayBuffer>>,
     target: EncryptTargetE2E,
     io: Pick<EncryptIO, 'deriveAESKey' | 'getRandomValues'>,
 ): Promise<EncryptionResultE2EMap> {

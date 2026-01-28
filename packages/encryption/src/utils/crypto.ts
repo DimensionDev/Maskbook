@@ -2,7 +2,7 @@ import { type AESCryptoKey, CheckedError, type EC_CryptoKey, type EC_Public_Cryp
 import { Result, Ok } from 'ts-results-es'
 import { EC_KeyCurve } from '../payload/index.js'
 import { CryptoException } from '../types/index.js'
-export function importAES(key: JsonWebKey | Uint8Array): Promise<Result<AESCryptoKey, unknown>> {
+export function importAES(key: JsonWebKey | Uint8Array<ArrayBuffer>): Promise<Result<AESCryptoKey, unknown>> {
     return Result.wrapAsync(() => {
         if (key instanceof Uint8Array) {
             return crypto.subtle.importKey('raw', key, { name: 'AES-GCM', length: 256 }, true, [
@@ -24,9 +24,18 @@ export function exportCryptoKeyToRaw(key: CryptoKey) {
     return Result.wrapAsync(() => crypto.subtle.exportKey('raw', key).then((x) => new Uint8Array(x)))
 }
 
-export function importEC_Key(key: Uint8Array, kind: EC_KeyCurve): Promise<Result<EC_Public_CryptoKey, unknown>>
-export function importEC_Key(key: JsonWebKey | Uint8Array, kind: EC_KeyCurve): Promise<Result<EC_CryptoKey, unknown>>
-export function importEC_Key(key: JsonWebKey | Uint8Array, kind: EC_KeyCurve): Promise<Result<EC_CryptoKey, unknown>> {
+export function importEC_Key(
+    key: Uint8Array<ArrayBuffer>,
+    kind: EC_KeyCurve,
+): Promise<Result<EC_Public_CryptoKey, unknown>>
+export function importEC_Key(
+    key: JsonWebKey | Uint8Array<ArrayBuffer>,
+    kind: EC_KeyCurve,
+): Promise<Result<EC_CryptoKey, unknown>>
+export function importEC_Key(
+    key: JsonWebKey | Uint8Array<ArrayBuffer>,
+    kind: EC_KeyCurve,
+): Promise<Result<EC_CryptoKey, unknown>> {
     const DeriveKeyUsage: KeyUsage[] = ['deriveKey', 'deriveBits']
     const ImportParamsMap = {
         [EC_KeyCurve.secp256k1]: { name: 'ECDH', namedCurve: 'K-256' } as EcKeyImportParams,
@@ -42,13 +51,13 @@ export function importEC_Key(key: JsonWebKey | Uint8Array, kind: EC_KeyCurve): P
     })
 }
 
-export function encryptWithAES(key: CryptoKey, iv: Uint8Array, message: Uint8Array) {
+export function encryptWithAES(key: CryptoKey, iv: Uint8Array<ArrayBuffer>, message: Uint8Array<ArrayBuffer>) {
     return Result.wrapAsync(async () => {
         const x = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, message)
         return new Uint8Array(x)
     })
 }
-export function decryptWithAES(key: CryptoKey, iv: Uint8Array, message: Uint8Array) {
+export function decryptWithAES(key: CryptoKey, iv: Uint8Array<ArrayBuffer>, message: Uint8Array<ArrayBuffer>) {
     return Result.wrapAsync(async () => {
         return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, message))
     })

@@ -1,7 +1,7 @@
 import { None, Ok, Result } from 'ts-results-es'
 import { makeTypedMessageText, type TypedMessageText } from '../core/index.js'
 
-export function encodeTypedMessageV38Format(message: TypedMessageText) {
+export function encodeTypedMessageV38Format(message: TypedMessageText): Uint8Array<ArrayBuffer> {
     const encoder = new TextEncoder()
     if (message.meta?.size) {
         const rec = Object.fromEntries(message.meta.entries())

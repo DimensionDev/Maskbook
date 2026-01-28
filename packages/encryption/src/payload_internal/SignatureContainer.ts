@@ -8,7 +8,7 @@ const enum SignaturePayloadFirstByte {
     NoSignature = 0,
     Signature = 1,
 }
-export function encodeSignatureContainer(payload: Uint8Array, signature: Uint8Array | null): Uint8Array {
+export function encodeSignatureContainer(payload: Uint8Array, signature: Uint8Array | null): Uint8Array<ArrayBuffer> {
     if (signature)
         return new Uint8Array(
             concatArrayBuffer(new Uint8Array([SignaturePayloadFirstByte.Signature]), signature, payload),

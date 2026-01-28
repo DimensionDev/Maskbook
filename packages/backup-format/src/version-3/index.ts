@@ -2,7 +2,7 @@ import { decode, encode } from '@msgpack/msgpack'
 import { createContainer, parseEncryptedJSONContainer, SupportedVersions } from '../container/index.js'
 import { BackupErrors } from '../BackupErrors.js'
 
-export async function encryptBackup(password: BufferSource, binaryBackup: BufferSource) {
+export async function encryptBackup(password: Uint8Array<ArrayBuffer>, binaryBackup: Uint8Array<ArrayBuffer>) {
     const [pbkdf2IV, AESKey] = await createAESFromPassword(password)
     const AESParam: AesGcmParams = { name: 'AES-GCM', iv: crypto.getRandomValues(new Uint8Array(16)) }
 
@@ -11,14 +11,14 @@ export async function encryptBackup(password: BufferSource, binaryBackup: Buffer
     return createContainer(SupportedVersions.Version0, container)
 }
 
-export async function decryptBackup(password: BufferSource, data: ArrayBuffer | ArrayLike<number>) {
+export async function decryptBackup(password: Uint8Array<ArrayBuffer>, data: ArrayBuffer | ArrayLike<number>) {
     const container = await parseEncryptedJSONContainer(SupportedVersions.Version0, data)
 
     const payloadTuple = decode(container)
     if (!Array.isArray(payloadTuple) || payloadTuple.length !== 3) throw new TypeError(BackupErrors.UnknownFormat)
     if (!payloadTuple.every((x): x is Uint8Array => x instanceof Uint8Array))
         throw new TypeError(BackupErrors.UnknownFormat)
-    const [pbkdf2IV, encryptIV, encrypted] = payloadTuple
+    const [pbkdf2IV, encryptIV, encrypted] = payloadTuple as Array<Uint8Array<ArrayBuffer>>
 
     const aes = await getAESFromPassword(password, pbkdf2IV)
 
@@ -27,7 +27,7 @@ export async function decryptBackup(password: BufferSource, data: ArrayBuffer | 
     return decryptedBackup
 }
 
-async function createAESFromPassword(password: BufferSource) {
+async function createAESFromPassword(password: Uint8Array<ArrayBuffer>) {
     const pbkdf = await crypto.subtle.importKey('raw', password, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const aes = await crypto.subtle.deriveKey(
@@ -40,7 +40,7 @@ async function createAESFromPassword(password: BufferSource) {
     return [iv, aes] as const
 }
 
-async function getAESFromPassword(password: BufferSource, iv: Uint8Array) {
+async function getAESFromPassword(password: Uint8Array<ArrayBuffer>, iv: Uint8Array<ArrayBuffer>) {
     const pbkdf = await crypto.subtle.importKey('raw', password, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
     const aes = await crypto.subtle.deriveKey(
         { name: 'PBKDF2', salt: iv, iterations: 10000, hash: 'SHA-256' },
