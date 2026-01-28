@@ -10,7 +10,7 @@ import type { EC_Key } from '../index.js'
 export interface AppendEncryptionOptions {
     version: -38 | -37
     postAESKey: AESCryptoKey
-    iv: Uint8Array
+    iv: Uint8Array<ArrayBuffer>
     target: ReadonlyArray<EC_Key<EC_Public_CryptoKey>>
 }
 export interface AppendEncryptionIO extends Pick<EncryptIO, 'getRandomECKey' | 'deriveAESKey' | 'getRandomValues'> {}

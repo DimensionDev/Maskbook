@@ -34,9 +34,9 @@ export interface DecryptIO {
      */
     decryptByLocalKey(
         authorHint: ProfileIdentifier | null,
-        data: Uint8Array,
-        iv: Uint8Array,
-    ): Promise<Uint8Array | ArrayBuffer>
+        data: Uint8Array<ArrayBuffer>,
+        iv: Uint8Array<ArrayBuffer>,
+    ): Promise<Uint8Array<ArrayBuffer> | ArrayBuffer>
     /**
      * If the author is null, the host should use some heuristic approach (e.g. where they found the post).
      * @param author ProfileIdentifier of the author. Might be empty.
@@ -47,7 +47,7 @@ export interface DecryptIO {
      *
      * Error from this function will become a fatal error.
      */
-    queryPostKey_version40(iv: Uint8Array): Promise<DecryptStaticECDH_PostKey | null>
+    queryPostKey_version40(iv: Uint8Array<ArrayBuffer>): Promise<DecryptStaticECDH_PostKey | null>
     /**
      * Query the key from the gun.
      *
@@ -55,7 +55,10 @@ export interface DecryptIO {
      *
      * Error from this function will become a fatal error.
      */
-    queryPostKey_version39(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<DecryptStaticECDH_PostKey>
+    queryPostKey_version39(
+        iv: Uint8Array<ArrayBuffer>,
+        signal?: AbortSignal,
+    ): AsyncIterableIterator<DecryptStaticECDH_PostKey>
     /**
      * Query the key from the gun.
      *
@@ -63,7 +66,10 @@ export interface DecryptIO {
      *
      * Error from this function will become a fatal error.
      */
-    queryPostKey_version38(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<DecryptStaticECDH_PostKey>
+    queryPostKey_version38(
+        iv: Uint8Array<ArrayBuffer>,
+        signal?: AbortSignal,
+    ): AsyncIterableIterator<DecryptStaticECDH_PostKey>
     /**
      * Query the key from the gun.
      *
@@ -71,7 +77,10 @@ export interface DecryptIO {
      *
      * Error from this function will become a fatal error.
      */
-    queryPostKey_version37(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<DecryptEphemeralECDH_PostKey>
+    queryPostKey_version37(
+        iv: Uint8Array<ArrayBuffer>,
+        signal?: AbortSignal,
+    ): AsyncIterableIterator<DecryptEphemeralECDH_PostKey>
     /**
      * Derive a group of AES key by ECDH(selfPriv, targetPub).
      *
@@ -86,14 +95,14 @@ export interface DecryptIO {
     deriveAESKey(publicKey: EC_Public_CryptoKey): Promise<AESCryptoKey[]>
 }
 export interface DecryptStaticECDH_PostKey {
-    encryptedPostKey: Uint8Array
-    postKeyIV: Uint8Array
+    encryptedPostKey: Uint8Array<ArrayBuffer>
+    postKeyIV: Uint8Array<ArrayBuffer>
 }
 export interface DecryptEphemeralECDH_PostKey {
-    encryptedPostKey: Uint8Array
+    encryptedPostKey: Uint8Array<ArrayBuffer>
     /** For the first time encryption, it might be included in the post payload. */
     ephemeralPublicKey?: EC_Public_CryptoKey
-    ephemeralPublicKeySignature?: Uint8Array
+    ephemeralPublicKeySignature?: Uint8Array<ArrayBuffer>
 }
 export enum DecryptProgressKind {
     Success = 'success',

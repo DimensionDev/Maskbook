@@ -50,7 +50,10 @@ export const Component = memo(function LocalBackup() {
                 excludeWallet: !backupWallets,
             })
 
-            const encrypted = await encryptBackup(encode(data.backupPassword), encode(file))
+            const encrypted = await encryptBackup(
+                encode(data.backupPassword) as Uint8Array<ArrayBuffer>,
+                encode(file) as Uint8Array<ArrayBuffer>,
+            )
             const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
             const blob = new Blob([encrypted], { type: MimeType.Binary })
             const url = URL.createObjectURL(blob)

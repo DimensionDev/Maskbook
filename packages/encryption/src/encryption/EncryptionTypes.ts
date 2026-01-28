@@ -60,7 +60,7 @@ export interface EncryptIO {
      * Fill the arr with random values.
      * This should be only provided in the test environment to create a deterministic result.
      */
-    getRandomValues?(arr: Uint8Array): Uint8Array
+    getRandomValues?(arr: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>
     /**
      * Generate a new AES Key.
      * This should be only provided in the test environment to create a deterministic result.
@@ -74,7 +74,7 @@ export interface EncryptIO {
 }
 export interface EncryptResult {
     postKey: AESCryptoKey
-    output: string | Uint8Array
+    output: string | Uint8Array<ArrayBuffer>
     identifier: PostIVIdentifier
     author?: ProfileIdentifier
     e2e?: EncryptionResultE2EMap
@@ -83,9 +83,9 @@ export interface EncryptResult {
 export type EncryptionResultE2EMap = Map<EC_Key<EC_Public_CryptoKey>, PromiseSettledResult<EncryptionResultE2E>>
 export interface EncryptionResultE2E {
     target: EC_Key<EC_Public_CryptoKey>
-    encryptedPostKey: Uint8Array
+    encryptedPostKey: Uint8Array<ArrayBuffer>
     /** This is used in v38. */
-    ivToBePublished?: Uint8Array
+    ivToBePublished?: Uint8Array<ArrayBuffer>
     /** This feature is supported since v37. */
     ephemeralPublicKey?: EC_Public_CryptoKey
 }

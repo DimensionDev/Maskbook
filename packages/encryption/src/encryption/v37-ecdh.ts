@@ -12,8 +12,8 @@ import { type createEphemeralKeysMap, fillIV } from './utils.js'
 export async function v37_addReceiver(
     firstTime: boolean,
     context: {
-        postIV: Uint8Array
-        postKeyEncoded: Promise<Uint8Array>
+        postIV: Uint8Array<ArrayBuffer>
+        postKeyEncoded: Promise<Uint8Array<ArrayBuffer>>
         getEphemeralKey: ReturnType<typeof createEphemeralKeysMap>['getEphemeralKey']
     },
     target: EncryptTargetE2E,

@@ -28,7 +28,7 @@ export async function parsePayload(payload: unknown): PayloadParserResult {
 
 async function encodePayloadWithoutSignatureContainer(
     payload: PayloadWellFormed.Payload,
-): Promise<Result<string | Uint8Array, CheckedError<CryptoException | PayloadException>>> {
+): Promise<Result<string | Uint8Array<ArrayBuffer>, CheckedError<CryptoException | PayloadException>>> {
     if (payload.version === -38) return encode38(payload)
     else if (payload.version === -37) return encode37(payload)
 
@@ -39,8 +39,11 @@ async function encodePayloadWithoutSignatureContainer(
 
 export async function encodePayload<E>(
     payload: PayloadWellFormed.Payload,
-    sign: (payload: PayloadWellFormed.Payload, payloadToBeSigned: Uint8Array) => Promise<OptionalResult<Uint8Array, E>>,
-): Promise<Result<string | Uint8Array, CheckedError<CryptoException | PayloadException | E>>> {
+    sign: (
+        payload: PayloadWellFormed.Payload,
+        payloadToBeSigned: Uint8Array<ArrayBuffer>,
+    ) => Promise<OptionalResult<Uint8Array<ArrayBuffer>, E>>,
+): Promise<Result<string | Uint8Array<ArrayBuffer>, CheckedError<CryptoException | PayloadException | E>>> {
     if (payload.version === -37) {
         const bin = await encodePayloadWithoutSignatureContainer(payload)
         if (bin.isErr()) return bin

@@ -109,7 +109,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
         try {
             if (!encrypted) return
             const password = decryptWithAccount ? account + backupPassword : backupPassword
-            const decrypted = await decryptBackup(encode(password), encrypted)
+            const decrypted = await decryptBackup(encode(password) as Uint8Array<ArrayBuffer>, encrypted)
             const backupJson = JSON.stringify(decode(decrypted))
             const summary = await Services.Backup.generateBackupSummary(backupJson)
             if (summary.isErr()) {

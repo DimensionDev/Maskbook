@@ -9,10 +9,10 @@ import { encode } from '@msgpack/msgpack'
 import { TypedMessageBinaryEncodingTypeEnum } from './type.js'
 
 const HEAD = '[@masknet/typed-message] '
-export function encodeTypedMessageToDocument(tm: SerializableTypedMessages) {
-    if (isTypedMessageText(tm)) return encode([0, tm.content, encodeMeta(tm)])
+export function encodeTypedMessageToDocument(tm: SerializableTypedMessages): Uint8Array<ArrayBuffer> {
+    if (isTypedMessageText(tm)) return encode([0, tm.content, encodeMeta(tm)]) as Uint8Array<ArrayBuffer>
     const doc = [1, ...encodeTypedMessage(tm)]
-    return encode(doc)
+    return encode(doc) as Uint8Array<ArrayBuffer>
 }
 function encodeTypedMessage(tm: SerializableTypedMessages): any[] {
     if (tm.serializable === false) {

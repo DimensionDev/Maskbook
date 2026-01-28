@@ -19,11 +19,11 @@ class LoadAgent implements ProviderAgent {
     async makeAttachment(options: AttachmentOptions) {
         this.init()
         const passphrase = options.key ? encodeText(options.key) : undefined
-        const encoded = await Attachment.encode(passphrase, {
+        const encoded = (await Attachment.encode(passphrase, {
             block: options.block,
             mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
             metadata: null,
-        })
+        })) as Uint8Array<ArrayBuffer>
 
         const effectiveType = isEmpty(options.type) ? 'application/octet-stream' : options.type
         const effectiveName = options.name || 'unnamed_file'
@@ -74,7 +74,7 @@ class LoadAgent implements ProviderAgent {
         return landingPageTxId
     }
 
-    async makePayload(data: Uint8Array, type: string, fileName: string = 'file.dat') {
+    async makePayload(data: Uint8Array<ArrayBuffer>, type: string, fileName: string = 'file.dat') {
         this.init()
 
         const blob = new Blob([data], { type })

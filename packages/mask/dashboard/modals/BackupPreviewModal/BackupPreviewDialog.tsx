@@ -118,7 +118,10 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 })
 
                 const password = encryptWithAccount ? account + data.backupPassword : data.backupPassword
-                const encrypted = await encryptBackup(encode(password), encode(file))
+                const encrypted = await encryptBackup(
+                    encode(password) as Uint8Array<ArrayBuffer>,
+                    encode(file) as Uint8Array<ArrayBuffer>,
+                )
                 const controller = new AbortController()
                 controllerRef.current = controller
                 await onUpload?.(encrypted, controller.signal)

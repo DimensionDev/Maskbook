@@ -35,7 +35,7 @@ export declare namespace PayloadParseResult {
         /** The encryption method this payload used. */
         readonly encryption: RequiredField<PublicEncryption | EndToEndEncryption>
         /** The encrypted content. */
-        readonly encrypted: RequiredField<Uint8Array>
+        readonly encrypted: RequiredField<Uint8Array<ArrayBuffer>>
     }
     /**
      * A publicly encrypted payload.
@@ -50,7 +50,7 @@ export declare namespace PayloadParseResult {
      */
     export interface EndToEndEncryption {
         readonly type: 'E2E'
-        readonly ownersAESKeyEncrypted: RequiredField<Uint8Array>
+        readonly ownersAESKeyEncrypted: RequiredField<Uint8Array<ArrayBuffer>>
         readonly iv: RequiredField<Uint8Array<ArrayBuffer>>
         readonly ephemeralPublicKey: Record<string, RequiredField<EC_Key, CryptoException>>
     }
@@ -71,7 +71,7 @@ export declare namespace PayloadWellFormed {
         /** The encryption method this payload used. */
         readonly encryption: PublicEncryption | EndToEndEncryption
         /** The encrypted content. */
-        readonly encrypted: Uint8Array
+        readonly encrypted: Uint8Array<ArrayBuffer>
     }
     /**
      * A publicly encrypted payload.
@@ -80,21 +80,21 @@ export declare namespace PayloadWellFormed {
         readonly type: 'public'
         /** The key used to encrypt the payload. It should be AES-256-GCM */
         readonly AESKey: AESCryptoKey
-        readonly iv: Uint8Array
+        readonly iv: Uint8Array<ArrayBuffer>
     }
     /**
      * An E2E encrypted payload.
      */
     export interface EndToEndEncryption {
         readonly type: 'E2E'
-        readonly ownersAESKeyEncrypted: Uint8Array
-        readonly iv: Uint8Array
+        readonly ownersAESKeyEncrypted: Uint8Array<ArrayBuffer>
+        readonly iv: Uint8Array<ArrayBuffer>
         readonly ephemeralPublicKey: Map<EC_KeyCurve, CryptoKey>
     }
 }
 export interface Signature {
-    readonly signee: Uint8Array
-    readonly signature: Uint8Array
+    readonly signee: Uint8Array<ArrayBuffer>
+    readonly signature: Uint8Array<ArrayBuffer>
 }
 export interface EC_Key<K extends EC_CryptoKey = EC_CryptoKey> {
     readonly algr: EC_KeyCurve

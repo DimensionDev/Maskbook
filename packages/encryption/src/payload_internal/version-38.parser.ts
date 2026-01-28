@@ -100,8 +100,8 @@ function splitFields(raw: string) {
 }
 
 async function decodePublicSharedAESKey(
-    iv: Result<Uint8Array, CheckedError<CryptoException>>,
-    encryptedKey: Result<Uint8Array, CheckedError<CryptoException>>,
+    iv: Result<Uint8Array<ArrayBuffer>, CheckedError<CryptoException>>,
+    encryptedKey: Result<Uint8Array<ArrayBuffer>, CheckedError<CryptoException>>,
 ): Promise<PayloadParseResult.PublicEncryption['AESKey']> {
     if (iv.isErr()) return iv
     if (encryptedKey.isErr()) return encryptedKey

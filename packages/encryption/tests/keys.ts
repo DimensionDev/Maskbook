@@ -58,11 +58,11 @@ export async function getBobLocalKey(): Promise<AESCryptoKey> {
 }
 export function encryptDecryptWith(f: typeof getBobLocalKey) {
     return {
-        async encrypt(message: Uint8Array, iv: Uint8Array) {
+        async encrypt(message: Uint8Array<ArrayBuffer>, iv: Uint8Array<ArrayBuffer>) {
             const key = await f()
             return crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, message)
         },
-        async decrypt(message: Uint8Array, iv: Uint8Array) {
+        async decrypt(message: Uint8Array<ArrayBuffer>, iv: Uint8Array<ArrayBuffer>) {
             const key = await f()
             return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, message)
         },
@@ -114,7 +114,7 @@ export function getRandomValues() {
         new Uint8Array([103, 255, 64, 75, 77, 251, 1, 164, 34, 237, 4, 16, 126, 175, 142, 35]),
         new Uint8Array([150, 164, 124, 165, 4, 65, 142, 140, 96, 64, 241, 15, 128, 231, 32, 186]),
     ]
-    return (uint8Array: Uint8Array) => {
+    return (uint8Array: Uint8Array<ArrayBuffer>) => {
         if (random.length === 0) throw new Error('No more random values')
         uint8Array.set(random.shift()!)
         return uint8Array
