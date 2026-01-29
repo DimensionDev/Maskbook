@@ -46,7 +46,7 @@
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "5.15.20",
     "@mui/system": "5.15.20",
-    "@privy-io/react-auth": "^3.0.1",
+    "@privy-io/react-auth": "^3.12.0",
     "@tanstack/react-query": "^5.49.2",
     "@types/masknet__global-types": "workspace:^",
     "@types/react": "^19.2.10",
