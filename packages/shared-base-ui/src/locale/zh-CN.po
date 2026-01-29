@@ -6708,8 +6708,8 @@ msgid "Trying exploring more features powered by Mask Network."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
-msgid "Twitter cookies synced successfully"
-msgstr ""
+#~ msgid "Twitter cookies synced successfully"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 msgid "Twitter OAuth data not found. Please login via Twitter OAuth first."
@@ -7284,6 +7284,10 @@ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "You have signed with your wallet."
+msgstr ""
+
+#: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
+msgid "You have successfully logged in"
 msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx

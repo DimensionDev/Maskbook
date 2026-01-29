@@ -34,6 +34,8 @@ const useStyles = makeStyles()((theme) => ({
     title: {
         lineHeight: '18px',
         padding: '0 8px',
+        display: 'flex',
+        alignItems: 'center',
     },
     message: {
         textOverflow: 'ellipsis',
