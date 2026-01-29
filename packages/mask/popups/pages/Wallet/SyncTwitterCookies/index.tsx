@@ -408,7 +408,10 @@ export const Component = memo(function SyncTwitterCookies() {
 
     useInterval(pollStatus, POLLING_INTERVAL)
 
-    const schemaUrl = session && cryptoKey ? urlcat('firefly://account/scan/desktop-sync', { session, cryptoKey }) : ''
+    const schemaUrl =
+        session && cryptoKey ?
+            urlcat('firefly://account/scan/desktop-sync', { session, cryptoKey, source: 'maskbook' })
+        :   ''
 
     return (
         <>
