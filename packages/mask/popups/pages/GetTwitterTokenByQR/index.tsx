@@ -38,6 +38,7 @@ export function TwitterTokenRequestPage() {
                 color="warning"
                 onClick={async () => {
                     if (!(await browser.permissions.request({ permissions: ['cookies'] }))) return
+                    // cspell:disable
                     const cookies = await getCookies([
                         'guest_id_marketing',
                         'guest_id_ads',
@@ -57,6 +58,7 @@ export function TwitterTokenRequestPage() {
                         'cf_clearance',
                         'lang',
                     ])
+                    // cspell:enable
                     await browser.permissions.remove({ permissions: ['cookies'] })
                     setPayload(JSON.stringify(cookies))
                 }}>
