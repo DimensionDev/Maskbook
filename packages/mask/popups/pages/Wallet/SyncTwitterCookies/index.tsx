@@ -1,7 +1,7 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { CopyButton, FormattedAddress } from '@masknet/shared'
 import { PersistentStorages } from '@masknet/shared-base'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -14,6 +14,7 @@ import { useAsyncFn, useInterval } from 'react-use'
 import { WalletAvatar } from '../../../components/WalletAvatar/index.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import Services from '#services'
+import { Icons } from '@masknet/icons'
 
 // Generate a 6-digit crypto key for encryption
 function generateCryptoKey(): string {
@@ -240,7 +241,7 @@ export const Component = memo(function SyncTwitterCookies() {
     const navigate = useNavigate()
     const [params] = useSearchParams()
     const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = usePopupCustomSnackbar()
 
     useTitle(t`Connect your Firefly App`)
 
@@ -363,10 +364,18 @@ export const Component = memo(function SyncTwitterCookies() {
             await Services.Helper.syncTwitterCookies(session, cryptoKey, encryptedPayload, accessToken)
 
             setChannelStatus(DesktopSyncChannelStatus.DataReady)
-            enqueueSnackbar(t`Twitter cookies synced successfully`, { variant: 'success' })
+            showSnackbar(
+                <Box display="flex" alignItems="center" gap="10px">
+                    <Icons.FillSuccess size={16} />
+                    <Trans>You have successfully logged in</Trans>
+                </Box>,
+                {
+                    variant: 'success',
+                },
+            )
             navigate(-1)
         } catch (err) {
-            enqueueSnackbar((err as Error).message || t`Login failed. Please try again`, { variant: 'error' })
+            showSnackbar((err as Error).message || t`Login failed. Please try again`, { variant: 'error' })
         }
     }, [session, cryptoKey, accessToken, fireflyAccount])
 
@@ -400,7 +409,7 @@ export const Component = memo(function SyncTwitterCookies() {
                 if (session) setInvalidMap((x) => ({ ...x, [session]: true }))
             }
         } catch (error_) {
-            enqueueSnackbar((error_ as Error).message || t`Network error. Please try again later.`, {
+            showSnackbar((error_ as Error).message || t`Network error. Please try again later.`, {
                 variant: 'error',
             })
         }
