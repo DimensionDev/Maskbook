@@ -9,3 +9,9 @@ export function usePrivyWallet(address: string | undefined) {
         return ready && address ? wallets.find((x) => isSameAddress(x.address, address)) || null : null
     }, [wallets, ready, address])
 }
+
+function useMockPrivyWallet() {
+    return null
+}
+
+export default process.env.PRIVY_APP_ID ? usePrivyWallet : useMockPrivyWallet

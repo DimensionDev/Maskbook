@@ -1,14 +1,14 @@
+import { Trans, useLingui } from '@lingui/react/macro'
 import { CopyButton, FormattedAddress, Icon, ImageIcon, NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
-import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'

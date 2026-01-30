@@ -290,6 +290,7 @@ export function provider_url() { return new URL("./general/Provider.svg", import
 export function public_key_dark_url() { return new URL("./general/PublicKey.dark.svg", import.meta.url).href }
 export function public_key_light_url() { return new URL("./general/PublicKey.light.svg", import.meta.url).href }
 export function public_key_2_url() { return new URL("./general/PublicKey2.svg", import.meta.url).href }
+export function qrcode_icon_url() { return new URL("./general/QrcodeIcon.svg", import.meta.url).href }
 export function questions_url() { return new URL("./general/Questions.svg", import.meta.url).href }
 export function radio_button_checked_url() { return new URL("./general/RadioButtonChecked.svg", import.meta.url).href }
 export function radio_button_un_checked_url() { return new URL("./general/RadioButtonUnChecked.svg", import.meta.url).href }

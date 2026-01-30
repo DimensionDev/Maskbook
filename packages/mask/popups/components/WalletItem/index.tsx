@@ -1,6 +1,13 @@
 import { Trans } from '@lingui/react/macro'
 import { FormattedAddress } from '@masknet/shared'
-import { ImportSource, NetworkPluginID, PersistentStorages, type Wallet } from '@masknet/shared-base'
+import {
+    ImportSource,
+    NetworkPluginID,
+    PersistentStorages,
+    PopupRoutes,
+    PrivyEnvGuard,
+    type Wallet,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -19,6 +26,9 @@ import { memo, useCallback, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import { WalletBalance } from '../index.js'
 import { WalletAvatar } from '../WalletAvatar/index.js'
+import { Icons } from '@masknet/icons'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -93,57 +103,71 @@ interface WalletItemProps extends Omit<ListItemProps, 'onSelect'> {
     hiddenTag?: boolean
 }
 
-export const WalletItem = memo<WalletItemProps>(function WalletItem({
-    wallet,
-    onSelect,
-    isSelected,
-    className,
-    hiddenTag,
-    ...rest
-}) {
-    const { classes, cx } = useStyles()
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
+export const WalletItem = memo<WalletItemProps>(
+    PrivyEnvGuard(function WalletItem({ wallet, onSelect, isSelected, className, hiddenTag, ...rest }) {
+        const { classes, cx } = useStyles()
+        const navigate = useNavigate()
+        const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
-    const handleSelect = useCallback(() => {
-        onSelect(wallet)
-    }, [wallet])
+        const handleSelect = useCallback(() => {
+            onSelect(wallet)
+        }, [wallet])
 
-    const extraName = domain && domain !== wallet.name ? ` (${formatDomainName(domain)})` : ''
-    const { wallets: fireflyWallets } = useWallets()
-    const isFireflyWallet = useMemo(
-        () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),
-        [fireflyWallets, wallet.address],
-    )
-    const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
+        const extraName = domain && domain !== wallet.name ? ` (${formatDomainName(domain)})` : ''
+        const { wallets: fireflyWallets } = useWallets()
+        const isFireflyWallet = useMemo(
+            () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),
+            [fireflyWallets, wallet.address],
+        )
+        const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
 
-    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : `${wallet.name}${extraName}`)
-    return (
-        <ListItem
-            className={cx(classes.item, className)}
-            onClick={handleSelect}
-            secondaryAction={<Radio sx={{ marginLeft: 0.75 }} checked={isSelected} />}
-            {...rest}>
-            <WalletAvatar address={wallet.address} size={24} />
-            <Box className={classes.text}>
-                <Box width={180} overflow="auto">
-                    <Typography className={classes.mainLine} component="div">
-                        <Typography className={classes.name}>{walletName}</Typography>
-                        {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (
-                            <Typography component="span" className={classes.badge}>
-                                <Trans>Imported</Trans>
-                            </Typography>
-                        )}
-                    </Typography>
-                    <Typography className={classes.address}>
-                        <Tooltip title={wallet.address} placement="right" classes={{ tooltip: classes.tooltip }}>
-                            <span>
-                                <FormattedAddress address={wallet.address} size={4} formatter={formatEthereumAddress} />
-                            </span>
-                        </Tooltip>
-                    </Typography>
+        const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : `${wallet.name}${extraName}`)
+        return (
+            <ListItem
+                className={cx(classes.item, className)}
+                onClick={handleSelect}
+                secondaryAction={<Radio sx={{ marginLeft: 0.75 }} checked={isSelected} />}
+                {...rest}>
+                <WalletAvatar address={wallet.address} size={24} />
+                <Box className={classes.text}>
+                    <Box width={180} overflow="auto">
+                        <Typography className={classes.mainLine} component="div">
+                            <Typography className={classes.name}>{walletName}</Typography>
+                            {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (
+                                <Typography component="span" className={classes.badge}>
+                                    <Trans>Imported</Trans>
+                                </Typography>
+                            )}
+                        </Typography>
+                        <Typography className={classes.address}>
+                            <Tooltip title={wallet.address} placement="right" classes={{ tooltip: classes.tooltip }}>
+                                <span>
+                                    <FormattedAddress
+                                        address={wallet.address}
+                                        size={4}
+                                        formatter={formatEthereumAddress}
+                                    />
+                                </span>
+                            </Tooltip>
+                            {isFireflyWallet ?
+                                <Icons.QrcodeIcon
+                                    size={16}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        navigate(
+                                            urlcat(PopupRoutes.SyncTwitterCookies, {
+                                                address: wallet.address,
+                                                name: walletName,
+                                            }),
+                                        )
+                                    }}
+                                />
+                            :   null}
+                        </Typography>
+                    </Box>
+                    <WalletBalance className={classes.balance} skeletonWidth={60} account={wallet.address} />
                 </Box>
-                <WalletBalance className={classes.balance} skeletonWidth={60} account={wallet.address} />
-            </Box>
-        </ListItem>
-    )
-})
+            </ListItem>
+        )
+    }),
+)

@@ -3,7 +3,7 @@
     "version": "0",
     "manifest_version": 2,
     "permissions": ["storage", "webNavigation", "activeTab", "identity"],
-    "optional_permissions": ["<all_urls>", "notifications", "clipboardRead", "tabs"],
+    "optional_permissions": ["<all_urls>", "notifications", "clipboardRead", "tabs", "cookies"],
     "background": { "page": "background.html" },
     "icons": {
         "16": "assets/16x16.png",
