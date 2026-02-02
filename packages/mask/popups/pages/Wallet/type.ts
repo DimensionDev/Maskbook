@@ -1,4 +1,4 @@
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import type { TransactionDescriptor, TransactionContext, GasOptionType } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter, Transaction } from '@masknet/web3-shared-evm'
 
@@ -36,7 +36,7 @@ export type GasSetting = {
 
 export type TransactionDetail = {
     gasOptionType?: GasOptionType
-    payload: JsonRpcPayload
+    payload: JsonRpcRequest
     computedPayload: Partial<Transaction>
     formattedTransaction?: TransactionDescriptor<ChainId, Transaction, TransactionParameter>
     transactionContext?: TransactionContext<ChainId, TransactionParameter>

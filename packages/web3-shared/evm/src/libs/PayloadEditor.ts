@@ -1,10 +1,10 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import defer * as web3_utils from 'web3-utils'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import type { Wallet } from '@masknet/shared-base'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { parseChainId } from '../helpers/parseChainId.js'
-import { createJsonRpcPayload } from '../helpers/createJsonRpcPayload.js'
+import { createJsonRpcRequest } from '../helpers/createJsonRpcRequest.js'
 import {
     type Transaction,
     type TransactionOptions,
@@ -20,7 +20,7 @@ type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
 export class PayloadEditor {
     constructor(
-        private payload: JsonRpcPayload,
+        private payload: JsonRpcRequest,
         private options?: Options,
     ) {}
 
@@ -37,11 +37,11 @@ export class PayloadEditor {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.eth_sign:
-                return first(params)
+                return String(first(params))
             case EthereumMethodType.personal_sign:
-                return params?.[1]
+                return String(params?.[1])
             case EthereumMethodType.eth_signTypedData_v4:
-                return first(params)
+                return String(first(params))
             default:
                 const config = this.config
                 return config.from
@@ -175,7 +175,7 @@ export class PayloadEditor {
 
     static from<T>(id: number, method: EthereumMethodType, params: T[] = [], options?: Options) {
         return new PayloadEditor(
-            createJsonRpcPayload(id, {
+            createJsonRpcRequest(id, {
                 method,
                 params,
             }),
@@ -187,7 +187,7 @@ export class PayloadEditor {
         return PayloadEditor.from(0, method, params, options)
     }
 
-    static fromPayload(payload: JsonRpcPayload, options?: Options) {
+    static fromPayload(payload: JsonRpcRequest, options?: Options) {
         return new PayloadEditor(payload, options)
     }
 }

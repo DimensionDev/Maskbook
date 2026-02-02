@@ -11,7 +11,7 @@ import { Box, Dialog, DialogActions, DialogContent, DialogContentText, IconButto
 import React, { memo, startTransition, useCallback, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import type { JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcResponse } from 'web3-types'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { AddChainRequest } from './AddChainRequest.js'
 import { PermissionRequest } from './PermissionRequest.js'
@@ -35,7 +35,7 @@ const useStyles = makeStyles()({
 })
 
 interface InteractionProps {
-    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse>
+    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse<unknown, unknown>>
     totalMessages: number
     currentMessageIndex: number
     setMessageIndex(count: number): void
@@ -154,7 +154,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
 Interaction.displayName = 'Interaction'
 
 export interface InteractionItemProps {
-    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse>
+    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse<unknown, unknown>>
     setIsDanger(isDanger: boolean): void
     setConfirmVerb(verb: ReactNode): void
     setConfirmAction(action: (isLastRequest: boolean) => Promise<void>): void

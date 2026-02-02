@@ -123,7 +123,7 @@ const methods: Methods = {
         }).request({
             method: EthereumMethodType.eth_sendRawTransaction,
             params: [transaction],
-        })
+        }) as any
     },
     async eth_sendTransaction(options) {
         await Services.Wallet.requestUnlockWallet()
@@ -136,7 +136,7 @@ const methods: Methods = {
         }).request({
             method: EthereumMethodType.eth_sendTransaction,
             params: [options],
-        })
+        }) as any
     },
     async eth_signTypedData_v4(requestedAddress, typedData) {
         await Services.Wallet.requestUnlockWallet()
@@ -149,7 +149,7 @@ const methods: Methods = {
         }).request({
             method: EthereumMethodType.eth_signTypedData_v4,
             params: [requestedAddress, typedData],
-        })
+        }) as any
     },
     async eth_subscribe(...params) {
         if ((await Services.Wallet.sdk_eth_chainId()) !== ChainId.Mainnet) {
@@ -175,7 +175,7 @@ const methods: Methods = {
                 }).request({
                     method: EthereumMethodType.wallet_addEthereumChain,
                     params: [request],
-                })
+                }) as any
             }
             // Note: We have not figure out the security concern of this method, therefore hide it in the production.
         :   null!,
@@ -197,7 +197,7 @@ const methods: Methods = {
         }).request({
             method: EthereumMethodType.wallet_requestPermissions,
             params: [request],
-        })
+        }) as any
     },
     wallet_revokePermissions: null!,
     async wallet_switchEthereumChain(request) {
@@ -208,7 +208,7 @@ const methods: Methods = {
         }).request({
             method: EthereumMethodType.wallet_switchEthereumChain,
             params: [request],
-        })
+        }) as any
     },
     async wallet_watchAsset({ type, options: { address, decimals, image, symbol, tokenId } }) {
         // TODO: throw error if chainId is unknown (https://eips.ethereum.org/EIPS/eip-747#erc1046-type)
@@ -308,7 +308,7 @@ const methods: Methods = {
         }).request({
             method: EthereumMethodType.personal_sign,
             params: [challenge, requestedAddress],
-        })
+        }) as any
     },
     async personal_ecRecover(message, signature) {
         return providers.EVMWeb3.getWeb3().eth.accounts.recover(message, signature)

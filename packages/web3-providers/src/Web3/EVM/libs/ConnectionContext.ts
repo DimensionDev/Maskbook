@@ -6,7 +6,7 @@ import {
     EthereumMethodType,
     PayloadEditor,
     ProviderType,
-    createJsonRpcPayload,
+    createJsonRpcRequest,
     createJsonRpcResponse,
     parseChainId,
     type Transaction,
@@ -172,7 +172,7 @@ export class ConnectionContext {
      * JSON RPC request payload
      */
     get request() {
-        return createJsonRpcPayload(this.id, this.requestArguments)
+        return createJsonRpcRequest(this.id, this.requestArguments)
     }
 
     /**

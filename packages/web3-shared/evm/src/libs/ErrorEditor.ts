@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es'
-import type { JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcResponse } from 'web3-types'
 import type { RecognizableError } from '@masknet/web3-shared-base'
 
 // https://www.jsonrpc.org/specification#error_object
@@ -18,7 +18,7 @@ export enum JSON_RPC_ERROR_CODE {
 export class ErrorEditor {
     constructor(
         private unknownError: unknown,
-        private response?: JsonRpcResponse | null,
+        private response?: JsonRpcResponse<unknown, unknown> | null,
         private fallback?: string,
     ) {}
 
@@ -31,11 +31,10 @@ export class ErrorEditor {
             if (rpcError && typeof rpcError === 'string') return new Error(rpcError)
         }
 
-        {
-            const responseError = this.response?.error as unknown
+        if (this.response && 'error' in this.response) {
+            const responseError = this.response?.error
             if (responseError instanceof Error) return responseError
-            if (responseError && typeof (responseError as Error).message === 'string')
-                return new Error((responseError as Error).message)
+            if (responseError && typeof responseError.message === 'string') return new Error(responseError.message)
             if (responseError && typeof responseError === 'string') return new Error(responseError)
         }
 
@@ -47,7 +46,7 @@ export class ErrorEditor {
      * At least an error exists.
      */
     get presence() {
-        return !isNil(this.unknownError) || !isNil(this.response?.error)
+        return !isNil(this.unknownError) || (this.response && 'error' in this.response && this.response.error)
     }
 
     /**
@@ -94,7 +93,7 @@ export class ErrorEditor {
         return new ErrorEditor(error, null, fallback)
     }
 
-    static from(error: unknown, response?: JsonRpcResponse | null, fallback?: string) {
+    static from(error: unknown, response?: JsonRpcResponse<unknown, unknown> | null, fallback?: string) {
         return new ErrorEditor(error, response, fallback)
     }
 }

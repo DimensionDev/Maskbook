@@ -73,8 +73,11 @@ export class Popups implements Middleware<ConnectionContext> {
 
             if (editor.presence || !response) {
                 context.abort(editor.error)
-            } else {
+            }
+            if (response && 'result' in response) {
                 context.write(response.result)
+            } else {
+                context.write(undefined)
             }
         } catch (error) {
             context.abort(error)

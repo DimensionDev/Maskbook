@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
 import { createTransaction } from '../../../database/utils/openDB.js'
 import type { RequestPayload } from '../database/types.js'
@@ -8,7 +8,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'
 
-function requestSorter(a: JsonRpcPayload, z: JsonRpcPayload) {
+function requestSorter(a: JsonRpcRequest, z: JsonRpcRequest) {
     return ((a.id as number) ?? 0) - ((z.id as number) ?? 0)
 }
 

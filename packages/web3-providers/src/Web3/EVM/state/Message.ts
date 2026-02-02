@@ -1,9 +1,9 @@
 import { omitBy } from 'lodash-es'
-import type { JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcResponse } from 'web3-types'
 import { EMPTY_OBJECT, PopupRoutes, Sniffings, type StorageItem } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
-    createJsonRpcPayload,
+    createJsonRpcRequest,
     PayloadEditor,
     type MessageRequest,
     type MessageResponse,
@@ -106,11 +106,12 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
 
         const request = await this.updateRequest(request_, updates)
         const response = await this.context.send(
-            createJsonRpcPayload(0, request.arguments),
+            createJsonRpcRequest(0, request.arguments),
             omitBy<TransactionOptions>(request.options, isUndefined),
         )
         const error = ErrorEditor.from(null, response)
-        if (error.presence) return response
+        // TODO(web3@4): review after upgrade
+        if (error.presence) return response as any
 
         await this.updateMessage(id, {
             request,
@@ -124,6 +125,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
             keepNonceUnrelated: this.isNonceUnrelated(request),
         })
 
-        return response
+        // TODO(web3@4): review after upgrade
+        return response as any
     }
 }
