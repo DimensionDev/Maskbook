@@ -1,6 +1,6 @@
 import defer * as web3_utils from 'web3-utils'
 import type { TransactionConfig } from 'web3-core'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import { EthereumMethodType, type RequestArguments } from '../types/index.js'
 
 export class RequestID {
@@ -66,7 +66,7 @@ export class RequestID {
         return new RequestID(url, requestArguments)
     }
 
-    static fromPayload(url: string, payload: JsonRpcPayload) {
+    static fromPayload(url: string, payload: JsonRpcRequest) {
         return new RequestID(url, {
             method: payload.method as EthereumMethodType,
             params: payload.params ?? [],

@@ -38,8 +38,10 @@ class CustomNetworkAPI implements Middleware<ConnectionContext> {
 
             if (editor.presence) {
                 context.abort(editor.error)
-            } else {
+            } else if ('result' in response) {
                 context.write(response.result)
+            } else {
+                context.write(undefined)
             }
         } catch (error) {
             context.abort(error)

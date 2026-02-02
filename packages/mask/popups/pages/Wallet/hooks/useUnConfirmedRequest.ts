@@ -1,7 +1,7 @@
 import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
@@ -22,7 +22,7 @@ export const useUnconfirmedRequest = () => {
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
         return {
             identifier: payload.identifier ? ECKeyIdentifier.from(payload.identifier).unwrapOr(undefined) : undefined,
-            payload: omit(payload, 'owner', 'identifier', 'paymentToken') as JsonRpcPayload,
+            payload: omit(payload, 'owner', 'identifier', 'paymentToken') as JsonRpcRequest,
             computedPayload,
             formatterTransaction,
             transactionContext,

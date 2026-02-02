@@ -66,7 +66,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
                     errorMessage.includes('addEthereumChain') ||
                     errorMessage.includes('configured for connector'))
             ) {
-                await this.request<void>({
+                await this.request({
                     method: EthereumMethodType.wallet_addEthereumChain,
                     params: [
                         {
@@ -86,10 +86,10 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
         // Delay to make sure the provider will return the newest chain id.
         await delay(1000)
 
-        const actualChainId = await this.request<string>({
+        const actualChainId = (await this.request({
             method: EthereumMethodType.eth_chainId,
             params: [],
-        })
+        })) as string
 
         if (Number.parseInt(actualChainId, 16) !== chainId)
             throw new Error(`Failed to switch to ${EVMChainResolver.chainFullName(chainId)}.`)
@@ -97,7 +97,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
 
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
-    abstract request<T>(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<T>
+    abstract request(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<unknown>
 
     // Create an external provider from the basic request method.
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
@@ -107,14 +107,14 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
     }
 
     async connect(expectedChainId: ChainId, address?: string): Promise<Account<ChainId>> {
-        const accounts = await this.request<string[]>({
+        const accounts = (await this.request({
             method: EthereumMethodType.eth_requestAccounts,
             params: [],
-        })
-        const chainId = await this.request<string>({
+        })) as string[]
+        const chainId = (await this.request({
             method: EthereumMethodType.eth_chainId,
             params: [],
-        })
+        })) as string
 
         const actualChainId = Number.parseInt(chainId, 16)
         if (expectedChainId !== actualChainId) throw new Error(`Failed to connect to ${this.providerType}`)

@@ -1,14 +1,17 @@
-import { EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, createJsonRpcRequest } from '@masknet/web3-shared-evm'
 import { fetchJsonRpcResponse } from './fetchJsonRpcResponse.js'
 
 export async function fetchChainId(url: string, init?: RequestInit) {
-    const { result } = await fetchJsonRpcResponse(
+    const response = await fetchJsonRpcResponse(
         url,
-        createJsonRpcPayload(0, {
+        createJsonRpcRequest(0, {
             method: EthereumMethodType.eth_chainId,
             params: [],
         }),
         init,
     )
-    return Number.parseInt(result, 16)
+    if ('result' in response && typeof response.result === 'string') {
+        return Number.parseInt(response.result, 16)
+    }
+    throw new Error('Failed to fetch chain ID')
 }

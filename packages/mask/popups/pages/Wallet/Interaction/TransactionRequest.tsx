@@ -7,7 +7,7 @@ import { GasOptionType, MessageStateType, TransactionDescriptorType } from '@mas
 import {
     abiCoder,
     ChainId,
-    createJsonRpcPayload,
+    createJsonRpcRequest,
     createJsonRpcResponse,
     ErrorEditor,
     formatEthereumAddress,
@@ -100,7 +100,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             queryKey,
             networkMode: 'always',
             queryFn: async (): Promise<TransactionDetail> => {
-                const payload = createJsonRpcPayload(0, request.request.arguments)
+                const payload = createJsonRpcRequest(0, request.request.arguments)
                 const computedPayload = PayloadEditor.fromPayload(payload).config
                 const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
                 // eslint-disable-next-line react/no-missing-context-display-name

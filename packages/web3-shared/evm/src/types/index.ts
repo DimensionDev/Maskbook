@@ -1,5 +1,9 @@
-import type { Transaction as Web3Transaction, TransactionReceipt as Web3TransactionReceipt } from 'web3-core'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type {
+    Transaction as Web3Transaction,
+    TransactionReceipt as Web3TransactionReceipt,
+    AbstractProvider,
+} from 'web3-core'
+import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
 import type { Web3 } from '../libs/Web3.js'
@@ -345,16 +349,15 @@ export enum ProviderType {
 /**
  * EIP-1193 compatible provider
  */
-export interface Web3Provider {
-    send(
-        payload: JsonRpcPayload,
-        callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    ): Promise<JsonRpcResponse>
+export interface Web3Provider extends AbstractProvider {
+    // TODO(web3@4): review after upgrade
     sendAsync(
-        payload: JsonRpcPayload,
-        callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    ): Promise<JsonRpcResponse>
-    request<T>(requestArguments: RequestArguments): Promise<T>
+        payload: JsonRpcRequest,
+        callback?: (error: Error | null, result?: any) => Promise<unknown> | void,
+    ): Promise<any>
+    // TODO(web3@4): review after upgrade
+    send(payload: JsonRpcRequest, callback: (error: Error | null, result?: any) => unknown): void
+    request(args: RequestArguments): Promise<unknown>
 
     on(name: 'connect', listener: (connectInfo: { chainId: string }) => void): Web3Provider
     on(name: 'disconnect', listener: (error: { message: string; code: number; data?: unknown }) => void): Web3Provider
@@ -397,7 +400,7 @@ export interface MessageRequest {
     options: RequestOptions
 }
 
-export type MessageResponse = JsonRpcResponse
+export type MessageResponse = JsonRpcResponse<unknown, unknown>
 
 export interface Transaction {
     from?: string

@@ -51,10 +51,10 @@ export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
         return this.bridge as unknown as Web3Provider
     }
 
-    override async request<T>(
+    override async request(
         requestArguments: RequestArguments,
         options?: WalletAPI.ProviderOptions<ChainId>,
-    ): Promise<T> {
+    ): Promise<unknown> {
         const provider = this.createWeb3Provider(options)
         return provider.request(requestArguments)
     }
@@ -63,14 +63,14 @@ export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
         await this.readyPromise
 
         const provider = this.createWeb3Provider()
-        const accounts = await provider.request<string[]>({
+        const accounts = (await provider.request({
             method: EthereumMethodType.eth_requestAccounts,
             params: [],
-        })
-        const chainId = await provider.request<string>({
+        })) as string[]
+        const chainId = (await provider.request({
             method: EthereumMethodType.eth_chainId,
             params: [],
-        })
+        })) as string
         return {
             chainId: Number.parseInt(chainId, 16),
             account: first(accounts) ?? '',
