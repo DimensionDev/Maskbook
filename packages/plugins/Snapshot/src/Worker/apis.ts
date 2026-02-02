@@ -1,7 +1,7 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { SNAPSHOT_RELAY_URL, SNAPSHOT_SEQ_URL } from '../constants.js'
 import type { HubProposal, Proposal, RawVote, VoteResult } from '../types.js'
-import { formatBoxProposal, fetchProposalFromBoxApi, fetchVotesFromBox, formatBoxVote } from './box.js'
+import { fetchProposalFromBoxApi, fetchVotesFromBox, formatBoxVote } from './box.js'
 
 export async function fetchProposal(id: string) {
     const proposal = await fetchProposalFromGraphql(id)
@@ -82,8 +82,7 @@ async function fetchVotesFromGraphql(id: string, first: number, skip: number, sp
 
 async function fetchProposalFromGraphql(id: string): Promise<HubProposal> {
     if (id.includes('/')) {
-        const proposal = await fetchProposalFromBoxApi(id)
-        return formatBoxProposal(proposal.proposal)
+        return fetchProposalFromBoxApi(id)
     }
     const response = await fetch('https://hub.snapshot.org/graphql', {
         method: 'POST',

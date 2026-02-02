@@ -1,63 +1,25 @@
-import type { HubProposal, RawVote } from '../types.js'
+import type { HubProposal, RawVote, Strategy } from '../types.js'
 
-interface ProposalQueryResult {
-    proposal: Proposal
-}
-
-// cspell:ignore timelock
-interface Proposal {
-    id: string
-    proposal_id: string
+interface SpaceQueryResult {
     space: Space
-    author: Author
-    quorum: number
-    execution_hash: string
-    metadata: ProposalMetadata
-    start: number
-    min_end: number
-    max_end: number
-    snapshot: number
-    scores_1: string
-    scores_2: string
-    scores_3: string
-    scores_total: number
-    execution_time: number
-    execution_strategy: string
-    execution_strategy_type: string
-    execution_destination: string
-    timelock_veto_guardian: string
-    strategies_indices: number[]
-    strategies: string[]
-    strategies_params: string[]
-    created: number
-    edited: number
-    tx: string
-    execution_tx: string
-    veto_tx: string
-    vote_count: number
-    execution_ready: boolean
-    executed: boolean
-    vetoed: boolean
-    completed: boolean
-    cancelled: boolean
 }
 
 interface Space {
     id: string
+    _indexer: string
     controller: string
     authenticators: string[]
     metadata: SpaceMetadata
-    strategies_parsed_metadata: StrategyParsedMetadata[]
+    voting_power_validation_strategies_parsed_metadata: StrategyParsedMetadata[]
+    proposal_count: number
+    vote_count: number
+    created: number
 }
 
 interface SpaceMetadata {
-    id: string
     name: string
     avatar: string
     voting_power_symbol: string
-    treasuries: string[]
-    executors: string[]
-    executors_types: string[]
     executors_strategies: ExecutorStrategy[]
 }
 
@@ -82,25 +44,165 @@ interface StrategyData {
     decimals: number
     symbol: string
     token: string
-    payload: any // Consider defining a more specific type if the structure is known
+    payload: any
 }
 
-interface Author {
+interface Proposal {
     id: string
-    address_type: string
+    proposal_id: string
+    space: {
+        id: string
+        metadata: SpaceMetadata
+        strategies_parsed_metadata: StrategyParsedMetadata[]
+    }
+    author: {
+        id: string
+    }
+    quorum: number
+    execution_hash: string
+    metadata: {
+        id: string
+        title: string
+        body: string
+        discussion: string
+        execution: string
+        choices: string[]
+        labels: string[]
+    }
+    start: number
+    max_end: number
+    snapshot: number
+    scores_1: string
+    scores_2: string
+    scores_3: string
+    scores_total: number
+    execution_strategy: string
+    execution_strategy_type: string
+    execution_destination: string
+    strategies_indices: number[]
+    strategies: string[]
+    strategies_params: string[]
+    created: number
+    vote_count: number
 }
 
-interface ProposalMetadata {
+interface ProposalQueryResult {
+    proposal: Proposal
+}
+
+interface VotesQueryResponse {
+    data: {
+        votes: Vote[]
+    }
+}
+
+interface Vote {
     id: string
-    title: string
-    body: string
-    discussion: string
-    execution: string
-    choices: string[]
-    labels: string[]
+    voter: {
+        id: string
+    }
+    space: {
+        id: string
+    }
+    metadata: {
+        reason: string | null
+    }
+    proposal: number
+    choice: number
+    vp: string
+    created: number
+    tx: string
 }
 
-export async function fetchProposalFromBoxApi(id: string) {
+// Parse the space identifier to extract indexer and space address
+// Format: "sn:0x07bd3419669f9f0cc8f19e9e2457089cdd4804a4c41a5729ee9c7fd02ab8ab62"
+// Returns: { indexer: "sn", spaceAddress: "0x07bd..." }
+function parseSpaceIdentifier(space: string): { indexer: string; spaceAddress: string } {
+    const parts = space.split(':')
+    if (parts.length > 1) {
+        return { indexer: parts[0], spaceAddress: parts[1] }
+    }
+    // Default to "sn" indexer if no prefix
+    return { indexer: 'sn', spaceAddress: space }
+}
+
+export async function fetchProposalFromBoxApi(id: string): Promise<HubProposal> {
+    // Parse the ID to extract space and proposal ID
+    // Format: "0x07bd3419669f9f0cc8f19e9e2457089cdd4804a4c41a5729ee9c7fd02ab8ab62/54"
+    const [spaceId] = id.split('/')
+
+    const { indexer, spaceAddress } = parseSpaceIdentifier(spaceId)
+
+    const spaceData = await fetchSpaceFromBoxApi(indexer, spaceAddress)
+
+    const proposalData = await fetchProposalDataFromBoxApi(id)
+
+    // Merge space data into proposal
+    // Use the original spaceId (with prefix if present) as the space identifier
+    proposalData.space = {
+        id: spaceId, // Preserve the original space identifier (e.g., "sn:0x07bd...")
+        metadata: spaceData.metadata,
+        strategies_parsed_metadata: spaceData.voting_power_validation_strategies_parsed_metadata,
+    }
+
+    // Return formatted proposal
+    return formatBoxProposal(proposalData, spaceData)
+}
+
+async function fetchSpaceFromBoxApi(indexer: string, spaceAddress: string): Promise<Space> {
+    const response = await fetch('https://api.snapshot.box/', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            operationName: 'Space',
+            query: /* GraphQL */ `
+                query Space($indexer: String!, $id: String!) {
+                    space(indexer: $indexer, id: $id) {
+                        id
+                        _indexer
+                        controller
+                        authenticators
+                        metadata {
+                            name
+                            avatar
+                            voting_power_symbol
+                            executors_strategies {
+                                treasury_chain
+                            }
+                        }
+                        voting_power_validation_strategies_parsed_metadata {
+                            index
+                            data {
+                                id
+                                name
+                                description
+                                decimals
+                                symbol
+                                token
+                                payload
+                            }
+                        }
+                        proposal_count
+                        vote_count
+                        created
+                    }
+                }
+            `,
+            variables: {
+                indexer,
+                id: spaceAddress,
+            },
+        }),
+    })
+
+    const res: { data: SpaceQueryResult } = await response.json()
+    return res.data.space
+}
+
+async function fetchProposalDataFromBoxApi(proposalId: string): Promise<Proposal> {
     const response = await fetch('https://api.snapshot.box/', {
         method: 'POST',
         headers: {
@@ -116,16 +218,10 @@ export async function fetchProposalFromBoxApi(id: string) {
                         proposal_id
                         space {
                             id
-                            controller
-                            authenticators
                             metadata {
-                                id
                                 name
                                 avatar
                                 voting_power_symbol
-                                treasuries
-                                executors
-                                executors_types
                                 executors_strategies {
                                     id
                                     address
@@ -150,7 +246,6 @@ export async function fetchProposalFromBoxApi(id: string) {
                         }
                         author {
                             id
-                            address_type
                         }
                         quorum
                         execution_hash
@@ -164,110 +259,88 @@ export async function fetchProposalFromBoxApi(id: string) {
                             labels
                         }
                         start
-                        min_end
                         max_end
                         snapshot
                         scores_1
                         scores_2
                         scores_3
                         scores_total
-                        execution_time
                         execution_strategy
                         execution_strategy_type
                         execution_destination
-                        timelock_veto_guardian
                         strategies_indices
                         strategies
                         strategies_params
                         created
-                        edited
-                        tx
-                        execution_tx
-                        veto_tx
                         vote_count
-                        execution_ready
-                        executed
-                        vetoed
-                        completed
-                        cancelled
                     }
                 }
             `,
             variables: {
-                id,
+                id: proposalId,
             },
         }),
     })
 
     const res: { data: ProposalQueryResult } = await response.json()
-    return res.data
+    return res.data.proposal
 }
 
-export function formatBoxProposal(proposal: Proposal): HubProposal {
+export function formatBoxProposal(proposal: Proposal, space: Space): HubProposal {
+    // Map strategies from Box API format to Snapshot format
+    const strategies: Strategy[] = space.voting_power_validation_strategies_parsed_metadata.map((sm) => ({
+        name: sm.data.name,
+        params: {
+            address: sm.data.token,
+            decimals: sm.data.decimals,
+            symbol: sm.data.symbol,
+        },
+        network: '',
+        __typename: 'Strategy',
+    }))
+
+    const network = space.metadata.executors_strategies?.[0]?.treasury_chain || ''
+
+    // Compute state based on current time
+    const now = Math.floor(Date.now() / 1000)
+    const state =
+        proposal.start > now ? 'pending'
+        : proposal.max_end < now ? 'closed'
+        : 'active'
+
     return {
         author: proposal.author.id,
         body: proposal.metadata.body,
         choices: proposal.metadata.choices,
-        created: proposal.created,
+        created: proposal.start, // Box API doesn't return created separately
         discussion: proposal.metadata.discussion,
         end: proposal.max_end,
         id: proposal.id,
         ipfs: '',
-        network: '',
-        privacy: '',
+        network,
+        privacy: 'shutter',
         scores: [],
         scores_by_strategy: [+proposal.scores_1, +proposal.scores_2, +proposal.scores_3],
         scores_total: proposal.scores_total,
         snapshot: proposal.snapshot.toString(),
         start: proposal.start,
-        state: '',
-        strategies: [],
-        symbol: proposal.space.metadata.voting_power_symbol,
+        state,
+        strategies,
+        symbol: space.metadata.voting_power_symbol,
         title: proposal.metadata.title,
-        type: '',
+        type: 'single-choice',
         votes: proposal.vote_count,
         space: {
-            id: proposal.space.id,
-            name: proposal.space.metadata.name,
-            symbol: proposal.space.metadata.voting_power_symbol,
-            avatar: proposal.space.metadata.avatar,
+            id: space.id,
+            name: space.metadata.name,
+            symbol: space.metadata.voting_power_symbol,
+            avatar: space.metadata.avatar,
         },
     }
 }
 
-/**
- * TypeScript types for the Votes GraphQL query result
- */
-
-// Main response interface
-export interface VotesQueryResponse {
-    data: {
-        votes: Vote[]
-    }
-}
-
-// Vote interface representing each vote item
-export interface Vote {
-    id: string
-    voter: {
-        id: string
-    }
-    space: {
-        id: string
-    }
-    metadata: {
-        reason: string | null
-    }
-    proposal: number
-    choice: number
-    /* Voting power */
-    vp: string
-    /** Unix timestamp */
-    created: number
-    tx: string
-}
-
 export async function fetchVotesFromBox(id: string, first: number, skip: number, space: string) {
+    const proposalId = id.includes('/') ? id.split('/').pop()! : id
     const response = await fetch('https://api.snapshot.box/', {
         method: 'POST',
         headers: {
@@ -315,7 +388,7 @@ export async function fetchVotesFromBox(id: string, first: number, skip: number,
                 orderBy: 'vp',
                 orderDirection: 'desc',
                 where: {
-                    proposal: +id,
+                    proposal: proposalId,
                     space,
                 },
             },
