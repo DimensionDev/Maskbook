@@ -3,18 +3,18 @@ import { join } from 'node:path'
 import { task } from '../utils/task.ts'
 import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
 import { shell } from '../utils/run.ts'
-import { rimraf } from 'rimraf'
 
 const ABIS_PATH = join(import.meta.dirname, '../../../web3-contracts/abis/')
 const GENERATED_PATH = join(import.meta.dirname, '../../../web3-contracts/types/')
 
-async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
+async function replaceFileAll(file: string, pairs: Array<[string, string] | false>) {
     let content = await fs.readFile(file, 'utf-8')
-    for (const [pattern, value] of pairs) {
-        // only replace once.
-        // eslint-disable-next-line unicorn/prefer-string-replace-all
-        content = content.replace(new RegExp(pattern, 'mgu'), value)
+    for (const x of pairs) {
+        if (!x) continue
+        const [pattern, value] = x
+        content = content.replaceAll(pattern, value)
     }
+    if (file.includes('index')) console.log(content)
     await fs.writeFile(file, content, 'utf-8')
 }
 
@@ -24,7 +24,7 @@ export async function buildContracts() {
     // find all files matching the glob
     const allFiles = glob(cwd, ['./abis/*.json'])
 
-    await rimraf(GENERATED_PATH)
+    await fs.rmdir(GENERATED_PATH, { recursive: true })
     await runTypeChain({
         cwd,
         filesToProcess: allFiles,
@@ -32,25 +32,14 @@ export async function buildContracts() {
         outDir: GENERATED_PATH,
         target: 'web3-v1',
     })
-
-    // rename Qualification to QualificationEvent
-    const qualificationDefinition = join(GENERATED_PATH, 'Qualification.ts')
-    replaceFileAll(qualificationDefinition, [
-        ['type Qualification', 'type QualificationEvent'],
-        ['Callback<Qualification>', 'Callback<QualificationEvent>'],
-    ])
-    replaceFileAll(join(GENERATED_PATH, 'types.ts'), [['web3-core/types', 'web3-core']])
-
-    await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpm exec @magic-works/ts-esm-migrate .`)
-    // format code
-    await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpm exec prettier . --write`)
-    // rename .ts to .d.ts
     for (const file of await fs.readdir(GENERATED_PATH)) {
+        await replaceFileAll(join(GENERATED_PATH, file), [
+            ['from "./types"', "from './types.js'"],
+            file.includes('types.ts') && ['web3-core/types', 'web3-core'],
+            file.includes('index.ts') && ['";\n', '.js";\n'],
+        ])
         await fs.rename(join(GENERATED_PATH, file), join(GENERATED_PATH, file.replace('.ts', '.d.ts')))
     }
-
-    // add to git stage
-    await awaitChildProcess(shell.cwd(ABIS_PATH)`git add .`)
-    await awaitChildProcess(shell.cwd(GENERATED_PATH)`git add .`)
+    await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpm exec prettier . --write`)
 }
 task(buildContracts, 'build-contracts', 'Build .d.ts files from ABI files')
