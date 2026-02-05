@@ -1,1 +1,1 @@
-export { default as LensHub } from '../abis/LensHub.json' with { type: 'json' }
+export { default as LensHubAbi } from '../abis/LensHub.json' with { type: 'json' }

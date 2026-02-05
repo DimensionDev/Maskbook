@@ -1,1 +1,1 @@
-export { default as ERC20 } from '../abis/ERC20.json' with { type: 'json' }
+export { default as ERC20Abi } from '../abis/ERC20.json' with { type: 'json' }

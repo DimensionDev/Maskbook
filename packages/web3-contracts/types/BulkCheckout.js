@@ -1,1 +1,1 @@
-export { default as BulkCheckout } from '../abis/BulkCheckout.json' with { type: 'json' }
+export { default as BulkCheckoutAbi } from '../abis/BulkCheckout.json' with { type: 'json' }

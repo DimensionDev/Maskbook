@@ -1,1 +1,1 @@
-export { default as LensFollowNFT } from '../abis/LensFollowNFT.json' with { type: 'json' }
+export { default as LensFollowNFTAbi } from '../abis/LensFollowNFT.json' with { type: 'json' }

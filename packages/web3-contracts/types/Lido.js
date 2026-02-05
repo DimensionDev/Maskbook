@@ -1,1 +1,1 @@
-export { default as Lido } from '../abis/Lido.json' with { type: 'json' }
+export { default as LidoAbi } from '../abis/Lido.json' with { type: 'json' }

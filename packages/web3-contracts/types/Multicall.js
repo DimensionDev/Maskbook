@@ -1,1 +1,1 @@
-export { default as Multicall } from '../abis/Multicall.json' with { type: 'json' }
+export { default as MulticallAbi } from '../abis/Multicall.json' with { type: 'json' }

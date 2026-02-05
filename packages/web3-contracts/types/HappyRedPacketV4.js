@@ -1,1 +1,1 @@
-export { default as HappyRedPacketV4 } from '../abis/HappyRedPacketV4.json' with { type: 'json' }
+export { default as HappyRedPacketV4Abi } from '../abis/HappyRedPacketV4.json' with { type: 'json' }

@@ -1,1 +1,1 @@
-export { default as WETH } from '../abis/WETH.json' with { type: 'json' }
+export { default as WETHAbi } from '../abis/WETH.json' with { type: 'json' }

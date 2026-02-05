@@ -1,1 +1,1 @@
-export { default as SmartPayEntryPoint } from '../abis/SmartPayEntryPoint.json' with { type: 'json' }
+export { default as SmartPayEntryPointAbi } from '../abis/SmartPayEntryPoint.json' with { type: 'json' }

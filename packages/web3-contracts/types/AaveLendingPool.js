@@ -1,1 +1,1 @@
-export { default as AaveLendingPool } from '../abis/AaveLendingPool.json' with { type: 'json' }
+export { default as AaveLendingPoolAbi } from '../abis/AaveLendingPool.json' with { type: 'json' }

@@ -1,1 +1,1 @@
-export { default as BalanceChecker } from '../abis/BalanceChecker.json' with { type: 'json' }
+export { default as BalanceCheckerAbi } from '../abis/BalanceChecker.json' with { type: 'json' }

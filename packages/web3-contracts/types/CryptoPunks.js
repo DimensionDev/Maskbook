@@ -1,1 +1,1 @@
-export { default as CryptoPunks } from '../abis/CryptoPunks.json' with { type: 'json' }
+export { default as CryptoPunksAbi } from '../abis/CryptoPunks.json' with { type: 'json' }

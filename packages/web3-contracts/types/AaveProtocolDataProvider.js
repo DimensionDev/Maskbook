@@ -1,1 +1,1 @@
-export { default as AaveProtocolDataProvider } from '../abis/AaveProtocolDataProvider.json' with { type: 'json' }
+export { default as AaveProtocolDataProviderAbi } from '../abis/AaveProtocolDataProvider.json' with { type: 'json' }

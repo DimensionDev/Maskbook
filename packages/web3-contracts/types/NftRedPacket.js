@@ -1,1 +1,1 @@
-export { default as NftRedPacket } from '../abis/NftRedPacket.json' with { type: 'json' }
+export { default as NftRedPacketAbi } from '../abis/NftRedPacket.json' with { type: 'json' }

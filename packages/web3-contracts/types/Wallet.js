@@ -1,1 +1,1 @@
-export { default as Wallet } from '../abis/Wallet.json' with { type: 'json' }
+export { default as WalletAbi } from '../abis/Wallet.json' with { type: 'json' }
