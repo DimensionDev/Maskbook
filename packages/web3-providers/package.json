@@ -58,6 +58,7 @@
     "@solana/web3.js": "^1.98.1",
     "@walletconnect/sign-client": "^2.10.5",
     "@walletconnect/utils": "^2.10.5",
+    "abitype": "1.2.3",
     "bignumber.js": "9.1.2",
     "bloom-filters": "^3.0.0",
     "bn.js": "^4.12.0",
@@ -78,6 +79,7 @@
     "web3-eth": "1.10.4",
     "web3-utils": "1.10.4",
     "web3-types": "1.10.0",
+    "viem": "^2.45.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

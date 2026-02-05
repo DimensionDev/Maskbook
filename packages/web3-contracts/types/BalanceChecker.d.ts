@@ -33,3 +33,7 @@ export interface BalanceChecker extends BaseContract {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 }
+
+// prettier-ignore
+export type BalanceCheckerAbi = [{"stateMutability":"payable","type":"fallback"},{"inputs":[{"internalType":"address[]","name":"users","type":"address[]"},{"internalType":"address[]","name":"tokens","type":"address[]"}],"name":"balances","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"address","name":"token","type":"address"}],"name":"tokenBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}]
+export const BalanceCheckerAbi: BalanceCheckerAbi

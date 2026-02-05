@@ -671,6 +671,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
@@ -912,6 +915,9 @@ importers:
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-utils:
         specifier: 1.10.4
         version: 1.10.4
@@ -1053,6 +1059,9 @@ importers:
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-utils:
         specifier: 1.10.4
         version: 1.10.4
@@ -1113,6 +1122,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-utils:
         specifier: 1.10.4
         version: 1.10.4
@@ -1600,6 +1612,9 @@ importers:
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
@@ -1654,6 +1669,9 @@ importers:
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-utils:
         specifier: 1.10.4
         version: 1.10.4
@@ -1852,6 +1870,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-utils:
         specifier: 1.10.4
         version: 1.10.4
@@ -1933,6 +1954,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
@@ -2351,6 +2375,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       web3-types:
         specifier: 1.10.0
         version: 1.10.0
@@ -2577,6 +2604,9 @@ importers:
       '@typechain/web3-v1':
         specifier: ^6.0.7
         version: 6.0.7(typechain@8.3.2(typescript@5.9.2))(typescript@5.9.2)(web3-core@1.10.4(encoding@0.1.13))(web3-eth-contract@1.10.4(encoding@0.1.13))(web3@1.10.2(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
@@ -2686,6 +2716,9 @@ importers:
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-utils:
         specifier: 1.10.4
         version: 1.10.4
@@ -2770,6 +2803,9 @@ importers:
       '@walletconnect/utils':
         specifier: ^2.10.5
         version: 2.21.7(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+      abitype:
+        specifier: 1.2.3
+        version: 1.2.3(typescript@5.9.2)(zod@3.24.4)
       bignumber.js:
         specifier: 9.1.2
         version: 9.1.2
@@ -2818,6 +2854,9 @@ importers:
       uuid:
         specifier: ^9.0.0
         version: 9.0.1
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
@@ -2876,6 +2915,9 @@ importers:
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-types:
         specifier: 1.10.0
         version: 1.10.0
@@ -2904,6 +2946,9 @@ importers:
       '@masknet/web3-telemetry':
         specifier: workspace:^
         version: link:../../web3-telemetry
+      abitype:
+        specifier: 1.2.3
+        version: 1.2.3(typescript@5.9.2)(zod@4.2.1)
       bignumber.js:
         specifier: 9.1.2
         version: 9.1.2
@@ -2913,6 +2958,9 @@ importers:
       punycode:
         specifier: ^2.3.1
         version: 2.3.1
+      viem:
+        specifier: ^2.45.0
+        version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
@@ -8263,17 +8311,6 @@ packages:
     peerDependencies:
       typescript: '>=5.0.4'
       zod: ^3 >=3.22.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-      zod:
-        optional: true
-
-  abitype@1.1.1:
-    resolution: {integrity: sha512-Loe5/6tAgsBukY95eGaPSDmQHIjRZYQq8PB1MpsNccDIK8WiV+Uw6WzaIXipvaxTEL2yEB0OpEaQv3gs8pkS9Q==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-      zod: ^3.22.0 || ^4.0.0
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -20208,7 +20245,7 @@ snapshots:
     dependencies:
       '@ethereumjs/tx': 4.2.0
       '@noble/hashes': 1.8.0
-      '@scure/base': 1.1.7
+      '@scure/base': 1.2.6
       '@types/debug': 4.1.7
       debug: 4.4.1
       pony-cause: 2.1.10
@@ -21744,7 +21781,7 @@ snapshots:
 
   '@scure/bip32@1.7.0':
     dependencies:
-      '@noble/curves': 1.9.2
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
 
@@ -25648,16 +25685,6 @@ snapshots:
       zod: 3.24.4
 
   abitype@1.0.8(typescript@5.9.2)(zod@4.2.1):
-    optionalDependencies:
-      typescript: 5.9.2
-      zod: 4.2.1
-
-  abitype@1.1.1(typescript@5.9.2)(zod@3.24.4):
-    optionalDependencies:
-      typescript: 5.9.2
-      zod: 3.24.4
-
-  abitype@1.1.1(typescript@5.9.2)(zod@4.2.1):
     optionalDependencies:
       typescript: 5.9.2
       zod: 4.2.1
@@ -30491,7 +30518,7 @@ snapshots:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
-      ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      ws: 8.18.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -31938,7 +31965,7 @@ snapshots:
   ox@0.6.7(typescript@5.9.2)(zod@3.24.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
-      '@noble/curves': 1.9.2
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
@@ -31952,7 +31979,7 @@ snapshots:
   ox@0.6.9(typescript@5.9.2)(zod@3.24.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
-      '@noble/curves': 1.9.2
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
@@ -31967,11 +31994,11 @@ snapshots:
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
-      '@noble/curves': 1.9.2
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.1.1(typescript@5.9.2)(zod@3.24.4)
+      abitype: 1.2.3(typescript@5.9.2)(zod@3.24.4)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.2
@@ -31982,11 +32009,11 @@ snapshots:
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
-      '@noble/curves': 1.9.2
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.1.1(typescript@5.9.2)(zod@4.2.1)
+      abitype: 1.2.3(typescript@5.9.2)(zod@4.2.1)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.2

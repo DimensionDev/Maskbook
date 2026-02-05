@@ -1,16 +1,14 @@
 import { mapKeys } from 'lodash-es'
-import type { BigNumber } from 'bignumber.js'
 import defer * as web3_utils from 'web3-utils'
-import type { AbiItem } from 'web3-utils'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
+import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
 import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
 import {
+    decodeFunctionParams,
     ProviderType,
     formatWeiToGwei,
     type ChainId,
     type Transaction as EvmTransaction,
-    decodeFunctionParams,
 } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from './type.js'
 import { GasSettingModal } from '../../modals/modal-controls.js'
@@ -58,8 +56,8 @@ export async function modifyTransaction(
 export function parseReceiverFromERC20TransferInput(input?: string | null) {
     if (!input) return ''
     try {
-        const decodedInputParams = decodeFunctionParams(ERC20_ABI as AbiItem[], input, 'transfer')
-        return decodedInputParams[0] as string
+        const decodedInputParams = decodeFunctionParams(ERC20Abi, input as `0x${string}`, 'transfer')
+        return decodedInputParams[0]
     } catch {
         return ''
     }
@@ -67,11 +65,11 @@ export function parseReceiverFromERC20TransferInput(input?: string | null) {
 
 // The Debank transaction history api does not return the input data and approved token info,
 //  so can not do the decoding within its scope.
-export function parseAmountFromERC20ApproveInput(input?: string | null) {
+export function parseAmountFromERC20ApproveInput(input?: string | null): 'Infinite' | string | undefined {
     if (!input) return
     try {
-        const decodedInputParam = decodeFunctionParams(ERC20_ABI as AbiItem[], input, 'approve')
-        const result = (decodedInputParam[1] as BigNumber).toString()
+        const decodedInputParam = decodeFunctionParams(ERC20Abi, input as `0x${string}`, 'approve')
+        const result = decodedInputParam[1].toString()
         return MaxUint256 === result ? 'Infinite' : result
     } catch {
         return

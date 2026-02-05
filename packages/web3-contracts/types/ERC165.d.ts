@@ -31,3 +31,7 @@ export interface ERC165 extends BaseContract {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 }
+
+// prettier-ignore
+export type ERC165Abi = [{"constant":true,"inputs":[{"name":"interfaceID","type":"bytes4"}],"name":"supportsInterface","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"}]
+export const ERC165Abi: ERC165Abi

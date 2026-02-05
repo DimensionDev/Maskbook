@@ -1,15 +1,14 @@
-import type { AbiItem } from 'web3-utils'
-import { abiCoder } from './abiCoder.js'
+import { decodeFunctionData, type Abi } from 'viem'
+import type { ExtractAbiFunctionNames, ExtractAbiFunction, AbiParametersToPrimitiveTypes } from 'abitype'
 
-export function decodeFunctionParams(abis: AbiItem[], input: string, methodName: string) {
-    const item = abis.find((x) => x.type === 'function' && x.name === methodName)
-    if (!item) throw new Error(`Failed to locate abi with name: ${methodName}.`)
-    if (!item.inputs) throw new Error('Invalid ABI type.')
-
-    const signature = abiCoder.encodeFunctionSignature(item)
-    if (!input.startsWith(signature)) {
-        throw new Error(`Function Signature not matched! signature: ${signature}, input: ${input}`)
+export function decodeFunctionParams<InputAbi extends Abi, MethodName extends ExtractAbiFunctionNames<InputAbi>>(
+    abi: InputAbi,
+    data: `0x${string}`,
+    methodName: MethodName,
+): AbiParametersToPrimitiveTypes<ExtractAbiFunction<InputAbi, MethodName>['inputs'], 'inputs', true> {
+    const { functionName, args } = decodeFunctionData({ abi, data })
+    if (functionName !== methodName) {
+        throw new Error(`Function Signature not matched! name: ${functionName}, expected: ${String(methodName)}`)
     }
-    // Decode the input using web3.eth.abi.decodeParameters
-    return abiCoder.decodeParameters(item.inputs, `0x${input.slice(10)}`)
+    return args as any
 }
