@@ -43,7 +43,7 @@ export const ${abiName}Abi: ${abiName}Abi
 `
             fs.writeFile(
                 path.replace('.ts', '.js'),
-                `export { default as ${abiName} } from '../abis/${abiName}.json' with { type: 'json' }\n`,
+                `export { default as ${abiName}Abi } from '../abis/${abiName}.json' with { type: 'json' }\n`,
             )
         }
 
