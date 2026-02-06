@@ -130,10 +130,6 @@ export class ConnectionContext {
         return this.payloadEditor.wallet
     }
 
-    get userOperation() {
-        return this.payloadEditor.userOperation
-    }
-
     get proof() {
         return this.payloadEditor.proof
     }

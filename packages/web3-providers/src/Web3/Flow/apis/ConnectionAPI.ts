@@ -3,7 +3,6 @@ import { getUnixTime } from 'date-fns'
 import { unreachable } from '@masknet/kit'
 import {
     AddressType,
-    type Operation,
     type SchemaType,
     ChainId,
     type Web3,
@@ -12,7 +11,6 @@ import {
     type TransactionReceipt,
     type Block,
     isNativeTokenAddress,
-    type TransactionQuery,
     type TransactionSignature,
     TransactionStatusCode,
     type BlockHeader,
@@ -24,7 +22,6 @@ import {
     type NonFungibleToken,
     type NonFungibleTokenMetadata,
     type NonFungibleTokenContract,
-    type NonFungibleCollection,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { toHex, type Account } from '@masknet/shared-base'
@@ -43,7 +40,6 @@ export class FlowConnectionAPI
             SchemaType,
             ProviderType,
             Signature,
-            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -91,13 +87,6 @@ export class FlowConnectionAPI
     }
 
     getFungibleTokensBalance(
-        listOfAddress: string[],
-        initial?: FlowConnectionOptions,
-    ): Promise<Record<string, string>> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNonFungibleTokensBalance(
         listOfAddress: string[],
         initial?: FlowConnectionOptions,
     ): Promise<Record<string, string>> {
@@ -203,15 +192,6 @@ export class FlowConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    getNonFungibleTokenOwner(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -236,14 +216,6 @@ export class FlowConnectionAPI
         schema?: SchemaType,
         initial?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNonFungibleTokenCollection(
-        address: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
 
@@ -316,12 +288,6 @@ export class FlowConnectionAPI
     async switchChain(chainId: ChainId, initial?: FlowConnectionOptions): Promise<void> {
         await this.Web3.getProviderInstance(initial).switchChain(chainId)
     }
-
-    async callTransaction(query: TransactionQuery, initial?: FlowConnectionOptions): Promise<string> {
-        const web3 = this.getWeb3(initial)
-        return web3.query(query)
-    }
-
     async sendTransaction(mutation: Transaction, initial?: FlowConnectionOptions): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         const web3 = this.getWeb3(options)

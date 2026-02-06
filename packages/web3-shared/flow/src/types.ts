@@ -55,7 +55,6 @@ export type Block = BlockObject
 export type BlockHeader = BlockHeaderObject
 export type MessageRequest = never
 export type MessageResponse = never
-export type Operation = never
 export type Transaction = MutateOptions
 export type TransactionQuery = QueryOptions
 export type TransactionReceipt = never
@@ -85,14 +84,11 @@ export type Web3Definition = {
     Block: Block
     MessageRequest: MessageRequest
     MessageResponse: MessageResponse
-    Operation: Operation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt
     TransactionDetailed: TransactionDetailed
     TransactionSignature: TransactionSignature
     TransactionParameter: TransactionParameter
-    UserOperation: Operation
     Web3: Web3
     Web3Provider: Web3Provider
-    Web3State: Web3State
 }

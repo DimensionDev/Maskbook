@@ -23,7 +23,6 @@ export function createConnectionCreator<
         Web3Helper.Definition[T]['SchemaType'],
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['Signature'],
-        Web3Helper.Definition[T]['Operation'],
         Web3Helper.Definition[T]['Transaction'],
         Web3Helper.Definition[T]['TransactionReceipt'],
         Web3Helper.Definition[T]['TransactionDetailed'],

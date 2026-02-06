@@ -1,7 +1,6 @@
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof } from '@masknet/shared-base'
 import type {
     FungibleToken,
-    NonFungibleCollection,
     NonFungibleToken,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
@@ -15,7 +14,6 @@ export interface BaseConnection<
     SchemaType,
     ProviderType,
     Signature,
-    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -46,9 +44,6 @@ export interface BaseConnection<
 
     /** Get fungible token balance. */
     getFungibleTokensBalance(listOfAddress: string[], initial?: Options): Promise<Record<string, string>>
-
-    /** Get non-fungible token balance. */
-    getNonFungibleTokensBalance(listOfAddress: string[], initial?: Options): Promise<Record<string, string>>
 
     /** Get gas price */
     getGasPrice(initial?: Options): Promise<string>
@@ -97,13 +92,6 @@ export interface BaseConnection<
         initial?: Options,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
 
-    getNonFungibleTokenOwner(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<string>
-
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string | undefined,
@@ -125,13 +113,6 @@ export interface BaseConnection<
         schema?: SchemaType,
         initial?: Options,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
-
-    /** Get a non-fungible token collection. */
-    getNonFungibleTokenCollection(
-        address: string,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<NonFungibleCollection<ChainId, SchemaType>>
 
     /** Get the currently connected account. */
     getAccount(initial?: Options): Promise<string>
@@ -179,10 +160,6 @@ export interface BaseConnection<
         initial?: Options,
     ): Promise<string>
 
-    /** Call a operation */
-    callUserOperation?: (owner: string, operation: Operation, initial?: Options) => Promise<string>
-    /** Send a operation */
-    sendUserOperation?: (owner: string, operation: Operation, initial?: Options) => Promise<TransactionSignature>
     /** Transfer some native tokens from contract wallet */
     transfer?: (recipient: string, amount: string, initial?: Options) => Promise<string>
     /** Change owner of contract wallet */
@@ -197,9 +174,6 @@ export interface BaseConnection<
 
     /** Sign multiple transactions */
     signTransactions(transactions: Transaction[], initial?: Options): Promise<TransactionSignature[]>
-
-    /** Query a transaction */
-    callTransaction(transaction: Transaction, initial?: Options): Promise<string>
 
     /** Send a transaction and wait for mining */
     sendTransaction(transaction: Transaction, initial?: Options): Promise<string>
@@ -216,12 +190,6 @@ export interface BaseConnection<
     /** Break connection */
     disconnect(initial?: Options): Promise<void>
 
-    /** Get all wallets. */
-    getWallets?: (initial?: Options) => Promise<Wallet[]>
-    /** Add a new wallet. */
-    addWallet?: (wallet: UpdatableWallet, initial?: Options) => Promise<void>
-    /** Update a wallet. */
-    updateWallet?: (address: string, wallet: Partial<UpdatableWallet>, initial?: Options) => Promise<void>
     /** Rename a wallet */
     renameWallet?: (address: string, name: string, initial?: Options) => Promise<void>
     /** Remove a wallet */

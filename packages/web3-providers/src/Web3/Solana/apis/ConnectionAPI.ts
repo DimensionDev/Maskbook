@@ -12,7 +12,6 @@ import {
     decodeAddress,
     type TransactionSignature,
     type ProviderType,
-    type Operation,
     type Transaction,
     serializeTransaction,
     isValidChainId,
@@ -23,7 +22,6 @@ import {
     type NonFungibleToken,
     type NonFungibleTokenMetadata,
     type NonFungibleTokenContract,
-    type NonFungibleCollection,
     isSameAddress,
     createNonFungibleToken,
 } from '@masknet/web3-shared-base'
@@ -49,7 +47,6 @@ export class SolanaConnectionAPI
             SchemaType,
             ProviderType,
             Signature,
-            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -211,13 +208,6 @@ export class SolanaConnectionAPI
         return records
     }
 
-    getNonFungibleTokensBalance(
-        listOfAddress: string[],
-        initial?: SolanaConnectionOptions,
-    ): Promise<Record<string, string>> {
-        throw new Error('Method not implemented.')
-    }
-
     getGasPrice(initial?: SolanaConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -312,15 +302,6 @@ export class SolanaConnectionAPI
         )
     }
 
-    getNonFungibleTokenOwner(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: SolanaConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -345,18 +326,6 @@ export class SolanaConnectionAPI
         schema?: SchemaType,
         initial?: SolanaConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNonFungibleTokenCollection(
-        address: string,
-        schema?: SchemaType,
-        initial?: SolanaConnectionOptions,
-    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-
-    callTransaction(transaction: Transaction, initial?: SolanaConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
