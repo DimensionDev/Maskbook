@@ -3562,6 +3562,10 @@ msgstr "잘못된 월렛 주소."
 msgid "Incorrect words selected. Please try again!"
 msgstr ""
 
+#: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+msgid "Infinite"
+msgstr ""
+
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Info"
