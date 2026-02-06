@@ -1,4 +1,4 @@
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import {
     createNonFungibleToken,
@@ -9,7 +9,6 @@ import {
     resolveCrossOriginURL,
     resolveIPFS_URL,
     type FungibleToken,
-    type NonFungibleCollection,
     type NonFungibleToken,
     type NonFungibleTokenContract,
     type NonFungibleTokenMetadata,
@@ -24,7 +23,6 @@ import {
     getEthereumConstant,
     getTokenConstant,
     getTransactionStatusType,
-    isCryptoPunksContractAddress,
     isEmptyHex,
     isNativeTokenAddress,
     isValidAddress,
@@ -39,7 +37,6 @@ import {
     type TransactionDetailed,
     type TransactionReceipt,
     type TransactionSignature,
-    type UserOperation,
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { first, omit, toNumber } from 'lodash-es'
@@ -78,7 +75,6 @@ export class EVMConnectionReadonlyAPI
             SchemaType,
             ProviderType,
             Signature,
-            UserOperation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -115,28 +111,6 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    getWallets(initial?: EVMConnectionOptions): Promise<Wallet[]> {
-        return this.Request.request<Wallet[]>(
-            {
-                method: EthereumMethodType.MASK_WALLETS,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    async addWallet(wallet: UpdatableWallet, initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async updateWallet(
-        address: string,
-        wallet: Partial<UpdatableWallet>,
-        initial?: EVMConnectionOptions,
-    ): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
     async renameWallet(address: string, name: string, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
@@ -146,14 +120,6 @@ export class EVMConnectionReadonlyAPI
     }
 
     async resetAllWallets(initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async updateWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async removeWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
@@ -293,29 +259,6 @@ export class EVMConnectionReadonlyAPI
         )
     }
 
-    async getNonFungibleTokenOwner(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: EVMConnectionOptions,
-    ) {
-        const options = this.ConnectionOptions.fill(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
-
-        // ERC1155
-        if (actualSchema === SchemaType.ERC1155) return ''
-
-        // CRYPTOPUNKS
-        if (isCryptoPunksContractAddress(address)) {
-            const cryptoPunksContract = this.Contract.getCryptoPunksContract(address, options)
-            return (await cryptoPunksContract?.methods.punkIndexToAddress(tokenId).call()) ?? ''
-        }
-
-        // ERC721
-        const contract = this.Contract.getERC721Contract(address, options)
-        return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
-    }
-
     async getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -437,31 +380,6 @@ export class EVMConnectionReadonlyAPI
         )
     }
 
-    async getNonFungibleTokenCollection(
-        address: string,
-        schema?: SchemaType,
-        initial?: EVMConnectionOptions,
-    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
-        const options = this.ConnectionOptions.fill(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
-
-        // ERC1155
-        if (actualSchema === SchemaType.ERC1155) throw new Error('Not implemented yet.')
-
-        // ERC721
-        const contract = this.Contract.getERC721Contract(address, options)
-        const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
-        const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
-        return {
-            id: address,
-            chainId: options.chainId,
-            name: name ?? 'Unknown Token',
-            symbol: '',
-            slug: '',
-            isSpam: undefined,
-        }
-    }
-
     createAccount(initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         const account = createAccount()
@@ -556,34 +474,6 @@ export class EVMConnectionReadonlyAPI
             })
         }
         return Object.fromEntries(entities)
-    }
-
-    async getNonFungibleTokensBalance(
-        listOfAddress: string[],
-        initial?: EVMConnectionOptions,
-    ): Promise<Record<string, string>> {
-        if (!listOfAddress.length) return {}
-
-        const options = this.ConnectionOptions.fill(initial)
-        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
-        if (!BALANCE_CHECKER_ADDRESS) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error(
-                    `BALANCE_CHECKER_ADDRESS for chain ${options.chainId} is not provided, do you forget to update packages/web3-constants/evm/ethereum.json ?`,
-                    BALANCE_CHECKER_ADDRESS,
-                )
-            }
-            return {}
-        }
-        const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS, options)
-        const result = await contract?.methods.balances([options.account], listOfAddress).call({
-            // cannot check the sender's balance in the same contract
-            from: undefined,
-            chainId: web3_utils.numberToHex(options.chainId),
-        })
-
-        if (result?.length !== listOfAddress.length) return {}
-        return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
     }
 
     getNativeToken(initial?: EVMConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
@@ -774,22 +664,6 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    supportedChainIds(initial?: EVMConnectionOptions): Promise<ChainId[]> {
-        throw new Error('Method not implemented.')
-    }
-
-    async callUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async sendUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async transfer(recipient: string, amount: string, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     async changeOwner(recipient: string, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -800,17 +674,6 @@ export class EVMConnectionReadonlyAPI
 
     async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
-    }
-
-    callTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.eth_call,
-                params: [new AccountTransaction(transaction).fill(options.overrides), 'latest'],
-            },
-            options,
-        )
     }
 
     async sendTransaction(transaction: Transaction, initial?: EVMConnectionOptions): Promise<string> {

@@ -8,7 +8,6 @@ import { createJsonRpcRequest } from '../helpers/createJsonRpcRequest.js'
 import {
     type Transaction,
     type TransactionOptions,
-    type UserOperation,
     type EIP3085Descriptor,
     EthereumMethodType,
 } from '../types/index.js'
@@ -102,18 +101,6 @@ export class PayloadEditor {
             case EthereumMethodType.MASK_ADD_WALLET:
                 const [wallet] = params as [Wallet]
                 return wallet
-            default:
-                return
-        }
-    }
-
-    get userOperation() {
-        const { method, params } = this.payload
-        switch (method) {
-            case EthereumMethodType.eth_callUserOperation:
-            case EthereumMethodType.eth_sendUserOperation:
-                const [_, userOperation] = params as [string, UserOperation]
-                return userOperation
             default:
                 return
         }

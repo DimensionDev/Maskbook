@@ -427,20 +427,6 @@ export interface Transaction {
 
     _isOKXSwap?: boolean
 }
-export interface UserOperation {
-    sender: string
-    nonce?: number
-    initCode?: string
-    callData?: string
-    callGas?: string
-    verificationGas?: string
-    preVerificationGas?: string
-    maxFeePerGas?: string
-    maxPriorityFeePerGas?: string
-    paymaster?: string
-    paymasterData?: string
-    signature?: string
-}
 export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
@@ -481,14 +467,11 @@ export type Web3Definition = {
     Block: Block
     MessageRequest: MessageRequest
     MessageResponse: MessageResponse
-    Operation: UserOperation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt
     TransactionDetailed: TransactionDetailed
     TransactionSignature: TransactionSignature
     TransactionParameter: TransactionParameter
-    UserOperation: UserOperation
     Web3: Web3
     Web3Provider: Web3Provider
-    Web3State: Web3State
 }
