@@ -31,3 +31,7 @@ export interface CryptoPunks extends BaseContract {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 }
+
+// prettier-ignore
+export type CryptoPunksAbi = [{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"punkIndexToAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
+export const CryptoPunksAbi: CryptoPunksAbi

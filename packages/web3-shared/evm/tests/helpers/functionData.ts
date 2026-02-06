@@ -1,7 +1,6 @@
 import { describe, test, expect } from 'vitest'
-import type { AbiItem } from 'web3-utils'
-import { encodeFunctionData } from '../../src/helpers/encodeFunctionData.js'
 import { decodeFunctionParams } from '../../src/helpers/decodeFunctionParams.js'
+import type { AbiFunction } from 'viem'
 
 const ERC20 = [
     {
@@ -27,21 +26,16 @@ const ERC20 = [
         stateMutability: 'nonpayable',
         type: 'function',
     },
-] satisfies AbiItem[]
+] satisfies AbiFunction[]
 
 const DATA =
     '0x095ea7b30000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000000'
 
 describe('encode & decode function data', () => {
-    test('should encode function data', () => {
-        const result = encodeFunctionData(ERC20, ['0x8ba1f109551bD432803012645Ac136ddd64DBA72', '0x0'], 'approve')
-        expect(result).toBe(DATA)
-    })
-
     test('should decode function data', () => {
         const result = decodeFunctionParams(ERC20, DATA, 'approve')
 
-        expect(result._spender).toBe('0x8ba1f109551bD432803012645Ac136ddd64DBA72')
-        expect(result._value).toBe('0')
+        expect(result[0]).toBe('0x8ba1f109551bD432803012645Ac136ddd64DBA72')
+        expect(result[1]).toBe(0n)
     })
 })

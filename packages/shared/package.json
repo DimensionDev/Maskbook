@@ -56,6 +56,7 @@
     "use-subscription": "^1.8.0",
     "web3-types": "1.10.0",
     "web3-utils": "1.10.4",
+    "viem": "^2.45.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

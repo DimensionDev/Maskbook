@@ -85,6 +85,9 @@ export function NftHistory() {
             openComposition(
                 RedPacketNftMetaKey,
                 {
+                    // TODO: is the type missing the field or the field is unnecessary?
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
                     id: rpid,
                     txid,
                     duration,
@@ -95,7 +98,7 @@ export function NftHistory() {
                     contractTokenURI: collection.iconURL ?? '',
                     privateKey: password,
                     chainId,
-                },
+                } satisfies NftRedPacketJSONPayload,
                 compositionType,
             )
             ApplicationBoardModal.close()

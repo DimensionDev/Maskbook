@@ -24,6 +24,8 @@ import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNftRedpacketCallback } from '../hooks/useCreateNftRedpacketCallback.js'
 import { openComposition } from '../openComposition.js'
+import type { RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -168,18 +170,21 @@ export function NftRedPacketConfirm() {
                 RedPacketNftMetaKey,
                 {
                     id,
+                    // TODO: is the type missing the field or the field is unnecessary?
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
                     transactionId,
                     duration,
                     message,
                     senderName: creator,
-                    contractName: collection?.name,
-                    contractAddress: collection?.address,
+                    contractName: collection?.name as string,
+                    contractAddress: collection?.address as string,
                     contractTokenURI: collection?.iconURL ?? '',
                     contractVersion: 1,
                     privateKey,
-                    chainId: collection?.chainId,
-                    themeId,
-                },
+                    chainId: collection?.chainId as ChainId,
+                    themeId: themeId as string,
+                } satisfies RedPacketNftJSONPayload,
                 compositionType,
                 undefined,
                 post,

@@ -288,7 +288,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 <Typography className={classes.asset} component="div">
                     <strong className={classes.amount}>
                         {approveAmount === 'Infinite' ?
-                            approveAmount
+                            <Trans>Infinite</Trans>
                         :   formatTokenBalance(approveAmount, approveToken.decimals)}
                     </strong>
                     <TextOverflowTooltip title={approveToken.symbol} PopperProps={popperProps}>
