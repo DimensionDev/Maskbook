@@ -7,7 +7,6 @@
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         "aaron-bond.better-comments",
-        "davidanson.vscode-markdownlint",
         "christian-kohler.path-intellisense",
         "TypeScriptTeam.native-preview"
     ],
