@@ -36,6 +36,7 @@ export type AbiFunctionToObjectMapped<
     abiParameterKind extends AbiParameterKind,
 > = AbiParametersToPrimitiveTypesObjectMapped<ExtractAbiFunction<abi, method>[abiParameterKind], abiParameterKind>
 
+// Note: the type below is modified from abitype
 type AbiParametersToPrimitiveTypesObjectMapped_inner<
     abiParameters extends readonly AbiParameter[],
     abiParameterKind extends AbiParameterKind = AbiParameterKind,
@@ -46,7 +47,7 @@ type AbiParametersToPrimitiveTypesObjectMapped_inner<
     depth['length'] extends 15 ? readonly unknown[]
     : abiParameters extends (
         readonly [
-            // Significantly reduce type instantiations by batch proccessing up to six parameters at a time instead of processing one parameter per recursion
+            // Significantly reduce type instantiations by batch processing up to six parameters at a time instead of processing one parameter per recursion
             infer head1 extends AbiParameter,
             infer head2 extends AbiParameter,
             infer head3 extends AbiParameter,
