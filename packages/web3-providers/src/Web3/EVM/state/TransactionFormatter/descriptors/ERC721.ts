@@ -1,7 +1,8 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
-import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
+import type { AbiFunctionToObjectMapped, ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptorFormatResult } from '../types.js'
 import { BaseDescriptor } from './Base.js'
+import type { ERC721Abi } from '@masknet/web3-contracts/types/ERC721.js'
 
 export class ERC721Descriptor extends BaseDescriptor {
     async getContractSymbol(chainId: ChainId, address: string) {
@@ -14,11 +15,11 @@ export class ERC721Descriptor extends BaseDescriptor {
     ): Promise<TransactionDescriptorFormatResult | undefined> {
         if (!context.methods?.length) return
 
-        for (const { name, parameters } of context.methods) {
+        for (const { name, parameters: _parameters } of context.methods) {
             switch (name) {
                 case 'approve': {
                     const schemaType = await this.Web3.getSchemaType(context.to)
-                    if (parameters?.to === undefined || parameters.tokenId === undefined || !schemaType) break
+                    if (_parameters?.to === undefined || _parameters.tokenId === undefined || !schemaType) break
 
                     const symbol = (await this.getContractSymbol(context.chainId, context.to)) || ''
 
@@ -36,7 +37,12 @@ export class ERC721Descriptor extends BaseDescriptor {
                     }
                 }
                 case 'setApprovalForAll': {
-                    if (parameters?.operator === undefined || parameters.approved === undefined) break
+                    if (_parameters?.operator === undefined || _parameters.approved === undefined) break
+                    const parameters = _parameters as AbiFunctionToObjectMapped<
+                        ERC721Abi,
+                        'setApprovalForAll',
+                        'inputs'
+                    >
 
                     const action = parameters.approved === false ? 'Revoke' : 'Unlock'
                     const symbol = (await this.getContractSymbol(context.chainId, context.to)) || ''
@@ -66,7 +72,12 @@ export class ERC721Descriptor extends BaseDescriptor {
                 }
                 case 'transferFrom':
                 case 'safeTransferFrom': {
-                    if (!parameters?.tokenId) return
+                    if (!_parameters?.tokenId) return
+                    const parameters = _parameters as AbiFunctionToObjectMapped<
+                        ERC721Abi,
+                        'transferFrom' | 'safeTransferFrom',
+                        'inputs'
+                    >
                     const symbol = (await this.getContractSymbol(context.chainId, context.to)) || ''
                     return {
                         chainId: context.chainId,
@@ -78,7 +89,7 @@ export class ERC721Descriptor extends BaseDescriptor {
                         },
                         popup: {
                             method: name,
-                            tokenId: parameters.tokenId as string,
+                            tokenId: String(parameters.tokenId),
                         },
                     }
                 }

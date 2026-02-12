@@ -4,7 +4,7 @@ import {
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import {
-    abiCoder,
+    abiArrayToMappedObject,
     AccountTransaction,
     type ChainId,
     isEmptyHex,
@@ -29,6 +29,7 @@ import { LensDescriptor } from './TransactionFormatter/descriptors/Lens.js'
 import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js'
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { decodeAbiParameters } from 'viem'
 
 export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptorFormatter[]> = {
@@ -73,7 +74,10 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
                         type: TransactionDescriptorType.INTERACTION,
                         methods: abis.map((x) => ({
                             name: x.name,
-                            parameters: abiCoder.decodeParameters(x.parameters, functionParameters ?? ''),
+                            parameters: abiArrayToMappedObject(
+                                x.inputs,
+                                decodeAbiParameters(x.inputs, (functionParameters ?? '') as `0x${string}`),
+                            ) as Record<string, unknown>,
                         })),
                     }
                 } catch {

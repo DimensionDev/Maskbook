@@ -35,5 +35,5 @@ export interface Create2Factory extends BaseContract {
 }
 
 // prettier-ignore
-export type Create2FactoryAbi = [{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"name":"fund","stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"initCode","type":"bytes"},{"internalType":"bytes32","name":"salt","type":"bytes32"}],"name":"deploy","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"nonpayable","type":"function"}]
+export type Create2FactoryAbi = [{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"outputs":[],"name":"fund","stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"initCode","type":"bytes"},{"internalType":"bytes32","name":"salt","type":"bytes32"}],"name":"deploy","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"nonpayable","type":"function"}]
 export const Create2FactoryAbi: Create2FactoryAbi

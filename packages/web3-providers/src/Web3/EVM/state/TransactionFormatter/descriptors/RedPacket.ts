@@ -3,6 +3,7 @@ import {
     type ChainId,
     getNftRedPacketConstant,
     getRedPacketConstants,
+    type AbiFunctionToObjectMapped,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
@@ -10,6 +11,8 @@ import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json' wit
 import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptorFormatResult } from '../types.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
+import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
+import type { NftRedPacketAbi } from '@masknet/web3-contracts/types/NftRedPacket.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
@@ -89,14 +92,19 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 method?.parameters?._token_addr &&
                 method?.parameters?._total_tokens
             ) {
-                const token = await this.Hub.getFungibleToken(method?.parameters?._token_addr ?? '', {
+                const parameters = method.parameters as AbiFunctionToObjectMapped<
+                    HappyRedPacketV4Abi,
+                    'create_red_packet',
+                    'inputs'
+                >
+                const token = await this.Hub.getFungibleToken(parameters?._token_addr ?? '', {
                     chainId: context.chainId,
                 })
-                const tokenAmountDescription = getTokenAmountDescription(method.parameters?._total_tokens, token)
+                const tokenAmountDescription = getTokenAmountDescription(parameters?._total_tokens, token)
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
-                    tokenInAmount: method?.parameters?._total_tokens,
+                    tokenInAmount: String(parameters?._total_tokens),
                     title: 'Create Lucky Drop',
                     description: 'Create your Lucky Drop.',
                     snackbar: {
@@ -148,10 +156,12 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
             }
         } else if (isSameAddress(context.to, RED_PACKET_NFT_ADDRESS)) {
             if (method?.name === 'create_red_packet') {
-                const symbol = await this.getNonFungibleContractSymbol(
-                    context.chainId,
-                    method.parameters?._token_addr ?? '',
-                )
+                const parameters = method.parameters as AbiFunctionToObjectMapped<
+                    NftRedPacketAbi,
+                    'create_red_packet',
+                    'inputs'
+                >
+                const symbol = await this.getNonFungibleContractSymbol(context.chainId, parameters?._token_addr ?? '')
                 return {
                     chainId: context.chainId,
                     title: 'Create NFT Lucky Drop',

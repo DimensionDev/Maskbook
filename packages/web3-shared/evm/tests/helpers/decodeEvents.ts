@@ -17,14 +17,7 @@ describe('decodeEvents', () => {
             transactionHash: '0x9a9e084717d1f63be9d552ffe4f1edbcad2ade10c064b72c1872b67856dfd278',
             transactionIndex: 0x58,
         }
-        const eventParams = decodeEvents(REDPACKET_ABI as AbiItem[], [log]) as unknown as {
-            CreationSuccess: {
-                returnValues: {
-                    id: string
-                    creation_time: string
-                }
-            }
-        }
+        const eventParams = decodeEvents(REDPACKET_ABI as AbiItem[], [log])
         expect(eventParams).toMatchInlineSnapshot(`
           {
             "CreationSuccess": {

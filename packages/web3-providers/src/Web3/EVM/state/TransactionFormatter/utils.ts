@@ -4,7 +4,8 @@ import { type ChainId, type SchemaType, decodeEvents } from '@masknet/web3-share
 import { EVMContractReadonly } from '../../apis/ContractReadonlyAPI.js'
 import { BaseDescriptor } from './descriptors/Base.js'
 
-export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {
+export function getTokenAmountDescription(amount: string | bigint = '0', token?: FungibleToken<ChainId, SchemaType>) {
+    amount = String(amount)
     const value =
         scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount) ?
             formatBalance(amount, token?.decimals)

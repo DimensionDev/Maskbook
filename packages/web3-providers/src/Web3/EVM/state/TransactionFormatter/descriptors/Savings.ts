@@ -1,8 +1,9 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
-import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionParameter, AbiFunctionToObjectMapped } from '@masknet/web3-shared-evm'
 import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptorFormatResult } from '../types.js'
 import { BaseDescriptor } from './Base.js'
+import type { AaveLendingPoolAbi } from '@masknet/web3-contracts/types/AaveLendingPool.js'
 
 export class SavingsDescriptor extends BaseDescriptor {
     override async compute(
@@ -11,9 +12,9 @@ export class SavingsDescriptor extends BaseDescriptor {
         const context = context_ as TransactionContext<ChainId>
         if (!context.methods?.length) return
 
-        for (const { name, parameters } of context.methods) {
+        for (const { name, parameters: _parameters } of context.methods) {
             // Lido
-            if (name === 'submit' && parameters?._referral) {
+            if (name === 'submit' && _parameters?._referral) {
                 const token = await this.Web3.getNativeToken({
                     chainId: context.chainId,
                 })
@@ -44,13 +45,14 @@ export class SavingsDescriptor extends BaseDescriptor {
             }
 
             // Aave
-            if (name === 'deposit' && parameters?.amount && parameters.asset) {
+            if (name === 'deposit' && _parameters?.amount !== undefined && _parameters.asset) {
+                const parameters = _parameters as AbiFunctionToObjectMapped<AaveLendingPoolAbi, 'deposit', 'inputs'>
                 const token = await this.Hub.getFungibleToken(parameters.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
-                    tokenInAmount: parameters.amount,
+                    tokenInAmount: String(parameters.amount),
                     title: 'Deposit token',
                     description: {
                         key: 'Deposit {token} for savings.',
@@ -69,13 +71,14 @@ export class SavingsDescriptor extends BaseDescriptor {
                 }
             }
 
-            if (name === 'withdraw' && parameters?.amount && parameters.asset) {
+            if (name === 'withdraw' && _parameters?.amount !== undefined && _parameters.asset) {
+                const parameters = _parameters as AbiFunctionToObjectMapped<AaveLendingPoolAbi, 'withdraw', 'inputs'>
                 const token = await this.Hub.getFungibleToken(parameters.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
-                    tokenInAmount: parameters.amount,
+                    tokenInAmount: String(parameters.amount),
                     title: 'Withdraw token',
                     description: {
                         key: 'Withdraw {token} for savings.',
