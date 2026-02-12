@@ -9,7 +9,7 @@ import {
     pow10,
     isSameAddress,
 } from '@masknet/web3-shared-base'
-import { type GasConfig } from '@masknet/web3-shared-evm'
+import { type AbiFunctionToObjectMapped, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import {
     useChainContext,
@@ -30,6 +30,8 @@ import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { Trans } from '@lingui/react/macro'
 import { useFormatMessage } from '../../../../shared/src/UI/translate.js'
+import type { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
+import type { ERC721Abi } from '@masknet/web3-contracts/types/ERC721.js'
 
 const useStyles = makeStyles()((theme) => ({
     info: {
@@ -91,9 +93,16 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
-                const to = transaction.formattedTransaction?.context?.methods?.find((x) =>
+                const parameters = transaction.formattedTransaction?.context?.methods?.find((x) =>
                     ['transfer', 'transferFrom', 'safeTransferFrom'].includes(x.name ?? ''),
-                )?.parameters?.to
+                )?.parameters as
+                    | AbiFunctionToObjectMapped<
+                          ERC20Abi | ERC721Abi,
+                          'transfer' | 'transferFrom' | 'safeTransferFrom',
+                          'inputs'
+                      >
+                    | undefined
+                const to = parameters?.to
 
                 return {
                     title: format(transaction.formattedTransaction?.title) ?? <Trans>Contract Interaction</Trans>,

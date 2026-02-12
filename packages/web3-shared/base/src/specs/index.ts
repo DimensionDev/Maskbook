@@ -932,9 +932,7 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
         /** name */
         name?: string
         /** actual parameters */
-        parameters?: {
-            [key: string]: Parameter
-        }
+        parameters?: Record<string, unknown>
     }>
     /** nested children contexts */
     children?: Array<TransactionContext<ChainId, Parameter>>

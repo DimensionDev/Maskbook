@@ -1,8 +1,13 @@
-import { BigNumber } from 'bignumber.js'
 import { type TransactionContext, formatBalance } from '@masknet/web3-shared-base'
-import { type ChainId, getGitcoinConstant, getNativeTokenAddress } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    getGitcoinConstant,
+    getNativeTokenAddress,
+    type AbiFunctionToObjectMapped,
+} from '@masknet/web3-shared-evm'
 import type { TransactionDescriptorFormatResult } from '../types.js'
 import { BaseDescriptor } from './Base.js'
+import type { BulkCheckoutAbi } from '@masknet/web3-contracts/types/BulkCheckout.js'
 
 type ParameterTuple = {
     0: string
@@ -25,14 +30,13 @@ export class GitcoinDescriptor extends BaseDescriptor {
         const GITCOIN_ETH_ADDRESS = getGitcoinConstant(context.chainId, 'GITCOIN_ETH_ADDRESS')
         const nativeTokenAddress = getNativeTokenAddress(context.chainId)
 
-        for (const { name, parameters } of context.methods) {
-            if (name === 'donate' && parameters) {
+        for (const { name, parameters: _parameters } of context.methods) {
+            if (name === 'donate' && _parameters) {
+                const parameters = _parameters as AbiFunctionToObjectMapped<BulkCheckoutAbi, 'donate', 'inputs'>
                 const tokenAddress = parameters._donations[0].token
                 const address = tokenAddress === GITCOIN_ETH_ADDRESS ? nativeTokenAddress : tokenAddress
                 const token = await this.Hub.getFungibleToken(address, { chainId: context.chainId })
-                const amount = new BigNumber(parameters._donations[0].amount)
-                    .plus(parameters._donations[1].amount)
-                    .toFixed()
+                const amount = String(parameters._donations[0].amount + parameters._donations[1].amount)
                 return {
                     chainId: context.chainId,
                     tokenInAddress: address,

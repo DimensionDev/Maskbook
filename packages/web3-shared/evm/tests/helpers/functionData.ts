@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest'
 import { decodeFunctionParams } from '../../src/helpers/decodeFunctionParams.js'
+import { abiArrayToMappedObject } from '../../src/helpers/abiArrayToMappedObject.js'
 import type { AbiFunction } from 'viem'
 
 const ERC20 = [
@@ -33,9 +34,15 @@ const DATA =
 
 describe('encode & decode function data', () => {
     test('should decode function data', () => {
-        const result = decodeFunctionParams(ERC20, DATA, 'approve')
+        const result = abiArrayToMappedObject(ERC20[0].inputs, decodeFunctionParams(ERC20, DATA, 'approve'))
 
-        expect(result[0]).toBe('0x8ba1f109551bD432803012645Ac136ddd64DBA72')
-        expect(result[1]).toBe(0n)
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "0": "0x8ba1f109551bD432803012645Ac136ddd64DBA72",
+            "1": 0n,
+            "_spender": "0x8ba1f109551bD432803012645Ac136ddd64DBA72",
+            "_value": 0n,
+          }
+        `)
     })
 })
