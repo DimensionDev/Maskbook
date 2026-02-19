@@ -68,16 +68,10 @@ export function useCreateFTRedpacketCallback(
 
         if (!settings.token) return
 
-        const CreationSuccess = (events?.CreationSuccess?.returnValues ?? {}) as {
-            creation_time: string
-            creator: string
-            id: string
-            token_address: string
-            total: string
-        }
+        const CreationSuccess = events?.CreationSuccess?.returnValues
 
         // the events log is not available
-        if (!events?.CreationSuccess?.returnValues.id) return
+        if (!CreationSuccess?.id) return
         const senderName = settings.name || getLastRecognizedIdentity()?.identifier?.userId
         const redpacketPayload = {
             sender: {
@@ -90,7 +84,7 @@ export function useCreateFTRedpacketCallback(
             rpid: CreationSuccess.id,
             total: CreationSuccess.total,
             duration: settings.duration,
-            creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
+            creation_time: Number(CreationSuccess.creation_time * 1000n),
             token: settings.token,
         } as const
         Object.assign(payload.current, redpacketPayload)

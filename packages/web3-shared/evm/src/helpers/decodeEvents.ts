@@ -1,37 +1,43 @@
 import type { EventLog, Log } from 'web3-core'
-import defer * as web3_utils from 'web3-utils'
-import type { AbiItem } from 'web3-utils'
-import { abiCoder } from './abiCoder.js'
+import { decodeEventLog, type ContractEventName, type DecodeEventLogReturnType } from 'viem'
+import type { Abi, ExtractAbiEventNames } from 'abitype'
 
-export function decodeEvents(abis: AbiItem[], logs: Log[]) {
-    // the topic0 for identifying which abi to be used for decoding the event
-    const listOfTopic0 = abis.map((abi) =>
-        web3_utils.keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join(',')})`),
-    )
+export type AbiEventToPrimitiveType<
+    abi extends Abi,
+    eventName extends ContractEventName<abi>,
+> = DecodeEventLogReturnType<abi, eventName>['args']
 
-    // decode events
-    const events = logs.map((log) => {
-        const idx = listOfTopic0.indexOf(log.topics[0])
-        if (idx === -1) return
-        const abi = abis[idx]
-        const inputs = abi?.inputs ?? []
+export type MultipleAbiEventsToMappedObject<abi extends Abi> = {
+    [eventName in ExtractAbiEventNames<abi> & ContractEventName<abi>]:
+        | (Omit<EventLog, 'returnValues'> & { returnValues: AbiEventToPrimitiveType<abi, eventName> })
+        | undefined
+}
 
-        return {
-            // more: https://web3js.readthedocs.io/en/v1.2.11/web3-eth-abi.html?highlight=decodeLog#decodelog
-            returnValues: abiCoder.decodeLog(inputs, log.data, abi.anonymous ? log.topics : log.topics.slice(1)),
-            raw: {
-                data: log.data,
-                topics: log.topics,
-            },
-            event: abi.name,
-            signature: listOfTopic0[idx],
-            ...log,
-        } as EventLog
-    })
-    return events.reduce<{
+export function decodeEvents<abi extends Abi>(allAbis: abi, logs: Log[]): MultipleAbiEventsToMappedObject<abi> {
+    const events: {
         [eventName: string]: EventLog | undefined
-    }>((accumulate, event) => {
-        if (event) accumulate[event.event] = event
-        return accumulate
-    }, {})
+    } = {}
+    // decode events
+    for (const log of logs) {
+        try {
+            const { eventName, args } = decodeEventLog({
+                abi: allAbis,
+                topics: log.topics as [signature: `0x${string}`, ...args: Array<`0x${string}`>],
+                data: log.data as `0x${string}`,
+            })
+            if (!eventName) continue
+            events[eventName] = {
+                returnValues: args,
+                raw: {
+                    data: log.data,
+                    topics: log.topics,
+                },
+                event: eventName,
+                ...log,
+            }
+        } catch {
+            continue
+        }
+    }
+    return events as any
 }

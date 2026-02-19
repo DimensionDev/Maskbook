@@ -247,7 +247,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     message: createSuccessResult.message,
                 },
                 total: history.total_amounts ?? '0',
-                duration: +createSuccessResult.duration,
+                duration: Number(createSuccessResult.duration),
                 token: {
                     type: TokenType.Fungible,
                     schema:
