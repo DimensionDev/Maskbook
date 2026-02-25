@@ -1,4 +1,3 @@
-import type { AbiItem } from 'web3-utils'
 import {
     type ChainId,
     getNftRedPacketConstant,
@@ -6,22 +5,17 @@ import {
     type AbiFunctionToObjectMapped,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
-import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json' with { type: 'json' }
 import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptorFormatResult } from '../types.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
-import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import type { NftRedPacketAbi } from '@masknet/web3-contracts/types/NftRedPacket.js'
+import { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
+import { NftRedPacketAbi } from '@masknet/web3-contracts/types/NftRedPacket.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
+        const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4Abi, hash)
 
-        const { claimed_value, token_address } = (events?.ClaimSuccess?.returnValues ?? {}) as {
-            claimed_value: string
-            token_address: string
-        }
+        const { claimed_value, token_address } = events?.ClaimSuccess?.returnValues ?? {}
         if (!token_address) return
 
         const token = await this.Hub.getFungibleToken(token_address ?? '', { chainId })
@@ -31,12 +25,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     }
 
     async getRefundTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
+        const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4Abi, hash)
 
-        const { remaining_balance, token_address } = (events?.RefundSuccess?.returnValues ?? {}) as {
-            token_address: string
-            remaining_balance: string
-        }
+        const { remaining_balance, token_address } = events?.RefundSuccess?.returnValues ?? {}
 
         if (!token_address) return
 
@@ -47,11 +38,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     }
 
     async getClaimedNFTSymbol(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const events = await this.getReceipt(chainId, contractAddress, NftRedPacketABI as AbiItem[], hash)
+        const events = await this.getReceipt(chainId, contractAddress, NftRedPacketAbi, hash)
 
-        const { token_address } = (events?.ClaimSuccess?.returnValues ?? {}) as {
-            token_address: string
-        }
+        const { token_address } = events?.ClaimSuccess?.returnValues ?? {}
         if (!token_address) return
 
         return this.getNonFungibleContractSymbol(chainId, token_address)

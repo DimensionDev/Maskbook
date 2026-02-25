@@ -11,11 +11,13 @@ import {
     SchemaType,
     useTokenConstants,
     decodeEvents,
+    type MultipleAbiEventsToMappedObject,
     ContractTransaction,
     type GasConfig,
+    type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { useRedPacketContract } from './useRedPacketContract.js'
+import { getRedPacketContractAbi, useRedPacketContract } from './useRedPacketContract.js'
 
 export interface RedPacketSettings {
     shares: number
@@ -151,7 +153,14 @@ export function useCreateCallback(
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
 
-    return useAsyncFn(async () => {
+    return useAsyncFn(async (): Promise<
+        | {
+              hash: string
+              receipt: TransactionReceipt
+              events: undefined | MultipleAbiEventsToMappedObject<ReturnType<typeof getRedPacketContractAbi>>
+          }
+        | undefined
+    > => {
         const token = redPacketSettings.token
         const createParams = await getCreateParams()
         if (!token || !redPacketContract || !createParams) return
@@ -184,7 +193,7 @@ export function useCreateCallback(
         })
         const receipt = await EVMWeb3.getTransactionReceipt(hash, { chainId })
         if (receipt) {
-            const events = decodeEvents(redPacketContract.options.jsonInterface, receipt.logs)
+            const events = decodeEvents(getRedPacketContractAbi(version), receipt.logs)
 
             return {
                 hash,
@@ -192,6 +201,6 @@ export function useCreateCallback(
                 events,
             }
         }
-        return { hash, receipt }
+        return { hash, receipt, events: undefined }
     }, [account, redPacketContract, redPacketSettings.token, gasOption, chainId, getCreateParams])
 }

@@ -6,6 +6,7 @@ import type {
     ExtractAbiFunction,
     ExtractAbiFunctionNames,
 } from 'abitype'
+import type { UnionEvaluate } from 'viem'
 
 /**
  * Convert [a: type1, b: type2] to { a: type1, b: type2 }.
@@ -28,7 +29,7 @@ export function abiArrayToMappedObject<inputAbi extends readonly AbiParameter[]>
 export type AbiParametersToPrimitiveTypesObjectMapped<
     abiParameters extends readonly AbiParameter[],
     abiParameterKind extends AbiParameterKind = AbiParameterKind,
-> = AbiParametersToPrimitiveTypesObjectMapped_inner<abiParameters, abiParameterKind>
+> = UnionEvaluate<AbiParametersToPrimitiveTypesObjectMapped_inner<abiParameters, abiParameterKind>>
 
 export type AbiFunctionToObjectMapped<
     abi extends Abi,

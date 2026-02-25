@@ -11,14 +11,14 @@ import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
 
-import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json' with { type: 'json' }
-import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json' with { type: 'json' }
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
-import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json' with { type: 'json' }
-import ERC165ABI from '@masknet/web3-contracts/abis/ERC165.json' with { type: 'json' }
-import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json' with { type: 'json' }
-import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json' with { type: 'json' }
-import WalletABI from '@masknet/web3-contracts/abis/Wallet.json' with { type: 'json' }
+import { AirdropV2Abi as AirDropV2ABI } from '@masknet/web3-contracts/types/AirdropV2.js'
+import { BalanceCheckerAbi as BalanceCheckerABI } from '@masknet/web3-contracts/types/BalanceChecker.js'
+import { ERC20Abi as ERC20ABI } from '@masknet/web3-contracts/types/ERC20.js'
+import { ERC20Bytes32Abi as ERC20Bytes32ABI } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
+import { ERC165Abi as ERC165ABI } from '@masknet/web3-contracts/types/ERC165.js'
+import { ERC721Abi as ERC721ABI } from '@masknet/web3-contracts/types/ERC721.js'
+import { ERC1155Abi as ERC1155ABI } from '@masknet/web3-contracts/types/ERC1155.js'
+import { WalletAbi as WalletABI } from '@masknet/web3-contracts/types/Wallet.js'
 
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
@@ -46,35 +46,35 @@ export class EVMContractReadonlyAPI {
     }
 
     getERC20Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], initial)
+        return this.getWeb3Contract<ERC20>(address, ERC20ABI, initial)
     }
 
     getERC20Bytes32Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI as AbiItem[], initial)
+        return this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI, initial)
     }
 
     getERC721Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], initial)
+        return this.getWeb3Contract<ERC721>(address, ERC721ABI, initial)
     }
 
     getERC1155Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC1155>(address, ERC1155ABI as AbiItem[], initial)
+        return this.getWeb3Contract<ERC1155>(address, ERC1155ABI, initial)
     }
 
     getERC165Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], initial)
+        return this.getWeb3Contract<ERC165>(address, ERC165ABI, initial)
     }
 
     getBalanceCheckerContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<BalanceChecker>(address, BalanceCheckerABI as AbiItem[], initial)
+        return this.getWeb3Contract<BalanceChecker>(address, BalanceCheckerABI, initial)
     }
 
     getWalletContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<Wallet>(address, WalletABI as AbiItem[], initial)
+        return this.getWeb3Contract<Wallet>(address, WalletABI, initial)
     }
 
     getAirdropV2Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<AirdropV2>(address, AirDropV2ABI as AbiItem[], initial)
+        return this.getWeb3Contract<AirdropV2>(address, AirDropV2ABI, initial)
     }
 }
 export const EVMContractReadonly = EVMContractReadonlyAPI.Default

@@ -1,8 +1,7 @@
-import type { AbiItem } from 'web3-utils'
 import { type FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base'
 import { type ChainId, type SchemaType, decodeEvents } from '@masknet/web3-shared-evm'
-import { EVMContractReadonly } from '../../apis/ContractReadonlyAPI.js'
 import { BaseDescriptor } from './descriptors/Base.js'
+import type { Abi } from 'viem'
 
 export function getTokenAmountDescription(amount: string | bigint = '0', token?: FungibleToken<ChainId, SchemaType>) {
     amount = String(amount)
@@ -15,10 +14,10 @@ export function getTokenAmountDescription(amount: string | bigint = '0', token?:
 }
 
 export class DescriptorWithTransactionDecodedReceipt extends BaseDescriptor {
-    async getReceipt(
+    protected async getReceipt<abi extends Abi>(
         chainId: ChainId,
         contractAddress: string | undefined,
-        abi: AbiItem[] | undefined,
+        abi: abi | undefined,
         hash: string | undefined,
     ) {
         if (!hash || !contractAddress || !abi) return
@@ -26,9 +25,6 @@ export class DescriptorWithTransactionDecodedReceipt extends BaseDescriptor {
         const receipt = await this.Web3.getTransactionReceipt(hash, { chainId })
         if (!receipt) return
 
-        const contract = EVMContractReadonly.getWeb3Contract(contractAddress, abi)
-        if (!contract) return
-
-        return decodeEvents(contract.options.jsonInterface, receipt.logs)
+        return decodeEvents(abi, receipt.logs)
     }
 }

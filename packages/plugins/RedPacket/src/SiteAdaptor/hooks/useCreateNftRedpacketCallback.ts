@@ -1,5 +1,5 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
+import { NftRedPacketAbi, type NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -9,6 +9,8 @@ import {
     decodeEvents,
     type GasConfig,
     isValidAddress,
+    type MultipleAbiEventsToMappedObject,
+    type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
@@ -82,7 +84,15 @@ export function useCreateNftRedpacketCallback({
         return new BigNumber(gasPrice).multipliedBy(gasLimit).multipliedBy(1.5).toFixed()
     }, [gasLimit, gasPrice])
 
-    const [{ loading }, createCallback] = useAsyncFn(async () => {
+    const [{ loading }, createCallback] = useAsyncFn(async (): Promise<
+        | undefined
+        | {
+              hash: string
+              receipt: TransactionReceipt
+              events: undefined | MultipleAbiEventsToMappedObject<NftRedPacketAbi>
+          }
+        | undefined
+    > => {
         const nftRedPacketContract = createNftRedpacketContract(chainId)
         if (!nftRedPacketContract || !isValidAddress(contractAddress) || tokenIds.length === 0 || !gasLimit) {
             return
@@ -115,10 +125,10 @@ export function useCreateNftRedpacketCallback({
             return {
                 hash,
                 receipt,
-                events: decodeEvents(nftRedPacketContract.options.jsonInterface, receipt.logs),
+                events: decodeEvents(NftRedPacketAbi, receipt.logs),
             }
         }
-        return { hash, receipt }
+        return { hash, receipt, events: undefined }
     }, [duration, message, creator, contractAddress, tokenIds, account, chainId, gasOption, gasLimit])
 
     return { gasLimit, estimateGasFee, loading, createCallback }
