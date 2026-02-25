@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionType, MessageStateType, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import {
-    abiCoder,
     ChainId,
     createJsonRpcRequest,
     createJsonRpcResponse,
@@ -27,6 +26,7 @@ import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 import { type TransactionDetail } from '../type.js'
 import type { InteractionItemProps } from './interaction.js'
+import { decodeAbiParameters, encodeAbiParameters, hexToBigInt } from 'viem'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -78,7 +78,7 @@ const approveParametersType = [
         name: 'value',
         type: 'uint256',
     },
-]
+] as const
 
 let mockingPrivyPid = Date.now() // Use unix timestamp as pid to avoid duplicate mocking
 export function TransactionRequest(props: InteractionItemProps) {
@@ -137,14 +137,15 @@ export function TransactionRequest(props: InteractionItemProps) {
         if (approvedAmount) {
             if (!transaction.formattedTransaction?._tx.data) return
 
-            const parameters = abiCoder.decodeParameters(
+            const [spender, _approvedAmount] = decodeAbiParameters(
                 approveParametersType,
-                transaction.formattedTransaction._tx.data.slice(10),
+                `0x${transaction.formattedTransaction._tx.data.slice(10)}`,
             )
 
-            const parametersString = abiCoder
-                .encodeParameters(approveParametersType, [parameters.spender, web3_utils.toHex(approvedAmount)])
-                .slice(2)
+            const parametersString = encodeAbiParameters(approveParametersType, [
+                spender,
+                approvedAmount.startsWith('0x') ? hexToBigInt(approvedAmount as `0x${string}`) : BigInt(approvedAmount),
+            ]).slice(2)
 
             const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
 

@@ -24,7 +24,6 @@ const deferPackages = [
     'web3-eth-accounts',
     'twitter-text',
     'web3-utils',
-    'web3-eth-abi',
     '@solana/web3.js',
     // add package names here.
 ]
