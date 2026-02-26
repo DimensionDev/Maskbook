@@ -1,10 +1,25 @@
 import defer * as _metamask_eth_sig_util from '@metamask/eth-sig-util'
-import { signTransaction, type Transaction } from '@masknet/web3-shared-evm'
+import { signTransaction } from '@masknet/web3-shared-evm'
 import { SignType, toHex } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
+import type { Hex, TransactionSerializable } from 'viem'
 
 export class Signer {
-    static async sign(type: SignType, key: Buffer<ArrayBuffer>, message: unknown): Promise<string> {
+    static async sign(
+        type: SignType.Message | SignType.TypedData,
+        key: Buffer<ArrayBuffer>,
+        message: string,
+    ): Promise<string>
+    static async sign(
+        type: SignType.Transaction,
+        key: Buffer<ArrayBuffer>,
+        message: TransactionSerializable,
+    ): Promise<string>
+    static async sign(
+        type: SignType,
+        key: Buffer<ArrayBuffer>,
+        message: string | TransactionSerializable,
+    ): Promise<string> {
         switch (type) {
             case SignType.Message:
                 return _metamask_eth_sig_util.personalSign({
@@ -18,12 +33,12 @@ export class Signer {
                     version: _metamask_eth_sig_util.SignTypedDataVersion.V4,
                 })
             case SignType.Transaction:
-                const transaction = message as Transaction
+                const transaction = message as TransactionSerializable
 
                 const chainId = transaction.chainId
                 if (!chainId) throw new Error('Invalid chain id.')
 
-                const { rawTransaction } = await signTransaction(transaction, toHex(key))
+                const rawTransaction = await signTransaction(transaction, toHex(key) as Hex)
                 if (!rawTransaction) throw new Error('Failed to sign transaction.')
                 return rawTransaction
 

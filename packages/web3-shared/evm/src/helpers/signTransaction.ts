@@ -1,10 +1,6 @@
-import defer * as Web3Accounts from 'web3-eth-accounts'
-import type { Accounts } from 'web3-eth-accounts'
-import type { Transaction } from '../types/index.js'
+import { signTransaction as viem_signTransaction } from 'viem/accounts'
+import type { Hex, TransactionSerializable } from 'viem'
 
-export function signTransaction(transaction: Transaction, privateKey: string) {
-    if (typeof transaction.nonce === 'undefined') throw new Error('Nonce is required.')
-    const Accounts_ = Web3Accounts.default as unknown as typeof Accounts
-    const accounts = new Accounts_()
-    return accounts.signTransaction(transaction, privateKey)
+export function signTransaction(transaction: TransactionSerializable, privateKey: Hex) {
+    return viem_signTransaction({ privateKey, transaction })
 }

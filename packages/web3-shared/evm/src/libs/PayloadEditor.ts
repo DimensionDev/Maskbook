@@ -1,8 +1,6 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import type { JsonRpcRequest } from 'web3-types'
 import type { Wallet } from '@masknet/shared-base'
-import { formatEthereumAddress } from '../helpers/formatter.js'
 import { parseChainId } from '../helpers/parseChainId.js'
 import { createJsonRpcRequest } from '../helpers/createJsonRpcRequest.js'
 import {
@@ -14,6 +12,7 @@ import {
 import { readonlyMethodType } from '../helpers/isReadonlyMethodType.js'
 import { riskyMethodType } from '../helpers/isRiskyMethodType.js'
 import { gasConsumingMethodType } from '../helpers/isGasConsumingMethodType.js'
+import { hexToBigInt, hexToNumber, isHex, type Hex, type TransactionSerializable } from 'viem'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
@@ -87,7 +86,7 @@ export class PayloadEditor {
         return omitBy<Transaction>(
             {
                 ...raw,
-                nonce: parseHexNumber(raw?.nonce),
+                nonce: toNumber(raw?.nonce),
                 from: raw?.from ?? this.options?.account,
                 chainId: parseChainId(raw?.chainId) ?? this.options?.chainId,
             },
@@ -124,24 +123,27 @@ export class PayloadEditor {
         }
     }
 
-    get signableConfig() {
+    get signableTransaction(): TransactionSerializable | undefined {
         if (!this.config) return
 
-        return omitBy(
-            {
-                ...this.config,
-                from: this.config.from ? formatEthereumAddress(this.config.from) : '',
-                value: parseHexNumberString(this.config.value),
-                gas: parseHexNumberString(this.config.gas),
-                gasPrice: parseHexNumberString(this.config.gasPrice),
-                maxFeePerGas: parseHexNumberString(this.config.maxFeePerGas),
-                maxPriorityFeePerGas: parseHexNumberString(this.config.maxPriorityFeePerGas),
-                // TODO: revert to parseHexNumberString after updating MaskCore
-                chainId: parseHexNumber(this.config.chainId),
-                nonce: parseHexNumberString(this.config.nonce),
-            },
-            isUndefined,
-        ) as Transaction
+        const tx = {
+            ...this.config,
+            type:
+                this.config.type === '0x0' ? 'legacy'
+                : this.config.type === '0x1' ? 'eip2930'
+                : this.config.type === '0x2' ? 'eip1559'
+                : undefined,
+            to: this.config.to as Hex,
+            data: this.config.data as Hex,
+            value: toBigInt(this.config.value),
+            gas: toBigInt(this.config.gas),
+            gasPrice: toBigInt(this.config.gasPrice),
+            maxFeePerGas: toBigInt(this.config.maxFeePerGas),
+            maxPriorityFeePerGas: toBigInt(this.config.maxPriorityFeePerGas),
+            chainId: toNumber(this.config.chainId),
+            nonce: toNumber(this.config.nonce),
+        } as TransactionSerializable
+        return omitBy(tx, isUndefined)
     }
 
     get risky() {
@@ -179,10 +181,20 @@ export class PayloadEditor {
     }
 }
 
-function parseHexNumberString(hex: string | number | undefined) {
-    return typeof hex !== 'undefined' ? web3_utils.hexToNumberString(hex ?? '0x0') : undefined
+function toBigInt(hex: string | number | undefined) {
+    if (typeof hex === 'number') return BigInt(hex)
+    if (typeof hex === 'string') {
+        if (isHex(hex)) return hexToBigInt(hex)
+        return BigInt(hex)
+    }
+    return undefined
 }
 
-function parseHexNumber(hex: string | number | undefined) {
-    return typeof hex !== 'undefined' ? (web3_utils.hexToNumber(hex) as number) : undefined
+function toNumber(hex: string | number | undefined) {
+    if (typeof hex === 'number') return hex
+    if (typeof hex === 'string') {
+        if (isHex(hex)) return Number(hexToNumber(hex))
+        return Number(hex)
+    }
+    return undefined
 }

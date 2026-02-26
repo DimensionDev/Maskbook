@@ -1,8 +1,9 @@
-import defer * as Web3Accounts from 'web3-eth-accounts'
-import type { Accounts } from 'web3-eth-accounts'
+import type { Hex } from 'viem'
+import { signMessage as viem_sign } from 'viem/accounts'
 
-export function signMessage(message: string, privateKey: string): Web3Accounts.Sign {
-    const Accounts_ = Web3Accounts.default as unknown as typeof Accounts
-    const accounts = new Accounts_()
-    return accounts.sign(message, privateKey)
+export function signMessage(message: string, privateKey: Hex): Promise<string> {
+    return viem_sign({
+        message: message.startsWith('0x') ? { raw: message as Hex } : message,
+        privateKey,
+    })
 }

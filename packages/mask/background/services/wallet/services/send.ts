@@ -1,5 +1,5 @@
 import type { JsonRpcRequest } from 'web3-types'
-import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
+import { ECKeyIdentifier, SignType } from '@masknet/shared-base'
 import { EVMRequestReadonly, EVMWeb3Readonly } from '@masknet/web3-providers'
 import {
     ChainId,
@@ -8,10 +8,10 @@ import {
     EthereumMethodType,
     PayloadEditor,
     type TransactionOptions,
-    Signer,
 } from '@masknet/web3-shared-evm'
 import { signWithWallet } from './wallet/index.js'
 import { signWithPersona } from '../../identity/persona/sign.js'
+import type { TransactionSerializable } from 'viem'
 
 /**
  * The entrance of all RPC requests to MaskWallet.
@@ -23,25 +23,33 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
         from,
         chainId = options?.chainId ?? ChainId.Mainnet,
         signableMessage,
-        signableConfig,
+        signableTransaction,
     } = PayloadEditor.fromPayload(payload, options)
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
-    const signer =
-        identifier ?
-            new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
-                signWithPersona(type, message, identifier, undefined, true),
-            )
-        :   new Signer(owner || from!, signWithWallet)
+    const signTransaction = async (transaction: TransactionSerializable) => {
+        if (identifier) {
+            return signWithPersona(SignType.Transaction, transaction, identifier)
+        } else {
+            return signWithWallet(SignType.Transaction, transaction, owner || from!)
+        }
+    }
+    const signMessageOrTypedData = async (type: SignType.Message | SignType.TypedData, message: string) => {
+        if (identifier) {
+            return signWithPersona(type, message, identifier)
+        } else {
+            return signWithWallet(type, message, owner || from!)
+        }
+    }
 
     switch (payload.method) {
         case EthereumMethodType.eth_sendTransaction:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-            if (!signableConfig) throw new Error('No transaction to be sent.')
+            if (!signableTransaction) throw new Error('No transaction to be sent.')
 
             try {
                 return createJsonRpcResponse(
                     pid,
-                    await EVMWeb3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
+                    await EVMWeb3Readonly.sendSignedTransaction(await signTransaction(signableTransaction), {
                         chainId,
                         providerURL,
                     }),
@@ -53,21 +61,21 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
         case EthereumMethodType.personal_sign:
             try {
                 if (!signableMessage) throw new Error('No message to be signed.')
-                return createJsonRpcResponse(pid, await signer.signMessage(signableMessage))
+                return createJsonRpcResponse(pid, await signMessageOrTypedData(SignType.Message, signableMessage))
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to sign message.').error
             }
         case EthereumMethodType.eth_signTypedData_v4:
             try {
                 if (!signableMessage) throw new Error('No typed data to be signed.')
-                return createJsonRpcResponse(pid, await signer.signTypedData(signableMessage))
+                return createJsonRpcResponse(pid, await signMessageOrTypedData(SignType.TypedData, signableMessage))
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to sign typed data.').error
             }
         case EthereumMethodType.eth_signTransaction:
             try {
-                if (!signableConfig) throw new Error('No transaction to be signed.')
-                return createJsonRpcResponse(pid, await signer.signTransaction(signableConfig))
+                if (!signableTransaction) throw new Error('No transaction to be signed.')
+                return createJsonRpcResponse(pid, await signTransaction(signableTransaction))
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to sign transaction.').error
             }

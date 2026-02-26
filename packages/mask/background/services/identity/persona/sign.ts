@@ -11,6 +11,35 @@ import {
 import { queryPersonasWithPrivateKey } from '../../../database/persona/web.js'
 import { openPopupWindow } from '../../helper/popup-opener.js'
 
+async function getIdentifier(
+    message: unknown,
+    identifier?: ECKeyIdentifier,
+    source?: string,
+    silent = false,
+) {
+    if (!identifier || !silent) {
+        const requestID = crypto.randomUUID()
+        await openPopupWindow(PopupRoutes.PersonaSignRequest, {
+            message: JSON.stringify(message),
+            requestID,
+            identifier: identifier?.toText(),
+            source,
+        })
+
+        return timeout(
+            new Promise<PersonaIdentifier>((resolve, reject) => {
+                MaskMessages.events.personaSignRequest.on((approval) => {
+                    if (approval.requestID !== requestID) return
+                    if (!approval.selectedPersona) reject(new Error('The user refused to sign message with persona.'))
+                    resolve(approval.selectedPersona!)
+                })
+            }),
+            60 * 1000,
+            'Timeout of signing with persona.',
+        )
+    }
+    return identifier
+}
 /**
  * Generate a signature w or w/o confirmation from user
  */
@@ -20,37 +49,12 @@ export async function signWithPersona(
     identifier?: ECKeyIdentifier,
     source?: string,
     silent = false,
-): Promise<string> {
-    const getIdentifier = async () => {
-        if (!identifier || !silent) {
-            const requestID = crypto.randomUUID()
-            await openPopupWindow(PopupRoutes.PersonaSignRequest, {
-                message: JSON.stringify(message),
-                requestID,
-                identifier: identifier?.toText(),
-                source,
-            })
-
-            return timeout(
-                new Promise<PersonaIdentifier>((resolve, reject) => {
-                    MaskMessages.events.personaSignRequest.on((approval) => {
-                        if (approval.requestID !== requestID) return
-                        if (!approval.selectedPersona)
-                            reject(new Error('The user refused to sign message with persona.'))
-                        resolve(approval.selectedPersona!)
-                    })
-                }),
-                60 * 1000,
-                'Timeout of signing with persona.',
-            )
-        }
-        return identifier
-    }
-
-    const identifier_ = await getIdentifier()
+): Promise<string>
+{
+    identifier = await getIdentifier(message, identifier, source, silent)
 
     // find the persona with the signer's identifier
-    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier_)
+    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier)
     if (!persona?.privateKey.d) throw new Error('Persona not found')
 
     return Signer.sign(type, Buffer.from(fromBase64URL(persona.privateKey.d)), message)
