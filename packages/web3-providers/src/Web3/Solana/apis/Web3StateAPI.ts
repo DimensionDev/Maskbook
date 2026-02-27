@@ -31,7 +31,7 @@ export async function createSolanaState(context: WalletAPI.IOContext): Promise<W
     ])
 
     const state: Web3State = lazyObject({
-        Provider: () => new Provider.SolanaProvider(context.signWithPersona, provider),
+        Provider: () => new Provider.SolanaProvider(provider),
         AddressBook: () => new AddressBook.SolanaAddressBook(address),
         IdentityService: () => new IdentityService.SolanaIdentityService(),
         Settings: () => new Settings.SolanaSettings(settings),

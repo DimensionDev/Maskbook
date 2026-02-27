@@ -29,10 +29,7 @@ export abstract class ProviderState<ChainId extends number, ProviderType extends
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
-    constructor(
-        public signWithPersona: WalletAPI.SignWithPersona,
-        protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
-    ) {}
+    constructor(protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {}
     protected init() {
         this.setupSubscriptions()
         this.setupProviders()

@@ -132,8 +132,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                 // Verify Wallet sign with persona
                 if (bindingWallets.some((x) => isSameAddress(x.identity, account))) {
                     sign = await Services.Identity.signWithPersona(
-                        SignType.Message,
-                        JSON.stringify(data),
+                        { type: SignType.Message, data: JSON.stringify(data) },
                         currentPersona.identifier,
                         location.origin,
                         true,

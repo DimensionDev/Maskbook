@@ -77,8 +77,7 @@ export const Component = memo(() => {
             if (!result) return
 
             const signature = await Service.Identity.signWithPersona(
-                SignType.Message,
-                result.signPayload,
+                { type: SignType.Message, data: result.signPayload },
                 currentPersona.identifier,
                 location.origin,
                 true,

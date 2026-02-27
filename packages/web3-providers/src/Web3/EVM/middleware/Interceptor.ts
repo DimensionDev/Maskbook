@@ -6,10 +6,9 @@ import { WalletConnect } from '../interceptors/WalletConnect.js'
 import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
 import { Popups } from '../interceptors/Popups.js'
 import { CustomNetwork } from '../interceptors/CustomNetwork.js'
-import type { WalletAPI } from '../../../entry-types.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
-    constructor(private signWithPersona: WalletAPI.SignWithPersona) {
+    constructor() {
         this.composers = {
             [ProviderType.None]: Composer.from(new NoneWallet()),
             [ProviderType.BitGet]: Composer.from(new MetaMaskLike(ProviderType.BitGet)),

@@ -60,8 +60,7 @@ export const Component = memo(function PersonaSignRequest() {
             case MethodAfterPersonaSign.DISCONNECT_NEXT_ID:
                 if (!message) break
                 const signature = await Services.Identity.signWithPersona(
-                    SignType.Message,
-                    message,
+                    { type: SignType.Message, data: message },
                     selectedPersona,
                     location.origin,
                     true,

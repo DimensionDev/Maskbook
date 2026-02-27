@@ -2967,9 +2967,6 @@ importers:
       web3-eth:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
-      web3-eth-accounts:
-        specifier: 1.10.4
-        version: 1.10.4(encoding@0.1.13)
       web3-eth-contract:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)

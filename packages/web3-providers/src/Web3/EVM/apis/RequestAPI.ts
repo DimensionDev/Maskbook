@@ -28,7 +28,7 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                 const context = createContext(requestArguments, options)
 
                 try {
-                    await Composer.compose(this.Provider.signWithPersona).dispatch(context, async () => {
+                    await Composer.compose().dispatch(context, async () => {
                         if (!context.writable) return
                         try {
                             switch (context.method) {

@@ -6,7 +6,7 @@ export function usePersonaSign(message?: string, currentIdentifier?: ECKeyIdenti
     return useAsyncFn(async () => {
         if (!message || !currentIdentifier) return
         try {
-            return await signWithPersona?.(SignType.Message, message, currentIdentifier)
+            return await signWithPersona?.({ type: SignType.Message, data: message }, currentIdentifier)
         } catch {
             return
         }

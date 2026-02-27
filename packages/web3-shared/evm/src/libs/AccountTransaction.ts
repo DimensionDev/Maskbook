@@ -57,7 +57,6 @@ export class AccountTransaction {
             maxFeePerGas,
             data,
             nonce,
-            _disableExceptionSnackbar,
             _disableSuccessSnackbar,
             _disableSnackbar,
         } = {
@@ -76,7 +75,6 @@ export class AccountTransaction {
                 maxPriorityFeePerGas: maxPriorityFeePerGas ? normalizeHex(maxPriorityFeePerGas) : undefined,
                 maxFeePerGas: maxFeePerGas ? normalizeHex(maxFeePerGas) : undefined,
                 nonce,
-                _disableExceptionSnackbar,
                 _disableSuccessSnackbar,
                 _disableSnackbar,
             },

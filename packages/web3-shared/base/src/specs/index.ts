@@ -3,7 +3,6 @@ import type { Subscription } from 'use-subscription'
 import type { JsonRpcRequest } from 'web3-types'
 import type { Emitter } from '@servie/events'
 import type {
-    ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
     NetworkPluginID,
@@ -12,7 +11,6 @@ import type {
     SocialAddress,
     SocialIdentity,
     SocialAccount,
-    SignType,
     Web3BioProfile,
 } from '@masknet/shared-base'
 
@@ -1294,9 +1292,6 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
-    /** Sign a message with persona (w or w/o popups) */
-    // TODO: this is not the best place to put this signature, but to avoid IOContext leaked as a global variable, we'll put it here for now.
-    signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
 }
 
 export interface BalanceNotifierState<ChainId> {

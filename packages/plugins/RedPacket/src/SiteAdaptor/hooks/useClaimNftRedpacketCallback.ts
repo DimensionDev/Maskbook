@@ -7,7 +7,7 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 import type { RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { useSignedMessage } from './useSignedMessage.js'
-import { useMemo } from 'react'
+import type { Hex } from 'viem'
 
 const EXTRA_GAS_PER_NFT = 335
 
@@ -16,12 +16,10 @@ export function useClaimNftRedpacketCallback(payload: RedPacketNftJSONPayload, t
     const nftRedPacketContract = useNftRedPacketContract(chainId)
     const { refetch } = useSignedMessage(account, payload)
     const id = payload.id
-    const signedMsg = useMemo(() => {
-        return signMessage(account, payload.privateKey).signature ?? ''
-    }, [account, payload.privateKey])
     return useAsyncFn(async () => {
-        if (!nftRedPacketContract || !id || !account || !totalAmount || !signedMsg) return
+        if (!nftRedPacketContract || !id || !account || !totalAmount || !payload.privateKey) return
 
+        const signedMsg = await signMessage(account, payload.privateKey as Hex)
         const transaction = nftRedPacketContract.methods.claim(id, signedMsg, account)
         const estimatedGas = await transaction.estimateGas({ from: account })
         const tx = await new ContractTransaction(nftRedPacketContract).fillAll(transaction, {
@@ -30,5 +28,5 @@ export function useClaimNftRedpacketCallback(payload: RedPacketNftJSONPayload, t
             chainId,
         })
         return EVMWeb3.sendTransaction(tx, { chainId })
-    }, [id, refetch, account, chainId, totalAmount, signedMsg])
+    }, [id, refetch, account, chainId, totalAmount, account, payload.privateKey])
 }
