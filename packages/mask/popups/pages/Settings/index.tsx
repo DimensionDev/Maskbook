@@ -95,8 +95,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const FEEDBACK_MAIL = 'Support@mask.io'
-const FAQ_LINK =
-    'realmasknetwork.notion.site/realmasknetwork/Mask-Network-2-0-Setting-Up-Features-The-Broader-Ecosystem-e4b3e24182e045a58bdb5549c0daea82'
+const FAQ_LINK = 'www.mask.io/help-tutorial'
 const HOME_LINK = 'Mask.io'
 
 export const Component = memo(function SettingsPage() {
@@ -330,7 +329,7 @@ export const Component = memo(function SettingsPage() {
                             <ListItemText
                                 classes={itemClasses}
                                 primary={<Trans>FAQ&Tutorial</Trans>}
-                                secondary={'realmasknetwork.notion.site'}
+                                secondary={'www.mask.io/help-tutorial'}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>

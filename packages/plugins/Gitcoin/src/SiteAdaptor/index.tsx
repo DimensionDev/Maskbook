@@ -48,7 +48,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            hiddenInList: false,
+            hiddenInList: true,
             ApplicationEntryID: base.ID,
             category: 'dapp',
             description: (

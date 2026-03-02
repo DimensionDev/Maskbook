@@ -24,7 +24,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             category: 'dapp',
             recommendFeature,
             description: recommendFeature.description,
-            tutorialLink: 'https://mask.notion.site/Calendar-Web3-Daily-Digest-a59647e6e43a454eaccedd627fe50d3c',
+            tutorialLink: 'https://www.mask.io/help-tutorial/calendar-web3-daily-digest',
         },
     ],
 }

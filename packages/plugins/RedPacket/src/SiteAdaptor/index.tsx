@@ -158,7 +158,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 icon,
                 description: <Trans>Gift crypto or NFTs to any users, first come, first served.</Trans>,
                 name,
-                tutorialLink: 'https://mask.notion.site/Send-a-Lucky-Drop-a4c7d33e87d54f1e9f537838308e3a6b',
+                tutorialLink: 'https://www.mask.io/help-tutorial/send-a-lucky-drop',
                 category: 'dapp',
                 recommendFeature,
             }

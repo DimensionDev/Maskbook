@@ -70,7 +70,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             description: <Trans>Display Snapshot proposals on the X of the respective project or protocol.</Trans>,
-            tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
+            tutorialLink: 'https://www.mask.io/help-tutorial/web3-daos',
             name: <Trans>DAO</Trans>,
             marketListSortingPriority: 8,
             icon: <Icons.Snapshot size={36} />,
