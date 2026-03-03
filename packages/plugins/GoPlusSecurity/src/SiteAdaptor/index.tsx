@@ -44,8 +44,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 category: 'dapp',
                 marketListSortingPriority: 16,
                 description: <Trans>Provide you with fast, reliable and convenient security services.</Trans>,
-                tutorialLink:
-                    'https://mask.notion.site/Security-Detection-Go-Scamsniffer-Blockaid-Cryptoscamdb-9c32befb3c0648e79997900cee232462',
+                tutorialLink: 'https://www.mask.io/help-tutorial/check-security',
             }
         })(),
     ],

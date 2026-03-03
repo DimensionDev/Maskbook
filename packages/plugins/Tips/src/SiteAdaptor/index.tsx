@@ -41,7 +41,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 iconFilterColor,
                 nextIdRequired: true,
                 entryWalletConnectedNotRequired: true,
-                tutorialLink: 'https://mask.notion.site/Tip-Your-Favourite-Web3-User-fbf16a9009b54cc4be7e860ba2c15441',
+                tutorialLink: 'https://www.mask.io/help-tutorial/tip-your-favourite-web3-user',
             }
         })(),
     ],

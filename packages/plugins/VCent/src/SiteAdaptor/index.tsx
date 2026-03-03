@@ -17,7 +17,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             name: <Trans>Valuables</Trans>,
             description: <Trans>Buy & sell tweets autographed by their original creators.</Trans>,
             marketListSortingPriority: 10,
-            tutorialLink: 'https://realmasknetwork.notion.site/27424923ee454a4a9b0ed16fc5cb93d0',
             icon: <Icons.Valuables size={36} />,
         },
     ],

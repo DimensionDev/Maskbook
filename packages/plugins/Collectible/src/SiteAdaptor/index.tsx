@@ -204,7 +204,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             name: <Trans>Collectibles</Trans>,
             icon: <Icons.Collectibles size={36} />,
             marketListSortingPriority: 7,
-            tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
         },
     ],
     wrapperProps: {

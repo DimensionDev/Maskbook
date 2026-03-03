@@ -101,7 +101,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
                 ),
                 name,
                 iconFilterColor,
-                tutorialLink: 'https://mask.notion.site/Web3-File-Service-ee60e0e79a674019a0560de16144ecb3',
+                tutorialLink: 'https://www.mask.io/help-tutorial/web3-file-service',
             }
         })(),
     ],

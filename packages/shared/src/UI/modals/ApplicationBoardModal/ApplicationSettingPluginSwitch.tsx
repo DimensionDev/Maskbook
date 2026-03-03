@@ -209,11 +209,7 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                                 <Box className={classes.settings}>
                                     <Icons.Tutorial
                                         size={22}
-                                        onClick={() =>
-                                            openWindow(
-                                                'https://mask.notion.site/DSearch-73f30e9268764c10901090aaa6ed0558',
-                                            )
-                                        }
+                                        onClick={() => openWindow('https://www.mask.io/help-tutorial/dsearch')}
                                     />
                                 </Box>
                             </div>

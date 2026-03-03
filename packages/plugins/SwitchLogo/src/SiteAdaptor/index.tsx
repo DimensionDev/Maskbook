@@ -21,7 +21,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             category: 'dapp',
             recommendFeature,
             description: recommendFeature.description,
-            tutorialLink: 'https://mask.notion.site/Back-to-Twitter-Blue-Bird-6e17fd3065be4333b7ddcb77b0828af0',
+            tutorialLink: 'https://www.mask.io/help-tutorial/back-to-twitter-blue-bird',
         },
     ],
     GlobalInjection() {
