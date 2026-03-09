@@ -11,12 +11,7 @@ import {
 import { queryPersonasWithPrivateKey } from '../../../database/persona/web.js'
 import { openPopupWindow } from '../../helper/popup-opener.js'
 
-async function getIdentifier(
-    message: unknown,
-    identifier?: ECKeyIdentifier,
-    source?: string,
-    silent = false,
-) {
+async function getIdentifier(message: unknown, identifier?: ECKeyIdentifier, source?: string, silent = false) {
     if (!identifier || !silent) {
         const requestID = crypto.randomUUID()
         await openPopupWindow(PopupRoutes.PersonaSignRequest, {
@@ -49,8 +44,7 @@ export async function signWithPersona(
     identifier?: ECKeyIdentifier,
     source?: string,
     silent = false,
-): Promise<string>
-{
+): Promise<string> {
     identifier = await getIdentifier(message, identifier, source, silent)
 
     // find the persona with the signer's identifier
