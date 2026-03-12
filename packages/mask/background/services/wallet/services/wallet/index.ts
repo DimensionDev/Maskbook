@@ -1,14 +1,14 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { toBytes } from '@ethereumjs/util'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
-import { ImportSource, type SignMessage, type Wallet } from '@masknet/shared-base'
+import { ImportSource, toHex, type SignMessage, type Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import * as Mask from '../maskwallet/index.js'
 import * as database from './database/index.js'
 import * as password from './password.js'
+import { keccak256 } from 'viem'
 
 const MAX_DERIVE_COUNT = 99
 
@@ -60,9 +60,7 @@ export async function createMnemonicWords() {
 }
 
 export async function createMnemonicId(mnemonic: string) {
-    const id = web3_utils.sha3(mnemonic)
-    if (!id) throw new Error('Failed to create mnemonic id.')
-    return id
+    return keccak256(toHex(mnemonic))
 }
 
 export async function getPrimaryWalletByMnemonicId(mnemonicId?: string) {

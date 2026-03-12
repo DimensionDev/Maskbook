@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, toHex } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionType, MessageStateType, TransactionDescriptorType } from '@masknet/web3-shared-base'
@@ -15,12 +15,10 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { BigNumber } from 'bignumber.js'
 import { produce } from 'immer'
 import { compact, mapValues, omit } from 'lodash-es'
 import { useCallback, useEffect, useState } from 'react'
 import { useLatest } from 'react-use'
-import defer * as web3_utils from 'web3-utils'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
@@ -125,6 +123,8 @@ export function TransactionRequest(props: InteractionItemProps) {
         if (privyWallet) {
             const provider = await privyWallet.getEthereumProvider()
             const result: string = await provider.request(request.request.arguments)
+            // TODO:
+            // eslint-disable-next-line react-compiler/react-compiler
             mockingPrivyPid += 1
             await Message?.updateMessage(request.ID, {
                 request: request.request,
@@ -175,12 +175,12 @@ export function TransactionRequest(props: InteractionItemProps) {
                     ...(gasConfig ?
                         mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
                             if (key === 'gasCurrency' || !value) return
-                            return web3_utils.toHex(value)
+                            return toHex(value)
                         })
                     :   {}),
-                    gasLimit: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
-                    chainId: web3_utils.toHex(x.chainId),
-                    nonce: web3_utils.toHex(x.nonce),
+                    gasLimit: toHex(gasConfig?.gas ?? x.gas),
+                    chainId: toHex(x.chainId),
+                    nonce: toHex(x.nonce),
                 }
             }),
         )

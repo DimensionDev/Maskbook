@@ -1,8 +1,7 @@
 import { memoize } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { EnhanceableSite, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, PostIdentifier, ProfileIdentifier, toHex } from '@masknet/shared-base'
 import {
     FlattenTypedMessage,
     extractTextFromTypedMessage,
@@ -29,6 +28,7 @@ import {
     toastLinkSelector,
 } from '../utils/selector.js'
 import { IdentityProviderTwitter } from './identity.js'
+import { keccak256 } from 'viem'
 
 function getParentTweetNode(node: HTMLElement) {
     return node.closest<HTMLElement>('[data-testid="tweet"]')
@@ -122,7 +122,7 @@ function registerPostCollectorInner(
             const tweetNode = getTweetNode(node)
             const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) {
-                return `keccak256:${web3_utils.keccak256(node.innerText)}`
+                return `keccak256:${keccak256(toHex(node.innerText))}`
             }
             const parentTweetId = parentTweetNode ? getPostId(parentTweetNode) : ''
             const tweetId = getPostId(tweetNode)

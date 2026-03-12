@@ -60,7 +60,5 @@ export interface Utils<T extends NetworkPluginID>
     extends BaseUtils<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['SchemaType'],
-        Web3Helper.Definition[T]['ProviderType'],
-        Web3Helper.Definition[T]['NetworkType'],
-        Web3Helper.Definition[T]['Transaction']
+        Web3Helper.Definition[T]['NetworkType']
     > {}

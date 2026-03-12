@@ -1,11 +1,11 @@
 import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
-import { RequestID } from '@masknet/web3-shared-evm'
 import { fetchSquashedJSON } from './fetchJSON.js'
+import stringify from 'json-stable-stringify'
 
 async function resolveRequestKey(request: Request) {
     try {
         const body: JsonRpcRequest = await request.json()
-        return RequestID.fromPayload(request.url, body).ID ?? ''
+        return stringify([request.url, body.method, body.params])
     } catch {
         return ''
     }

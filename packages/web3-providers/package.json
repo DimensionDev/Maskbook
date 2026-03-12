@@ -66,6 +66,7 @@
     "buffer": "^6.0.3",
     "date-fns": "^3.6.0",
     "fuse.js": "^7.0.0",
+    "json-stable-stringify": "^1.1.1",
     "graphql-request": "^7.0.1",
     "immer": "^10.1.1",
     "lru-cache": "^10.3.0",
@@ -85,6 +86,7 @@
   "devDependencies": {
     "@types/bn.js": "^5.1.5",
     "@types/bs58": "^4.0.4",
+    "@types/json-stable-stringify": "^1.0.36",
     "@types/socket.io-client": "^1.4.36",
     "@types/twitter-text": "^3.1.10",
     "@types/use-subscription": "^1.0.2",

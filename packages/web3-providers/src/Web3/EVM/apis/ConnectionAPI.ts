@@ -1,6 +1,5 @@
-import defer * as web3_utils from 'web3-utils'
 import { delay } from '@masknet/kit'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, toHex } from '@masknet/shared-base'
 import type { Account } from '@masknet/shared-base'
 import {
     type AddressType,
@@ -100,7 +99,7 @@ export class ConnectionAPI
 
         // ERC20
         return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.approve(recipient, web3_utils.toHex(amount)),
+            (x) => x?.methods.approve(recipient, toHex(amount)),
             options.overrides,
         )
     }
@@ -138,8 +137,8 @@ export class ConnectionAPI
             const tx: Transaction = {
                 from: options.account,
                 to: recipient,
-                value: web3_utils.toHex(amount),
-                data: memo ? web3_utils.toHex(memo) : undefined,
+                value: toHex(amount),
+                data: memo ? toHex(memo) : undefined,
             }
             return this.sendTransaction(
                 {
@@ -152,7 +151,7 @@ export class ConnectionAPI
 
         // ERC20
         return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.transfer(recipient, web3_utils.toHex(amount)),
+            (x) => x?.methods.transfer(recipient, toHex(amount)),
             options.overrides,
         )
     }

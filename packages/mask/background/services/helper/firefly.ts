@@ -74,7 +74,7 @@ export async function encrypt(plainText: string, cryptoKey: string): Promise<str
     )
 
     const hex = toHex(new Uint8Array(encryptedBuffer))
-    return hex.startsWith('0x') ? hex.slice(2) : hex
+    return hex.slice(2)
 }
 
 export interface DesktopLinkInfoResponse {

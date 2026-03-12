@@ -1,10 +1,10 @@
 import { BigNumber } from 'bignumber.js'
-import defer * as web3_utils from 'web3-utils'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToGwei, PayloadEditor, ProviderType, type Translator } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { EVMHub } from '../apis/HubAPI.js'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
+import { toHex } from '@masknet/shared-base'
 
 export abstract class BaseTranslator implements Translator<ConnectionContext> {
     async encode(context: ConnectionContext) {
@@ -16,14 +16,13 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
             // add gas margin
             if (config.gas) {
                 if (context.providerType !== ProviderType.MaskWallet) {
-                    config.gas = web3_utils.toHex(
-                        BigNumber.max(
-                            web3_utils.toHex(config.gas),
-                            context.chainId === ChainId.Optimism ? 25000 : 21000,
-                        ).toFixed(),
+                    config.gas = toHex(
+                        BigNumber.max(toHex(config.gas), context.chainId === ChainId.Optimism ? 25000 : 21000).toFixed(
+                            0,
+                        ),
                     )
                 } else {
-                    config.gas = web3_utils.toHex(config.gas)
+                    config.gas = toHex(config.gas)
                 }
             }
 
@@ -47,17 +46,15 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
                         slowOption.suggestedMaxPriorityFeePerGas,
                     )
                 ) {
-                    config.maxFeePerGas = web3_utils.toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
-                    config.maxPriorityFeePerGas = web3_utils.toHex(
-                        toFixed(normalOption.suggestedMaxPriorityFeePerGas, 0),
-                    )
+                    config.maxFeePerGas = toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
+                    config.maxPriorityFeePerGas = toHex(toFixed(normalOption.suggestedMaxPriorityFeePerGas, 0))
                 }
             } else {
                 delete config.maxFeePerGas
                 delete config.maxPriorityFeePerGas
 
                 if (slowOption && normalOption && isLessThan(config.gasPrice ?? 0, slowOption.suggestedMaxFeePerGas)) {
-                    config.gasPrice = web3_utils.toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
+                    config.gasPrice = toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
                 }
             }
         } catch (err) {
@@ -70,12 +67,10 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
 
         context.config = {
             ...config,
-            maxFeePerGas: overrideMaxFeePerGas ? web3_utils.toHex(overrideMaxFeePerGas) : config.maxFeePerGas,
+            maxFeePerGas: overrideMaxFeePerGas ? toHex(overrideMaxFeePerGas) : config.maxFeePerGas,
             maxPriorityFeePerGas:
-                overrideMaxPriorityFeePerGas ?
-                    web3_utils.toHex(overrideMaxPriorityFeePerGas)
-                :   config.maxPriorityFeePerGas,
-            gasPrice: overrideGasPrice ? web3_utils.toHex(overrideGasPrice) : config.gasPrice,
+                overrideMaxPriorityFeePerGas ? toHex(overrideMaxPriorityFeePerGas) : config.maxPriorityFeePerGas,
+            gasPrice: overrideGasPrice ? toHex(overrideGasPrice) : config.gasPrice,
         }
         // #endregion
     }

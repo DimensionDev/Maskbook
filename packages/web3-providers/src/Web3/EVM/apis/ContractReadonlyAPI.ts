@@ -1,4 +1,3 @@
-import type { AbiItem } from 'web3-utils'
 import { isUndefined, omitBy } from 'lodash-es'
 import { createContract } from '@masknet/web3-shared-evm'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
@@ -22,6 +21,7 @@ import { WalletAbi as WalletABI } from '@masknet/web3-contracts/types/Wallet.js'
 
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
+import type { Abi } from 'viem'
 
 export class EVMContractReadonlyAPI {
     static Default = new EVMContractReadonlyAPI()
@@ -30,11 +30,7 @@ export class EVMContractReadonlyAPI {
     }
     protected Request
 
-    getWeb3Contract<T extends BaseContract>(
-        address: string | undefined,
-        ABI: AbiItem[],
-        initial?: EVMConnectionOptions,
-    ) {
+    getWeb3Contract<T extends BaseContract>(address: string | undefined, abi: Abi, initial?: EVMConnectionOptions) {
         const web3 = this.Request.getWeb3(initial)
         const options = omitBy(
             {
@@ -42,7 +38,7 @@ export class EVMContractReadonlyAPI {
             },
             isUndefined,
         )
-        return createContract<T>(web3, address, ABI, options)
+        return createContract<T>(web3, address, abi, options)
     }
 
     getERC20Contract(address: string | undefined, initial?: EVMConnectionOptions) {

@@ -12,9 +12,5 @@ export function useNftRedPacketContract(chainId?: ChainId) {
 
 export function createNftRedpacketContract(chainId: ChainId | undefined) {
     const RED_PACKET_NFT_ADDRESS = getNftRedPacketConstant(chainId ?? ChainId.Mainnet, 'RED_PACKET_NFT_ADDRESS')
-    return createContract<NftRedPacket>(
-        EVMWeb3.getWeb3({ chainId }),
-        RED_PACKET_NFT_ADDRESS,
-        NftRedPacketABI as AbiItem[],
-    )
+    return createContract<NftRedPacket>(EVMWeb3.getWeb3({ chainId }), RED_PACKET_NFT_ADDRESS, NftRedPacketABI)
 }

@@ -1,6 +1,7 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.preferences.importModuleSpecifierEnding": "js",
+    // https://github.com/microsoft/typescript-go/issues/2780
     "typescript.experimental.useTsgo": true,
     "js/ts.implicitProjectConfig.module": "NodeNext",
     "js/ts.implicitProjectConfig.target": "ESNext",
