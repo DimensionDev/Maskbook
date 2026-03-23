@@ -23,7 +23,11 @@ async function createAndSignMessage(platform: NextIDPlatform, persona: PersonaIn
     )
     if (!payload) throw new Error('Failed to create persona payload.')
 
-    const signature = await signWithPersona(SignType.Message, payload.signPayload, persona.identifier, true)
+    const signature = await signWithPersona(
+        { type: SignType.Message, data: payload.signPayload },
+        persona.identifier,
+        true,
+    )
     if (!signature) throw new Error('Failed to sign by persona.')
     return { payload, signature }
 }

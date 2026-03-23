@@ -172,8 +172,7 @@ export const Component = memo(function ConnectWalletPage() {
 
             if (!payload) return
             const personaSignature = await Services.Identity.signWithPersona(
-                SignType.Message,
-                payload.signPayload,
+                { type: SignType.Message, data: payload.signPayload },
                 currentPersona.identifier,
                 location.origin,
                 true,

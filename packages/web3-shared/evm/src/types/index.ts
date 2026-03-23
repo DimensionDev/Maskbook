@@ -406,7 +406,11 @@ export interface Transaction {
     from?: string
     to?: string
     value?: string
-    /** gasLimit */
+    // value?: bigint
+    // gas?: bigint
+    // gasPrice?: bigint
+    // maxPriorityFeePerGas?: bigint
+    // maxFeePerGas?: bigint
     gas?: string
     gasPrice?: string
     maxPriorityFeePerGas?: string
@@ -416,16 +420,8 @@ export interface Transaction {
     chainId?: number
     type?: '0x0' | '0x1' | '0x2'
 
-    // CELO
-    feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
-    gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
-    gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
-
     _disableSnackbar?: boolean
     _disableSuccessSnackbar?: boolean
-    _disableExceptionSnackbar?: boolean
-
-    _isOKXSwap?: boolean
 }
 export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction

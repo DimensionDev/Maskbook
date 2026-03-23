@@ -7,7 +7,6 @@ import { delay } from '@masknet/kit'
 import { openPopupWindow } from '../utils/openPopup.js'
 
 await initWallet({
-    signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
     WalletConnectContext: {
         openWalletConnectDialog: async (uri: string) => {
             if (Sniffings.is_popup_page) {

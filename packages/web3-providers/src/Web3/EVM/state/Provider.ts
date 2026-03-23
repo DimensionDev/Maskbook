@@ -23,7 +23,7 @@ export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkTyp
         storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
         hostedProviderStorage: BaseHostedStorage,
     ) {
-        super(context.signWithPersona, storage)
+        super(storage)
         this.providers = createEVMWalletProviders(context, hostedProviderStorage)
         this.init()
     }

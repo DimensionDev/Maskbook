@@ -4,6 +4,7 @@ import { type RedPacketJSONPayload, type RedPacketNftJSONPayload } from '@maskne
 import { signMessage } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { usePlatformType } from './usePlatformType.js'
+import type { Hex } from 'viem'
 
 // TODO NFT redpacket is not supported by the API yet.
 export function useSignedMessage(
@@ -34,7 +35,7 @@ export function useSignedMessage(
         queryKey: ['red-packet', 'signed-message', rpid, version, password, account, profile, isTokenRedPacket],
         queryFn: async () => {
             if (isTokenRedPacket && version <= 3) return password ?? null
-            if (password) return signMessage(account, password).signature
+            if (password) return signMessage(account, password as Hex)
             if (!profile) return ''
             return (
                 (await FireflyRedPacket.createClaimSignature({

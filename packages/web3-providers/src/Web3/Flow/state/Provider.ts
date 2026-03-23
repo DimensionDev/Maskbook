@@ -13,15 +13,11 @@ import {
 import { createFlowWalletProviders } from '../providers/index.js'
 import { FlowChainResolver } from '../apis/ResolverAPI.js'
 import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
-import type { WalletAPI } from '../../../entry-types.js'
 import type { Account, StorageObject } from '@masknet/shared-base'
 
 export class FlowProvider extends ProviderState<ChainId, ProviderType, NetworkType> {
-    constructor(
-        signWithPersona: WalletAPI.SignWithPersona,
-        storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
-    ) {
-        super(signWithPersona, storage)
+    constructor(storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
+        super(storage)
         this.init()
     }
     public providers = createFlowWalletProviders()

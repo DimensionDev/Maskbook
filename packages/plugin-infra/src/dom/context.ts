@@ -10,7 +10,7 @@ import type {
     PopupRoutes,
     PopupRoutesParamsMap,
     ProfileIdentifier,
-    SignType,
+    SignMessage,
     SocialIdentity,
 } from '@masknet/shared-base'
 import type { Subscription } from 'use-subscription'
@@ -41,7 +41,7 @@ export interface __UIContext__ {
         params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
     ): Promise<void>
     /** Sign a message with persona (w or w/o popups) */
-    signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
+    signWithPersona(message: SignMessage, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
     hasPaymentPassword(): Promise<boolean>
     createPersona: () => void
     setCurrentPersonaIdentifier: ((x?: PersonaIdentifier) => Promise<void>) | undefined

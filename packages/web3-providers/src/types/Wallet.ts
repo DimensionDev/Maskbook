@@ -4,11 +4,11 @@ import type {
     ECKeyIdentifier,
     Account,
     Wallet,
-    SignType,
     PopupRoutes,
     PopupRoutesParamsMap,
     PersonaInformation,
     ImportSource,
+    SignMessage,
 } from '@masknet/shared-base'
 import type { JsonRpcResponse, JsonRpcRequest } from 'web3-types'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
@@ -67,8 +67,7 @@ export namespace WalletAPI {
         disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
     }
     export type SignWithPersona = (
-        type: SignType,
-        message: unknown,
+        message: SignMessage,
         identifier?: ECKeyIdentifier,
         silent?: boolean,
     ) => Promise<string>
@@ -86,8 +85,6 @@ export namespace WalletAPI {
         MaskWalletContext: MaskWalletIOContext
         MessageContext: MessageIOContext
         WalletConnectContext: WalletConnectIOContext
-        /** Sign a message with persona (w or w/o popups) */
-        signWithPersona: SignWithPersona
     }
     export interface Provider<ChainId, ProviderType> {
         readonly ready: boolean

@@ -32,7 +32,11 @@ export function useVerifyContent(personaIdentifier: PersonaIdentifier | undefine
             )
             if (!payload) throw new Error('Failed to create persona payload.')
 
-            const signature = await signWithPersona(SignType.Message, payload.signPayload, personaIdentifier, true)
+            const signature = await signWithPersona(
+                { type: SignType.Message, data: payload.signPayload },
+                personaIdentifier,
+                true,
+            )
             const post = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
             return {
                 post,

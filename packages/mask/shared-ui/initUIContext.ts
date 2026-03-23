@@ -40,7 +40,7 @@ export function setupUIContext() {
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         openDashboard: Services.Helper.openDashboard,
         openPopupWindow,
-        signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
+        signWithPersona: (a, b, c) => Services.Identity.signWithPersona(a, b, location.origin, c),
         hasPaymentPassword: Services.Wallet.hasPassword,
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         attachProfile: Services.Identity.attachProfile,
