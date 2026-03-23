@@ -8,7 +8,8 @@ type MakeStylesOptions = {
     uniqId?: string
 }
 
-type StyleRules = Record<string, CSSObject>
+type StyleRules = Record<string, CSSObject | { [key: string]: unknown }>
+//                                           ^ conceal the complaint like `position: string` not satisfy `position: CSSProperties['position']`
 
 type NestedSelectorClasses<RuleNameSubsetReferencedInNestedSelectors extends string> = Record<
     RuleNameSubsetReferencedInNestedSelectors,
@@ -41,15 +42,11 @@ type MakeStylesResult<Styles extends StyleRules, Overrides extends StyleOverride
     cx: Cx
 }
 
-type GetCssObjectByRuleName<
-    Params,
-    RuleNameSubsetReferencedInNestedSelectors extends string,
-    Styles extends StyleRules,
-> = (
+type GetCssObjectByRuleName<Params, RuleNameSubsetReferencedInNestedSelectors extends string> = (
     theme: Theme,
     params: Params,
     classes: NestedSelectorClasses<RuleNameSubsetReferencedInNestedSelectors>,
-) => Styles
+) => StyleRules
 
 export interface UseStyles<Params, Styles extends StyleRules> {
     (params: Params): MakeStylesResult<Styles, EmptyStyleOverrides>
@@ -64,9 +61,9 @@ export interface UseStyles<Params, Styles extends StyleRules> {
 
 interface MakeStylesHook<Params, RuleNameSubsetReferencedInNestedSelectors extends string> {
     <Styles extends StyleRules>(cssObjectByRuleName: Styles): UseStyles<Params, Styles>
-    <Styles extends StyleRules>(
-        getCssObjectByRuleName: GetCssObjectByRuleName<Params, RuleNameSubsetReferencedInNestedSelectors, Styles>,
-    ): UseStyles<Params, Styles>
+    <T extends GetCssObjectByRuleName<Params, RuleNameSubsetReferencedInNestedSelectors>>(
+        getCssObjectByRuleName: T,
+    ): UseStyles<Params, ReturnType<T>>
 }
 
 // Note: type refinement, see https://github.com/garronej/tss-react/issues/128
