@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
-import type { AbiItem } from 'web3-utils'
 import {
     ActionButtonPromise,
     EthereumERC20TokenApprovedBoundary,
@@ -16,8 +15,10 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json' with { type: 'json' }
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
+import {
+    AaveLendingPoolAddressProviderAbi,
+    type AaveLendingPoolAddressProvider,
+} from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import {
     useChainContext,
     useFungibleTokenBalance,
@@ -170,7 +171,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
         const lPoolAddressProviderContract = EVMContract.getWeb3Contract<AaveLendingPoolAddressProvider>(
             aavePoolAddress,
-            AaveLendingPoolAddressProviderABI as AbiItem[],
+            AaveLendingPoolAddressProviderAbi,
         )
 
         const token = protocol.bareToken

@@ -1,8 +1,8 @@
-import defer * as web3_utils from 'web3-utils'
 import { type TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { EtherscanExplorer } from '../../../../../Etherscan/index.js'
 import type { ExplorerAPI } from '../../../../../entry-types.js'
+import { toHex } from '@masknet/shared-base'
 
 class TTL<T> {
     private cache: Record<string, { value: T; ttl: number; at: number }> = {}
@@ -30,16 +30,15 @@ class AccountCheckerAPI implements TransactionChecker<ChainId, Transaction> {
 
     private ttl = new TTL<ExplorerAPI.Transaction[]>()
 
-    private getExplorerTransactionId(transaction: ExplorerAPI.Transaction | null) {
+    private getTransactionCacheKey(transaction: ExplorerAPI.Transaction | Transaction | null) {
         if (!transaction) return ''
-        const { from, to, input, value } = transaction
-        return web3_utils.sha3([from, to, input || '0x0', web3_utils.toHex(value || '0x0') || '0x0'].join('_')) ?? ''
-    }
-
-    private getTransactionId(transaction: Transaction) {
-        const { from, to, data = '0x0', value = '0x0' } = transaction
-        if (!from || !to) return ''
-        return web3_utils.sha3([from, to, data, value].join('_')) ?? ''
+        const { from, to, value = '0' } = transaction
+        return JSON.stringify([
+            from,
+            to,
+            'input' in transaction ? transaction.input : transaction.data || '0x0',
+            toHex(value || '0'),
+        ])
     }
 
     private async fetchLatestTransactions(chainId: ChainId, account: string) {
@@ -58,8 +57,8 @@ class AccountCheckerAPI implements TransactionChecker<ChainId, Transaction> {
         const account = transaction.from
         if (!account) throw new Error('Cannot found account.')
         const latestTransactions = await this.fetchLatestTransactions(chainId, account)
-        const txId = this.getTransactionId(transaction)
-        const tx = latestTransactions.find((x) => x.hash === id || this.getExplorerTransactionId(x) === txId)
+        const txId = this.getTransactionCacheKey(transaction)
+        const tx = latestTransactions.find((x) => x.hash === id || this.getTransactionCacheKey(x) === txId)
         if (!tx) return TransactionStatusType.NOT_DEPEND
         // '1' for successful transactions and '0' for failed transactions.
         return tx.status === '1' ? TransactionStatusType.SUCCEED : TransactionStatusType.FAILED

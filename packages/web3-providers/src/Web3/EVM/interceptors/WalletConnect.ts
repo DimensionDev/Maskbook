@@ -1,6 +1,6 @@
-import defer * as web3_utils from 'web3-utils'
 import { EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
+import { toHex } from '@masknet/shared-base'
 
 export class WalletConnect implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
@@ -20,7 +20,7 @@ export class WalletConnect implements Middleware<ConnectionContext> {
         switch (context.request.method) {
             case EthereumMethodType.eth_chainId:
                 if (typeof context.result === 'number') {
-                    context.result = web3_utils.toHex(context.result)
+                    context.result = toHex(context.result)
                 }
                 break
             default:

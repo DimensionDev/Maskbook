@@ -1,6 +1,5 @@
 import { identity, pickBy } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
-import { type Unresolved, resolve } from '@masknet/shared-base'
+import { type Unresolved, resolve, toHex } from '@masknet/shared-base'
 import type {
     BaseContract,
     PayableTx,
@@ -31,14 +30,14 @@ export class ContractTransaction<T extends BaseContract | null> {
                 from: overrides?.from ?? this.contract?.defaultAccount ?? this.contract?.options.from ?? '',
                 to: this.contract?.options.address,
                 data: transaction?.encodeABI(),
-                value: overrides?.value ? web3_utils.toHex(overrides.value) : undefined,
-                gas: overrides?.gas ? web3_utils.toHex(overrides.gas) : undefined,
-                gasPrice: overrides?.gasPrice ? web3_utils.toHex(overrides.gasPrice) : undefined,
+                value: overrides?.value ? toHex(overrides.value) : undefined,
+                gas: overrides?.gas ? toHex(overrides.gas) : undefined,
+                gasPrice: overrides?.gasPrice ? toHex(overrides.gasPrice) : undefined,
                 maxPriorityFeePerGas:
-                    overrides?.maxPriorityFeePerGas ? web3_utils.toHex(overrides.maxPriorityFeePerGas) : undefined,
-                maxFeePerGas: overrides?.maxFeePerGas ? web3_utils.toHex(overrides.maxFeePerGas) : undefined,
-                nonce: overrides?.nonce ? web3_utils.toHex(overrides.nonce) : undefined,
-                chainId: overrides?.chainId ? web3_utils.toHex(overrides.chainId) : undefined,
+                    overrides?.maxPriorityFeePerGas ? toHex(overrides.maxPriorityFeePerGas) : undefined,
+                maxFeePerGas: overrides?.maxFeePerGas ? toHex(overrides.maxFeePerGas) : undefined,
+                nonce: overrides?.nonce ? toHex(overrides.nonce) : undefined,
+                chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
             },
             identity,
         )
@@ -65,7 +64,7 @@ export class ContractTransaction<T extends BaseContract | null> {
 
             if (!gas) throw new Error('Estimate gas failed')
 
-            transactionEncoded.gas = web3_utils.toHex(gas)
+            transactionEncoded.gas = toHex(gas)
         }
 
         return transactionEncoded

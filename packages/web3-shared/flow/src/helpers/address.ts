@@ -56,10 +56,6 @@ export function getDefaultProviderType() {
     return ProviderType.None
 }
 
-export function getZeroAddress() {
-    return ZERO_ADDRESS
-}
-
 export function getContractAddress(address: string) {
     if (isValidContractAddress(address)) {
         const [_, contractAddress, ...identifierFragments] = address.split(/\./gu)

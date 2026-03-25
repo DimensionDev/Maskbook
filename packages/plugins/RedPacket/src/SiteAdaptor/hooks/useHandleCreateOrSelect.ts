@@ -1,15 +1,15 @@
 import { ApplicationBoardModal } from '@masknet/shared'
-import { RedPacketMetaKey, type NetworkPluginID } from '@masknet/shared-base'
+import { RedPacketMetaKey, toHex, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI, RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useCallback, useContext } from 'react'
-import defer * as web3_utils from 'web3-utils'
 import { openComposition } from '../openComposition.js'
 import { reduceUselessPayloadInfo } from '../helpers/reduceUselessPayloadInfo.js'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
+import { keccak256 } from 'viem'
 
 interface Options {
     senderName?: string
@@ -34,13 +34,9 @@ export function useHandleCreateOrSelect({ senderName, onClose }: Options) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    payload.password = await EVMWeb3.signMessage(
-                        'message',
-                        web3_utils.sha3(payload.sender.message) ?? '',
-                        {
-                            account,
-                        },
-                    )
+                    payload.password = await EVMWeb3.signMessage('message', keccak256(toHex(payload.sender.message)), {
+                        account,
+                    })
                     payload.password = payload.password.slice(2)
                 }
             }

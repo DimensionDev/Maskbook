@@ -4,14 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { isEmpty } from 'lodash-es'
 import { z as zod } from 'zod'
-import defer * as web3_utils from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { NetworkPluginID, PopupRoutes, NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes, NUMERIC_INPUT_REGEXP_PATTERN, toHex } from '@masknet/shared-base'
 import {
     formatCurrency,
     GasOptionType,
@@ -31,6 +30,7 @@ import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { formatGwei } from 'viem'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -236,9 +236,9 @@ export const GasSetting1559 = memo(() => {
         if (value.formatterTransaction._tx.maxFeePerGas && value.formatterTransaction._tx.maxPriorityFeePerGas) {
             setValue(
                 'maxPriorityFeePerGas',
-                web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),
+                formatGwei(BigInt(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas))),
             )
-            setValue('maxFeePerGas', web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas), 'gwei'))
+            setValue('maxFeePerGas', formatGwei(BigInt(toFixed(value.formatterTransaction._tx.maxFeePerGas))))
         } else {
             setOption(1)
         }
@@ -268,9 +268,9 @@ export const GasSetting1559 = memo(() => {
                 param === 'latest' ? param : (
                     {
                         ...Object(param),
-                        gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
-                        maxPriorityFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                        maxFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                        gas: toHex(data.gasLimit),
+                        maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                        maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                     }
                 ),
             )

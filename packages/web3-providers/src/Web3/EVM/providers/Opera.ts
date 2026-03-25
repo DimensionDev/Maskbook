@@ -1,5 +1,4 @@
-import defer * as web3_utils from 'web3-utils'
-import { Sniffings } from '@masknet/shared-base'
+import { Sniffings, toHex } from '@masknet/shared-base'
 import { injectedOperaProvider } from '@masknet/injected-script'
 import { type ChainId, EthereumMethodType, ProviderType, isValidChainId } from '@masknet/web3-shared-evm'
 import { EVMInjectedWalletProvider } from './BaseInjected.js'
@@ -26,7 +25,7 @@ export class OperaProvider extends EVMInjectedWalletProvider {
             method: EthereumMethodType.wallet_switchEthereumChain,
             params: [
                 {
-                    chainId: web3_utils.toHex(chainId),
+                    chainId: toHex(chainId),
                 },
             ],
         })

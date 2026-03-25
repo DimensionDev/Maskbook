@@ -1,4 +1,3 @@
-import defer * as web3_utils from 'web3-utils'
 import {
     type ChainId,
     EthereumMethodType,
@@ -8,6 +7,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { toHex } from '@masknet/shared-base'
 
 class NonceAPI implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
@@ -48,9 +48,7 @@ class NonceAPI implements Middleware<ConnectionContext> {
                 params: [
                     {
                         ...context.config,
-                        nonce: web3_utils.toHex(
-                            await this.syncRemoteNonce(context.chainId, context.account, context.providerURL),
-                        ),
+                        nonce: toHex(await this.syncRemoteNonce(context.chainId, context.account, context.providerURL)),
                     },
                 ],
             }

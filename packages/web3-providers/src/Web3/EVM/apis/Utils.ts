@@ -1,27 +1,14 @@
-import { createFungibleToken, createNonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
-    isZeroAddress,
     isNativeTokenAddress,
-    isNativeTokenSchemaType,
-    isFungibleTokenSchemaType,
-    isNonFungibleTokenSchemaType,
     formatEthereumAddress,
     formatDomainName,
     formatTokenId,
-    getTransactionSignature,
     type ChainId,
-    type ProviderType,
     type NetworkType,
-    type Transaction,
     type SchemaType,
-    getNetworkPluginID,
     getDefaultChainId,
-    getInvalidChainId,
-    getDefaultNetworkType,
-    getDefaultProviderType,
-    getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
     getAverageBlockDelay,
@@ -29,42 +16,25 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import type { BaseUtils } from '../../Base/apis/Utils.js'
-import { EVMChainResolver, EVMExplorerResolver, EVMProviderResolver, EVMNetworkResolver } from './ResolverAPI.js'
+import { EVMChainResolver, EVMExplorerResolver, EVMNetworkResolver } from './ResolverAPI.js'
 
 export const EVMUtils = {
-    isSameAddress,
     chainResolver: EVMChainResolver,
     explorerResolver: EVMExplorerResolver,
-    providerResolver: EVMProviderResolver,
     networkResolver: EVMNetworkResolver,
 
     isValidDomain,
     isValidChainId,
     isValidAddress,
-    isZeroAddress,
     isNativeTokenAddress,
-    isNativeTokenSchemaType,
-    isFungibleTokenSchemaType,
-    isNonFungibleTokenSchemaType,
 
-    getNetworkPluginID,
     getDefaultChainId,
-    getInvalidChainId,
-    getDefaultNetworkType,
-    getDefaultProviderType,
-    getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
-    getTransactionSignature,
     getAverageBlockDelay,
 
     formatAddress: formatEthereumAddress,
     formatTokenId,
     formatDomainName,
     formatSchemaType,
-    createNativeToken(chainId: ChainId) {
-        return EVMChainResolver.nativeCurrency(chainId)
-    },
-    createFungibleToken,
-    createNonFungibleToken,
-} satisfies BaseUtils<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+} satisfies BaseUtils<ChainId, SchemaType, NetworkType>

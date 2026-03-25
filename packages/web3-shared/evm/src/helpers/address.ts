@@ -1,5 +1,4 @@
 import { memoize } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainIdList,
@@ -12,24 +11,19 @@ import {
     ZERO_ADDRESS,
 } from '../constants/index.js'
 import { ChainId } from '../types/index.js'
+import { isAddress, type Hex } from 'viem'
 
-export function checksumAddress(address: string) {
-    return web3_utils.toChecksumAddress(address)
-}
+export { getAddress as checksumAddress } from 'viem'
 
 export function isEmptyHex(hex?: string): hex is undefined {
     return !hex || ['0x', '0x0'].includes(hex)
 }
 
-export function isZeroString(str?: string): str is undefined {
-    return !str || str === '0'
-}
-
 export const isValidAddress: (address?: string) => address is string = memoize(function isValidAddress(
     address?: string,
-): address is string {
+): address is Hex {
     if (!address) return false
-    return web3_utils.isAddress(address)
+    return isAddress(address)
 })
 
 export function isZeroAddress(address?: string): address is '0x0000000000000000000000000000000000000000' {
@@ -68,10 +62,6 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
                 isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
             )
     }
-}
-
-export function getZeroAddress() {
-    return ZERO_ADDRESS
 }
 
 export const getNativeTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {

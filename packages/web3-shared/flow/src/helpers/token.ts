@@ -43,16 +43,3 @@ export function createFungibleAsset(
         },
     }
 }
-
-export function isNativeTokenSchemaType(schemaType?: SchemaType) {
-    // there is no native token schema on flow network
-    return false
-}
-
-export function isFungibleTokenSchemaType(schemaType?: SchemaType) {
-    return schemaType === SchemaType.Fungible
-}
-
-export function isNonFungibleTokenSchemaType(schemaType?: SchemaType) {
-    return schemaType === SchemaType.NonFungible
-}

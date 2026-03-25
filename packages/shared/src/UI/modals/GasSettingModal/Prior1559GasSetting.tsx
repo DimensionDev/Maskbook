@@ -2,7 +2,6 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
 import { isEmpty, noop } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,6 +19,7 @@ import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { GasSettingProps } from './types.js'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { parseGwei } from 'viem'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -172,7 +172,7 @@ export const Prior1559GasSetting = memo(
             (data: zod.infer<typeof schema>) => {
                 onConfirm({
                     gasLimit: data.gasLimit as any,
-                    gasPrice: web3_utils.toWei(data.gasPrice, 'gwei'),
+                    gasPrice: parseGwei(data.gasPrice).toString(),
                     gasOption: selectedGasOption,
                 })
             },

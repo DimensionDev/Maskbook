@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import type { AbiItem } from 'web3-utils'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { EVMContractReadonly } from '@masknet/web3-providers'
 
@@ -24,8 +23,8 @@ export function useNFTXAssetAddress(address: string, enabled: boolean) {
                     stateMutability: 'view',
                     type: 'function',
                 },
-            ]
-            const contract = EVMContractReadonly.getWeb3Contract(address, ABI as AbiItem[], {
+            ] as const
+            const contract = EVMContractReadonly.getWeb3Contract(address, ABI, {
                 chainId: ChainId.Mainnet,
             })
             const assetAddress: string = await contract?.methods.assetAddress().call()

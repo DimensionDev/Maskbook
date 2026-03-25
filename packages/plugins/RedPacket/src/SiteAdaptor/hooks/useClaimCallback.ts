@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { toHex, type NetworkPluginID } from '@masknet/shared-base'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -6,9 +6,9 @@ import { EVMChainResolver, EVMWeb3 } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import defer * as web3_utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract.js'
 import { useSignedMessage } from './useSignedMessage.js'
+import { keccak256 } from 'viem'
 
 /**
  * Claim fungible token red packet.
@@ -45,7 +45,7 @@ export function useClaimCallback(account: string, payload: RedPacketJSONPayload 
                         rpid,
                         signedMsg,
                         account,
-                        web3_utils.sha3(account)!,
+                        keccak256(toHex(account)),
                     ),
                     config,
                 )

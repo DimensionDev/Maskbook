@@ -2833,6 +2833,9 @@ importers:
       immer:
         specifier: ^10.1.1
         version: 10.1.1
+      json-stable-stringify:
+        specifier: ^1.1.1
+        version: 1.1.1
       lru-cache:
         specifier: ^10.3.0
         version: 10.3.0
@@ -2879,6 +2882,9 @@ importers:
       '@types/bs58':
         specifier: ^4.0.4
         version: 4.0.4
+      '@types/json-stable-stringify':
+        specifier: ^1.0.36
+        version: 1.0.36
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36

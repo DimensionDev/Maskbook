@@ -1,5 +1,4 @@
 import { mapKeys } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
 import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
@@ -12,6 +11,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from './type.js'
 import { GasSettingModal } from '../../modals/modal-controls.js'
+import { toHex } from '@masknet/shared-base'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -38,7 +38,7 @@ export async function modifyTransaction(
     const newConfig = {
         ...candidate,
         ...oldGasSettings,
-        ...mapKeys(gasSettings, (value) => (typeof value === 'undefined' ? value : web3_utils.toHex(value))),
+        ...mapKeys(gasSettings, (value) => (typeof value === 'undefined' ? value : toHex(value))),
     }
     if (replaceType === ReplaceType.CANCEL) {
         await EVMWeb3.cancelTransaction(transaction.id, newConfig, {

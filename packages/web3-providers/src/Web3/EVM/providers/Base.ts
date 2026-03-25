@@ -1,5 +1,4 @@
 import { first } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
 import {
@@ -10,7 +9,7 @@ import {
     type RequestArguments,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
+import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription, toHex } from '@masknet/shared-base'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -51,7 +50,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
                 method: EthereumMethodType.wallet_switchEthereumChain,
                 params: [
                     {
-                        chainId: web3_utils.toHex(chainId),
+                        chainId: toHex(chainId),
                     },
                 ],
             })
@@ -70,7 +69,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
                     method: EthereumMethodType.wallet_addEthereumChain,
                     params: [
                         {
-                            chainId: web3_utils.toHex(chainId),
+                            chainId: toHex(chainId),
                             chainName: EVMChainResolver.chainFullName(chainId) ?? EVMChainResolver.chainName(chainId),
                             nativeCurrency: EVMChainResolver.nativeCurrency(chainId),
                             rpcUrls: [ProviderURL.fromOfficial(chainId)],

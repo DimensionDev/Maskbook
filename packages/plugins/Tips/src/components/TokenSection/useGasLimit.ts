@@ -1,8 +1,7 @@
 import { useAsync } from 'react-use'
-import defer * as web3_utils from 'web3-utils'
 import { EVMContract } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { toHex, type NetworkPluginID } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useTip } from '../../contexts/index.js'
@@ -25,7 +24,7 @@ export function useGasLimit(fallback = DEFAULT_GAS_LIMIT) {
             chainId,
             account,
         })
-        const tx = contract?.methods.transfer(recipientAddress, web3_utils.toHex(amount))
+        const tx = contract?.methods.transfer(recipientAddress, toHex(amount))
         const estimated = await tx?.estimateGas({
             from: account,
         })

@@ -1,4 +1,4 @@
-import type { Account, ECKeyIdentifier, Proof } from '@masknet/shared-base'
+import { toHex, type Account, type ECKeyIdentifier, type Proof } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import {
     createNonFungibleToken,
@@ -40,7 +40,6 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { first, omit, toNumber } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
@@ -466,7 +465,7 @@ export class EVMConnectionReadonlyAPI
             const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
                 // cannot check the sender's balance in the same contract
                 from: undefined,
-                chainId: web3_utils.numberToHex(options.chainId),
+                chainId: toHex(options.chainId),
             })
 
             listOfNonNativeAddress.forEach((x, i) => {
@@ -514,8 +513,8 @@ export class EVMConnectionReadonlyAPI
         return createERC20Token(
             options.chainId,
             address,
-            parseStringOrBytes32(name, nameBytes32, 'Unknown Token'),
-            parseStringOrBytes32(symbol, symbolBytes32, 'UNKNOWN'),
+            parseStringOrBytes32(name, toHex(nameBytes32), 'Unknown Token'),
+            parseStringOrBytes32(symbol, toHex(symbolBytes32), 'UNKNOWN'),
             typeof decimals === 'string' ? Number.parseInt(decimals ? decimals : '0', 10) : decimals,
         )
     }
@@ -548,7 +547,7 @@ export class EVMConnectionReadonlyAPI
         return this.Request.request<Block>(
             {
                 method: EthereumMethodType.eth_getBlockByNumber,
-                params: [web3_utils.toHex(noOrId), false],
+                params: [toHex(noOrId), false],
             },
             initial,
         )
@@ -618,7 +617,7 @@ export class EVMConnectionReadonlyAPI
                 options,
             )
         } catch {
-            return web3_utils.toHex(fallback)
+            return toHex(fallback)
         }
     }
 

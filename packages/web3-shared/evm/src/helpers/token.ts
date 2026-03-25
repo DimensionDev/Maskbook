@@ -34,15 +34,3 @@ export const createERC20Tokens = createFungibleTokensFromConstants<typeof Token,
     SchemaType.ERC20,
     Token,
 )
-
-export function isNativeTokenSchemaType(schemaType?: SchemaType) {
-    return schemaType === SchemaType.Native
-}
-
-export function isFungibleTokenSchemaType(schemaType?: SchemaType) {
-    return schemaType === SchemaType.Native || schemaType === SchemaType.ERC20
-}
-
-export function isNonFungibleTokenSchemaType(schemaType?: SchemaType) {
-    return schemaType === SchemaType.ERC721 || schemaType === SchemaType.ERC1155
-}
