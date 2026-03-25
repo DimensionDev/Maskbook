@@ -4,10 +4,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes, toHex } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
@@ -228,8 +227,8 @@ export const Prior1559GasSetting = memo(() => {
             if (!value) return
             const config = value.payload.params!.map((param) => ({
                 ...Object(param),
-                gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
-                gasPrice: web3_utils.toHex(formatGweiToWei(data.gasPrice).toString()),
+                gas: toHex(data.gasLimit),
+                gasPrice: toHex(formatGweiToWei(data.gasPrice).toFixed(0)),
             }))
             await Services.Wallet.updateUnconfirmedRequest({
                 ...value.payload,

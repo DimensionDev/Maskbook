@@ -86,10 +86,6 @@ export function getDefaultProviderType() {
     return ProviderType.None
 }
 
-export function getZeroAddress() {
-    return ZERO_ADDRESS
-}
-
 export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
     return ''
 }

@@ -1,7 +1,12 @@
 import { uniqWith } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
 import { delay } from '@masknet/kit'
-import { type StorageObject, type UpdatableWallet, type Wallet, CrossIsolationMessages } from '@masknet/shared-base'
+import {
+    type StorageObject,
+    type UpdatableWallet,
+    type Wallet,
+    CrossIsolationMessages,
+    toHex,
+} from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress, formatEthereumAddress, type ChainId, type ProviderType } from '@masknet/web3-shared-evm'
 import { BaseEVMWalletProvider } from './Base.js'
@@ -141,12 +146,12 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
 
         this.emitter.emit('accounts', [this.hostedAccount])
         await delay(100)
-        this.emitter.emit('chainId', web3_utils.toHex(this.hostedChainId))
+        this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
     private async onChainChanged() {
         await this.walletStorage.chainId.initializedPromise
-        if (this.hostedChainId) this.emitter.emit('chainId', web3_utils.toHex(this.hostedChainId))
+        if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
     async switchAccount(account?: string) {

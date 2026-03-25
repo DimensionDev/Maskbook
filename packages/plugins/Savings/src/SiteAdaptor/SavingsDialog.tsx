@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { chunk, compact, flatten } from 'lodash-es'
-import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
@@ -16,8 +15,10 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, getAaveConstant } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
 import { EVMContract } from '@masknet/web3-providers'
-import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
-import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json' with { type: 'json' }
+import {
+    AaveProtocolDataProviderAbi,
+    type AaveProtocolDataProvider,
+} from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
@@ -79,7 +80,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
             const protocolDataContract = EVMContract.getWeb3Contract<AaveProtocolDataProvider>(
                 address,
-                AaveProtocolDataProviderABI as AbiItem[],
+                AaveProtocolDataProviderAbi,
                 {
                     chainId,
                 },

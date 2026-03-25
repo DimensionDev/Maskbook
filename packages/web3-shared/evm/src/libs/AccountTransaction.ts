@@ -1,16 +1,8 @@
-import { BigNumber } from 'bignumber.js'
-import { identity, pickBy, memoize } from 'lodash-es'
-import defer * as web3_utils from 'web3-utils'
+import { identity, pickBy } from 'lodash-es'
 import { ZERO_ADDRESS } from '../constants/index.js'
 import { isEmptyHex } from '../helpers/address.js'
 import { ChainId, type Transaction } from '../types/index.js'
-
-const normalizeHex = memoize((value: string | number) => {
-    // fix an abnormal hex value like: 0x02c68af0bb140000
-    if (typeof value === 'string' && value.length > 3 && value.startsWith('0x0'))
-        return web3_utils.toHex(new BigNumber(value).toFixed())
-    return web3_utils.toHex(value)
-})
+import { toHex } from '@masknet/shared-base'
 
 export class AccountTransaction {
     constructor(private transaction?: Transaction) {}
@@ -68,12 +60,12 @@ export class AccountTransaction {
                 from,
                 to,
                 data,
-                value: value ? normalizeHex(value) : undefined,
-                chainId: chainId && chainId !== ChainId.Astar ? normalizeHex(chainId) : undefined,
-                gas: gas ? normalizeHex(gas) : undefined,
-                gasPrice: gasPrice ? normalizeHex(gasPrice) : undefined,
-                maxPriorityFeePerGas: maxPriorityFeePerGas ? normalizeHex(maxPriorityFeePerGas) : undefined,
-                maxFeePerGas: maxFeePerGas ? normalizeHex(maxFeePerGas) : undefined,
+                value: value ? toHex(value) : undefined,
+                chainId: chainId && chainId !== ChainId.Astar ? toHex(chainId) : undefined,
+                gas: gas ? toHex(gas) : undefined,
+                gasPrice: gasPrice ? toHex(gasPrice) : undefined,
+                maxPriorityFeePerGas: maxPriorityFeePerGas ? toHex(maxPriorityFeePerGas) : undefined,
+                maxFeePerGas: maxFeePerGas ? toHex(maxFeePerGas) : undefined,
                 nonce,
                 _disableSuccessSnackbar,
                 _disableSnackbar,

@@ -466,6 +466,12 @@ const moduleSystemRules = {
                     importNames: ['get'],
                 },
                 {
+                    name: 'viem',
+                    message:
+                        'Use toHex from @masknet/shared-base. They have different behaviors on "0x-" strings. If you want to use the original toHex, import it like import { toHex as viem_toHex } from "viem".',
+                    importNames: ['toHex'],
+                },
+                {
                     name: 'react-use',
                     importNames: ['useLocalStorage'],
                     message:

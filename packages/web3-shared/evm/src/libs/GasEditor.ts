@@ -1,4 +1,3 @@
-import defer * as web3_utils from 'web3-utils'
 import { GasOptionType, isZero, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '../helpers/formatter.js'
 import type {
@@ -10,6 +9,7 @@ import type {
     Transaction,
 } from '../types/index.js'
 import { CHAIN_DESCRIPTORS } from '../constants/descriptors.js'
+import { toHex } from '@masknet/shared-base'
 
 export class GasEditor {
     constructor(
@@ -46,16 +46,14 @@ export class GasEditor {
             const config = fallback as EIP1559GasConfig | undefined
             return {
                 gasPrice: undefined,
-                maxFeePerGas:
-                    web3_utils.toHex(this.EIP1559GasOptionConfig.maxFeePerGas) ||
-                    web3_utils.toHex(config?.maxFeePerGas || '0'),
+                maxFeePerGas: toHex(this.EIP1559GasOptionConfig.maxFeePerGas) || toHex(config?.maxFeePerGas || '0'),
                 maxPriorityFeePerGas:
-                    web3_utils.toHex(this.EIP1559GasOptionConfig.maxPriorityFeePerGas) ||
-                    web3_utils.toHex(config?.maxPriorityFeePerGas || '1'),
+                    toHex(this.EIP1559GasOptionConfig.maxPriorityFeePerGas) ||
+                    toHex(config?.maxPriorityFeePerGas || '1'),
                 gasCurrency: this.EIP1559GasOptionConfig.gasCurrency || fallback?.gasCurrency,
                 gas:
                     this.EIP1559GasOptionConfig.gas && !isZero(this.EIP1559GasOptionConfig.gas) ?
-                        web3_utils.toHex(this.EIP1559GasOptionConfig.gas)
+                        toHex(this.EIP1559GasOptionConfig.gas)
                     :   undefined,
                 gasOptionType: this.config.gasOptionType ?? config?.gasOptionType,
             }
@@ -64,9 +62,7 @@ export class GasEditor {
         const priorConfig = fallback as PriorEIP1559GasConfig | undefined
 
         return {
-            gasPrice:
-                web3_utils.toHex(this.priorEIP1559GasOptionConfig.gasPrice) ||
-                web3_utils.toHex(priorConfig?.gasPrice || '0'),
+            gasPrice: toHex(this.priorEIP1559GasOptionConfig.gasPrice) || toHex(priorConfig?.gasPrice || '0'),
             maxFeePerGas: undefined,
             maxPriorityFeePerGas: undefined,
             gasOptionType: this.config.gasOptionType ?? priorConfig?.gasOptionType,

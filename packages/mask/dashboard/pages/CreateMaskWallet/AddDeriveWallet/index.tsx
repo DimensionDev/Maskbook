@@ -3,11 +3,10 @@ import urlcat from 'urlcat'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
-import defer * as web3_utils from 'web3-utils'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { delay } from '@masknet/kit'
 import { DeriveWalletTable } from '@masknet/shared'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST, toHex } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -28,6 +27,7 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { ResetWalletContext } from '../context.js'
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
+import { keccak256 } from 'viem'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -85,7 +85,7 @@ export const Component = memo(function AddDeriveWallet() {
 
     const { mnemonic, password, isReset } = state
     // Avoid leaking mnemonic to react-query
-    const mnemonicHash = web3_utils.sha3(mnemonic)
+    const mnemonicHash = keccak256(toHex(mnemonic))
     const [pathIndexes, setPathIndexes] = useState<number[]>([])
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 

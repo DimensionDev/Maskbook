@@ -45,7 +45,7 @@ async function makePrivateKey(record: LegacyWalletRecord) {
         record._private_key_ ?
             await recoverWalletFromPrivateKey(record._private_key_)
         :   await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
-    return `0x${toHex(privateKey)}`
+    return toHex(privateKey)
 }
 
 async function recoverWalletFromMnemonicWords(
@@ -64,7 +64,7 @@ async function recoverWalletFromMnemonicWords(
         address: wallet_ts.EthereumAddress.from(walletPublicKey).address,
         privateKey: walletPrivateKey,
         privateKeyValid: true,
-        privateKeyInHex: `0x${toHex(walletPrivateKey)}`,
+        privateKeyInHex: toHex(walletPrivateKey),
         path,
         mnemonic,
         passphrase,

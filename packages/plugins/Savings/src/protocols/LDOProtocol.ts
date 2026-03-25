@@ -1,4 +1,3 @@
-import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import {
     type ChainId,
@@ -10,14 +9,11 @@ import {
     splitSignature,
 } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
-import type { Lido } from '@masknet/web3-contracts/types/Lido.js'
-import type { LidoWithdraw } from '@masknet/web3-contracts/types/LidoWithdraw.js'
-import type { LidoStETH } from '@masknet/web3-contracts/types/LidoStETH.js'
+import { LidoAbi, type Lido } from '@masknet/web3-contracts/types/Lido.js'
+import { LidoWithdrawAbi, type LidoWithdraw } from '@masknet/web3-contracts/types/LidoWithdraw.js'
+import { LidoStETHAbi, type LidoStETH } from '@masknet/web3-contracts/types/LidoStETH.js'
 
 import { EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
-import LidoABI from '@masknet/web3-contracts/abis/Lido.json' with { type: 'json' }
-import LidoWithdrawABI from '@masknet/web3-contracts/abis/LidoWithdraw.json' with { type: 'json' }
-import LidoStEthABI from '@masknet/web3-contracts/abis/LidoStETH.json' with { type: 'json' }
 import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
 const MAX_DEADLINE = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
@@ -44,11 +40,7 @@ export class LidoProtocol implements SavingsProtocol {
     }
     async getBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
-            const contract = createContract<Lido>(
-                web3,
-                getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
-                LidoABI as AbiItem[],
-            )
+            const contract = createContract<Lido>(web3, getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
             return new BigNumber((await contract?.methods.balanceOf(account).call()) ?? 0)
         } catch {}
         return ZERO
@@ -56,11 +48,7 @@ export class LidoProtocol implements SavingsProtocol {
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const contract = createContract<Lido>(
-                web3,
-                getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
-                LidoABI as AbiItem[],
-            )
+            const contract = createContract<Lido>(web3, getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
             const gasEstimate = await contract?.methods
                 .submit(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS)
                 .estimateGas({
@@ -80,11 +68,7 @@ export class LidoProtocol implements SavingsProtocol {
     public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
         return new Promise<string>((resolve, reject) => {
-            const contract = createContract<Lido>(
-                web3,
-                getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
-                LidoABI as AbiItem[],
-            )
+            const contract = createContract<Lido>(web3, getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
             contract?.methods
                 .submit(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS)
                 .send({
@@ -109,7 +93,7 @@ export class LidoProtocol implements SavingsProtocol {
         const lidoStETHContract = createContract<LidoStETH>(
             web3,
             getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
-            LidoStEthABI as AbiItem[],
+            LidoStETHAbi,
         )
 
         const nonces = await lidoStETHContract?.methods.nonces(account).call()
@@ -182,7 +166,7 @@ export class LidoProtocol implements SavingsProtocol {
         const contract = createContract<LidoWithdraw>(
             web3,
             getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'),
-            LidoWithdrawABI as AbiItem[],
+            LidoWithdrawAbi,
         )
 
         const result = contract?.methods.requestWithdrawalsWithPermit([value], account, [

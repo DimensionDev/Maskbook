@@ -1,11 +1,10 @@
-import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json' with { type: 'json' }
-import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json' with { type: 'json' }
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
-import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool.js'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
-import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
+import { AaveLendingPoolAbi, type AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool.js'
+import {
+    AaveLendingPoolAddressProviderAbi,
+    type AaveLendingPoolAddressProvider,
+} from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
+import { ERC20Abi, type ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { ZERO, pow10, type FungibleToken } from '@masknet/web3-shared-base'
 import {
@@ -132,7 +131,7 @@ export class AAVEProtocol implements SavingsProtocol {
             })
 
             const aTokenId = response.data.reserves[0].aToken.id
-            const contract = createContract<ERC20>(web3, aTokenId, ERC20ABI as AbiItem[])
+            const contract = createContract<ERC20>(web3, aTokenId, ERC20Abi)
             return new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
         } catch (error) {
             console.error('AAVE BALANCE ERROR:', error)
@@ -159,12 +158,12 @@ export class AAVEProtocol implements SavingsProtocol {
         const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
             web3,
             aaveLPoolAddress,
-            AaveLendingPoolAddressProviderABI as AbiItem[],
+            AaveLendingPoolAddressProviderAbi,
         )
 
         const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
-        const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolABI as AbiItem[])
+        const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolAbi)
         return contract?.methods.deposit(this.bareToken.address, new BigNumber(value).toFixed(), account, '0')
     }
 
@@ -192,12 +191,12 @@ export class AAVEProtocol implements SavingsProtocol {
             const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
                 getAaveConstant(chainId, 'AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS'),
-                AaveLendingPoolAddressProviderABI as AbiItem[],
+                AaveLendingPoolAddressProviderAbi,
             )
 
             const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
-            const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolABI as AbiItem[])
+            const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolAbi)
             const gasEstimate = await contract?.methods
                 .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)
                 .estimateGas({
@@ -213,13 +212,13 @@ export class AAVEProtocol implements SavingsProtocol {
         const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
             web3,
             getAaveConstant(chainId, 'AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS'),
-            AaveLendingPoolAddressProviderABI as AbiItem[],
+            AaveLendingPoolAddressProviderAbi,
         )
 
         const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
         const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
-        const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolABI as AbiItem[])
+        const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolAbi)
         return new Promise<string>((resolve, reject) => {
             contract?.methods
                 .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)

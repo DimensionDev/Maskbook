@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { toHex, type NetworkPluginID } from '@masknet/shared-base'
 import { NftRedPacketAbi, type NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
@@ -16,8 +16,8 @@ import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import defer * as web3_utils from 'web3-utils'
 import { createNftRedpacketContract } from './useNftRedPacketContract.js'
+import { keccak256 } from 'viem'
 
 interface Options {
     publicKey: string
@@ -43,7 +43,7 @@ export function useCreateNftRedpacketCallback({
         return [
             publicKey,
             duration,
-            web3_utils.sha3(Math.random().toString())!,
+            keccak256(toHex(Math.random().toString())),
             message,
             creator,
             contractAddress,

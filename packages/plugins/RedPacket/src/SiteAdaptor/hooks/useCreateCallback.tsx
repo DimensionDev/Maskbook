@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import defer * as web3_utils from 'web3-utils'
 import { omit } from 'lodash-es'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, toHex } from '@masknet/shared-base'
 import { useChainContext, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { type FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
@@ -18,6 +17,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { getRedPacketContractAbi, useRedPacketContract } from './useRedPacketContract.js'
+import { keccak256 } from 'viem'
 
 export interface RedPacketSettings {
     shares: number
@@ -93,7 +93,7 @@ function useCreateParamsCallback(
             shares,
             isRandom,
             duration,
-            seed: web3_utils.sha3(seed)!,
+            seed: keccak256(toHex(seed)),
             message,
             name,
             tokenType,
