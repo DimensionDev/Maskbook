@@ -15,8 +15,8 @@ export function toBase64(x: BufferSource) {
 
 export function toHex(value: string | number | bigint | boolean | ByteArray) {
     if (typeof value === 'string') {
-        // convert hex to number first, to normalize hex like 0x02 to 0x2
-        if (/^\d+$/u.test(value) || /^0x[0-9a-fA-F]+$/u.test(value)) return viem_toHex(BigInt(value))
+        if (/^0x[0-9a-fA-F]+$/u.test(value)) return value
+        if (/^\d+$/u.test(value)) return viem_toHex(BigInt(value))
     }
     return viem_toHex(value)
 }

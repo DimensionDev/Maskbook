@@ -4,6 +4,11 @@ import { isEmptyHex } from '../helpers/address.js'
 import { ChainId, type Transaction } from '../types/index.js'
 import { toHex } from '@masknet/shared-base'
 
+function normalizeHex(value: string | number) {
+    if (typeof value === 'string' && value.startsWith('0x')) return toHex(BigInt(value))
+    return toHex(value)
+}
+
 export class AccountTransaction {
     constructor(private transaction?: Transaction) {}
 
@@ -60,12 +65,12 @@ export class AccountTransaction {
                 from,
                 to,
                 data,
-                value: value ? toHex(value) : undefined,
-                chainId: chainId && chainId !== ChainId.Astar ? toHex(chainId) : undefined,
-                gas: gas ? toHex(gas) : undefined,
-                gasPrice: gasPrice ? toHex(gasPrice) : undefined,
-                maxPriorityFeePerGas: maxPriorityFeePerGas ? toHex(maxPriorityFeePerGas) : undefined,
-                maxFeePerGas: maxFeePerGas ? toHex(maxFeePerGas) : undefined,
+                value: value ? normalizeHex(value) : undefined,
+                chainId: chainId && chainId !== ChainId.Astar ? normalizeHex(chainId) : undefined,
+                gas: gas ? normalizeHex(gas) : undefined,
+                gasPrice: gasPrice ? normalizeHex(gasPrice) : undefined,
+                maxPriorityFeePerGas: maxPriorityFeePerGas ? normalizeHex(maxPriorityFeePerGas) : undefined,
+                maxFeePerGas: maxFeePerGas ? normalizeHex(maxFeePerGas) : undefined,
                 nonce,
                 _disableSuccessSnackbar,
                 _disableSnackbar,
