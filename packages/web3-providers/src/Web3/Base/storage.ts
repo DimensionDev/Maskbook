@@ -43,7 +43,7 @@ export function settingsStorage(plugin: NetworkPluginID) {
         currencyType: CurrencyType.USD,
         gasOptionType: GasOptionType.NORMAL,
         fungibleAssetSourceType: SourceType.DeBank,
-        nonFungibleAssetSourceType: SourceType.OpenSea,
+        nonFungibleAssetSourceType: SourceType.Alchemy_EVM,
     })
     return Promise.all([
         settings.currencyType.initializedPromise,

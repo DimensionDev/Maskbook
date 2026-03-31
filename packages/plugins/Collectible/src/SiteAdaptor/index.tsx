@@ -197,8 +197,8 @@ const site: Plugin.SiteAdaptor.Definition = {
             category: 'dapp',
             description: (
                 <Trans>
-                    Display specific information of collectibles in OpenSea and Rarible, make an offer directly on
-                    social media.
+                    Display specific information of collectibles in NFT marketplaces, make an offer directly on social
+                    media.
                 </Trans>
             ),
             name: <Trans>Collectibles</Trans>,

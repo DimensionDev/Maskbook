@@ -263,9 +263,7 @@ export const CollectibleDetailUI = memo(function CollectibleDetailUI({
     const collectionDesc = availableAsset?.collection?.description
     const floorPrice = useMemo(() => {
         if (!asset?.collection?.floorPrices) return null
-        return (
-            asset.collection.floorPrices.find((x) => x.marketplace_id === 'opensea') || asset.collection.floorPrices[0]
-        )
+        return asset.collection.floorPrices[0]
     }, [asset?.collection?.floorPrices])
 
     const lastSale = asset?.priceInToken

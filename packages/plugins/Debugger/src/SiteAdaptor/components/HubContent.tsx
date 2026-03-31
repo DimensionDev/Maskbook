@@ -133,7 +133,7 @@ export function HubContent(props: HubContentProps) {
                             <ShadowRootMenu
                                 anchorEl={anchorEl}
                                 open={!!anchorEl}
-                                defaultValue={SourceType.OpenSea}
+                                defaultValue={SourceType.Alchemy_EVM}
                                 onClose={() => setAnchorEl(null)}>
                                 {getEnumAsArray(SourceType).map((x) => {
                                     return (

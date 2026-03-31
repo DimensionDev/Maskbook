@@ -2,9 +2,9 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Stack } from '@mui/material'
-import { SourceProviderIcon } from '../index.js'
+import { SourceProviderIcon } from '../SourceProviderIcon/index.js'
 
-const sourceList = [SourceType.LooksRare, SourceType.OpenSea, SourceType.Rarible]
+const sourceList = [SourceType.LooksRare, SourceType.Rarible]
 
 interface SourceProviderSwitcherProps {
     // default is all
@@ -13,15 +13,13 @@ interface SourceProviderSwitcherProps {
     onSelect?(source: SourceType): void
 }
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        selected: {
-            position: 'absolute',
-            left: '16px',
-            top: '14px',
-            borderRadius: '50%',
-        },
-    }
+const useStyles = makeStyles()({
+    selected: {
+        position: 'absolute',
+        left: '16px',
+        top: '14px',
+        borderRadius: '50%',
+    },
 })
 
 export function SourceProviderSwitcher({ sources, onSelect, selected }: SourceProviderSwitcherProps) {

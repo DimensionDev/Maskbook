@@ -2374,8 +2374,12 @@ msgid "Display Snapshot proposals on the X of the respective project or protocol
 msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
-msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
-msgstr "OpenSea 및 Rarible에서 수집품의 정보를 전시하고 소셜 미디어에서 경매합니다."
+msgid "Display specific information of collectibles in NFT marketplaces, make an offer directly on social media."
+msgstr ""
+
+#: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
+#~ msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
+#~ msgstr "OpenSea 및 Rarible에서 수집품의 정보를 전시하고 소셜 미디어에서 경매합니다."
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/index.tsx
 msgid "Display specific information of Gitcoin projects, donate to a project directly on social media."
