@@ -105,7 +105,7 @@ export namespace RSS3BaseAPI {
     // Uniswap like actions: add, collect, remove
     // Aave like actions: supply, withdraw, borrow, repay
     type LiquidityIn = 'supply' | 'add' | 'repay'
-    type LiquidityOut = 'withdraw' | 'collect' | 'remove' | 'collect'
+    type LiquidityOut = 'withdraw' | 'collect' | 'remove' | 'borrow'
     interface LiquidityMetadata {
         /**
          * @example "Uniswap V2"
