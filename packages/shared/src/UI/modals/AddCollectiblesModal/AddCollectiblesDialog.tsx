@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useNetworks } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'

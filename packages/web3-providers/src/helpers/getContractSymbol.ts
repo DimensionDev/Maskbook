@@ -1,4 +1,4 @@
-import { type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { EVMContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 
 export async function getContractSymbol(chainId: ChainId, address: string) {

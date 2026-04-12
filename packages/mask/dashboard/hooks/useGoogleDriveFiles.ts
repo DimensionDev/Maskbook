@@ -1,4 +1,4 @@
-import { type GoogleDriveClient } from '@masknet/web3-providers'
+import type { GoogleDriveClient } from '@masknet/web3-providers'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { compact } from 'lodash-es'
 import { UserContext } from '../../shared-ui/index.js'

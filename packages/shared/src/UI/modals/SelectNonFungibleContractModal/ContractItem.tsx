@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { CheckBoxIndicator, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
-import { type NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { Avatar, Link, ListItem, Typography, type ListItemProps } from '@mui/material'
 import { memo } from 'react'
 

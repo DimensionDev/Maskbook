@@ -3,7 +3,7 @@ import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getAllPluginsWeb3State, getConnection } from '@masknet/web3-providers'
-import { type NetworkDescriptor } from '@masknet/web3-shared-base'
+import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
 import {
     NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,

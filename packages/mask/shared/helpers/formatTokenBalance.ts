@@ -1,5 +1,5 @@
 import { addThousandSeparators, isLessThan, isZero, leftShift, trimZero } from '@masknet/web3-shared-base'
-import { type BigNumber } from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 
 /**
  * Yet another formatBalance

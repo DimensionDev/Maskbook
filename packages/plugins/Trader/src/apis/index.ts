@@ -1,7 +1,7 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CoinGeckoTrending, NFTScanTrending_EVM, NFTScanTrending_Solana } from '@masknet/web3-providers'
-import { type TrendingAPI } from '@masknet/web3-providers/types'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { SourceType, type NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'

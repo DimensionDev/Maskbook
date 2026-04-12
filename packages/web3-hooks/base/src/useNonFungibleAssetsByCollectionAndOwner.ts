@@ -1,4 +1,4 @@
-import { type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
+import type { NetworkPluginID, PageIndicator } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useWeb3Hub } from './useWeb3Hub.js'

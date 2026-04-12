@@ -1,4 +1,4 @@
-import { type EvmAddress } from '@lens-protocol/client'
+import type { EvmAddress } from '@lens-protocol/client'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useLensClient, useMyLensAccount } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'

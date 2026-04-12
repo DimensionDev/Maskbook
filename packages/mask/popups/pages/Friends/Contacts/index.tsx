@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo } from 'react'
-import { type Friend } from '../../../hooks/index.js'
+import type { Friend } from '../../../hooks/index.js'
 import { ContactCard } from '../ContactCard/index.js'
 
 const useStyles = makeStyles()((theme) => ({

@@ -2,7 +2,7 @@ import { noop } from 'lodash-es'
 import { timeout } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 import { BooleanPreference, ValueRefWithReady } from '@masknet/shared-base'
-import { type Plugin } from '../types.js'
+import type { Plugin } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
 
 // Plugin state machine

@@ -3,7 +3,7 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { type FeedCardProps } from '../base.js'
+import type { FeedCardProps } from '../base.js'
 import { AccountLabel, Label } from '../common.js'
 import { Select, Trans } from '@lingui/react/macro'
 

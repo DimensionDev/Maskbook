@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers/fetchJSON.js'
-import { type FireflyTwitterAPI } from '../types/Firefly.js'
+import type { FireflyTwitterAPI } from '../types/Firefly.js'
 import { FIREFLY_BASE_URL } from './constants.js'
 
 export class FireflyTwitter {

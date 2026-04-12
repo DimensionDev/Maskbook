@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { type Transaction } from '@masknet/web3-shared-base'
+import type { Transaction } from '@masknet/web3-shared-base'
 import { createIndicator, createNextIndicator, createPageable, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { Tx } from '../types.js'

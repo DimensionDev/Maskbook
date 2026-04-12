@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { unreachable } from '@masknet/kit'
 import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
 

@@ -3,7 +3,7 @@ import type { PersonaInformation } from '@masknet/shared-base'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { CopyButton } from '../CopyButton/index.js'
 import { PlatformAvatar } from './PlatformAvatar.js'
 

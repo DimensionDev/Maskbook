@@ -1,5 +1,5 @@
 import { PrivyProvider } from '@privy-io/react-auth'
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { chains } from './configs'
 
 export function PrivySetupProvider({ children }: PropsWithChildren) {

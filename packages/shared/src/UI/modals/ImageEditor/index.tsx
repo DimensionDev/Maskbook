@@ -1,4 +1,4 @@
-import { type ImageEditorProps } from './ImageEditor.js'
+import type { ImageEditorProps } from './ImageEditor.js'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { ImageEditor } from './ImageEditor.js'
 import { useState } from 'react'

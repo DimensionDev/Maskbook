@@ -1,4 +1,4 @@
-import { type SingletonModalProps } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'

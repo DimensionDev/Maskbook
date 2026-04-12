@@ -556,7 +556,7 @@ const moduleSystemRules = {
     // 'import/no-relative-packages': 'error', // bans import '../../another-package', should import the workspace package instead
     'import/no-self-import': 'error',
     // 'import/no-unassigned-import': 'error', // bans `import 'x'`. side-effect only imports should be explicitly marked.
-    // '@typescript-eslint/no-import-type-side-effects': 'warn',
+    '@typescript-eslint/no-import-type-side-effects': 'warn',
 
     // performance
     '@masknet/prefer-defer-import': [

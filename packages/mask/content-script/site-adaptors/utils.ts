@@ -1,4 +1,4 @@
-import { type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../site-adaptor-infra/index.js'
 
 export function getCurrentIdentifier():

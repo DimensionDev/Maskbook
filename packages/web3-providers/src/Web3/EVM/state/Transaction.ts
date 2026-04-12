@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import { type StorageItem } from '@masknet/shared-base'
+import type { StorageItem } from '@masknet/shared-base'
 import {
     type ChainId,
     type Transaction as EVM_Transaction,

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, type ReactNode } from 'react'
-import { type MaskTextFieldProps } from '../TextField/index.js'
+import type { MaskTextFieldProps } from '../TextField/index.js'
 import { CountdownButton } from '../CountdownButton/index.js'
 import { makeStyles } from '../../UIHelper/index.js'
 import { TextField } from '@mui/material'

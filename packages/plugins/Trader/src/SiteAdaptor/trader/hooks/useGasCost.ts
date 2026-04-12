@@ -2,7 +2,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { multipliedBy } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
-import { type BigNumber } from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
 import { useTrade } from '../contexts/TradeProvider.js'
 

@@ -6,8 +6,8 @@ import {
     type PageIndicator,
 } from '@masknet/shared-base'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
-import { type Transaction } from '@masknet/web3-shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import type { Transaction } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-es'
 import urlcat from 'urlcat'
 import type { BaseHubOptions } from '../entry-types.js'

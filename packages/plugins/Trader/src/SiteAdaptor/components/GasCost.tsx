@@ -3,7 +3,7 @@ import { useNativeToken } from '@masknet/web3-hooks-base'
 import { formatCompact } from '@masknet/web3-shared-base'
 import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Typography, type TypographyProps } from '@mui/material'
-import { type BigNumber } from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { useGasCost } from '../trader/hooks/useGasCost.js'
 
 interface Props extends TypographyProps {

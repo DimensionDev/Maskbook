@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import { type StorageItem } from '@masknet/shared-base'
+import type { StorageItem } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { RiskWarningState } from '../../Base/state/RiskWarning.js'
 

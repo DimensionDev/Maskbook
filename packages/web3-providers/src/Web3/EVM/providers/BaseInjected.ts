@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import { isInPageEthereumInjected } from '@masknet/shared-base'
-import { type InjectedWalletBridge } from '@masknet/injected-script'
+import type { InjectedWalletBridge } from '@masknet/injected-script'
 import {
     type ChainId,
     EthereumMethodType,

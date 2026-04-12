@@ -9,7 +9,7 @@ import {
     pow10,
     isSameAddress,
 } from '@masknet/web3-shared-base'
-import { type AbiFunctionToObjectMapped, type GasConfig } from '@masknet/web3-shared-evm'
+import type { AbiFunctionToObjectMapped, GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import {
     useChainContext,

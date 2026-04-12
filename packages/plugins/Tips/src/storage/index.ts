@@ -1,5 +1,5 @@
 import type { ScopedStorage, EnhanceableSite } from '@masknet/shared-base'
-import { type NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
 import { useCallback } from 'react'

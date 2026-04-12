@@ -1,4 +1,4 @@
-import { type EIP2255Permission } from '@masknet/sdk'
+import type { EIP2255Permission } from '@masknet/sdk'
 import { enableMapSet, produce } from 'immer'
 import { sortBy } from 'lodash-es'
 import { walletDatabase } from '../database/Plugin.db.js'

@@ -1,7 +1,7 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleAsset } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useWalletAssets } from './useWalletAssets.js'
 
 // Use token from list first, to make sure data is consistent

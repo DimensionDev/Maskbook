@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useDebugValue, useEffect } from 'react'
-import { type Subscription } from 'use-subscription'
+import type { Subscription } from 'use-subscription'
 
 /**
  * In favor of react-query's persist cache and cache management

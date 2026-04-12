@@ -1,5 +1,5 @@
-import { type TransactionContext } from '@masknet/web3-shared-base'
-import { type AbiFunctionToObjectMapped, type ChainId, type TransactionParameter } from '@masknet/web3-shared-evm'
+import type { TransactionContext } from '@masknet/web3-shared-base'
+import type { AbiFunctionToObjectMapped, ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import { BaseDescriptor } from './Base.js'
 import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptorFormatResult } from '../types.js'

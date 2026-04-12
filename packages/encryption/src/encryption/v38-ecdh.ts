@@ -1,12 +1,12 @@
 import { concatArrayBuffer, decodeArrayBuffer } from '@masknet/kit'
 import type { AESCryptoKey, EC_Public_CryptoKey } from '@masknet/base'
 import { encryptWithAES } from '../utils/index.js'
-import {
-    type EncryptIO,
-    type EncryptionResultE2E,
-    type EncryptionResultE2EMap,
-    type EncryptResult,
-    type EncryptTargetE2E,
+import type {
+    EncryptIO,
+    EncryptionResultE2E,
+    EncryptionResultE2EMap,
+    EncryptResult,
+    EncryptTargetE2E,
 } from './EncryptionTypes.js'
 import { fillIV } from './utils.js'
 

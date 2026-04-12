@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { type ProfileIdentifier, type PostIdentifier } from '@masknet/shared-base'
+import type { ProfileIdentifier, PostIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { SiteAdaptor } from '@masknet/types'
 import { createSiteAdaptorSpecializedPostContext } from '../../site-adaptor-infra/utils/create-post-context.js'

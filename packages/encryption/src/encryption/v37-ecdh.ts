@@ -1,10 +1,10 @@
 import { encryptWithAES } from '../utils/index.js'
-import {
-    type EncryptTargetE2E,
-    type EncryptIO,
-    type EncryptResult,
-    type EncryptionResultE2E,
-    type EncryptionResultE2EMap,
+import type {
+    EncryptTargetE2E,
+    EncryptIO,
+    EncryptResult,
+    EncryptionResultE2E,
+    EncryptionResultE2EMap,
 } from './EncryptionTypes.js'
 import { type createEphemeralKeysMap, fillIV } from './utils.js'
 

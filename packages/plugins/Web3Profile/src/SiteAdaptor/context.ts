@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { type StorageObject } from '@masknet/shared-base'
-import { type LensStorageType } from './types.js'
+import type { StorageObject } from '@masknet/shared-base'
+import type { LensStorageType } from './types.js'
 
 export let lensStorage: StorageObject<LensStorageType>
 

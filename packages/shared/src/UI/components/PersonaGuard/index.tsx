@@ -1,5 +1,5 @@
 import { memo, type PropsWithChildren, useLayoutEffect, useEffect } from 'react'
-import { type PersonaIdentifier, type PersonaInformation } from '@masknet/shared-base'
+import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { useCurrentPersonaConnectStatus } from '../../../hooks/useCurrentPersonaConnectStatus.js'
 import { PersonaSelectPanelModal } from '../../modals/index.js'

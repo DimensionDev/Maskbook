@@ -1,4 +1,4 @@
-import { type Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
 import { PLUGIN_ID } from './constants.js'
 

@@ -1,10 +1,10 @@
 import type { Subscription } from 'use-subscription'
 import { createConstantSubscription, type StorageObject } from '@masknet/shared-base'
-import {
-    type CurrencyType,
-    type GasOptionType,
-    type SourceType,
-    type SettingsState as Web3SettingsState,
+import type {
+    CurrencyType,
+    GasOptionType,
+    SourceType,
+    SettingsState as Web3SettingsState,
 } from '@masknet/web3-shared-base'
 
 interface SettingsStorage {

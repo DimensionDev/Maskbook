@@ -1,5 +1,5 @@
 import { type ComponentProps, memo, useEffect } from 'react'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'

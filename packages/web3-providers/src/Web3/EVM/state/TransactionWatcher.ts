@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { type ChainId, type Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { EVMTransactionCheckers } from './TransactionWatcher/checker.js'
 import { evm } from '../../../Manager/registry.js'

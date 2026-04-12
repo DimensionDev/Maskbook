@@ -20,8 +20,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
 import { compact } from 'lodash-es'
-import { type Transaction as RestTransaction } from './reset-types.js'
-import { type ZerionAddressPosition } from './types.js'
+import type { Transaction as RestTransaction } from './reset-types.js'
+import type { ZerionAddressPosition } from './types.js'
 
 export function isValidAsset(data: ZerionAddressPosition) {
     const { asset, chain } = data

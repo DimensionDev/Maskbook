@@ -22,7 +22,7 @@ import {
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Button, DialogActions, DialogContent } from '@mui/material'

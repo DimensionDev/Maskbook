@@ -1,6 +1,6 @@
 import { NetworkPluginID, type EnhanceableSite } from '@masknet/shared-base'
 import { Web3Storage } from '@masknet/web3-providers'
-import { type AvatarNextID } from '@masknet/web3-providers/types'
+import type { AvatarNextID } from '@masknet/web3-providers/types'
 import { useCallback } from 'react'
 import { NFT_AVATAR_METADATA_STORAGE } from '../constants.js'
 import { useSaveAddress } from './useSaveAddress.js'

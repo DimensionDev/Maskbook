@@ -1,4 +1,4 @@
-import { type FungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type SchemaType, type ChainId } from '@masknet/web3-shared-solana'
 import { useQuery } from '@tanstack/react-query'
 import { getEstimatedGasByCreateWithNativeToken } from '../helpers/createWithNativeToken.js'

@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { FormattedBalance, SelectGasSettingsModal, useMenuConfig } from '@masknet/shared'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'

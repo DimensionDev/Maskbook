@@ -1,4 +1,4 @@
-import { type NextIDPlatform } from '@masknet/shared-base'
+import type { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'

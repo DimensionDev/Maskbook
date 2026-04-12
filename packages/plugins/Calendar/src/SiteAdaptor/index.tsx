@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { type Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { Trans } from '@lingui/react/macro'

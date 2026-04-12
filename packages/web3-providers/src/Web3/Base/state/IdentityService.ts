@@ -7,7 +7,7 @@ import {
     SocialAddressType,
     EMPTY_LIST,
 } from '@masknet/shared-base'
-import { type IdentityServiceState as Web3SocialIdentityState } from '@masknet/web3-shared-base'
+import type { IdentityServiceState as Web3SocialIdentityState } from '@masknet/web3-shared-base'
 
 export abstract class IdentityServiceState<ChainId> implements Web3SocialIdentityState<ChainId> {
     protected cache = new LRUCache<string, Promise<Array<SocialAddress<ChainId>>>>({

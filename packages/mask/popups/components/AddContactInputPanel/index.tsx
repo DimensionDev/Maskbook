@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'

@@ -3,7 +3,7 @@ import { series, type TaskFunction } from 'gulp'
 import { buildBaseExtension } from './normal.ts'
 import { ROOT_PATH, task } from '../utils/index.ts'
 import { codegen } from '../codegen/index.ts'
-import { type BuildFlagsExtended } from './flags.ts'
+import type { BuildFlagsExtended } from './flags.ts'
 import { copyFile } from 'node:fs/promises'
 import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 
