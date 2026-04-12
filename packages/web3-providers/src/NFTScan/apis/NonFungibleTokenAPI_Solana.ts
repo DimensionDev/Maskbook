@@ -1,10 +1,6 @@
 import urlcat from 'urlcat'
 import { createIndicator, createNextIndicator, createPageable, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
-import type {
-    NonFungibleCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenEvent,
-} from '@masknet/web3-shared-base'
+import type { NonFungibleCollection, NonFungibleTokenContract, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
 import {
     createNonFungibleAsset,
