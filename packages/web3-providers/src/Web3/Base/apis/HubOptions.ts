@@ -1,7 +1,7 @@
 import { identity, pickBy } from 'lodash-es'
 import type { NetworkPluginID, PageIndicator, PartialRequired } from '@masknet/shared-base'
 import { CurrencyType, type SourceType } from '@masknet/web3-shared-base'
-import { type SchemaType } from '@masknet/web3-shared-evm'
+import type { SchemaType } from '@masknet/web3-shared-evm'
 
 export interface BaseHubOptions<ChainId, Indicator = PageIndicator> {
     /** The user account as the API parameter */

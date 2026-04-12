@@ -1,4 +1,4 @@
-import { type StorageItem } from '@masknet/shared-base'
+import type { StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { AddressBookState } from '../../Base/state/AddressBook.js'

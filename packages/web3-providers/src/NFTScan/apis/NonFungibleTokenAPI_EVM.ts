@@ -7,10 +7,10 @@ import {
     type Pageable,
     EMPTY_LIST,
 } from '@masknet/shared-base'
-import {
-    type NonFungibleCollection,
-    type NonFungibleTokenContract,
-    type NonFungibleTokenEvent,
+import type {
+    NonFungibleCollection,
+    NonFungibleTokenContract,
+    NonFungibleTokenEvent,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { EVM, type PageableResponse, type Response } from '../types/index.js'

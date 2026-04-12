@@ -1,4 +1,4 @@
-import { type NameServiceID, type NetworkPluginID } from '@masknet/shared-base'
+import type { NameServiceID, NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { getActivatedPluginWeb3State } from '@masknet/web3-providers'
 import { useQueries, useQuery } from '@tanstack/react-query'

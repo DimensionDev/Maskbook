@@ -1,5 +1,5 @@
 import { Calendar } from '@masknet/web3-providers'
-import { type EventProvider } from '@masknet/web3-providers/types'
+import type { EventProvider } from '@masknet/web3-providers/types'
 import { useQuery } from '@tanstack/react-query'
 import { startOfMonth, addDays, format } from 'date-fns'
 

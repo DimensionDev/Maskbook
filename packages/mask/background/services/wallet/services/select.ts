@@ -1,5 +1,5 @@
 import { PopupRoutes, type ECKeyIdentifier } from '@masknet/shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { openPopupWindow } from '../../helper/popup-opener.js'
 
 let deferred: PromiseWithResolvers<MaskAccount[]> | undefined

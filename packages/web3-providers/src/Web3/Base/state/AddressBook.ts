@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import { type StorageItem } from '@masknet/shared-base'
+import type { StorageItem } from '@masknet/shared-base'
 import type { Contact, AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
 export abstract class AddressBookState implements Web3AddressBookState {

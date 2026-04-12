@@ -7,7 +7,7 @@ import {
     EMPTY_LIST,
 } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
-import { type NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'

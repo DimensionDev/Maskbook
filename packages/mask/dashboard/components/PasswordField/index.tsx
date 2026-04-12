@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { type MaskTextFieldProps } from '@masknet/theme'
+import type { MaskTextFieldProps } from '@masknet/theme'
 import { IconButton, InputAdornment, TextField } from '@mui/material'
 import { Icons } from '@masknet/icons'
 

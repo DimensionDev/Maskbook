@@ -1,4 +1,4 @@
-import { type NameServiceID, type StorageItem } from '@masknet/shared-base'
+import type { NameServiceID, StorageItem } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { NameServiceState } from '../../Base/state/NameService.js'
 import defer * as ENS from '../../../ENS/index.js'

@@ -14,7 +14,7 @@ import {
     formatTokenId,
     isValidChainId,
 } from '@masknet/web3-shared-flow'
-import { type BaseUtils } from '../../Base/apis/Utils.js'
+import type { BaseUtils } from '../../Base/apis/Utils.js'
 import { FlowChainResolver, FlowExplorerResolver, FlowNetworkResolver } from './ResolverAPI.js'
 
 export const FlowUtils = {

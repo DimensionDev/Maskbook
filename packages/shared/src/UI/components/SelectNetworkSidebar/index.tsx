@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ReasonableNetwork } from '@masknet/web3-shared-base'

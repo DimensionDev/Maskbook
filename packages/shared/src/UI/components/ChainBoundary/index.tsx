@@ -18,7 +18,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '../WalletIcon/index.js'
-import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
+import type { ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { SelectProviderModal } from '../../modals/modals.js'
 import { Trans } from '@lingui/react/macro'
 

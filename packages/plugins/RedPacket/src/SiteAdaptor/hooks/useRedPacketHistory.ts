@@ -1,4 +1,4 @@
-import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { createIndicator } from '@masknet/shared-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'

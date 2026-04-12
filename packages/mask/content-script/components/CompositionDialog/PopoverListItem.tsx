@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, FormControlLabel, Radio, Typography } from '@mui/material'
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: { marginLeft: 'unset', marginRight: 'unset' },

@@ -4,7 +4,7 @@ import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from 
 import { buttonClasses } from '@mui/material/Button'
 import { alpha } from '@mui/system'
 import { Box, Typography } from '@mui/material'
-import { type SingletonModalProps } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'

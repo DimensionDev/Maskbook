@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { type EnhanceableSite } from '@masknet/shared-base'
+import type { EnhanceableSite } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { EnhanceableSite_RSS3_NFT_SITE_KEY_map } from '@masknet/shared'
 import { PLUGIN_ID } from '../constants.js'

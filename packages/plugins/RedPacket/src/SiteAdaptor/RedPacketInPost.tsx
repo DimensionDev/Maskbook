@@ -1,5 +1,5 @@
 import { usePostLink } from '@masknet/plugin-infra/content-script'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { EVMWeb3ContextProvider, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { RedPacketRecord } from '@masknet/web3-providers/types'

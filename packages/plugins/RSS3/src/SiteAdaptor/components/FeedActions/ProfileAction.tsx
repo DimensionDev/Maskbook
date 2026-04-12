@@ -1,8 +1,8 @@
 import { makeStyles } from '@masknet/theme'
-import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { useAddressLabel } from '../../hooks/index.js'
-import { type FeedCardProps } from '../base.js'
+import type { FeedCardProps } from '../base.js'
 import { Label } from '../common.js'
 import { Select, Trans } from '@lingui/react/macro'
 

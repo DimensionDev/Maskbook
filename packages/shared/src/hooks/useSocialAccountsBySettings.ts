@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { type SocialAddressType, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import type { SocialAddressType, SocialAccount, SocialIdentity } from '@masknet/shared-base'
 import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 

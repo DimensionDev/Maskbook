@@ -1,4 +1,4 @@
-import { type StorageItem, type NameServiceID } from '@masknet/shared-base'
+import type { StorageItem, NameServiceID } from '@masknet/shared-base'
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 import type { NameServiceAPI } from '../../../entry-types.js'
 

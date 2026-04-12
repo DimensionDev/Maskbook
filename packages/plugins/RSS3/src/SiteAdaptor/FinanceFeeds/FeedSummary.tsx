@@ -1,7 +1,7 @@
 import { Select, Trans } from '@lingui/react/macro'
 import { makeStyles } from '@masknet/theme'
 import { formatCompact, isSameAddress, trimZero, type Transaction } from '@masknet/web3-shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Typography, type TypographyProps } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo } from 'react'

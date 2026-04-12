@@ -1,5 +1,5 @@
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
-import { type Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {

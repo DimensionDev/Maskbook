@@ -1,4 +1,4 @@
-import { type ProfileInformation } from '@masknet/shared-base'
+import type { ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material'
 import { Avatar } from '../../../../shared-ui/components/Avatar.js'

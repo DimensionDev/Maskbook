@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { type Transaction } from '@masknet/web3-shared-base'
+import type { Transaction } from '@masknet/web3-shared-base'
 import {
     asyncIteratorToArray,
     createIndicator,

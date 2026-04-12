@@ -7,7 +7,7 @@ import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme
 import { useEnvironmentContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { type ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
+import type { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { memo, useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'

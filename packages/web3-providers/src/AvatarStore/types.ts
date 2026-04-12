@@ -1,5 +1,5 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { type Web3Helper } from '@masknet/web3-helpers'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AvatarNextID<T extends NetworkPluginID> {

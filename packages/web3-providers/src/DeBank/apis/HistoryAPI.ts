@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { compact, last, uniq } from 'lodash-es'
 import { createPageable, createIndicator, type Pageable, createNextIndicator, EMPTY_LIST } from '@masknet/shared-base'
-import { type Transaction } from '@masknet/web3-shared-base'
+import type { Transaction } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { formatTransactions, getDebankChain, resolveDeBankAssetIdReversed } from '../helpers.js'
 import type { HistoryRecord } from '../types.js'

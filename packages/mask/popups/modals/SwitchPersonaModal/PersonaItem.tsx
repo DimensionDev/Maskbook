@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { ListItem, listItemSecondaryActionClasses, type ListItemProps, Radio, Typography, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { type PersonaInformation } from '@masknet/shared-base'
+import type { PersonaInformation } from '@masknet/shared-base'
 import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
 import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
 

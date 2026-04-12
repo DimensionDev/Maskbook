@@ -1,6 +1,6 @@
 import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import defer * as RSS3Next from 'rss3-next'

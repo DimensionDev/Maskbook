@@ -25,7 +25,7 @@ import { type ChainId, formatAmount } from '@masknet/web3-shared-evm'
 import { add } from 'lodash-es'
 import { useAsyncFn } from 'react-use'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { Trans, useLingui } from '@lingui/react/macro'
 

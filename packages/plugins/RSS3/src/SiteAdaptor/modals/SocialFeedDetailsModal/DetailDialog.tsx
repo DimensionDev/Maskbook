@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { SocialFeed, type SocialFeedProps } from '../../SocialFeeds/SocialFeed.js'
 
 const useStyles = makeStyles()((theme) => ({

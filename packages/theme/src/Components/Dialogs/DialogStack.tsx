@@ -1,5 +1,5 @@
 import { useRef, useContext, createContext, useState, useMemo, useLayoutEffect } from 'react'
-import { type DialogProps } from '@mui/material'
+import type { DialogProps } from '@mui/material'
 import { noop } from 'lodash-es'
 
 interface StackContext {

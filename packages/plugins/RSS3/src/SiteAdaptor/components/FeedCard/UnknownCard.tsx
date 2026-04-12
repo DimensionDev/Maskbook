@@ -1,4 +1,4 @@
-import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useFeedOwner } from '../../contexts/index.js'

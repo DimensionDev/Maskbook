@@ -6,7 +6,7 @@ import { CopyButton, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { type TokenRiskWarningDialogEvent } from '../../messages.js'
+import type { TokenRiskWarningDialogEvent } from '../../messages.js'
 import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({

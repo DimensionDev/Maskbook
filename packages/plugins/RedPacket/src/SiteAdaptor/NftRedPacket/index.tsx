@@ -13,7 +13,7 @@ import {
     useNonFungibleAsset,
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
-import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import type { RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { SourceType, TokenType } from '@masknet/web3-shared-base'
 import { Card } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'

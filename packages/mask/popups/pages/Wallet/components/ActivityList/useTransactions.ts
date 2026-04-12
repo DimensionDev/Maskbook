@@ -1,7 +1,7 @@
 import { EMPTY_LIST, hidingScamSettings, type PageIndicator } from '@masknet/shared-base'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { DeBankHistory } from '@masknet/web3-providers'
-import { type RecentTransaction } from '@masknet/web3-shared-base'
+import type { RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
 import { useInfiniteQuery, useQueries, useQueryClient } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'

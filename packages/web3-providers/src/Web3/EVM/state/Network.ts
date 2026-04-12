@@ -1,4 +1,4 @@
-import { type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import type { ReasonableNetwork, TransferableNetwork } from '@masknet/web3-shared-base'
 import { NetworkState } from '../../Base/state/Network.js'
 import { createSchema } from '../schemas/ChainDescriptor.js'

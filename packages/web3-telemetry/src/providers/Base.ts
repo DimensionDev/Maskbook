@@ -1,11 +1,11 @@
 /// <reference types="@masknet/global-types/env" />
-import {
-    type UserOptions,
-    type DeviceOptions,
-    type NetworkOptions,
-    type CommonOptions,
-    type EventOptions,
-    type ExceptionOptions,
+import type {
+    UserOptions,
+    DeviceOptions,
+    NetworkOptions,
+    CommonOptions,
+    EventOptions,
+    ExceptionOptions,
 } from '../types/index.js'
 import { telemetrySettings } from '../settings/index.js'
 

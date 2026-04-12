@@ -1,4 +1,4 @@
-import { type StoreAPI } from '../types/Store.js'
+import type { StoreAPI } from '../types/Store.js'
 
 export abstract class StoreProvider<T> implements StoreAPI.Provider<T> {
     public abstract store: T

@@ -3,7 +3,7 @@ import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DialogContent } from '@mui/material'
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { FinanceFeed, type FinanceFeedProps } from '../../FinanceFeeds/FinanceFeed.js'
 import { TxDetails } from './TxDetails.js'
 

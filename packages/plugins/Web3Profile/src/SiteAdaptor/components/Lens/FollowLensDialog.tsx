@@ -1,4 +1,4 @@
-import { type Account, type EvmAddress } from '@lens-protocol/client'
+import type { Account, EvmAddress } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import {

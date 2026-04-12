@@ -1,4 +1,4 @@
-import { type NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
+import type { NetworkPluginID, SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useOKXTokenList } from '@masknet/web3-hooks-evm'

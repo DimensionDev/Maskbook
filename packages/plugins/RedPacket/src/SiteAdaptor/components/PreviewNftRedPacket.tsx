@@ -1,6 +1,6 @@
 import { t } from '@lingui/core/macro'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { type HTMLProps } from 'react'
+import type { HTMLProps } from 'react'
 import { NftRedPacketEnvelope, type NftRedPacketEnvelopeProps } from './NftRedPacketEnvelope.js'
 
 interface Props extends HTMLProps<HTMLDivElement>, Pick<NftRedPacketEnvelopeProps, 'address' | 'chainId' | 'tokenId'> {

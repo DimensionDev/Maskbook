@@ -14,7 +14,7 @@ import {
     formatSchemaType,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
-import { type BaseUtils } from '../../Base/apis/Utils.js'
+import type { BaseUtils } from '../../Base/apis/Utils.js'
 import { SolanaChainResolver, SolanaExplorerResolver, SolanaNetworkResolver } from './ResolverAPI.js'
 
 export const SolanaUtils = {

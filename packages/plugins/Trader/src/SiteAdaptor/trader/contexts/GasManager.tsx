@@ -7,7 +7,7 @@ import {
     type GasConfig,
     type GasOption,
 } from '@masknet/web3-shared-evm'
-import { type BigNumber } from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import {
     createContext,
     useContext,

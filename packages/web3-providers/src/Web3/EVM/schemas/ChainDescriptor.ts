@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { isSameURL, type ChainDescriptor } from '@masknet/web3-shared-base'
-import { type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 
 export function createSchema(descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {
     return (

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { decodeEvents } from '../../src/helpers/decodeEvents.js'
-import { type Log } from 'web3-core'
+import type { Log } from 'web3-core'
 import { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 describe('decodeEvents', () => {

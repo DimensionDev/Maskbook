@@ -22,7 +22,7 @@ import { useLatest } from 'react-use'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
-import { type TransactionDetail } from '../type.js'
+import type { TransactionDetail } from '../type.js'
 import type { InteractionItemProps } from './interaction.js'
 import { decodeAbiParameters, encodeAbiParameters, hexToBigInt } from 'viem'
 

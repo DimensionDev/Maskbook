@@ -1,4 +1,4 @@
-import { type RouteObject } from 'react-router-dom'
+import type { RouteObject } from 'react-router-dom'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { useMatch } from 'react-router-dom'
 import { ResetWalletContext } from './context.js'

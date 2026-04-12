@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
-import { type ChainId, type GasOption } from '@masknet/web3-shared-evm'
+import type { ChainId, GasOption } from '@masknet/web3-shared-evm'
 import type { GasPriceResponse } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
 import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'

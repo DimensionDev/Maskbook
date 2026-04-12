@@ -3,7 +3,7 @@
 import { memoizePromise } from '@masknet/kit'
 import { memoize } from 'lodash-es'
 import { EnhanceableSite, getEnhanceableSiteType } from '@masknet/shared-base'
-import { type StoreAPI } from '../types/Store.js'
+import type { StoreAPI } from '../types/Store.js'
 import { getAddress } from './helpers/getAddress.js'
 import { getAvatar } from './helpers/getAvatar.js'
 import { getAvatarToken } from './helpers/getAvatarToken.js'

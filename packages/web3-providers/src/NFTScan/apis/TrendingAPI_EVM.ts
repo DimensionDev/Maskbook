@@ -8,7 +8,7 @@ import {
     type NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, isDomainOrSubdomainOf, NetworkPluginID, twitterDomainMigrate } from '@masknet/shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, createNonFungibleAsset } from '../helpers/EVM.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'

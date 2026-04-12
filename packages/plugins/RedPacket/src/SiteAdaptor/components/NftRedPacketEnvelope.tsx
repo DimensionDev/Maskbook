@@ -6,7 +6,7 @@ import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/the
 import { useNetworks, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
 import { isZero, SourceType } from '@masknet/web3-shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import type { HTMLProps } from 'react'

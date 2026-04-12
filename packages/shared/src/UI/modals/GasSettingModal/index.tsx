@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { type BigNumber } from 'bignumber.js'
+import type { BigNumber } from 'bignumber.js'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'

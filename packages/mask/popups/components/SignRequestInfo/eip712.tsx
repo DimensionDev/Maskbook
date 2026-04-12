@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Alert, Link, Tooltip, Typography } from '@mui/material'
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { z } from 'zod'
 
 const useStyles = makeStyles()({
