@@ -1,5 +1,5 @@
 import { identity, pickBy } from 'lodash-es'
-import { type Unresolved, resolve, toHex } from '@masknet/shared-base'
+import { toHex } from '@masknet/shared-base'
 import type {
     BaseContract,
     PayableTx,
@@ -7,29 +7,23 @@ import type {
     PayableTransactionObject,
 } from '@masknet/web3-contracts/types/types.js'
 import type { Transaction } from '../types/index.js'
-
-type TransactionResolver<T extends BaseContract | null> = Unresolved<
-    PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined,
-    T
->
+import type { Hex } from 'viem'
 
 export class ContractTransaction<T extends BaseContract | null> {
     constructor(private contract: T) {}
 
     /**
      * Fill the transaction without gas (for calling a readonly transaction)
-     * @param transactionResolver
-     * @param overrides
-     * @returns
      */
-    fill(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>): Transaction {
-        const transaction = resolve(transactionResolver, this.contract)
-
+    private fill(
+        transaction: Hex | PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined,
+        overrides: Partial<Transaction> | undefined,
+    ): Transaction {
         return pickBy(
             {
                 from: overrides?.from ?? this.contract?.defaultAccount ?? this.contract?.options.from ?? '',
                 to: this.contract?.options.address,
-                data: transaction?.encodeABI(),
+                data: typeof transaction === 'string' ? transaction : transaction?.encodeABI(),
                 value: overrides?.value ? toHex(overrides.value) : undefined,
                 gas: overrides?.gas ? toHex(overrides.gas) : undefined,
                 gasPrice: overrides?.gasPrice ? toHex(overrides.gasPrice) : undefined,
@@ -45,13 +39,12 @@ export class ContractTransaction<T extends BaseContract | null> {
 
     /**
      * Fill the transaction include gas (for sending a payable transaction)
-     * @param transactionResolver
-     * @param overrides
-     * @returns
      */
-    async fillAll(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
-        const transaction = resolve(transactionResolver, this.contract)
-        const transactionEncoded = this.fill(transactionResolver, overrides)
+    async fillAll(
+        transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined,
+        overrides: Partial<Transaction> | undefined,
+    ): Promise<Transaction> {
+        const transactionEncoded = this.fill(transaction, overrides)
 
         // estimate gas
         if (!transactionEncoded.gas) {
@@ -70,9 +63,43 @@ export class ContractTransaction<T extends BaseContract | null> {
         return transactionEncoded
     }
 
-    async send(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
-        const transaction = resolve(transactionResolver, this.contract)
-        const transactionEncoded = await this.fillAll(transactionResolver, overrides)
+    async fillAllViem(
+        transaction: Hex,
+        estimateGas: (
+            from: Hex | undefined,
+            to: Hex | undefined,
+            data: Hex | undefined,
+            value: Hex | undefined,
+        ) => Promise<bigint>,
+        overrides: Partial<Transaction> | undefined,
+    ): Promise<Transaction> {
+        const transactionEncoded = this.fill(transaction, overrides)
+
+        // estimate gas
+        if (!transactionEncoded.gas) {
+            const gas = await estimateGas(
+                transactionEncoded.from as Hex,
+                transactionEncoded.to as Hex,
+                transactionEncoded.data as Hex,
+                transactionEncoded.value as Hex,
+            )
+
+            if (!gas) throw new Error('Estimate gas failed')
+
+            transactionEncoded.gas = toHex(gas)
+        }
+
+        return transactionEncoded
+    }
+
+    async send(
+        transactionResolver: (
+            e: T | undefined,
+        ) => PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined,
+        overrides: Partial<Transaction> | undefined,
+    ) {
+        const transaction = transactionResolver(this.contract)
+        const transactionEncoded = await this.fillAll(transaction, overrides)
         const receipt = await transaction?.send(transactionEncoded as PayableTx)
         return receipt?.transactionHash ?? ''
     }

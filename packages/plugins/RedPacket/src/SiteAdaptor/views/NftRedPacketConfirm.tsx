@@ -131,11 +131,11 @@ export function NftRedPacketConfirm() {
         estimateGasFee,
         createCallback,
     } = useCreateNftRedpacketCallback({
-        publicKey: redpacketPubkey,
+        publicKey: redpacketPubkey as HexString,
         duration,
         message,
         creator,
-        contractAddress: collection?.address ?? '',
+        contractAddress: collection?.address as HexString | undefined,
         tokenIds,
         gasOption,
     })
