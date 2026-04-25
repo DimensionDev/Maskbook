@@ -1,0 +1,22 @@
+{
+  "name": "@masknet/plugin-efp",
+  "private": true,
+  "sideEffects": [
+    "./src/register.ts"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./register": {
+      "mask-src": "./src/register.ts",
+      "default": "./dist/register.js"
+    }
+  },
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared-base": "workspace:^"
+  }
+}
