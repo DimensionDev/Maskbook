@@ -8,6 +8,8 @@
   "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../plugin-infra/tsconfig.json" },
-    { "path": "../../shared-base/tsconfig.json" }
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../theme/tsconfig.json" },
+    { "path": "../../typed-message/base/tsconfig.json" }
   ]
 }
