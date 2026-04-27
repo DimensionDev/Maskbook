@@ -22,17 +22,21 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
     useEffect(() => {
         if (!rootNode || !enabled) return
 
+        const tweet = rootNode.closest<HTMLElement>('[data-testid="tweet"]') ?? rootNode.closest('article')
+        if (!tweet) return
+
         const hide = () => {
-            const card = rootNode.querySelector<HTMLElement>('[data-testid="card.wrapper"]')
-            if (!card || card.style.display === 'none') return
-            if (!isEFPCard(card)) return
-            card.style.display = 'none'
-            card.setAttribute('aria-hidden', 'true')
+            for (const card of tweet.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
+                if (card === rootNode || card.style.display === 'none') continue
+                if (!isEFPCard(card)) continue
+                card.style.display = 'none'
+                card.setAttribute('aria-hidden', 'true')
+            }
         }
 
         hide()
         const observer = new MutationObserver(hide)
-        observer.observe(rootNode, { childList: true, subtree: true })
+        observer.observe(tweet, { childList: true, subtree: true })
         return () => observer.disconnect()
     }, [rootNode, enabled])
 }
