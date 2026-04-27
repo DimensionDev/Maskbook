@@ -27,10 +27,12 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
 
         const hide = () => {
             for (const card of tweet.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
-                if (card === rootNode || card.style.display === 'none') continue
+                if (card === rootNode) continue
                 if (!isEFPCard(card)) continue
-                card.style.display = 'none'
-                card.setAttribute('aria-hidden', 'true')
+                const container = getCardContainer(card)
+                if (container.style.display === 'none') continue
+                container.style.display = 'none'
+                container.setAttribute('aria-hidden', 'true')
             }
         }
 
@@ -41,8 +43,23 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
     }, [rootNode, enabled])
 }
 
+// Twitter renders the visible card as a parent that's `aria-labelledby` the card.wrapper id and
+// also holds the "From <site>" footer as a sibling of the wrapper. Hide the parent so the footer
+// goes away with the card; fall back to the wrapper when the structure doesn't match.
+function getCardContainer(card: HTMLElement): HTMLElement {
+    const parent = card.parentElement
+    if (!parent || !card.id) return card
+    const labelledBy = parent.getAttribute('aria-labelledby')
+    if (labelledBy && labelledBy.split(/\s+/).includes(card.id)) return parent
+    return card
+}
+
 function isEFPCard(card: HTMLElement) {
     if (card.querySelector('a[href*="efp.app"], a[href*="ethfollow.xyz"]')) return true
+    for (const el of card.querySelectorAll<HTMLElement>('[aria-label]')) {
+        const label = el.getAttribute('aria-label')?.toLowerCase() ?? ''
+        if (label.includes('efp.app') || label.includes('ethfollow.xyz')) return true
+    }
     const text = card.textContent?.toLowerCase() ?? ''
     return text.includes('efp.app') || text.includes('ethfollow.xyz')
 }
