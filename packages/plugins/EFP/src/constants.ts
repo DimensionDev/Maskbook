@@ -5,6 +5,7 @@ export const PLUGIN_NAME = 'Ethereum Follow Protocol'
 export const PLUGIN_DESCRIPTION = 'A native Ethereum protocol for following and tagging Ethereum accounts.'
 export const EFP_APP_URL = 'https://efp.app'
 export const EFP_API_URL = 'https://data.ethfollow.xyz/api/v1'
+export const EFP_FALLBACK_IMAGE_URL = `${EFP_APP_URL}/assets/art/default-header.svg`
 
 const RESERVED_ROUTE_PATTERN =
     'api(?:[/?#]|$)|og(?:[/?#]|$)|assets(?:[/?#]|$)|leaderboard(?:[/?#]|$)|integrations(?:[/?#]|$)|team(?:[/?#]|$)|swipe(?:[/?#]|$)'

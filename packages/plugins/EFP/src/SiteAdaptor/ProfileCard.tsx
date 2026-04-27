@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Link, Stack, Typography } from '@mui/material'
-import { useEffect, useMemo, useReducer } from 'react'
-import { EFP_API_URL, PLUGIN_NAME } from '../constants.js'
+import { useEffect, useMemo, useReducer, useState } from 'react'
+import { EFP_API_URL, EFP_FALLBACK_IMAGE_URL, PLUGIN_NAME } from '../constants.js'
 import type { EFPProfileLink } from '../helpers/url.js'
 
 interface EFPProfileResponse {
@@ -53,6 +53,15 @@ const useStyles = makeStyles()((theme) => ({
         aspectRatio: '1.91 / 1',
         objectFit: 'cover',
         background: theme.palette.maskColor.bg,
+    },
+    imageFallback: {
+        display: 'flex',
+        width: '100%',
+        aspectRatio: '1.91 / 1',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #f1f3fe 0%, #dff2fb 45%, #ecfffd 100%)',
+        color: '#333333',
     },
     body: {
         padding: theme.spacing(1.5),
@@ -119,7 +128,7 @@ export function ProfileCard({ profileLink }: ProfileCardProps) {
     return (
         <Stack className={classes.root}>
             <Box className={classes.card}>
-                <img className={classes.image} src={profileLink.imageUrl} alt="" />
+                <ProfileImage key={profileLink.imageUrl} profileLink={profileLink} />
                 <Stack className={classes.body}>
                     <Typography className={classes.eyebrow} variant="caption">
                         {profileLink.topEight ? 'EFP Top 8' : PLUGIN_NAME}
@@ -157,6 +166,35 @@ export function ProfileCard({ profileLink }: ProfileCardProps) {
                 </Stack>
             </Box>
         </Stack>
+    )
+}
+
+function ProfileImage({ profileLink }: ProfileCardProps) {
+    const { classes } = useStyles()
+    const [imageUrl, setImageUrl] = useState(profileLink.imageUrl)
+    const [failed, setFailed] = useState(false)
+
+    if (failed) {
+        return (
+            <Box className={classes.imageFallback}>
+                <Icons.Web3Profile size={64} />
+            </Box>
+        )
+    }
+
+    return (
+        <img
+            className={classes.image}
+            src={imageUrl}
+            alt=""
+            onError={() => {
+                if (imageUrl === EFP_FALLBACK_IMAGE_URL) {
+                    setFailed(true)
+                    return
+                }
+                setImageUrl(EFP_FALLBACK_IMAGE_URL)
+            }}
+        />
     )
 }
 
