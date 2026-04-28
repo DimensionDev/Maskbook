@@ -11,21 +11,24 @@ import { ProfileCard } from './ProfileCard.js'
 function Renderer({ url }: { url: string }) {
     const profileLink = useMemo(() => parseEFPProfileLink(url), [url])
     const rootNode = usePostInfoDetails.rootNode()
+    const isFocusing = usePostInfoDetails.isFocusing?.()
     usePluginWrapper(!!profileLink, { name: PLUGIN_NAME })
-    useHideNativeTwitterCard(rootNode, !!profileLink)
+    useHideNativeTwitterCard(rootNode, !!profileLink, !!isFocusing)
 
     if (!profileLink) return null
     return <ProfileCard profileLink={profileLink} />
 }
 
-function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean) {
+function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean, isFocusing: boolean) {
     useEffect(() => {
         if (!rootNode || !enabled) return
 
-        // Search from the article (or its parent in detail view, where the card sits in a sibling
-        // subtree) so we cover both timeline and detail layouts.
         const article = rootNode.closest<HTMLElement>('article')
-        const searchRoot = article?.parentElement ?? rootNode.ownerDocument.body
+        // Timeline: scope to the article so we don't hide cards in sibling tweets whose Twitter
+        // preview happens to mention efp.app/ethfollow.xyz in its title or description. Detail
+        // view: the post's card can live in a sibling subtree of the article (per Twitter's
+        // postsContentSelector), so widen one level.
+        const searchRoot = isFocusing ? article?.parentElement : article
         if (!searchRoot) return
 
         const hide = () => {
@@ -45,7 +48,7 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
         const observer = new MutationObserver(hide)
         observer.observe(searchRoot, { childList: true, subtree: true })
         return () => observer.disconnect()
-    }, [rootNode, enabled])
+    }, [rootNode, enabled, isFocusing])
 }
 
 // Twitter renders the visible card as a parent that's `aria-labelledby` the card.wrapper id and
