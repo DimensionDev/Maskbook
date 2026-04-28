@@ -22,11 +22,14 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
     useEffect(() => {
         if (!rootNode || !enabled) return
 
-        const tweet = rootNode.closest<HTMLElement>('[data-testid="tweet"]') ?? rootNode.closest('article')
-        if (!tweet) return
+        // Search from the article (or its parent in detail view, where the card sits in a sibling
+        // subtree) so we cover both timeline and detail layouts.
+        const article = rootNode.closest<HTMLElement>('article')
+        const searchRoot = article?.parentElement ?? rootNode.ownerDocument.body
+        if (!searchRoot) return
 
         const hide = () => {
-            for (const card of tweet.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
+            for (const card of searchRoot.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
                 if (card === rootNode) continue
                 if (!isEFPCard(card)) continue
                 const container = getCardContainer(card)
@@ -38,7 +41,7 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
 
         hide()
         const observer = new MutationObserver(hide)
-        observer.observe(tweet, { childList: true, subtree: true })
+        observer.observe(searchRoot, { childList: true, subtree: true })
         return () => observer.disconnect()
     }, [rootNode, enabled])
 }
