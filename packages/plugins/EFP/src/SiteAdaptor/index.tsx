@@ -30,7 +30,9 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
 
         const hide = () => {
             for (const card of searchRoot.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
-                if (card === rootNode) continue
+                // For link-only tweets, rootNode IS the card.wrapper — don't hide our own
+                // injection target.
+                if (card.contains(rootNode)) continue
                 if (!isEFPCard(card)) continue
                 const container = getCardContainer(card)
                 if (container.style.display === 'none') continue
