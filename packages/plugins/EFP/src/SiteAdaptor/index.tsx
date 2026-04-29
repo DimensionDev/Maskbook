@@ -1,8 +1,13 @@
 import { Icons } from '@masknet/icons'
-import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import {
+    type Plugin,
+    PostInfoContext,
+    usePluginWrapper,
+    usePostInfoDetails,
+} from '@masknet/plugin-infra/content-script'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { useEffect, useMemo, type JSX } from 'react'
+import { useContext, useEffect, useMemo, type JSX } from 'react'
 import { base } from '../base.js'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
 import { parseEFPProfileLink } from '../helpers/url.js'
@@ -10,10 +15,14 @@ import { ProfileCard } from './ProfileCard.js'
 
 function Renderer({ url }: { url: string }) {
     const profileLink = useMemo(() => parseEFPProfileLink(url), [url])
-    const rootNode = usePostInfoDetails.rootNode()
-    const isFocusing = usePostInfoDetails.isFocusing?.()
+    // Read rootNode/isFocusing through the context directly. The usePostInfoDetails proxy
+    // also works, but trips react-compiler's hook-as-value rule at the call site for fields
+    // (like rootNode) that the proxy returns as plain values rather than via a real hook.
+    const postInfo = useContext(PostInfoContext)
+    const rootNode = postInfo?.rootNode ?? null
+    const isFocusing = postInfo?.isFocusing ?? false
     usePluginWrapper(!!profileLink, { name: PLUGIN_NAME })
-    useHideNativeTwitterCard(rootNode, !!profileLink, !!isFocusing)
+    useHideNativeTwitterCard(rootNode, !!profileLink, isFocusing)
 
     if (!profileLink) return null
     return <ProfileCard profileLink={profileLink} />
@@ -58,7 +67,7 @@ function getCardContainer(card: HTMLElement): HTMLElement {
     const parent = card.parentElement
     if (!parent || !card.id) return card
     const labelledBy = parent.getAttribute('aria-labelledby')
-    if (labelledBy && labelledBy.split(/\s+/).includes(card.id)) return parent
+    if (labelledBy?.split(/\s+/u).includes(card.id)) return parent
     return card
 }
 
