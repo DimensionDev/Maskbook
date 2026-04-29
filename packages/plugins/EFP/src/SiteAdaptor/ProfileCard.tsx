@@ -1,8 +1,9 @@
 import { Icons } from '@masknet/icons'
+import { Trans } from '@lingui/react/macro'
 import { makeStyles } from '@masknet/theme'
 import { Box, Link, Stack, Typography } from '@mui/material'
-import { useEffect, useMemo, useReducer, useState } from 'react'
-import { EFP_API_URL, EFP_FALLBACK_IMAGE_URL, PLUGIN_NAME } from '../constants.js'
+import { useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
+import { EFP_API_URL, EFP_FALLBACK_IMAGE_URL } from '../constants.js'
 import type { EFPProfileLink } from '../helpers/url.js'
 
 interface EFPProfileResponse {
@@ -131,7 +132,9 @@ export function ProfileCard({ profileLink }: ProfileCardProps) {
                 <ProfileImage key={profileLink.imageUrl} profileLink={profileLink} />
                 <Stack className={classes.body}>
                     <Typography className={classes.eyebrow} variant="caption">
-                        {profileLink.topEight ? 'EFP Top 8' : PLUGIN_NAME}
+                        {profileLink.topEight ?
+                            <Trans>EFP Top 8</Trans>
+                        :   <Trans>Ethereum Follow Protocol</Trans>}
                     </Typography>
                     <Typography className={classes.title} variant="h6">
                         {displayName}
@@ -142,24 +145,32 @@ export function ProfileCard({ profileLink }: ProfileCardProps) {
                         </Typography>
                     :   null}
                     <Box className={classes.metrics}>
-                        <Metric label="Followers" value={loading ? '--' : formatCount(data?.followers_count)} />
-                        <Metric label="Following" value={loading ? '--' : formatCount(data?.following_count)} />
+                        <Metric
+                            label={<Trans>Followers</Trans>}
+                            value={loading ? '--' : formatCount(data?.followers_count)}
+                        />
+                        <Metric
+                            label={<Trans>Following</Trans>}
+                            value={loading ? '--' : formatCount(data?.following_count)}
+                        />
                         {primaryList ?
-                            <Metric label="Primary List" value={`#${primaryList}`} />
+                            <Metric label={<Trans>Primary List</Trans>} value={`#${primaryList}`} />
                         : profileLink.type === 'list' ?
-                            <Metric label="List" value={`#${profileLink.user}`} />
+                            <Metric label={<Trans>List</Trans>} value={`#${profileLink.user}`} />
                         :   null}
                     </Box>
                     <Box className={classes.footer}>
                         <Typography variant="caption" color="textSecondary">
-                            {profileLink.type === 'list' ? 'EFP list' : 'EFP profile'}
+                            {profileLink.type === 'list' ?
+                                <Trans>EFP list</Trans>
+                            :   <Trans>EFP profile</Trans>}
                         </Typography>
                         <Link
                             className={classes.link}
                             href={profileLink.profileUrl}
                             target="_blank"
                             rel="noopener noreferrer">
-                            View on EFP
+                            <Trans>View on EFP</Trans>
                             <Icons.LinkOut size={14} />
                         </Link>
                     </Box>
@@ -198,7 +209,7 @@ function ProfileImage({ profileLink }: ProfileCardProps) {
     )
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, value }: { label: ReactNode; value: string }) {
     const { classes } = useStyles()
     return (
         <Box className={classes.metric}>

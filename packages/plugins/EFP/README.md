@@ -1,12 +1,5 @@
 # Ethereum Follow Protocol plugin
 
-## TODOs
-
-- Detect direct `ethfollow.xyz` and `efp.app` profile/list links in supported post content.
-- Render a compact Ethereum Follow Protocol profile card in Twitter/X posts.
-- Fetch profile/list details from the EFP data API and keep a URL-derived fallback card when the API fails.
-- Use EFP-generated images for profile and Top 8 previews.
-
 ## Referenced resources
 
 - https://efp.app

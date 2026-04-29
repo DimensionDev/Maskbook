@@ -1,4 +1,5 @@
 import { Icons } from '@masknet/icons'
+import { Trans } from '@lingui/react/macro'
 import {
     type Plugin,
     PostInfoContext,
@@ -9,28 +10,26 @@ import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useContext, useEffect, useMemo, type JSX } from 'react'
 import { base } from '../base.js'
-import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
-import { parseEFPProfileLink } from '../helpers/url.js'
+import { EFP_HOST_KEYWORDS, PLUGIN_NAME } from '../constants.js'
+import { parseEFPProfileLink, type EFPProfileLink } from '../helpers/url.js'
 import { ProfileCard } from './ProfileCard.js'
 
-function Renderer({ url }: { url: string }) {
-    const profileLink = useMemo(() => parseEFPProfileLink(url), [url])
+function Renderer({ profileLink }: { profileLink: EFPProfileLink }) {
     // Read rootNode/isFocusing through the context directly. The usePostInfoDetails proxy
     // also works, but trips react-compiler's hook-as-value rule at the call site for fields
     // (like rootNode) that the proxy returns as plain values rather than via a real hook.
     const postInfo = useContext(PostInfoContext)
     const rootNode = postInfo?.rootNode ?? null
     const isFocusing = postInfo?.isFocusing ?? false
-    usePluginWrapper(!!profileLink, { name: PLUGIN_NAME })
-    useHideNativeTwitterCard(rootNode, !!profileLink, isFocusing)
+    usePluginWrapper(true, { name: PLUGIN_NAME })
+    useHideNativeTwitterCard(rootNode, isFocusing)
 
-    if (!profileLink) return null
     return <ProfileCard profileLink={profileLink} />
 }
 
-function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean, isFocusing: boolean) {
+function useHideNativeTwitterCard(rootNode: HTMLElement | null, isFocusing: boolean) {
     useEffect(() => {
-        if (!rootNode || !enabled) return
+        if (!rootNode) return
 
         const article = rootNode.closest<HTMLElement>('article')
         // Timeline: scope to the article so we don't hide cards in sibling tweets whose Twitter
@@ -59,7 +58,7 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
         const observer = new MutationObserver(hide)
         observer.observe(searchRoot, { childList: true, subtree: true })
         return () => observer.disconnect()
-    }, [rootNode, enabled, isFocusing])
+    }, [rootNode, isFocusing])
 }
 
 // Twitter renders the visible card as a parent that's `aria-labelledby` the card.wrapper id and
@@ -74,41 +73,52 @@ function getCardContainer(card: HTMLElement): HTMLElement {
 }
 
 function isEFPCard(card: HTMLElement) {
-    if (card.querySelector('a[href*="efp.app"], a[href*="ethfollow.xyz"]')) return true
+    const anchorSelector = EFP_HOST_KEYWORDS.map((host) => `a[href*="${host}"]`).join(', ')
+    if (card.querySelector(anchorSelector)) return true
     for (const el of card.querySelectorAll<HTMLElement>('[aria-label]')) {
         const label = el.getAttribute('aria-label')?.toLowerCase() ?? ''
-        if (label.includes('efp.app') || label.includes('ethfollow.xyz')) return true
+        if (EFP_HOST_KEYWORDS.some((host) => label.includes(host))) return true
     }
     const text = card.textContent?.toLowerCase() ?? ''
-    return text.includes('efp.app') || text.includes('ethfollow.xyz')
+    return EFP_HOST_KEYWORDS.some((host) => text.includes(host))
 }
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     DecryptedInspector(props): JSX.Element | null {
-        const link = useMemo(() => {
+        const profileLink = useMemo(() => {
             const text = extractTextFromTypedMessage(props.message)
             if (text.isNone()) return null
-            return parseURLs(text.value, false).find((x) => parseEFPProfileLink(x))
+            for (const url of parseURLs(text.value, false)) {
+                const link = parseEFPProfileLink(url)
+                if (link) return link
+            }
+            return null
         }, [props.message])
 
-        if (!link) return null
-        return <Renderer url={link} />
+        if (!profileLink) return null
+        return <Renderer profileLink={profileLink} />
     },
     PostInspector(): JSX.Element | null {
         const links = usePostInfoDetails.mentionedLinks()
-        const link = links.find((x) => parseEFPProfileLink(x))
+        const profileLink = useMemo(() => {
+            for (const url of links) {
+                const link = parseEFPProfileLink(url)
+                if (link) return link
+            }
+            return null
+        }, [links])
 
-        if (!link) return null
-        return <Renderer url={link} />
+        if (!profileLink) return null
+        return <Renderer profileLink={profileLink} />
     },
     ApplicationEntries: [
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 18,
-            description: PLUGIN_DESCRIPTION,
-            name: PLUGIN_NAME,
+            description: <Trans>A native Ethereum protocol for following and tagging Ethereum accounts.</Trans>,
+            name: <Trans>Ethereum Follow Protocol</Trans>,
             icon: <Icons.Web3Profile size={36} />,
             tutorialLink: 'https://docs.efp.app/intro',
         },

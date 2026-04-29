@@ -1,7 +1,7 @@
-import { EFP_APP_URL } from '../constants.js'
+import { EFP_APP_URL, EFP_HOSTS, RESERVED_EFP_PATHS } from '../constants.js'
 
-const EFP_HOSTS = new Set(['efp.app', 'www.efp.app', 'ethfollow.xyz', 'www.ethfollow.xyz'])
-const RESERVED_PATHS = new Set(['api', 'og', 'assets', 'leaderboard', 'integrations', 'team', 'swipe'])
+const EFP_HOST_SET: ReadonlySet<string> = new Set(EFP_HOSTS)
+const RESERVED_PATH_SET: ReadonlySet<string> = new Set(RESERVED_EFP_PATHS)
 const ADDRESS_PATTERN = /^0x[\dA-Fa-f]{40}$/u
 const LIST_PATTERN = /^[1-9]\d*$/u
 const ENS_LABEL_PATTERN = /^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/u
@@ -19,7 +19,7 @@ export function parseEFPProfileLink(link: string): EFPProfileLink | null {
     const url = parseURL(link)
     if (!url) return null
     if (url.protocol !== 'https:') return null
-    if (!EFP_HOSTS.has(url.hostname)) return null
+    if (!EFP_HOST_SET.has(url.hostname)) return null
     if (url.hash) return null
 
     const segments = url.pathname.split('/').filter(Boolean)
@@ -27,7 +27,7 @@ export function parseEFPProfileLink(link: string): EFPProfileLink | null {
 
     const user = safeDecodeURIComponent(segments[0])
     if (!user) return null
-    if (RESERVED_PATHS.has(user.toLowerCase())) return null
+    if (RESERVED_PATH_SET.has(user.toLowerCase())) return null
     if (!isSupportedUser(user)) return null
 
     const searchParams = Array.from(url.searchParams.entries())
