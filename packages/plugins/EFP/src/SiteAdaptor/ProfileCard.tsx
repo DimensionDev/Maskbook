@@ -188,7 +188,7 @@ function ProfileImage({ profileLink }: ProfileCardProps) {
     if (failed) {
         return (
             <Box className={classes.imageFallback}>
-                <Icons.Web3Profile size={64} />
+                <Icons.EFP size={64} />
             </Box>
         )
     }

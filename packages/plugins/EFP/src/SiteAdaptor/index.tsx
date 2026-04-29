@@ -119,12 +119,12 @@ const site: Plugin.SiteAdaptor.Definition = {
             marketListSortingPriority: 18,
             description: <Trans>A native Ethereum protocol for following and tagging Ethereum accounts.</Trans>,
             name: <Trans>Ethereum Follow Protocol</Trans>,
-            icon: <Icons.Web3Profile size={36} />,
+            icon: <Icons.EFP size={36} />,
             tutorialLink: 'https://docs.efp.app/intro',
         },
     ],
     wrapperProps: {
-        icon: <Icons.Web3Profile size={24} />,
+        icon: <Icons.EFP size={24} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(255, 224, 103, 0.2) 0%, rgba(211, 234, 244, 0.2) 100%), #FFFFFF',
     },
