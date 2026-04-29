@@ -3,19 +3,10 @@ import { Trans } from '@lingui/react/macro'
 import { makeStyles } from '@masknet/theme'
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
-import { EFP_API_URL, EFP_FALLBACK_IMAGE_URL } from '../constants.js'
+import { EFP_FALLBACK_IMAGE_URL } from '../constants.js'
 import type { EFPProfileLink } from '../helpers/url.js'
-
-interface EFPProfileResponse {
-    address?: string
-    ens?: {
-        name?: string | null
-        records?: Record<string, string | undefined> | null
-    } | null
-    followers_count?: number | string
-    following_count?: number | string
-    primary_list?: string | null
-}
+import { PluginEFPRPC } from '../messages.js'
+import type { EFPProfileResponse } from '../Worker/apis/index.js'
 
 interface ProfileCardProps {
     profileLink: EFPProfileLink
@@ -233,7 +224,7 @@ function useEFPProfile(profileLink: EFPProfileLink) {
         let cancelled = false
         dispatch({ type: 'loading' })
 
-        fetchEFPProfile(profileLink.apiPath)
+        PluginEFPRPC.fetchEFPProfile(profileLink.apiPath)
             .then((data) => {
                 if (cancelled) return
                 dispatch({ type: 'success', data: isProfileResponse(data) ? data : null })
@@ -255,16 +246,6 @@ function reduceEFPProfileState(_: EFPProfileState, action: EFPProfileAction): EF
     if (action.type === 'loading') return { data: null, loading: true }
     if (action.type === 'success') return { data: action.data, loading: false }
     return { data: null, loading: false }
-}
-
-async function fetchEFPProfile(apiPath: string) {
-    const response = await fetch(`${EFP_API_URL}${apiPath}`, {
-        headers: {
-            Accept: 'application/json',
-        },
-    })
-    if (!response.ok) throw new Error('Failed to fetch EFP profile')
-    return response.json() as Promise<EFPProfileResponse>
 }
 
 function isProfileResponse(value: EFPProfileResponse | null): value is EFPProfileResponse {
