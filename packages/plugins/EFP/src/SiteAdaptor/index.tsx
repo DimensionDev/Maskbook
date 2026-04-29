@@ -42,14 +42,16 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, enabled: boolean
 
         const hide = () => {
             for (const card of searchRoot.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
-                // For link-only tweets, rootNode IS the card.wrapper — don't hide our own
-                // injection target.
-                if (card.contains(rootNode)) continue
                 if (!isEFPCard(card)) continue
                 const container = getCardContainer(card)
-                if (container.style.display === 'none') continue
-                container.style.display = 'none'
-                container.setAttribute('aria-hidden', 'true')
+                // For link-only tweets the rootNode IS the card.wrapper, and our React tree mounts
+                // in rootElement.afterShadow — a sibling of the card. Hiding the card itself is
+                // fine, but we must not hide any ancestor of rootNode or we'd take our own
+                // injection down with it.
+                const target = container.contains(rootNode) ? card : container
+                if (target.style.display === 'none') continue
+                target.style.display = 'none'
+                target.setAttribute('aria-hidden', 'true')
             }
         }
 
