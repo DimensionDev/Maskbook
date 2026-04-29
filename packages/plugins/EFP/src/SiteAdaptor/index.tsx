@@ -100,14 +100,16 @@ const site: Plugin.SiteAdaptor.Definition = {
         return <Renderer profileLink={profileLink} />
     },
     PostInspector(): JSX.Element | null {
-        const links = usePostInfoDetails.mentionedLinks()
+        const message = usePostInfoDetails.rawMessage()
         const profileLink = useMemo(() => {
-            for (const url of links) {
+            const text = extractTextFromTypedMessage(message)
+            if (text.isNone()) return null
+            for (const url of parseURLs(text.value, false)) {
                 const link = parseEFPProfileLink(url)
                 if (link) return link
             }
             return null
-        }, [links])
+        }, [message])
 
         if (!profileLink) return null
         return <Renderer profileLink={profileLink} />
