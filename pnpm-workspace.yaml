@@ -67,4 +67,3 @@ peerDependencyRules:
     - react
     - react-dom
     - '@types/react'
-  allowedVersions: {}
