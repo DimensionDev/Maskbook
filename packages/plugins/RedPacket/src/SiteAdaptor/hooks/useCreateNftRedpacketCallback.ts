@@ -106,7 +106,7 @@ export function useCreateNftRedpacketCallback({
 
         // #endregion
 
-        const tx = await new ContractTransaction(nftRedPacketContract).fillAll(
+        const tx = await new ContractTransaction(nftRedPacketContract.options.address).fillAll(
             nftRedPacketContract.methods.create_red_packet(...params),
             {
                 from: account,
