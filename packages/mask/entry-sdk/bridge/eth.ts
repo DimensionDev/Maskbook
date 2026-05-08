@@ -10,6 +10,7 @@ import { maskSDK } from '../index.js'
 import { sample } from 'lodash-es'
 import { AsyncCall, JSONEncoder } from 'async-call-rpc/full'
 import { isValidChecksumAddress } from '@ethereumjs/util'
+import { recoverMessageAddress } from 'viem'
 
 const PassthroughMethods = [
     ...readonlyMethodType,
@@ -311,7 +312,8 @@ const methods: Methods = {
         }) as any
     },
     async personal_ecRecover(message, signature) {
-        return providers.EVMWeb3.getWeb3().eth.accounts.recover(message, signature)
+        if (!signature.startsWith('0x')) return err.invalid_input({ cause: 'signature must be a hex string' })
+        return recoverMessageAddress({ message, signature: signature as `0x${string}` })
     },
 }
 

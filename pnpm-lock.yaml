@@ -1591,6 +1591,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.49.2
         version: 5.49.2(react@0.0.0-experimental-58af67a8f8-20240628)
+      abitype:
+        specifier: ^1.2.3
+        version: 1.2.3(typescript@5.9.2)(zod@4.2.1)
       bignumber.js:
         specifier: 9.1.2
         version: 9.1.2

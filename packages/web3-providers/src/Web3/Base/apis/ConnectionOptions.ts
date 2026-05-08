@@ -36,7 +36,7 @@ export abstract class ConnectionOptionsProvider<ChainId, ProviderType, NetworkTy
 
     constructor(private options?: BaseConnectionOptions<ChainId, ProviderType, Transaction>) {}
 
-    protected get defaults() {
+    private get defaults() {
         return {
             account: '',
             chainId: this.getDefaultChainId(),
@@ -44,7 +44,7 @@ export abstract class ConnectionOptionsProvider<ChainId, ProviderType, NetworkTy
         }
     }
 
-    protected get refs(): BaseConnectionOptions<ChainId, ProviderType, Transaction> {
+    private get refs(): BaseConnectionOptions<ChainId, ProviderType, Transaction> {
         const provider = this.getProvider?.()
         if (!provider) return {}
         return {
