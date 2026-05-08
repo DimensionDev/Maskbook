@@ -1,4 +1,3 @@
-import { isUndefined, omitBy } from 'lodash-es'
 import { createContract } from '@masknet/web3-shared-evm'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
@@ -30,15 +29,13 @@ export class EVMContractReadonlyAPI {
     }
     protected Request
 
-    getWeb3Contract<T extends BaseContract>(address: string | undefined, abi: Abi, initial?: EVMConnectionOptions) {
+    getWeb3Contract<T extends BaseContract>(
+        address: string | undefined,
+        abi: Abi,
+        initial?: Pick<EVMConnectionOptions, 'chainId'>,
+    ) {
         const web3 = this.Request.getWeb3(initial)
-        const options = omitBy(
-            {
-                from: initial?.overrides?.from ?? initial?.account,
-            },
-            isUndefined,
-        )
-        return createContract<T>(web3, address, abi, options)
+        return createContract<T>(web3, address, abi)
     }
 
     getERC20Contract(address: string | undefined, initial?: EVMConnectionOptions) {
