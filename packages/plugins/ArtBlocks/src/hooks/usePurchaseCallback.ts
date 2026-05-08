@@ -14,7 +14,7 @@ export function usePurchaseCallback(chainId: ChainId, projectId: string, amount:
     return useAsyncFn(async () => {
         if (!genArt721MinterContract) return
 
-        const tx = await new ContractTransaction(genArt721MinterContract).fillAll(
+        const tx = await new ContractTransaction(genArt721MinterContract.options.address).fillAll(
             genArt721MinterContract.methods.purchase(projectId),
             {
                 from: account,

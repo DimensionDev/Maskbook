@@ -99,7 +99,7 @@ export class ConnectionAPI
 
         // ERC20
         const contract = this.Contract.getERC20Contract(address, options)
-        return new ContractTransaction(contract).send(
+        return new ContractTransaction(address).send(
             contract?.methods.approve(recipient, toHex(amount)),
             options.overrides,
         )
@@ -119,7 +119,7 @@ export class ConnectionAPI
 
         // ERC721 & ERC1155
         const contract = this.Contract.getERC721Contract(address, options)
-        return new ContractTransaction(contract).send(
+        return new ContractTransaction(address).send(
             contract?.methods.setApprovalForAll(recipient, approved),
             options.overrides,
         )
@@ -153,7 +153,7 @@ export class ConnectionAPI
 
         // ERC20
         const contract = this.Contract.getERC20Contract(address, options)
-        return new ContractTransaction(contract).send(
+        return new ContractTransaction(address).send(
             contract?.methods.transfer(recipient, toHex(amount)),
             options.overrides,
         )
@@ -173,7 +173,7 @@ export class ConnectionAPI
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
             const contract = this.Contract.getERC1155Contract(address, options)
-            return new ContractTransaction(contract).send(
+            return new ContractTransaction(address).send(
                 contract?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
                 options.overrides,
             )
@@ -181,7 +181,7 @@ export class ConnectionAPI
 
         // ERC721
         const contract = this.Contract.getERC721Contract(address, options)
-        return new ContractTransaction(contract).send(
+        return new ContractTransaction(address).send(
             contract?.methods.transferFrom(options.account, recipient, tokenId),
             options.overrides,
         )
