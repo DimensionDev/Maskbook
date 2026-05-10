@@ -175,7 +175,7 @@ export function useCreateCallback(
         }
 
         // estimate gas and compose transaction
-        const tx = await new ContractTransaction(redPacketContract).fillAll(
+        const tx = await new ContractTransaction(redPacketContract.options.address).fillAll(
             redPacketContract.methods.create_red_packet(...params),
             {
                 from: account,

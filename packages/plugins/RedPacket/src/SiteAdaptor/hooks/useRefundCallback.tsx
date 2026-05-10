@@ -42,9 +42,12 @@ export function useRefundCallback(version: number, from: string, id?: string, ex
 
         setIsRefunded(false)
 
-        const tx = await new ContractTransaction(redPacketContract).fillAll(redPacketContract.methods.refund(id), {
-            from,
-        })
+        const tx = await new ContractTransaction(redPacketContract.options.address).fillAll(
+            redPacketContract.methods.refund(id),
+            {
+                from,
+            },
+        )
         const hash = await EVMWeb3.sendTransaction(tx, {
             chainId,
         })

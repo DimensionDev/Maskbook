@@ -56,7 +56,7 @@ export function useClaimAirdrop(
                     providerType: ProviderType.WalletConnect,
                 })
             }
-            const tx = await new ContractTransaction(airdropContract).fillAll(
+            const tx = await new ContractTransaction(airdropContract.options.address).fillAll(
                 airdropContract.methods.claim(eventIndex, merkleProof, account, formatEtherToWei(amount)),
                 {
                     from: account,

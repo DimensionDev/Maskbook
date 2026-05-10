@@ -33,7 +33,7 @@ export function useClaimCallback(account: string, payload: RedPacketJSONPayload 
         }
         // note: despite the method params type of V1 and V2 is the same,
         // but it is more understandable to declare respectively
-        const contractTransaction = new ContractTransaction(redPacketContract)
+        const contractTransaction = new ContractTransaction(redPacketContract.options.address)
         const tx =
             version === 4 ?
                 await contractTransaction.fillAll(

@@ -98,8 +98,9 @@ export class ConnectionAPI
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
-        return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.approve(recipient, toHex(amount)),
+        const contract = this.Contract.getERC20Contract(address, options)
+        return new ContractTransaction(address).send(
+            contract?.methods.approve(recipient, toHex(amount)),
             options.overrides,
         )
     }
@@ -117,8 +118,9 @@ export class ConnectionAPI
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC721 & ERC1155
-        return new ContractTransaction(this.Contract.getERC721Contract(address, options)).send(
-            (x) => x?.methods.setApprovalForAll(recipient, approved),
+        const contract = this.Contract.getERC721Contract(address, options)
+        return new ContractTransaction(address).send(
+            contract?.methods.setApprovalForAll(recipient, approved),
             options.overrides,
         )
     }
@@ -150,8 +152,9 @@ export class ConnectionAPI
         }
 
         // ERC20
-        return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.transfer(recipient, toHex(amount)),
+        const contract = this.Contract.getERC20Contract(address, options)
+        return new ContractTransaction(address).send(
+            contract?.methods.transfer(recipient, toHex(amount)),
             options.overrides,
         )
     }
@@ -169,15 +172,17 @@ export class ConnectionAPI
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            return new ContractTransaction(this.Contract.getERC1155Contract(address, options)).send(
-                (x) => x?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
+            const contract = this.Contract.getERC1155Contract(address, options)
+            return new ContractTransaction(address).send(
+                contract?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
                 options.overrides,
             )
         }
 
         // ERC721
-        return new ContractTransaction(this.Contract.getERC721Contract(address, options)).send(
-            (x) => x?.methods.transferFrom(options.account, recipient, tokenId),
+        const contract = this.Contract.getERC721Contract(address, options)
+        return new ContractTransaction(address).send(
+            contract?.methods.transferFrom(options.account, recipient, tokenId),
             options.overrides,
         )
     }
