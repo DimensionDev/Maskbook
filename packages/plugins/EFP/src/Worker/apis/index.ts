@@ -12,11 +12,14 @@ export interface EFPProfileResponse {
 }
 
 export async function fetchEFPProfile(apiPath: string): Promise<EFPProfileResponse> {
-    const response = await fetch(`${EFP_API_URL}${apiPath}`, {
+    const url = `${EFP_API_URL}${apiPath}`
+    const response = await fetch(url, {
         headers: {
             Accept: 'application/json',
         },
     })
-    if (!response.ok) throw new Error('Failed to fetch EFP profile')
+    if (!response.ok) {
+        throw new Error(`Failed to fetch EFP profile from ${apiPath} (status: ${response.status})`)
+    }
     return response.json() as Promise<EFPProfileResponse>
 }
