@@ -2,7 +2,8 @@ import { Icons } from '@masknet/icons'
 import { Trans } from '@lingui/react/macro'
 import { makeStyles } from '@masknet/theme'
 import { Box, Link, Stack, Typography } from '@mui/material'
-import { useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState, type ReactNode } from 'react'
 import { EFP_FALLBACK_IMAGE_URL } from '../constants.js'
 import type { EFPProfileLink } from '../helpers/url.js'
 import { PluginEFPRPC } from '../messages.js'
@@ -11,16 +12,6 @@ import type { EFPProfileResponse } from '../Worker/apis/index.js'
 interface ProfileCardProps {
     profileLink: EFPProfileLink
 }
-
-interface EFPProfileState {
-    data: EFPProfileResponse | null
-    loading: boolean
-}
-
-type EFPProfileAction =
-    | { type: 'loading' }
-    | { type: 'success'; data: EFPProfileResponse | null }
-    | { type: 'error' }
 
 const formatter = new Intl.NumberFormat('en', {
     notation: 'compact',
@@ -112,7 +103,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ProfileCard({ profileLink }: ProfileCardProps) {
     const { classes } = useStyles()
-    const { data, loading } = useEFPProfile(profileLink)
+    const { data, isPending: loading } = useQuery({
+        queryKey: ['efp', 'profile', profileLink.apiPath],
+        queryFn: () => PluginEFPRPC.fetchEFPProfile(profileLink.apiPath),
+        select: (raw) => (isProfileResponse(raw) ? raw : null),
+    })
     const displayName = useMemo(() => getDisplayName(profileLink, data), [profileLink, data])
     const description = data?.ens?.records?.description
     const primaryList = data?.primary_list
@@ -214,45 +209,11 @@ function Metric({ label, value }: { label: ReactNode; value: string }) {
     )
 }
 
-function useEFPProfile(profileLink: EFPProfileLink) {
-    const [state, dispatch] = useReducer(reduceEFPProfileState, {
-        data: null,
-        loading: true,
-    })
-
-    useEffect(() => {
-        let cancelled = false
-        dispatch({ type: 'loading' })
-
-        PluginEFPRPC.fetchEFPProfile(profileLink.apiPath)
-            .then((data) => {
-                if (cancelled) return
-                dispatch({ type: 'success', data: isProfileResponse(data) ? data : null })
-            })
-            .catch(() => {
-                if (cancelled) return
-                dispatch({ type: 'error' })
-            })
-
-        return () => {
-            cancelled = true
-        }
-    }, [profileLink.apiPath])
-
-    return state
-}
-
-function reduceEFPProfileState(_: EFPProfileState, action: EFPProfileAction): EFPProfileState {
-    if (action.type === 'loading') return { data: null, loading: true }
-    if (action.type === 'success') return { data: action.data, loading: false }
-    return { data: null, loading: false }
-}
-
 function isProfileResponse(value: EFPProfileResponse | null): value is EFPProfileResponse {
     return !!value && (typeof value.address === 'string' || typeof value.primary_list === 'string')
 }
 
-function getDisplayName(profileLink: EFPProfileLink, data: EFPProfileResponse | null) {
+function getDisplayName(profileLink: EFPProfileLink, data: EFPProfileResponse | null | undefined) {
     const ensName = data?.ens?.name
     if (ensName) return ensName
     if (profileLink.type === 'list') return `List #${profileLink.user}`
