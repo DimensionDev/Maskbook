@@ -10,7 +10,7 @@ import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useContext, useEffect, useMemo, type JSX } from 'react'
 import { base } from '../base.js'
-import { EFP_HOST_KEYWORDS, PLUGIN_NAME } from '../constants.js'
+import { PLUGIN_NAME } from '../constants.js'
 import { parseEFPProfileLink, type EFPProfileLink } from '../helpers/url.js'
 import { ProfileCard } from './ProfileCard.js'
 
@@ -89,15 +89,20 @@ function getCardContainer(card: HTMLElement): HTMLElement {
     return card
 }
 
+// Twitter wraps external links in t.co redirects, so the anchor href is usually opaque. The
+// real EFP URL surfaces as the anchor's visible text or as its aria-label. Run all three
+// through parseEFPProfileLink so we only match valid EFP profile/list URLs — substring checks
+// would false-positive on cards whose description merely mentions efp.app, or on hostnames
+// that happen to contain it as a substring.
 function isEFPCard(card: HTMLElement) {
-    const anchorSelector = EFP_HOST_KEYWORDS.map((host) => `a[href*="${host}"]`).join(', ')
-    if (card.querySelector(anchorSelector)) return true
-    for (const el of card.querySelectorAll<HTMLElement>('[aria-label]')) {
-        const label = el.getAttribute('aria-label')?.toLowerCase() ?? ''
-        if (EFP_HOST_KEYWORDS.some((host) => label.includes(host))) return true
+    for (const anchor of card.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+        if (parseEFPProfileLink(anchor.href)) return true
+        const text = anchor.textContent?.trim()
+        if (text && parseEFPProfileLink(text)) return true
+        const label = anchor.getAttribute('aria-label')?.trim()
+        if (label && parseEFPProfileLink(label)) return true
     }
-    const text = card.textContent?.toLowerCase() ?? ''
-    return EFP_HOST_KEYWORDS.some((host) => text.includes(host))
+    return false
 }
 
 const site: Plugin.SiteAdaptor.Definition = {
