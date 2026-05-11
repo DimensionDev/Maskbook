@@ -39,6 +39,11 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, isFocusing: bool
         const searchRoot = isFocusing ? article?.parentElement : article
         if (!searchRoot) return
 
+        // Track every element we modify so the cleanup can restore the Twitter card if the plugin
+        // unmounts (navigation, post leaves the viewport, plugin disabled). Without this, hidden
+        // cards stay hidden forever even after the React tree is gone.
+        const modified = new Map<HTMLElement, { display: string; ariaHidden: string | null }>()
+
         const hide = () => {
             for (const card of searchRoot.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
                 if (!isEFPCard(card)) continue
@@ -48,7 +53,11 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, isFocusing: bool
                 // fine, but we must not hide any ancestor of rootNode or we'd take our own
                 // injection down with it.
                 const target = container.contains(rootNode) ? card : container
-                if (target.style.display === 'none') continue
+                if (modified.has(target)) continue
+                modified.set(target, {
+                    display: target.style.display,
+                    ariaHidden: target.getAttribute('aria-hidden'),
+                })
                 target.style.display = 'none'
                 target.setAttribute('aria-hidden', 'true')
             }
@@ -57,7 +66,15 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, isFocusing: bool
         hide()
         const observer = new MutationObserver(hide)
         observer.observe(searchRoot, { childList: true, subtree: true })
-        return () => observer.disconnect()
+        return () => {
+            observer.disconnect()
+            for (const [target, prev] of modified) {
+                target.style.display = prev.display
+                if (prev.ariaHidden === null) target.removeAttribute('aria-hidden')
+                else target.setAttribute('aria-hidden', prev.ariaHidden)
+            }
+            modified.clear()
+        }
     }, [rootNode, isFocusing])
 }
 
