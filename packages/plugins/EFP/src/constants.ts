@@ -15,6 +15,6 @@ const EFP_USER_PATTERN = `(?:0x[\\dA-Fa-f]{40}|[1-9]\\d*|(?:${ENS_LABEL_PATTERN}
 const RESERVED_ROUTE_PATTERN = RESERVED_EFP_PATHS.map((path) => `${path}(?:[/?#]|$)`).join('|')
 
 export const EFP_PROFILE_URL_PATTERN = new RegExp(
-    `^https:\\/\\/(?:www\\.)?(?:ethfollow\\.xyz|efp\\.app)\\/(?!${RESERVED_ROUTE_PATTERN})${EFP_USER_PATTERN}(?:\\?topEight=true)?$`,
+    `^(?:https:\\/\\/)?(?:www\\.)?(?:ethfollow\\.xyz|efp\\.app)\\/(?!${RESERVED_ROUTE_PATTERN})${EFP_USER_PATTERN}(?:\\?topEight=true)?$`,
     'u',
 )
