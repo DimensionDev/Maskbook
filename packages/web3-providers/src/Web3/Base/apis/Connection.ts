@@ -178,7 +178,7 @@ export interface BaseConnection<
     /** Send a transaction and wait for mining */
     sendTransaction(transaction: Transaction, initial?: Options): Promise<string>
 
-    /** Estimate a transaction  */
+    /** Estimate a transaction */
     estimateTransaction?: (transaction: Transaction, fallback?: number, initial?: Options) => Promise<string>
 
     /** Send a signed transaction */

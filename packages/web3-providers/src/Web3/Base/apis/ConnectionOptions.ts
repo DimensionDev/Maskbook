@@ -19,7 +19,7 @@ export interface BaseConnectionOptions<ChainId, ProviderType, Transaction> {
     paymentToken?: string
     /** Only Support Mask Wallet, silent switch wallet */
     silent?: boolean
-    /** Accessing data from chain directly w/o middleware, the default value is true  */
+    /** Accessing data from chain directly w/o middleware, the default value is true */
     readonly?: boolean
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
