@@ -181,7 +181,7 @@ export const NftRedPacketRecord = memo(function NftRedPacketRecord({
         backgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    const { canSend, isPasswordValid, password } = useNftAvailabilityComputed(account, patchedHistory)
+    const { canSend, isPasswordValid, password } = useNftAvailabilityComputed(account as HexString | '', patchedHistory)
 
     const collection = collections.find((x) => isSameAddress(x.address, patchedHistory.token_address))
 
@@ -190,7 +190,11 @@ export const NftRedPacketRecord = memo(function NftRedPacketRecord({
         onSend({ ...patchedHistory, password: patchedHistory.password || password }, collection)
     }, [onSend, canSend, patchedHistory, collection, isPasswordValid, password])
 
-    const { data: redpacketStatus } = useAvailabilityNftRedPacket(rpid, account, patchedHistory.chainId)
+    const { data: redpacketStatus } = useAvailabilityNftRedPacket(
+        rpid as HexString | '',
+        account as HexString | '',
+        patchedHistory.chainId,
+    )
     const bitStatusList =
         redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
     const locale = useLingui().i18n.locale

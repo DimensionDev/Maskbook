@@ -131,11 +131,11 @@ export function NftRedPacketConfirm() {
         estimateGasFee,
         createCallback,
     } = useCreateNftRedpacketCallback({
-        publicKey: redpacketPubkey,
+        publicKey: redpacketPubkey as HexString,
         duration,
         message,
         creator,
-        contractAddress: collection?.address ?? '',
+        contractAddress: collection?.address as HexString,
         tokenIds,
         gasOption,
     })
@@ -240,7 +240,7 @@ export function NftRedPacketConfirm() {
                             nativeToken={nativeTokenDetailed}
                             nativeTokenPrice={nativeTokenPrice}
                             gasConfig={gasOption}
-                            gasLimit={gasLimit ?? 0}
+                            gasLimit={gasLimit}
                             onChange={setGasOption}
                             estimateGasFee={estimateGasFee}
                             editMode

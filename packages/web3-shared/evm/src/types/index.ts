@@ -406,11 +406,6 @@ export interface Transaction {
     from?: string
     to?: string
     value?: string
-    // value?: bigint
-    // gas?: bigint
-    // gasPrice?: bigint
-    // maxPriorityFeePerGas?: bigint
-    // maxFeePerGas?: bigint
     gas?: string
     gasPrice?: string
     maxPriorityFeePerGas?: string

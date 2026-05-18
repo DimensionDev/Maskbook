@@ -11,7 +11,11 @@ import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket.js'
  */
 export function useNftAvailabilityComputed(account: string, payload: NftRedPacketJSONPayload) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: availability } = useAvailabilityNftRedPacket(payload?.rpid, account, chainId)
+    const { data: availability } = useAvailabilityNftRedPacket(
+        payload?.rpid as HexString | '',
+        account as HexString | '',
+        chainId,
+    )
 
     if (!availability) {
         return {

@@ -4,7 +4,7 @@ import { isEmptyHex } from '../helpers/address.js'
 import { ChainId, type Transaction } from '../types/index.js'
 import { toHex } from '@masknet/shared-base'
 
-function normalizeHex(value: string | number) {
+function normalizeHex(value: string | number | bigint) {
     if (typeof value === 'string' && value.startsWith('0x')) return toHex(BigInt(value))
     return toHex(value)
 }
