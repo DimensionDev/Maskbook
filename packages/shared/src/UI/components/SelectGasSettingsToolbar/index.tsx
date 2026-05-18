@@ -25,7 +25,7 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     chainId?: Web3Helper.ChainIdAll
     nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
-    gasLimit: number
+    gasLimit: number | bigint | null | undefined
     gasConfig?: GasConfig
     estimateGasFee?: string
     editMode?: boolean
@@ -153,12 +153,12 @@ export function SelectGasSettingsToolbarUI({
                     {
                         maxFeePerGas,
                         maxPriorityFeePerGas,
-                        gas: new BigNumber(gasLimit).toString(),
+                        gas: new BigNumber(String(gasLimit ?? 0)).toString(),
                         gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
                     }
                 :   {
                         gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
-                        gas: new BigNumber(gasLimit).toString(),
+                        gas: new BigNumber(String(gasLimit ?? 0)).toString(),
                         gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
                     },
             ),
@@ -250,7 +250,7 @@ export function SelectGasSettingsToolbarUI({
 
     const gasFee = useMemo(() => {
         if (!gasOption || !gasLimit) return ZERO
-        const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
+        const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(String(gasLimit))
         return result
     }, [gasLimit, gasOption, nativeToken])
 
