@@ -69,7 +69,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
         isPending: loading,
         refetch: retryAvailability,
         error: availabilityError,
-    } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
+    } = useAvailabilityNftRedPacket(payload.id as HexString, account as HexString, payload.chainId)
 
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(payload, availability?.totalAmount)
 
@@ -93,7 +93,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
     const { data: claimedAsset, error: assetError } = useNonFungibleAsset(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
-        availability?.claimed_id,
+        availability?.claimed_id === undefined ? undefined : String(availability.claimed_id),
         {
             chainId: payload.chainId,
             sourceType: SourceType.SimpleHash,
@@ -181,7 +181,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
                 creator={payload.senderName}
                 chainId={payload.chainId}
                 address={payload.contractAddress}
-                tokenId={availability.claimed_id}
+                tokenId={availability.claimed_id === undefined ? undefined : String(availability.claimed_id)}
                 shares={availability.totalAmount}
                 claimedCount={+availability.claimedAmount}
                 total={availability.totalAmount}

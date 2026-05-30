@@ -10,32 +10,16 @@ import type { Transaction } from '../types/index.js'
 export class ContractTransaction {
     constructor(private contractAddress: string) {}
 
-    /**
-     * Fill the transaction without gas (for calling a readonly transaction)
-     * @param transaction
-     * @param overrides
-     * @returns
-     */
-    private fill(
-        transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined,
-        overrides?: Partial<Transaction>,
-    ): Transaction {
-        return pickBy(
-            {
-                from: overrides?.from ?? '',
-                to: this.contractAddress,
-                data: transaction?.encodeABI(),
-                value: overrides?.value ? toHex(overrides.value) : undefined,
-                gas: overrides?.gas ? toHex(overrides.gas) : undefined,
-                gasPrice: overrides?.gasPrice ? toHex(overrides.gasPrice) : undefined,
-                maxPriorityFeePerGas:
-                    overrides?.maxPriorityFeePerGas ? toHex(overrides.maxPriorityFeePerGas) : undefined,
-                maxFeePerGas: overrides?.maxFeePerGas ? toHex(overrides.maxFeePerGas) : undefined,
-                nonce: overrides?.nonce ? toHex(overrides.nonce) : undefined,
-                chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
-            },
-            identity,
-        )
+    static normalizeTransaction(transaction: Transaction): Transaction {
+        const normalized: Transaction = { ...transaction }
+        const { value, gas, gasPrice, maxPriorityFeePerGas, maxFeePerGas } = transaction
+        if (value) normalized.value = toHex(value)
+        if (gas) normalized.gas = toHex(gas)
+        if (gasPrice) normalized.gasPrice = toHex(gasPrice)
+        if (maxPriorityFeePerGas) normalized.maxPriorityFeePerGas = toHex(maxPriorityFeePerGas)
+        if (maxFeePerGas) normalized.maxFeePerGas = toHex(maxFeePerGas)
+        // drop all falsy fields
+        return pickBy(normalized, identity)
     }
 
     /**
@@ -48,7 +32,11 @@ export class ContractTransaction {
         transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined,
         overrides?: Partial<Transaction>,
     ) {
-        const transactionEncoded = this.fill(transaction, overrides)
+        const transactionEncoded = ContractTransaction.normalizeTransaction({
+            ...overrides,
+            to: this.contractAddress,
+            data: transaction?.encodeABI(),
+        })
 
         // estimate gas
         if (!transactionEncoded.gas) {

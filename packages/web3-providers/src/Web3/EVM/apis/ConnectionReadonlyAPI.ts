@@ -98,6 +98,10 @@ export class EVMConnectionReadonlyAPI
         return this.Request.getWeb3(initial)
     }
 
+    getViem(initial?: EVMConnectionOptions) {
+        return this.Request.getViem(initial)
+    }
+
     getWeb3Provider(initial?: EVMConnectionOptions) {
         return this.Request.getWeb3Provider(initial)
     }

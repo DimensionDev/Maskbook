@@ -63,7 +63,7 @@ export namespace WalletAPI {
             source?: string,
         ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
-        /** Disconnect origin from Mask wallet  */
+        /** Disconnect origin from Mask wallet */
         disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
     }
     export type SignWithPersona = (

@@ -1,5 +1,5 @@
 import { toHex, type NetworkPluginID } from '@masknet/shared-base'
-import { NftRedPacketAbi, type NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
+import { NftRedPacketAbi } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -17,14 +17,15 @@ import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { createNftRedpacketContract } from './useNftRedPacketContract.js'
-import { keccak256 } from 'viem'
+import { encodeFunctionData, keccak256 } from 'viem'
+import type { AbiParametersToPrimitiveTypes, ExtractAbiFunction } from 'abitype'
 
 interface Options {
-    publicKey: string
+    publicKey: HexString
     duration: number
     message: string
     creator: string
-    contractAddress: string
+    contractAddress: HexString
     tokenIds: string[]
     gasOption?: GasConfig
 }
@@ -39,15 +40,19 @@ export function useCreateNftRedpacketCallback({
     gasOption,
 }: Options) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const params: Parameters<NftRedPacket['methods']['create_red_packet']> = useMemo(() => {
+    const params = useMemo((): AbiParametersToPrimitiveTypes<
+        ExtractAbiFunction<NftRedPacketAbi, 'create_red_packet'>['inputs'],
+        'inputs',
+        true
+    > => {
         return [
             publicKey,
-            duration,
+            BigInt(duration),
             keccak256(toHex(Math.random().toString())),
             message,
             creator,
             contractAddress,
-            tokenIds,
+            tokenIds.map(BigInt),
         ]
     }, [publicKey, duration, message, creator, contractAddress, tokenIds])
 
@@ -66,13 +71,13 @@ export function useCreateNftRedpacketCallback({
         ],
         refetchInterval: 10,
         queryFn: async () => {
-            if (!account) return null
+            if (!account || !contractAddress) return null
             const nftRedPacketContract = createNftRedpacketContract(chainId)
             if (!nftRedPacketContract) return null
 
-            const gasLimit = await nftRedPacketContract.methods
-                .create_red_packet(...params)
-                .estimateGas({ from: account })
+            const gasLimit = await nftRedPacketContract.estimateGas.create_red_packet(params, {
+                account: account as HexString,
+            })
             return gasLimit
         },
     })
@@ -81,7 +86,7 @@ export function useCreateNftRedpacketCallback({
     const estimateGasFee = useMemo(() => {
         if (!gasLimit) return undefined
         if (!gasPrice || gasPrice === '0') return undefined
-        return new BigNumber(gasPrice).multipliedBy(gasLimit).multipliedBy(1.5).toFixed()
+        return new BigNumber(gasPrice).multipliedBy(String(gasLimit)).multipliedBy(1.5).toFixed()
     }, [gasLimit, gasPrice])
 
     const [{ loading }, createCallback] = useAsyncFn(async (): Promise<
@@ -99,22 +104,24 @@ export function useCreateNftRedpacketCallback({
         }
 
         // #region check ownership
-        const checkParams: Parameters<NftRedPacket['methods']['check_ownership']> = [tokenIds, contractAddress]
-
-        const isOwner = await nftRedPacketContract.methods.check_ownership(...checkParams).call({ from: account })
+        const isOwner = await nftRedPacketContract.read.check_ownership([tokenIds.map(BigInt), contractAddress], {
+            account: (account || undefined) as HexString | undefined,
+        })
         if (!isOwner) return
 
         // #endregion
-
-        const tx = await new ContractTransaction(nftRedPacketContract.options.address).fillAll(
-            nftRedPacketContract.methods.create_red_packet(...params),
-            {
-                from: account,
-                chainId,
-                ...gasOption,
-                gas: addGasMargin(BigNumber.max(gasLimit, gasOption?.gas ?? 0), 0.3),
-            },
-        )
+        const tx = ContractTransaction.normalizeTransaction({
+            from: account,
+            chainId,
+            ...gasOption,
+            gas: addGasMargin(BigNumber.max(String(gasLimit), gasOption?.gas ?? 0), 0.3),
+            to: nftRedPacketContract.address,
+            data: encodeFunctionData({
+                abi: NftRedPacketAbi,
+                functionName: 'create_red_packet',
+                args: params,
+            }),
+        })
 
         const hash = await EVMWeb3.sendTransaction(tx, {
             paymentToken: gasOption?.gasCurrency,
@@ -129,7 +136,7 @@ export function useCreateNftRedpacketCallback({
             }
         }
         return { hash, receipt, events: undefined }
-    }, [duration, message, creator, contractAddress, tokenIds, account, chainId, gasOption, gasLimit])
+    }, [duration, message, creator, contractAddress, tokenIds, account, chainId, gasOption, gasLimit, params])
 
     return { gasLimit, estimateGasFee, loading, createCallback }
 }
