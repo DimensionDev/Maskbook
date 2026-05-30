@@ -10,7 +10,7 @@ import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useContext, useEffect, useMemo, type JSX } from 'react'
 import { base } from '../base.js'
-import { PLUGIN_NAME } from '../constants.js'
+import { EFP_HOSTS, PLUGIN_NAME } from '../constants.js'
 import { parseEFPProfileLink, type EFPProfileLink } from '../helpers/url.js'
 import { ProfileCard } from './ProfileCard.js'
 
@@ -89,18 +89,21 @@ function getCardContainer(card: HTMLElement): HTMLElement {
     return card
 }
 
-// Twitter wraps external links in t.co redirects, so the anchor href is usually opaque. The
-// real EFP URL surfaces as the anchor's visible text or as its aria-label. Run all three
-// through parseEFPProfileLink so we only match valid EFP profile/list URLs — substring checks
-// would false-positive on cards whose description merely mentions efp.app, or on hostnames
-// that happen to contain it as a substring.
+// Twitter wraps external links in t.co redirects, so the card anchor's href is usually opaque.
+// We identify an EFP card from two precise signals, never a substring scan (which would
+// false-positive on cards whose title/description merely mentions efp.app, or on a look-alike
+// host that contains it as a substring):
+//   1. The href or visible text already is a valid EFP URL (direct, non-t.co links).
+//   2. The card's source host — the first whitespace token of the media anchor's aria-label,
+//      e.g. "efp.app vitalik.eth" — exactly equals one of the EFP hosts. That token is Twitter's
+//      declared card domain, so exact equality is safe.
 function isEFPCard(card: HTMLElement) {
     for (const anchor of card.querySelectorAll<HTMLAnchorElement>('a[href]')) {
         if (parseEFPProfileLink(anchor.href)) return true
         const text = anchor.textContent?.trim()
         if (text && parseEFPProfileLink(text)) return true
-        const label = anchor.getAttribute('aria-label')?.trim()
-        if (label && parseEFPProfileLink(label)) return true
+        const sourceHost = anchor.getAttribute('aria-label')?.trim().split(/\s+/u)[0]?.toLowerCase()
+        if (sourceHost && (EFP_HOSTS as readonly string[]).includes(sourceHost)) return true
     }
     return false
 }
@@ -123,15 +126,22 @@ const site: Plugin.SiteAdaptor.Definition = {
     },
     PostInspector(): JSX.Element | null {
         const message = usePostInfoDetails.rawMessage()
+        const mentionedLinks = usePostInfoDetails.mentionedLinks()
         const profileLink = useMemo(() => {
+            // mentionedLinks carries the links Maskbook resolves from t.co redirects. That is how
+            // an EFP URL surfaces when X renders it as a link-preview card (the tweet text has no
+            // URL) or truncates a long address URL with an ellipsis. parseURLs(rawMessage, false)
+            // additionally catches protocol-less links typed directly in the body (e.g.
+            // efp.app/vitalik.eth) without waiting on that async resolution.
             const text = extractTextFromTypedMessage(message)
-            if (text.isNone()) return null
-            for (const url of parseURLs(text.value, false)) {
+            const candidates =
+                text.isNone() ? mentionedLinks : [...mentionedLinks, ...parseURLs(text.value, false)]
+            for (const url of candidates) {
                 const link = parseEFPProfileLink(url)
                 if (link) return link
             }
             return null
-        }, [message])
+        }, [message, mentionedLinks])
 
         if (!profileLink) return null
         return <Renderer profileLink={profileLink} />
