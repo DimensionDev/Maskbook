@@ -75,8 +75,8 @@ type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 export function TickersTable({ tickers }: TickersTableProps) {
     const theme = useTheme()
     const themeMode = useSiteThemeMode(theme)
-    const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
-    const { classes } = useStyles({ themeMode, isPopper: isCollectionProjectPopper || isTokenTagPopper })
+    const { isTokenTagPopper } = useContext(TrendingViewContext)
+    const { classes } = useStyles({ themeMode, isPopper: isTokenTagPopper })
 
     const headCellMap: Record<Cells, ReactNode> = {
         volume: <Trans>Volume (24h)</Trans>,

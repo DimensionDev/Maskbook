@@ -26,18 +26,14 @@ interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     const { TrendingCardProps, children } = props
-    const { isCollectionProjectPopper, isProfilePage, isTokenTagPopper } = useContext(TrendingViewContext)
+    const { isProfilePage, isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles(undefined, { props })
 
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.root}>
-                {isCollectionProjectPopper || isTokenTagPopper ? null : (
-                    <PluginDescriptor
-                        isCollectionProjectPopper={isCollectionProjectPopper}
-                        isProfilePage={isProfilePage}
-                        isTokenTagPopper={isTokenTagPopper}
-                    />
+                {isTokenTagPopper ? null : (
+                    <PluginDescriptor isProfilePage={isProfilePage} isTokenTagPopper={isTokenTagPopper} />
                 )}
                 <CardContent className={classes.content}>
                     {children ?? (
@@ -49,12 +45,8 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
                         </Stack>
                     )}
                 </CardContent>
-                {isCollectionProjectPopper || isTokenTagPopper ?
-                    <PluginDescriptor
-                        isCollectionProjectPopper={isCollectionProjectPopper}
-                        isProfilePage={isProfilePage}
-                        isTokenTagPopper={isTokenTagPopper}
-                    />
+                {isTokenTagPopper ?
+                    <PluginDescriptor isProfilePage={isProfilePage} isTokenTagPopper={isTokenTagPopper} />
                 :   null}
             </Stack>
         </TrendingCard>

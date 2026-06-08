@@ -5,7 +5,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { SearchResultType } from '@masknet/web3-shared-base'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
 import { TrendingViewProvider } from './context.js'
@@ -20,7 +19,7 @@ export function TagInspector() {
             setActive?: (x: boolean) => void,
             identity?: SocialIdentity,
             address?: string,
-            isCollectionProjectPopper?: boolean,
+            _isCollectionProjectPopper?: boolean,
             reposition?: () => void,
         ) => {
             return (
@@ -33,7 +32,6 @@ export function TagInspector() {
                     name={name}
                     type={type}
                     reposition={reposition}
-                    isCollectionProjectPopper={isCollectionProjectPopper}
                 />
             )
         },
@@ -54,7 +52,6 @@ interface TrendingViewWrapperProps {
     setActive?: (x: boolean) => void
     identity?: SocialIdentity
     address?: string
-    isCollectionProjectPopper?: boolean
     reposition?: () => void
 }
 
@@ -66,15 +63,13 @@ function TrendingViewWrapper({
     setActive,
     address,
     identity,
-    isCollectionProjectPopper,
 }: TrendingViewWrapperProps) {
-    const keyword = isCollectionProjectPopper && name ? name : `${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`
-    const searchType = isCollectionProjectPopper ? SearchResultType.CollectionListByTwitterHandle : undefined
+    const keyword = `${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`
     const { data: resultList, isLoading: loadingResultList } = useQuery({
-        queryKey: ['dsearch', keyword, searchType],
+        queryKey: ['dsearch', keyword],
         queryFn: async () => {
             if (!keyword) return EMPTY_LIST
-            const results = await DSearch.search<Web3Helper.TokenResultAll>(keyword, searchType)
+            const results = await DSearch.search<Web3Helper.TokenResultAll>(keyword)
             return results
         },
     })
@@ -82,12 +77,7 @@ function TrendingViewWrapper({
     if (!resultList?.length || loadingResultList) return null
 
     return (
-        <TrendingViewProvider
-            isDSearch={false}
-            isCollectionProjectPopper={!!isCollectionProjectPopper}
-            isProfilePage={false}
-            isTokenTagPopper={!isCollectionProjectPopper}
-            isPreciseSearch={false}>
+        <TrendingViewProvider isDSearch={false} isProfilePage={false} isTokenTagPopper isPreciseSearch={false}>
             <TrendingView
                 currentResult={currentResult}
                 resultList={resultList}

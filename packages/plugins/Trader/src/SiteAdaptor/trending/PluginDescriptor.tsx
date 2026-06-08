@@ -13,23 +13,17 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 interface PluginHeaderProps extends React.PropsWithChildren {
-    isCollectionProjectPopper?: boolean
     isProfilePage?: boolean
     isTokenTagPopper?: boolean
 }
 
-export function PluginDescriptor({
-    children,
-    isCollectionProjectPopper,
-    isProfilePage,
-    isTokenTagPopper,
-}: PluginHeaderProps) {
+export function PluginDescriptor({ children, isProfilePage, isTokenTagPopper }: PluginHeaderProps) {
     const { classes } = useStyles()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isCollectionProjectPopper || isTokenTagPopper ?
+                {isTokenTagPopper ?
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                 : isProfilePage ?
                     <Icons.Web3Profile className={classes.cardIcon} size={24} />
@@ -37,12 +31,8 @@ export function PluginDescriptor({
                 <Typography
                     fontWeight="bolder"
                     fontSize={16}
-                    color={(theme) =>
-                        isCollectionProjectPopper || isTokenTagPopper ?
-                            theme.palette.maskColor.main
-                        :   theme.palette.maskColor.dark
-                    }>
-                    {isTokenTagPopper || isCollectionProjectPopper ?
+                    color={(theme) => (isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark)}>
+                    {isTokenTagPopper ?
                         <Trans>Web3 Profile Card</Trans>
                     : isProfilePage ?
                         <Trans>Web3 Profile</Trans>

@@ -15,7 +15,6 @@ interface TrendingPopperProps {
         setActive?: (x: boolean) => void,
         identity?: SocialIdentity,
         address?: string,
-        isCollectionProjectPopper?: boolean,
     ) => React.ReactNode
     locked?: boolean
 }
@@ -23,7 +22,6 @@ interface TrendingPopperProps {
 export const TrendingPopper = memo(function TrendingPopper({ children, locked }: TrendingPopperProps) {
     const [active, setActive] = useState(false)
     const [name, setName] = useState('')
-    const [isCollectionProjectPopper, setIsNFTProjectPopper] = useState(false)
     const [identity, setIdentity] = useState<SocialIdentity>()
     const [badgeBounding, setBadgeBounding] = useState<DOMRect>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -43,7 +41,6 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
             setAnchorEl(ev.anchorEl)
             setAddress(ev.address ?? '')
             setIdentity(ev.identity)
-            setIsNFTProjectPopper(!!ev.isCollectionProjectPopper)
             setActive(true)
         })
     }, [])
@@ -85,7 +82,7 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
                         :   { bottom: window.innerHeight - badgeBoundingBottom + 10 - initialOffsetY }),
                     }}>
                     <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
-                        {children?.(name, type, currentResult, setActive, identity, address, isCollectionProjectPopper)}
+                        {children?.(name, type, currentResult, setActive, identity, address)}
                     </AnchorProvider>
                 </div>
             </Fade>

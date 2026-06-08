@@ -73,19 +73,11 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     useEffect(() => {
         if (profileTabType || !resultList?.length) return
         const type = resultList[0].type
-        let timer1: NodeJS.Timeout | undefined
-        let timer2: NodeJS.Timeout | undefined
-        if (
-            type === SearchResultType.CollectionListByTwitterHandle ||
-            type === SearchResultType.NonFungibleCollection ||
-            type === SearchResultType.NonFungibleToken
-        )
-            timer1 = setTimeout(() => Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchNft), 500)
+        let timer: NodeJS.Timeout | undefined
         if (type === SearchResultType.FungibleToken)
-            timer2 = setTimeout(() => Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken), 500)
+            timer = setTimeout(() => Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken), 500)
         return () => {
-            timer1 && clearTimeout(timer1)
-            timer2 && clearTimeout(timer2)
+            timer && clearTimeout(timer)
         }
     }, [resultList, profileTabType])
 

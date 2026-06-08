@@ -10,7 +10,6 @@ interface TrendingAnchorEvent {
     anchorBounding: DOMRect
     anchorEl: HTMLElement | null
     address?: string
-    isCollectionProjectPopper?: boolean
     identity?: SocialIdentity
     currentResult?: Web3Helper.TokenResultAll
 }

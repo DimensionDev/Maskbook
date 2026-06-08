@@ -6,7 +6,7 @@ import { BooleanPreference, MaskMessages, PluginID, ProfileTabs } from '@masknet
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
-import type { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
+import type { FungibleTokenResult } from '@masknet/web3-shared-base'
 import Color from 'color'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useWindowSize } from 'react-use'
@@ -203,10 +203,8 @@ function ProfileTabForTokenAndPersona() {
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const collectionList = useCollectionByTwitterHandle(currentVisitingUserId)
     const collectionResult = collectionList?.[0]
-    const twitterHandle =
-        (collectionResult as NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.collection
-            ?.socialLinks?.twitter ||
-        (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.socialLinks?.twitter
+    const twitterHandle = (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)
+        ?.socialLinks?.twitter
     const { classes } = useStyles({
         minWidth:
             currentVisitingUserId && twitterHandle?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase()) ?

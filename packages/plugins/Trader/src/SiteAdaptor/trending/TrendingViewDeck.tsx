@@ -20,7 +20,7 @@ import {
     type NetworkPluginID,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import { useAnchor, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -52,7 +52,6 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
-    isCollectionProjectPopper: boolean
 }>()((theme, props) => {
     return {
         content: {
@@ -69,7 +68,7 @@ const useStyles = makeStyles<{
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: props.isCollectionProjectPopper || props.isTokenTagPopper ? 0 : 16,
+            marginTop: props.isTokenTagPopper ? 0 : 16,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -176,7 +175,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         resultList = EMPTY_LIST,
         result,
         setResult,
-        setActive,
         currentTab,
         identity,
         isSwappable,
@@ -185,12 +183,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { coin, market } = trending
     const [walletMenuOpen, setWalletMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
-    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch, isProfilePage } =
-        useContext(TrendingViewContext)
-    const { anchorEl, anchorBounding } = useAnchor()
+    const { isTokenTagPopper, isPreciseSearch, isProfilePage } = useContext(TrendingViewContext)
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
     const theme = useTheme()
-    const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper }, { props })
+    const { classes } = useStyles({ isTokenTagPopper }, { props })
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
@@ -242,27 +238,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity?.identifier?.network as EnhanceableSite]
     const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity, undefined, undefined)
 
-    const openRss3Profile = useCallback(
-        (address: string) => {
-            if (!isCollectionProjectPopper) {
-                CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
-                return
-            }
-
-            if (!identity?.identifier?.userId || !anchorBounding) return
-
-            CrossIsolationMessages.events.profileCardEvent.sendToLocal({
-                open: true,
-                userId: identity.identifier.userId,
-                anchorBounding,
-                anchorEl,
-                address,
-                external: true,
-            })
-            setActive?.(false)
-        },
-        [identity, isCollectionProjectPopper, anchorBounding, anchorEl],
-    )
+    const openRss3Profile = useCallback((_address: string) => {
+        CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
+    }, [])
 
     const { isReporting, isSpam, promptReport } = useReportSpam({
         address: coin.address,
@@ -272,25 +250,22 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current)
 
-        if (isCollectionProjectPopper || isTokenTagPopper) {
+        if (isTokenTagPopper) {
             timer.current = setTimeout(() => {
-                Telemetry.captureEvent(
-                    EventType.Access,
-                    isNFT ? EventID.EntryTimelineHoverNftDuration : EventID.EntryTimelineHoverTokenDuration,
-                )
+                Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverTokenDuration)
             }, 1000)
         }
         return () => {
             if (timer) clearTimeout(timer.current)
             timer.current = undefined
         }
-    }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage, isNFT])
+    }, [isTokenTagPopper, isProfilePage])
 
     const floorPrice = market?.current_price
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
-                {isCollectionProjectPopper || isTokenTagPopper ? null : (
+                {isTokenTagPopper ? null : (
                     <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                 )}
                 <Stack className={classes.headline}>
@@ -440,11 +415,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <CardContent className={classes.content}>
                 <Paper className={classes.body} elevation={0}>
                     {children}
-                    {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTab.Market ?
+                    {isTokenTagPopper && currentTab === ContentTab.Market ?
                         <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
                     :   null}
                 </Paper>
-                {isCollectionProjectPopper || isTokenTagPopper ?
+                {isTokenTagPopper ?
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>
