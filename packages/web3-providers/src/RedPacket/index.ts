@@ -1,5 +1,5 @@
 import { attemptUntil } from '@masknet/web3-shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacket } from '../Etherscan/index.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'

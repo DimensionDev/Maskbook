@@ -48,13 +48,10 @@ const define: SiteAdaptorUI.Definition = {
         setupWizard: createTaskStartSetupGuideDefault(),
         postInspector: injectPostInspectorInstagram,
         profileAvatar: undefined,
-        enhancedProfileNFTAvatar: undefined,
-        openNFTAvatar: undefined,
         userAvatar: undefined,
         pageInspector: injectPageInspectorDefault(),
         profileTab: injectProfileTabAtInstagram,
         profileTabContent: injectProfileTabContentAtInstagram,
-        openNFTAvatarSettingDialog: undefined,
         /* newPostComposition: {
             start: newPostCompositionInstagram,
             supportedInputTypes: { text: true, image: true },

@@ -14,7 +14,7 @@ import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { useLingui } from '@lingui/react/macro'
 
-const useStyles = makeStyles<void>()((theme, _) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',

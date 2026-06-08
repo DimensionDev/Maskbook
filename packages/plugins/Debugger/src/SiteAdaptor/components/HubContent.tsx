@@ -5,7 +5,7 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Hub } from '@masknet/web3-providers/types'
 import { getHub } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
+import { resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectFungibleTokenModal } from '@masknet/shared'
@@ -50,18 +50,6 @@ export function HubContent(props: HubContentProps) {
 
         ['getFungibleTokensFromTokenList', [chainId]],
         ['getFungibleTokenSpenders', [chainId, account]],
-
-        // non-fungible tokens
-        ['getNonFungibleTokensFromTokenList', [chainId]],
-        ['getNonFungibleTokenSpenders', [chainId, address]],
-        ['getNonFungibleTokenContract', [address]],
-        ['getNonFungibleCollectionsByOwner', [account]],
-        ['getNonFungibleTokenEvents', [address, tokenId]],
-        ['getNonFungibleTokenOrders', [address, tokenId, OrderSide.Buy]],
-        ['getNonFungibleAsset', [address, tokenId]],
-        ['getNonFungibleAssets', [account]],
-        ['getNonFungibleRarity', [address, tokenId]],
-        ['getNonFungibleAssetsByCollection', [address]],
     ]
 
     return (
@@ -133,7 +121,7 @@ export function HubContent(props: HubContentProps) {
                             <ShadowRootMenu
                                 anchorEl={anchorEl}
                                 open={!!anchorEl}
-                                defaultValue={SourceType.OpenSea}
+                                defaultValue={SourceType.DeBank}
                                 onClose={() => setAnchorEl(null)}>
                                 {getEnumAsArray(SourceType).map((x) => {
                                     return (

@@ -26,9 +26,7 @@ const map: Record<
     Swap: msg`Swap`,
     'Failed to swap': msg`Failed to swap`,
     'Claim your Lucky Drop.': msg`Claim your Lucky Drop.`,
-    'Claim your NFT Lucky Drop': msg`Claim your NFT Lucky Drop`,
     'Create your Lucky Drop.': msg`Create your Lucky Drop.`,
-    'Create your NFT Lucky Drop.': msg`Create your NFT Lucky Drop.`,
     'Created a SmartPay wallet on Polygon network.': msg`Created a SmartPay wallet on Polygon network.`,
     'Deploy a SmartPay wallet on Polygon network.': msg`Deploy a SmartPay wallet on Polygon network.`,
     'Failed to claim Lucky Drop.': msg`Failed to claim Lucky Drop.`,
@@ -42,8 +40,6 @@ const map: Record<
     'Failed to unlock token contract.': msg`Failed to unlock token contract.`,
     'Lucky Drop claimed.': msg`Lucky Drop claimed.`,
     'Lucky Drop refunded.': msg`Lucky Drop refunded.`,
-    'NFT Lucky Drop claimed.': msg`NFT Lucky Drop claimed.`,
-    'NFT Lucky Drop created.': msg`NFT Lucky Drop created.`,
     'Owner changed.': msg`Owner changed.`,
     'Refund your expired Lucky Drop.': msg`Refund your expired Lucky Drop.`,
     'Revoke the approval for token': msg`Revoke the approval for token`,
@@ -57,12 +53,10 @@ const map: Record<
     'Cancel Transaction': msg`Cancel Transaction`,
     'Change Owner': msg`Change Owner`,
     'Claim Lucky Drop': msg`Claim Lucky Drop`,
-    'Claim NFT Lucky Drop': msg`Claim NFT Lucky Drop`,
     'Claim your Airdrop': msg`Claim your Airdrop`,
     'Contract Deployment': msg`Contract Deployment`,
     'Contract Interaction': msg`Contract Interaction`,
     'Create Lucky Drop': msg`Create Lucky Drop`,
-    'Create NFT Lucky Drop': msg`Create NFT Lucky Drop`,
     'Create Smart Pay wallet': msg`Create Smart Pay wallet`,
     'Deploy Smarty Pay wallet': msg`Deploy Smarty Pay wallet`,
     'Deposit token': msg`Deposit token`,
@@ -100,14 +94,10 @@ export function useFormatMessage() {
                     return _(msg`Failed to ${message.action} NFT contract.`)
                 case '{token} were claimed':
                     return _(msg`${message.token} were claimed`)
-                case '1 {symbol} NFT Lucky Drop claimed.':
-                    return _(msg`1 ${message.symbol} NFT Lucky Drop claimed.`)
                 case 'Lucky Drop with {token} claimed.':
                     return _(msg`Claim Lucky Drop with ${message.token} claimed.`)
                 case 'Lucky drop with {token} created.':
                     return _(msg`Lucky drop with ${message.token} created.`)
-                case '{symbol} NFT Lucky Drop created.':
-                    return _(msg`${message.symbol} NFT Lucky Drop created.`)
                 case '{token} deposited.':
                     return _(msg`${message.token} deposited.`)
                 case 'Lucky Drop with {token} refunded.':

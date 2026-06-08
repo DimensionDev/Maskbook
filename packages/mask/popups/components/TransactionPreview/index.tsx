@@ -48,11 +48,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.second,
     },
-    tokenIcon: {
-        width: 24,
-        height: 24,
-        borderRadius: '50%',
-    },
     amount: {
         display: 'flex',
         alignItems: 'center',

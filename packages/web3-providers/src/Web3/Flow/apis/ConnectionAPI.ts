@@ -17,13 +17,7 @@ import {
     type ProviderType,
     type Signature,
 } from '@masknet/web3-shared-flow'
-import {
-    type FungibleToken,
-    type NonFungibleToken,
-    type NonFungibleTokenMetadata,
-    type NonFungibleTokenContract,
-    TransactionStatusType,
-} from '@masknet/web3-shared-base'
+import { type FungibleToken, type NonFungibleTokenContract, TransactionStatusType } from '@masknet/web3-shared-base'
 import { toHex, type Account } from '@masknet/shared-base'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { FlowConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
@@ -75,15 +69,6 @@ export class FlowConnectionAPI
 
         // TODO
         return Promise.resolve('0')
-    }
-
-    getNonFungibleTokenBalance(
-        address: string,
-        tokenId?: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
     }
 
     getFungibleTokensBalance(
@@ -183,34 +168,6 @@ export class FlowConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    getNonFungibleToken(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNonFungibleTokenOwnership(
-        address: string,
-        tokenId: string,
-        owner: string,
-        schema?: SchemaType | undefined,
-        initial?: FlowConnectionOptions,
-    ): Promise<boolean> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNonFungibleTokenMetadata(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<NonFungibleTokenMetadata> {
-        throw new Error('Method not implemented.')
-    }
-
     getNonFungibleTokenContract(
         address: string,
         schema?: SchemaType,
@@ -228,32 +185,11 @@ export class FlowConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    approveAllNonFungibleTokens(
-        address: string,
-        recipient: string,
-        approved: boolean,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     transferFungibleToken(
         address: string,
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: FlowConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    transferNonFungibleToken(
-        address: string,
-        tokenId: string,
-        recipient: string,
-        amount: string,
-        schema?: SchemaType,
         initial?: FlowConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')

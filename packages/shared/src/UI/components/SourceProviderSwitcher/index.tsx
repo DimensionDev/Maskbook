@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { SourceType } from '@masknet/web3-shared-base'
+import type { SourceType } from '@masknet/web3-shared-base'
 import { Stack } from '@mui/material'
 import { SourceProviderIcon } from '../index.js'
 

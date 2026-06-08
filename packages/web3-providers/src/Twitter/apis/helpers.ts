@@ -3,7 +3,6 @@ import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
 export function createUser(result: TwitterBaseAPI.LegacyUserResult) {
     return {
         verified: result.legacy?.verified ?? false,
-        has_nft_avatar: result.has_nft_avatar ?? false,
         userId: result.rest_id,
         nickname: result.legacy?.name ?? '',
         screenName: result.legacy?.screen_name ?? '', // handle

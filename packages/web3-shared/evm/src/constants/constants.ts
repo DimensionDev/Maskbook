@@ -3,7 +3,6 @@ import Airdrop from '@masknet/web3-constants/evm/airdrop.json' with { type: 'jso
 import Arb from '@masknet/web3-constants/evm/arb.json' with { type: 'json' }
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json' with { type: 'json' }
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json' with { type: 'json' }
-import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json' with { type: 'json' }
 import ENS from '@masknet/web3-constants/evm/ens.json' with { type: 'json' }
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json' with { type: 'json' }
 import Etherscan from '@masknet/web3-constants/evm/etherscan.json' with { type: 'json' }
@@ -125,8 +124,6 @@ export const getLensConstant = transform(ChainId, Lens)
 export const getLensConstants = transformAll(ChainId, Lens)
 export const useLensConstant = transformHook(getLensConstants)
 export const useLensConstants = transformAllHook(getLensConstants)
-
-export const getCryptoPunksConstants = transformAll(ChainId, CryptoPunks)
 
 export const getAirdropClaimersConstant = transform(ChainId, Airdrop)
 export const getAirdropClaimersConstants = transformAll(ChainId, Airdrop)

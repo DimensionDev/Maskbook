@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, type InjectedDialogProps, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { TokenType } from '@masknet/web3-shared-base'
+import type { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type React from 'react'
 import type { PropsWithChildren } from 'react'
@@ -35,32 +35,9 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: theme.spacing(0, 3, 3),
     },
-    nftContainer: {
-        height: 126,
-        width: 126,
-        borderRadius: 8,
-        position: 'relative',
-        overflow: 'hidden',
-    },
-    nftName: {
-        display: 'flex',
-        marginTop: 10,
-    },
-    nftMessage: {
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
     messageText: {
         fontSize: 16,
         color: theme.palette.maskColor.main,
-        fontWeight: 700,
-        lineHeight: '20px',
-    },
-    nftMessageText: {
-        fontSize: 16,
-        color: theme.palette.maskColor.second,
         fontWeight: 700,
         lineHeight: '20px',
     },

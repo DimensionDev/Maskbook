@@ -111,14 +111,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         color: theme.palette.maskColor.main,
     },
-    collectionName: {
-        maxWidth: 80,
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 2,
-        overflow: 'hidden',
-        whiteSpace: 'normal',
-    },
     tokenIcon: {
         width: 24,
         height: 24,

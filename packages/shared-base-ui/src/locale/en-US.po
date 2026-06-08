@@ -180,10 +180,9 @@ msgstr ""
 msgid "{0} NFT contract unlocked."
 msgstr ""
 
-#. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
-msgid "{0} NFT Lucky Drop created."
-msgstr ""
+#~ msgid "{0} NFT Lucky Drop created."
+#~ msgstr ""
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
@@ -551,10 +550,9 @@ msgstr ""
 #~ msgid "1 {0} claimed."
 #~ msgstr ""
 
-#. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
-msgid "1 {0} NFT Lucky Drop claimed."
-msgstr ""
+#~ msgid "1 {0} NFT Lucky Drop claimed."
+#~ msgstr ""
 
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 #~ msgid "1 {0} tips sent."
@@ -1423,8 +1421,8 @@ msgid "Claim Lucky Drop with {0} claimed."
 msgstr ""
 
 #: packages/shared/src/UI/translate.ts
-msgid "Claim NFT Lucky Drop"
-msgstr ""
+#~ msgid "Claim NFT Lucky Drop"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/index.tsx
 msgid "Claim on Firefly"
@@ -1440,16 +1438,16 @@ msgid "Claim your Lucky Drop."
 msgstr ""
 
 #: packages/shared/src/UI/translate.ts
-msgid "Claim your NFT Lucky Drop"
-msgstr ""
+#~ msgid "Claim your NFT Lucky Drop"
+#~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Claimable"
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
-msgid "Claimed"
-msgstr ""
+#~ msgid "Claimed"
+#~ msgstr ""
 
 #. placeholder {0}: tokenDetail.symbol
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
@@ -1962,8 +1960,8 @@ msgid "Create New Mask Identity"
 msgstr ""
 
 #: packages/shared/src/UI/translate.ts
-msgid "Create NFT Lucky Drop"
-msgstr ""
+#~ msgid "Create NFT Lucky Drop"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Create Password"
@@ -1999,8 +1997,8 @@ msgid "Create your Lucky Drop."
 msgstr ""
 
 #: packages/shared/src/UI/translate.ts
-msgid "Create your NFT Lucky Drop."
-msgstr ""
+#~ msgid "Create your NFT Lucky Drop."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
@@ -4210,12 +4208,12 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/shared/src/UI/translate.ts
-msgid "NFT Lucky Drop claimed."
-msgstr ""
+#~ msgid "NFT Lucky Drop claimed."
+#~ msgstr ""
 
 #: packages/shared/src/UI/translate.ts
-msgid "NFT Lucky Drop created."
-msgstr ""
+#~ msgid "NFT Lucky Drop created."
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/RouterDialog.tsx
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatarButton.tsx
@@ -5514,8 +5512,8 @@ msgid "Sending..."
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
-msgid "Sent"
-msgstr ""
+#~ msgid "Sent"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Sent verification post successfully."
@@ -5727,8 +5725,8 @@ msgid "Space"
 msgstr ""
 
 #: packages/shared/src/UI/components/TokenSecurity/index.tsx
-msgid "Spam"
-msgstr ""
+#~ msgid "Spam"
+#~ msgstr ""
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 #~ msgid "Spam reported."
@@ -6422,7 +6420,6 @@ msgid "Token Value"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/index.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Tokens"
 msgstr ""
 

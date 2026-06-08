@@ -585,9 +585,7 @@ export type FormattedTransactionTitle =
     | 'Donate'
     // RedPacket
     | 'Claim Lucky Drop'
-    | 'Claim NFT Lucky Drop'
     | 'Create Lucky Drop'
-    | 'Create NFT Lucky Drop'
     | 'Refund Lucky drop'
     // Savings
     | 'Deposit token'
@@ -615,9 +613,7 @@ export type FormattedTransactionDescription =
     | 'Transaction submitted.'
     // RedPacket
     | 'Claim your Lucky Drop.'
-    | 'Claim your NFT Lucky Drop'
     | 'Create your Lucky Drop.'
-    | 'Create your NFT Lucky Drop.'
     | 'Refund your expired Lucky Drop.'
     // Savings
     | { key: 'Deposit {token} for savings.'; token: string }
@@ -665,11 +661,7 @@ export type FormattedTransactionSnackbarSuccessDescription =
     | { key: 'You have donated {amount} {symbol}'; amount: string; symbol: string }
     // Lucky Drop
     | 'Lucky Drop claimed.'
-    | 'NFT Lucky Drop claimed.'
-    | 'NFT Lucky Drop created.'
     | 'Lucky Drop refunded.'
-    | { key: '1 {symbol} NFT Lucky Drop claimed.'; symbol: string }
-    | { key: '{symbol} NFT Lucky Drop created.'; symbol: string }
     | { key: 'Lucky Drop with {token} refunded.'; token: string }
     | { key: 'Lucky Drop with {token} claimed.'; token: string }
     | { key: 'Lucky drop with {token} created.'; token: string }

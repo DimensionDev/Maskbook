@@ -9,7 +9,7 @@ import { usePlatformType } from './usePlatformType.js'
 export function useClaimStrategyStatus(payload: RedPacketJSONPayload) {
     const platform = usePlatformType()
     const { pluginID } = useNetworkContext()
-    const rpid = 'rpid' in payload ? payload.rpid : payload.id
+    const rpid = payload.rpid
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: payload.chainId,

@@ -463,11 +463,6 @@ export const NFTGo = /*#__PURE__*/ __createIcon('NFTGo', [
         u: () => new URL('./brands/NFTGo.svg', import.meta.url).href,
     },
 ])
-export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
-    {
-        u: () => new URL('./brands/NFTScan.svg', import.meta.url).href,
-    },
-])
 export const Okx = /*#__PURE__*/ __createIcon('okx', [
     {
         c: ['dark'],
@@ -2943,11 +2938,6 @@ export const NFTHolder = /*#__PURE__*/ __createIcon(
     ],
     [21, 20],
 )
-export const NFTRedPacket = /*#__PURE__*/ __createIcon('NFTRedPacket', [
-    {
-        u: () => new URL('./general/NFTRedPacket.svg', import.meta.url).href,
-    },
-])
 export const OutlinedMask = /*#__PURE__*/ __createIcon('OutlinedMask', [
     {
         u: () => new URL('./general/OutlinedMask.svg', import.meta.url).href,
@@ -4249,11 +4239,6 @@ export const Markets = /*#__PURE__*/ __createIcon('Markets', [
 export const MarketsClaim = /*#__PURE__*/ __createIcon('MarketsClaim', [
     {
         u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url).href,
-    },
-])
-export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
-    {
-        u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url).href,
     },
 ])
 export const PoolTogether = /*#__PURE__*/ __createIcon('PoolTogether', [
