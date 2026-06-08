@@ -207,7 +207,6 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         anchorBounding,
                         anchorEl,
                         type: TrendingAPI.TagType.HASH,
-                        isCollectionProjectPopper: true,
                         currentResult,
                     })
 

@@ -16,7 +16,6 @@ import { ExchangeInjection } from './trader/ExchangeInjection.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { TrendingView } from './trending/TrendingView.js'
-import { MentionModifier } from './components/MentionModifier.js'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -38,7 +37,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                     <Web3ContextProvider network={pluginID} chainId={chainId}>
                         <TrendingViewProvider
                             isDSearch={!isProfilePage}
-                            isCollectionProjectPopper={false}
                             isProfilePage={!!isProfilePage}
                             isTokenTagPopper={false}
                             isPreciseSearch={EVMUtils.isValidAddress(keyword)}>
@@ -54,12 +52,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         },
         Utils: {
             shouldDisplay(result) {
-                return [
-                    SearchResultType.FungibleToken,
-                    SearchResultType.NonFungibleToken,
-                    SearchResultType.NonFungibleCollection,
-                    SearchResultType.CollectionListByTwitterHandle,
-                ].includes(result.type)
+                return [SearchResultType.FungibleToken].includes(result.type)
             },
         },
     },
@@ -72,7 +65,6 @@ const site: Plugin.SiteAdaptor.Definition = {
         )
     },
     TagModifier,
-    MentionModifier,
     ApplicationEntries:
         // temporarily disabled
         process.env.MASK_ENABLE_EXCHANGE ?

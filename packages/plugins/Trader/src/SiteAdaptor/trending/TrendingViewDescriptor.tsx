@@ -11,7 +11,6 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
-    isCollectionProjectPopper: boolean
 }>()((theme, props) => {
     return {
         source: {
@@ -29,16 +28,10 @@ const useStyles = makeStyles<{
         },
         selectedOption: {
             fontWeight: 700,
-            color:
-                props.isCollectionProjectPopper || props.isTokenTagPopper ?
-                    theme.palette.maskColor.main
-                :   theme.palette.maskColor.dark,
+            color: props.isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark,
         },
         arrowDropIcon: {
-            color:
-                props.isCollectionProjectPopper || props.isTokenTagPopper ?
-                    theme.palette.maskColor.main
-                :   theme.palette.maskColor.dark,
+            color: props.isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark,
         },
     }
 })
@@ -51,13 +44,9 @@ export interface TrendingViewDescriptorProps {
 
 export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
     const { result, resultList, setResult } = props
-    const {
-        isProfilePage,
-        isCollectionProjectPopper = false,
-        isTokenTagPopper = true,
-    } = useContext(TrendingViewContext)
+    const { isProfilePage, isTokenTagPopper = true } = useContext(TrendingViewContext)
 
-    const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper })
+    const { classes } = useStyles({ isTokenTagPopper })
 
     const displayList = uniqBy(
         resultList.filter((x) => x.type === result.type),
@@ -65,10 +54,7 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
     )
 
     return (
-        <PluginDescriptor
-            isCollectionProjectPopper={isCollectionProjectPopper}
-            isProfilePage={isProfilePage}
-            isTokenTagPopper={isTokenTagPopper}>
+        <PluginDescriptor isProfilePage={isProfilePage} isTokenTagPopper={isTokenTagPopper}>
             <Box className={classes.source}>
                 <Stack
                     className={classes.sourceMenu}

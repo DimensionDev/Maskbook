@@ -59,26 +59,11 @@ describe('DSearch test', async () => {
         })
     })
 
-    it('should return collection by twitter handle', async () => {
-        const result = await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandle)
-
-        expect(result.length).toBe(1)
-        if (result[0].type === SearchResultType.NonFungibleCollection) {
-            expect(result[0].name).toBe('Terraforms')
-        } else {
-            expect(result[0].type).toBe(SearchResultType.NonFungibleCollection)
-        }
-    })
-
     it('should return all the data with tag prefix', async () => {
         const result = await DSearch.search('$eth')
 
         expect(result.length).toBe(1)
-        if (result[0].type === SearchResultType.NonFungibleToken) {
-            expect(result[0].name).toBe('eth1')
-        } else {
-            expect(result[0].type).toBe(SearchResultType.FungibleToken)
-        }
+        expect(result[0].type).toBe(SearchResultType.FungibleToken)
     })
 
     test('searching lens profile', async () => {
