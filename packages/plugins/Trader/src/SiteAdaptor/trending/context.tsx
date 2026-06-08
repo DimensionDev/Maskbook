@@ -2,7 +2,6 @@ import { createContext, useMemo, type PropsWithChildren } from 'react'
 
 interface TrendingViewContextProps {
     isTokenTagPopper: boolean
-    isCollectionProjectPopper: boolean
     isProfilePage: boolean
     isPreciseSearch: boolean
     isDSearch: boolean
@@ -10,7 +9,6 @@ interface TrendingViewContextProps {
 
 export const TrendingViewContext = createContext<TrendingViewContextProps>({
     isTokenTagPopper: true,
-    isCollectionProjectPopper: false,
     isProfilePage: false,
     isPreciseSearch: false,
     isDSearch: false,
@@ -19,7 +17,6 @@ TrendingViewContext.displayName = 'TrendingViewContext'
 
 export function TrendingViewProvider({
     isTokenTagPopper,
-    isCollectionProjectPopper,
     isProfilePage,
     isPreciseSearch,
     children,
@@ -27,12 +24,11 @@ export function TrendingViewProvider({
     const context = useMemo(
         () => ({
             isTokenTagPopper,
-            isDSearch: !isTokenTagPopper && !isCollectionProjectPopper && !isProfilePage,
-            isCollectionProjectPopper,
+            isDSearch: !isTokenTagPopper && !isProfilePage,
             isProfilePage,
             isPreciseSearch,
         }),
-        [isTokenTagPopper, isCollectionProjectPopper, isProfilePage, isPreciseSearch],
+        [isTokenTagPopper, isProfilePage, isPreciseSearch],
     )
     return <TrendingViewContext value={context}>{children}</TrendingViewContext>
 }

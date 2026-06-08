@@ -124,8 +124,8 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
     const theme = useTheme()
     const containerRef = useRef(null)
     const themeMode = useSiteThemeMode(theme)
-    const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
-    const { classes } = useStyles({ isPopper: isCollectionProjectPopper || isTokenTagPopper, themeMode })
+    const { isTokenTagPopper } = useContext(TrendingViewContext)
+    const { classes } = useStyles({ isPopper: isTokenTagPopper, themeMode })
     const Utils = useWeb3Utils(result.pluginID)
     const { activities, fetchActivities, loadingActivities } = useNonFungibleTokenActivities(
         result.pluginID,

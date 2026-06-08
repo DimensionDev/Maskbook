@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import type { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
+import type { FungibleTokenResult } from '@masknet/web3-shared-base'
 import { Link } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, useRef, useState } from 'react'
@@ -28,9 +28,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-type TagSearchResult =
-    | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    | NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+type TagSearchResult = FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 
 export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifier']>>(function TagModifier({
     children,

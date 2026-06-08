@@ -31,12 +31,11 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
-    isCollectionProjectPopper: boolean
     currentTab: ContentTab
 }>()((theme, props) => {
     return {
         root:
-            props.isTokenTagPopper || props.isCollectionProjectPopper ?
+            props.isTokenTagPopper ?
                 {
                     width: 598,
                     borderRadius: theme.spacing(2),
@@ -54,22 +53,12 @@ const useStyles = makeStyles<{
         tabListRoot: {
             flexGrow: 0,
         },
-        body:
-            props.isCollectionProjectPopper ?
-                {
-                    minHeight: 374,
-                    maxHeight: props.currentTab === ContentTab.Price ? 450 : 374,
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    background: 'transparent',
-                }
-            :   {
-                    background: 'transparent',
-                    maxHeight: props.currentTab === ContentTab.Market ? 374 : 'unset',
-                    display: 'flex',
-                    flexDirection: 'column',
-                },
+        body: {
+            background: 'transparent',
+            maxHeight: props.currentTab === ContentTab.Market ? 374 : 'unset',
+            display: 'flex',
+            flexDirection: 'column',
+        },
         footerSkeleton:
             props.isTokenTagPopper ?
                 {}
@@ -92,7 +81,7 @@ const useStyles = makeStyles<{
             marginBottom: '-36px',
         },
         nftItems: {
-            height: props.isCollectionProjectPopper ? 360 : 530,
+            height: 530,
             padding: theme.spacing(2),
             boxSizing: 'border-box',
             overflow: 'auto',
@@ -121,7 +110,7 @@ interface TrendingViewProps {
 export function TrendingView(props: TrendingViewProps) {
     const { resultList, identity, setActive, currentResult } = props
     const [result = resultList[0], setResult] = useState(currentResult)
-    const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
+    const { isTokenTagPopper, isProfilePage } = useContext(TrendingViewContext)
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
@@ -239,7 +228,7 @@ export function TrendingView(props: TrendingViewProps) {
     }, [isNFT])
     // #endregion
 
-    const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper, currentTab })
+    const { classes } = useStyles({ isTokenTagPopper, currentTab })
 
     // #region api ready callback
     useEffect(() => {
@@ -328,8 +317,7 @@ export function TrendingView(props: TrendingViewProps) {
             </TabContext>
             <Stack
                 sx={{
-                    backgroundColor:
-                        isTokenTagPopper || isCollectionProjectPopper ? theme.palette.maskColor.bottom : 'transparent',
+                    backgroundColor: isTokenTagPopper ? theme.palette.maskColor.bottom : 'transparent',
                     flexGrow: 1,
                     overflow: 'auto',
                     scrollbarWidth: 'none',
