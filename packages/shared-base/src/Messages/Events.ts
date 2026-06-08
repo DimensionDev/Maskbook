@@ -21,8 +21,6 @@ export interface MaskContentScriptEvents {
     profileTabHidden: { hidden: boolean }
     postReplacerHidden: postReplacerHiddenEvent
     profileTabActive: { active: boolean }
-    NFTAvatarUpdated: NFTAvatarEvent
-    nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskContentScriptEvents {
@@ -35,7 +33,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskContentScriptEvents 
     legacySettings_broadcast: SettingsUpdateEvent
     ownPersonaChanged: void
     ownProofChanged: void
-    NFTProjectTwitterDetect: NFTProjectTwitterDetectEvent
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
     hostPermissionChanged: void
@@ -104,10 +101,6 @@ export interface AvatarSettingsDialogEvent {
     startPicking?: boolean
 }
 
-export interface NFTProjectTwitterDetectEvent {
-    address?: string
-}
-
 export interface SettingsDialogEvent {
     open: boolean
     targetTab?: string
@@ -126,28 +119,10 @@ export type ProfileCardEvent =
           external?: boolean
       }
 
-export type NonFungibleTokenDialogEvent =
-    | {
-          open: true
-          pluginID: NetworkPluginID
-          chainId: number
-          tokenId: string
-          tokenAddress: string
-          ownerAddress?: string
-          origin?: 'pfp' | 'web3-profile-card' | 'web3-profile-tab' | 'unknown'
-      }
-    | {
-          open: false
-      }
-
 export enum EncryptionTargetType {
     Public = 'public',
     Self = 'self',
     E2E = 'e2e',
-}
-
-export interface NFTAvatarSettingDialogEvent {
-    open: boolean
 }
 
 interface SettingsUpdateEvent {
@@ -208,16 +183,6 @@ export interface postReplacerHiddenEvent {
 export interface HideSearchResultInspectorEvent {
     hide: boolean
 }
-export interface NFTAvatarEvent {
-    userId: string
-    tokenId?: string
-    address?: string
-    avatarId: string
-    chainId?: number
-    schema?: number
-    pluginID?: NetworkPluginID
-}
-
 export interface TokenType {
     name: string
     symbol: string

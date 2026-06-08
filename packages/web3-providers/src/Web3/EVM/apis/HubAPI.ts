@@ -4,9 +4,8 @@ import { createHubMemoized } from '../../Base/apis/createHubMemoized.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 import { EVMBaseHub } from './HubBaseAPI.js'
 import { HubFungibleAPI } from './HubFungibleAPI.js'
-import { HubNonFungibleAPI } from './HubNonFungibleAPI.js'
 
 export const createHub = createHubMemoized((initial?: BaseHubOptions<Web3Definition['ChainId']>) => {
-    return mixin(new EVMBaseHub(initial), new HubFungibleAPI(initial), new HubNonFungibleAPI(initial))
+    return mixin(new EVMBaseHub(initial), new HubFungibleAPI(initial))
 })
 export const EVMHub = createHub()

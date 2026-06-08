@@ -1,6 +1,5 @@
 import { PluginID } from '@masknet/shared-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 /**
  * !! This ID is used to identify the stored plugin data. Change it will cause data lost.
@@ -10,27 +9,21 @@ export const RedPacketPluginID = PluginID.RedPacket
 export const RED_PACKET_DEFAULT_SHARES = 5
 export const RED_PACKET_MIN_SHARES = 1
 export const RED_PACKET_MAX_SHARES = 500
-export const NFT_RED_PACKET_MAX_SHARES = 255
-
 export const SOL_REDPACKET_MAX_SHARES = 200
 export const SOL_REDPACKET_CREATE_DEFAULT_GAS = '10000000'
 export const DEFAULT_DURATION = 60 * 60 * 24 // 24 hours
 export const enum RoutePaths {
     Create = '/create',
     CreateTokenRedPacket = '/create/token',
-    CreateNftRedPacket = '/create/nft',
     Confirm = '/confirm',
     ConfirmTokenRedPacket = '/confirm/token',
-    ConfirmNftRedPacket = '/confirm/nft',
     CustomCover = '/custom-cover',
     Requirements = '/requirements',
-    SelectCollectibles = '/select-collectibles',
 
     History = '/history',
     HistoryDetail = '/history/detail',
     SentHistory = '/history/sent',
     ClaimedHistory = '/history/claimed',
-    NftHistory = '/nft-history',
 
     CreateSolanaRedPacket = '/create/solana',
     ConfirmSolanaRedPacket = '/confirm/solana',
@@ -41,9 +34,6 @@ export const enum RoutePaths {
 
 export const MAX_FILE_SIZE = 1.5 * 1024 * 1024
 export const DURATION = 60 * 60 * 24
-
-// Chains that supported by the intersection of NFTScan, Chainbase, and our deployed chains.
-export const NFT_DEFAULT_CHAINS = [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon, ChainId.Optimism]
 
 function createTheme(themeId: string, cover: string): FireflyRedPacketAPI.ThemeGroupSettings {
     return {
@@ -157,4 +147,4 @@ export const PRESET_THEMES =
 
 export const MAX_CUSTOM_THEMES = 3
 
-export const WalletRelatedTypes = [FireflyRedPacketAPI.StrategyType.nftOwned, FireflyRedPacketAPI.StrategyType.tokens]
+export const WalletRelatedTypes = [FireflyRedPacketAPI.StrategyType.tokens]

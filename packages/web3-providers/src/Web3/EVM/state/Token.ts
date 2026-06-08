@@ -71,21 +71,6 @@ export class EVMToken extends TokenState<ChainId, SchemaType> {
     ): Promise<NonFungibleToken<ChainId, SchemaType> | undefined> {
         if (!isValidChainId(chainId) || !address) return
 
-        const nonFungibleTokenListFromStorage = this.storage.credibleNonFungibleTokenList.value
-        const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage?.[chainId]
-
-        if (!nonFungibleTokenListByChainFromStorage) {
-            const nonFungibleTokenList = await this.Hub.getNonFungibleTokensFromTokenList(chainId, { chainId })
-            await this.storage.credibleNonFungibleTokenList.setValue({
-                ...nonFungibleTokenListFromStorage,
-                [chainId]: nonFungibleTokenList,
-            })
-
-            const credibleToken = nonFungibleTokenList?.find((x) => isSameAddress(x.address, address))
-            return credibleToken ?? token
-        }
-
-        const credibleToken = nonFungibleTokenListByChainFromStorage.find((x) => isSameAddress(x.address, address))
-        return credibleToken ?? token
+        return token
     }
 }

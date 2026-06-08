@@ -152,7 +152,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
             return plugins
                 .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) || [])
                 .filter((x) => {
-                    const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
+                    const isAllowed = x.pluginID === PluginID.RSS3
                     const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
                     return isAllowed && shouldDisplay
                 })
@@ -164,7 +164,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         }))
     }, [activatedPlugins, translate])
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? '', ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
         if (currentTab === `${PluginID.RSS3}_Social`)

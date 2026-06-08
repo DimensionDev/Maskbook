@@ -1,10 +1,10 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { SelectFungibleTokenModal, SelectNonFungibleContractModal, TokenIcon } from '@masknet/shared'
+import { SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { FungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { PopperOwnProps } from '@mui/base'
 import { ClickAwayListener, InputBase, Typography } from '@mui/material'
@@ -95,11 +95,6 @@ const useStyles = makeStyles()((theme) => {
             gap: '4px',
             flexFlow: 'row wrap',
         },
-        collections: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '4px',
-        },
         asset: {
             display: 'flex',
             alignItems: 'center',
@@ -139,16 +134,8 @@ const popperOptions: PopperOwnProps['popperOptions'] = {
 
 export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx, theme } = useStyles()
-    const {
-        conditions,
-        setConditions,
-        tokenQuantity,
-        setTokenQuantity,
-        requiredTokens,
-        setRequiredTokens,
-        requiredCollections,
-        setRequiredCollections,
-    } = useRedPacket()
+    const { conditions, setConditions, tokenQuantity, setTokenQuantity, requiredTokens, setRequiredTokens } =
+        useRedPacket()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -287,94 +274,6 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                             </>
                                         :   <>
                                                 <Trans>Select a token</Trans>
-                                                <Icons.Plus size={16} />
-                                            </>
-                                        }
-                                    </Typography>
-                                </div>
-                            :   null}
-                        </div>
-                        <div className={classes.condition}>
-                            <label
-                                className={classes.option}
-                                onClick={() => {
-                                    setConditions([ConditionType.NFT])
-                                }}>
-                                <RadioIndicator
-                                    checked={conditions.includes(ConditionType.NFT)}
-                                    uncheckedColor={theme.palette.maskColor.secondaryLine}
-                                />
-                                <Typography className={classes.rowLabel}>
-                                    <Trans>NFT Holder</Trans>
-                                </Typography>
-                            </label>
-                            {conditions.includes(ConditionType.NFT) ?
-                                <div className={classes.section}>
-                                    <Typography className={classes.sectionTitle}>
-                                        <Trans>Supported contracts</Trans>
-                                        <ShadowRootTooltip
-                                            title={
-                                                <Trans>
-                                                    You can claim the lucky drop by holding the required amount of any
-                                                    selected token.
-                                                </Trans>
-                                            }>
-                                            <Icons.Questions sx={{ ml: 0.5 }} />
-                                        </ShadowRootTooltip>
-                                    </Typography>
-                                    {requiredCollections.length ?
-                                        <div className={classes.collections}>
-                                            {requiredCollections.map((collection) => (
-                                                <div className={classes.asset} key={collection.address}>
-                                                    <TokenIcon
-                                                        className={classes.tokenIcon}
-                                                        address={collection.address}
-                                                        name={collection.name}
-                                                        chainId={collection.chainId}
-                                                        logoURL={collection.iconURL!}
-                                                        size={36}
-                                                        badgeSize={12}
-                                                    />
-                                                    <Typography className={classes.assetName}>
-                                                        {collection.name}
-                                                    </Typography>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    :   null}
-                                    <Typography
-                                        className={classes.selectButton}
-                                        onClick={async () => {
-                                            setAnchorEl(null)
-                                            const picked = await new Promise<
-                                                Array<NonFungibleCollection<ChainId, SchemaType>>
-                                            >((resolve) => {
-                                                SelectNonFungibleContractModal.open({
-                                                    pluginID: NetworkPluginID.PLUGIN_EVM,
-                                                    chainId,
-                                                    multiple: true,
-                                                    maxCollections: 4,
-                                                    selectedCollections: requiredCollections,
-                                                    onSubmit(collection) {
-                                                        resolve(
-                                                            collection as Array<
-                                                                NonFungibleCollection<ChainId, SchemaType>
-                                                            >,
-                                                        )
-                                                    },
-                                                })
-                                            })
-                                            if (picked) {
-                                                setRequiredCollections(picked)
-                                            }
-                                        }}>
-                                        {requiredCollections.length ?
-                                            <>
-                                                <Trans>Adjust Selection</Trans>
-                                                <Icons.Filter size={16} />
-                                            </>
-                                        :   <>
-                                                <Trans>Select NFTs</Trans>
                                                 <Icons.Plus size={16} />
                                             </>
                                         }

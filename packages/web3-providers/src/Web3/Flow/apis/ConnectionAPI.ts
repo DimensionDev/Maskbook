@@ -207,7 +207,7 @@ export class FlowConnectionAPI
         tokenId: string,
         schema?: SchemaType,
         initial?: FlowConnectionOptions,
-    ): Promise<NonFungibleTokenMetadata<ChainId>> {
+    ): Promise<NonFungibleTokenMetadata> {
         throw new Error('Method not implemented.')
     }
 

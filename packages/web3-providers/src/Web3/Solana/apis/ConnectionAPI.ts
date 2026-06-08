@@ -29,7 +29,6 @@ import { EMPTY_OBJECT, NetworkPluginID, type Account } from '@masknet/shared-bas
 import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { BlockResponse } from '@solana/web3.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
-import defer * as MagicEden from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
@@ -287,19 +286,7 @@ export class SolanaConnectionAPI
         initial?: SolanaConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const asset = await MagicEden.MagicEden.getAsset(address, tokenId, {
-            chainId: options.chainId,
-        })
-        return createNonFungibleToken(
-            options.chainId,
-            address,
-            SchemaType.NonFungible,
-            tokenId,
-            asset?.ownerId,
-            asset?.metadata,
-            asset?.contract,
-            asset?.collection,
-        )
+        return createNonFungibleToken(options.chainId, address, SchemaType.NonFungible, tokenId)
     }
 
     getNonFungibleTokenOwnership(
@@ -317,7 +304,7 @@ export class SolanaConnectionAPI
         tokenId: string,
         schema?: SchemaType,
         initial?: SolanaConnectionOptions,
-    ): Promise<NonFungibleTokenMetadata<ChainId>> {
+    ): Promise<NonFungibleTokenMetadata> {
         throw new Error('Method not implemented.')
     }
 

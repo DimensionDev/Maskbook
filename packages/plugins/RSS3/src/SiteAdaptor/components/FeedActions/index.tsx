@@ -1,7 +1,5 @@
 import { memo } from 'react'
 import type { FeedCardProps } from '../base.js'
-import { isCollectibleApprovalFeed } from '../FeedCard/CollectibleApprovalCard.js'
-import { isCollectibleFeed } from '../FeedCard/CollectibleCard.js'
 import { isCommentFeed } from '../FeedCard/CommentCard.js'
 import { isDonationFeed } from '../FeedCard/DonationCard.js'
 import { isLiquidityFeed } from '../FeedCard/LiquidityCard.js'
@@ -21,7 +19,6 @@ import { TokenOperationAction } from './TokenOperationAction.js'
 import { TokenSwapAction } from './TokenSwapAction.js'
 import { LiquidityAction } from './LiquidityAction.js'
 import { StakingAction } from './StakingAction.js'
-import { CollectibleAction } from './CollectibleAction.js'
 import { DonationAction } from './DonationAction.js'
 import { NoteAction } from './NoteAction.js'
 import { CommentAction } from './CommentAction.js'
@@ -31,7 +28,6 @@ import { ProposeAction } from './ProposeAction.js'
 import { VoteAction } from './VoteAction.js'
 import { TokenBridgeAction } from './TokenBridgeAction.js'
 import { ProfileProxyAction } from './ProfileProxy.js'
-import { CollectibleApprovalAction } from './CollectibleApprovalAction.js'
 import { TokenApprovalAction } from './TokenApprovalAction.js'
 
 export const FeedActions = memo(({ feed, ...rest }: FeedCardProps) => {
@@ -42,8 +38,6 @@ export const FeedActions = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isLiquidityFeed(feed)) return <LiquidityAction feed={feed} {...rest} />
 
     if (isStakingFeed(feed)) return <StakingAction feed={feed} {...rest} />
-
-    if (isCollectibleFeed(feed)) return <CollectibleAction feed={feed} {...rest} />
 
     if (isDonationFeed(feed)) return <DonationAction feed={feed} {...rest} />
 
@@ -60,8 +54,6 @@ export const FeedActions = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isVoteFeed(feed)) return <VoteAction feed={feed} {...rest} />
 
     if (isTokenApprovalFeed(feed)) return <TokenApprovalAction feed={feed} {...rest} />
-
-    if (isCollectibleApprovalFeed(feed)) return <CollectibleApprovalAction feed={feed} {...rest} />
 
     if (isTokenBridgeFeed(feed)) return <TokenBridgeAction feed={feed} {...rest} />
 

@@ -25,13 +25,6 @@ import { createTaskStartSetupGuideDefault } from '../../site-adaptor-infra/defau
 import { useThemeFacebookVariant } from './customization/custom.js'
 import { activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar.js'
-import { injectProfileNFTAvatarInFacebook } from './injection/NFT/ProfileNFTAvatar.js'
-import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook.js'
-import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline.js'
-import {
-    injectOpenNFTAvatarEditProfileButton,
-    openNFTAvatarSettingDialog,
-} from './injection/NFT/NFTAvatarEditProfile.js'
 import { injectPostReplacerAtFacebook } from './injection/PostReplacer.js'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent.js'
 import { FacebookRenderFragments } from './customization/render-fragments.js'
@@ -177,12 +170,12 @@ const facebookUI: SiteAdaptorUI.Definition = {
                 },
             ),
         },
-        userAvatar: injectUserNFTAvatarAtFacebook,
-        enhancedProfileNFTAvatar: injectProfileNFTAvatarInFacebook,
-        profileAvatar: injectNFTAvatarInFacebook,
+        userAvatar: undefined,
+        enhancedProfileNFTAvatar: undefined,
+        profileAvatar: undefined,
         profileCover: injectFacebookProfileCover,
-        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
-        openNFTAvatarSettingDialog,
+        openNFTAvatar: undefined,
+        openNFTAvatarSettingDialog: undefined,
         postReplacer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),

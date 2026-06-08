@@ -53,7 +53,6 @@ export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
                     <RouterDialog
                         pageMap={{
                             [RedPacketTabs.tokens]: RoutePaths.CreateTokenRedPacket,
-                            [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
                         }}
                         open
                         onClose={onClose}

@@ -2,23 +2,20 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { RedPacketMetaKey, RedPacketNftMetaKey, SolanaRedPacketMetaKey } from '@masknet/shared-base'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import { RedPacketMetaKey, SolanaRedPacketMetaKey } from '@masknet/shared-base'
+import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { base } from '../base.js'
-import { NftRedPacketInPost } from './NftRedPacketInPost.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketInjection } from './RedPacketInjection.js'
 import { SolanaRedPacketFrame } from './SolanaRedPacket/SolanaRedPacketFrame.js'
 import { openDialog } from './emitter.js'
 import {
     RedPacketMetadataReader,
-    RedPacketNftMetadataReader,
     renderWithRedPacketMetadata,
-    renderWithRedPacketNftMetadata,
     renderWithSolanaRedPacketMetadata,
     SolanaRedPacketMetadataReader,
 } from './helpers.js'
@@ -53,14 +50,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             )
         }
 
-        if (RedPacketNftMetadataReader(meta).isOk())
-            return (
-                <Render name="NFT Lucky Drop">
-                    {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
-                        <NftRedPacketInPost payload={r} />
-                    ))}
-                </Render>
-            )
         if (SolanaRedPacketMetadataReader(meta).isOk())
             return (
                 <Render name="Solana Lucky Drop">
@@ -98,19 +87,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 }
             },
         ],
-        [
-            RedPacketNftMetaKey,
-            (_payload) => {
-                return {
-                    text: (
-                        <RedpacketBadge
-                            message={(_payload as RedPacketNftJSONPayload).message}
-                            fallback={'An NFT Lucky Drop'}
-                        />
-                    ),
-                }
-            },
-        ],
     ]),
     GlobalInjection: RedPacketInjection,
     CompositionDialogEntry: {
@@ -129,9 +105,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             const icon = <PluginIcon size={36} />
             const name = <Trans>Lucky Drop</Trans>
             const recommendFeature = {
-                description: (
-                    <Trans>Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported.</Trans>
-                ),
+                description: <Trans>Send a surprise crypto giveaway. Tokens on multiple chains are supported.</Trans>,
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
                 isFirst: true,
             }
@@ -156,7 +130,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 1,
                 marketListSortingPriority: 1,
                 icon,
-                description: <Trans>Gift crypto or NFTs to any users, first come, first served.</Trans>,
+                description: <Trans>Gift crypto to any users, first come, first served.</Trans>,
                 name,
                 tutorialLink: 'https://www.mask.io/help-tutorial/send-a-lucky-drop',
                 category: 'dapp',

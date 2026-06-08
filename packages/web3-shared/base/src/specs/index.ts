@@ -42,10 +42,99 @@ export enum TokenType {
     NonFungible = 'NonFungible',
 }
 
+export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
+    name?: string
+    symbol?: string
+    logoURL?: string
+    metadata?: NonFungibleTokenMetadata
+}
+
+export interface NonFungibleTokenMetadata {
+    description?: string
+    mediaURL?: string
+    animationURL?: string
+    externalLink?: string
+    traits?: Array<{ trait_type: string; value: string; display_type?: string }>
+}
+
+export interface NonFungibleCollection<ChainId, SchemaType> {
+    id: string
+    chainId: ChainId
+    name: string
+    symbol?: string
+    address: string
+    logoURL?: string
+    description?: string
+    totalSupply?: number
+    ownerCount?: number
+}
+
+export interface NonFungibleTokenContract<ChainId, SchemaType> {
+    chainId: ChainId
+    address: string
+    name: string
+    symbol?: string
+    logoURL?: string
+    schema: SchemaType
+}
+
+export interface NonFungibleTokenRarity<ChainId> {
+    provider: SourceType
+    rank?: number
+    score?: number
+    total?: number
+    traits?: Record<string, { value: string; percentage: number }>
+}
+
+export interface NonFungibleTokenTrait {
+    trait_type: string
+    value: string
+    display_type?: string
+    percentage?: number
+}
+
+export interface NonFungibleTokenAuction<ChainId, SchemaType> {
+    provider: SourceType
+    token?: FungibleToken<ChainId, SchemaType>
+    startPrice?: string
+    endPrice?: string
+    startTime?: number
+    endTime?: number
+}
+
+export interface NonFungibleTokenOrder<ChainId, SchemaType> {
+    provider: SourceType
+    token?: FungibleToken<ChainId, SchemaType>
+    price?: string
+    expirationTime?: number
+    maker?: string
+    taker?: string
+}
+
+export interface NonFungibleTokenEvent<ChainId, SchemaType> {
+    type: string
+    from?: string
+    to?: string
+    price?: string
+    token?: FungibleToken<ChainId, SchemaType>
+    timestamp?: number
+}
+
+export interface SocialLinks {
+    twitter?: string
+    discord?: string
+    website?: string
+    telegram?: string
+    instagram?: string
+    medium?: string
+    github?: string
+}
+
 export enum SourceType {
     // FT assets
     DeBank = 'DeBank',
     Zerion = 'Zerion',
+    Chainbase = 'Chainbase',
     Flow = 'Flow',
     Solana = 'Solana',
     CoinGecko = 'CoinGecko',
@@ -53,35 +142,9 @@ export enum SourceType {
     CF = 'CloudFlare',
     GoPlus = 'GoPlus',
 
-    // NFT assets
-    Rabby = 'Rabby',
-    Gem = 'Gem',
-    RSS3 = 'RSS3',
-    Zora = 'zora',
-    OpenSea = 'opensea',
-    Rarible = 'rarible',
-    LooksRare = 'looksrare',
-    NFTScan = 'NFTScan',
-    Alchemy_EVM = 'Alchemy_EVM',
-    Alchemy_FLOW = 'Alchemy_FLOW',
-    Chainbase = 'Chainbase',
-    MagicEden = 'MagicEden',
-    Element = 'Element',
-    Solsea = 'Solsea',
-    Solanart = 'Solanart',
-    OKX = 'OKX',
-    Uniswap = 'Uniswap',
-    NFTX = 'NFTX',
-    Etherscan = 'Etherscan',
-    CryptoPunks = 'CryptoPunks',
-    SimpleHash = 'SimpleHash',
-
-    // Rarity
-    RaritySniper = 'RaritySniper',
-    TraitSniper = 'TraitSniper',
-
     // Token List
     R2D2 = 'R2D2',
+    Rabby = 'Rabby',
 
     Approval = 'Approval',
 }
@@ -93,24 +156,14 @@ export enum SearchResultType {
     Domain = 'Domain',
     // e.g., $MASK #MASK or its address 0x69af81e73a73b40adf4f3d4223cd9b1ece623074
     FungibleToken = 'FungibleToken',
-    // e.g., #APE
+    // NFT token search results
     NonFungibleToken = 'NonFungibleToken',
-    // e.g., #punks
+    // NFT collection search results
     NonFungibleCollection = 'NonFungibleCollection',
     // e.g., masknetwork
     CollectionListByTwitterHandle = 'CollectionListByTwitterHandle',
     // e.g., PancakeSwap
     DAO = 'DAO',
-}
-
-export enum ActivityType {
-    Transfer = 'Transfer',
-    Mint = 'Mint',
-    Sale = 'Sale',
-    Offer = 'Offer',
-    Burn = 'Burn',
-    List = 'List',
-    CancelOffer = 'CancelOffer',
 }
 
 export enum MessageStateType {
@@ -313,257 +366,6 @@ export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, Schem
     logoURL?: string
     // Sorted by market cap.
     rank?: number
-}
-
-export interface NonFungibleTokenStats {
-    volume24h: number
-    count24h: number
-    floorPrice: number
-}
-
-export interface NonFungibleTokenRarity<ChainId> {
-    chainId: ChainId
-    rank: number
-    url: string
-    status?: 'verified' | 'unverified'
-    /** source type */
-    source?: SourceType
-}
-
-export interface NonFungibleTokenContract<ChainId, SchemaType> {
-    chainId: ChainId
-    name: string
-    symbol?: string
-    address: string
-    schema: SchemaType
-    owner?: string
-    balance?: number
-    logoURL?: string
-    iconURL?: string
-    /** @example 2.5% */
-    creatorEarning?: string
-    /** source type */
-    source?: SourceType
-}
-
-export interface NonFungibleTokenMetadata<ChainId> {
-    chainId: ChainId
-    /** Might be the format `TheName #42` */
-    name: string
-    tokenId?: string
-    symbol?: string
-    description?: string
-    /** image url */
-    imageURL?: string
-    previewImageURL?: string
-    /** Useful for progress loading */
-    blurhash?: string
-    /** source media url */
-    mediaURL?: string
-    /** source media type */
-    mediaType?: string
-    /** project url */
-    projectURL?: string
-    /** source type */
-    source?: SourceType
-}
-
-export interface SocialLinks {
-    website?: string
-    email?: string
-    twitter?: string
-    discord?: string
-    telegram?: string
-    github?: string
-    instagram?: string
-    medium?: string
-}
-
-export interface NonFungibleCollection<ChainId, SchemaType> {
-    /** some providers define id, while others don't. For those don't, we will fallback to contract address */
-    id?: string
-    runtime?: NetworkPluginID
-    chainId: ChainId
-    name: string
-    slug: string
-    symbol?: string | null
-    description?: string
-    address?: string
-    schema?: SchemaType
-    iconURL?: string | null
-    /** the balance of the current owner */
-    balance?: number
-    /** the amount of holders */
-    ownersTotal?: number
-    /** verified by provider */
-    verified?: boolean
-    verifiedBy?: string[]
-    isSpam?: boolean
-    /** unix timestamp */
-    createdAt?: number
-    /** source type */
-    source?: SourceType
-    assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
-    socialLinks?: SocialLinks
-    relatedTwitters?: string[]
-    floorPrices?: Array<{
-        marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
-        marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
-        value: number
-        payment_token: {
-            payment_token_id: LiteralUnion<'ethereum.native'>
-            name: string
-            symbol: string
-            address: string | null
-            decimals: number
-        }
-    }>
-}
-
-export interface NonFungibleCollectionOverview {
-    // collection name
-    collection?: string
-    market_cap?: string
-    highest_price?: string
-    volume_24h?: string
-    average_price_24h?: string
-    average_price_change_1d?: string
-    average_price_change?: string
-    average_price_change_7d?: string
-    sales_24h?: number
-    owners_total?: number
-    total_volume?: string
-    items_total?: number
-    sales?: number
-    volume?: number
-    average_price?: string
-}
-
-export interface NonFungibleTokenActivity<ChainId, SchemaType> {
-    hash: string
-    event_type: ActivityType
-    transaction_link?: string
-    timestamp: number
-    imageURL: string
-    trade_price?: number
-    // The param `from` of the transaction
-    from: string
-    // The param `to` of the transaction
-    to: string
-    // The user address who received the NFT
-    receive: string
-    // The user address who sent the NFT
-    send: string
-    contract_address: string
-    token_id?: string
-    trade_token?: FungibleToken<ChainId, SchemaType>
-    trade_symbol?: string
-    // #region solana
-    source?: string
-    destination?: string
-    fee?: number
-    tx_interact_program?: string
-    token_address?: string
-    // #endregion
-}
-
-export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
-    /** the token id */
-    tokenId: string
-    /** the address or uid of the token owner */
-    ownerId?: string
-    /** the contract info */
-    contract?: NonFungibleTokenContract<ChainId, SchemaType>
-    /** the media metadata */
-    metadata?: NonFungibleTokenMetadata<ChainId>
-    /** the collection info */
-    collection?: NonFungibleCollection<ChainId, SchemaType>
-    traits?: NonFungibleTokenTrait[]
-}
-
-export interface NonFungibleTokenTrait {
-    /** The type of trait. */
-    type: string
-    /** The value of trait. */
-    value: string
-    /** The rarity of trait in percentage. */
-    rarity?: string
-    displayType?: LiteralUnion<'date' | 'string' | 'number'> | null
-}
-
-export interface NonFungibleTokenAuction<ChainId, SchemaType> {
-    /** unix timestamp */
-    startAt?: number
-    /** unix timestamp */
-    endAt?: number
-    /** tokens available to make an order */
-    orderTokens?: Array<FungibleToken<ChainId, SchemaType>>
-    /** tokens available to make an offer */
-    offerTokens?: Array<FungibleToken<ChainId, SchemaType>>
-}
-
-export interface NonFungibleTokenOrder<ChainId, SchemaType> {
-    id: string
-    /** chain Id */
-    chainId: ChainId
-    /** permalink of asset */
-    assetPermalink: string
-    /** token amount */
-    quantity: string
-    /** transaction hash */
-    hash?: string
-    /** buy or sell */
-    side?: OrderSide
-    /** the account make the order */
-    maker?: Identity
-    /** the account fulfill the order */
-    taker?: Identity
-    /** unix timestamp */
-    createdAt?: number
-    /** unix timestamp */
-    expiredAt?: number
-    /** calculated current price */
-    price?: Price
-    /** the payment token and corresponding price */
-    priceInToken?: PriceInToken<ChainId, SchemaType>
-    /** source type */
-    source?: SourceType
-}
-
-export interface NonFungibleTokenEvent<ChainId, SchemaType> {
-    id: string
-    /** chain Id */
-    chainId: ChainId
-    /** event type */
-    type: ActivityType
-    /** permalink of asset */
-    assetPermalink?: string
-    /** name of asset */
-    assetName?: string
-    /** symbol of asset */
-    assetSymbol?: string
-    /** token amount */
-    quantity: string
-    /** transaction hash */
-    hash?: string
-    /** the account make the order */
-    from?: Identity
-    /** the account fulfill the order */
-    to?: Identity
-    /** the account who send the token */
-    send?: Identity
-    /** the account who receive the token */
-    receive?: Identity
-    /** unix timestamp */
-    timestamp: number
-    /** relate token price */
-    price?: Price
-    /** the payment token and corresponding price */
-    priceInToken?: PriceInToken<ChainId, SchemaType>
-    /** the payment token */
-    paymentToken?: FungibleToken<ChainId, SchemaType>
-    /** source type */
-    source?: SourceType
 }
 
 /**

@@ -20,7 +20,6 @@
     { "path": "../../web3-telemetry/tsconfig.json" },
     { "path": "../../theme/tsconfig.json" },
     { "path": "../../plugin-infra/tsconfig.json" },
-    { "path": "../../plugins/Avatar/tsconfig.json" },
     { "path": "../../plugins/Tips/tsconfig.json" },
     { "path": "../../injected-script/sdk/tsconfig.json" },
     { "path": "../../plugins/Trader/tsconfig.json" },

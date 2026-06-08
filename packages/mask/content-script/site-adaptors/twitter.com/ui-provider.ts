@@ -30,17 +30,10 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector.js'
 import { injectPostActionsAtTwitter } from './injection/PostActions/index.js'
 import { injectTips } from './injection/Tips/index.js'
-import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar.js'
-import {
-    injectOpenNFTAvatarEditProfileButton,
-    openNFTAvatarSettingDialog,
-} from './injection/NFT/NFTAvatarEditProfile.js'
-import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar.js'
 import { TwitterRenderFragments } from './customization/render-fragments.js'
 import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
-import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
 import { injectSwitchLogoButton } from './injection/SwitchLogo.js'
 import { injectCalendar } from './injection/Calendar.js'
 import { injectBadges } from './injection/Badges/index.js'
@@ -196,11 +189,11 @@ const twitterUI: SiteAdaptorUI.Definition = {
         setupWizard: createTaskStartSetupGuideDefault(),
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
-        userAvatar: injectUserNFTAvatarAtTwitter,
-        profileAvatar: injectNFTAvatarInTwitter,
-        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
-        postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
-        openNFTAvatarSettingDialog,
+        userAvatar: undefined,
+        profileAvatar: undefined,
+        openNFTAvatar: undefined,
+        postAndReplyNFTAvatar: undefined,
+        openNFTAvatarSettingDialog: undefined,
         avatar: injectAvatar,
         tips: injectTips,
         badges: injectBadges,

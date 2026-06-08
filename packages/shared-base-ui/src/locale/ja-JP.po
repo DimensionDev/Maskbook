@@ -73,9 +73,7 @@ msgstr ""
 msgid "{0, select, Post {<0/><1>{handle}</1> published a post on <2>{1}</2>} Comment {<3/><4>{handle}</4> made a comment on <5>{2}</5>} Mirror {<6/><7>{3}</7> mirrored a post post by<8/><9>{handle}</9> on <10>{4}</10>} Quote {<11/><12>{handle}</12> quoted a post post on <13>{5}</13>} other {<14/><15>{handle}</15> post stuff on <16>{6}</16>}}"
 msgstr ""
 
-#. placeholder {0}: dateTimeFormat(locale, new Date(patchedHistory.creation_time))
 #. placeholder {0}: format(fromUnixTime(timestamp), 'M/d/yyyy HH:mm')
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "{0} (UTC+8)"
 msgstr ""
@@ -203,10 +201,9 @@ msgstr ""
 msgid "{0} Pending"
 msgstr ""
 
-#. placeholder {0}: sourceType ?? SourceType.NFTScan
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
-msgid "{0} Platform costs"
-msgstr "{0} のプラットフォームコスト"
+#~ msgid "{0} Platform costs"
+#~ msgstr "{0} のプラットフォームコスト"
 
 #. placeholder {0}: fromNetwork?.name || ''
 #. placeholder {0}: toNetwork?.name || ''
@@ -257,12 +254,9 @@ msgstr ""
 msgid "{0}m"
 msgstr ""
 
-#. placeholder {0}: metadata?.collection ?? 'Unknown'
-#. placeholder {1}: metadata?.collection ?? 'Unknown'
-#. placeholder {2}: metadata?.action || ''
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleApprovalAction.tsx
-msgid "{2, select, approve {<0>{user}</0> approved {0} to <1>{contract}</1>} revoke {<2>{user}</2> approved {1} to <3>{contract}</3>} other {}}"
-msgstr ""
+#~ msgid "{2, select, approve {<0>{user}</0> approved {0} to <1>{contract}</1>} revoke {<2>{user}</2> approved {1} to <3>{contract}</3>} other {}}"
+#~ msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/StakingAction.tsx
 msgid "{actionType, select, stake {<0>{user}</0> staked <1>{symbol}</1>} claim {<2>{user}</2> claimed <3>{symbol}</3>} unstake {<4>{user}</4> un-staked <5>{symbol}</5>} other {}}"
@@ -335,10 +329,9 @@ msgstr ""
 msgid "{walletLength, plural, one {# Wallet} other {# Wallets}}"
 msgstr ""
 
-#. placeholder {0}: postLink.toString()
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
-msgid "@{sender} is sending an NFT lucky drop on {networkName} network. {account_promote} {promote_short} #mask_io #LuckyDrop {0}"
-msgstr ""
+#~ msgid "@{sender} is sending an NFT lucky drop on {networkName} network. {account_promote} {promote_short} #mask_io #LuckyDrop {0}"
+#~ msgstr ""
 
 #. placeholder {0}: formatAmount(asset.amount)
 #. placeholder {1}: asset.symbol || asset.name
@@ -368,11 +361,9 @@ msgstr ""
 msgid "<0/> interacted with <1/>"
 msgstr ""
 
-#. placeholder {0}: verbose ? 'name' : 'nft'
-#. placeholder {1}: metadata!.name
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}}"
-msgstr ""
+#~ msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}}"
+#~ msgstr ""
 
 #. placeholder {0}: action.platform
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedCard/CommentCard.tsx
@@ -408,24 +399,17 @@ msgstr ""
 msgid "<0>{user}</0> bridged <1>{amount} {symbol}</1> from <2>{source}</2> to <3>{target}</3>"
 msgstr ""
 
-#. placeholder {0}: metadata?.name
-#. placeholder {1}: verbose ? 'name' : 'nft'
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> burned <1>{1, select, nft {an NFT} name {{0}} other {}}</1>"
-msgstr ""
+#~ msgid "<0>{user}</0> burned <1>{1, select, nft {an NFT} name {{0}} other {}}</1>"
+#~ msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/UnknownAction.tsx
 msgid "<0>{user}</0> carried out an activity to <1>{target}</1> on <2>{platform}</2>"
 msgstr ""
 
-#. placeholder {0}: verbose ? 'verbose' : 'simple'
-#. placeholder {1}: metadata!.name
-#. placeholder {2}: costMetadata ? 'cost' : 'free'
-#. placeholder {3}: formatValue(costMetadata)
-#. placeholder {4}: costMetadata?.symbol ?? 'Unknown'
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>} other {}}from <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {} other {}}"
-msgstr ""
+#~ msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>} other {}}from <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {} other {}}"
+#~ msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/DonationAction.tsx
 msgid "<0>{user}</0> donated <1>{costValue} {costSymbol}</1>"
@@ -440,36 +424,25 @@ msgstr ""
 msgid "<0>{user}</0> made a comment on {platform}"
 msgstr ""
 
-#. placeholder {0}: verbose ? 'name' : 'nft'
-#. placeholder {1}: metadata!.name
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> minted {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}}for <3>{value} {symbolName}</3>"
-msgstr ""
+#~ msgid "<0>{user}</0> minted {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}}for <3>{value} {symbolName}</3>"
+#~ msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/ProposeAction.tsx
 msgid "<0>{user}</0> proposed"
 msgstr ""
 
-#. placeholder {0}: verbose ? 'name' : 'nft'
-#. placeholder {1}: feed.actions[1].metadata!.name
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> registered {0, select, name {<1>{1} </1>} nft {<2>an ENS </2>} other {}}for <3>{costValue} {costSymbol}</3>"
-msgstr ""
+#~ msgid "<0>{user}</0> registered {0, select, name {<1>{1} </1>} nft {<2>an ENS </2>} other {}}for <3>{costValue} {costSymbol}</3>"
+#~ msgstr ""
 
-#. placeholder {0}: verbose ? 'name' : 'nft'
-#. placeholder {1}: metadata!.name
-#. placeholder {2}: formatValue(cost)
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}} to <3>{recipient}</3> for <4>{2} {symbolName}</4>"
-msgstr ""
+#~ msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}} to <3>{recipient}</3> for <4>{2} {symbolName}</4>"
+#~ msgstr ""
 
-#. placeholder {0}: verbose ? 'name' : 'nft'
-#. placeholder {1}: metadata!.name
-#. placeholder {2}: formatValue(cost)
-#. placeholder {3}: feed.platform
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}} to <3>{recipient}</3> for <4>{2} {symbolName}</4> on <5>{3}</5>"
-msgstr ""
+#~ msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}} to <3>{recipient}</3> for <4>{2} {symbolName}</4> on <5>{3}</5>"
+#~ msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/TokenSwapAction.tsx
 msgid "<0>{user}</0> swapped <1>{from_value} {from_symbol}</1> to <2>{to_value} {to_symbol}</2> on <3>{platform}</3>"
@@ -479,14 +452,9 @@ msgstr ""
 msgid "<0>{user}</0> voted for <1>{option}</1> on <2>{platform}</2>"
 msgstr ""
 
-#. placeholder {0}: verbose ? 'verbose' : 'simple'
-#. placeholder {1}: metadata!.name
-#. placeholder {2}: costMetadata ? 'cost' : 'free'
-#. placeholder {3}: formatValue(costMetadata)
-#. placeholder {4}: costMetadata?.symbol ?? 'Unknown'
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>} other {}}to <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {} other {}}"
-msgstr ""
+#~ msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>} other {}}to <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {} other {}}"
+#~ msgstr ""
 
 #. placeholder {0}: websiteCount || 0
 #: packages/mask/popups/pages/Settings/index.tsx
@@ -505,10 +473,9 @@ msgstr ""
 msgid "<0>Dear Users,</0><1>Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.</1>"
 msgstr ""
 
-#. placeholder {0}: formatDistanceToNow(Math.ceil(offer.expiredAt!), { addSuffix: true, })
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/OfferCard.tsx
-msgid "<0>Expires in </0>{0}"
-msgstr ""
+#~ msgid "<0>Expires in </0>{0}"
+#~ msgstr ""
 
 #. placeholder {0}: formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)
 #: packages/mask/popups/pages/Wallet/Interaction/TransactionRequest.tsx
@@ -580,26 +547,23 @@ msgid "📃📃📃 Try to permanently use decentralized file storage on {sns}. 
 msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
-#: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 msgid "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
 
-#. placeholder {0}: token?.contract?.name || 'NFT'
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
-msgid "1 {0} claimed."
-msgstr ""
+#~ msgid "1 {0} claimed."
+#~ msgstr ""
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
 msgid "1 {0} NFT Lucky Drop claimed."
 msgstr ""
 
-#. placeholder {0}: nonFungibleToken?.contract?.name || 'NFT'
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-msgid "1 {0} tips sent."
-msgstr ""
+#~ msgid "1 {0} tips sent."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
@@ -624,16 +588,16 @@ msgid "24 Hour Trading Vol"
 msgstr "24時間取引Vol"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
-msgid "24H Average Price"
-msgstr "24時間平均価格"
+#~ msgid "24H Average Price"
+#~ msgstr "24時間平均価格"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
-msgid "24H sale"
-msgstr "24時間売上"
+#~ msgid "24H sale"
+#~ msgstr "24時間売上"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
-msgid "24H Traded Volume"
-msgstr "24時間の取引量"
+#~ msgid "24H Traded Volume"
+#~ msgstr "24時間の取引量"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "A blacklist is found. Some addresses may not be able to trade normally, which is a honeypot risk."
@@ -648,15 +612,13 @@ msgid "A whitelist is found. Some addresses may not be able to trade normally, w
 msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "About"
 msgstr "詳細"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-msgid "About {collectionName}"
-msgstr ""
+#~ msgid "About {collectionName}"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/DisablePermit.tsx
 msgid "About Permit"
@@ -680,9 +642,6 @@ msgid "Account successfully connected to persona"
 msgstr "ソーシャルメディアで Web3 dApps の機能を探索してみてください。"
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/index.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Activities"
 msgstr "アクティビティ"
 
@@ -711,8 +670,8 @@ msgstr "資産を追加"
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/Tips/src/components/NFTSection/index.tsx
 #: packages/shared/src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx
-msgid "Add Collectibles"
-msgstr "コレクティブルを追加"
+#~ msgid "Add Collectibles"
+#~ msgstr "コレクティブルを追加"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
@@ -734,8 +693,8 @@ msgstr "既存のグループに新しいアドレスを追加"
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-msgid "Add NFTs"
-msgstr "コレクティブルを追加"
+#~ msgid "Add NFTs"
+#~ msgstr "コレクティブルを追加"
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Add Suggested Token"
@@ -781,7 +740,6 @@ msgstr "アドレス"
 msgid "Address: <0>{address}</0>"
 msgstr ""
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Adjust Selection"
 msgstr ""
@@ -854,8 +812,8 @@ msgid "Amount per Share"
 msgstr "1株当たりの金額"
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
-msgid "an NFT"
-msgstr "NFT"
+#~ msgid "an NFT"
+#~ msgstr "NFT"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Anti_whale(Limited number of transactions)"
@@ -925,11 +883,9 @@ msgstr ""
 msgid "Are you sure to remove this wallet?"
 msgstr "このウォレットを削除してもよろしいですか？"
 
-#. placeholder {0}: collection?.name ? 'hasName' : 'noName'
-#. placeholder {1}: collection?.name || ''
 #: packages/shared/src/hooks/useReportSpam.tsx
-msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT} other {this NFT}}? After confirmed, this NFT will be marked as spam."
-msgstr ""
+#~ msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT} other {this NFT}}? After confirmed, this NFT will be marked as spam."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Are you sure?"
@@ -940,12 +896,12 @@ msgid "Are your sure you want to disconnect? You may lose part of functionalitie
 msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/index.tsx
-msgid "Artblocks"
-msgstr ""
+#~ msgid "Artblocks"
+#~ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/index.tsx
-msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
-msgstr "Artblocksでは、好きなスタイルを選び、作品に対価を支払うと、アルゴリズムによってランダムに生成されたバージョンのコンテンツが作成され、イーサリアムアカウントに送られる。"
+#~ msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
+#~ msgstr "Artblocksでは、好きなスタイルを選び、作品に対価を支払うと、アルゴリズムによってランダムに生成されたバージョンのコンテンツが作成され、イーサリアムアカウントに送られる。"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Arweave"
@@ -1109,10 +1065,9 @@ msgstr "残高"
 msgid "Balance: <0/>"
 msgstr ""
 
-#. placeholder {0}: balance || 0
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/CollectionSelectPanel.tsx
-msgid "Balance: <0>{0}</0>"
-msgstr ""
+#~ msgid "Balance: <0>{0}</0>"
+#~ msgstr ""
 
 #: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
 msgid "Balance({symbol})"
@@ -1144,8 +1099,6 @@ msgid "Be careful what you visit and sign!"
 msgstr "あなたが訪問して署名するものに注意してください!"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/PreviewNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketRecord.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketRecord.tsx
@@ -1164,12 +1117,12 @@ msgid "Block Explorer URL"
 msgstr "ブロックエクスプローラーのURL"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
-msgid "Blockchain"
-msgstr "ブロックチェーン"
+#~ msgid "Blockchain"
+#~ msgstr "ブロックチェーン"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Blockchain:"
-msgstr "ブロックチェーン:"
+#~ msgid "Blockchain:"
+#~ msgstr "ブロックチェーン:"
 
 #: packages/shared/src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Blocto only supports the Flow chain."
@@ -1231,8 +1184,8 @@ msgid "Buy Tax: {0}"
 msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
-msgstr ""
+#~ msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
@@ -1248,8 +1201,8 @@ msgid "By granting permission, you are allowing the following <0/> contract to a
 msgstr ""
 
 #: packages/mask/popups/components/UnlockERC721Token/index.tsx
-msgid "By granting permission, you are allowing the following <0/> contract to access your NFTs."
-msgstr ""
+#~ msgid "By granting permission, you are allowing the following <0/> contract to access your NFTs."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "By proceeding you agree to the"
@@ -1298,14 +1251,11 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
-#: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/SelectCollectibles.tsx
-#: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 #: packages/shared/src/UI/modals/ConfirmDialog/index.tsx
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
@@ -1330,8 +1280,8 @@ msgid "Category"
 msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Chain"
-msgstr "チェーン"
+#~ msgid "Chain"
+#~ msgstr "チェーン"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
@@ -1346,7 +1296,6 @@ msgid "Chain ID: {0}"
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-#: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfilePopup.tsx
 #: packages/shared/src/UI/components/WalletStatusBar/Action.tsx
@@ -1369,8 +1318,8 @@ msgid "Change Network"
 msgstr "ネットワークを変更"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
-msgid "Change NFT PFP"
-msgstr "NFT PFPを変更"
+#~ msgid "Change NFT PFP"
+#~ msgstr "NFT PFPを変更"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Change Owner"
@@ -1454,7 +1403,6 @@ msgstr "流通供給量"
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimEntry/index.tsx
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/Claim/src/SiteAdaptor/index.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claim"
@@ -1513,12 +1461,9 @@ msgstr "受け取り済"
 msgid "Claimed {amount} ${0} successfully."
 msgstr ""
 
-#. placeholder {0}: rpid ? bitStatusList.filter(Boolean).length.toString() : '0'
-#. placeholder {1}: patchedHistory.shares
-#. placeholder {2}: collection?.name ?? ''
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
-msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
-msgstr ""
+#~ msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
+#~ msgstr ""
 
 #. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal, false)
 #. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal, false)
@@ -1532,7 +1477,6 @@ msgstr ""
 msgid "Claiming will be live until: <0> {days} d {0} h {1} m</0>"
 msgstr ""
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claiming..."
@@ -1575,8 +1519,8 @@ msgid "Click the settings icon to list it on the App board."
 msgstr ""
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-msgid "Click to retry"
-msgstr "クリックして再試行"
+#~ msgid "Click to retry"
+#~ msgstr "クリックして再試行"
 
 #: packages/mask/content-script/components/InjectedComponents/PageInspector.tsx
 #: packages/plugins/Tips/src/SiteAdaptor/components/TipsRealmContent/index.tsx
@@ -1595,23 +1539,23 @@ msgid "Cloud Backup"
 msgstr "クラウドバックアップ"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-msgid "Collectible"
-msgstr "コレクティブ"
+#~ msgid "Collectible"
+#~ msgstr "コレクティブ"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalDialog.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/CollectionSelectPanel.tsx
-msgid "Collectibles"
-msgstr "コレクティブ"
+#~ msgid "Collectibles"
+#~ msgstr "コレクティブ"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Collection"
-msgstr "コレクション"
+#~ msgid "Collection"
+#~ msgstr "コレクション"
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
-msgid "Collection Approval"
-msgstr "コレクションを承認"
+#~ msgid "Collection Approval"
+#~ msgstr "コレクションを承認"
 
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
@@ -1624,13 +1568,11 @@ msgstr ""
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 msgid "Completed"
 msgstr "完了しました"
 
 #: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/modals/ConfirmModal/index.tsx
-#: packages/mask/popups/components/NFTAvatarPicker/index.tsx
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
@@ -1652,15 +1594,12 @@ msgstr "完了しました"
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
-#: packages/mask/popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/SelectCollectibles.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/SelectLiquidity.tsx
@@ -1671,7 +1610,6 @@ msgstr "完了しました"
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
-#: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
 msgstr "確認"
@@ -1724,10 +1662,9 @@ msgid "Confirm to hide {0}? You can redisplay it by re-adding this token at any 
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-msgid "Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time."
-msgstr ""
+#~ msgid "Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time."
+#~ msgstr ""
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirming"
@@ -1738,9 +1675,7 @@ msgid "Congratulations"
 msgstr "おめでとうございます！"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
-#: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 #: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 msgid "Congratulations!"
 msgstr "おめでとうございます！"
@@ -1826,7 +1761,6 @@ msgstr ""
 msgid "Connect your social platform accounts."
 msgstr "ソーシャルプラットフォームのアカウントに接続します。"
 
-#: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connect your wallet"
@@ -1907,10 +1841,7 @@ msgid "Continue"
 msgstr "続行"
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
-#: packages/mask/popups/components/UnlockERC721Token/index.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Contract"
@@ -1951,8 +1882,8 @@ msgid "Contract source code verified"
 msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Contract:"
-msgstr "コントラクト:"
+#~ msgid "Contract:"
+#~ msgstr "コントラクト:"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "contributions"
@@ -1997,7 +1928,6 @@ msgid "Could not fetch chain ID. Is your RPC URL correct?"
 msgstr "チェーンIDを取得できませんでした。RPCのURLは正しいですか？"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Cover"
 msgstr ""
@@ -2061,15 +1991,13 @@ msgid "Create Smart Pay wallet"
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Create the Lucky Drop"
 msgstr "ラッキードロップを作成します。"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
-msgid "Create time:"
-msgstr "作成時間:"
+#~ msgid "Create time:"
+#~ msgstr "作成時間:"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create your Lucky Drop."
@@ -2087,10 +2015,9 @@ msgstr "あなたのペルソナを作成して始めましょう"
 msgid "Created a SmartPay wallet on Polygon network."
 msgstr ""
 
-#. placeholder {0}: project.artistName
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Created by <0>{0}</0> • <1>Website</1>"
-msgstr ""
+#~ msgid "Created by <0>{0}</0> • <1>Website</1>"
+#~ msgstr ""
 
 #. placeholder {0}: format(project.metadata.createdAt, 'MMMM do, yyyy')
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
@@ -2168,8 +2095,8 @@ msgid "Custom"
 msgstr "カスタム"
 
 #: packages/plugins/Avatar/src/Application/PersonaPage.tsx
-msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
-msgstr "ソーシャルアカウントを接続することでNFTエクスペリエンスをカスタマイズします。全く新しいWeb3の雰囲気でWeb2をお楽しみください。"
+#~ msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
+#~ msgstr "ソーシャルアカウントを接続することでNFTエクスペリエンスをカスタマイズします。全く新しいWeb3の雰囲気でWeb2をお楽しみください。"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
 msgid "CyberConnect"
@@ -2302,11 +2229,9 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DescriptionCard.tsx
-msgid "Description"
-msgstr "説明"
+#~ msgid "Description"
+#~ msgstr "説明"
 
-#: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketRecord.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/DetailDialog.tsx
@@ -2374,8 +2299,8 @@ msgid "Display Snapshot proposals on the X of the respective project or protocol
 msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/index.tsx
-msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
-msgstr "OpenSeaとRaribleのコレクションの具体的な情報を表示し、ソーシャルメディアで直接オファーします。"
+#~ msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
+#~ msgstr "OpenSeaとRaribleのコレクションの具体的な情報を表示し、ソーシャルメディアで直接オファーします。"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/index.tsx
 msgid "Display specific information of Gitcoin projects, donate to a project directly on social media."
@@ -2413,8 +2338,8 @@ msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 ea
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
-msgid "Don't see your NFT?"
-msgstr "NFTが見つかりませんか？"
+#~ msgid "Don't see your NFT?"
+#~ msgstr "NFTが見つかりませんか？"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Donate"
@@ -2488,8 +2413,8 @@ msgid "Edit Contact"
 msgstr "連絡先を編集"
 
 #: packages/plugins/Avatar/src/Application/RouterDialog.tsx
-msgid "Edit Profile"
-msgstr "プロフィールを編集する"
+#~ msgid "Edit Profile"
+#~ msgstr "プロフィールを編集する"
 
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Editor"
@@ -2512,7 +2437,6 @@ msgstr "メールアドレス"
 msgid "Email verification code"
 msgstr "電子メール検証コード"
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Empty"
@@ -2680,8 +2604,8 @@ msgid "EVM"
 msgstr ""
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
-msgid "EVM Chains only"
-msgstr ""
+#~ msgid "EVM Chains only"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Example: Alice"
@@ -2707,7 +2631,6 @@ msgid "Experience in X"
 msgstr "Twitter での経験"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
@@ -2797,8 +2720,8 @@ msgid "Failed to download and merge the backup: {0}"
 msgstr ""
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
-msgid "Failed to download image"
-msgstr ""
+#~ msgid "Failed to download image"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Failed to get permissions"
@@ -2822,8 +2745,8 @@ msgid "Failed to refund Lucky Drop."
 msgstr ""
 
 #: packages/shared/src/hooks/useReportSpam.tsx
-msgid "Failed to report spam."
-msgstr "スパムを報告できませんでした。"
+#~ msgid "Failed to report spam."
+#~ msgstr "スパムを報告できませんでした。"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
@@ -2961,13 +2884,13 @@ msgid "Firefly"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-msgid "Floor price"
-msgstr "フロア価格"
+#~ msgid "Floor price"
+#~ msgstr "フロア価格"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
-msgid "Floor Price"
-msgstr "フロア価格"
+#~ msgid "Floor Price"
+#~ msgstr "フロア価格"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
@@ -2977,8 +2900,8 @@ msgid "Follow"
 msgstr "フォロー"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
-msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
-msgstr ""
+#~ msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "Follow @masknetwork for Web3 updates and insights."
@@ -3027,15 +2950,12 @@ msgid "Forgot payment password?"
 msgstr "パスワードを忘れましたか？"
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivityCard.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/Shared/OfferCard.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "From"
 msgstr "から"
 
@@ -3062,7 +2982,6 @@ msgstr ""
 
 #: packages/mask/popups/components/TransactionPreview/index.tsx
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
-#: packages/mask/popups/components/UnlockERC721Token/index.tsx
 #: packages/mask/popups/modals/GasSettingModal/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -3188,17 +3107,19 @@ msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social m
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
-msgid "Gift crypto or NFTs to any users, first come, first served."
-msgstr "暗号資産またはNFTをすべてのユーザーに贈り、先着順に提供します。"
+#~ msgid "Gift crypto or NFTs to any users, first come, first served."
+#~ msgstr "暗号資産またはNFTをすべてのユーザーに贈り、先着順に提供します。"
+
+#: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
+msgid "Gift crypto to any users, first come, first served."
+msgstr ""
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/index.tsx
 msgid "Gitcoin"
 msgstr ""
 
-#. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
-#: packages/mask/popups/components/UnlockERC721Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
 msgstr ""
 
@@ -3261,11 +3182,11 @@ msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim.
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid ""
-"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n"
-"\n"
-"🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
-msgstr ""
+#~ msgid ""
+#~ "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n"
+#~ "\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
+#~ msgstr ""
 
 #: build/bundled/101.js
 #~ msgid ""
@@ -3297,8 +3218,8 @@ msgid "Hide {0}"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-msgid "Hide {name}"
-msgstr ""
+#~ msgid "Hide {name}"
+#~ msgstr ""
 
 #: packages/mask/popups/components/MnemonicDisplay/index.tsx
 msgid "Hide mnemonic words"
@@ -3328,15 +3249,14 @@ msgid "High Risk"
 msgstr "高リスク"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
-msgid "Highest Price"
-msgstr "最高価格"
+#~ msgid "Highest Price"
+#~ msgstr "最高価格"
 
 #: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
 msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "History"
@@ -3348,8 +3268,8 @@ msgid "Holding {0}"
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
-msgid "Holding NFT"
-msgstr ""
+#~ msgid "Holding NFT"
+#~ msgstr ""
 
 #. placeholder {0}: provider.name
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
@@ -3373,27 +3293,21 @@ msgid ""
 " Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
-#. placeholder {0}: project.name
-#. placeholder {1}: price.toFixed()
-#. placeholder {2}: token?.symbol || ''
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @masknetwork to get yours."
-msgstr ""
+#~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @masknetwork to get yours."
+#~ msgstr ""
 
-#. placeholder {0}: project.name
-#. placeholder {1}: price.toFixed()
-#. placeholder {2}: token?.symbol || ''
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
-msgstr "{0} {1} {2}のコレクションから、美しいアート作品を購入しました。ようこそ。"
+#~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
+#~ msgstr "{0} {1} {2}のコレクションから、美しいアート作品を購入しました。ようこそ。"
 
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "I just replaced Twitter X logo with the original blue bird one with Mask Network extension."
 msgstr "Twitter Xのロゴを元の青鳥のロゴに置き換えたところ、Mask Networkの拡張機能が使われています。"
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
-msgid "I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io."
-msgstr ""
+#~ msgid "I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io."
+#~ msgstr ""
 
 #. placeholder {0}: token?.symbol ? 'namedToken' : 'token'
 #. placeholder {1}: token?.symbol || ''
@@ -3406,13 +3320,12 @@ msgid ""
 "Install https://mask.io/download-links to send your first tip."
 msgstr ""
 
-#. placeholder {0}: recipientName ? 'name' : 'address'
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-msgid ""
-"I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\n"
-"\n"
-"Install https://mask.io/download-links to send your first tip."
-msgstr ""
+#~ msgid ""
+#~ "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\n"
+#~ "\n"
+#~ "Install https://mask.io/download-links to send your first tip."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "I wrote down those words in the correct order"
@@ -3447,7 +3360,6 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
-#: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Image"
 msgstr "画像"
 
@@ -3461,8 +3373,8 @@ msgid "Import"
 msgstr "インポート"
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
-msgid "Import NFT"
-msgstr "NFT をインポート"
+#~ msgid "Import NFT"
+#~ msgstr "NFT をインポート"
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Import Wallet"
@@ -3510,7 +3422,6 @@ msgstr "バックアップパスワードが正しくありません。"
 msgid "Incorrect cloud backup password, please try again."
 msgstr "クラウドバックアップのパスワードが正しくありません。もう一度やり直してください。"
 
-#: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/index.tsx
 msgid "Incorrect contract address."
 msgstr "有効なトークンアドレスを入力してください"
@@ -3576,16 +3487,16 @@ msgid "Information"
 msgstr "情報"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Infos"
-msgstr "情報"
+#~ msgid "Infos"
+#~ msgstr "情報"
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
 msgstr "入力金額が最小金額以下です"
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
-msgid "Input contract address"
-msgstr "コントラクトアドレスを入力"
+#~ msgid "Input contract address"
+#~ msgstr "コントラクトアドレスを入力"
 
 #: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
@@ -3614,7 +3525,6 @@ msgstr ""
 msgid "Insufficient ${0} balance"
 msgstr ""
 
-#: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #: packages/plugins/Tips/src/contexts/Tip/useTipValidate.ts
 msgid "Insufficient balance"
 msgstr "残高不足"
@@ -3622,7 +3532,6 @@ msgstr "残高不足"
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient Balance"
 msgstr "残高不足"
@@ -3630,7 +3539,6 @@ msgstr "残高不足"
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient Balance for Gas Fee"
@@ -3688,8 +3596,8 @@ msgid "It remains unclaimed."
 msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
-msgid "Items"
-msgstr "アイテム"
+#~ msgid "Items"
+#~ msgstr "アイテム"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "Join"
@@ -3745,12 +3653,12 @@ msgid "Lens Unfollow"
 msgstr "レンズのフォローを解除"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Library:"
-msgstr "ライブラリー:"
+#~ msgid "Library:"
+#~ msgstr "ライブラリー:"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "License:"
-msgstr "ライセンス:"
+#~ msgid "License:"
+#~ msgstr "ライセンス:"
 
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Lido Exchange Rate"
@@ -3774,7 +3682,6 @@ msgid "Listed"
 msgstr "リストされました"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
-#: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 #: packages/plugins/CyberConnect/src/SiteAdaptor/FollowersPage.tsx
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
@@ -3784,8 +3691,8 @@ msgid "Load failed"
 msgstr "読み込み失敗"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/OffersList.tsx
-msgid "Load More"
-msgstr "さらに読み込む"
+#~ msgid "Load More"
+#~ msgstr "さらに読み込む"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Load Network"
@@ -3795,7 +3702,6 @@ msgstr ""
 #: packages/mask/popups/pages/Friends/Home/UI.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileView.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewSkeleton.tsx
 #: packages/shared/src/UI/components/LoadingStatus/index.tsx
 msgid "Loading"
@@ -3810,8 +3716,8 @@ msgid "Loading failed due to Snapshot API service breakdown."
 msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTBadge.tsx
-msgid "Loading..."
-msgstr "読み込み中..."
+#~ msgid "Loading..."
+#~ msgstr "読み込み中..."
 
 #: packages/shared/src/UI/components/PluginCardFrame/index.tsx
 msgid "Loading...."
@@ -3872,7 +3778,6 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 msgid "Lucky Drop"
@@ -3883,8 +3788,8 @@ msgid "Lucky Drop claimed."
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send approved NFTs to the participants of Lucky Drop."
-msgstr ""
+#~ msgid "Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send approved NFTs to the participants of Lucky Drop."
+#~ msgstr ""
 
 #: packages/shared/src/UI/translate.ts
 msgid "Lucky Drop refunded."
@@ -3926,7 +3831,6 @@ msgid "Manage Token List"
 msgstr "トークンリストを管理"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Market Cap"
@@ -4099,8 +4003,8 @@ msgid "Message"
 msgstr "メッセージ"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-msgid "Method"
-msgstr "方法"
+#~ msgid "Method"
+#~ msgstr "方法"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Minimum received"
@@ -4112,8 +4016,8 @@ msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
-msgid "Mint Address"
-msgstr "ミントアドレス"
+#~ msgid "Mint Address"
+#~ msgstr "ミントアドレス"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Mint function"
@@ -4124,8 +4028,8 @@ msgid "Mint function is transparent or non-existent. Hidden mint functions may i
 msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Minted:"
-msgstr "ミント済"
+#~ msgid "Minted:"
+#~ msgstr "ミント済"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/hooks/useSwappable.ts
@@ -4149,10 +4053,9 @@ msgstr "その他"
 msgid "More Details"
 msgstr "詳細情報"
 
-#. placeholder {0}: asset.data.source === SourceType.NFTScan ? resolveSourceTypeName(asset.data.source) : 'platform'
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
-msgid "More on {0}"
-msgstr "{0}"
+#~ msgid "More on {0}"
+#~ msgstr "{0}"
 
 #. placeholder {0}: String(currentMessageIndex + 1)
 #. placeholder {1}: String(totalMessages)
@@ -4175,8 +4078,8 @@ msgstr "私のウォレット"
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-msgid "N/A"
-msgstr "なし"
+#~ msgid "N/A"
+#~ msgstr "なし"
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/EditContactModal/index.tsx
@@ -4190,8 +4093,8 @@ msgid "Name or Contract address e.g. USDC or 0x234..."
 msgstr "名前またはコントラクトアドレス (USDC または 0x234..."
 
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-msgid "Name or contract address eg. PUNK or 0x234..."
-msgstr ""
+#~ msgid "Name or contract address eg. PUNK or 0x234..."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ChooseNetworkModal/index.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
@@ -4207,8 +4110,8 @@ msgid "Network added"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
-msgid "Network error or execute smart contract failed."
-msgstr "ネットワークエラーまたはスマートコントラクトを実行できませんでした。"
+#~ msgid "Network error or execute smart contract failed."
+#~ msgstr "ネットワークエラーまたはスマートコントラクトを実行できませんでした。"
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
@@ -4288,28 +4191,28 @@ msgid "Next.ID"
 msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-msgid "NFT"
-msgstr ""
+#~ msgid "NFT"
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
-msgid "NFT Avatar Setting"
-msgstr "NFT のアバター設定"
+#~ msgid "NFT Avatar Setting"
+#~ msgstr "NFT のアバター設定"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "NFT collection"
 msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
-msgid "NFT Details"
-msgstr "NFTの詳細"
+#~ msgid "NFT Details"
+#~ msgstr "NFTの詳細"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
-msgid "NFT Holder"
-msgstr ""
+#~ msgid "NFT Holder"
+#~ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
-msgid "NFT is not minted yet."
-msgstr "NFT はまだ発行されていません。"
+#~ msgid "NFT is not minted yet."
+#~ msgstr "NFT はまだ発行されていません。"
 
 #: packages/shared/src/UI/translate.ts
 msgid "NFT Lucky Drop claimed."
@@ -4321,27 +4224,20 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/RouterDialog.tsx
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatarButton.tsx
-msgid "NFT PFP"
-msgstr ""
+#~ msgid "NFT PFP"
+#~ msgstr ""
 
-#: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: packages/mask/popups/pages/Wallet/AddToken/index.tsx
-#: packages/mask/popups/pages/Wallet/components/WalletAssets/index.tsx
-#: packages/mask/popups/pages/Wallet/Transfer/index.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
-#: packages/plugins/Tips/src/components/TipDialog.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "NFTs"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
-msgid "NFTs added"
-msgstr ""
+#~ msgid "NFTs added"
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
-msgid "NFTs Profile"
-msgstr ""
+#~ msgid "NFTs Profile"
+#~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "No activities found."
@@ -4356,10 +4252,9 @@ msgid "No anti_whale(Unlimited number of transactions)"
 msgstr ""
 
 #: packages/plugins/Tips/src/components/NFTSection/index.tsx
-msgid "No any collectible is available for preview. Please add your collectible here."
-msgstr ""
+#~ msgid "No any collectible is available for preview. Please add your collectible here."
+#~ msgstr ""
 
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "No approved contract records."
 msgstr "承認された契約記録がありません。"
@@ -4396,8 +4291,8 @@ msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/shared/src/UI/components/CollectibleList/CollectibleList.tsx
-msgid "No collectible found."
-msgstr "コレクションが見つかりません."
+#~ msgid "No collectible found."
+#~ msgstr "コレクションが見つかりません."
 
 #: packages/mask/popups/pages/Friends/Contacts/index.tsx
 msgid "No contacts stored locally, you can try searching."
@@ -4409,7 +4304,6 @@ msgid "No content for the last two weeks."
 msgstr "過去２週間のコンテンツはありません。"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/index.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
 #: packages/shared/src/UI/components/EmptyStatus/index.tsx
@@ -4446,8 +4340,8 @@ msgid "No function found that retrieves ownership"
 msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/PriceCard.tsx
-msgid "No Listings"
-msgstr "リストがありません"
+#~ msgid "No Listings"
+#~ msgstr "リストがありません"
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "No local key"
@@ -4480,8 +4374,8 @@ msgstr ""
 #: packages/mask/popups/components/NFTAvatarPicker/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
-msgid "No NFTs found."
-msgstr "NFTが見つかりません。"
+#~ msgid "No NFTs found."
+#~ msgstr "NFTが見つかりません。"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
 msgid "No past rounds found."
@@ -4501,9 +4395,7 @@ msgid "No recent transactions"
 msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipients.tsx
-#: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/components/CountryCodePicker/index.tsx
-#: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "No results"
 msgstr "該当結果なし"
 
@@ -4516,8 +4408,8 @@ msgid "No search results"
 msgstr "検索結果なし"
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
-msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
-msgstr "有効なウォレットが見つかりませんでした。ウォレットに接続するか、ウォレットを確認してください。"
+#~ msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
+#~ msgstr "有効なウォレットが見つかりませんでした。ウォレットに接続するか、ウォレットを確認してください。"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
@@ -4558,8 +4450,8 @@ msgid "Not Connected"
 msgstr ""
 
 #: packages/plugins/Avatar/src/Application/PersonaItem.tsx
-msgid "Not current account. Please switch to this account to set up NFTs Profile."
-msgstr "現在のアカウントではありません。このアカウントに切り替えてNFTsプロファイルを設定してください。"
+#~ msgid "Not current account. Please switch to this account to set up NFTs Profile."
+#~ msgstr "現在のアカウントではありません。このアカウントに切り替えてNFTsプロファイルを設定してください。"
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Not enough data to present."
@@ -4575,8 +4467,8 @@ msgstr "未設定"
 
 #: packages/mask/popups/components/NFTAvatarPicker/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
-msgid "Not supported yet."
-msgstr ""
+#~ msgid "Not supported yet."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
@@ -4587,16 +4479,16 @@ msgid "Note: Scams detections might not be 100% guaranteed."
 msgstr "注意: 詐欺行為の検出は100%保証されない場合があります."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
-msgstr ""
+#~ msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
-msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
-msgstr ""
+#~ msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
+#~ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
-msgid "Offers"
-msgstr "オファー"
+#~ msgid "Offers"
+#~ msgstr "オファー"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
@@ -4641,8 +4533,8 @@ msgid "Oops, we can't find any results."
 msgstr "おっと、結果が見つかりません"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
-msgid "Open"
-msgstr "オープン"
+#~ msgid "Open"
+#~ msgstr "オープン"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Open in a new tab"
@@ -4665,7 +4557,6 @@ msgstr "トークン名、NFTコレクション、ENSドメイン、またはウ
 msgid "Optimize the display of search results about ENS in social media."
 msgstr ""
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 #: packages/shared/src/UI/components/UploadDropArea/index.tsx
 msgid "or"
 msgstr ""
@@ -4679,8 +4570,8 @@ msgid "Or create a new wallet group"
 msgstr "または新しいウォレットグループを作成"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
-msgid "or Holding NFT"
-msgstr ""
+#~ msgid "or Holding NFT"
+#~ msgstr ""
 
 #. placeholder {0}: author.userId
 #: packages/mask/content-script/components/InjectedComponents/DecryptedPost/authorDifferentMessage.tsx
@@ -4708,8 +4599,8 @@ msgid "Owner changed."
 msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
-msgid "Owners"
-msgstr "所有者"
+#~ msgid "Owners"
+#~ msgstr "所有者"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Pair"
@@ -4730,8 +4621,8 @@ msgid "Paste manually"
 msgstr "手動でペーストする"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
-msgid "Paused"
-msgstr "一時停止"
+#~ msgid "Paused"
+#~ msgstr "一時停止"
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
@@ -4843,8 +4734,8 @@ msgid "Platform"
 msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-msgid "Please check ToS document"
-msgstr "ToS ドキュメントを確認してください"
+#~ msgid "Please check ToS document"
+#~ msgstr "ToS ドキュメントを確認してください"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 msgid "Please click Browse Files button to select files to upload."
@@ -5051,8 +4942,8 @@ msgid "Price"
 msgstr "価格"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-msgid "Price per mint"
-msgstr "1ミントあたりの価格"
+#~ msgid "Price per mint"
+#~ msgstr "1ミントあたりの価格"
 
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -5060,8 +4951,8 @@ msgid "Price Statistic"
 msgstr "価格統計"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
-msgid "Price:"
-msgstr "価格:"
+#~ msgid "Price:"
+#~ msgstr "価格:"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Priority fee"
@@ -5117,8 +5008,8 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/PropertiesCard.tsx
-msgid "Properties"
-msgstr "プロパティ"
+#~ msgid "Properties"
+#~ msgstr "プロパティ"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 msgid "Proposal"
@@ -5144,12 +5035,12 @@ msgstr ""
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-msgid "Purchase"
-msgstr "購入"
+#~ msgid "Purchase"
+#~ msgstr "購入"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-msgid "Purchasing...."
-msgstr "購入中..."
+#~ msgid "Purchasing...."
+#~ msgstr "購入中..."
 
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 msgid "QR code expired. Please try again."
@@ -5295,16 +5186,16 @@ msgid "Rename"
 msgstr "名前変更"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
-msgid "Report NFT Scam Contract?"
-msgstr "NFT 詐欺契約を報告しますか？"
+#~ msgid "Report NFT Scam Contract?"
+#~ msgstr "NFT 詐欺契約を報告しますか？"
 
 #: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 msgid "Report on GitHub"
 msgstr "GitHubで報告"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
-msgid "Report Spam"
-msgstr "スパムを報告"
+#~ msgid "Report Spam"
+#~ msgstr "スパムを報告"
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Request ID"
@@ -5393,16 +5284,11 @@ msgid "Results"
 msgstr "結果"
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
-#: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Retry"
 msgstr "再試行"
 
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
@@ -5423,8 +5309,6 @@ msgstr ""
 msgid "Revoke Token"
 msgstr ""
 
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalNFTContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoking"
@@ -5448,13 +5332,11 @@ msgstr ""
 msgid "Safety Warning"
 msgstr "安全警告"
 
-#. placeholder {0}: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss')
 #: packages/plugins/Collectible/src/SiteAdaptor/Card/Collectible.tsx
-msgid "Sale ends in {0}"
-msgstr "セールは {0}"
+#~ msgid "Sale ends in {0}"
+#~ msgstr "セールは {0}"
 
 #: packages/mask/popups/components/AddContactInputPanel/index.tsx
-#: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
 #: packages/plugins/SwitchLogo/src/SiteAdaptor/SwitchLogoDialog.tsx
 #: packages/shared/src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Save"
@@ -5490,7 +5372,6 @@ msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SearchBox.tsx
-#: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Search"
 msgstr "検索"
 
@@ -5526,7 +5407,6 @@ msgid "Select a token"
 msgstr "トークンを選択します"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Select a Token"
 msgstr "トークンを選択してください"
@@ -5537,29 +5417,28 @@ msgstr "アドレスを選択する"
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Select All"
 msgstr "全て選ぶ"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-msgid "Select an NFT Contract"
-msgstr "NFT コントラクトを選択"
+#~ msgid "Select an NFT Contract"
+#~ msgstr "NFT コントラクトを選択"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-msgid "Select an NFT Contract Operator"
-msgstr "NFT コントラクトのオペレーターを選択"
+#~ msgid "Select an NFT Contract Operator"
+#~ msgstr "NFT コントラクトのオペレーターを選択"
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-msgid "Select an NFT Contract Owner"
-msgstr "NFT コントラクト所有者を選択"
+#~ msgid "Select an NFT Contract Owner"
+#~ msgstr "NFT コントラクト所有者を選択"
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
 msgid "Select and Connect to your wallet"
 msgstr "選択してウォレットに接続"
 
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-msgid "Select Collection"
-msgstr "コレクションを選択"
+#~ msgid "Select Collection"
+#~ msgstr "コレクションを選択"
 
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
 msgid "Select language"
@@ -5576,8 +5455,8 @@ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/CollectionSelectPanel.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
-msgid "Select NFTs"
-msgstr ""
+#~ msgid "Select NFTs"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
@@ -5588,8 +5467,8 @@ msgid "Select Wallet"
 msgstr "ウォレットを選択"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
-msgid "Selecting NFTs"
-msgstr ""
+#~ msgid "Selecting NFTs"
+#~ msgstr ""
 
 #. placeholder {0}: percentageToNumber(info.sell_tax)
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
@@ -5598,7 +5477,6 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/mask/popups/components/TransactionPreview/index.tsx
-#: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/components/ActionGroup/index.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
@@ -5606,9 +5484,6 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-#: packages/shared/src/UI/components/AddCollectibles/index.tsx
-#: packages/shared/src/UI/components/AssetsManagement/Collection.tsx
-#: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
 msgstr "送信"
@@ -5619,7 +5494,11 @@ msgid "Send {0}"
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
-msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
+#~ msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
+#~ msgstr ""
+
+#: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
+msgid "Send a surprise crypto giveaway. Tokens on multiple chains are supported."
 msgstr ""
 
 #: packages/plugins/Tips/src/SiteAdaptor/components/TipsRealmContent/index.tsx
@@ -5652,24 +5531,24 @@ msgid "Service Agreement"
 msgstr "サービス利用契約"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
-msgid "Set NFT Avatar"
-msgstr "NFT アバターを設定"
+#~ msgid "Set NFT Avatar"
+#~ msgstr "NFT アバターを設定"
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
-msgid "Set NFT NFT Background"
-msgstr ""
+#~ msgid "Set NFT NFT Background"
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/NFTListDialog.tsx
-msgid "Set NFT PFP"
-msgstr ""
+#~ msgid "Set NFT PFP"
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/NFTInfo.tsx
-msgid "Set NFT PFPs"
-msgstr "NFT PFPを設定"
+#~ msgid "Set NFT PFPs"
+#~ msgstr "NFT PFPを設定"
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
-msgid "Set NFT Photo"
-msgstr "NFT 写真を設定"
+#~ msgid "Set NFT Photo"
+#~ msgstr "NFT 写真を設定"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -5683,16 +5562,16 @@ msgid "Set payment password successfully."
 msgstr "支払いパスワードを正常に設定しました"
 
 #: packages/plugins/Avatar/src/Application/NFTInfo.tsx
-msgid "Set up NFT PFP successfully"
-msgstr "NFT PFPを正常にセットアップしました"
+#~ msgid "Set up NFT PFP successfully"
+#~ msgstr "NFT PFPを正常にセットアップしました"
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr "Web3フットプリントを表示し、各ソーシャルメディアアカウントにチップを受け取るためのウォレットを設定します。"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/index.tsx
-msgid "Set your NFT as profile picture with exclusive aura."
-msgstr ""
+#~ msgid "Set your NFT as profile picture with exclusive aura."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Set Your Payment Password"
@@ -5711,7 +5590,6 @@ msgid "Settings"
 msgstr "設定"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
@@ -5822,25 +5700,24 @@ msgid "Social Account"
 msgstr "ソーシャルアカウント"
 
 #: packages/plugins/Avatar/src/SiteAdaptor/index.tsx
-msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
-msgstr ""
+#~ msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "Solana"
 msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/Collectible.tsx
-msgid "Something went wrong!"
-msgstr "問題が発生しました!"
+#~ msgid "Something went wrong!"
+#~ msgstr "問題が発生しました!"
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Something went wrong."
 msgstr "問題が発生しました"
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
-msgid "Sorry, failed to save NFT Avatar. Please set again."
-msgstr "申し訳ありませんが、NFT アバターを保存できませんでした。もう一度設定してください。"
+#~ msgid "Sorry, failed to save NFT Avatar. Please set again."
+#~ msgstr "申し訳ありませんが、NFT アバターを保存できませんでした。もう一度設定してください。"
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Sorry, signature failed! Please try signing again."
@@ -5859,8 +5736,8 @@ msgid "Spam"
 msgstr "スパム"
 
 #: packages/shared/src/hooks/useReportSpam.tsx
-msgid "Spam reported."
-msgstr ""
+#~ msgid "Spam reported."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/GasSettingModal/index.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
@@ -5869,7 +5746,6 @@ msgid "Speed Up"
 msgstr "速度アップ"
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
-#: packages/mask/popups/components/UnlockERC721Token/index.tsx
 msgid "Spend limit requested by"
 msgstr "リクエストされた使用限度額"
 
@@ -5960,7 +5836,6 @@ msgstr "個人データにアクセスするために、IDコード、秘密鍵�
 msgid "Support mnemonic phrase, private key or keystore file."
 msgstr ""
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Supported contracts"
 msgstr ""
@@ -6107,8 +5982,8 @@ msgid "The chainID is not equal to the currently connected one."
 msgstr "chainIDは現在接続されているものと等しくありません。"
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
-msgid "The contract address is incorrect or the collection does not belong to you."
-msgstr "コントラクトアドレスが正しくないか、コレクションはあなたに属していません。"
+#~ msgid "The contract address is incorrect or the collection does not belong to you."
+#~ msgstr "コントラクトアドレスが正しくないか、コレクションはあなたに属していません。"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "The contract may contain additional issuance functions, which could maybe generate a large number of tokens, resulting in significant fluctuations in token prices. It is recommended to confirm with the project team whether it complies with the token issuance instructions."
@@ -6151,12 +6026,12 @@ msgid "The input is not a single file."
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
-msgid "The Lucky Drop can't be sent due to data damage."
-msgstr ""
+#~ msgid "The Lucky Drop can't be sent due to data damage."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/SelectCollectibles.tsx
-msgid "The maximum number of NFTs to be sold in one collection lucky drop contract is 255."
-msgstr ""
+#~ msgid "The maximum number of NFTs to be sold in one collection lucky drop contract is 255."
+#~ msgstr ""
 
 #. placeholder {0}: formatBalance(1, token.decimals)
 #. placeholder {1}: token.symbol
@@ -6341,16 +6216,16 @@ msgid "This network name already exists"
 msgstr "このネットワーク名は既に存在します"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/SelectCollectibles.tsx
-msgid "This NFT contract cannot be modified now."
-msgstr ""
+#~ msgid "This NFT contract cannot be modified now."
+#~ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivitiesList.tsx
-msgid "This NFT didn't have any activities."
-msgstr "このNFTにはアクティビティがありませんでした。"
+#~ msgid "This NFT didn't have any activities."
+#~ msgstr "このNFTにはアクティビティがありませんでした。"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/OffersList.tsx
-msgid "This NFT didn't have any offers."
-msgstr "このNFTにはオファーはありませんでした。"
+#~ msgid "This NFT didn't have any offers."
+#~ msgstr "このNFTにはオファーはありませんでした。"
 
 #. placeholder {0}: lensAccount.operations.canFollow.reason
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
@@ -6362,8 +6237,8 @@ msgid "This profile can not be followed."
 msgstr "このプロフィールはフォローできません。"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
-msgid "This project is no longer active"
-msgstr ""
+#~ msgid "This project is no longer active"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "This QR includes your identity, please keep it safely."
@@ -6441,8 +6316,8 @@ msgid "This will overwrite the existing cloud backup with the local data, this c
 msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-msgid "Time"
-msgstr "時刻"
+#~ msgid "Time"
+#~ msgstr "時刻"
 
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -6462,7 +6337,6 @@ msgstr "チップ"
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "To"
 msgstr "宛先："
 
@@ -6473,10 +6347,9 @@ msgstr "宛先："
 msgid "to {0}"
 msgstr ""
 
-#. placeholder {0}: type === ActivityType.Mint ? Utils.formatAddress(activity.from?.address, 4) : activity.receive.nickname || (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/ActivityCard.tsx
-msgid "To <0>{0}</0>"
-msgstr ""
+#~ msgid "To <0>{0}</0>"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "to <0>{toAddress}</0>"
@@ -6514,16 +6387,16 @@ msgid "Token Contract Address"
 msgstr "トークンコントラクトアドレス"
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
-msgid "Token ID"
-msgstr "トークンID"
+#~ msgid "Token ID"
+#~ msgstr "トークンID"
 
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
-msgid "Token ID separated by comma, e.g. 1223,1224,"
-msgstr ""
+#~ msgid "Token ID separated by comma, e.g. 1223,1224,"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
-msgid "Token ID should be separated by comma, e.g. 1223,1224,"
-msgstr ""
+#~ msgid "Token ID should be separated by comma, e.g. 1223,1224,"
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Token info"
@@ -6534,32 +6407,27 @@ msgid "Token Name"
 msgstr "トークン名"
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-msgid "Token now is hidden."
-msgstr ""
+#~ msgid "Token now is hidden."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Token quantity greater than"
 msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/DetailsCard.tsx
-msgid "Token Standard"
-msgstr "トークン標準"
+#~ msgid "Token Standard"
+#~ msgstr "トークン標準"
 
 #: packages/shared/src/UI/translate.ts
 msgid "Token unlocked"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
-#: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Token Value"
 msgstr "トークンの価値"
 
-#: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/index.tsx
-#: packages/mask/popups/pages/Wallet/Transfer/index.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalDialog.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
-#: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Tokens"
 msgstr "トークン"
 
@@ -6574,8 +6442,8 @@ msgid "Total cost"
 msgstr "合計額"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Total NFTs"
-msgstr ""
+#~ msgid "Total NFTs"
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -6584,8 +6452,8 @@ msgid "Total Supply"
 msgstr "総供給量"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/CoinMarketTable.tsx
-msgid "Total Volume"
-msgstr "合計量"
+#~ msgid "Total Volume"
+#~ msgstr "合計量"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/Quote.tsx
@@ -6610,7 +6478,6 @@ msgid "Transaction Confirmed"
 msgstr "取引が確認されました"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Transaction cost"
 msgstr ""
@@ -6796,13 +6663,13 @@ msgstr ""
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-msgid "Unlocking {hasSymbolName}..."
-msgstr ""
+#~ msgid "Unlocking {hasSymbolName}..."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-msgid "Unlocking ALL..."
-msgstr ""
+#~ msgid "Unlocking ALL..."
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Unnamed"
@@ -6836,8 +6703,8 @@ msgid "up to {0} Gwei"
 msgstr "最大 {0} Gweiまで"
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
-msgid "Update NFT Avatar Success!"
-msgstr "NFTアバターを更新しました！"
+#~ msgid "Update NFT Avatar Success!"
+#~ msgstr "NFTアバターを更新しました！"
 
 #: packages/mask/dashboard/pages/SetupPersona/Permissions/index.tsx
 msgid "Update permission for X.com"
@@ -6882,8 +6749,8 @@ msgid "URLs require the appropriate HTTPS prefix."
 msgstr "URL には適切な HTTPS プレフィックスが必要です。"
 
 #: packages/mask/content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx
-msgid "Use NFT"
-msgstr "NFT を使用する"
+#~ msgid "Use NFT"
+#~ msgstr "NFT を使用する"
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Use Persona to encrypt and decrypt social media posts & messages."
@@ -6911,8 +6778,8 @@ msgid "value"
 msgstr "価値"
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-msgid "Value"
-msgstr "価値"
+#~ msgid "Value"
+#~ msgstr "価値"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Verification code has been sent to your email. Please check your mailbox."
@@ -6922,13 +6789,11 @@ msgstr ""
 msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
 msgstr ""
 
-#. placeholder {0}: currentVerifiedBy.join(', ')
-#. placeholder {0}: verifiedBy.join(', ')
 #: packages/shared/src/UI/components/AssetsManagement/CollectibleItem.tsx
 #: packages/shared/src/UI/components/AssetsManagement/Collection.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionHeader.tsx
-msgid "Verified by {0}"
-msgstr ""
+#~ msgid "Verified by {0}"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
@@ -7043,7 +6908,6 @@ msgstr ""
 msgid "Waiting time"
 msgstr ""
 
-#: packages/plugins/Avatar/src/SiteAdaptor/NFTAvatar.tsx
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -7167,10 +7031,9 @@ msgstr "Mask Networkへようこそ"
 msgid "What is Web3 File Service?"
 msgstr "Web3ファイルサービスとは何ですか?"
 
-#. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateNftRedPacket.tsx
-msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
-msgstr ""
+#~ msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
+#~ msgstr ""
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "when you click Add Google Drive button，you will be forwarded to Google authorization pages."
@@ -7238,7 +7101,6 @@ msgid "You"
 msgstr "あなた"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "You can claim the lucky drop by holding the required amount of any selected token."
 msgstr ""
 
@@ -7260,8 +7122,8 @@ msgid "You claimed {0} ${1}."
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/NftRedPacket/index.tsx
-msgid "You claimed 1."
-msgstr ""
+#~ msgid "You claimed 1."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
@@ -7284,8 +7146,8 @@ msgid "You have donated {0} {1}"
 msgstr ""
 
 #: packages/plugins/Avatar/src/Application/UploadAvatarDialog.tsx
-msgid "You have set NFT PFP successfully."
-msgstr ""
+#~ msgid "You have set NFT PFP successfully."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 msgid "You have signed with your wallet."
@@ -7300,8 +7162,8 @@ msgid "You have verified your cloud password and recovered your backup. Do you w
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftHistory.tsx
-msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
-msgstr ""
+#~ msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
+#~ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 msgid "You haven't uploaded any files yet."
@@ -7331,8 +7193,8 @@ msgid "You need to follow the creator of the lucky drop."
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
-msgid "You need to hold any of the following NFTs in your wallet."
-msgstr ""
+#~ msgid "You need to hold any of the following NFTs in your wallet."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to hold any of the following tokens."
@@ -7350,7 +7212,6 @@ msgstr ""
 msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 msgstr ""
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "You've already claimed the lucky drop"
 msgstr ""

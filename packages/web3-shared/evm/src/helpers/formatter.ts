@@ -30,7 +30,7 @@ const formatTimestamp = (timestamp: string) => {
 }
 export function formatTrait(trait: NonFungibleTokenTrait) {
     if (isValidAddress(trait.value)) return formatEthereumAddress(trait.value, 4)
-    if (trait.displayType === 'date') return formatTimestamp(trait.value)
+    if (trait.display_type === 'date') return formatTimestamp(trait.value)
     return trait.value
 }
 

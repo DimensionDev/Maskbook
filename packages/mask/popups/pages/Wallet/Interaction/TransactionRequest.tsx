@@ -21,7 +21,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useLatest } from 'react-use'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 import type { TransactionDetail } from '../type.js'
 import type { InteractionItemProps } from './interaction.js'
 import { decodeAbiParameters, encodeAbiParameters, hexToBigInt } from 'viem'
@@ -228,7 +227,6 @@ export function TransactionRequest(props: InteractionItemProps) {
     )
 
     const isUnlockERC20 = transaction.formattedTransaction?.popup?.spender
-    const isUnlockERC721 = transaction.formattedTransaction?.popup?.erc721Spender
 
     const [expand, setExpand] = useState(
         transaction.formattedTransaction?.type === TransactionDescriptorType.DEPLOYMENT,
@@ -285,8 +283,7 @@ export function TransactionRequest(props: InteractionItemProps) {
     const main =
         isUnlockERC20 ?
             <UnlockERC20Token onConfigChange={setGasConfig} transaction={transaction} handleChange={setApproveAmount} />
-        : isUnlockERC721 ? <UnlockERC721Token onConfigChange={setGasConfig} transaction={transaction} />
-        : <TransactionPreview transaction={transaction} onConfigChange={setGasConfig} />
+        :   <TransactionPreview transaction={transaction} onConfigChange={setGasConfig} />
     return (
         <>
             {main}

@@ -232,7 +232,7 @@ export class EVMConnectionReadonlyAPI
             this.getNonFungibleTokenContract(address, schema, options),
         ])
         const [metadata, contract] = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)) as [
-            NonFungibleTokenMetadata<ChainId>,
+            NonFungibleTokenMetadata,
             NonFungibleTokenContract<ChainId, SchemaType>,
         ]
 

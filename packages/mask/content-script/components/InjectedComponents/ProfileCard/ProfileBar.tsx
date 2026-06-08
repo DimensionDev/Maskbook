@@ -12,10 +12,9 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Skeleton, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
-import { AvatarDecoration } from './AvatarDecoration.js'
 import { useLingui } from '@lingui/react/macro'
 
-const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void>()((theme, _) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -38,19 +37,10 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
             // Adjust to fit the rainbow border.
             transform: 'scale(0.94, 0.96) translate(0, 1px)',
         },
-        [`& .${refs.avatarDecoration}`]: {
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: '100%',
-            height: '100%',
-            transform: 'scale(1)',
-        },
     },
     avatarImageContainer: {
         borderRadius: '50%',
     },
-    avatarDecoration: {},
     description: {
         height: 40,
         marginLeft: 10,
@@ -152,7 +142,6 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         className: classes.avatarImageContainer,
                     }}
                 />
-                <AvatarDecoration className={classes.avatarDecoration} userId={identity.identifier?.userId} size={40} />
             </div>
             <Box className={classes.description}>
                 <Typography className={classes.nickname} title={identity.nickname}>

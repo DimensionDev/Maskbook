@@ -9,7 +9,6 @@ import type {
     SwapDialogEvent,
     ProfileCardEvent,
     SettingsDialogEvent,
-    NonFungibleTokenDialogEvent,
     WalletSettingsDialogEvent,
     AvatarSettingsDialogEvent,
     redpacketDialogEvent,
@@ -50,7 +49,6 @@ export interface CrossIsolationEvents {
     settingsDialogEvent: SettingsDialogEvent
     profileCardEvent: ProfileCardEvent
     renameWallet: RenameWalletEvent
-    nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent
     avatarSettingsDialogEvent: AvatarSettingsDialogEvent
     redpacketDialogEvent: redpacketDialogEvent

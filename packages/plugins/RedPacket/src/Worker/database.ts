@@ -1,12 +1,8 @@
 import { omit } from 'lodash-es'
-import type {
-    RedPacketRecord,
-    RedPacketRecordInDatabase,
-    RedPacketNftRecordInDatabase,
-} from '@masknet/web3-providers/types'
+import type { RedPacketRecord, RedPacketRecordInDatabase } from '@masknet/web3-providers/types'
 import type { Plugin } from '@masknet/plugin-infra'
 
-export let RedPacketDatabase: Plugin.Worker.DatabaseStorage<RedPacketRecordInDatabase | RedPacketNftRecordInDatabase>
+export let RedPacketDatabase: Plugin.Worker.DatabaseStorage<RedPacketRecordInDatabase>
 
 export function setupDatabase(x: typeof RedPacketDatabase) {
     RedPacketDatabase = x

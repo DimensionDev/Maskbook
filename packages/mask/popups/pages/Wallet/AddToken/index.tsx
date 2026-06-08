@@ -1,27 +1,16 @@
-import { Trans, useLingui } from '@lingui/react/macro'
-import { AddCollectibles, FungibleTokenList, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
+import { useLingui } from '@lingui/react/macro'
+import { FungibleTokenList, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    useBlockedFungibleTokens,
-    useChainContext,
-    useNetworks,
-    usePrivyWallet,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useBlockedFungibleTokens, useChainContext, useNetworks, usePrivyWallet } from '@masknet/web3-hooks-base'
 import { PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
-import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { TabContext, TabPanel } from '@mui/lab'
-import { Tab } from '@mui/material'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { memo, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAsyncFn } from 'react-use'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
-import { WalletAssetTabs } from '../type.js'
 
 const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }) => ({
     content: {
@@ -53,12 +42,6 @@ const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }
         fontSize: 12,
         background: '#F7F9FA',
     },
-    tabs: {
-        flex: 'none!important',
-        paddingTop: '0px!important',
-        paddingLeft: 16,
-        paddingRight: 16,
-    },
     panel: {
         padding: 0,
         background: theme.palette.maskColor.bottom,
@@ -83,25 +66,7 @@ const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }
         height: 432,
         paddingTop: theme.spacing(2),
     },
-    grid: {
-        gridTemplateColumns: 'repeat(auto-fill, minmax(40%, 1fr))',
-    },
-    form: {
-        padding: theme.spacing(2, 2, 0, 1.5),
-        height: 490,
-    },
-    nftContent: {
-        overflow: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
 }))
-
-enum TabType {
-    Tokens = 'Tokens',
-    Collectibles = 'Collectibles',
-}
 
 export const Component = memo(function AddToken() {
     const { t } = useLingui()
@@ -109,13 +74,8 @@ export const Component = memo(function AddToken() {
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
     const navigate = useNavigate()
-    const { chainId: defaultChainId, assetType } = useParams()
+    const { chainId: defaultChainId } = useParams()
     const { account } = useChainContext()
-    const [currentTab, onChange] = useTabs(
-        assetType === TabType.Collectibles ? TabType.Collectibles : TabType.Tokens,
-        TabType.Tokens,
-        TabType.Collectibles,
-    )
     const [searchError, setSearchError] = useState(false)
     const { classes } = useStyles({ searchError })
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
@@ -134,44 +94,9 @@ export const Component = memo(function AddToken() {
 
     useTitle(t`Add Assets`)
 
-    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
-    const { showSnackbar } = usePopupCustomSnackbar()
-
-    const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
-        async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
-            const [contract, tokenIds] = result
-            await Token?.addNonFungibleTokens?.(account, contract, tokenIds)
-
-            for (const tokenId of tokenIds) {
-                await Token?.addToken?.(account, {
-                    id: `${contract.chainId}.${contract.address}.${tokenId}`,
-                    chainId: contract.chainId,
-                    tokenId,
-                    type: TokenType.NonFungible,
-                    schema: contract.schema,
-                    address: contract.address,
-                })
-            }
-
-            showSnackbar(<Trans>NFTs added</Trans>, {
-                variant: 'success',
-            })
-            navigate(`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Collectibles}`, { replace: true })
-        },
-        [account],
-    )
-
     return (
-        <TabContext value={currentTab}>
-            <NormalHeader
-                tabList={
-                    <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                        <Tab label={<Trans>Tokens</Trans>} value={TabType.Tokens} />
-                        <Tab label={<Trans>NFTs</Trans>} value={TabType.Collectibles} />
-                    </MaskTabList>
-                }
-            />
+        <>
+            <NormalHeader />
             <div className={classes.content}>
                 <SelectNetworkSidebar
                     className={classes.sidebar}
@@ -181,7 +106,7 @@ export const Component = memo(function AddToken() {
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                 />
                 <div className={classes.main}>
-                    <TabPanel className={classes.panel} value={TabType.Tokens}>
+                    <div className={classes.panel}>
                         <FungibleTokenList
                             chainId={chainId}
                             isHiddenChainIcon={false}
@@ -196,19 +121,9 @@ export const Component = memo(function AddToken() {
                             FixedSizeListProps={{ height: 444, itemSize: rowSize + 16, className: classes.wrapper }}
                             SearchTextFieldProps={{ className: classes.input }}
                         />
-                    </TabPanel>
-                    <TabPanel className={classes.panel} value={TabType.Collectibles}>
-                        <AddCollectibles
-                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                            chainId={chainId}
-                            onAdd={addCustomNFTs}
-                            disabled={loadingAddCustomNFTs}
-                            className={classes.form}
-                            classes={{ grid: classes.grid, main: classes.nftContent }}
-                        />
-                    </TabPanel>
+                    </div>
                 </div>
             </div>
-        </TabContext>
+        </>
     )
 })

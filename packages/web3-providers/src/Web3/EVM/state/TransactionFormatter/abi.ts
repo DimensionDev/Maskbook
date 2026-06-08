@@ -4,7 +4,6 @@ import type { AbiFunction } from 'abitype'
 
 // built-in abis
 import { BulkCheckoutAbi } from '@masknet/web3-contracts/types/BulkCheckout.js'
-import { NftRedPacketAbi } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
 import { ERC721Abi } from '@masknet/web3-contracts/types/ERC721.js'
@@ -15,7 +14,6 @@ import { SmartPayEntryPointAbi } from '@masknet/web3-contracts/types/SmartPayEnt
 import { WalletAbi } from '@masknet/web3-contracts/types/Wallet.js'
 import { Create2FactoryAbi } from '@masknet/web3-contracts/types/Create2Factory.js'
 import { LensHubAbi } from '@masknet/web3-contracts/types/LensHub.js'
-import { LensFollowNFTAbi } from '@masknet/web3-contracts/types/LensFollowNFT.js'
 import { AirdropV2Abi } from '@masknet/web3-contracts/types/AirdropV2.js'
 
 class ABI {
@@ -23,7 +21,6 @@ class ABI {
 
     constructor() {
         this.construct(BulkCheckoutAbi) // donate gitcoin grants
-        this.construct(NftRedPacketAbi)
         this.construct(HappyRedPacketV4Abi)
         this.construct(ERC721Abi)
         this.construct(ERC20Abi)
@@ -34,7 +31,6 @@ class ABI {
         this.construct(WalletAbi) // Contract Wallet
         this.construct(Create2FactoryAbi) // Create2Factory
         this.construct(LensHubAbi)
-        this.construct(LensFollowNFTAbi)
         this.construct(AirdropV2Abi)
     }
 

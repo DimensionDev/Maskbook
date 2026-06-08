@@ -18,14 +18,13 @@ import {
     useFungibleToken,
     useFungibleTokenPrice,
     useNativeToken,
-    useNonFungibleAsset,
     useReverseAddress,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 import { isString } from 'lodash-es'
-import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { Trans } from '@lingui/react/macro'
@@ -133,12 +132,6 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
     const tokenId = transaction.formattedTransaction?.popup?.tokenId
 
-    const { data: metadata } = useNonFungibleAsset(
-        NetworkPluginID.PLUGIN_EVM,
-        tokenId ? transaction.computedPayload.to : undefined,
-        tokenId,
-    )
-
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
@@ -200,11 +193,8 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
                 <Typography component="div" className={classes.amount}>
-                    {tokenId && metadata?.collection?.iconURL ?
-                        <>
-                            <ImageIcon icon={metadata.collection.iconURL} size={24} className={classes.tokenIcon} />
-                            {metadata.collection.name}#{tokenId}
-                        </>
+                    {tokenId ?
+                        <Typography>Token #{tokenId}</Typography>
                     :   null}
                     {!tokenId ?
                         <>

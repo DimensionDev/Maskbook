@@ -1,14 +1,9 @@
-import { RedPacketMetaKey, RedPacketNftMetaKey, SolanaRedPacketMetaKey } from '@masknet/shared-base'
+import { RedPacketMetaKey, SolanaRedPacketMetaKey } from '@masknet/shared-base'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import type {
-    RedPacketJSONPayload,
-    RedPacketNftJSONPayload,
-    SolanaRedPacketJSONPayload,
-} from '@masknet/web3-providers/types'
+import type { RedPacketJSONPayload, SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Ok, type Result } from 'ts-results-es'
-import evmNftSchema from '../schemas/evm-nft.json' with { type: 'json' }
 import evmTokenSchema from '../schemas/evm-token.json' with { type: 'json' }
 import solanaTokenSchema from '../schemas/solana-token.json' with { type: 'json' }
 
@@ -34,12 +29,6 @@ export function RedPacketMetadataReader(
     return result
 }
 export const renderWithRedPacketMetadata = createRenderWithMetadata(RedPacketMetadataReader)
-
-export const RedPacketNftMetadataReader = createTypedMessageMetadataReader<RedPacketNftJSONPayload>(
-    RedPacketNftMetaKey,
-    evmNftSchema,
-)
-export const renderWithRedPacketNftMetadata = createRenderWithMetadata(RedPacketNftMetadataReader)
 
 export const SolanaRedPacketMetadataReader = createTypedMessageMetadataReader<SolanaRedPacketJSONPayload>(
     SolanaRedPacketMetaKey,

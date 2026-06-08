@@ -105,7 +105,7 @@ export interface BaseConnection<
         tokenId: string | undefined,
         schema?: SchemaType,
         initial?: Options,
-    ): Promise<NonFungibleTokenMetadata<ChainId>>
+    ): Promise<NonFungibleTokenMetadata>
 
     /** Get a non-fungible token contract. */
     getNonFungibleTokenContract(

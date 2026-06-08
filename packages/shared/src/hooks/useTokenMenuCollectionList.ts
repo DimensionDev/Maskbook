@@ -25,10 +25,7 @@ export function useTokenMenuCollectionList(
                 return false
             }
 
-            if (
-                (currentCollection?.source === SourceType.NFTScan || !currentCollection) &&
-                SourceTypeList.includes(SourceType.CoinGecko)
-            ) {
+            if (!currentCollection && SourceTypeList.includes(SourceType.CoinGecko)) {
                 return false
             }
 
