@@ -44,7 +44,6 @@ export const walletRoutes: RouteObject[] = [
             { path: r(PopupRoutes.SetPaymentPassword), lazy: () => import('./SetPaymentPassword/index.js') },
             { path: r(PopupRoutes.TokenDetail), lazy: () => import('./TokenDetail/index.js') },
             { path: r(PopupRoutes.TransactionDetail), lazy: () => import('./TransactionDetail/index.js') },
-            { path: r(PopupRoutes.CollectibleDetail), lazy: () => import('./CollectibleDetail/index.js') },
             { path: r(PopupRoutes.ResetWallet), lazy: () => import('./ResetWallet/index.js') },
             { path: '*', element: <Navigate to={PopupRoutes.Wallet} /> },
         ],

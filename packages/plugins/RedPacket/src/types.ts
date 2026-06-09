@@ -1,23 +1,15 @@
 import type { BN, web3 } from '@coral-xyz/anchor'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 
-export enum NFTSelectOption {
-    All = 'All',
-    Partial = 'Partial',
-}
-
 export enum RequirementType {
     Follow = 'Follow',
     Like = 'Like',
     Repost = 'Repost',
     Comment = 'Comment',
-    NFTHolder = 'NFTHolder',
 }
 
 export type FireflyRedpacketSettings = {
     requirements: RequirementType[]
-    nftHolderContract?: string
-    nftCollectionName?: string
 }
 
 export type FireflySocialProfile = {
@@ -44,7 +36,6 @@ export enum FireflyAccountSource {
 
 export enum RedPacketTabs {
     tokens = 'tokens',
-    collectibles = 'collectibles',
 }
 export enum HistoryTabs {
     Sent = 'sent',

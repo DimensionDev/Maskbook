@@ -80,7 +80,6 @@ export namespace SiteAdaptorUI {
             /** Inject UI to the setting dialog */
             PluginSettingsDialog?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
-            openNFTAvatarSettingDialog?(): void
 
             /**
              * @deprecated
@@ -91,13 +90,7 @@ export namespace SiteAdaptorUI {
              */
             userAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
-            enhancedProfileNFTAvatar?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
-            openNFTAvatar?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
-            postAndReplyNFTAvatar?(signal: AbortSignal): void
             avatar?(signal: AbortSignal): void
             tips?(signal: AbortSignal): void
             lens?(signal: AbortSignal): void

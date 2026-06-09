@@ -2,14 +2,12 @@ import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWallet, useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { TokenDetailUI } from '../TokenDetail/index.js'
 import { ContractSection } from '../../../../../shared/src/UI/components/CoinMetadataTable/ContractSection.js'
 import { useAsset } from '../hooks/useAsset.js'
-import { CollectibleDetailUI } from '../CollectibleDetail/index.js'
-import { useAsync } from 'react-use'
 import type { InteractionItemProps } from './interaction.js'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Trans } from '@lingui/react/macro'
@@ -122,28 +120,8 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
                     </Typography>
                     <TokenDetailUI hideChart valueAlign="left" address={address} chainId={chainId} />
                 </>
-            : (type === 'ERC721' || type === 'ERC1155') && tokenId ?
-                <NonFungibleAsset address={address} chainId={chainId} tokenId={tokenId} />
             :   null}
         </Box>
     )
 })
 WatchTokenRequest.displayName = 'WatchTokenRequest'
-
-function NonFungibleAsset({ address, chainId, tokenId }: { address: string; chainId: ChainId; tokenId: string }) {
-    const { classes } = useStyles()
-
-    const Hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { value: asset } = useAsync(() => {
-        return Hub.getNonFungibleAsset(address, tokenId, { chainId })
-    })
-    if (!asset) return
-    return (
-        <>
-            <Typography variant="caption" className={classes.caption}>
-                <Trans>Token Value</Trans>
-            </Typography>
-            <CollectibleDetailUI stateAsset={asset} />
-        </>
-    )
-}

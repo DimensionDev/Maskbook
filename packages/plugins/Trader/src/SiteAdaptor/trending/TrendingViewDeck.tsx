@@ -1,13 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
 import {
-    EnhanceableSite_RSS3_NFT_SITE_KEY_map,
     Linking,
-    NFTSpamBadge,
     PriceChange,
     TokenSecurityBar,
     TokenWithSocialGroupMenu,
-    useReportSpam,
     useSocialAccountsBySettings,
     useTokenMenuCollectionList,
     useTokenSecurity,
@@ -16,16 +13,15 @@ import {
     CrossIsolationMessages,
     EMPTY_LIST,
     PluginID,
-    type EnhanceableSite,
     type NetworkPluginID,
     type SocialIdentity,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { LoadingBase, MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
+import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { TokenType, formatCurrency } from '@masknet/web3-shared-base'
+import { formatCurrency } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import {
@@ -187,7 +183,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
     const theme = useTheme()
     const { classes } = useStyles({ isTokenTagPopper }, { props })
-    const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
 
@@ -195,7 +190,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-    const isTokenSecurityEnable = !useIsMinimalMode(PluginID.GoPlusSecurity) && !isNFT
+    const isTokenSecurityEnable = !useIsMinimalMode(PluginID.GoPlusSecurity)
     const isTransakEnabled = !!useActivatedPluginSiteAdaptor(PluginID.Transak, false)
 
     const { value: tokenSecurity, error } = useTokenSecurity(
@@ -204,7 +199,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         isTokenSecurityEnable,
     )
 
-    const isBuyable = !isNFT && isTransakEnabled && coin.symbol && isAllowanceCoin
+    const isBuyable = isTransakEnabled && coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
@@ -235,17 +230,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const collectionList = useTokenMenuCollectionList(resultList, result)
 
-    const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity?.identifier?.network as EnhanceableSite]
     const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity, undefined, undefined)
 
     const openRss3Profile = useCallback((_address: string) => {
         CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
     }, [])
-
-    const { isReporting, isSpam, promptReport } = useReportSpam({
-        address: coin.address,
-        chainId: coin.chainId,
-    })
 
     useEffect(() => {
         if (timer.current) clearTimeout(timer.current)
@@ -306,7 +295,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         </Trans>
                                     </Typography>
                                 :   null}
-                                {(collectionList.length > 1 || (socialAccounts.length && rss3Key)) && !isPreciseSearch ?
+                                {(collectionList.length > 1 || socialAccounts.length) && !isPreciseSearch ?
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
@@ -351,16 +340,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 <Trans>Buy Now</Trans>
                                             </Button>
                                         :   null}
-                                        {isNFT && first(coin.home_urls) ?
-                                            <Button
-                                                color="primary"
-                                                size="small"
-                                                endIcon={<Icons.LinkOut size={16} />}
-                                                variant="roundedContained"
-                                                onClick={() => window.open(first(coin.home_urls))}>
-                                                <Trans>Open</Trans>
-                                            </Button>
-                                        :   null}
                                     </ThemeProvider>
                                 </Box>
                             </Stack>
@@ -372,27 +351,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             fontWeight={500}
                                             lineHeight="24px"
                                             color={theme.palette.maskColor.dark}>
-                                            {isNFT ?
-                                                <>
-                                                    <Trans>Floor Price</Trans>:{' '}
-                                                </>
-                                            :   null}
-                                            {floorPrice ?
-                                                formatCurrency(floorPrice, isNFT ? market.price_symbol : 'USD')
-                                            :   '--'}
+                                            {floorPrice ? formatCurrency(floorPrice, 'USD') : '--'}
                                         </Typography>
                                     :   <Typography fontSize={14} fontWeight={500} lineHeight="24px">
                                             <Trans>No Data</Trans>
                                         </Typography>
                                     }
-                                    {isNFT && !isSpam ?
-                                        <IconButton onClick={promptReport} disabled={isReporting}>
-                                            {isReporting ?
-                                                <LoadingBase size={16} />
-                                            :   <Icons.Flag size={16} color={theme.palette.maskColor.dark} />}
-                                        </IconButton>
-                                    :   null}
-                                    {market && !isNFT ?
+                                    {market ?
                                         <PriceChange
                                             change={
                                                 market.price_change_percentage_24h_in_currency ||
@@ -402,9 +367,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         />
                                     :   null}
                                 </Stack>
-                                {isNFT && isSpam ?
-                                    <NFTSpamBadge />
-                                : isTokenSecurityEnable && tokenSecurity && !error ?
+                                {isTokenSecurityEnable && tokenSecurity && !error ?
                                     <TokenSecurityBar tokenSecurity={tokenSecurity} />
                                 :   null}
                             </Stack>

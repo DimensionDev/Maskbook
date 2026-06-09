@@ -1,17 +1,9 @@
 import { toHex, type Account, type ECKeyIdentifier, type Proof } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import {
-    createNonFungibleToken,
     createNonFungibleTokenContract,
-    createNonFungibleTokenMetadata,
-    isGreaterThan,
-    isSameAddress,
-    resolveCrossOriginURL,
-    resolveIPFS_URL,
     type FungibleToken,
-    type NonFungibleToken,
     type NonFungibleTokenContract,
-    type NonFungibleTokenMetadata,
     type TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import {
@@ -41,7 +33,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { first, omit, toNumber } from 'lodash-es'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
-import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
 import type { EVMConnectionOptions } from '../types/index.js'
@@ -52,19 +43,6 @@ import { EVMChainResolver } from './ResolverAPI.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
-
-interface ERC721Metadata {
-    name: string
-    description: string
-    image: string
-}
-
-interface ERC1155Metadata {
-    name: string
-    decimals: number
-    description: string
-    image: string
-}
 
 export class EVMConnectionReadonlyAPI
     implements
@@ -135,32 +113,11 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async approveAllNonFungibleTokens(
-        address: string,
-        recipient: string,
-        approved: boolean,
-        schema?: SchemaType,
-        initial?: EVMConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     async transferFungibleToken(
         address: string,
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: EVMConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async transferNonFungibleToken(
-        address: string,
-        tokenId: string,
-        recipient: string,
-        amount?: string,
-        schema?: SchemaType,
         initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
@@ -217,125 +174,6 @@ export class EVMConnectionReadonlyAPI
         } catch {
             return
         }
-    }
-
-    async getNonFungibleToken(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: EVMConnectionOptions,
-    ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        const options = this.ConnectionOptions.fill(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
-        const allSettled = await Promise.allSettled([
-            this.getNonFungibleTokenMetadata(address, tokenId, schema, options),
-            this.getNonFungibleTokenContract(address, schema, options),
-        ])
-        const [metadata, contract] = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)) as [
-            NonFungibleTokenMetadata<ChainId>,
-            NonFungibleTokenContract<ChainId, SchemaType>,
-        ]
-
-        let ownerId: string | undefined
-
-        if (actualSchema !== SchemaType.ERC1155) {
-            const contract = this.Contract.getERC721Contract(address, options)
-            try {
-                ownerId = await contract?.methods.ownerOf(tokenId).call()
-            } catch {}
-        } else if (options.account) {
-            const contract = this.Contract.getERC1155Contract(address, options)
-            try {
-                const balance = await contract?.methods.balanceOf(options.account, tokenId).call()
-                ownerId = balance && isGreaterThan(balance, '0') ? options.account : undefined
-            } catch {}
-        }
-
-        return createNonFungibleToken<ChainId, SchemaType>(
-            options.chainId,
-            address,
-            actualSchema ?? SchemaType.ERC721,
-            tokenId,
-            ownerId,
-            metadata,
-            contract,
-        )
-    }
-
-    async getNonFungibleTokenOwnership(
-        address: string,
-        tokenId: string,
-        owner: string,
-        schema?: SchemaType,
-        initial?: EVMConnectionOptions,
-    ) {
-        const options = this.ConnectionOptions.fill(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
-
-        // ERC1155
-        if (actualSchema === SchemaType.ERC1155) {
-            const contract = this.Contract.getERC1155Contract(address, options)
-            // the owner has at least 1 token
-            return isGreaterThan((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0, 0)
-        }
-
-        // ERC721
-        const contract = this.Contract.getERC721Contract(address, options)
-        return isSameAddress(await contract?.methods.ownerOf(tokenId).call(), owner)
-    }
-
-    async getNonFungibleTokenMetadata(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: EVMConnectionOptions,
-    ) {
-        const options = this.ConnectionOptions.fill(initial)
-        const processURI = (uri: string) => {
-            // e.g,
-            // address: 0x495f947276749ce646f68ac8c248420045cb7b5e
-            // token id: 33445046430196205871873533938903624085962860434195770982901962545689408831489
-            if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
-
-            // add cors header
-            return resolveCrossOriginURL(resolveIPFS_URL(uri))!
-        }
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
-
-        // ERC1155
-        if (actualSchema === SchemaType.ERC1155) {
-            const contract = this.Contract.getERC1155Contract(address, options)
-            const uri = await contract?.methods.uri(tokenId ?? '').call()
-            if (!uri) throw new Error('Failed to read metadata uri.')
-
-            const response = await fetchJSON<ERC1155Metadata>(processURI(uri))
-            return createNonFungibleTokenMetadata(
-                options.chainId,
-                response.name,
-                tokenId ?? '',
-                '',
-                response.description,
-                undefined,
-                resolveIPFS_URL(response.image),
-                resolveIPFS_URL(response.image),
-            )
-        }
-
-        // ERC721
-        const contract = this.Contract.getERC721Contract(address, options)
-        const uri = await contract?.methods.tokenURI(tokenId ?? '').call()
-        if (!uri) throw new Error('Failed to read metadata uri.')
-        const response = await fetchJSON<ERC721Metadata>(processURI(uri))
-        return createNonFungibleTokenMetadata(
-            options.chainId,
-            response.name,
-            tokenId ?? '',
-            '',
-            response.description,
-            undefined,
-            resolveIPFS_URL(response.image),
-            resolveIPFS_URL(response.image),
-        )
     }
 
     async getNonFungibleTokenContract(
@@ -416,26 +254,6 @@ export class EVMConnectionReadonlyAPI
         // ERC20
         const contract = this.Contract.getERC20Contract(address, options)
         return (await contract?.methods.balanceOf(options.account).call()) ?? '0'
-    }
-
-    async getNonFungibleTokenBalance(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: EVMConnectionOptions,
-    ): Promise<string> {
-        const options = this.ConnectionOptions.fill(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
-
-        // ERC1155
-        if (actualSchema === SchemaType.ERC1155) {
-            const contract = this.Contract.getERC1155Contract(address, options)
-            return contract?.methods?.balanceOf(options.account, tokenId ?? '').call() ?? '0'
-        }
-
-        // ERC721
-        const contract = this.Contract.getERC721Contract(address, options)
-        return contract?.methods.balanceOf(options.account).call() ?? '0'
     }
 
     async getFungibleTokensBalance(

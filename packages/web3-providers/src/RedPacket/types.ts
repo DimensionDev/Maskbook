@@ -1,6 +1,6 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { ChainId as SolanaChainId, SchemaType as SolanaSchemaType } from '@masknet/web3-shared-solana'
 import type { Cluster } from '@solana/web3.js'
 
@@ -65,48 +65,6 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
 }
 
 // #endregion
-
-// #region nft red packet
-export interface RedPacketNftJSONPayload {
-    id: string
-    txid: string
-    duration: number
-    message: string
-    senderName: string
-    contractName: string
-    contractAddress: string
-    contractVersion: number
-    contractTokenURI: string
-    privateKey: string
-    chainId: ChainId
-    /** @since 2.32.0 */
-    themeId: string
-}
-
-export interface NftRedPacketJSONPayload extends Omit<RedPacketBasic, 'is_random' | 'total'> {
-    contract_version: number
-    sender: {
-        address: string
-        name: string
-        message: string
-    }
-    chainId: ChainId
-    network?: string
-    token_ids: string[]
-    token_address: string
-    token?: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'name' | 'decimals' | 'symbol'>
-}
-
-export interface RedPacketNftRecord {
-    id: string
-    password: string
-    contract_version: number
-}
-
-export interface RedPacketNftRecordInDatabase extends RedPacketNftRecord {
-    /** An unique record type in DB */
-    type: 'red-packet-nft'
-}
 
 export interface SolanaRedPacketJSONPayload extends RedPacketBasic {
     rpid: string

@@ -111,14 +111,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         color: theme.palette.maskColor.main,
     },
-    collectionName: {
-        maxWidth: 80,
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 2,
-        overflow: 'hidden',
-        whiteSpace: 'normal',
-    },
     tokenIcon: {
         width: 24,
         height: 24,
@@ -141,9 +133,7 @@ export function TokenRedPacketConfirm() {
         setGasOption,
         tokenQuantity,
         requiredTokens,
-        requiredCollections,
         needHoldingTokens,
-        needHoldingCollections,
         claimStrategies,
         message,
         rawAmount,
@@ -268,7 +258,7 @@ export function TokenRedPacketConfirm() {
                     <Typography className={classes.fieldName}>
                         <Trans>Claim Conditions</Trans>
                     </Typography>
-                    {!needHoldingTokens && !needHoldingCollections ?
+                    {!needHoldingTokens ?
                         <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
                             <Trans>Available to Everyone</Trans>
                         </Typography>
@@ -298,40 +288,6 @@ export function TokenRedPacketConfirm() {
                                                     logoURL={token.logoURL}
                                                 />
                                                 <Typography className={classes.assetName}>{token.symbol}</Typography>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    :   null}
-                    {needHoldingCollections ?
-                        <div className={classes.conditionGroup}>
-                            <div className={classes.field}>
-                                <Typography component="span" className={classes.value}>
-                                    {needHoldingTokens ?
-                                        <Trans>or Holding NFT</Trans>
-                                    :   <Trans>Holding NFT</Trans>}
-                                </Typography>
-                            </div>
-                            <div className={classes.field}>
-                                <div className={classes.fieldValue}>
-                                    <div className={classes.assets}>
-                                        {requiredCollections.map((collection, index) => (
-                                            <div className={classes.asset} key={collection.address}>
-                                                {index === 0 ? '' : '/'}
-                                                <TokenIcon
-                                                    className={classes.tokenIcon}
-                                                    address={collection.address}
-                                                    name={collection.name}
-                                                    size={24}
-                                                    badgeSize={12}
-                                                    chainId={collection.chainId}
-                                                    logoURL={collection.iconURL!}
-                                                />
-                                                <Typography className={cx(classes.assetName, classes.collectionName)}>
-                                                    {collection.name}
-                                                </Typography>
                                             </div>
                                         ))}
                                     </div>

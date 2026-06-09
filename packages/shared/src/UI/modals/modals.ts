@@ -12,7 +12,6 @@ import type { GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js
 import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { ConfirmDialogOpenProps } from './ConfirmDialog/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
-import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
 import type {
     SelectFungibleTokenModalOpenProps,
     SelectFungibleTokenModalCloseProps,
@@ -21,7 +20,6 @@ import type {
     SelectGasSettingsModalCloseProps,
     SelectGasSettingsModalOpenProps,
 } from './SelectAdvancedSettingsDialog/index.js'
-import type { AddCollectiblesModalCloseProps, AddCollectiblesModalOpenProps } from './AddCollectiblesModal/index.js'
 import type { PersonaSelectPanelModalOpenProps } from './PersonaSelectPanelModal/index.js'
 import type { VerifyNextIDDialogCloseProps, VerifyNextIDDialogProps } from '../components/VerifyNextIDDialog/index.js'
 import type { ImageEditorModalCloseProps, ImageEditorModalOpenProps } from './ImageEditor/index.js'
@@ -39,12 +37,10 @@ export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModa
 export const TransactionSnackbar = new SingletonModal()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, ConfirmModalCloseProps>()
 export const ConfirmDialog = new SingletonModal<ConfirmDialogOpenProps, boolean>()
-export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()
 export const SelectGasSettingsModal = new SingletonModal<
     SelectGasSettingsModalOpenProps,
     SelectGasSettingsModalCloseProps
 >()
-export const AddCollectiblesModal = new SingletonModal<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>()
 export const SelectFungibleTokenModal = new SingletonModal<
     SelectFungibleTokenModalOpenProps,
     SelectFungibleTokenModalCloseProps

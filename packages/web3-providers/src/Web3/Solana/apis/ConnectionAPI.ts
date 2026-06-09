@@ -1,7 +1,7 @@
 import {
     AddressType,
     ChainId,
-    SchemaType,
+    type SchemaType,
     type Signature,
     type TransactionDetailed,
     type TransactionReceipt,
@@ -19,17 +19,13 @@ import {
 import {
     TransactionStatusType,
     type FungibleToken,
-    type NonFungibleToken,
-    type NonFungibleTokenMetadata,
     type NonFungibleTokenContract,
     isSameAddress,
-    createNonFungibleToken,
 } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, NetworkPluginID, type Account } from '@masknet/shared-base'
 import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { BlockResponse } from '@solana/web3.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
-import defer * as MagicEden from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
@@ -98,16 +94,6 @@ export class SolanaConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    approveAllNonFungibleTokens(
-        address: string,
-        recipient: string,
-        approved: boolean,
-        schema?: SchemaType | undefined,
-        initial?: SolanaConnectionOptions | undefined,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     async transferFungibleToken(
         address: string,
         recipient: string,
@@ -118,17 +104,6 @@ export class SolanaConnectionAPI
         return isNativeTokenAddress(address) ?
                 this.Transfer.transferSol(recipient, amount, initial)
             :   this.Transfer.transferSplToken(address, recipient, amount, initial)
-    }
-
-    transferNonFungibleToken(
-        address: string,
-        tokenId: string,
-        recipient: string,
-        amount: string,
-        schema?: SchemaType,
-        initial?: SolanaConnectionOptions,
-    ): Promise<string> {
-        return this.Transfer.transferSplToken(address, recipient, amount, initial)
     }
 
     async connect(initial?: SolanaConnectionOptions): Promise<Account<ChainId>> {
@@ -172,15 +147,6 @@ export class SolanaConnectionAPI
         const { data: assets } = await SolanaFungible.getAssets(options.account, options)
         const asset = assets.find((x) => isSameAddress(x.address, address))
         return asset?.balance ?? '0'
-    }
-
-    getNonFungibleTokenBalance(
-        address: string,
-        tokenId?: string,
-        schema?: SchemaType,
-        initial?: SolanaConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
     }
 
     async getFungibleTokensBalance(
@@ -278,47 +244,6 @@ export class SolanaConnectionAPI
                 chainId: options.chainId,
             } as FungibleToken<ChainId, SchemaType>)
         )
-    }
-
-    async getNonFungibleToken(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: SolanaConnectionOptions,
-    ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        const options = this.ConnectionOptions.fill(initial)
-        const asset = await MagicEden.MagicEden.getAsset(address, tokenId, {
-            chainId: options.chainId,
-        })
-        return createNonFungibleToken(
-            options.chainId,
-            address,
-            SchemaType.NonFungible,
-            tokenId,
-            asset?.ownerId,
-            asset?.metadata,
-            asset?.contract,
-            asset?.collection,
-        )
-    }
-
-    getNonFungibleTokenOwnership(
-        address: string,
-        tokenId: string,
-        owner: string,
-        schema?: SchemaType | undefined,
-        initial?: SolanaConnectionOptions,
-    ): Promise<boolean> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNonFungibleTokenMetadata(
-        address: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: SolanaConnectionOptions,
-    ): Promise<NonFungibleTokenMetadata<ChainId>> {
-        throw new Error('Method not implemented.')
     }
 
     getNonFungibleTokenContract(

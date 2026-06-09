@@ -105,7 +105,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return getSearchResultTabs(activatedPlugins, currentResult, translate)
     }, [activatedPlugins, resultList, translate])
 
-    const defaultTab = first(tabs)?.id ?? PluginID.Collectible
+    const defaultTab = first(tabs)?.id ?? PluginID.Trader
     const [currentTab, onChange, , setTab] = useTabs(defaultTab, ...tabs.map((tab) => tab.id))
     useLayoutEffect(() => {
         setTab(defaultTab)

@@ -9,8 +9,6 @@ export interface DataProviderIconProps {
 export function DataProviderIcon(props: DataProviderIconProps) {
     const { size = 16 } = props
     switch (props.provider) {
-        case SourceType.NFTScan:
-            return <Icons.NFTScan size={size} />
         case SourceType.CoinGecko:
             return <Icons.CoinGecko size={size} />
         case SourceType.UniswapInfo:

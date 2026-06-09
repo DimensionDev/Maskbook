@@ -3,7 +3,6 @@ import Airdrop from '@masknet/web3-constants/evm/airdrop.json' with { type: 'jso
 import Arb from '@masknet/web3-constants/evm/arb.json' with { type: 'json' }
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json' with { type: 'json' }
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json' with { type: 'json' }
-import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json' with { type: 'json' }
 import ENS from '@masknet/web3-constants/evm/ens.json' with { type: 'json' }
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json' with { type: 'json' }
 import Etherscan from '@masknet/web3-constants/evm/etherscan.json' with { type: 'json' }
@@ -12,7 +11,6 @@ import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json' with { type
 import LensProfile from '@masknet/web3-constants/evm/lens-profile.json' with { type: 'json' }
 import Lens from '@masknet/web3-constants/evm/lens.json' with { type: 'json' }
 import Lido from '@masknet/web3-constants/evm/lido.json' with { type: 'json' }
-import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json' with { type: 'json' }
 import OpenOcean from '@masknet/web3-constants/evm/openocean.json' with { type: 'json' }
 import Pet from '@masknet/web3-constants/evm/pet.json' with { type: 'json' }
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json' with { type: 'json' }
@@ -101,11 +99,6 @@ export const getArtBlocksConstants = transformAll(ChainId, ArtBlocks)
 export const useArtBlocksConstant = transformHook(getArtBlocksConstants)
 export const useArtBlocksConstants = transformAllHook(getArtBlocksConstants)
 
-export const getNftRedPacketConstant = transform(ChainId, NftRedPacket)
-export const getNftRedPacketConstants = transformAll(ChainId, NftRedPacket)
-export const useNftRedPacketConstant = transformHook(getNftRedPacketConstants)
-export const useNftRedPacketConstants = transformAllHook(getNftRedPacketConstants)
-
 export const getAaveConstant = transform(ChainId, Aave)
 export const getAaveConstants = transformAll(ChainId, Aave)
 export const useAaveConstant = transformHook(getAaveConstants)
@@ -131,8 +124,6 @@ export const getLensConstant = transform(ChainId, Lens)
 export const getLensConstants = transformAll(ChainId, Lens)
 export const useLensConstant = transformHook(getLensConstants)
 export const useLensConstants = transformAllHook(getLensConstants)
-
-export const getCryptoPunksConstants = transformAll(ChainId, CryptoPunks)
 
 export const getAirdropClaimersConstant = transform(ChainId, Airdrop)
 export const getAirdropClaimersConstants = transformAll(ChainId, Airdrop)

@@ -1,68 +1,5 @@
 /* cspell:disable */
 export namespace TwitterBaseAPI {
-    export interface NFT {
-        address: string
-        token_id: string
-    }
-
-    export interface NFTContainer {
-        has_nft_avatar: boolean
-        nft_avatar_metadata: AvatarMetadata
-    }
-
-    export interface UserNFTAvatar {
-        has_nft_avatar: boolean
-        id: string
-        is_blue_verified: boolean
-        legacy: Pick<
-            IdentifyResponse,
-            'id' | 'id_str' | 'name' | 'screen_name' | 'verified' | 'profile_image_url_https'
-        > & {
-            profile_image_extensions: {
-                mediaColor: {
-                    r: {
-                        ok: {
-                            palette: Array<{
-                                /** @example 42 */
-                                percentage: number
-                                rgb: { red: number; blue: number; green: number }
-                            }>
-                        }
-                    }
-                }
-            }
-        }
-        nft_avatar_metadata: AvatarMetadata
-    }
-
-    export interface AvatarMetadata {
-        token_id: string
-        smart_contract: {
-            __isSmartContract: 'ERC721'
-            network: 'Ethereum'
-            address: string
-        }
-        metadata: {
-            creator_username: string
-            creator_address: string
-            name: string
-            description?: string
-            collection: {
-                name: string
-                metadata: {
-                    image_url: string
-                    verified: boolean
-                    description: string
-                    name: string
-                }
-            }
-            traits: Array<{
-                trait_type: string
-                value: string
-            }>
-        }
-    }
-
     export interface UserUrl {
         display_url: string
         expanded_url: string
@@ -289,15 +226,6 @@ export namespace TwitterBaseAPI {
         }
     }
 
-    export interface UserNFTAvatarResponse {
-        data: {
-            // If user doesn't exist, instead of 404 response, user field will miss
-            user?: {
-                result: UserNFTAvatar
-            }
-        }
-    }
-
     export interface MediaResponse {
         media_id: number
         media_id_string: string
@@ -366,7 +294,6 @@ export namespace TwitterBaseAPI {
         is_blue_verified: boolean
         profile_image_shape: 'Circle'
         legacy: LegacyUserInfo
-        has_nft_avatar?: boolean
     }
     export interface CreateTweetResponse {
         data: {
@@ -532,7 +459,6 @@ export namespace TwitterBaseAPI {
 
     export interface User {
         verified: boolean
-        has_nft_avatar: boolean
         userId: string
         nickname: string
         screenName: string // handle

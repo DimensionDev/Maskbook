@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { NFTSCAN_CHAIN_IDS } from '@masknet/web3-providers'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginID.Tips,
@@ -19,7 +19,24 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: NFTSCAN_CHAIN_IDS,
+                supportedChainIds: [
+                    ChainId.Mainnet,
+                    ChainId.BSC,
+                    ChainId.Polygon,
+                    ChainId.Arbitrum,
+                    ChainId.Base,
+                    ChainId.xDai,
+                    ChainId.Fantom,
+                    ChainId.Optimism,
+                    ChainId.Avalanche,
+                    ChainId.Aurora,
+                    ChainId.Conflux,
+                    ChainId.Astar,
+                    ChainId.Scroll,
+                    ChainId.Metis,
+                    ChainId.XLayer,
+                    ChainId.Sei,
+                ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
             [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },

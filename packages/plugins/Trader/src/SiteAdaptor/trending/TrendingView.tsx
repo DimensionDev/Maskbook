@@ -1,20 +1,18 @@
 import { Trans } from '@lingui/react/macro'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { NFTList, PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
+import { PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
 import { Days, EMPTY_LIST, NetworkPluginID, PluginID, type SocialIdentity } from '@masknet/shared-base'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
-import { compact, first } from 'lodash-es'
+import { first } from 'lodash-es'
 import { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById } from '../../trending/useTrending.js'
@@ -22,7 +20,6 @@ import { ContentTab } from '../../types/index.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { TrendingViewContext } from './context.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
-import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { PriceChart } from './PriceChart.js'
 import { DEFAULT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
@@ -80,20 +77,8 @@ const useStyles = makeStyles<{
         cardHeader: {
             marginBottom: '-36px',
         },
-        nftItems: {
-            height: 530,
-            padding: theme.spacing(2),
-            boxSizing: 'border-box',
-            overflow: 'auto',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
         priceChartWrapper: {
             padding: theme.spacing(4, 2, props.isTokenTagPopper ? 8 : 4, 2),
-        },
-        nftList: {
-            gap: 12,
         },
     }
 })
@@ -149,11 +134,10 @@ export function TrendingView(props: TrendingViewProps) {
         onPriceDaysControlChange(Days.ONE_DAY)
     }, [trending?.market])
 
-    const isNFT = trending?.coin.type === TokenType.NonFungible
     const { data: stats = EMPTY_LIST, isPending: loadingStats } = usePriceStats({
         chainId: result.chainId,
         coinId: trending?.coin.id,
-        sourceType: isNFT ? SourceType.NFTScan : trending?.dataProvider,
+        sourceType: trending?.dataProvider,
         currency: trending?.currency,
         days,
     })
@@ -186,7 +170,6 @@ export function TrendingView(props: TrendingViewProps) {
     const isSwappable =
         !!process.env.MASK_ENABLE_EXCHANGE &&
         !isMinimalMode &&
-        !isNFT &&
         !isBRC20 &&
         !!trending?.coin.contract_address &&
         (!swapExpectedContract?.pluginID || swapExpectedContract.pluginID === NetworkPluginID.PLUGIN_EVM)
@@ -194,10 +177,8 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region tabs
     const tabs = useMemo(() => {
-        const list = [ContentTab.Market, ContentTab.Price, ContentTab.Exchange]
-        if (isNFT) list.push(ContentTab.NFTItems)
-        return list
-    }, [isNFT])
+        return [ContentTab.Market, ContentTab.Price, ContentTab.Exchange]
+    }, [])
     const [currentTab, , , setTab] = useTabs<ContentTab>(tabs[0], ...tabs)
     useLayoutEffect(() => {
         setTab(tabs[0])
@@ -211,21 +192,15 @@ export function TrendingView(props: TrendingViewProps) {
             },
             {
                 key: ContentTab.Price,
-                label: isNFT ? <Trans>Floor Price</Trans> : <Trans>Price</Trans>,
+                label: <Trans>Price</Trans>,
             },
             {
                 key: ContentTab.Exchange,
-                label: isNFT ? <Trans>Activities</Trans> : <Trans>Exchange</Trans>,
+                label: <Trans>Exchange</Trans>,
             },
-            isNFT ?
-                {
-                    key: ContentTab.NFTItems,
-                    label: <Trans>NFTs</Trans>,
-                }
-            :   undefined,
         ]
-        return compact(configs).map((x) => <Tab value={x.key} key={x.key} label={x.label} />)
-    }, [isNFT])
+        return configs.map((x) => <Tab value={x.key} key={x.key} label={x.label} />)
+    }, [])
     // #endregion
 
     const { classes } = useStyles({ isTokenTagPopper, currentTab })
@@ -246,13 +221,6 @@ export function TrendingView(props: TrendingViewProps) {
             />
         )
     }
-    const collectionId =
-        trending?.coin.type === TokenType.NonFungible ?
-            result.pluginID === NetworkPluginID.PLUGIN_SOLANA ?
-                result.name
-            :   trending.coin.contract_address
-        :   undefined
-
     // #region display loading skeleton
     if (!trending?.currency || loadingTrending)
         return (
@@ -294,20 +262,10 @@ export function TrendingView(props: TrendingViewProps) {
 
                             if (!isProfilePage) return
 
-                            if (isNFT) {
-                                if (v === ContentTab.Price) {
-                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_TrendSwitchTo)
-                                } else if (v === ContentTab.NFTItems) {
-                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ItemsSwitchTo)
-                                } else if (v === ContentTab.Exchange) {
-                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ActivitiesSwitchTo)
-                                }
-                            } else {
-                                if (v === ContentTab.Price) {
-                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchTrend)
-                                } else if (v === ContentTab.Exchange) {
-                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchMarket)
-                                }
+                            if (v === ContentTab.Price) {
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchTrend)
+                            } else if (v === ContentTab.Exchange) {
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchMarket)
                             }
                         }}
                         aria-label="Network Tabs">
@@ -347,27 +305,7 @@ export function TrendingView(props: TrendingViewProps) {
                 :   null}
                 {currentTab === ContentTab.Exchange && trending.dataProvider ?
                     <Box p={2}>
-                        {isNFT ?
-                            <NonFungibleTickersTable
-                                id={
-                                    (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
-                                    ''
-                                }
-                                chainId={result.chainId ?? coin.chainId ?? ChainId.Mainnet}
-                                result={result}
-                            />
-                        :   <TickersTable tickers={tickers} />}
-                    </Box>
-                :   null}
-                {isNFT && currentTab === ContentTab.NFTItems ?
-                    <Box className={classes.nftItems}>
-                        <NFTList
-                            pluginID={result.pluginID}
-                            chainId={result.chainId}
-                            className={classes.nftList}
-                            collectionId={collectionId}
-                            gap={16}
-                        />
+                        <TickersTable tickers={tickers} />
                     </Box>
                 :   null}
             </Stack>

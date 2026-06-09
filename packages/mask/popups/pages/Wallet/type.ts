@@ -12,7 +12,6 @@ export enum MethodAfterPersonaSign {
 }
 export enum ProfilePhotoType {
     Image = 'Image',
-    NFT = 'NFT',
 }
 
 export enum ContactType {
@@ -22,7 +21,6 @@ export enum ContactType {
 
 export enum WalletAssetTabs {
     Tokens = 'Tokens',
-    Collectibles = 'Collectibles',
     Activity = 'Activity',
 }
 
@@ -49,5 +47,4 @@ export type TransactionDetail = {
 
 export enum TransferTabType {
     Token = 'Token',
-    NFT = 'NFT',
 }

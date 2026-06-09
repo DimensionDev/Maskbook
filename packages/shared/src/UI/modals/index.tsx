@@ -3,7 +3,6 @@ import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { memo } from 'react'
 import { PrivySetup } from '../components/Privy/Setup.js'
 import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
-import { AddCollectiblesModal } from './AddCollectiblesModal/index.js'
 import { ApplicationBoardModal, ApplicationBoardSettingsModal } from './ApplicationBoardModal/index.js'
 import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
 import { ConfirmModal } from './ConfirmModal/index.js'
@@ -15,7 +14,6 @@ import * as modals from './modals.js'
 import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
 import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
 import { SelectFungibleTokenModal } from './SelectFungibleTokenModal/index.js'
-import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal/index.js'
 import { SelectProviderModal } from './SelectProviderModal/index.js'
 import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js'
 import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
@@ -43,10 +41,8 @@ export const Modals = memo(function Modals(props: ModalProps) {
             <TransactionSnackbarModal pluginID={NetworkPluginID.PLUGIN_EVM} ref={modals.TransactionSnackbar.register} />
             <TransactionConfirmModal ref={modals.TransactionConfirmModal.register} />
             <ConfirmModal ref={modals.ConfirmModal.register} />
-            <SelectNonFungibleContractModal ref={modals.SelectNonFungibleContractModal.register} />
             <SelectFungibleTokenModal ref={modals.SelectFungibleTokenModal.register} />
             <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
-            <AddCollectiblesModal ref={modals.AddCollectiblesModal.register} />
             <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
             <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
             <VerifyNextIDModal ref={modals.VerifyNextIDModal.register} />

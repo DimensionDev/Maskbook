@@ -1,19 +1,15 @@
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { FireflyRedPacket } from '@masknet/web3-providers'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { signMessage } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { usePlatformType } from './usePlatformType.js'
 import type { Hex } from 'viem'
 
-// TODO NFT redpacket is not supported by the API yet.
-export function useSignedMessage(
-    account: string,
-    payload: RedPacketJSONPayload | RedPacketNftJSONPayload = {} as RedPacketJSONPayload,
-) {
-    const rpid = 'rpid' in payload ? payload.rpid : payload.id
-    const password = 'privateKey' in payload ? payload.privateKey : payload.password
-    const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
+export function useSignedMessage(account: string, payload: RedPacketJSONPayload = {} as RedPacketJSONPayload) {
+    const rpid = payload.rpid
+    const password = 'privateKey' in payload ? (payload.privateKey as string) : payload.password
+    const version = payload.contract_version
     const isTokenRedPacket = 'contract_version' in payload
     const platform = usePlatformType()
     const me = useLastRecognizedIdentity()
