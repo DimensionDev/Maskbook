@@ -6,9 +6,11 @@ import {
     usePluginWrapper,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { parseURLs } from '@masknet/shared-base'
+import { resolveTCOLink } from '@masknet/plugin-infra/dom/context'
+import { EMPTY_LIST, parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { useContext, useEffect, useMemo, type JSX } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useContext, useEffect, useMemo, useState, type JSX } from 'react'
 import { base } from '../base.js'
 import { EFP_HOSTS, PLUGIN_NAME } from '../constants.js'
 import { parseEFPProfileLink, type EFPProfileLink } from '../helpers/url.js'
@@ -108,6 +110,62 @@ function isEFPCard(card: HTMLElement) {
     return false
 }
 
+// When X renders a link-preview card it strips the URL from the tweet text, so the card anchor's
+// t.co href is the only machine-readable trace of the EFP link. The site adaptor does collect and
+// resolve card anchors into mentionedLinks, but that collection runs when the post's text node is
+// first processed and never re-runs — a card that mounts later (common on slow connections) is
+// missed entirely. Watch the post's card area ourselves, scoped exactly like
+// useHideNativeTwitterCard so detection and hiding agree, and resolve the card link directly.
+function useEFPCardLink(enabled: boolean): EFPProfileLink | null {
+    const postInfo = useContext(PostInfoContext)
+    const rootNode = postInfo?.rootNode ?? null
+    const isFocusing = postInfo?.isFocusing ?? false
+    const [hrefs, setHrefs] = useState<readonly string[]>(EMPTY_LIST)
+
+    useEffect(() => {
+        if (!enabled || !rootNode) return
+
+        const article = rootNode.closest<HTMLElement>('article')
+        const searchRoot = isFocusing ? article?.parentElement : article
+        if (!searchRoot) return
+
+        const scan = () => {
+            const found = new Set<string>()
+            for (const card of searchRoot.querySelectorAll<HTMLElement>('[data-testid="card.wrapper"]')) {
+                if (!isEFPCard(card)) continue
+                for (const anchor of card.querySelectorAll<HTMLAnchorElement>('a[href]')) found.add(anchor.href)
+            }
+            const next = [...found].sort()
+            setHrefs((prev) => (prev.length === next.length && prev.every((x, i) => x === next[i]) ? prev : next))
+        }
+
+        scan()
+        const observer = new MutationObserver(scan)
+        observer.observe(searchRoot, { childList: true, subtree: true })
+        return () => {
+            observer.disconnect()
+            setHrefs(EMPTY_LIST)
+        }
+    }, [enabled, rootNode, isFocusing])
+
+    const { data = null } = useQuery({
+        enabled: enabled && hrefs.length > 0,
+        queryKey: ['efp', 'card-link', hrefs],
+        queryFn: async () => {
+            for (const href of hrefs) {
+                const direct = parseEFPProfileLink(href)
+                if (direct) return direct
+                if (!href.startsWith('https://t.co/')) continue
+                const resolved = await resolveTCOLink(href)
+                const link = resolved ? parseEFPProfileLink(resolved) : null
+                if (link) return link
+            }
+            return null
+        },
+    })
+    return data
+}
+
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     DecryptedInspector(props): JSX.Element | null {
@@ -129,22 +187,24 @@ const site: Plugin.SiteAdaptor.Definition = {
         const mentionedLinks = usePostInfoDetails.mentionedLinks()
         const profileLink = useMemo(() => {
             // mentionedLinks carries the links Maskbook resolves from t.co redirects. That is how
-            // an EFP URL surfaces when X renders it as a link-preview card (the tweet text has no
-            // URL) or truncates a long address URL with an ellipsis. parseURLs(rawMessage, false)
-            // additionally catches protocol-less links typed directly in the body (e.g.
-            // efp.app/vitalik.eth) without waiting on that async resolution.
+            // an EFP URL surfaces when X truncates a long address URL with an ellipsis.
+            // parseURLs(rawMessage, false) additionally catches protocol-less links typed directly
+            // in the body (e.g. efp.app/vitalik.eth) without waiting on that async resolution.
             const text = extractTextFromTypedMessage(message)
-            const candidates =
-                text.isNone() ? mentionedLinks : [...mentionedLinks, ...parseURLs(text.value, false)]
+            const candidates = text.isNone() ? mentionedLinks : [...mentionedLinks, ...parseURLs(text.value, false)]
             for (const url of candidates) {
                 const link = parseEFPProfileLink(url)
                 if (link) return link
             }
             return null
         }, [message, mentionedLinks])
+        // Link-preview cards leave no URL in the tweet text, so when the body and collected links
+        // yield nothing, detect the EFP card from the card DOM itself.
+        const cardLink = useEFPCardLink(!profileLink)
 
-        if (!profileLink) return null
-        return <Renderer profileLink={profileLink} />
+        const link = profileLink ?? cardLink
+        if (!link) return null
+        return <Renderer profileLink={link} />
     },
     ApplicationEntries: [
         {
