@@ -11,6 +11,10 @@ describe('EFP profile links', () => {
         ],
         ['https://ethfollow.xyz/6509', { user: '6509', type: 'list', topEight: false }],
         ['https://efp.app/vitalik.eth?topEight=true', { user: 'vitalik.eth', type: 'user', topEight: true }],
+        // X rewrites protocol-less links into http:// t.co redirect targets, so links resolved
+        // from t.co cards arrive with the http protocol.
+        ['http://ethfollow.xyz/6509', { user: '6509', type: 'list', topEight: false }],
+        ['http://efp.app/vitalik.eth', { user: 'vitalik.eth', type: 'user', topEight: false }],
     ] as const)('parses %s', (link, expected) => {
         const result = parseEFPProfileLink(link)
 
@@ -33,7 +37,7 @@ describe('EFP profile links', () => {
         'https://efp.app/vitalik.eth?topEight=false',
         'https://efp.app/vitalik.eth?foo=bar',
         'https://efp.app/vitalik.eth#profile',
-        'http://efp.app/vitalik.eth',
+        'ftp://efp.app/vitalik.eth',
     ])('rejects %s', (link) => {
         expect(parseEFPProfileLink(link)).toBeNull()
     })
@@ -43,6 +47,7 @@ describe('EFP profile links', () => {
         'https://efp.app/0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
         'https://ethfollow.xyz/6509',
         'https://efp.app/vitalik.eth?topEight=true',
+        'http://ethfollow.xyz/6509',
     ])('contribution pattern matches %s', (link) => {
         expect(EFP_PROFILE_URL_PATTERN.test(link)).toBe(true)
     })

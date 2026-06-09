@@ -18,7 +18,10 @@ export interface EFPProfileLink {
 export function parseEFPProfileLink(link: string): EFPProfileLink | null {
     const url = parseURL(link)
     if (!url) return null
-    if (url.protocol !== 'https:') return null
+    // http is accepted because X rewrites protocol-less links into http:// t.co redirect targets,
+    // so EFP links resolved from t.co cards arrive with the http protocol. Every URL we emit is
+    // built from the https EFP_APP_URL constant regardless of the input protocol.
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return null
     if (!EFP_HOST_SET.has(url.hostname)) return null
     if (url.hash) return null
 
