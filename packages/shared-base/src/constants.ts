@@ -37,7 +37,6 @@ export const DEFAULT_PLUGIN_PUBLISHER = { name: { fallback: 'Mask Network' }, li
  * !! Please make sure it also be able to recognize the old key.
  */
 export const RedPacketMetaKey = `${PluginID.RedPacket}:1`
-export const RedPacketNftMetaKey = `${PluginID.RedPacket}_nft:1`
 export const SolanaRedPacketMetaKey = `${PluginID.RedPacket}_solana:1`
 
 export const EVM_ADDRESS_RE = /(^|\s)(0x[a-fA-F0-9]{40})/gu

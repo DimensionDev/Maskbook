@@ -12,9 +12,6 @@ export enum NetworkPluginID {
  */
 export enum PluginID {
     Approval = 'com.maskbook.approval',
-    Avatar = 'com.maskbook.avatar',
-    ArtBlocks = 'io.artblocks',
-    Collectible = 'com.maskbook.collectibles',
     Handle = 'com.maskbook.handle',
     NextID = 'com.mask.next_id',
     Gitcoin = 'co.gitcoin',

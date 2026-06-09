@@ -8,7 +8,6 @@ import type {
     FungibleAsset,
     NonFungibleAsset,
     RecentTransaction,
-    NonFungibleTokenActivity,
     SearchResult,
     TokenResult,
     FungibleTokenResult,
@@ -116,11 +115,6 @@ export declare namespace Web3Helper {
     >
 
     export type NonFungibleTokenResultAll = NonFungibleTokenResult<
-        Definition[NetworkPluginID]['ChainId'],
-        Definition[NetworkPluginID]['SchemaType']
-    >
-
-    export type NonFungibleTokenActivityAll = NonFungibleTokenActivity<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType']
     >

@@ -80,7 +80,6 @@ export function next_id_url() { return new URL("./brands/NextID.svg", import.met
 export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.dark.svg", import.meta.url).href }
 export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url).href }
 export function nft_go_url() { return new URL("./brands/NFTGo.svg", import.meta.url).href }
-export function nft_scan_url() { return new URL("./brands/NFTScan.svg", import.meta.url).href }
 export function okx_dark_url() { return new URL("./brands/okx.dark.svg", import.meta.url).href }
 export function okx_light_url() { return new URL("./brands/okx.light.svg", import.meta.url).href }
 export function one_inch_url() { return new URL("./brands/OneInch.png", import.meta.url).href }
@@ -271,7 +270,6 @@ export function next_id_avatar_dark_url() { return new URL("./general/NextIdAvat
 export function next_id_avatar_light_url() { return new URL("./general/NextIdAvatar.light.svg", import.meta.url).href }
 export function next_id_persona_warning_url() { return new URL("./general/NextIdPersonaWarning.svg", import.meta.url).href }
 export function nft_holder_url() { return new URL("./general/NFTHolder.svg", import.meta.url).href }
-export function nft_red_packet_url() { return new URL("./general/NFTRedPacket.svg", import.meta.url).href }
 export function outlined_mask_url() { return new URL("./general/OutlinedMask.svg", import.meta.url).href }
 export function personas_outline_url() { return new URL("./general/PersonasOutline.svg", import.meta.url).href }
 export function pin_dark_url() { return new URL("./general/Pin.dark.svg", import.meta.url).href }
@@ -386,7 +384,6 @@ export function good_ghosting_light_url() { return new URL("./plugins/GoodGhosti
 export function go_plus_url() { return new URL("./plugins/GoPlus.svg", import.meta.url).href }
 export function markets_url() { return new URL("./plugins/Markets.png", import.meta.url).href }
 export function markets_claim_url() { return new URL("./plugins/MarketsClaim.svg", import.meta.url).href }
-export function nft_avatar_url() { return new URL("./plugins/NFTAvatar.svg", import.meta.url).href }
 export function pool_together_url() { return new URL("./plugins/PoolTogether.png", import.meta.url).href }
 export function savings_url() { return new URL("./plugins/Savings.svg", import.meta.url).href }
 export function scam_sniffer_dark_url() { return new URL("./plugins/ScamSniffer.dark.svg", import.meta.url).href }

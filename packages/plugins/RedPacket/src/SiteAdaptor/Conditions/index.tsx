@@ -1,6 +1,5 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { WalletRelatedTypes } from '@masknet/plugin-redpacket'
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { MaskColors, makeStyles } from '@masknet/theme'
@@ -12,7 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { memo } from 'react'
 import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 
-const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void, 'assetName'>()((theme) => ({
     box: {
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         backdropFilter: 'blur(10px)',
@@ -65,14 +64,6 @@ const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
         display: 'flex',
         gap: theme.spacing(1.5),
         flexFlow: 'row wrap',
-    },
-    collections: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2,1fr)',
-        gap: theme.spacing(1),
-        [`& .${refs.assetName}`]: {
-            lineHeight: '18px',
-        },
     },
     asset: {
         display: 'flex',
@@ -130,10 +121,7 @@ export const Conditions = memo(function Conditions({ onClose, statusList, ...pro
     const tokenPayload = tokenPayloads?.[0]
     const quantity = tokenPayload ? formatTokenAmount(tokenPayload.amount, tokenPayload.decimals) : ''
 
-    const collectionPayloads = statusList.find((x) => x.type === StrategyType.nftOwned)?.payload
-    const walletUnsatisfied = statusList
-        .filter((x) => WalletRelatedTypes.includes(x.type))
-        .some((x) => (typeof x.result === 'boolean' ? !x.result : !x.result.hasPassed))
+    const walletUnsatisfied = statusList.some((x) => (typeof x.result === 'boolean' ? !x.result : !x.result.hasPassed))
     const followStatus = statusList.find((x) => x.type === StrategyType.profileFollow)
     const followPayload = followStatus?.payload.find((x) => x.platform === PlatformType.twitter)
 
@@ -185,34 +173,6 @@ export const Conditions = memo(function Conditions({ onClose, statusList, ...pro
                                         badgeSize={12}
                                     />
                                     <Typography className={classes.assetName}>{token.symbol}</Typography>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                :   null}
-                {tokenPayloads?.length && collectionPayloads?.length ?
-                    <Typography className={classes.sectionTitle} textAlign="center">
-                        <Trans>or</Trans>
-                    </Typography>
-                :   null}
-                {collectionPayloads?.length ?
-                    <div className={classes.section}>
-                        <Typography className={classes.sectionTitle}>
-                            <Trans>You need to hold any of the following NFTs in your wallet.</Trans>
-                        </Typography>
-
-                        <div className={classes.collections}>
-                            {collectionPayloads.map((collection) => (
-                                <div className={classes.asset} key={collection.contractAddress}>
-                                    <TokenIcon
-                                        className={classes.tokenIcon}
-                                        name={collection.collectionName}
-                                        chainId={Number.parseInt(collection.chainId, 10)}
-                                        logoURL={collection.icon!}
-                                        size={34}
-                                        badgeSize={12}
-                                    />
-                                    <Typography className={classes.assetName}>{collection.collectionName}</Typography>
                                 </div>
                             ))}
                         </div>

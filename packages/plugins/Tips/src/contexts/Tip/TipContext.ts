@@ -2,7 +2,7 @@ import { noop } from 'lodash-es'
 import { createContext, type Dispatch, type SetStateAction } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SocialAccount } from '@masknet/shared-base'
-import { type NonFungibleTokenContract, TokenType } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import type { ValidationTuple } from '../../types/index.js'
 
@@ -18,15 +18,9 @@ export interface TipContextOptions {
     setToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | null>>
     amount: string
     setAmount: Dispatch<SetStateAction<string>>
-    nonFungibleTokenId: string | null
-    setNonFungibleTokenId: Dispatch<SetStateAction<string | null>>
-    nonFungibleTokenContract: NonFungibleTokenContract<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
-    nonFungibleTokenAddress: string
-    setNonFungibleTokenAddress: Dispatch<SetStateAction<string>>
     sendTip: () => Promise<string | undefined>
     isSending: boolean
     isDirty: boolean
-    storedTokens: Web3Helper.NonFungibleTokenAll[]
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasConfig | undefined>>
     gasOption: GasConfig | undefined
@@ -43,22 +37,16 @@ export const TipContext = createContext<TipContextOptions>({
     recipientAddress: '',
     recipientUserId: '',
     setRecipient: noop,
-    tipType: TokenType.NonFungible,
+    tipType: TokenType.Fungible,
     setTipType: noop,
     recipients: [],
     token: null,
     setToken: noop,
     amount: '',
     setAmount: noop,
-    nonFungibleTokenId: null,
-    setNonFungibleTokenId: noop,
-    nonFungibleTokenContract: null,
-    nonFungibleTokenAddress: '',
-    setNonFungibleTokenAddress: noop,
     sendTip: noop as () => Promise<string | undefined>,
     isSending: false,
     isDirty: false,
-    storedTokens: [],
     reset: noop,
     setGasOption: noop,
     gasOption: undefined,

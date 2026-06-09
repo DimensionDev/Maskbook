@@ -1,68 +1,13 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { trending } from '@masknet/web3-providers/helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
-import { flatten } from 'lodash-es'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useMemo } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { PluginTraderRPC } from '../messages.js'
-
-export function useNFT_TrendingOverview(
-    pluginID: NetworkPluginID,
-    id: string, // For nftscan it's address, for simplehash it's collection id.
-    expectedChainId?: Web3Helper.ChainIdAll,
-) {
-    return useQuery({
-        queryKey: ['nft-trending-overview', pluginID, expectedChainId, id],
-        queryFn: async () => {
-            if (!id || !expectedChainId || !pluginID) return null
-            return (await PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)) || null
-        },
-    })
-}
-
-export function useNonFungibleTokenActivities(
-    pluginID: NetworkPluginID,
-    id: string,
-    expectedChainId?: Web3Helper.ChainIdAll,
-) {
-    const cursorRef = useRef<string>('')
-    const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
-        Record<string, Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
-    >({})
-    const [{ loading: loadingActivities }, fetchActivities] = useAsyncFn(async () => {
-        if (!id || !expectedChainId || !pluginID) return
-
-        const result = await PluginTraderRPC.getNonFungibleTokenActivities(
-            pluginID,
-            expectedChainId,
-            id,
-            cursorRef.current,
-        )
-
-        setNonFungibleTokenActivities((currentActivities) => {
-            if (!result || currentActivities[result.cursor] || !result.content) return currentActivities
-            cursorRef.current = result.cursor
-
-            return { ...currentActivities, [cursorRef.current]: result.content }
-        })
-    }, [id, expectedChainId, pluginID])
-
-    useEffect(() => {
-        fetchActivities()
-    }, [fetchActivities])
-
-    return {
-        activities: flatten(Object.values(nonFungibleTokenActivities)),
-        fetchActivities,
-        loadingActivities,
-    }
-}
 
 export function useTrendingById(
     result: Web3Helper.TokenResultAll,

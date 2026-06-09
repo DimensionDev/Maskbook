@@ -6,14 +6,8 @@ export interface SourceProviderIconProps extends GeneratedIconProps {
 }
 
 const IconMap: Partial<Record<SourceType, GeneratedIcon>> = {
-    [SourceType.NFTScan]: Icons.NFTScan,
-    [SourceType.Gem]: Icons.Gem,
-    [SourceType.Rarible]: Icons.Rarible,
-    [SourceType.OpenSea]: Icons.OpenSea,
     [SourceType.CoinGecko]: Icons.CoinGecko,
-    [SourceType.Uniswap]: Icons.Uniswap,
-    [SourceType.LooksRare]: Icons.LooksRare,
-    [SourceType.SimpleHash]: Icons.SimpleHash,
+    [SourceType.UniswapInfo]: Icons.Uniswap,
 }
 
 export function SourceProviderIcon({ provider, ...rest }: SourceProviderIconProps) {

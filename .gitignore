@@ -125,3 +125,4 @@ quick-lint-js.config
 .aider*
 
 .claude
+.pnpm-store/

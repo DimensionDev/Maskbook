@@ -1,11 +1,9 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { AssetPreviewer, InjectedDialog, type InjectedDialogProps, NetworkIcon, TokenIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { InjectedDialog, type InjectedDialogProps, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
-import { TokenType } from '@masknet/web3-shared-base'
+import type { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type React from 'react'
 import type { PropsWithChildren } from 'react'
@@ -37,32 +35,9 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: theme.spacing(0, 3, 3),
     },
-    nftContainer: {
-        height: 126,
-        width: 126,
-        borderRadius: 8,
-        position: 'relative',
-        overflow: 'hidden',
-    },
-    nftName: {
-        display: 'flex',
-        marginTop: 10,
-    },
-    nftMessage: {
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
     messageText: {
         fontSize: 16,
         color: theme.palette.maskColor.main,
-        fontWeight: 700,
-        lineHeight: '20px',
-    },
-    nftMessageText: {
-        fontSize: 16,
-        color: theme.palette.maskColor.second,
         fontWeight: 700,
         lineHeight: '20px',
     },
@@ -89,22 +64,14 @@ export interface TokenTransactionConfirmModalProps extends PropsWithChildren<Inj
 }
 
 export function TokenTransactionConfirmModal({
-    className,
     confirmText = 'Confirm',
     onConfirm,
-    children,
-    messageTextForNFT,
     messageTextForFT,
-    tokenType,
     token,
-    nonFungibleTokenAddress,
-    nonFungibleTokenId,
     onClose,
     ...rest
 }: TokenTransactionConfirmModalProps) {
     const { classes } = useStyles()
-    const isToken = tokenType === TokenType.Fungible
-    const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
     return (
         <InjectedDialog
             classes={{
@@ -119,59 +86,26 @@ export function TokenTransactionConfirmModal({
             onClose={onClose}
             {...rest}>
             <DialogContent className={classes.content}>
-                {isToken ?
-                    <Box>
-                        {token ?
-                            <TokenIcon
-                                className={classes.tokenIcon}
-                                address={token.address}
-                                logoURL={token.logoURL}
-                                name={token.symbol ?? token.name}
-                                pluginID={token.runtime}
-                                chainId={token.chainId}
-                                badgeSize={20}
-                                size={90}
-                            />
-                        :   <Icons.FillSuccess className={classes.icon} size={90} />}
-                        <Typography className={classes.congratulation} mt="19.5px">
-                            <Trans>Congratulations!</Trans>
-                        </Typography>
-                        <Typography className={classes.messageText} mt="41px">
-                            {messageTextForFT}
-                        </Typography>
-                    </Box>
-                :   <div className={classes.nftMessage}>
-                        {nonFungibleToken ?
-                            <>
-                                <div className={classes.nftContainer}>
-                                    <AssetPreviewer
-                                        url={nonFungibleToken.metadata?.mediaURL || nonFungibleToken.metadata?.imageURL}
-                                        icon={
-                                            <NetworkIcon
-                                                pluginID={nonFungibleToken.runtime ?? NetworkPluginID.PLUGIN_EVM}
-                                                chainId={nonFungibleToken.chainId}
-                                            />
-                                        }
-                                    />
-                                </div>
-                                <div className={classes.nftName}>
-                                    <Typography fontWeight={700} fontSize={20} lineHeight="24px">
-                                        {nonFungibleToken.metadata?.name}
-                                    </Typography>
-                                    {nonFungibleToken.collection?.verified ?
-                                        <Icons.Verification size={21.43} />
-                                    :   null}
-                                </div>
-                            </>
-                        :   null}
-                        <Typography className={classes.congratulation} mt="24px">
-                            <Trans>Congratulations!</Trans>
-                        </Typography>
-                        <Typography className={classes.nftMessageText} mt="14px">
-                            {messageTextForNFT}
-                        </Typography>
-                    </div>
-                }
+                <Box>
+                    {token ?
+                        <TokenIcon
+                            className={classes.tokenIcon}
+                            address={token.address}
+                            logoURL={token.logoURL}
+                            name={token.symbol ?? token.name}
+                            pluginID={token.runtime}
+                            chainId={token.chainId}
+                            badgeSize={20}
+                            size={90}
+                        />
+                    :   <Icons.FillSuccess className={classes.icon} size={90} />}
+                    <Typography className={classes.congratulation} mt="19.5px">
+                        <Trans>Congratulations!</Trans>
+                    </Typography>
+                    <Typography className={classes.messageText} mt="41px">
+                        {messageTextForFT}
+                    </Typography>
+                </Box>
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button fullWidth onClick={onConfirm}>

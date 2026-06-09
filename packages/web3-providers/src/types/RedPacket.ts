@@ -1,19 +1,7 @@
-import type { Pageable, PageIndicator } from '@masknet/shared-base'
-import type { NftRedPacketJSONPayload } from '../RedPacket/types.js'
-import type { Transaction, NonFungibleCollection } from '@masknet/web3-shared-base'
-import type { BaseHubOptions } from '../entry-types.js'
+import type { Transaction } from '@masknet/web3-shared-base'
 
 export namespace RedPacketBaseAPI {
     export interface Provider<ChainId, SchemaType> {
-        getNFTHistories?: (
-            chainId: ChainId,
-            senderAddress: string,
-            contractAddress: string,
-            methodId: string,
-            startBlock: number,
-            endBlock: number,
-        ) => Promise<NftRedPacketJSONPayload[] | undefined>
-
         getHistoryTransactions?: (
             chainId: ChainId,
             senderAddress: string,
@@ -22,11 +10,5 @@ export namespace RedPacketBaseAPI {
             startBlock: number,
             endBlock: number,
         ) => Promise<Array<Transaction<ChainId, SchemaType>> | undefined>
-
-        /** Get non-fungible collections owned by the given account. */
-        getCollectionsByOwner?: (
-            account: string,
-            options?: BaseHubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>>
     }
 }

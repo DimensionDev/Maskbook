@@ -64,7 +64,6 @@ export enum PopupRoutes {
     GasSetting = '/wallet/gas',
     TokenDetail = '/wallet/token-detail',
     TransactionDetail = '/wallet/transaction-detail',
-    CollectibleDetail = '/wallet/collectible-detail',
     ContractInteraction = '/wallet/contract-interaction',
     ResetWallet = '/wallet/reset-wallet',
     Transfer = '/wallet/transfer',

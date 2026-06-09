@@ -72,16 +72,6 @@ export { ENS } from './ENS/index.js'
 export { DeBankHistory } from './DeBank/index.js'
 export { OKX } from './OKX/index.js'
 
-// NFTScan
-export {
-    NFTScanTrending_EVM,
-    NFTScanTrending_Solana,
-    NFTScanNonFungibleTokenEVM,
-    NFTScanNonFungibleTokenSolana,
-    NFTSCAN_CHAIN_IDS,
-    NFTScanSupportedChains,
-} from './NFTScan/index.js'
-
 // Chainbase
 export { ChainbaseHistory } from './Chainbase/index.js'
 
@@ -110,11 +100,5 @@ export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'
 
 // Calendar
 export { Calendar } from './Calendar/index.js'
-
-// NFT Spam
-export { NFTSpam } from './NFTSpam/index.js'
-
-// Stores
-export { AvatarStore, getAvatarFromStorage, setAvatarToStorage } from './AvatarStore/index.js'
 
 export * from './GoogleDriveClient/index.js'

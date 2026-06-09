@@ -1,11 +1,5 @@
 import type { Account, ECKeyIdentifier, Proof } from '@masknet/shared-base'
-import type {
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleTokenContract,
-    NonFungibleTokenMetadata,
-    TransactionStatusType,
-} from '@masknet/web3-shared-base'
+import type { FungibleToken, NonFungibleTokenContract, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { BaseConnectionOptions } from './ConnectionOptions.js'
 
 export interface BaseConnection<
@@ -33,14 +27,6 @@ export interface BaseConnection<
 
     /** Get fungible token balance. */
     getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: Options): Promise<string>
-
-    /** Get non-fungible token balance. */
-    getNonFungibleTokenBalance(
-        address: string,
-        tokenId?: string,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<string>
 
     /** Get fungible token balance. */
     getFungibleTokensBalance(listOfAddress: string[], initial?: Options): Promise<Record<string, string>>
@@ -84,29 +70,6 @@ export interface BaseConnection<
     /** Get a fungible token. */
     getFungibleToken(address: string, initial?: Options): Promise<FungibleToken<ChainId, SchemaType>>
 
-    /** Get a non-fungible token. */
-    getNonFungibleToken(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<NonFungibleToken<ChainId, SchemaType>>
-
-    getNonFungibleTokenOwnership(
-        address: string,
-        tokenId: string | undefined,
-        owner: string,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<boolean>
-
-    getNonFungibleTokenMetadata(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<NonFungibleTokenMetadata<ChainId>>
-
     /** Get a non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
@@ -132,31 +95,12 @@ export interface BaseConnection<
     /** Approve a recipient for using a fungible token. */
     approveFungibleToken(address: string, recipient: string, amount: string, initial?: Options): Promise<string>
 
-    /** Approve a recipient for using all non-fungible tokens. */
-    approveAllNonFungibleTokens(
-        address: string,
-        recipient: string,
-        approved: boolean,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<string>
-
     /** Transfer fungible token to */
     transferFungibleToken(
         address: string,
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: Options,
-    ): Promise<string>
-
-    /** Transfer non-fungible token to */
-    transferNonFungibleToken(
-        address: string | undefined,
-        tokenId: string,
-        recipient: string,
-        amount: string,
-        schema?: SchemaType,
         initial?: Options,
     ): Promise<string>
 

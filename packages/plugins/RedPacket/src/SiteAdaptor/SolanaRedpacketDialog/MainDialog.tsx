@@ -50,7 +50,6 @@ export function SolRedPacketMainDialog({ onClose }: RedPacketDialogProps) {
                 <RouterDialog
                     pageMap={{
                         [RedPacketTabs.tokens]: RoutePaths.CreateSolanaRedPacket,
-                        [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
                     }}
                     open
                     onClose={onClose}

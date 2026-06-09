@@ -1,6 +1,5 @@
 import {
     type ChainId,
-    getNftRedPacketConstant,
     getRedPacketConstants,
     type AbiFunctionToObjectMapped,
     type TransactionParameter,
@@ -9,7 +8,6 @@ import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-bas
 import type { TransactionDescriptorFormatResult } from '../types.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 import { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import { NftRedPacketAbi } from '@masknet/web3-contracts/types/NftRedPacket.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
@@ -37,22 +35,6 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
         return getTokenAmountDescription(remaining_balance, token)
     }
 
-    async getClaimedNFTSymbol(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const events = await this.getReceipt(chainId, contractAddress, NftRedPacketAbi, hash)
-
-        const { token_address } = events?.ClaimSuccess?.returnValues ?? {}
-        if (!token_address) return
-
-        return this.getNonFungibleContractSymbol(chainId, token_address)
-    }
-
-    async getNonFungibleContractSymbol(chainId: ChainId, address: string) {
-        const contract = await this.Web3.getNonFungibleTokenContract(address, undefined, { chainId })
-        return contract?.symbol && contract?.symbol.length > 15 ?
-                `${contract?.symbol.slice(0, 12)}...`
-            :   contract?.symbol
-    }
-
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
     override async compute(
         context_: TransactionContext<ChainId, TransactionParameter>,
@@ -65,7 +47,6 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
             HAPPY_RED_PACKET_ADDRESS_V3,
             HAPPY_RED_PACKET_ADDRESS_V4,
         } = getRedPacketConstants(context.chainId)
-        const RED_PACKET_NFT_ADDRESS = getNftRedPacketConstant(context.chainId, 'RED_PACKET_NFT_ADDRESS')
         const method = context.methods?.find((x) => ['create_red_packet', 'claim', 'refund'].includes(x.name ?? ''))
 
         if (
@@ -140,43 +121,6 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     },
                     popup: {
                         method: method?.name,
-                    },
-                }
-            }
-        } else if (isSameAddress(context.to, RED_PACKET_NFT_ADDRESS)) {
-            if (method?.name === 'create_red_packet') {
-                const parameters = method.parameters as AbiFunctionToObjectMapped<
-                    NftRedPacketAbi,
-                    'create_red_packet',
-                    'inputs'
-                >
-                const symbol = await this.getNonFungibleContractSymbol(context.chainId, parameters?._token_addr ?? '')
-                return {
-                    chainId: context.chainId,
-                    title: 'Create NFT Lucky Drop',
-                    description: 'Create your NFT Lucky Drop.',
-                    snackbar: {
-                        successfulDescription:
-                            symbol ? { key: '{symbol} NFT Lucky Drop created.', symbol } : 'NFT Lucky Drop created.',
-                        failedDescription: 'Failed to create Lucky Drop.',
-                    },
-                    popup: {
-                        method: method.name,
-                    },
-                }
-            } else if (method?.name === 'claim') {
-                const symbol = await this.getClaimedNFTSymbol(context.chainId, RED_PACKET_NFT_ADDRESS, context.hash)
-                return {
-                    chainId: context.chainId,
-                    title: 'Claim NFT Lucky Drop',
-                    description: 'Claim your NFT Lucky Drop',
-                    snackbar: {
-                        successfulDescription:
-                            symbol ? { key: '1 {symbol} NFT Lucky Drop claimed.', symbol } : 'NFT Lucky Drop claimed.',
-                        failedDescription: 'Failed to claim Lucky Drop.',
-                    },
-                    popup: {
-                        method: method.name,
                     },
                 }
             }

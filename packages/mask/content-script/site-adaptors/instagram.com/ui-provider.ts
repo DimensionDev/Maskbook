@@ -13,13 +13,6 @@ import {
 import { pasteInstagram } from '@masknet/injected-script'
 import { injectPostInspectorInstagram } from './injection/post-inspector.js'
 import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity.js'
-import { injectProfileNFTAvatarInInstagram } from './injection/NFT/ProfileNFTAvatar.js'
-import { injectNFTAvatarInInstagram } from './injection/NFT/NFTAvatarInInstagram.js'
-import {
-    injectOpenNFTAvatarEditProfileButton,
-    openNFTAvatarSettingDialog,
-} from './injection/NFT/NFTAvatarEditProfile.js'
-import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline.js'
 import { injectProfileTabAtInstagram } from './injection/ProfileTab.js'
 import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent.js'
 import { injectAvatar } from './injection/Avatar/index.js'
@@ -54,14 +47,11 @@ const define: SiteAdaptorUI.Definition = {
     injection: {
         setupWizard: createTaskStartSetupGuideDefault(),
         postInspector: injectPostInspectorInstagram,
-        profileAvatar: injectNFTAvatarInInstagram,
-        enhancedProfileNFTAvatar: injectProfileNFTAvatarInInstagram,
-        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
-        userAvatar: injectUserNFTAvatarAtInstagram,
+        profileAvatar: undefined,
+        userAvatar: undefined,
         pageInspector: injectPageInspectorDefault(),
         profileTab: injectProfileTabAtInstagram,
         profileTabContent: injectProfileTabContentAtInstagram,
-        openNFTAvatarSettingDialog,
         /* newPostComposition: {
             start: newPostCompositionInstagram,
             supportedInputTypes: { text: true, image: true },

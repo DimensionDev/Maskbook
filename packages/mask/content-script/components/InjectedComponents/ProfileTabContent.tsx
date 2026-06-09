@@ -197,7 +197,7 @@ function Content(props: ProfileTabContentProps) {
         }))
     }, [activatedPlugins, translate, selectedSocialAccount])
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? '', ...tabs.map((tab) => tab.id))
 
     const isWeb3ProfileDisabled = useIsMinimalMode(PluginID.Web3Profile)
 

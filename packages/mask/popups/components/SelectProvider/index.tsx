@@ -56,7 +56,6 @@ export const SelectProvider = memo(function SelectProvider() {
                 navigate(
                     hasWallets ?
                         urlcat(PopupRoutes.SelectWallet, {
-                            setNFTAvatar: onlyMask ? true : undefined,
                             verifyWallet: !onlyMask ? true : undefined,
                             chainId: ChainId.Mainnet,
                         })

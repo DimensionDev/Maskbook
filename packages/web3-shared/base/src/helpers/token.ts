@@ -30,25 +30,16 @@ export function createFungibleToken<ChainId, SchemaType>(
         logoURL,
     }
 }
-export function createNonFungibleTokenMetadata<ChainId>(
-    chainId: ChainId,
-    name: string,
-    tokenId: string,
-    symbol: string,
+export function createNonFungibleTokenMetadata(
+    _name: string,
+    _tokenId: string,
+    _symbol: string,
     description?: string,
-    mediaType?: string,
     mediaURL?: string,
-    imageURL?: string,
-): NonFungibleTokenMetadata<ChainId> {
+): NonFungibleTokenMetadata {
     return {
-        chainId,
-        name,
-        tokenId,
-        symbol,
         description,
         mediaURL,
-        mediaType,
-        imageURL,
     }
 }
 export function createNonFungibleTokenContract<ChainId, SchemaType>(
@@ -71,23 +62,20 @@ export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     chainId: ChainId,
     address: string,
     name: string,
-    slug: string,
+    _slug: string,
     description?: string,
     iconURL?: string,
-    verified?: boolean,
-    createdAt?: number,
-    isSpam?: boolean,
+    _verified?: boolean,
+    _createdAt?: number,
+    _isSpam?: boolean,
 ): NonFungibleCollection<ChainId, SchemaType> {
     return {
         id: address,
         chainId,
         name,
-        slug,
+        address,
         description,
-        iconURL,
-        verified,
-        createdAt,
-        isSpam,
+        logoURL: iconURL,
     }
 }
 export function createNonFungibleToken<ChainId, SchemaType>(
@@ -95,10 +83,10 @@ export function createNonFungibleToken<ChainId, SchemaType>(
     address: string,
     schema: SchemaType,
     tokenId: string,
-    ownerId?: string,
+    _ownerId?: string,
     metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'],
-    contract?: NonFungibleToken<ChainId, SchemaType>['contract'],
-    collection?: NonFungibleToken<ChainId, SchemaType>['collection'],
+    _contract?: unknown,
+    _collection?: unknown,
 ): NonFungibleToken<ChainId, SchemaType> {
     return {
         chainId,
@@ -107,10 +95,7 @@ export function createNonFungibleToken<ChainId, SchemaType>(
         schema,
         address,
         tokenId,
-        ownerId,
         metadata,
-        contract,
-        collection,
     }
 }
 

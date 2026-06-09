@@ -105,10 +105,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     ui.injection.tips?.(signal)
     ui.injection.badges?.(signal)
 
-    ui.injection.enhancedProfileNFTAvatar?.(signal)
-    ui.injection.openNFTAvatar?.(signal)
-    ui.injection.postAndReplyNFTAvatar?.(signal)
-
     ui.injection.avatar?.(signal)
     ui.injection.profileCard?.(signal)
 

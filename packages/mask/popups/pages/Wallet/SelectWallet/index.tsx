@@ -12,10 +12,8 @@ import { first } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import urlcat from 'urlcat'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { useTitle, useVerifiedWallets } from '../../../hooks/index.js'
-import { ProfilePhotoType } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -52,7 +50,6 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
     const source = params.get('source')
     const chainIdSearched = params.get('chainId')
     const isVerifyWalletFlow = params.has('verifyWallet')
-    const isSettingNFTAvatarFlow = params.has('setNFTAvatar')
 
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { proofs } = PersonaContext.useContainer()
@@ -92,7 +89,7 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
     }, [isVerifyWalletFlow])
 
     const handleConfirm = useCallback(async () => {
-        if (isVerifyWalletFlow || isSettingNFTAvatarFlow || embed) {
+        if (isVerifyWalletFlow || embed) {
             await EVMWeb3.connect({
                 account: selected,
                 chainId,
@@ -101,12 +98,7 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
 
             if (embed) return
 
-            navigate(
-                isSettingNFTAvatarFlow ?
-                    urlcat(PopupRoutes.PersonaAvatarSetting, { tab: ProfilePhotoType.NFT })
-                :   PopupRoutes.ConnectWallet,
-                { replace: true },
-            )
+            navigate(PopupRoutes.ConnectWallet, { replace: true })
             return
         }
 
@@ -123,7 +115,7 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
         }
 
         return Services.Helper.removePopupWindow()
-    }, [source, isVerifyWalletFlow, selected, chainId, wallets, isSettingNFTAvatarFlow, Network, embed])
+    }, [source, isVerifyWalletFlow, selected, chainId, wallets, Network, embed])
 
     useTitle(t`Select Wallet`)
 

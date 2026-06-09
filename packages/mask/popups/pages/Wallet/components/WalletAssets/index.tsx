@@ -1,17 +1,16 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { RestorableScroll, UserAssetsProvider, useParamTab } from '@masknet/shared'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { RestorableScroll, useParamTab } from '@masknet/shared'
+import { PopupRoutes } from '@masknet/shared-base'
 import { Boundary, makeStyles } from '@masknet/theme'
-import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
-import { memo, useCallback, useRef } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { memo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
-import { WalletCollections } from './WalletCollections.js'
 import { Component as SelectWallet } from '../../SelectWallet/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -115,15 +114,8 @@ interface WalletAssetsUIProps {
 }
 
 const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
-    const [params] = useSearchParams()
-
     const { classes } = useStyles()
     const [currentTab, handleTabChange] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
-
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const SEARCH_KEY = 'collectionId'
-
-    const scrollTargetRef = useRef<HTMLDivElement>(null)
 
     return (
         <div className={classes.content}>
@@ -131,7 +123,6 @@ const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAdd
                 <Box className={classes.header}>
                     <StyledTabList onChange={handleTabChange}>
                         <Tab className={classes.tab} label={<Trans>Tokens</Trans>} value={WalletAssetTabs.Tokens} />
-                        <Tab className={classes.tab} label={<Trans>NFTs</Trans>} value={WalletAssetTabs.Collectibles} />
                         <Tab
                             className={classes.tab}
                             label={<Trans>Activities</Trans>}
@@ -143,31 +134,21 @@ const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAdd
                     </Button>
                 </Box>
 
-                <UserAssetsProvider
-                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                    account={account}
-                    defaultCollectionId={params.get(SEARCH_KEY) || undefined}>
-                    <Boundary>
-                        <Box className={classes.panels}>
-                            <RestorableScroll scrollKey="assets">
-                                <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
-                                    <AssetsList />
-                                </TabPanel>
-                            </RestorableScroll>
-                            <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
-                                <RestorableScroll scrollKey="collectibles" targetRef={scrollTargetRef}>
-                                    <WalletCollections onAddToken={onAddToken} scrollTargetRef={scrollTargetRef} />
-                                </RestorableScroll>
+                <Boundary>
+                    <Box className={classes.panels}>
+                        <RestorableScroll scrollKey="assets">
+                            <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
+                                <AssetsList />
                             </TabPanel>
+                        </RestorableScroll>
 
-                            <RestorableScroll scrollKey="activities">
-                                <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
-                                    <ActivityList />
-                                </TabPanel>
-                            </RestorableScroll>
-                        </Box>
-                    </Boundary>
-                </UserAssetsProvider>
+                        <RestorableScroll scrollKey="activities">
+                            <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
+                                <ActivityList />
+                            </TabPanel>
+                        </RestorableScroll>
+                    </Box>
+                </Boundary>
             </TabContext>
         </div>
     )

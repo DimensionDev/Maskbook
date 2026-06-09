@@ -4,7 +4,6 @@ import type { BaseUtils } from '../../Base/apis/Utils.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import type { BaseHubProvider } from '../../Base/apis/HubBase.js'
 import type { BaseHubFungible } from '../../Base/apis/HubFungible.js'
-import type { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
 import type { EVMConnectionOptions, EVMHubOptions } from '../../EVM/types/index.js'
 import type { FlowConnectionOptions, FlowHubOptions } from '../../Flow/types/index.js'
 import type { SolanaConnectionOptions, SolanaHubOptions } from '../../Solana/types/index.js'
@@ -53,8 +52,7 @@ export interface Hub<T extends NetworkPluginID>
             Web3Helper.Definition[T]['SchemaType'],
             Web3Helper.Definition[T]['GasOption']
         >,
-        BaseHubFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        BaseHubNonFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> {}
+        BaseHubFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> {}
 
 export interface Utils<T extends NetworkPluginID>
     extends BaseUtils<

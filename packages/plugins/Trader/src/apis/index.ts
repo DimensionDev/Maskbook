@@ -1,10 +1,8 @@
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CoinGeckoTrending, NFTScanTrending_EVM, NFTScanTrending_Solana } from '@masknet/web3-providers'
+import { CoinGeckoTrending } from '@masknet/web3-providers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, type NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
-import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
+import { SourceType } from '@masknet/web3-shared-base'
 import type { Currency, Stat, Trending } from '../types/index.js'
 
 export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
@@ -16,15 +14,10 @@ export async function getCoinTrending(
     result: Web3Helper.TokenResultAll,
     currency: Currency,
 ): Promise<Trending | undefined> {
-    const { chainId, source, pluginID, id = '', name = '', address = '' } = result
+    const { chainId, source, id = '' } = result
     switch (source) {
         case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
-
-        case SourceType.NFTScan:
-            return pluginID === NetworkPluginID.PLUGIN_SOLANA ?
-                    NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)
-                :   NFTScanTrending_EVM.getCoinTrending(chainId as ChainIdEVM, address, currency)
 
         default:
             return
@@ -43,36 +36,8 @@ export async function getPriceStats(
     switch (dataProvider) {
         case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinPriceStats(id, currency, days)
-        case SourceType.NFTScan:
-            return NFTScanTrending_EVM.getCoinPriceStats(chainId as ChainIdEVM, id, days)
-
         default:
             return EMPTY_LIST
     }
-}
-// #endregion
-
-// #region get nft trending overview
-export async function getNFT_TrendingOverview(
-    pluginID: NetworkPluginID,
-    chainId: Web3Helper.ChainIdAll,
-    id: string,
-): Promise<NonFungibleCollectionOverview | undefined> {
-    return pluginID === NetworkPluginID.PLUGIN_SOLANA ?
-            NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, id)
-        :   NFTScanTrending_EVM.getCollectionOverview(chainId as ChainIdEVM, id)
-}
-// #endregion
-
-// #region get nft trending activities
-export async function getNonFungibleTokenActivities(
-    pluginID: NetworkPluginID,
-    chainId: Web3Helper.ChainIdAll,
-    address: string,
-    cursor: string,
-): Promise<{ content: Web3Helper.NonFungibleTokenActivityAll[]; cursor: string } | undefined> {
-    return pluginID === NetworkPluginID.PLUGIN_SOLANA ?
-            NFTScanTrending_Solana.getCoinActivities(chainId as ChainIdSolana, address, cursor)
-        :   NFTScanTrending_EVM.getCoinActivities(chainId as ChainIdEVM, address, cursor)
 }
 // #endregion

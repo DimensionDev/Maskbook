@@ -1,8 +1,6 @@
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { memo } from 'react'
 import type { FeedCardProps } from '../base.js'
-import { CollectibleApprovalCard, isCollectibleApprovalFeed } from './CollectibleApprovalCard.js'
-import { CollectibleCard, isCollectibleFeed } from './CollectibleCard.js'
 import { CommentCard, isCommentFeed } from './CommentCard.js'
 import { DonationCard, isDonationFeed } from './DonationCard.js'
 import { isLiquidityFeed, LiquidityCard } from './LiquidityCard.js'
@@ -27,8 +25,6 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
 
     if (isStakingFeed(feed)) return <StakingCard feed={feed} {...rest} />
 
-    if (isCollectibleFeed(feed)) return <CollectibleCard feed={feed} {...rest} />
-
     if (isDonationFeed(feed)) return <DonationCard feed={feed} {...rest} />
 
     if (isNoteFeed(feed)) return <NoteCard feed={feed} {...rest} />
@@ -42,8 +38,6 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isProposeFeed(feed)) return <ProposeCard feed={feed} {...rest} />
 
     if (isVoteFeed(feed)) return <VoteCard feed={feed} {...rest} />
-
-    if (isCollectibleApprovalFeed(feed)) return <CollectibleApprovalCard feed={feed} {...rest} />
 
     if (isTokenBridgeFeed(feed)) return <TokenBridgeCard feed={feed} {...rest} />
 

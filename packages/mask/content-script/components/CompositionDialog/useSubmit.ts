@@ -1,13 +1,6 @@
 import Services from '#services'
 import { encodeByNetwork } from '@masknet/encryption'
-import {
-    PluginID,
-    RedPacketMetaKey,
-    RedPacketNftMetaKey,
-    Sniffings,
-    SOCIAL_MEDIA_NAME,
-    SolanaRedPacketMetaKey,
-} from '@masknet/shared-base'
+import { PluginID, RedPacketMetaKey, Sniffings, SOCIAL_MEDIA_NAME, SolanaRedPacketMetaKey } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -73,11 +66,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 })
             }
 
-            if (
-                content.meta?.has(RedPacketMetaKey) ||
-                content.meta?.has(RedPacketNftMetaKey) ||
-                content.meta?.has(SolanaRedPacketMetaKey)
-            )
+            if (content.meta?.has(RedPacketMetaKey) || content.meta?.has(SolanaRedPacketMetaKey))
                 Telemetry.captureEvent(EventType.Interact, EventID.EntryAppLuckSend)
             Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeEncrypt)
 
@@ -92,11 +81,11 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Meta): string | null {
     if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
-    const token = meta.has(RedPacketMetaKey) || meta.has(SolanaRedPacketMetaKey) ? _(msg`a token`) : _(msg`an NFT`)
+    const token = _(msg`a token`)
     const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier]
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
-    if (meta.has(RedPacketMetaKey) || meta.has(RedPacketNftMetaKey) || meta.has(SolanaRedPacketMetaKey)) {
+    if (meta.has(RedPacketMetaKey) || meta.has(SolanaRedPacketMetaKey)) {
         const promote_red_packet = _(msg`Hi friends, I just created ${token} Lucky Drop. Download Mask.io to claim.`)
         const promote_red_packet2 = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
         return hasOfficialAccount ?
