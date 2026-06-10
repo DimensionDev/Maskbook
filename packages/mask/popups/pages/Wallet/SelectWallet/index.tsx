@@ -114,7 +114,9 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
 
     if (!chainIdValid)
         return (
-            <Box {...props} className={props.className ? `${classes.placeholder} ${props.className}` : classes.placeholder}>
+            <Box
+                {...props}
+                className={props.className ? `${classes.placeholder} ${props.className}` : classes.placeholder}>
                 <Typography>
                     <Trans>Unsupported network type</Trans>
                 </Typography>
