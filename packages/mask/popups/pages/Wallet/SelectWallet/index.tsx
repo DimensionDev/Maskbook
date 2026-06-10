@@ -1,7 +1,7 @@
 import Services from '#services'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { PersonaContext } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useChainIdValid, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -13,7 +13,7 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { WalletItem } from '../../../components/WalletItem/index.js'
-import { useTitle, useVerifiedWallets } from '../../../hooks/index.js'
+import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -54,7 +54,7 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { proofs } = PersonaContext.useContainer()
 
-    const bindingWallets = useVerifiedWallets(proofs)
+    const bindingWallets = useMemo(() => proofs?.filter((x) => x.platform === NextIDPlatform.Ethereum), [proofs])
 
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,

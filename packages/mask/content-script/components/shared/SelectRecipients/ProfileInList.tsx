@@ -1,14 +1,10 @@
-import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
-import { EMPTY_LIST, formatPersonaFingerprint, type ProfileInformationFromNextID } from '@masknet/shared-base'
+import { EMPTY_LIST, formatPersonaFingerprint, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
-import { truncate } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import Highlighter from 'react-highlight-words'
 import { Avatar } from '../../../../shared-ui/components/Avatar.js'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -34,11 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         marginLeft: theme.spacing(0.5),
     },
-    badge: {
-        width: 32,
-        height: 18,
-        marginLeft: theme.spacing(0.5),
-    },
     highLightBg: {
         background: theme.palette.maskColor.bg,
     },
@@ -61,11 +52,6 @@ const useStyles = makeStyles()((theme) => ({
     listItemRoot: {
         margin: '4px 0',
     },
-    columnReverse: {
-        margin: '4px 0',
-        display: 'flex',
-        flexDirection: 'column-reverse',
-    },
     toolTip: {
         fontSize: 14,
         lineHeight: '18px',
@@ -78,37 +64,21 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ProfileInListProps {
-    profile: ProfileInformationFromNextID
+    profile: ProfileInformation
     highlightText?: string
     selected?: boolean
     disabled?: boolean
-    onChange: (profile: ProfileInformationFromNextID, checked: boolean) => void
+    onChange: (profile: ProfileInformation, checked: boolean) => void
 }
 
 export const ProfileInList = memo(function ProfileInList(props: ProfileInListProps) {
-    const { i18n } = useLingui()
     const { classes, cx } = useStyles()
     const { profile, selected, disabled, highlightText, onChange } = props
     const searchWords = useMemo(() => (highlightText ? [highlightText] : EMPTY_LIST), [highlightText])
 
     const rawPublicKey = profile.linkedPersona?.rawPublicKey
-    const primaryText = (() => {
-        if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
-        const mentions = profile.linkedTwitterNames?.map((x) => '@' + x).join(' ') ?? ''
-        if (mentions.length < 15) return mentions
-        const len = profile.linkedTwitterNames?.length ?? 0
-        return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
-    })()
-
-    const tooltipTitle = (() => {
-        const linkedNames = profile.linkedTwitterNames ?? []
-        if (linkedNames.length === 0) return <Trans>The Persona is not connected to any accounts.</Trans>
-        if (linkedNames.length === 1)
-            return <Trans>The Persona is connected to the account @${profile.identifier.userId}.</Trans>
-        const mentions = profile.linkedTwitterNames?.map((username) => '@' + username) ?? []
-        const list = new Intl.ListFormat(i18n.locale).format(mentions)
-        return <Trans>The Persona is connected to the following accounts: {list}</Trans>
-    })()
+    const primaryText = `@${profile.identifier.userId || profile.nickname}`
+    const tooltipTitle = `@${profile.identifier.userId || ''}`
 
     const handleClick = useCallback(() => onChange(profile, !selected), [onChange, selected])
     const secondaryText = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 3)
@@ -130,7 +100,7 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
             </ListItemAvatar>
             <ListItemText
                 classes={{
-                    root: profile.fromNextID ? classes.columnReverse : classes.listItemRoot,
+                    root: classes.listItemRoot,
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
@@ -164,9 +134,6 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                         />
                         {rawPublicKey ?
                             <CopyButton className={classes.actionIcon} size={16} text={rawPublicKey} />
-                        :   null}
-                        {profile.fromNextID ?
-                            <Icons.NextIDMini className={classes.badge} />
                         :   null}
                     </div>
                 }

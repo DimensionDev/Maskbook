@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback } from 'react'
-import { Box, Avatar, Typography, Link } from '@mui/material'
+import { Box, Avatar, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { type ProfileIdentifier, formatPersonaFingerprint } from '@masknet/shared-base'
@@ -115,7 +115,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                     <Box>
                         {avatar ?
                             <Avatar src={avatar} style={{ width: 60, height: 60 }} />
-                        :   <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />}
+                        :   <Icons.MaskBlue size={60} style={{ borderRadius: 99 }} />}
                     </Box>
                     <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
                         {publicKey ? formatPersonaFingerprint(publicKey) : null}
@@ -129,14 +129,6 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                         columnGap="2px">
                         {formatPersonaFingerprint(nextId, 4)}
                         <CopyButton text={nextId} size={12} className={classes.icon} />
-                        <Link
-                            underline="none"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={`https://web3.bio/${nextId}`}
-                            className={classes.icon}>
-                            <Icons.LinkOut size={12} />
-                        </Link>
                     </Typography>
                 </Box>
             </Box>

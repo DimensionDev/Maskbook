@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, alpha } from '@mui/material'
-import { InjectedDialog, resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
+import { InjectedDialog } from '@masknet/shared'
+import { EMPTY_LIST, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-es'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { useRecipientsList } from '../CompositionDialog/useRecipientsList.js'
-import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitterIdByWalletSearch.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
@@ -86,26 +85,13 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
         })
     }, [handleClose, people, selectedProfiles, onSelect])
 
-    const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
-    const type = resolveNextIDPlatform(valueToSearch)
-
-    const value = resolveValueToSearch(valueToSearch)
-    const { isPending: searchLoading, data: NextIDResults } = usePersonasFromNextID(
-        value,
-        type ?? NextIDPlatform.NextID,
-        false,
-    )
-
-    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
     const myUserId = currentIdentity?.identifier.userId
     const searchedList = useMemo(() => {
         if (!recipientsList?.recipients) return EMPTY_LIST
         const profileItems = recipientsList.recipients.filter((x) => x.identifier.userId !== myUserId)
-        // Selected might contain profiles that fetched asynchronously from
-        // Next.ID, which are not stored locally
-        return uniqBy(profileItems.concat(NextIDItems, profiles), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
-    }, [NextIDItems, profiles, recipientsList.recipients, myUserId])
+        return uniqBy(profileItems.concat(profiles), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
+    }, [profiles, recipientsList.recipients, myUserId])
 
     useEffect(() => {
         if (!open) return
@@ -128,8 +114,8 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
                     items={searchedList}
                     selected={people}
                     onSetSelected={select}
-                    onSearch={setValueToSearch}
-                    loading={searchLoading}
+                    onSearch={() => {}}
+                    loading={false}
                 />
             </DialogContent>
             {rejection ?

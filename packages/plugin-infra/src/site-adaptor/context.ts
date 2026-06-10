@@ -3,12 +3,11 @@
 
 import type { Subscription } from 'use-subscription'
 import type { IdentityResolved } from '../types.js'
-import type { NextIDPlatform, PersonaIdentifier, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 
 export interface __SiteAdaptorContext__ {
     lastRecognizedProfile: Subscription<IdentityResolved | undefined>
     currentVisitingProfile: Subscription<IdentityResolved | undefined>
-    currentNextIDPlatform: NextIDPlatform | undefined
     currentPersonaIdentifier: Subscription<PersonaIdentifier | undefined>
     share: undefined | ((text: string, source?: string) => void)
     getPostURL: (identifier: PostIdentifier) => URL | null
@@ -23,7 +22,6 @@ export interface __SiteAdaptorContext__ {
 }
 export let lastRecognizedProfile: __SiteAdaptorContext__['lastRecognizedProfile']
 export let currentVisitingProfile: __SiteAdaptorContext__['currentVisitingProfile']
-export let currentNextIDPlatform: NextIDPlatform | undefined
 export let currentPersonaIdentifier: __SiteAdaptorContext__['currentPersonaIdentifier']
 export let getPostURL: __SiteAdaptorContext__['getPostURL']
 export let getProfileURL: __SiteAdaptorContext__['getProfileURL']
@@ -39,7 +37,6 @@ export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
     ;({
         lastRecognizedProfile,
         currentVisitingProfile,
-        currentNextIDPlatform,
         currentPersonaIdentifier,
         getPostURL,
         getProfileURL,

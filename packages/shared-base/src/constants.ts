@@ -1,4 +1,3 @@
-import { NextIDPlatform } from './NextID/types.js'
 import { EnhanceableSite } from './Site/types.js'
 import { PluginID } from './types/PluginID.js'
 
@@ -10,12 +9,6 @@ export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.OpenSea]: 'OpenSea',
     [EnhanceableSite.Localhost]: 'Localhost',
 }
-
-export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {
-    [NextIDPlatform.Twitter]: EnhanceableSite.Twitter,
-}
-
-export const SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID = [EnhanceableSite.Twitter]
 
 export const MEDIA_VIEWER_URL = 'https://media-viewer.r2d2.to/index.html'
 

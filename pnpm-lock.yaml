@@ -394,9 +394,6 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../plugin-infra
-      '@masknet/plugin-nextid':
-        specifier: workspace:^
-        version: link:../plugins/NextID
       '@masknet/plugin-profilecard':
         specifier: workspace:^
         version: link:../plugins/ProfileCard
@@ -1182,45 +1179,6 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
-
-  packages/plugins/NextID:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../../web3-hooks/base
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../../web3-shared/evm
-      react-use:
-        specifier: ^17.5.0
-        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
-      zod:
-        specifier: ^3.24.2
-        version: 3.24.4
 
   packages/plugins/ProfileCard:
     dependencies:

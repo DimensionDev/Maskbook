@@ -48,14 +48,7 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fe
         :   <Box className={classes.cardContainer}>
                 {friendsArray.map(({ friends }) => {
                     return friends.map((friend) => (
-                        <ContactCard
-                            key={friend.persona.publicKeyAsHex}
-                            avatar={friend.avatar}
-                            nextId={friend.persona?.publicKeyAsHex}
-                            publicKey={friend.persona?.rawPublicKey}
-                            profile={friend.profile}
-                            isLocal
-                        />
+                        <ContactCard key={friend.persona.publicKeyAsHex} friend={friend} avatar={friend.avatar} />
                     ))
                 })}
                 <ElementAnchor callback={() => fetchNextPage()} height={10} />

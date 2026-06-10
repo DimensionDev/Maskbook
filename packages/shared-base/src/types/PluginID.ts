@@ -13,7 +13,6 @@ export enum NetworkPluginID {
 export enum PluginID {
     Approval = 'com.maskbook.approval',
     Handle = 'com.maskbook.handle',
-    NextID = 'com.mask.next_id',
     Gitcoin = 'co.gitcoin',
     Trader = 'com.maskbook.trader',
     Tips = 'com.maskbook.tip',

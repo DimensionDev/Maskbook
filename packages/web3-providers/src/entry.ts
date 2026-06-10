@@ -50,9 +50,6 @@ export { SOLWeb3 } from './Web3/Solana/apis/ConnectionAPI.js'
 export * from './Privy/index.js'
 export * from './Privy/constants.js'
 
-// NextID
-export { NextIDProof } from './NextID/index.js'
-
 // Web3Bio
 export { Web3Bio } from './Web3Bio/index.js'
 

@@ -1,11 +1,9 @@
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/base'
-import type { NextIDPersonaBindings, NextIDPlatform } from '../NextID/types.js'
 /**
  * This interface contains the minimal information for UI display
  */
 export interface PersonaInformation {
     avatar?: string
-    proof?: NextIDPersonaBindings
     /** The nickname of the persona. Should use profile.nickname if it presents. */
     nickname?: string
     /** The evm address of persona */
@@ -23,20 +21,7 @@ export interface ProfileInformation {
     createAt?: Date
 }
 
-export interface ProfileAccount extends ProfileInformation {
-    is_valid?: boolean
-    identity?: string
-    platform?: NextIDPlatform
-    last_checked_at?: string
-}
-
-export interface ProfileInformationFromNextID extends ProfileInformation {
-    fromNextID: boolean
-    linkedTwitterNames?: string[]
-    walletAddress?: string
-    createdAt?: Date
-    updatedAt?: Date
-}
+export interface ProfileAccount extends ProfileInformation {}
 
 export enum RelationFavor {
     COLLECTED = -1,

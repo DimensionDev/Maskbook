@@ -3,18 +3,11 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { PostInfoContext, usePostInfoDetails, usePostInfoPostIVIdentifier } from '@masknet/plugin-infra/content-script'
-import {
-    EMPTY_LIST,
-    MaskMessages,
-    type ProfileIdentifier,
-    type ProfileInformation,
-    type ProfileInformationFromNextID,
-} from '@masknet/shared-base'
+import { EMPTY_LIST, MaskMessages, type ProfileIdentifier, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Typography, useTheme } from '@mui/material'
 import { memo, useContext, useEffect, useState } from 'react'
-import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
@@ -157,9 +150,6 @@ function AppendShareDetail({ recipients, selectedRecipients, onClose, whoAmI, re
             profiles={recipients.recipients || EMPTY_LIST}
             onClose={onClose}
             onSelect={async (profiles) => {
-                for (const item of profiles) {
-                    await attachNextIDToProfile(item as ProfileInformationFromNextID)
-                }
                 await Services.Crypto.appendShareTarget(
                     info.version.getCurrentValue()!,
                     iv,

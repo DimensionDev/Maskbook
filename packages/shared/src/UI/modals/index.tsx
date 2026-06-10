@@ -2,7 +2,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { memo } from 'react'
 import { PrivySetup } from '../components/Privy/Setup.js'
-import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
 import { ApplicationBoardModal, ApplicationBoardSettingsModal } from './ApplicationBoardModal/index.js'
 import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
 import { ConfirmModal } from './ConfirmModal/index.js'
@@ -45,7 +44,6 @@ export const Modals = memo(function Modals(props: ModalProps) {
             <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
             <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
             <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
-            <VerifyNextIDModal ref={modals.VerifyNextIDModal.register} />
             <ImageEditorModal ref={modals.ImageEditorModal.register} />
         </RootWeb3ContextProvider>
     )

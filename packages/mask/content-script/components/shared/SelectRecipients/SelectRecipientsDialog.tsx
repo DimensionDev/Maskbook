@@ -2,7 +2,7 @@ import { startTransition, useCallback, useDeferredValue, useMemo, useState, type
 import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ActionButtonPromise, EmptyStatus, InjectedDialog } from '@masknet/shared'
-import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import Fuse from 'fuse.js'
@@ -17,7 +17,6 @@ import {
     Typography,
     alpha,
 } from '@mui/material'
-import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
 import { ProfileInList } from './ProfileInList.js'
 import { Trans, useLingui } from '@lingui/react/macro'
 
@@ -171,9 +170,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     const handleSubmit = useCallback(async () => {
         props.onSetSelected([...selectedAllProfiles])
-        for (const item of selectedAllProfiles) {
-            await attachNextIDToProfile(item as ProfileInformationFromNextID)
-        }
         props.onSubmit()
         setSearchInput('')
         onSearch('')
@@ -247,7 +243,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                             return (
                                                 <ProfileInList
                                                     key={index}
-                                                    profile={item as ProfileInformationFromNextID}
+                                                    profile={item}
                                                     highlightText={keyword}
                                                     selected={selected}
                                                     disabled={props.disabled}

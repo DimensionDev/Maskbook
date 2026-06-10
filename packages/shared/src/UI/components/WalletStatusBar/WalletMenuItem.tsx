@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
-import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
+import type { NetworkPluginID, Web3BioPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
 import {
     useNetworkContext,
@@ -29,7 +29,7 @@ interface WalletMenuItemProps {
     selected?: boolean
     verified?: boolean
     onChangeWallet?: () => void
-    platform?: NextIDPlatform
+    platform?: Web3BioPlatform
     expectedChainId?: Web3Helper.ChainIdAll
 }
 
