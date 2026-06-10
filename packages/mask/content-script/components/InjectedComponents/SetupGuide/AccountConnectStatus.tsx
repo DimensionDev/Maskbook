@@ -75,7 +75,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const siteName = SOCIAL_MEDIA_NAME[site] || ''
 
-    const { connected, isFirstConnection, isFirstVerification } = SetupGuideContext.useContainer()
+    const { connected, isFirstConnection } = SetupGuideContext.useContainer()
 
     if (loading)
         return (
@@ -86,7 +86,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
             </Frame>
         )
 
-    if (isFirstConnection || isFirstVerification) {
+    if (isFirstConnection) {
         if (Sniffings.is_twitter_page) {
             return (
                 <Frame {...rest}>
