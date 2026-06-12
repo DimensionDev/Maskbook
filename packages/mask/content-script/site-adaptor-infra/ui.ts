@@ -139,12 +139,11 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     __setSiteAdaptorContext__({
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
-        currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
         getPostURL: ui.utils.getPostURL || (() => null),
         getProfileURL: ui.utils.getProfileURL || (() => null),
         share: ui.utils.share,
-        getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
+        getPostIdFromNewPostToast: undefined,
         connectPersona,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
         publishPost: ui.automation.endpoint?.publishPost,

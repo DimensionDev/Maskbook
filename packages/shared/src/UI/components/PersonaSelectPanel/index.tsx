@@ -9,8 +9,8 @@ import {
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
-    resolveNextIDIdentityToProfile,
     type PersonaIdentifier,
+    type PersonaInformation,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
@@ -22,12 +22,15 @@ import { memo, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
-import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
-import { ApplicationBoardModal, LeavePageConfirmModal } from '../../modals/index.js'
+import { LeavePageConfirmModal } from '../../modals/index.js'
 import { LoadingStatus } from '../LoadingStatus/index.js'
 import { ReloadStatus } from '../ReloadStatus/index.js'
-import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
+
+interface PersonaItem {
+    persona: PersonaInformation
+    avatar?: string
+}
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -58,20 +61,18 @@ export type PositionOption = 'center' | 'top-right'
 
 interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 'button'> {
     finishTarget?: string
-    enableVerify?: boolean
     onClose?: () => void
 }
 
 export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function PersonaSelectPanel(props) {
-    const { finishTarget, enableVerify = true, onClose } = props
+    const { finishTarget, onClose } = props
 
     const currentPersonaIdentifier = useCurrentPersona()
 
     const { classes } = useStyles(undefined, { props })
 
-    const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
+    const [selectedPersona, setSelectedPersona] = useState<PersonaItem>()
 
-    const handleVerifyNextID = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
 
@@ -122,20 +123,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
         return isSamePersona(selectedPersona.persona, currentPersonaIdentifier)
     }, [selectedPersona, currentProfileIdentify, currentPersonaIdentifier])
 
-    const isVerified = useMemo(() => {
-        if (!currentProfileIdentify || !selectedPersona) return false
-
-        const verifiedAtSite = selectedPersona.proof.find((x) => {
-            return (
-                isSameProfile(
-                    resolveNextIDIdentityToProfile(x.identity, x.platform),
-                    currentProfileIdentify.identifier,
-                ) && x.is_valid
-            )
-        })
-        return !!verifiedAtSite
-    }, [currentProfileIdentify, selectedPersona?.proof])
-
     const actionButton = useMemo(() => {
         if (!currentProfileIdentify || !selectedPersona) return null
 
@@ -145,22 +132,14 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
                 if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
                 else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
             }
-            if (!isVerified && enableVerify) {
-                onClose?.()
-                ApplicationBoardModal.close()
-                await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
-                if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectVerify)
-                else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeVerifyTwitter)
-            }
 
-            if (isVerified) CrossIsolationMessages.events.personaBindFinished.sendToAll({ pluginID: finishTarget })
+            CrossIsolationMessages.events.personaBindFinished.sendToAll({ pluginID: finishTarget })
 
             if (finishTarget) {
                 CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                     open: true,
                     pluginID: finishTarget,
                     selectedPersona: selectedPersona.persona,
-                    isVerified,
                 })
             }
 
@@ -171,28 +150,10 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
         const actionProps = {
             ...(() => {
                 const { persona } = selectedPersona
-                if (!isConnected && !isVerified && enableVerify)
-                    return {
-                        buttonText: <Trans>Connect and Verify {persona.nickname ?? ''}</Trans>,
-                        hint: (
-                            <Trans>
-                                Please connect {persona.nickname ?? ''} and send a proof post before using dApps.
-                            </Trans>
-                        ),
-                    }
                 if (!isConnected)
                     return {
                         buttonText: <Trans>Connect {persona.nickname ?? ''}</Trans>,
                         hint: <Trans>Please connect {persona.nickname ?? ''} before using dApps.</Trans>,
-                    }
-                if (!isVerified)
-                    return {
-                        buttonText: <Trans>Verify {persona.nickname ?? ''}</Trans>,
-                        hint: (
-                            <Trans>
-                                Please verify the current persona with a social media account before using dApps.
-                            </Trans>
-                        ),
                     }
                 return {
                     buttonText: <Trans>Connect {persona.nickname ?? ''}</Trans>,
@@ -202,16 +163,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
         }
 
         return <ActionContent {...actionProps} classes={{ button: props.classes?.button }} />
-    }, [
-        isConnected,
-        isVerified,
-        currentPersonaIdentifier,
-        currentProfileIdentify,
-        enableVerify,
-        finishTarget,
-        selectedPersona?.persona,
-        selectedPersona?.proof,
-    ])
+    }, [isConnected, currentPersonaIdentifier, currentProfileIdentify, finishTarget, selectedPersona?.persona])
 
     if (isPending)
         return (
@@ -240,7 +192,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
                             onClick={() => setSelectedPersona(x)}
                             currentPersona={selectedPersona}
                             currentPersonaIdentifier={currentPersonaIdentifier}
-                            currentProfileIdentify={currentProfileIdentify}
                             classes={{ unchecked: props.classes?.unchecked }}
                         />
                     )

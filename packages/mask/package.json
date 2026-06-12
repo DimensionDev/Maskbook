@@ -50,7 +50,6 @@
     "@masknet/plugin-go-plus-security": "workspace:^",
     "@masknet/plugin-handle": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
-    "@masknet/plugin-nextid": "workspace:^",
     "@masknet/plugin-profilecard": "workspace:^",
     "@masknet/plugin-redpacket": "workspace:^",
     "@masknet/plugin-rss3": "workspace:^",

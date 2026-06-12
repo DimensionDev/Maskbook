@@ -396,7 +396,6 @@ export namespace Plugin.SiteAdaptor {
          */
         category?: 'dapp' | 'other'
 
-        nextIdRequired?: boolean
         /**
          * One plugin may has multiple part. E.g. Tips requires connected wallet, but Tips setting not.
          */

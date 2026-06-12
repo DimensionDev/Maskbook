@@ -1,34 +1,25 @@
 import { Icons } from '@masknet/icons'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 import {
     formatPersonaFingerprint,
     isSamePersona,
-    isSameProfile,
-    resolveNextIDIdentityToProfile,
-    type BindingProof,
     type ECKeyIdentifier,
     type PersonaInformation,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
-import { useMemo } from 'react'
 import { CopyButton } from '../CopyButton/index.js'
 import { EmojiAvatar } from '../EmojiAvatar/index.js'
 
-/* cspell:disable-next-line */
-// TODO: Migrate to SocialIdentity by @Lanttcat
-export interface PersonaNextIDMixture {
+export interface PersonaItem {
     persona: PersonaInformation
-    proof: BindingProof[]
     avatar?: string
 }
 
 interface PersonaItemProps extends withClasses<'checked' | 'unchecked'> {
-    data: PersonaNextIDMixture
+    data: PersonaItem
     onClick: () => void
-    currentPersona?: PersonaNextIDMixture
+    currentPersona?: PersonaItem
     currentPersonaIdentifier?: ECKeyIdentifier
-    currentProfileIdentify?: IdentityResolved
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -63,18 +54,8 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function PersonaItemUI(props: PersonaItemProps) {
-    const { data, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
+    const { data, onClick, currentPersona, currentPersonaIdentifier } = props
     const { classes } = useStyles(undefined, { props })
-
-    const isVerified = useMemo(() => {
-        return data.proof.some(
-            (p) =>
-                isSameProfile(
-                    resolveNextIDIdentityToProfile(p.identity, p.platform),
-                    currentProfileIdentify?.identifier,
-                ) && p.is_valid,
-        )
-    }, [data.proof])
 
     return (
         <Stack direction="row" alignItems="center" gap={1} onClick={onClick}>
@@ -93,14 +74,7 @@ export function PersonaItemUI(props: PersonaItemProps) {
                 {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.indicator} />}
             </Box>
             <Stack flexGrow={1}>
-                <Typography className={classes.nickname}>
-                    <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
-                        {data.persona.nickname}
-                        {isVerified ?
-                            <Icons.NextIDMini width={32} height={18} />
-                        :   null}
-                    </Stack>
-                </Typography>
+                <Typography className={classes.nickname}>{data.persona.nickname}</Typography>
                 <Typography className={classes.fingerprint}>
                     <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
                         {formatPersonaFingerprint(data.persona.identifier.rawPublicKey, 4)}

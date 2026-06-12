@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import { EMPTY_LIST, type ProfileInformation as Profile, type ProfileInformationFromNextID } from '@masknet/shared-base'
+import { EMPTY_LIST, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { Boundary, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import Fuse from 'fuse.js'
@@ -177,7 +177,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                         return (
                                             <ProfileInList
                                                 key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}
-                                                profile={item as ProfileInformationFromNextID}
+                                                profile={item}
                                                 disabled={disabled}
                                                 selected={selected || disabled}
                                                 onChange={onSelectedProfile}

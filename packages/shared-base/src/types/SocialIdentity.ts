@@ -1,5 +1,4 @@
 import type { ProfileIdentifier } from '@masknet/base'
-import type { NextIDPersonaBindings } from '../NextID/types.js'
 import type { NetworkPluginID } from '../index.js'
 
 export enum SocialAddressType {
@@ -9,7 +8,6 @@ export enum SocialAddressType {
     SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',
     SOL = 'SOL',
-    NEXT_ID = 'NEXT_ID',
     CyberConnect = 'CyberConnect',
     Firefly = 'Firefly',
     Leaderboard = '.eth Leaderboard',
@@ -32,14 +30,10 @@ export interface SocialIdentity {
     nickname?: string
     /** The homepage link of the social account */
     homepage?: string
-    /** Has a NextID binding or not */
-    hasBinding?: boolean
     /** The public key of persona in hex */
     publicKey?: string
     /** Is own user account identity */
     isOwner?: boolean
-    /** All bindings of the persona  **/
-    binding?: NextIDPersonaBindings
 }
 
 /**

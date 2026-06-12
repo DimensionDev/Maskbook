@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { MaskMessages } from '@masknet/shared-base'
 import type { IdentityResolved } from '../types.js'
 import { useQuery } from '@tanstack/react-query'
-import { currentNextIDPlatform } from './context.js'
 import { querySocialIdentity } from '../dom/context.js'
 
 /**
@@ -10,11 +9,11 @@ import { querySocialIdentity } from '../dom/context.js'
  */
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
     const result = useQuery({
-        queryKey: ['next-id', identity, currentNextIDPlatform],
-        enabled: Boolean(identity && currentNextIDPlatform),
+        queryKey: ['social-identity', identity],
+        enabled: Boolean(identity),
         queryFn: async () => {
-            if (!currentNextIDPlatform || !identity) return null
-            return (await querySocialIdentity(currentNextIDPlatform, identity)) || null
+            if (!identity) return null
+            return (await querySocialIdentity(identity)) || null
         },
         refetchOnWindowFocus: false,
     })

@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { ContactCard } from '../ContactCard/index.js'
 import { Box } from '@mui/material'
 import { EmptyStatus, RestorableScroll, ElementAnchor } from '@masknet/shared'
-import type { NextIDPersonaBindingsWithIdentifier } from '../../../hooks/index.js'
+import type { Friend } from '../../../hooks/index.js'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     cardContainer: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface SearchListProps {
-    searchResult: NextIDPersonaBindingsWithIdentifier[]
+    searchResult: Friend[]
     fetchNextPage: () => void
     refetch: () => void
 }
@@ -50,11 +50,8 @@ export const SearchList = memo<SearchListProps>(function SearchList({ searchResu
                     {searchResult.map((friend) => {
                         return (
                             <ContactCard
-                                key={friend.persona}
-                                nextId={friend.persona}
-                                proofProfiles={friend.proofs}
-                                publicKey={friend.linkedPersona.rawPublicKey}
-                                isLocal={friend.isLocal}
+                                key={friend.persona.toText()}
+                                friend={friend}
                                 refetch={refetch}
                                 avatar={friend.avatar}
                             />

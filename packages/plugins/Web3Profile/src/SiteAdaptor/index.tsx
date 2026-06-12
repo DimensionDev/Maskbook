@@ -1,19 +1,15 @@
 import { Icons } from '@masknet/icons'
-import { Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
-import { Web3Bio } from '@masknet/web3-providers'
-import { useQuery } from '@tanstack/react-query'
-import { uniqBy } from 'lodash-es'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Trans } from '@lingui/react/macro'
 import { base } from '../base.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
 import { setupStorage } from './context.js'
 import { SocialBadges } from './components/SocialBadges/Badges.js'
-import { Web3BioProfileToFireflyLens } from '../utils.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -55,7 +51,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 marketListSortingPriority: 3,
                 name,
                 icon,
-                nextIdRequired: true,
                 category: 'dapp',
                 description: <Trans>Choose and show your Web3 footprints on X.</Trans>,
                 tutorialLink: 'https://www.mask.io/help-tutorial/web3-profile',
@@ -69,23 +64,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 const userId = identity?.userId
 
                 // #region lens
-                const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
-                const isProfile = slot === Plugin.SiteAdaptor.BadgesSlot.ProfileName
-
-                const handle = accounts[0]?.handle
-                const { data: nextIdLens = EMPTY_LIST } = useQuery({
-                    queryKey: ['next-id', 'all-lens', userId, handle],
-                    enabled: isProfile && !!handle && !!accounts.length,
-                    queryFn: async () => {
-                        const lensAccounts = await Web3Bio.getAllLens(handle)
-                        return lensAccounts.map(Web3BioProfileToFireflyLens)
-                    },
-                })
-
-                const lensAccounts = useMemo(
-                    () => (isProfile ? uniqBy([...accounts, ...nextIdLens], (x) => x.handle) : accounts),
-                    [isProfile, accounts, nextIdLens],
-                )
+                const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
                 // #endregion
 
                 // #region farcaster
@@ -97,7 +76,8 @@ const site: Plugin.SiteAdaptor.Definition = {
                     onStatusUpdate?.(disabled)
                 }, [onStatusUpdate, disabled])
 
-                if (!accounts.length || !userId) return null
+                if (!lensAccounts.length && !farcasterAccounts.length) return null
+                if (!userId) return null
 
                 return (
                     <SocialBadges

@@ -2,10 +2,8 @@ import type { Subscription } from 'use-subscription'
 import type {
     ValueRef,
     EncryptionTargetType,
-    NextIDPlatform,
     ObservableWeakMap,
     PersonaIdentifier,
-    PostIdentifier,
     ProfileInformation,
 } from '@masknet/shared-base'
 import type { PaletteMode, Theme } from '@mui/material'
@@ -235,7 +233,6 @@ export namespace SiteAdaptorUI {
     export namespace Configuration {
         export interface Define {
             themeSettings?: ThemeSettings
-            nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
             tipsConfig?: TipsConfig
         }
@@ -246,12 +243,6 @@ export namespace SiteAdaptorUI {
              * !!! Any observable change might cause a breaking change on steganography !!!
              */
             password?(): string
-        }
-        export interface NextIDConfig {
-            enable?: boolean
-            platform: NextIDPlatform
-            collectVerificationPost: (keyword: string) => PostIdentifier | null
-            getPostIdFromNewPostToast: () => string
         }
         export interface TipsConfig {
             enableUserGuide?: boolean

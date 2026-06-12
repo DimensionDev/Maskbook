@@ -13,7 +13,6 @@ import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 import { useCurrentUserId } from './hooks/useCurrentUserId.js'
-import { useConnectedVerified } from './hooks/useConnectedVerified.js'
 
 export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
     // #region parse setup status
@@ -41,9 +40,7 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
         queryFn: async () => Services.Helper.getActiveTab().then((x) => x?.id || null),
         refetchOnWindowFocus: true,
     })
-    const { networkIdentifier: site, configuration } = activatedSiteAdaptorUI!
-    const nextIdPlatform = configuration.nextIDConfig?.platform
-    const [checkingVerified, verified] = useConnectedVerified(personaInfo?.identifier?.publicKeyAsHex, userId)
+    const { networkIdentifier: site } = activatedSiteAdaptorUI!
     const connected = personaInfo?.linkedProfiles.some(
         (x) => x.identifier.network === site && x.identifier.userId === userId,
     )
@@ -63,7 +60,6 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
     }, [userId])
 
     const [isFirstConnection, setIsFirstConnection] = useState(false)
-    const [isFirstVerification, setIsFirstVerification] = useState(false)
     const step = useMemo(() => {
         if (!setupGuide.status) {
             // Should show pin extension when not set
@@ -73,23 +69,14 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
                 return SetupGuideStep.Close
             }
         }
-        const nextStep = isFirstConnection ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.CheckConnection
-        if (checkingVerified || checkingConnected || loadingCurrentUserId) return nextStep
-        if (!connected || (nextIdPlatform && !verified)) {
-            return SetupGuideStep.VerifyOnNextID
+        const nextStep = isFirstConnection ? SetupGuideStep.CheckConnection : SetupGuideStep.CheckConnection
+        if (checkingConnected || loadingCurrentUserId) return nextStep
+        if (!connected) {
+            return SetupGuideStep.CheckConnection
         }
         return nextStep
-    }, [
-        setupGuide.status,
-        checkingVerified,
-        checkingConnected,
-        connected,
-        verified,
-        isFirstConnection,
-        loadingCurrentUserId,
-    ])
+    }, [setupGuide.status, checkingConnected, connected, isFirstConnection, loadingCurrentUserId])
     const skip = !personaInfo || currentTabId !== setupGuide.tabId
-    // Will show connect result the first time for sites that don't need to verify nextId.
     return {
         step: skip ? SetupGuideStep.Close : step,
         userId,
@@ -99,11 +86,7 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
         personaInfo,
         isFirstConnection,
         setIsFirstConnection,
-        isFirstVerification,
-        setIsFirstVerification,
         checkingConnected,
-        checkingVerified,
-        verified,
         connected,
     }
 }

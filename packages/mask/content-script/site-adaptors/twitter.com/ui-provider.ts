@@ -1,6 +1,6 @@
 /* eslint-disable tss-unused-classes/unused-classes */
 import type { SiteAdaptorUI } from '@masknet/types'
-import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
 import { activatedSiteAdaptor_state, stateCreator } from '../../site-adaptor-infra/index.js'
@@ -14,7 +14,7 @@ import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposi
 import { publishPostTwitter } from './automation/publishPost.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
-import { collectVerificationPost, PostProviderTwitter, getPostIdFromNewPostToast } from './collecting/post.js'
+import { PostProviderTwitter } from './collecting/post.js'
 import { useThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
@@ -204,12 +204,6 @@ const twitterUI: SiteAdaptorUI.Definition = {
             size: FontSize.Normal,
             mode: ThemeMode.Light,
             isDim: false,
-        },
-        nextIDConfig: {
-            enable: true,
-            platform: NextIDPlatform.Twitter,
-            collectVerificationPost,
-            getPostIdFromNewPostToast,
         },
         steganography: {
             // ! Change this is a breaking change !

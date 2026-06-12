@@ -1,23 +1,14 @@
-import { memo, useState, useCallback, useMemo } from 'react'
+import { memo, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
-import {
-    formatPersonaFingerprint,
-    PopupRoutes,
-    ProfileIdentifier,
-    ECKeyIdentifier,
-    NextIDPlatform,
-} from '@masknet/shared-base'
-import { CopyButton, PersonaContext } from '@masknet/shared'
+import { Box, Typography, Avatar, useTheme, ButtonBase as Button } from '@mui/material'
+import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
+import { PersonaContext } from '@masknet/shared'
 import Services from '#services'
-import { ConnectedAccounts } from './ConnectedAccounts/index.js'
-import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
-import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
-import type { Profile } from '../common.js'
+import type { Friend } from '../../../hooks/index.js'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -48,33 +39,15 @@ const useStyles = makeStyles()((theme) => ({
         width: 40,
         height: 40,
     },
-    icon: {
-        width: 12,
-        height: 12,
-        fontSize: 12,
-        color: theme.palette.maskColor.second,
-    },
 }))
 
 interface ContactCardProps {
+    friend: Friend
     avatar?: string
-    proofProfiles?: Profile[]
-    nextId?: string
-    publicKey?: string
-    isLocal?: boolean
-    profile?: ProfileIdentifier
     refetch?: () => void
 }
 
-export const ContactCard = memo<ContactCardProps>(function ContactCard({
-    avatar,
-    nextId,
-    publicKey,
-    isLocal,
-    profile,
-    refetch,
-    proofProfiles,
-}) {
+export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend, avatar, refetch }) {
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -82,48 +55,18 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const [local, setLocal] = useState(false)
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
-    const profiles = useFriendProfiles(seen, nextId, profile)
+    const publicKey = friend.persona.publicKeyAsHex
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
 
-    const friendInfo = useMemo(() => {
-        if (!rawPublicKey) return
-        const twitter = proofProfiles?.find((p) => p.platform === NextIDPlatform.Twitter)
-        const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
-            `${nextId} should be a valid hex public key in k256`,
-        )
-        if (!twitter) {
-            return {
-                persona: personaIdentifier,
-            }
-        } else {
-            const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
-            return {
-                persona: personaIdentifier,
-                profile: profileIdentifier,
-            }
-        }
-    }, [nextId, rawPublicKey])
-
     const handleAddFriend = useCallback(async () => {
-        if (!friendInfo || !currentPersona) return
-        const { persona, profile } = friendInfo
-        if (!profile) {
-            await Services.Identity.createNewRelation(persona, currentPersona.identifier)
-        } else {
-            await attachNextIDToProfile({
-                identifier: profile,
-                linkedPersona: persona,
-                fromNextID: true,
-                linkedTwitterNames: [profile.userId],
-            })
-        }
-    }, [nextId, queryClient, currentPersona, refetch, friendInfo])
+        if (!currentPersona) return
+        await Services.Identity.createNewRelation(friend.persona, currentPersona.identifier)
+    }, [friend.persona, currentPersona])
 
     const { mutate: onAdd, isPending } = useMutation({
         mutationFn: handleAddFriend,
-        onMutate: async (friend: Friend | undefined) => {
-            if (!friend) return
+        onMutate: async () => {
             await queryClient.cancelQueries({ queryKey: ['relation-records', rawPublicKey] })
             await queryClient.cancelQueries({ queryKey: ['friends', rawPublicKey] })
             queryClient.setQueryData(
@@ -165,42 +108,20 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 <Box className={classes.title}>
                     {avatar ?
                         <Avatar className={classes.avatar} src={avatar} />
-                    :   <Icons.NextIdAvatar className={classes.avatar} />}
+                    :   <Icons.MaskBlue className={classes.avatar} />}
                     <Box>
                         <Typography fontSize={14} fontWeight={700} lineHeight="18px">
                             {publicKey ? formatPersonaFingerprint(publicKey) : null}
                         </Typography>
-                        <Typography
-                            fontSize={12}
-                            color={theme.palette.maskColor.second}
-                            lineHeight="16px"
-                            display="flex"
-                            alignItems="center"
-                            columnGap="2px">
-                            {nextId ? formatPersonaFingerprint(nextId, 4) : null}
-                            <CopyButton text={nextId ? nextId : ''} size={12} className={classes.icon} />
-                            <Link
-                                underline="none"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://web3.bio/${nextId}`}
-                                className={classes.icon}>
-                                <Icons.LinkOut size={12} />
-                            </Link>
-                        </Typography>
                     </Box>
                 </Box>
-                {isLocal || local ?
+                {local ?
                     <Button
                         onClick={() =>
-                            navigate(`${PopupRoutes.FriendsDetail}/${nextId}`, {
+                            navigate(`${PopupRoutes.FriendsDetail}/${publicKey}`, {
                                 state: {
                                     avatar,
-                                    publicKey,
-                                    nextId,
-                                    profiles: proofProfiles ?? profiles,
-                                    isLocal,
-                                    localProfile: profile,
+                                    friend,
                                 },
                             })
                         }
@@ -210,21 +131,13 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                     </Button>
                 :   <ActionButton
                         variant="roundedContained"
-                        onClick={() => onAdd(friendInfo)}
+                        onClick={() => onAdd()}
                         loading={isPending}
                         disabled={isPending}>
                         <Trans>Add</Trans>
                     </ActionButton>
                 }
             </Box>
-            <ConnectedAccounts
-                avatar={avatar}
-                nextId={nextId}
-                publicKey={publicKey}
-                isLocal={isLocal}
-                profiles={proofProfiles ?? profiles}
-                localProfile={profile}
-            />
         </Box>
     )
 })

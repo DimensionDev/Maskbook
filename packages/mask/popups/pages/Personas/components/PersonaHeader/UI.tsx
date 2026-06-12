@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, Link, Typography } from '@mui/material'
+import { Avatar, Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
 
@@ -46,13 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    icon: {
-        width: 12,
-        height: 12,
-        color: theme.palette.maskColor.main,
-        cursor: 'pointer',
-        marginLeft: 4,
-    },
 }))
 
 interface PersonaHeaderUIProps {
@@ -75,14 +68,6 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint
                     <Typography className={classes.nickname}>{formatPersonaName(nickname)}</Typography>
                     <Typography className={classes.identifier}>
                         {formatPersonaFingerprint(fingerprint ?? '', 4)}
-                        <Link
-                            underline="none"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={`https://web3.bio/${publicHexString}`}
-                            className={classes.icon}>
-                            <Icons.LinkOut size={12} />
-                        </Link>
                     </Typography>
                 </div>
             </div>

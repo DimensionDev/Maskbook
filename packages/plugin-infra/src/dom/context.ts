@@ -4,7 +4,6 @@
 import type {
     DashboardRoutes,
     ECKeyIdentifier,
-    NextIDPlatform,
     PersonaIdentifier,
     PersonaInformation,
     PopupRoutes,
@@ -24,10 +23,7 @@ export interface __UIContext__ {
         identifiers: readonly PersonaIdentifier[],
     ): Promise<Map<ProfileIdentifier | PersonaIdentifier, string | undefined>>
     queryPersonaAvatar(identifiers: undefined | PersonaIdentifier): Promise<string | undefined>
-    querySocialIdentity: (
-        platform: NextIDPlatform,
-        identity: IdentityResolved | undefined,
-    ) => Promise<SocialIdentity | undefined>
+    querySocialIdentity: (identity: IdentityResolved | undefined) => Promise<SocialIdentity | undefined>
     // DO NOT add <T> to this function, you do not test if it is T right?
     // (e.g. receive a function to check it validate: (x: unknown) => x is T)
     // fetchJSON<T>(validate: (x: unknown) => x is T, input: RequestInfo | URL, init?: RequestInit): Promise<T>

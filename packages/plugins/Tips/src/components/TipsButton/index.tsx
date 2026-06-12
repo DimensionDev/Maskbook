@@ -1,12 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useCurrentVisitingIdentity, useSocialIdentityByUserId } from '@masknet/plugin-infra/content-script'
-import {
-    EMPTY_LIST,
-    NetworkPluginID,
-    SocialAddressType,
-    type ProfileIdentifier,
-    type SocialAccount,
-} from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, type ProfileIdentifier, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
@@ -67,21 +61,10 @@ export function TipsButton(props: Props) {
 
     const accountsByIdentity = useTipsAccounts(identity)
     const accounts = useMemo(() => {
-        return [...receivingAccounts, ...accountsByIdentity]
-            .sort((a, z) => {
-                const aHasNextId = a.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
-                const zHasNextId = z.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
-                if (aHasNextId === zHasNextId) return 0
-                return (
-                    aHasNextId ? -1
-                    : zHasNextId ? 1
-                    : 0
-                )
-            })
-            .sort((a, z) => {
-                if (a.pluginID === z.pluginID) return 0
-                return a.pluginID === pluginID ? -1 : 1
-            })
+        return [...receivingAccounts, ...accountsByIdentity].sort((a, z) => {
+            if (a.pluginID === z.pluginID) return 0
+            return a.pluginID === pluginID ? -1 : 1
+        })
     }, [receivingAccounts, accountsByIdentity, pluginID])
 
     const disabled = accounts.length === 0 || !isRuntimeAvailable
