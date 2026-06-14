@@ -74,7 +74,7 @@ export function PersonaSelectPanelDialog({
                 title={<Trans>Persona</Trans>}
                 titleBarIconStyle="close">
                 <DialogContent classes={{ root: classes.content }}>
-                    <PersonaSelectPanel enableVerify={enableVerify} finishTarget={finishTarget} onClose={onClose} />
+                    <PersonaSelectPanel finishTarget={finishTarget} onClose={onClose} />
                 </DialogContent>
             </InjectedDialog>
         :   null

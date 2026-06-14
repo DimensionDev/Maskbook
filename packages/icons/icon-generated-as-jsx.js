@@ -443,21 +443,6 @@ export const Momoka = /*#__PURE__*/ __createIcon('Momoka', [
         u: () => new URL('./brands/Momoka.svg', import.meta.url).href,
     },
 ])
-export const NextID = /*#__PURE__*/ __createIcon('NextID', [
-    {
-        u: () => new URL('./brands/NextID.svg', import.meta.url).href,
-    },
-])
-export const NextIDMini = /*#__PURE__*/ __createIcon('NextIDMini', [
-    {
-        c: ['dark'],
-        u: () => new URL('./brands/NextIDMini.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./brands/NextIDMini.light.svg', import.meta.url).href,
-    },
-])
 export const NFTGo = /*#__PURE__*/ __createIcon('NFTGo', [
     {
         u: () => new URL('./brands/NFTGo.svg', import.meta.url).href,
@@ -2900,21 +2885,6 @@ export const More = /*#__PURE__*/ __createIcon('More', [
                 }),
             }),
         s: true,
-    },
-])
-export const NextIdAvatar = /*#__PURE__*/ __createIcon('NextIdAvatar', [
-    {
-        c: ['dark'],
-        u: () => new URL('./general/NextIdAvatar.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./general/NextIdAvatar.light.svg', import.meta.url).href,
-    },
-])
-export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon('NextIdPersonaWarning', [
-    {
-        u: () => new URL('./general/NextIdPersonaWarning.svg', import.meta.url).href,
     },
 ])
 export const NFTHolder = /*#__PURE__*/ __createIcon(

@@ -1,25 +1,13 @@
-import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { ConfirmDialog, FormattedAddress, PersonaContext, ProgressiveText } from '@masknet/shared'
-import {
-    MaskMessages,
-    NetworkPluginID,
-    NextIDAction,
-    PopupModalRoutes,
-    SignType,
-    type BindingProof,
-    type PersonaInformation,
-} from '@masknet/shared-base'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { FormattedAddress, ProgressiveText } from '@masknet/shared'
+import { NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver, NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
-import { useQueries } from '@tanstack/react-query'
-import { memo, useCallback } from 'react'
-import { useVerifiedWallets } from '../../hooks/index.js'
+import { memo } from 'react'
 import { useModalNavigate } from '../ActionModal/index.js'
 import { WalletAvatar } from '../WalletAvatar/index.js'
 
@@ -86,96 +74,35 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const localWallets = useWallets()
-    const { showSnackbar } = usePopupCustomSnackbar()
-    const { currentPersona, proofs } = PersonaContext.useContainer()
     const modalNavigate = useModalNavigate()
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useVerifiedWallets(proofs)
-
-    const queries = useQueries({
-        queries: wallets.map((wallet) => ({
-            enabled: !!NameService,
-            queryKey: ['persona-connected-wallet', wallet.identity],
-            queryFn: async () => {
-                const domain = await NameService?.reverse?.(wallet.identity)
-                if (domain) return domain
-                const localWallet = localWallets.find((x) => isSameAddress(x.address, wallet.identity))?.name
-                return localWallet || null
-            },
-        })),
-    })
-
-    const handleConfirmDisconnect = useCallback(async (wallet: BindingProof, persona: PersonaInformation) => {
-        try {
-            const result = await NextIDProof.createPersonaPayload(
-                persona.identifier.publicKeyAsHex,
-                NextIDAction.Delete,
-                wallet.identity,
-                wallet.platform,
-            )
-
-            if (!result) return
-
-            const signature = await Services.Identity.signWithPersona(
-                { type: SignType.Message, data: result.signPayload },
-                persona.identifier,
-                location.origin,
-                true,
-            )
-
-            if (!signature) return
-
-            await NextIDProof.bindProof(
-                result.uuid,
-                persona.identifier.publicKeyAsHex,
-                NextIDAction.Delete,
-                wallet.platform,
-                wallet.identity,
-                result.createdAt,
-                { signature },
-            )
-
-            // Broadcast updates.
-            MaskMessages.events.ownProofChanged.sendToAll()
-            showSnackbar(<Trans>Wallet disconnected</Trans>)
-        } catch {
-            showSnackbar(<Trans>Failed to disconnect wallet</Trans>, {
-                variant: 'error',
-            })
-        }
-    }, [])
 
     return (
         <Box className={classes.walletList}>
-            {wallets.map((wallet, index) => {
-                const query = queries[index]
-                let walletName = query.data || ''
-                if (!walletName && !query.isPending) {
-                    walletName = `${resolveNextIDPlatformWalletName(wallet.platform)} ${wallets.length - index}`
-                }
+            {localWallets.map((wallet, index) => {
                 return (
                     <Box className={classes.wallet} key={index}>
                         <Box display="flex" alignItems="center">
-                            <WalletAvatar size={24} className={classes.walletIcon} address={wallet.identity} />
+                            <WalletAvatar size={24} className={classes.walletIcon} address={wallet.address} />
                             <Typography className={classes.walletInfo} component="div">
                                 <ProgressiveText
                                     className={classes.walletName}
                                     component="span"
                                     skeletonWidth={60}
                                     skeletonHeight={16}
-                                    loading={query.isPending}>
-                                    {formatDomainName(walletName, 13)}
+                                    loading={false}>
+                                    {formatDomainName(wallet.name || '', 13)}
                                 </ProgressiveText>
 
                                 <Typography component="span" className={classes.address}>
                                     <FormattedAddress
-                                        address={wallet.identity}
+                                        address={wallet.address}
                                         size={4}
                                         formatter={formatEthereumAddress}
                                     />
                                     <Link
                                         style={{ width: 14, height: 14, color: theme.palette.maskColor.main }}
-                                        href={EVMExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
+                                        href={EVMExplorerResolver.addressLink(chainId, wallet.address ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
                                         <Icons.LinkOut size={14} sx={{ ml: 0.25 }} />
@@ -183,26 +110,6 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                                 </Typography>
                             </Typography>
                         </Box>
-                        <Icons.Disconnect
-                            size={16}
-                            onClick={async () => {
-                                if (!currentPersona) return
-                                const confirmed = await ConfirmDialog.openAndWaitForClose({
-                                    title: <Trans>Disconnect Wallet?</Trans>,
-                                    confirmVariant: 'warning',
-                                    message: (
-                                        <Trans>
-                                            Are you sure to remove the connected wallet{' '}
-                                            <strong style={{ color: theme.palette.maskColor.main }}>
-                                                {formatEthereumAddress(wallet.identity, 4)}
-                                            </strong>
-                                            ?
-                                        </Trans>
-                                    ),
-                                })
-                                if (confirmed) return handleConfirmDisconnect(wallet, currentPersona)
-                            }}
-                        />
                     </Box>
                 )
             })}

@@ -18,7 +18,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
-import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
+import { createContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useTimeout } from 'react-use'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
@@ -204,15 +204,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
 function RenderEntryComponent({ application, style }: { application: Application; style?: React.CSSProperties }) {
     const Entry = application.entry.RenderEntryComponent!
 
-    const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
-
-    // #region entry disabled
-    const disabled = useMemo(() => {
-        if (!application.enabled) return true
-
-        return !!application.entry.nextIdRequired && ApplicationEntryStatus.isLoading
-    }, [application, ApplicationEntryStatus.isLoading])
-    // #endregion
+    const disabled = !application.enabled
 
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired) {
@@ -221,33 +213,13 @@ function RenderEntryComponent({ application, style }: { application: Application
                 if (connected) walletConnectedCallback?.()
             }
         }
-        if (!application.entry.nextIdRequired) return
-        if (
-            ApplicationEntryStatus.isPersonaCreated === false ||
-            ApplicationEntryStatus.shouldVerifyNextId ||
-            !ApplicationEntryStatus.isPersonaConnected
-        )
-            return () =>
-                ApplicationEntryStatus.personaAction?.(
-                    ApplicationEntryStatus.isPersonaCreated ? application.pluginID : undefined,
-                )
 
         return
-    }, [ApplicationEntryStatus, application])
-
-    // #endregion
+    }, [application])
 
     // #region tooltip hint
     const tooltipHint = (() => {
-        if (ApplicationEntryStatus.isLoading) return
         if (application.isWalletConnectedRequired) return <Trans>Please connect your wallet</Trans>
-        if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
-            return <Trans>Please create a persona for accessing Dapps.</Trans>
-        if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
-            return <Trans>Please connect your persona</Trans>
-        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled)
-            return <Trans>Please verify your social account</Trans>
         return
     })()
     // #endregion
@@ -258,10 +230,8 @@ function RenderEntryComponent({ application, style }: { application: Application
 interface ApplicationEntryStatusContextProps {
     isPersonaConnected: boolean | undefined
     isPersonaCreated: boolean | undefined
-    isNextIDVerify: boolean | undefined
     isSiteConnectedToCurrentPersona: boolean | undefined
     shouldDisplayTooltipHint: boolean | undefined
-    shouldVerifyNextId: boolean | undefined
     currentPersonaPublicKey: string | undefined
     currentSiteConnectedPersonaPublicKey: string | undefined
     personaAction: ((target?: string | undefined, position?: 'center' | 'top-right' | undefined) => void) | undefined
@@ -271,10 +241,8 @@ interface ApplicationEntryStatusContextProps {
 const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContextProps>({
     isPersonaConnected: undefined,
     isPersonaCreated: undefined,
-    isNextIDVerify: undefined,
     isSiteConnectedToCurrentPersona: undefined,
     shouldDisplayTooltipHint: undefined,
-    shouldVerifyNextId: undefined,
     currentPersonaPublicKey: undefined,
     currentSiteConnectedPersonaPublicKey: undefined,
     personaAction: undefined,
@@ -313,11 +281,9 @@ function ApplicationEntryStatusProvider({
             personaAction: personaConnectStatus.action,
             isPersonaCreated: personaConnectStatus.hasPersona,
             isPersonaConnected: personaConnectStatus.connected,
-            isNextIDVerify: personaConnectStatus.verified,
             isSiteConnectedToCurrentPersona,
             shouldDisplayTooltipHint:
                 applicationCurrentStatus?.isSiteConnectedToCurrentPersona === false && personaConnectStatus.connected,
-            shouldVerifyNextId: !!(!personaConnectStatus.verified && applicationCurrentStatus),
             currentPersonaPublicKey,
             currentSiteConnectedPersonaPublicKey,
             isLoading: personaStatusLoading || personaPerSiteConnectStatusLoading,

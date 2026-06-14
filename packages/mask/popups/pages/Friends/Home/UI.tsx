@@ -2,7 +2,7 @@ import { makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
-import type { NextIDPersonaBindingsWithIdentifier, Friend } from '../../../hooks/index.js'
+import type { Friend } from '../../../hooks/index.js'
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
 import { Trans } from '@lingui/react/macro'
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface FriendsHomeUIProps {
     searchValue: string
-    searchResult: NextIDPersonaBindingsWithIdentifier[]
+    searchResult: Friend[]
     loading: boolean
     friends: Array<{ friends: Friend[]; nextPageOffset: number }>
     setSearchValue: (v: string) => void

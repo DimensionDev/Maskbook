@@ -1,8 +1,7 @@
-import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Link, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { memo } from 'react'
 
 const useStyles = makeStyles<{ iconSize: number }>()((theme, { iconSize }) => ({
@@ -42,14 +41,6 @@ export const PersonaPublicKey = memo<PersonaPublicKeyProps>(function PersonaPubl
         <Typography className={classes.text}>
             {formatPersonaFingerprint(rawPublicKey, 4)}
             <CopyButton text={rawPublicKey} className={classes.icon} size={iconSize} />
-            <Link
-                underline="none"
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`https://web3.bio/${publicHexString}`}
-                className={classes.icon}>
-                <Icons.LinkOut size={iconSize} />
-            </Link>
         </Typography>
     )
 })

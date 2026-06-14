@@ -1,7 +1,6 @@
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { MaskMessages, ValueRef, type NextIDPersonaBindings, type ProfileInformation } from '@masknet/shared-base'
+import { MaskMessages, ValueRef, type ProfileInformation } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { NextIDProof } from '@masknet/web3-providers'
 import { FontSize, ThemeColor, ThemeMode, type ThemeSettings } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { first, isEqual } from 'lodash-es'
@@ -13,15 +12,6 @@ import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-a
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
     return Services.Identity.queryPersonaByProfile(identityResolved.identifier)
-}
-
-async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
-    if (!identityResolved.identifier) return
-    if (!activatedSiteAdaptorUI?.configuration.nextIDConfig?.platform) return
-    return NextIDProof.queryAllExistedBindingsByPlatform(
-        activatedSiteAdaptorUI.configuration.nextIDConfig.platform,
-        identityResolved.identifier.userId,
-    )
 }
 
 const CurrentIdentitySubscription: Subscription<ProfileInformation | undefined> = {
@@ -60,16 +50,11 @@ export function useCurrentVisitingIdentity() {
     )
 }
 
-interface SocialIdentity extends IdentityResolved {
-    publicKey?: string
-    hasBinding?: boolean
-    binding?: NextIDPersonaBindings
-}
 /**
  * Get the social identity of the given identity
  */
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
-    const result = useQuery<SocialIdentity | null>({
+    const result = useQuery({
         enabled: !!identity,
         queryKey: ['social-identity', identity],
         queryFn: async () => {
@@ -79,16 +64,9 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
                 const persona = await queryPersonaFromDB(identity)
                 if (!persona) return identity
 
-                const bindings = await queryPersonasFromNextID(identity)
-                if (!bindings) return identity
-
-                const personaBindings =
-                    bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
                 return {
                     ...identity,
                     publicKey: persona?.identifier.publicKeyAsHex,
-                    hasBinding: personaBindings.length > 0,
-                    binding: first(personaBindings),
                 }
             } catch {
                 return identity || null

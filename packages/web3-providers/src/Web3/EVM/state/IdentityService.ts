@@ -1,14 +1,10 @@
 import { compact, uniqBy } from 'lodash-es'
 import {
-    EMPTY_LIST,
     NetworkPluginID,
-    NextIDPlatform,
     SocialAddressType,
     createLookupTableResolver,
-    type BindingProof,
     type SocialAddress,
     type SocialIdentity,
-    Sniffings,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
@@ -17,7 +13,6 @@ import defer * as ARBID from '../../../ARBID/index.js'
 import defer * as ENS from '../../../ENS/index.js'
 import defer * as Firefly from '../../../Firefly/index.js'
 import defer * as MaskX from '../../../MaskX/index.js'
-import defer * as NextIDProof from '../../../NextID/proof.js'
 import defer * as RSS3 from '../../../RSS3/index.js'
 import defer * as SpaceID from '../../../SpaceID/index.js'
 
@@ -45,28 +40,6 @@ function getCrossBellHandles(nickname: string, bio: string) {
     return [nickname.match(CROSSBELL_HANDLE_RE), bio.match(CROSSBELL_HANDLE_RE)]
         .flatMap((result) => result || [])
         .map((x) => x.toLowerCase())
-}
-
-function getNextIDPlatform() {
-    if (Sniffings.is_twitter_page) return NextIDPlatform.Twitter
-    return
-}
-
-async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIdentity): Promise<BindingProof[]> {
-    if (!identifier?.userId) return EMPTY_LIST
-
-    const platform = getNextIDPlatform()
-    if (!platform) return EMPTY_LIST
-
-    const latestActivatedBinding = await NextIDProof.NextIDProof.queryLatestBindingByPlatform(
-        platform,
-        identifier.userId,
-        publicKey,
-    )
-    if (!latestActivatedBinding) return EMPTY_LIST
-    return latestActivatedBinding.proofs.filter(
-        (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-    )
 }
 
 const resolveMaskXAddressType = createLookupTableResolver<BaseMaskX.SourceType, SocialAddressType>(
@@ -124,30 +97,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             }),
         )
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
-    }
-
-    /** Read a social address from NextID. */
-    private async getSocialAddressesFromNextID(identity: SocialIdentity) {
-        try {
-            const listOfAddress = await getWalletAddressesFromNextID(identity)
-            return compact(
-                listOfAddress.map((x) =>
-                    this.createSocialAddress(
-                        SocialAddressType.NEXT_ID,
-                        x.identity,
-                        '',
-                        undefined,
-                        x.latest_checked_at,
-                        x.created_at,
-                    ),
-                ),
-            )
-        } catch (err) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error('Failed to get social address from Next.ID', err)
-            }
-            return []
-        }
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
@@ -234,7 +183,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
-    override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
+    override async getFromRemote(identity: SocialIdentity) {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromENS(identity),

@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
+import type { ProfileAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
@@ -33,15 +33,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface AccountDetailUIProps {
     account: ProfileAccount
-    isSupportNextDotID: boolean
-    walletProofs?: BindingProof[]
 }
 
-export const AccountDetailUI = memo<AccountDetailUIProps>(function AccountDetailUI({
-    account,
-    isSupportNextDotID,
-    walletProofs,
-}) {
+export const AccountDetailUI = memo<AccountDetailUIProps>(function AccountDetailUI({ account }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const handleBack = useCallback(() => navigate(-1), [])
@@ -53,43 +47,22 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(function AccountDetail
                     <AccountAvatar
                         avatar={account.avatar}
                         network={account.identifier.network}
-                        isValid={account.is_valid}
                         classes={{ avatar: classes.avatar }}
                     />
-                    <Typography className={classes.identity}>@{account.identity}</Typography>
+                    <Typography className={classes.identity}>@{account.nickname}</Typography>
                 </Box>
                 <Typography className={classes.tips}>
-                    {account.is_valid ?
-                        <Trans>
-                            Display the following address on your Web3 profile page and use it to receive tips.
-                        </Trans>
-                    : isSupportNextDotID ?
-                        <Trans>
-                            After connecting and verifying your persona, you can set up associated address for
-                            displaying your web3 footprints or receiving tips.
-                        </Trans>
-                    :   <Trans>
-                            Other social networking platforms, such as <strong>Instagram, </strong>
-                            <strong>Facebook,</strong> and <strong>Minds,</strong> do not have a verified relationship
-                            like X's Next.ID verified connection.
-                            <br />
-                            <br />
-                            When connecting a persona with an account on these platforms, they only support sending
-                            encrypted posts.
-                        </Trans>
-                    }
+                    <Trans>Display the following address on your Web3 profile page and use it to receive tips.</Trans>
                 </Typography>
 
-                <WalletList walletProofs={walletProofs} isValid={isSupportNextDotID ? account.is_valid : false} />
+                <WalletList />
             </Box>
 
-            {isSupportNextDotID ?
-                <BottomController>
-                    <Button variant="outlined" fullWidth onClick={handleBack}>
-                        <Trans>Back</Trans>
-                    </Button>
-                </BottomController>
-            :   null}
+            <BottomController>
+                <Button variant="outlined" fullWidth onClick={handleBack}>
+                    <Trans>Back</Trans>
+                </Button>
+            </BottomController>
         </Box>
     )
 })

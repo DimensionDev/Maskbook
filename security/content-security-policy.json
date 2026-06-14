@@ -65,14 +65,6 @@
         "https://a8fq5hs9nk.execute-api.us-east-1.amazonaws.com",
 
         "https://maskbook.pages.dev",
-        "https://kv-service.next.id/v1/kv",
-        "https://kv-service.next.id/v1/kv/by_identity",
-        "https://kv-service.next.id/v1/kv/payload",
-        "https://proof-service.next.id/v1/proof",
-        "https://proof-service.next.id/v1/proof/exists",
-        "https://proof-service.next.id/v1/proof/payload",
-        "https://proof-service.next.id/v1/proof/restore_pubkey",
-        "https://relation-service-tiger.next.id/",
 
         "https://nftapi.firefly.land/",
         "https://store.firefly.land",

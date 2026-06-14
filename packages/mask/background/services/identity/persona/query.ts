@@ -4,14 +4,11 @@ import {
     type EC_Public_JsonWebKey,
     fromBase64URL,
     isEC_Private_JsonWebKey,
-    type NextIDPlatform,
     type PersonaIdentifier,
     type PersonaInformation,
     type ProfileIdentifier,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import type { IdentityResolved } from '@masknet/plugin-infra'
-import { NextIDProof } from '@masknet/web3-providers'
 import {
     createPersonaDBReadonlyAccess,
     queryPersonaDB,
@@ -24,6 +21,7 @@ import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils.js'
 import { bytesToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { decode } from '@msgpack/msgpack'
 import { decodeArrayBuffer } from '@masknet/kit'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export async function queryOwnedPersonaInformation(initializedOnly: boolean): Promise<PersonaInformation[]> {
     let result: Promise<PersonaInformation[]>
@@ -89,29 +87,14 @@ export async function queryPersonaEOAByPrivateKey(privateKeyString: string) {
     }
 }
 
-export async function queryPersonasFromNextID(platform: NextIDPlatform, identityResolved: IdentityResolved) {
-    if (!identityResolved.identifier) return
-    return NextIDProof.queryAllExistedBindingsByPlatform(platform, identityResolved.identifier.userId)
-}
-
-export async function querySocialIdentity(
-    platform: NextIDPlatform,
-    identity: IdentityResolved | undefined,
-): Promise<SocialIdentity | undefined> {
+export async function querySocialIdentity(identity: IdentityResolved | undefined): Promise<SocialIdentity | undefined> {
     if (!identity?.identifier) return
     const persona = await queryPersonaByProfile(identity.identifier)
     if (!persona) return identity
 
-    const bindings = await queryPersonasFromNextID(platform, identity)
-    if (!bindings) return identity
-
-    const personaBindings =
-        bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
     return {
         ...identity,
         publicKey: persona?.identifier.publicKeyAsHex,
-        hasBinding: personaBindings.length > 0,
-        binding: first(personaBindings),
     }
 }
 

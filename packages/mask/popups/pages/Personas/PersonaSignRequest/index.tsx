@@ -3,10 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box } from '@mui/material'
 import { ActionButton } from '@masknet/theme'
-import { PersonaContext } from '@masknet/shared'
-import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@masknet/shared-base'
-import { MethodAfterPersonaSign } from '../../Wallet/type.js'
-import Services from '#services'
+import { type PersonaInformation, PopupRoutes, MaskMessages } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../shared-ui/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
@@ -20,7 +17,6 @@ export const Component = memo(function PersonaSignRequest() {
     const [message, setMessage] = useState<string>('')
     const [selected, setSelected] = useState<PersonaInformation>()
     const personas = usePersonasFromDB()
-    const { currentPersona } = PersonaContext.useContainer()
 
     const source = params.get('source') || undefined
 
@@ -48,57 +44,15 @@ export const Component = memo(function PersonaSignRequest() {
             selectedPersona,
         })
 
-        const method = params.get('method') as MethodAfterPersonaSign | undefined
+        const method = params.get('method')
 
         if (!method) {
             window.close()
             return
         }
 
-        // sign request from popup
-        switch (method) {
-            case MethodAfterPersonaSign.DISCONNECT_NEXT_ID:
-                if (!message) break
-                const signature = await Services.Identity.signWithPersona(
-                    { type: SignType.Message, data: message },
-                    selectedPersona,
-                    location.origin,
-                    true,
-                )
-
-                const profileIdentifier = params.get('profileIdentifier')
-                const platform = params.get('platform')
-                const identity = params.get('identity')
-                const createdAt = params.get('createdAt')
-                const uuid = params.get('uuid')
-
-                if (
-                    !signature ||
-                    !profileIdentifier ||
-                    !platform ||
-                    !identity ||
-                    !createdAt ||
-                    !uuid ||
-                    !currentPersona?.identifier.publicKeyAsHex
-                )
-                    break
-                await Services.Identity.detachProfileWithNextID(
-                    uuid,
-                    currentPersona.identifier.publicKeyAsHex,
-                    platform,
-                    identity,
-                    createdAt,
-                    {
-                        signature,
-                    },
-                )
-                const profile = currentPersona.linkedProfiles.find((x) => x.identifier.toText() === profileIdentifier)
-                if (!profile) break
-                await Services.Identity.detachProfile(profile.identifier)
-                break
-        }
         navigate(-1)
-    }, [params, selected, requestID, message, currentPersona])
+    }, [params, selected, requestID, message])
 
     const [{ loading: cancelLoading }, handleCancel] = useAsyncFn(async () => {
         if (!requestID) return

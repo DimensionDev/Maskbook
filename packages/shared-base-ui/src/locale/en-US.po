@@ -627,8 +627,8 @@ msgid "Above 10% may be considered a high tax rate. More than 50% tax rate means
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-msgid "Account connected.<0/><1/>Try to explore more features powered by Mask Network."
-msgstr ""
+#~ msgid "Account connected.<0/><1/>Try to explore more features powered by Mask Network."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
 msgid "Account successfully connected to persona"
@@ -698,8 +698,8 @@ msgid "Add the file to Chrome's database"
 msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
-msgid "Add wallet"
-msgstr ""
+#~ msgid "Add wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/StartUp/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
@@ -720,7 +720,11 @@ msgid "Added successfully"
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "Adding your wallets will allow you to own, view, and utilize your digital identities via Next.ID service. Note that you will be required to sign and authenticate the transaction to prove ownership of your wallet."
+#~ msgid "Adding your wallets will allow you to own, view, and utilize your digital identities via Next.ID service. Note that you will be required to sign and authenticate the transaction to prove ownership of your wallet."
+#~ msgstr ""
+
+#: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
+msgid "Adding your wallets will allow you to own, view, and utilize your digital identities. Note that you will be required to sign and authenticate the transaction to prove ownership of your wallet."
 msgstr ""
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
@@ -746,8 +750,8 @@ msgid "Advanced Settings"
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
-msgid "After connecting and verifying your persona, you can set up associated address for displaying your web3 footprints or receiving tips."
-msgstr ""
+#~ msgid "After connecting and verifying your persona, you can set up associated address for displaying your web3 footprints or receiving tips."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
@@ -867,10 +871,9 @@ msgstr ""
 msgid "APR"
 msgstr ""
 
-#. placeholder {0}: formatEthereumAddress(wallet.identity, 4)
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
-msgid "Are you sure to remove the connected wallet <0>{0}</0>?"
-msgstr ""
+#~ msgid "Are you sure to remove the connected wallet <0>{0}</0>?"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 msgid "Are you sure to remove this wallet?"
@@ -1646,8 +1649,8 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
-msgid "Confirm this transaction in your wallet."
-msgstr ""
+#~ msgid "Confirm this transaction in your wallet."
+#~ msgstr ""
 
 #. placeholder {0}: asset.symbol
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
@@ -1664,8 +1667,8 @@ msgid "Confirming"
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "Congratulations"
-msgstr ""
+#~ msgid "Congratulations"
+#~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
@@ -1690,10 +1693,9 @@ msgstr ""
 msgid "Connect and switch between your wallets."
 msgstr ""
 
-#. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
-msgid "Connect and Verify {0}"
-msgstr ""
+#~ msgid "Connect and Verify {0}"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Connect EVM Wallet"
@@ -1728,7 +1730,6 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 #: packages/shared/src/UI/components/WalletConnectedBoundary/index.tsx
-#: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 #: packages/shared/src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/SelectProvider.tsx
@@ -1755,7 +1756,6 @@ msgid "Connect your social platform accounts."
 msgstr ""
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
-#: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connect your wallet"
 msgstr ""
 
@@ -1763,10 +1763,9 @@ msgstr ""
 msgid "Connected"
 msgstr ""
 
-#. placeholder {0}: currentPersona?.nickname
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "Connected {0} with {walletName}."
-msgstr ""
+#~ msgid "Connected {0} with {walletName}."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ConnectedSites/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
@@ -1778,16 +1777,16 @@ msgid "Connected successfully."
 msgstr ""
 
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
-msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
-msgstr ""
+#~ msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Connected Wallet"
 msgstr ""
 
 #: packages/shared/src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
-msgid "Connected wallets settings"
-msgstr ""
+#~ msgid "Connected wallets settings"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Connecting operation cancelled in third-party wallet."
@@ -1974,7 +1973,6 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
-#: packages/plugins/NextID/src/components/Actions/index.tsx
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Create Persona"
 msgstr ""
@@ -2256,24 +2254,22 @@ msgid "Disconnect all accounts"
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
-#: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect failed."
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
-msgid "Disconnect Social Account?"
-msgstr ""
+#~ msgid "Disconnect Social Account?"
+#~ msgstr ""
 
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
-msgid "Disconnect Wallet?"
-msgstr ""
+#~ msgid "Disconnect Wallet?"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Disconnected successfully."
 msgstr ""
 
-#: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnected."
 msgstr ""
@@ -2312,11 +2308,9 @@ msgstr ""
 msgid "Do you want to delete file <0>{0}</0>"
 msgstr ""
 
-#. placeholder {0}: selectedAccount?.identifier.userId
-#. placeholder {1}: currentPersona.nickname
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
-msgid "Do you want to remove the verified association between the X account @<0>{0}</0> and {1}?"
-msgstr ""
+#~ msgid "Do you want to remove the verified association between the X account @<0>{0}</0> and {1}?"
+#~ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Domain"
@@ -2345,8 +2339,6 @@ msgstr ""
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-#: packages/plugins/NextID/src/components/BindPanelUI.tsx
-#: packages/plugins/NextID/src/components/BindPanelUI.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
@@ -2658,8 +2650,8 @@ msgid "Failed to {0} NFT contract."
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "Failed to add the wallet, please try again."
-msgstr ""
+#~ msgid "Failed to add the wallet, please try again."
+#~ msgstr ""
 
 #: packages/mask/dashboard/components/GoogleDriveLogin.tsx
 msgid "Failed to authorize Google Drive. Please try again."
@@ -2704,8 +2696,8 @@ msgid "Failed to deposit token."
 msgstr ""
 
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
-msgid "Failed to disconnect wallet"
-msgstr ""
+#~ msgid "Failed to disconnect wallet"
+#~ msgstr ""
 
 #. placeholder {0}: (err as Error).message
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
@@ -3096,7 +3088,11 @@ msgid "Get optimized search results when you're looking for a token."
 msgstr ""
 
 #: packages/plugins/Tips/src/SiteAdaptor/index.tsx
-msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
+#~ msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
+#~ msgstr ""
+
+#: packages/plugins/Tips/src/SiteAdaptor/index.tsx
+msgid "Gift crypto or NFTs tips to verified users on social media."
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
@@ -3394,8 +3390,8 @@ msgid ""
 msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
-msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
-msgstr ""
+#~ msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
+#~ msgstr ""
 
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
 msgid "Incorrect Backup Password"
@@ -4405,8 +4401,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "No verified account found here."
-msgstr ""
+#~ msgid "No verified account found here."
+#~ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "No votes"
@@ -4483,7 +4479,6 @@ msgstr ""
 #~ msgid "Offers"
 #~ msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
 msgstr ""
@@ -4572,8 +4567,8 @@ msgid "Originally posted by {0}"
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
-msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
-msgstr ""
+#~ msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Overall Best"
@@ -4664,7 +4659,6 @@ msgid "Permissions List"
 msgstr ""
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
-#: packages/plugins/NextID/src/components/BindPanelUI.tsx
 #: packages/shared/src/hooks/useCurrentPersonaConnectStatus.ts
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 #: packages/shared/src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
@@ -4697,8 +4691,8 @@ msgid "Persona required."
 msgstr ""
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
-msgid "Persona Sign"
-msgstr ""
+#~ msgid "Persona Sign"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Persona: {personaName}"
@@ -4739,10 +4733,9 @@ msgstr ""
 msgid "Please click the \"Post\" button to open the compose dialog."
 msgstr ""
 
-#. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
-msgid "Please connect {0} and send a proof post before using dApps."
-msgstr ""
+#~ msgid "Please connect {0} and send a proof post before using dApps."
+#~ msgstr ""
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
@@ -4758,8 +4751,8 @@ msgid "Please connect wallet to check if you are eligible to claim $ARB."
 msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
-msgid "Please connect your persona"
-msgstr ""
+#~ msgid "Please connect your persona"
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your wallet"
@@ -4778,12 +4771,12 @@ msgid "Please create a Persona and verify your account to use this."
 msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
-msgid "Please create a persona for accessing Dapps."
-msgstr ""
+#~ msgid "Please create a persona for accessing Dapps."
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
-msgid "Please create your persona to use Web3 Profile."
-msgstr ""
+#~ msgid "Please create your persona to use Web3 Profile."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Please enter backup password to export persona private key."
@@ -4852,12 +4845,12 @@ msgid "Please try again if you failed to vote."
 msgstr ""
 
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
-msgid "Please verify the current persona with a social media account before using dApps."
-msgstr ""
+#~ msgid "Please verify the current persona with a social media account before using dApps."
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
-msgid "Please verify your social account"
-msgstr ""
+#~ msgid "Please verify your social account"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please write down or copy these words and save them in a secure place."
@@ -4885,8 +4878,8 @@ msgstr ""
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
-msgid "Post content:"
-msgstr ""
+#~ msgid "Post content:"
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDescriptor.tsx
 msgid "Powered by"
@@ -5212,8 +5205,8 @@ msgid "Request timed out"
 msgstr ""
 
 #: packages/shared/src/hooks/useCurrentPersonaConnectStatus.ts
-msgid "Request timed out."
-msgstr ""
+#~ msgid "Request timed out."
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
@@ -5225,8 +5218,8 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
-msgid "Resend"
-msgstr ""
+#~ msgid "Resend"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CustomCover.tsx
 #: packages/shared/src/UI/components/CompositionDialog/TypedMessageEditor.tsx
@@ -5468,7 +5461,6 @@ msgstr ""
 msgid "Sell Tax: {0}"
 msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: packages/mask/popups/components/TransactionPreview/index.tsx
 #: packages/mask/popups/pages/Wallet/components/ActionGroup/index.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
@@ -5477,7 +5469,6 @@ msgstr ""
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-#: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
 msgstr ""
 
@@ -5559,8 +5550,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
-msgstr ""
+#~ msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/SiteAdaptor/index.tsx
 #~ msgid "Set your NFT as profile picture with exclusive aura."
@@ -5609,7 +5600,6 @@ msgstr ""
 msgid "Show tokens with value less than $1"
 msgstr ""
 
-#: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaSignRequest/index.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/WalletSignRequest.tsx
 msgid "Sign"
@@ -5624,8 +5614,8 @@ msgid "Signature Request"
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "Signing ..."
-msgstr ""
+#~ msgid "Signing ..."
+#~ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Signing Message (Raw)"
@@ -5713,8 +5703,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "Sorry, signature failed! Please try signing again."
-msgstr ""
+#~ msgid "Sorry, signature failed! Please try signing again."
+#~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Sorry, you are not eligible to claim $ARB in this campaign."
@@ -6050,18 +6040,17 @@ msgstr ""
 msgid "The new passwords don't match"
 msgstr ""
 
-#. placeholder {0}: profile.identifier.userId
 #: packages/mask/content-script/components/shared/SelectRecipients/ProfileInList.tsx
-msgid "The Persona is connected to the account @${0}."
-msgstr ""
+#~ msgid "The Persona is connected to the account @${0}."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectRecipients/ProfileInList.tsx
-msgid "The Persona is connected to the following accounts: {list}"
-msgstr ""
+#~ msgid "The Persona is connected to the following accounts: {list}"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectRecipients/ProfileInList.tsx
-msgid "The Persona is not connected to any accounts."
-msgstr ""
+#~ msgid "The Persona is not connected to any accounts."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 msgid "The persona name already exists."
@@ -6094,12 +6083,12 @@ msgid "The transaction was confirmed at {0}"
 msgstr ""
 
 #: packages/plugins/NextID/src/components/Actions/index.tsx
-msgid "The user has not set this."
-msgstr ""
+#~ msgid "The user has not set this."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-msgid "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
-msgstr ""
+#~ msgid "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 msgid "The wallet address already exists."
@@ -6296,13 +6285,12 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
-msgid "This wallet address has already been connected."
-msgstr ""
+#~ msgid "This wallet address has already been connected."
+#~ msgstr ""
 
-#. placeholder {0}: String(currentPersona?.nickname)
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "This wallet is connected to current persona {0}."
-msgstr ""
+#~ msgid "This wallet is connected to current persona {0}."
+#~ msgstr ""
 
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
@@ -6358,12 +6346,12 @@ msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is f
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-msgid "To verify your X account and record it on the NextID, please send this post for the verification."
-msgstr ""
+#~ msgid "To verify your X account and record it on the NextID, please send this post for the verification."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-msgid "To verify your X account and record it on the NextID, you will need to send a post for the verification."
-msgstr ""
+#~ msgid "To verify your X account and record it on the NextID, you will need to send a post for the verification."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
@@ -6682,8 +6670,8 @@ msgid "Unsupported key store data"
 msgstr ""
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
-msgid "Unsupported Network"
-msgstr ""
+#~ msgid "Unsupported Network"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 msgid "Unsupported network type"
@@ -6778,8 +6766,8 @@ msgid "Verification code has been sent to your email. Please check your mailbox.
 msgstr ""
 
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
-msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
-msgstr ""
+#~ msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/AssetsManagement/CollectibleItem.tsx
 #: packages/shared/src/UI/components/AssetsManagement/Collection.tsx
@@ -6792,18 +6780,17 @@ msgstr ""
 msgid "Verify"
 msgstr ""
 
-#. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
-msgid "Verify {0}"
-msgstr ""
+#~ msgid "Verify {0}"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
 msgid "Verify Account"
 msgstr ""
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
-msgid "Verify your wallet"
-msgstr ""
+#~ msgid "Verify your wallet"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
@@ -6815,7 +6802,6 @@ msgid "Version"
 msgstr ""
 
 #: packages/plugins/Gitcoin/src/SiteAdaptor/PreviewCard.tsx
-#: packages/plugins/NextID/src/SiteAdaptor/VerificationPayload.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketRecord.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileSpaceHeader.tsx
@@ -6900,7 +6886,6 @@ msgstr ""
 msgid "Waiting time"
 msgstr ""
 
-#: packages/plugins/NextID/src/components/BindPanelUI.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Wallet"
@@ -6913,8 +6898,8 @@ msgid "Wallet Account"
 msgstr ""
 
 #: packages/mask/popups/components/ConnectedWallet/index.tsx
-msgid "Wallet disconnected"
-msgstr ""
+#~ msgid "Wallet disconnected"
+#~ msgstr ""
 
 #. placeholder {0}: String(index + 1)
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
@@ -6941,20 +6926,20 @@ msgstr ""
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
-msgid "Wallet Sign"
-msgstr ""
+#~ msgid "Wallet Sign"
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
-msgid "Wallet sign cancelled."
-msgstr ""
+#~ msgid "Wallet sign cancelled."
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
-msgid "Wallet sign failed."
-msgstr ""
+#~ msgid "Wallet sign failed."
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
-msgid "Wallet sign succeeded."
-msgstr ""
+#~ msgid "Wallet sign succeeded."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/WalletConnect/index.tsx
 #: packages/shared/src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
@@ -6975,8 +6960,8 @@ msgstr ""
 
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
-msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
-msgstr ""
+#~ msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
+#~ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/RouterDialog.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/index.tsx
@@ -7142,8 +7127,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
-msgid "You have signed with your wallet."
-msgstr ""
+#~ msgid "You have signed with your wallet."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "You have successfully restored the backup from Google Drive to your browser."

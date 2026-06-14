@@ -14,7 +14,6 @@ import { memo, useCallback } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { PinExtension } from './PinExtension.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
-import { VerifyNextID } from './VerifyNextID.js'
 import { CheckConnection } from './CheckConnection.js'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
@@ -67,8 +66,6 @@ function SetupGuideUI() {
     switch (step) {
         case SetupGuideStep.CheckConnection:
             return <CheckConnection onClose={onClose} />
-        case SetupGuideStep.VerifyOnNextID:
-            return <VerifyNextID onClose={onClose} />
         case SetupGuideStep.PinExtension:
             return <PinExtension onDone={onPinDone} onClose={onPinClose} />
         default:

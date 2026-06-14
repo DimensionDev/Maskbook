@@ -76,9 +76,6 @@ export function mini_mask_dark_url() { return new URL("./brands/MiniMask.dark.sv
 export function mini_mask_light_url() { return new URL("./brands/MiniMask.light.svg", import.meta.url).href }
 export function mirror_url() { return new URL("./brands/Mirror.svg", import.meta.url).href }
 export function momoka_url() { return new URL("./brands/Momoka.svg", import.meta.url).href }
-export function next_id_url() { return new URL("./brands/NextID.svg", import.meta.url).href }
-export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.dark.svg", import.meta.url).href }
-export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url).href }
 export function nft_go_url() { return new URL("./brands/NFTGo.svg", import.meta.url).href }
 export function okx_dark_url() { return new URL("./brands/okx.dark.svg", import.meta.url).href }
 export function okx_light_url() { return new URL("./brands/okx.light.svg", import.meta.url).href }
@@ -266,9 +263,6 @@ export function messages_url() { return new URL("./general/Messages.svg", import
 export function minus_url() { return new URL("./general/Minus.svg", import.meta.url).href }
 export function mnemonic_url() { return new URL("./general/Mnemonic.svg", import.meta.url).href }
 export function more_url() { return new URL("./general/More.svg", import.meta.url).href }
-export function next_id_avatar_dark_url() { return new URL("./general/NextIdAvatar.dark.svg", import.meta.url).href }
-export function next_id_avatar_light_url() { return new URL("./general/NextIdAvatar.light.svg", import.meta.url).href }
-export function next_id_persona_warning_url() { return new URL("./general/NextIdPersonaWarning.svg", import.meta.url).href }
 export function nft_holder_url() { return new URL("./general/NFTHolder.svg", import.meta.url).href }
 export function outlined_mask_url() { return new URL("./general/OutlinedMask.svg", import.meta.url).href }
 export function personas_outline_url() { return new URL("./general/PersonasOutline.svg", import.meta.url).href }

@@ -5,7 +5,6 @@ import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     getProfileTabContent,
     useActivatedPluginsSiteAdaptor,
-    useIsMinimalMode,
     usePluginTransField,
 } from '@masknet/plugin-infra/content-script'
 import {
@@ -27,7 +26,6 @@ import {
     currentPersonaIdentifier,
     EMPTY_LIST,
     MaskMessages,
-    NextIDPlatform,
     PluginID,
     ProfileTabs,
     Sniffings,
@@ -148,7 +146,6 @@ function Content(props: ProfileTabContentProps) {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const {
-        value: personaStatus,
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,
@@ -185,7 +182,6 @@ function Content(props: ProfileTabContentProps) {
             return plugins
                 .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) || [])
                 .filter((x) => {
-                    if (x.pluginID === PluginID.NextID) return false
                     return x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 })
                 .sort((a, z) => a.priority - z.priority)
@@ -199,25 +195,9 @@ function Content(props: ProfileTabContentProps) {
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? '', ...tabs.map((tab) => tab.id))
 
-    const isWeb3ProfileDisabled = useIsMinimalMode(PluginID.Web3Profile)
-
     const isOnTwitter = Sniffings.is_twitter_page
-    const doesOwnerHaveNoAddress =
-        isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    // the owner persona and site not verify on next ID
-    const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
-    const showNextID =
-        isOnTwitter &&
-        // enabled the plugin
-        (isWeb3ProfileDisabled ||
-            myPersonaNotVerifiedYet ||
-            // the owner persona and site verified on next ID but not verify the wallet
-            doesOwnerHaveNoAddress ||
-            // the visiting persona not have social address list
-            (!isOwnerIdentity && !socialAccounts.length))
-
-    const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
+    const componentTabId = currentTab
 
     const contentComponent = useMemo(() => {
         const Component = getProfileTabContent(componentTabId)
@@ -388,7 +368,7 @@ function Content(props: ProfileTabContentProps) {
     }
 
     // Maybe should merge in NextIdPage
-    if (socialAccounts.length === 0 && !showNextID && !isOnTwitter) {
+    if (socialAccounts.length === 0 && !isOnTwitter) {
         if (Sniffings.is_facebook_page) return null
         return (
             <ThemeProvider theme={MaskLightTheme}>
@@ -409,7 +389,7 @@ function Content(props: ProfileTabContentProps) {
         )
     }
 
-    if (!socialAccounts.length && !showNextID) {
+    if (!socialAccounts.length) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -425,7 +405,7 @@ function Content(props: ProfileTabContentProps) {
 
     return (
         <div className={classes.root}>
-            {tabs.length > 0 && !showNextID ?
+            {tabs.length > 0 ?
                 <div className={classes.container}>
                     <div className={classes.title}>
                         <div className={classes.walletItem}>

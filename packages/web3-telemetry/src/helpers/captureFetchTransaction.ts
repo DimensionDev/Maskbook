@@ -4,8 +4,6 @@ function isIgnoredRequest(request: Request) {
     return [
         // Twitter Identity API
         'mr8asf7i4h',
-        // NextID
-        'https://proof-service.next.id/v1/proof',
         // Twitter Assets
         'https://t.co',
         'https://pbs.twimg.com',

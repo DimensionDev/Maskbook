@@ -19,7 +19,6 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.Crossbell]: 'https://crossbell.io/',
         [SocialAddressType.Firefly]: '',
         [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
-        [SocialAddressType.NEXT_ID]: 'https://next.id/',
         [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
         [SocialAddressType.Leaderboard]: 'https://ethleaderboard.xyz/',
         [SocialAddressType.Sybil]: 'https://sybil.org/',

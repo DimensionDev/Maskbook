@@ -92,13 +92,12 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
                     <AccountAvatar
                         avatar={account.avatar}
                         network={account.identifier.network}
-                        isValid={account.is_valid}
                         classes={{ avatar: classes.avatar }}
                     />
                     <Typography className={classes.identity}>
-                        {/* identity could mistakenly start with an `@` */}
-                        {account.identity?.startsWith('@') ? '' : '@'}
-                        {account.identity}
+                        {/* userId could mistakenly start with an `@` */}
+                        {account.identifier.userId?.startsWith('@') ? '' : '@'}
+                        {account.identifier.userId}
                     </Typography>
                 </Box>
             ))}

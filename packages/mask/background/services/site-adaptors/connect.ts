@@ -127,7 +127,7 @@ export async function connectSite(
     await browser.tabs.update(targetTab.id, { active: true })
     await browser.windows.update(targetTab.windowId, { focused: true })
     currentSetupGuideStatus[network].value = stringify({
-        status: SetupGuideStep.VerifyOnNextID,
+        status: SetupGuideStep.PinExtension,
         persona: identifier.toText(),
         username: profile?.userId,
         tabId: targetTab.id,

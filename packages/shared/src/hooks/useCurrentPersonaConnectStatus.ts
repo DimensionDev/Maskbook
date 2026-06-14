@@ -6,23 +6,18 @@ import {
     type PersonaInformation,
     isSamePersona,
     isSameProfile,
-    resolveNextIDIdentityToProfile,
     MaskMessages,
     type ECKeyIdentifier,
 } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
 import type { PersonaConnectStatus } from '../types.js'
 import { useLingui } from '@lingui/react/macro'
-import { timeout } from '@masknet/kit'
 
 const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
     action: undefined,
     currentPersona: undefined,
     connected: false,
     hasPersona: false,
-    verified: false,
-    proof: undefined,
 }
 
 export function useCurrentPersonaConnectStatus(
@@ -92,43 +87,19 @@ export function useCurrentPersonaConnectStatus(
             }
         }
 
-        // handle had persona and connected current site, then check the nextID
-        try {
-            const nextIDInfo = await timeout(
-                NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex),
-                30_000,
-                t`Request timed out.`,
-            )
-            const verifiedProfile = nextIDInfo?.proofs.find(
-                (x) =>
-                    isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile.identifier) &&
-                    x.is_valid,
-            )
-
-            return {
-                action: verifiedProfile ? undefined : openPersonListDialog,
-                currentPersona,
-                connected: true,
-                hasPersona: true,
-                verified: !!verifiedProfile,
-                proof: nextIDInfo?.proofs,
-            }
-        } catch {
-            return {
-                action: openPersonListDialog,
-                currentPersona,
-                connected: true,
-                hasPersona: true,
-            }
+        // handle had persona and connected current site
+        return {
+            action: undefined,
+            currentPersona,
+            connected: true,
+            hasPersona: true,
         }
     }, [currentPersonaIdentifier, personas, identity?.identifier, create, openPersonListDialog])
 
     useEffect(() => {
         const cleanPersonaChangedListener = MaskMessages.events.ownPersonaChanged.on(retry)
-        const cleanProofsChangedListener = MaskMessages.events.ownProofChanged.on(retry)
         return () => {
             cleanPersonaChangedListener()
-            cleanProofsChangedListener()
         }
     }, [retry])
 
