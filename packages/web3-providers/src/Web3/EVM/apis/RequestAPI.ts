@@ -1,9 +1,4 @@
-import {
-    EthereumMethodType,
-    PayloadEditor,
-    type ChainId,
-    type RequestArguments,
-} from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, type ChainId, type RequestArguments } from '@masknet/web3-shared-evm'
 import type { TransactionSerializable } from 'viem'
 import { Composer } from './ComposerAPI.js'
 import { evm } from '../../../Manager/registry.js'
@@ -62,7 +57,9 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                                     if (!payloadEditor.readonly) {
                                         assertTransactionChainId(
                                             payloadEditor.signableTransaction,
-                                            EVMWalletProviders[options.providerType].subscription.chainId.getCurrentValue(),
+                                            EVMWalletProviders[
+                                                options.providerType
+                                            ].subscription.chainId.getCurrentValue(),
                                         )
 
                                         const web3Provider = EVMWalletProviders[
