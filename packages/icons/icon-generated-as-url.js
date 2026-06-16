@@ -366,6 +366,7 @@ export function cross_bridge_url() { return new URL("./plugins/CrossBridge.png",
 export function cyber_connect_dark_url() { return new URL("./plugins/CyberConnect.dark.svg", import.meta.url).href }
 export function cyber_connect_light_url() { return new URL("./plugins/CyberConnect.light.svg", import.meta.url).href }
 export function decentralized_search_url() { return new URL("./plugins/DecentralizedSearch.svg", import.meta.url).href }
+export function efp_url() { return new URL("./plugins/EFP.svg", import.meta.url).href }
 export function ens_url() { return new URL("./plugins/ENS.png", import.meta.url).href }
 export function ens_cover_url() { return new URL("./plugins/ENSCover.svg", import.meta.url).href }
 export function file_service_url() { return new URL("./plugins/FileService.svg", import.meta.url).href }

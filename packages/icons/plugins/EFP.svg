@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="40" fill="url(#EFP_svg__a)"/>
+    <path fill="#333" d="M167.68 258.56 255.36 112.64l87.04 145.92-87.04 53.12zM255.36 327.68l-87.68-53.12 87.68 123.52 87.04-123.52z"/>
+    <path fill="#333" d="M367.36 341.76H342.4v37.12h-34.56v23.04h34.56v38.4h24.96v-38.4h33.92v-23.04h-33.92z"/>
+    <defs>
+        <linearGradient id="EFP_svg__a" x1="256" x2="512" y1="256" y2="512" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFE067"/>
+            <stop offset="1" stop-color="#FFF7D9"/>
+        </linearGradient>
+    </defs>
+</svg>
