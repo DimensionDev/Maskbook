@@ -601,6 +601,10 @@ msgstr "24h 交易总额"
 msgid "A blacklist is found. Some addresses may not be able to trade normally, which is a honeypot risk."
 msgstr ""
 
+#: packages/plugins/EFP/src/SiteAdaptor/index.tsx
+msgid "A native Ethereum protocol for following and tagging Ethereum accounts."
+msgstr ""
+
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "a token"
 msgstr "代币"
@@ -2410,6 +2414,18 @@ msgstr "编辑联系人"
 msgid "Editor"
 msgstr "编辑器"
 
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
+msgid "EFP list"
+msgstr ""
+
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
+msgid "EFP profile"
+msgstr ""
+
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
+msgid "EFP Top 8"
+msgstr ""
+
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
@@ -2577,6 +2593,11 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
+msgstr ""
+
+#: packages/plugins/EFP/src/SiteAdaptor/index.tsx
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
+msgid "Ethereum Follow Protocol"
 msgstr ""
 
 #: packages/plugins/Calendar/src/SiteAdaptor/CalendarContent.tsx
@@ -2922,9 +2943,11 @@ msgid "Follow User"
 msgstr ""
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
 msgid "Followers"
 msgstr "粉丝"
 
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
@@ -3670,6 +3693,10 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Link"
 msgstr "交易记录"
+
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
+msgid "List"
+msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Listed"
@@ -4944,6 +4971,10 @@ msgstr "价格统计数据"
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/DetailsView.tsx
 #~ msgid "Price:"
 #~ msgstr "价格："
+
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
+msgid "Primary List"
+msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Priority fee"
@@ -6822,6 +6853,10 @@ msgstr "查看交易详情"
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
 msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
 msgstr "鼠标悬停于头像右下角的 Mask 图标或时间线上的代币话题标签，浏览多元化账户的 Web3 足迹。"
+
+#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
+msgid "View on EFP"
+msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
