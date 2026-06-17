@@ -128,7 +128,8 @@ export class LensV3 {
         return data.refresh
     }
 
-    async getAccountByHandle(/** handle */ localName: string) {
+    async getAccountByHandle(/** handle */ handle: string) {
+        const localName = handle.replace(/\.lens$/u, '')
         const res = await fetchAccount(this.client, {
             username: {
                 localName,
@@ -136,9 +137,9 @@ export class LensV3 {
         })
         return res.unwrapOr(null)
     }
-    async getAccountsByHandles(/** handles */ localNames: string[]) {
+    async getAccountsByHandles(/** handles */ handles: string[]) {
         const res = await fetchAccountsBulk(this.client, {
-            usernames: localNames.map((x) => ({ localName: x })),
+            usernames: handles.map((handle) => ({ localName: handle.replace(/\.lens$/u, '') })),
         })
         return res.unwrapOr(null)
     }
