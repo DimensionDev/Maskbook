@@ -214,7 +214,9 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                                 </Box>
                             </div>
                             <Typography className={classes.desc}>
-                                <Trans>Optimize search results with token names, ENS domains or wallet addresses.</Trans>
+                                <Trans>
+                                    Optimize search results with token names, ENS domains or wallet addresses.
+                                </Trans>
                             </Typography>
                         </Stack>
                     </section>
