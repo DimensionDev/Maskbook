@@ -3120,12 +3120,16 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Tips/src/SiteAdaptor/index.tsx
-msgid "Gift crypto or NFTs tips to verified users on social media."
-msgstr ""
+#~ msgid "Gift crypto or NFTs tips to verified users on social media."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 #~ msgid "Gift crypto or NFTs to any users, first come, first served."
 #~ msgstr "暗号資産またはNFTをすべてのユーザーに贈り、先着順に提供します。"
+
+#: packages/plugins/Tips/src/SiteAdaptor/index.tsx
+msgid "Gift crypto tips to verified users on social media."
+msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 msgid "Gift crypto to any users, first come, first served."
@@ -3270,8 +3274,12 @@ msgstr "高リスク"
 #~ msgstr "最高価格"
 
 #: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
-msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
+msgid "Highly integrated Web3 news and events on X, providing information on tokens, AMAs, and regulatory events."
 msgstr ""
+
+#: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
+#~ msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
@@ -4220,8 +4228,8 @@ msgstr ""
 #~ msgstr "NFT のアバター設定"
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
-msgid "NFT collection"
-msgstr ""
+#~ msgid "NFT collection"
+#~ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 #~ msgid "NFT Details"
@@ -4249,8 +4257,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
-msgid "NFTs"
-msgstr ""
+#~ msgid "NFTs"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 #~ msgid "NFTs added"
@@ -4570,8 +4578,12 @@ msgid "Operation"
 msgstr "操作"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
-msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
-msgstr "トークン名、NFTコレクション、ENSドメイン、またはウォレットアドレスで検索結果を最適化します。"
+msgid "Optimize search results with token names, ENS domains or wallet addresses."
+msgstr ""
+
+#: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
+#~ msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
+#~ msgstr "トークン名、NFTコレクション、ENSドメイン、またはウォレットアドレスで検索結果を最適化します。"
 
 #: packages/plugins/Handle/src/SiteAdaptor/index.tsx
 msgid "Optimize the display of search results about ENS in social media."
@@ -5410,8 +5422,8 @@ msgid "Search with an ENS domain or wallet address to get optimized results."
 msgstr "ENSドメインまたはウォレットアドレスで検索すると、最適化された結果が得られます。"
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
-msgid "Search with the name of an NFT collection or its symbol to get optimized results."
-msgstr "NFT コレクションまたはそのシンボルの名前で検索し、最適化された結果を得ます。"
+#~ msgid "Search with the name of an NFT collection or its symbol to get optimized results."
+#~ msgstr "NFT コレクションまたはそのシンボルの名前で検索し、最適化された結果を得ます。"
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Security Detection"
@@ -5804,8 +5816,8 @@ msgid "Status"
 msgstr ""
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
-msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
-msgstr ""
+#~ msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Step {step}/{step}"
@@ -6874,7 +6886,11 @@ msgid "View real-time crypto prices, market cap, trading volume, etc."
 msgstr ""
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
-msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+#~ msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+#~ msgstr ""
+
+#: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
+msgid "View user's Web3 footprints, including social media posts and other transaction activities based on public data source."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx

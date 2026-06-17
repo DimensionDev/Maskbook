@@ -214,10 +214,7 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                                 </Box>
                             </div>
                             <Typography className={classes.desc}>
-                                <Trans>
-                                    Optimize search results with token names, NFT collections, ENS domains or wallet
-                                    addresses.
-                                </Trans>
+                                <Trans>Optimize search results with token names, ENS domains or wallet addresses.</Trans>
                             </Typography>
                         </Stack>
                     </section>
@@ -234,16 +231,6 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                             </Typography>
                             <Typography className={classes.desc}>
                                 <Trans>Get optimized search results when you're looking for a token.</Trans>
-                            </Typography>
-                        </Stack>
-                        <Stack>
-                            <Typography className={classes.name} fontSize={14}>
-                                <Trans>NFTs</Trans>
-                            </Typography>
-                            <Typography className={classes.desc}>
-                                <Trans>
-                                    Search with the name of an NFT collection or its symbol to get optimized results.
-                                </Trans>
                             </Typography>
                         </Stack>
                         <Stack>
