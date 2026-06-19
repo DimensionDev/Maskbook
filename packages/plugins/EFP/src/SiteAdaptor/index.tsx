@@ -136,6 +136,7 @@ function useEFPCardLink(enabled: boolean): EFPProfileLink | null {
                 for (const anchor of card.querySelectorAll<HTMLAnchorElement>('a[href]')) found.add(anchor.href)
             }
             const next = [...found].sort()
+            // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
             setHrefs((prev) => (prev.length === next.length && prev.every((x, i) => x === next[i]) ? prev : next))
         }
 
