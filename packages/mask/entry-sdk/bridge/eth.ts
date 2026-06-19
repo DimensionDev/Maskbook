@@ -50,7 +50,6 @@ function getInteractiveClient(): Promise<InteractiveClient> {
         // The following endpoints are from packages/web3-constants/evm/rpc.json
         const ws = new WebSocket(
             sample([
-                'wss://mainnet.infura.io/ws/v3/d74bd8586b9e44449cef131d39ceeefb',
                 'wss://mainnet.infura.io/ws/v3/d65858b010d249419cf8687eca12b094',
                 'wss://mainnet.infura.io/ws/v3/a9d66980bf334e59a42ca19095f3daeb',
                 'wss://mainnet.infura.io/ws/v3/f39cc8734e294fba9c3938486df2b1bc',
