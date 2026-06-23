@@ -98,7 +98,7 @@ export function Terms() {
                     <Trans>
                         Web3 File Service is a decentralized storage solution provided by Mask Network that allows users
                         to store files across multiple decentralized networks. This service is powered by Mask Network’s
-                        partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats
+                        partner protocols, including IPFS and Arweave. It supports various file formats
                         such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.
                         <br />
                         Through the Web3 File Service, users can upload files to different decentralized networks and
