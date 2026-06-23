@@ -3724,8 +3724,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
-msgid "Load Network"
-msgstr ""
+#~ msgid "Load Network"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/mask/popups/pages/Friends/Home/UI.tsx
@@ -7029,8 +7029,12 @@ msgid "Web3 File Service"
 msgstr "檔案服務"
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
-msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
+msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS and Arweave. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
 msgstr ""
+
+#: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
+#~ msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/PluginDescriptor.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
