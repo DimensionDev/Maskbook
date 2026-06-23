@@ -497,7 +497,8 @@ function Content(props: ProfileTabContentProps) {
                     contentComponent
                 :   <EmptyStatus height={260}>
                         <Trans>There's no content associated with this address.</Trans>
-                    </EmptyStatus>}
+                    </EmptyStatus>
+                }
             </div>
         </div>
     )
