@@ -15,10 +15,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, getAaveConstant } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
 import { EVMContract } from '@masknet/web3-providers'
-import {
-    AaveProtocolDataProviderAbi,
-    type AaveProtocolDataProvider,
-} from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
+import { AaveProtocolDataProviderAbi } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
@@ -78,18 +75,12 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
             const address = getAaveConstant(chainId, 'AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS')
             if (!address) return EMPTY_LIST
 
-            const protocolDataContract = EVMContract.getWeb3Contract<AaveProtocolDataProvider>(
-                address,
-                AaveProtocolDataProviderAbi,
-                {
-                    chainId,
-                },
-            )
+            const protocolDataContract = EVMContract.getContract(address, AaveProtocolDataProviderAbi)
 
-            const [tokens, aTokens] = await Promise.all([
-                protocolDataContract?.methods.getAllReservesTokens().call(),
-                protocolDataContract?.methods.getAllATokens().call(),
-            ])
+            const [tokens, aTokens] = (await Promise.all([
+                EVMContract.readContract(protocolDataContract, 'getAllReservesTokens', [], { chainId }),
+                EVMContract.readContract(protocolDataContract, 'getAllATokens', [], { chainId }),
+            ])) as [Array<[string, string]> | undefined, Array<[string, string]> | undefined]
 
             if (!tokens) return EMPTY_LIST
             return tokens.map((token) => {

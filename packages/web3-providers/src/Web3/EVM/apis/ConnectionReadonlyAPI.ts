@@ -32,6 +32,7 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { first, omit, toNumber } from 'lodash-es'
+import type { Address } from 'viem'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
@@ -151,18 +152,23 @@ export class EVMConnectionReadonlyAPI
             const erc165Contract = this.Contract.getERC165Contract(address, options)
 
             const [isERC165, isERC721] = await Promise.all([
-                erc165Contract?.methods.supportsInterface(ERC165_INTERFACE_ID).call(),
-                erc165Contract?.methods.supportsInterface(ERC721_INTERFACE_ID).call(),
+                this.Contract.readContract(erc165Contract, 'supportsInterface', [ERC165_INTERFACE_ID], options),
+                this.Contract.readContract(erc165Contract, 'supportsInterface', [ERC721_INTERFACE_ID], options),
             ])
 
             if (isERC165 && isERC721) return SchemaType.ERC721
 
-            const isERC1155 = await erc165Contract?.methods.supportsInterface(ERC1155_INTERFACE_ID).call()
+            const isERC1155 = await this.Contract.readContract(
+                erc165Contract,
+                'supportsInterface',
+                [ERC1155_INTERFACE_ID],
+                options,
+            )
             if (isERC165 && isERC1155) return SchemaType.ERC1155
 
             const [isEIP5516, isEIP5192] = await Promise.all([
-                erc165Contract?.methods.supportsInterface(EIP5516_INTERFACE_ID).call(),
-                erc165Contract?.methods.supportsInterface(EIP5192_INTERFACE_ID).call(),
+                this.Contract.readContract(erc165Contract, 'supportsInterface', [EIP5516_INTERFACE_ID], options),
+                this.Contract.readContract(erc165Contract, 'supportsInterface', [EIP5192_INTERFACE_ID], options),
             ])
 
             if (isEIP5516 || isEIP5192) return SchemaType.SBT
@@ -188,11 +194,13 @@ export class EVMConnectionReadonlyAPI
         if (actualSchema === SchemaType.ERC1155) {
             const contractERC721 = this.Contract.getERC721Contract(address, options)
             const results = await Promise.allSettled([
-                contractERC721?.methods.name().call() ?? EMPTY_STRING,
-                contractERC721?.methods.symbol().call() ?? EMPTY_STRING,
+                this.Contract.readContract(contractERC721, 'name', [], options) ?? EMPTY_STRING,
+                this.Contract.readContract(contractERC721, 'symbol', [], options) ?? EMPTY_STRING,
             ])
 
-            const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
+            const [name, symbol] = results.map((result) =>
+                result.status === 'fulfilled' ? String(result.value ?? '') : '',
+            )
 
             return createNonFungibleTokenContract(
                 options.chainId,
@@ -206,11 +214,13 @@ export class EVMConnectionReadonlyAPI
         // ERC721
         const contract = this.Contract.getERC721Contract(address, options)
         const results = await Promise.allSettled([
-            contract?.methods.name().call() ?? EMPTY_STRING,
-            contract?.methods.symbol().call() ?? EMPTY_STRING,
+            this.Contract.readContract(contract, 'name', [], options) ?? EMPTY_STRING,
+            this.Contract.readContract(contract, 'symbol', [], options) ?? EMPTY_STRING,
         ])
 
-        const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
+        const [name, symbol] = results.map((result) =>
+            result.status === 'fulfilled' ? String(result.value ?? '') : '',
+        )
 
         return createNonFungibleTokenContract<ChainId, SchemaType.ERC721>(
             options.chainId,
@@ -253,7 +263,11 @@ export class EVMConnectionReadonlyAPI
 
         // ERC20
         const contract = this.Contract.getERC20Contract(address, options)
-        return (await contract?.methods.balanceOf(options.account).call()) ?? '0'
+        return (
+            (
+                await this.Contract.readContract(contract, 'balanceOf', [options.account as Address], options)
+            )?.toString() ?? '0'
+        )
     }
 
     async getFungibleTokensBalance(
@@ -284,14 +298,16 @@ export class EVMConnectionReadonlyAPI
 
         if (listOfNonNativeAddress.length) {
             const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS, options)
-            const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
+            const balances = (await this.Contract.readContract(
+                contract,
+                'balances',
+                [[options.account as Address], listOfNonNativeAddress as Address[]],
                 // cannot check the sender's balance in the same contract
-                from: undefined,
-                chainId: toHex(options.chainId),
-            })
+                { ...options, from: undefined },
+            )) as readonly bigint[] | undefined
 
             listOfNonNativeAddress.forEach((x, i) => {
-                entities.push([x, balances?.[i] ?? '0'])
+                entities.push([x, balances?.[i]?.toString() ?? '0'])
             })
         }
         return Object.fromEntries(entities)
@@ -321,11 +337,11 @@ export class EVMConnectionReadonlyAPI
             queryKey: ['fungibleToken', options.chainId, address],
             queryFn: async () => {
                 return Promise.allSettled([
-                    contract?.methods.name().call() ?? EMPTY_STRING,
-                    bytes32Contract?.methods.name().call() ?? EMPTY_STRING,
-                    contract?.methods.symbol().call() ?? EMPTY_STRING,
-                    bytes32Contract?.methods.symbol().call() ?? EMPTY_STRING,
-                    contract?.methods.decimals().call() ?? ZERO,
+                    this.Contract.readContract(contract, 'name', [], options) ?? EMPTY_STRING,
+                    this.Contract.readContract(bytes32Contract, 'name', [], options) ?? EMPTY_STRING,
+                    this.Contract.readContract(contract, 'symbol', [], options) ?? EMPTY_STRING,
+                    this.Contract.readContract(bytes32Contract, 'symbol', [], options) ?? EMPTY_STRING,
+                    this.Contract.readContract(contract, 'decimals', [], options) ?? ZERO,
                 ])
             },
         })

@@ -9,6 +9,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
+import type { Address } from 'viem'
 import { EVMContractReadonly } from './ContractReadonlyAPI.js'
 import defer * as CoinGeckoPriceEVM from '../../../CoinGecko/index.js'
 import type { EVMHubOptions } from '../types/index.js'
@@ -56,19 +57,16 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
             const contract = this.createContract(chainId)
             if (!contract) return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 
-            const balances = await contract.methods
-                .balances(
-                    [address],
-                    trustedFungibleTokens.map((x) => x.address),
-                )
-                .call()
+            const balances = (await EVMContractReadonly.readContract(
+                contract,
+                'balances',
+                [[address as Address], trustedFungibleTokens.map((x) => x.address as Address)],
+                { chainId },
+            )) as readonly bigint[] | undefined
 
-            const requests = balances
-                .map((x, i) => {
-                    if (!trustedFungibleTokens[i]) return
-                    return this.createAssets(trustedFungibleTokens[i], chainId, Number.parseInt(x, 10))
-                })
-                .filter(Boolean)
+            const requests = trustedFungibleTokens.map((token, i) =>
+                this.createAssets(token, chainId, Number(balances?.[i] ?? 0n)),
+            )
 
             const assets = (await Promise.allSettled(requests))
                 .map((x) => (x.status === 'fulfilled' ? x.value : undefined))

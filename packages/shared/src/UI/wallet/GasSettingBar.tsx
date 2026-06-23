@@ -2,9 +2,8 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { Tune } from '@mui/icons-material'
 import { Box, IconButton, Typography } from '@mui/material'
-import { formatWeiToEther } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, type Transaction } from '@masknet/web3-shared-evm'
 import { GasSettingModal, TokenPrice } from '@masknet/shared'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
 import { EVMChainResolver } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -15,7 +14,7 @@ export interface GasSettingBarProps {
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
-    onChange?: (tx: NonPayableTx) => void
+    onChange?: (tx: Partial<Transaction>) => void
 }
 
 export function GasSettingBar(props: GasSettingBarProps) {
@@ -58,7 +57,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
                 :   {
                         gas: evt?.gasLimit,
                         gasPrice: evt?.gasPrice,
-                    }) as NonPayableTx,
+                    }) as Partial<Transaction>,
             )
         })
         return () => {

@@ -4,7 +4,6 @@ import type {
     AbstractProvider,
 } from 'web3-core'
 import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
 import type { Web3 } from '../libs/Web3.js'
 
@@ -293,11 +292,6 @@ export enum TransactionEventType {
     CONFIRMATION = 'confirmation',
     ERROR = 'error',
 }
-
-export type UnboxTransactionObject<T> =
-    T extends NonPayableTransactionObject<infer R> ? R
-    : T extends PayableTransactionObject<infer S> ? S
-    : T
 
 export enum NetworkType {
     Ethereum = 'Ethereum',

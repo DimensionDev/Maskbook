@@ -3,7 +3,8 @@ import { EVMContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 
 export async function getContractSymbol(chainId: ChainId, address: string) {
     try {
-        const symbol = await EVMContractReadonly.getERC721Contract(address, { chainId })?.methods.symbol().call({})
+        const contract = EVMContractReadonly.getERC721Contract(address, { chainId })
+        const symbol = await EVMContractReadonly.readContract(contract, 'symbol', [], { chainId })
         return symbol ?? ''
     } catch {
         return ''

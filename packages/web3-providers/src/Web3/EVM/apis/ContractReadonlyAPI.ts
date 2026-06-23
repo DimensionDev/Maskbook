@@ -1,13 +1,13 @@
-import { createContract } from '@masknet/web3-shared-evm'
-import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
-import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
-import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
-import type { ERC165 } from '@masknet/web3-contracts/types/ERC165.js'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
-import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
-import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
-import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
+import {
+    createContractDescriptor,
+    createTransactionRequest,
+    encodeContractFunctionData,
+    estimateContractGas,
+    readContract,
+    type ContractCallOptions,
+    type ContractDescriptor,
+    type ContractWriteOptions,
+} from '@masknet/web3-shared-evm'
 
 import { AirdropV2Abi as AirDropV2ABI } from '@masknet/web3-contracts/types/AirdropV2.js'
 import { BalanceCheckerAbi as BalanceCheckerABI } from '@masknet/web3-contracts/types/BalanceChecker.js'
@@ -20,7 +20,13 @@ import { WalletAbi as WalletABI } from '@masknet/web3-contracts/types/Wallet.js'
 
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
-import type { Abi } from 'viem'
+import type {
+    Abi,
+    AbiStateMutability,
+    ContractFunctionArgs,
+    ContractFunctionName,
+    ContractFunctionReturnType,
+} from 'viem'
 
 export class EVMContractReadonlyAPI {
     static Default = new EVMContractReadonlyAPI()
@@ -29,45 +35,95 @@ export class EVMContractReadonlyAPI {
     }
     protected Request
 
-    getWeb3Contract<T extends BaseContract>(
-        address: string | undefined,
-        abi: Abi,
-        initial?: Pick<EVMConnectionOptions, 'chainId'>,
+    getContract<TAbi extends Abi>(address: string | undefined, abi: TAbi) {
+        return createContractDescriptor(address, abi)
+    }
+
+    readContract<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi, 'pure' | 'view'>,
+        TArgs extends ContractFunctionArgs<TAbi, 'pure' | 'view', TFunctionName>,
+    >(
+        contract: ContractDescriptor<TAbi> | null | undefined,
+        functionName: TFunctionName,
+        args: TArgs = [] as unknown as TArgs,
+        initial?: EVMConnectionOptions & ContractCallOptions,
+    ): Promise<ContractFunctionReturnType<TAbi, 'pure' | 'view', TFunctionName, TArgs> | undefined> {
+        return readContract(this.Request.getViem(initial), contract, functionName, args, initial)
+    }
+
+    estimateContractGas<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+        TArgs extends ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
+    >(
+        contract: ContractDescriptor<TAbi> | null | undefined,
+        functionName: TFunctionName,
+        args: TArgs = [] as unknown as TArgs,
+        initial?: EVMConnectionOptions & ContractCallOptions,
     ) {
-        const web3 = this.Request.getWeb3(initial)
-        return createContract<T>(web3, address, abi)
+        return estimateContractGas(this.Request.getViem(initial), contract, functionName, args, initial)
+    }
+
+    encodeContractFunctionData<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi>,
+        TArgs extends ContractFunctionArgs<TAbi, AbiStateMutability, TFunctionName>,
+    >(abi: TAbi, functionName: TFunctionName, args: TArgs = [] as unknown as TArgs) {
+        return encodeContractFunctionData(abi, functionName, args)
+    }
+
+    createTransactionRequest<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+        TArgs extends ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
+    >(
+        contract: ContractDescriptor<TAbi> | null | undefined,
+        functionName: TFunctionName,
+        args: TArgs = [] as unknown as TArgs,
+        initial?: ContractWriteOptions,
+    ) {
+        return createTransactionRequest(contract, functionName, args, initial)
     }
 
     getERC20Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC20>(address, ERC20ABI, initial)
+        void initial
+        return this.getContract(address, ERC20ABI)
     }
 
     getERC20Bytes32Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI, initial)
+        void initial
+        return this.getContract(address, ERC20Bytes32ABI)
     }
 
     getERC721Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC721>(address, ERC721ABI, initial)
+        void initial
+        return this.getContract(address, ERC721ABI)
     }
 
     getERC1155Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC1155>(address, ERC1155ABI, initial)
+        void initial
+        return this.getContract(address, ERC1155ABI)
     }
 
     getERC165Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC165>(address, ERC165ABI, initial)
+        void initial
+        return this.getContract(address, ERC165ABI)
     }
 
     getBalanceCheckerContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<BalanceChecker>(address, BalanceCheckerABI, initial)
+        void initial
+        return this.getContract(address, BalanceCheckerABI)
     }
 
     getWalletContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<Wallet>(address, WalletABI, initial)
+        void initial
+        return this.getContract(address, WalletABI)
     }
 
     getAirdropV2Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<AirdropV2>(address, AirDropV2ABI, initial)
+        void initial
+        return this.getContract(address, AirDropV2ABI)
     }
 }
 export const EVMContractReadonly = EVMContractReadonlyAPI.Default

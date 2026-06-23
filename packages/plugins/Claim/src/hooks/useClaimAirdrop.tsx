@@ -1,22 +1,17 @@
 import { useRef, useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useTheme } from '@mui/material'
-import { AirdropV2Abi, type AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
+import { AirdropV2Abi } from '@masknet/web3-contracts/types/AirdropV2.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import {
-    useAirdropClaimersConstants,
-    type ChainId,
-    ProviderType,
-    ContractTransaction,
-    formatEtherToWei,
-} from '@masknet/web3-shared-evm'
+import { useAirdropClaimersConstants, type ChainId, ProviderType, formatEtherToWei } from '@masknet/web3-shared-evm'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { toFixed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { EVMWeb3 } from '@masknet/web3-providers'
+import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import { PluginClaimMessage } from '../message.js'
 import { Trans } from '@lingui/react/macro'
+import type { Address, Hex } from 'viem'
 
 export function useClaimAirdrop(
     chainId: ChainId,
@@ -29,7 +24,7 @@ export function useClaimAirdrop(
     const theme = useTheme()
     const { account, providerType, chainId: globalChainId } = useChainContext()
     const { CONTRACT_ADDRESS } = useAirdropClaimersConstants(chainId)
-    const airdropContract = useContract<AirdropV2>(chainId, CONTRACT_ADDRESS, AirdropV2Abi)
+    const airdropContract = useContract(chainId, CONTRACT_ADDRESS, AirdropV2Abi)
 
     const { setDialog } = useRemoteControlledDialog(PluginClaimMessage.claimSuccessDialogEvent)
 
@@ -56,18 +51,22 @@ export function useClaimAirdrop(
                     providerType: ProviderType.WalletConnect,
                 })
             }
-            const tx = await new ContractTransaction(airdropContract.options.address).fillAll(
-                airdropContract.methods.claim(eventIndex, merkleProof, account, formatEtherToWei(amount)),
-                {
-                    from: account,
-                    gas: toFixed(
-                        await airdropContract.methods
-                            .claim(eventIndex, merkleProof, account, formatEtherToWei(amount))
-                            .estimateGas({ from: account }),
-                    ),
-                    chainId,
-                },
-            )
+            const args = [
+                BigInt(eventIndex),
+                merkleProof as Hex[],
+                account as Address,
+                BigInt(formatEtherToWei(amount).toFixed(0)),
+            ] as const
+            const gas = await EVMContract.estimateContractGas(airdropContract, 'claim', args, {
+                chainId,
+                from: account,
+            })
+            const tx = EVMContract.createTransactionRequest(airdropContract, 'claim', args, {
+                from: account,
+                gas: toFixed(gas ?? 0),
+                chainId,
+            })
+            if (!tx) return
 
             const hash = await EVMWeb3.sendTransaction(tx, {
                 chainId,

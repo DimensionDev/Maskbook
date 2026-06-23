@@ -3,6 +3,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
+import type { Address } from 'viem'
 
 export function useERC20TokenAllowance(
     address?: string,
@@ -18,10 +19,14 @@ export function useERC20TokenAllowance(
         queryKey: ['erc20-allowance', address, account, spender, chainId],
         queryFn: async () => {
             if (!account || !address || !spender) return '0'
+            const contract = EVMContract.getERC20Contract(address, { chainId })
             return (
-                EVMContract.getERC20Contract(address, { chainId })?.methods.allowance(account, spender).call({
-                    from: account,
-                }) || '0'
+                (
+                    await EVMContract.readContract(contract, 'allowance', [account as Address, spender as Address], {
+                        chainId,
+                        from: account,
+                    })
+                )?.toString() ?? '0'
             )
         },
         refetchInterval: 30 * 1000,

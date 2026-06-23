@@ -1,6 +1,7 @@
 import { delay } from '@masknet/kit'
 import { NetworkPluginID, toHex } from '@masknet/shared-base'
 import type { Account } from '@masknet/shared-base'
+import type { Address } from 'viem'
 import {
     type AddressType,
     type ChainId,
@@ -17,7 +18,6 @@ import {
     AccountTransaction,
     getAverageBlockDelay,
     isNativeTokenAddress,
-    ContractTransaction,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
@@ -99,10 +99,18 @@ export class ConnectionAPI
 
         // ERC20
         const contract = this.Contract.getERC20Contract(address, options)
-        return new ContractTransaction(address).send(
-            contract?.methods.approve(recipient, toHex(amount)),
-            options.overrides,
+        const tx = this.Contract.createTransactionRequest(
+            contract,
+            'approve',
+            [recipient as Address, BigInt(toHex(amount))],
+            {
+                ...options.overrides,
+                from: options.account,
+            },
         )
+        if (!tx) throw new Error('Failed to create contract transaction.')
+        tx.gas ??= await this.estimateTransaction(tx, 50000, options)
+        return this.sendTransaction(tx, options)
     }
 
     override async transferFungibleToken(
@@ -133,10 +141,18 @@ export class ConnectionAPI
 
         // ERC20
         const contract = this.Contract.getERC20Contract(address, options)
-        return new ContractTransaction(address).send(
-            contract?.methods.transfer(recipient, toHex(amount)),
-            options.overrides,
+        const tx = this.Contract.createTransactionRequest(
+            contract,
+            'transfer',
+            [recipient as Address, BigInt(toHex(amount))],
+            {
+                ...options.overrides,
+                from: options.account,
+            },
         )
+        if (!tx) throw new Error('Failed to create contract transaction.')
+        tx.gas ??= await this.estimateTransaction(tx, 50000, options)
+        return this.sendTransaction(tx, options)
     }
 
     override signMessage(
@@ -191,7 +207,7 @@ export class ConnectionAPI
         const tx = {
             from: options.account,
             to: options.account,
-            data: contract.methods.changeOwner(recipient).encodeABI(),
+            data: this.Contract.encodeContractFunctionData(contract.abi, 'changeOwner', [recipient as Address]),
         }
 
         return this.Request.request<string>(

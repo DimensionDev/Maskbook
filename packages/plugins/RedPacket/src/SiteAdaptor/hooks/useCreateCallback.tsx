@@ -1,9 +1,7 @@
 import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import { omit } from 'lodash-es'
 import { NetworkPluginID, toHex } from '@masknet/shared-base'
 import { useChainContext, useEnvironmentContext } from '@masknet/web3-hooks-base'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { type FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -11,13 +9,13 @@ import {
     useTokenConstants,
     decodeEvents,
     type MultipleAbiEventsToMappedObject,
-    ContractTransaction,
     type GasConfig,
     type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
-import { EVMWeb3 } from '@masknet/web3-providers'
-import { getRedPacketContractAbi, useRedPacketContract } from './useRedPacketContract.js'
-import { keccak256 } from 'viem'
+import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
+import { asHappyRedPacketV4Contract, getRedPacketContractAbi, useRedPacketContract } from './useRedPacketContract.js'
+import { keccak256, type Address, type ContractFunctionArgs, type Hex } from 'viem'
+import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 export interface RedPacketSettings {
     shares: number
@@ -55,12 +53,27 @@ export function checkParams(paramsObj: ParamsObjType) {
     return true
 }
 
-export type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
+export type MethodParameters = ContractFunctionArgs<HappyRedPacketV4Abi, 'payable', 'create_red_packet'>
 interface CreateParams {
     gas: string | undefined
     params: MethodParameters
     paramsObj: ParamsObjType
     gasError: Error | null
+}
+
+export function getCreateRedPacketParameters(paramsObj: ParamsObjType): MethodParameters {
+    return [
+        paramsObj.publicKey as Address,
+        BigInt(paramsObj.shares),
+        paramsObj.isRandom,
+        BigInt(paramsObj.duration),
+        paramsObj.seed as Hex,
+        paramsObj.message,
+        paramsObj.name,
+        BigInt(paramsObj.tokenType),
+        paramsObj.tokenAddress as Address,
+        BigInt(toFixed(paramsObj.total)),
+    ] as const
 }
 
 function useCreateParamsCallback(
@@ -108,20 +121,22 @@ function useCreateParamsCallback(
             return null
         }
 
-        const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
+        const params = getCreateRedPacketParameters(paramsObj)
+        const contract = asHappyRedPacketV4Contract(redPacketContract)
 
         let gasError: Error | null = null
         const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
 
-        const gas = await (redPacketContract as HappyRedPacketV4).methods
-            .create_red_packet(...params)
-            .estimateGas({ from: account, value })
-            .catch((error: Error) => {
-                gasError = error
-            })
+        const gas = await EVMContract.estimateContractGas(contract, 'create_red_packet', params, {
+            chainId,
+            from: account,
+            value,
+        }).catch((error: Error) => {
+            gasError = error
+        })
 
         return { gas: gas ? toFixed(gas) : undefined, params, paramsObj, gasError }
-    }, [redPacketSettings, account, redPacketContract, publicKey])
+    }, [redPacketSettings, account, redPacketContract, publicKey, chainId])
 
     return getCreateParams
 }
@@ -175,8 +190,10 @@ export function useCreateCallback(
         }
 
         // estimate gas and compose transaction
-        const tx = await new ContractTransaction(redPacketContract.options.address).fillAll(
-            redPacketContract.methods.create_red_packet(...params),
+        const tx = EVMContract.createTransactionRequest(
+            asHappyRedPacketV4Contract(redPacketContract),
+            'create_red_packet',
+            params,
             {
                 from: account,
                 value: toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0),
@@ -185,6 +202,7 @@ export function useCreateCallback(
                 ...gasOption,
             },
         )
+        if (!tx) return
 
         const hash = await EVMWeb3.sendTransaction(tx, {
             paymentToken: gasOption?.gasCurrency,

@@ -29,9 +29,6 @@ const config: KnipConfig = {
         'packages/web3-constants': {
             entry: ['constants.ts'],
         },
-        'packages/web3-contracts': {
-            ignoreDependencies: ['@typechain/web3-v1'],
-        },
         'packages/injected-script': {
             ignore: ['main/debugger.ts'],
             entry: ['main/index.ts'],

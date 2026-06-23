@@ -11,7 +11,7 @@ export function ConnectionDialog() {
         <InjectedDialog title="Connection" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
                 <EVMWeb3ContextProvider>
-                    <ConnectionContent onClose={closeDialog} />
+                    <ConnectionContent />
                 </EVMWeb3ContextProvider>
             </DialogContent>
         </InjectedDialog>

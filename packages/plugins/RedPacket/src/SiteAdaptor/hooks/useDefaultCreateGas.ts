@@ -1,12 +1,16 @@
 import { useAsync } from 'react-use'
-import { omit } from 'lodash-es'
 import { toHex, type NetworkPluginID } from '@masknet/shared-base'
 import { ZERO, toFixed } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
-import { checkParams, type RedPacketSettings, type ParamsObjType, type MethodParameters } from './useCreateCallback.js'
-import { useRedPacketContract } from './useRedPacketContract.js'
+import { EVMContract } from '@masknet/web3-providers'
+import {
+    checkParams,
+    getCreateRedPacketParameters,
+    type RedPacketSettings,
+    type ParamsObjType,
+} from './useCreateCallback.js'
+import { asHappyRedPacketV4Contract, useRedPacketContract } from './useRedPacketContract.js'
 import { keccak256 } from 'viem'
 
 export function useDefaultCreateGas(
@@ -49,12 +53,27 @@ export function useDefaultCreateGas(
             return ZERO
         }
 
-        const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
+        const params = getCreateRedPacketParameters(paramsObj)
 
         const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
 
-        return (redPacketContract as HappyRedPacketV4).methods
-            .create_red_packet(...params)
-            .estimateGas({ from: account, value })
-    }, [JSON.stringify(redPacketSettings), account, redPacketContract, publicKey, version, NATIVE_TOKEN_ADDRESS])
+        return EVMContract.estimateContractGas(
+            asHappyRedPacketV4Contract(redPacketContract),
+            'create_red_packet',
+            params,
+            {
+                chainId,
+                from: account,
+                value,
+            },
+        )
+    }, [
+        JSON.stringify(redPacketSettings),
+        account,
+        chainId,
+        redPacketContract,
+        publicKey,
+        version,
+        NATIVE_TOKEN_ADDRESS,
+    ])
 }

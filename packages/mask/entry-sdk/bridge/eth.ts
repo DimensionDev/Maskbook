@@ -10,7 +10,7 @@ import { maskSDK } from '../index.js'
 import { sample } from 'lodash-es'
 import { AsyncCall, JSONEncoder } from 'async-call-rpc/full'
 import { isValidChecksumAddress } from '@ethereumjs/util'
-import { recoverMessageAddress } from 'viem'
+import { recoverMessageAddress, type Address } from 'viem'
 
 const PassthroughMethods = [
     ...readonlyMethodType,
@@ -237,53 +237,69 @@ const methods: Methods = {
                 throw err.wallet_watchAsset.the_token_address_seems_invalid()
             }
         }
+        async function readRequired<T>(contract: Promise<T | undefined>) {
+            const value = await contract
+            if (value === undefined) throw err.wallet_watchAsset.the_token_address_seems_invalid()
+            return value
+        }
         if (type === 'ERC20') {
-            const contract = providers.EVMContractReadonly.getERC20Contract(address)!.methods
+            const contract = providers.EVMContractReadonly.getERC20Contract(address)
+            if (!contract) return err.wallet_watchAsset.the_token_address_seems_invalid()
             try {
                 // try verify if it is a ERC20 contract
-                await contract.totalSupply().call()
+                await providers.EVMContractReadonly.readContract(contract, 'totalSupply')
             } catch {
                 return err.wallet_watchAsset.the_token_address_seems_invalid()
             }
 
             await Promise.all([
-                verifySymbol(contract.symbol().call()),
-                contract
-                    .decimals()
-                    .call()
-                    .then(
-                        (realDecimal) => {
-                            const realDecimals = Number.parseInt(realDecimal, 10)
-                            if (decimals && realDecimals !== decimals)
-                                throw err.wallet_watchAsset.the_decimals_in_the_request_request_do_not_match_the_decimals_in_the_contract_decimals(
-                                    { decimals: realDecimal + '', request: decimals + '' },
-                                )
-                            decimals = realDecimals
-                        },
-                        () => {
-                            if (decimals) return
-                            throw err.wallet_watchAsset.decimals_are_required_but_were_not_found_in_either_the_request_or_contract()
-                        },
-                    ),
+                verifySymbol(readRequired(providers.EVMContractReadonly.readContract(contract, 'symbol'))),
+                providers.EVMContractReadonly.readContract(contract, 'decimals').then(
+                    (realDecimal) => {
+                        const realDecimals = Number.parseInt(String(realDecimal), 10)
+                        if (decimals && realDecimals !== decimals)
+                            throw err.wallet_watchAsset.the_decimals_in_the_request_request_do_not_match_the_decimals_in_the_contract_decimals(
+                                { decimals: String(realDecimal), request: decimals + '' },
+                            )
+                        decimals = realDecimals
+                    },
+                    () => {
+                        if (decimals) return
+                        throw err.wallet_watchAsset.decimals_are_required_but_were_not_found_in_either_the_request_or_contract()
+                    },
+                ),
             ])
         } else if (type === 'ERC721') {
-            const contract = providers.EVMContractReadonly.getERC721Contract(address)!.methods
+            if (!tokenId) return err.wallet_watchAsset.the_token_address_seems_invalid()
+            const contract = providers.EVMContractReadonly.getERC721Contract(address)
+            if (!contract) return err.wallet_watchAsset.the_token_address_seems_invalid()
 
-            await verifyContractInterface(contract.supportsInterface('0x780e9d63').call())
-            await verifySymbol(contract.symbol().call())
+            await verifyContractInterface(
+                readRequired(providers.EVMContractReadonly.readContract(contract, 'supportsInterface', ['0x780e9d63'])),
+            )
+            await verifySymbol(readRequired(providers.EVMContractReadonly.readContract(contract, 'symbol')))
 
-            const owner = await contract.ownerOf(tokenId).call()
+            const owner = await readRequired(
+                providers.EVMContractReadonly.readContract(contract, 'ownerOf', [BigInt(tokenId)]),
+            )
             if (!isSameAddress(owner, (await Services.Wallet.sdk_eth_accounts(location.origin))[0] || '')) {
                 return err.wallet_watchAsset.unable_to_verify_ownership_possibly_because_the_standard_is_not_supported_or_the_users_currently_selected_network_does_not_match_the_chain_of_the_asset_in_question()
             }
         } else if (type === 'ERC1155') {
-            const contract = providers.EVMContractReadonly.getERC1155Contract(address)!.methods
-            await verifyContractInterface(contract.supportsInterface('0xd9b67a26').call())
+            if (!tokenId) return err.wallet_watchAsset.the_token_address_seems_invalid()
+            const contract = providers.EVMContractReadonly.getERC1155Contract(address)
+            if (!contract) return err.wallet_watchAsset.the_token_address_seems_invalid()
+            await verifyContractInterface(
+                readRequired(providers.EVMContractReadonly.readContract(contract, 'supportsInterface', ['0xd9b67a26'])),
+            )
 
-            const balance = await contract
-                .balanceOf((await Services.Wallet.sdk_eth_accounts(location.origin))[0], tokenId)
-                .call()
-            if (balance === '0') {
+            const balance = await readRequired(
+                providers.EVMContractReadonly.readContract(contract, 'balanceOf', [
+                    ((await Services.Wallet.sdk_eth_accounts(location.origin))[0] || '') as Address,
+                    BigInt(tokenId),
+                ]),
+            )
+            if (balance === 0n) {
                 return err.wallet_watchAsset.unable_to_verify_ownership_possibly_because_the_standard_is_not_supported_or_the_users_currently_selected_network_does_not_match_the_chain_of_the_asset_in_question()
             }
         }

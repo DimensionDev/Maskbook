@@ -1,5 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
-import type { ChainId, SchemaType, Web3 } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export type TokenPair = [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]
@@ -24,11 +24,11 @@ export interface SavingsProtocol {
     readonly bareToken: FungibleToken<ChainId, SchemaType>
     readonly stakeToken: FungibleToken<ChainId, SchemaType>
 
-    getApr(chainId: ChainId, web3: Web3): Promise<string>
-    getBalance(chainId: ChainId, web3: Web3, account: string): Promise<BigNumber>
+    getApr(chainId: ChainId): Promise<string>
+    getBalance(chainId: ChainId, account: string): Promise<BigNumber>
 
-    depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
-    deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<string>
-    withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
-    withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<string>
+    depositEstimate(account: string, chainId: ChainId, value: BigNumber.Value): Promise<BigNumber.Value>
+    deposit(account: string, chainId: ChainId, value: BigNumber.Value): Promise<string>
+    withdrawEstimate(account: string, chainId: ChainId, value: BigNumber.Value): Promise<BigNumber.Value>
+    withdraw(account: string, chainId: ChainId, value: BigNumber.Value): Promise<string>
 }

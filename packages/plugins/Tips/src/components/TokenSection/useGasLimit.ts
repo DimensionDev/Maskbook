@@ -4,6 +4,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { toHex, type NetworkPluginID } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import type { Address } from 'viem'
 import { useTip } from '../../contexts/index.js'
 
 const MIN_GAS_LIMIT = 21000
@@ -24,10 +25,15 @@ export function useGasLimit(fallback = DEFAULT_GAS_LIMIT) {
             chainId,
             account,
         })
-        const tx = contract?.methods.transfer(recipientAddress, toHex(amount))
-        const estimated = await tx?.estimateGas({
-            from: account,
-        })
+        const estimated = await EVMContract.estimateContractGas(
+            contract,
+            'transfer',
+            [recipientAddress as Address, BigInt(toHex(amount))],
+            {
+                chainId,
+                from: account,
+            },
+        )
         return estimated ?? fallback
     }, [token, tipType, chainId, account, fallback])
 }
