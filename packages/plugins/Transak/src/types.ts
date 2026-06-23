@@ -6,6 +6,7 @@ export interface TransakConfig {
     defaultFiatAmount?: number
     defaultCryptoCurrency?: string
     walletAddress?: string
+    referrerDomain?: string
     themeColor?: string
     countryCode?: string
     fiatCurrency?: string
