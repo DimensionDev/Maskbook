@@ -11,6 +11,7 @@ import {
     AddressItem,
     addressSorter,
     ConnectPersonaBoundary,
+    EmptyStatus,
     GrantPermissions,
     LoadingStatus,
     PluginCardFrameMini,
@@ -405,81 +406,81 @@ function Content(props: ProfileTabContentProps) {
 
     return (
         <div className={classes.root}>
-            {tabs.length > 0 ?
-                <div className={classes.container}>
-                    <div className={classes.title}>
-                        <div className={classes.walletItem}>
-                            <Button variant="text" size="small" ref={buttonRef} className={classes.walletButton}>
-                                <AddressItem
-                                    isMenu
-                                    onClick={(event) => {
-                                        event.preventDefault()
-                                        event.stopPropagation()
-                                        setMenuOpen(true)
-                                    }}
-                                    linkIconClassName={classes.mainLinkIcon}
-                                    TypographyProps={{
-                                        className: classes.currentAddress,
-                                    }}
-                                    socialAccount={selectedSocialAccount}
-                                />
-                            </Button>
-
-                            <TokenWithSocialGroupMenu
-                                open={menuOpen}
-                                onClose={closeMenu}
-                                anchorEl={buttonRef.current}
-                                onAddressChange={onSelect}
-                                currentAddress={selectedAddress}
-                                collectionList={collectionList}
-                                socialAccounts={socialAccounts}
-                                currentCollection={trendingResult}
-                                onTokenChange={(_, i) => {
-                                    setCurrentTrendingIndex(i)
-                                    hideInspector(false)
-                                    setMenuOpen(false)
+            <div className={classes.container}>
+                <div className={classes.title}>
+                    <div className={classes.walletItem}>
+                        <Button variant="text" size="small" ref={buttonRef} className={classes.walletButton}>
+                            <AddressItem
+                                isMenu
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                    setMenuOpen(true)
                                 }}
-                                fromSocialCard
+                                linkIconClassName={classes.mainLinkIcon}
+                                TypographyProps={{
+                                    className: classes.currentAddress,
+                                }}
+                                socialAccount={selectedSocialAccount}
                             />
+                        </Button>
 
-                            <SocialAccountList web3bioProfiles={web3bioProfiles} userId={currentVisitingUserId} />
-                        </div>
-                        <div className={classes.settingItem}>
-                            <Trans>
-                                <Typography
-                                    fontSize="14px"
-                                    fontWeight={700}
-                                    marginRight="5px"
-                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                    Powered by
-                                </Typography>
-                                <Typography
-                                    fontSize="14px"
-                                    fontWeight={700}
-                                    marginRight="4px"
-                                    color={(theme) => theme.palette.maskColor.dark}>
-                                    Mask Network
-                                </Typography>
-                            </Trans>
-                            {isOwnerIdentity && isOnTwitter ?
-                                <ConnectPersonaBoundary
-                                    personas={allPersonas}
-                                    identity={lastRecognized}
-                                    currentPersonaIdentifier={currentIdentifier}
-                                    openDashboard={Services.Helper.openDashboard}
-                                    customHint
-                                    handlerPosition="top-right"
-                                    directTo={PluginID.Web3Profile}>
-                                    <Icons.Gear
-                                        variant="light"
-                                        onClick={openWeb3ProfileSettingDialog}
-                                        className={classes.gearIcon}
-                                        sx={{ cursor: 'pointer' }}
-                                    />
-                                </ConnectPersonaBoundary>
-                            :   null}
-                        </div>
+                        <TokenWithSocialGroupMenu
+                            open={menuOpen}
+                            onClose={closeMenu}
+                            anchorEl={buttonRef.current}
+                            onAddressChange={onSelect}
+                            currentAddress={selectedAddress}
+                            collectionList={collectionList}
+                            socialAccounts={socialAccounts}
+                            currentCollection={trendingResult}
+                            onTokenChange={(_, i) => {
+                                setCurrentTrendingIndex(i)
+                                hideInspector(false)
+                                setMenuOpen(false)
+                            }}
+                            fromSocialCard
+                        />
+
+                        <SocialAccountList web3bioProfiles={web3bioProfiles} userId={currentVisitingUserId} />
                     </div>
+                    <div className={classes.settingItem}>
+                        <Trans>
+                            <Typography
+                                fontSize="14px"
+                                fontWeight={700}
+                                marginRight="5px"
+                                color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                Powered by
+                            </Typography>
+                            <Typography
+                                fontSize="14px"
+                                fontWeight={700}
+                                marginRight="4px"
+                                color={(theme) => theme.palette.maskColor.dark}>
+                                Mask Network
+                            </Typography>
+                        </Trans>
+                        {isOwnerIdentity && isOnTwitter ?
+                            <ConnectPersonaBoundary
+                                personas={allPersonas}
+                                identity={lastRecognized}
+                                currentPersonaIdentifier={currentIdentifier}
+                                openDashboard={Services.Helper.openDashboard}
+                                customHint
+                                handlerPosition="top-right"
+                                directTo={PluginID.Web3Profile}>
+                                <Icons.Gear
+                                    variant="light"
+                                    onClick={openWeb3ProfileSettingDialog}
+                                    className={classes.gearIcon}
+                                    sx={{ cursor: 'pointer' }}
+                                />
+                            </ConnectPersonaBoundary>
+                        :   null}
+                    </div>
+                </div>
+                {tabs.length > 0 ?
                     <div className={classes.tabs}>
                         <TabContext value={currentTab}>
                             <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
@@ -489,9 +490,16 @@ function Content(props: ProfileTabContentProps) {
                             </MaskTabList>
                         </TabContext>
                     </div>
-                </div>
-            :   null}
-            <div className={classes.content}>{contentComponent}</div>
+                :   null}
+            </div>
+            <div className={classes.content}>
+                {tabs.length > 0 && contentComponent ?
+                    contentComponent
+                :   <EmptyStatus height={260}>
+                        <Trans>There's no content associated with this address.</Trans>
+                    </EmptyStatus>
+                }
+            </div>
         </div>
     )
 }

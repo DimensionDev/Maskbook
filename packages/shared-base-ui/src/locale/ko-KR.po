@@ -6173,6 +6173,10 @@ msgstr ""
 msgid "There was a network or RPC provider error, please try again later!"
 msgstr "네트워크나 RPC 제공자 오류입니다. 다시 시도하세요!"
 
+#: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
+msgid "There's no content associated with this address."
+msgstr ""
+
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/index.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/SocialFeeds/index.tsx
 msgid "There's no feed associated with this address."
