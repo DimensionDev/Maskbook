@@ -1374,8 +1374,8 @@ msgid "Choose a Cover"
 msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/index.tsx
-msgid "Choose and show your Web3 footprints on X."
-msgstr ""
+#~ msgid "Choose and show your Web3 footprints on X."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Choose another wallet"
@@ -7033,7 +7033,6 @@ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/PluginDescriptor.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
-#: packages/plugins/Web3Profile/src/SiteAdaptor/index.tsx
 #: packages/shared/src/UI/components/PluginCardFrame/index.tsx
 msgid "Web3 Profile"
 msgstr ""
