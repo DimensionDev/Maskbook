@@ -16,6 +16,7 @@ import {
     getTokenConstant,
     getTransactionStatusType,
     isEmptyHex,
+    isEIP7702Delegation,
     isNativeTokenAddress,
     isValidAddress,
     parseStringOrBytes32,
@@ -136,7 +137,9 @@ export class EVMConnectionReadonlyAPI
     async getAddressType(address: string, initial?: EVMConnectionOptions): Promise<AddressType | undefined> {
         if (!isValidAddress(address)) return
         const code = await this.getCode(address, initial)
-        return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
+        // EIP-7702 delegated EOA: still an EOA, not a contract.
+        if (isEIP7702Delegation(code)) return AddressType.ExternalOwned
+        return isEmptyHex(code) ? AddressType.ExternalOwned : AddressType.Contract
     }
 
     async getSchemaType(address: string, initial?: EVMConnectionOptions): Promise<SchemaType | undefined> {

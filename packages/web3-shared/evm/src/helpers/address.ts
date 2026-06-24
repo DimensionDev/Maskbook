@@ -19,6 +19,11 @@ export function isEmptyHex(hex?: string): hex is undefined {
     return !hex || ['0x', '0x0'].includes(hex)
 }
 
+/** EIP-7702: a delegated EOA's "code" is 0xef0100 + the delegated address. Still an EOA. */
+export function isEIP7702Delegation(code?: string): boolean {
+    return !!code && code.toLowerCase().startsWith('0xef0100')
+}
+
 export const isValidAddress: (address?: string) => address is string = memoize(function isValidAddress(
     address?: string,
 ): address is Hex {
