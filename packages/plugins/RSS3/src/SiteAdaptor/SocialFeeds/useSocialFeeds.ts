@@ -15,7 +15,7 @@ interface Options {
 
 export function useSocialFeeds({ userId, address }: Options) {
     const { data: farAccounts = EMPTY_LIST } = useFireflyFarcasterAccounts(userId)
-    const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
+    const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
 
     const { data: profiles } = useQuery({
         queryKey: ['firefly', 'profiles-by-address', address],

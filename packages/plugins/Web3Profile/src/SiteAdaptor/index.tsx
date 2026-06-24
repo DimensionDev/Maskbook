@@ -64,7 +64,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 const userId = identity?.userId
 
                 // #region lens
-                const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
+                const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
                 // #endregion
 
                 // #region farcaster
