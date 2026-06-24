@@ -236,9 +236,9 @@ export async function createConfiguration(
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
                 SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
-                FIREFLY_X_CLIENT_ID: process.env.FIREFLY_X_CLIENT_ID || '',
-                FIREFLY_X_CLIENT_SECRET: process.env.FIREFLY_X_CLIENT_SECRET || '',
-                PRIVY_APP_ID: process.env.PRIVY_APP_ID || '',
+                FIREFLY_X_CLIENT_ID: flags.FIREFLY_X_CLIENT_ID || process.env.FIREFLY_X_CLIENT_ID || '',
+                FIREFLY_X_CLIENT_SECRET: flags.FIREFLY_X_CLIENT_SECRET || process.env.FIREFLY_X_CLIENT_SECRET || '',
+                PRIVY_APP_ID: flags.PRIVY_APP_ID || process.env.PRIVY_APP_ID || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',

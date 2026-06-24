@@ -39,6 +39,7 @@ export interface BuildFlags {
     sourceMapHideFrameworks?: boolean | undefined
     FIREFLY_X_CLIENT_ID?: string
     FIREFLY_X_CLIENT_SECRET?: string
+    PRIVY_APP_ID?: string
 }
 export type NormalizedFlags = Required<BuildFlags>
 export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
@@ -54,6 +55,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         csp = false,
         FIREFLY_X_CLIENT_ID = '',
         FIREFLY_X_CLIENT_SECRET = '',
+        PRIVY_APP_ID = '',
     } = flags
     let {
         hmr = mode === 'development',
@@ -94,6 +96,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         //  Secrets
         FIREFLY_X_CLIENT_ID,
         FIREFLY_X_CLIENT_SECRET,
+        PRIVY_APP_ID,
     }
 }
 
@@ -128,6 +131,9 @@ export function computeCacheKey(flags: Required<BuildFlags>, computedFlags: Comp
         '1',
         'node' + process.version,
         flags.mode,
+        flags.FIREFLY_X_CLIENT_ID || process.env.FIREFLY_X_CLIENT_ID || '',
+        flags.FIREFLY_X_CLIENT_SECRET || process.env.FIREFLY_X_CLIENT_SECRET || '',
+        flags.PRIVY_APP_ID || process.env.PRIVY_APP_ID || '',
         computedFlags.reactProductionProfiling, // it will affect module resolution of react-dom
         flags.devtools, // it will affect module resolution of react-refresh-webpack-plugin/client/ReactRefreshEntry.js
         flags.reactRefresh, // it will affect all TSX files
