@@ -1,4 +1,4 @@
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -12,6 +12,12 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             setProfileOpen(open)
+        })
+    }, [])
+    useEffect(() => {
+        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
+            if (pluginID !== PluginID.Web3Profile) return
+            CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({ open })
         })
     }, [])
     const [handle, setHandle] = useState('')
