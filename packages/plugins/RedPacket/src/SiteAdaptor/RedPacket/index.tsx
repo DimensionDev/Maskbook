@@ -246,14 +246,16 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         return (
             <>
                 {card}
-                <Link
-                    className={classes.footer}
-                    href={`https://firefly.social/post/twitter/${postId}`}
-                    target="_blank"
-                    rel="noreferrer noopener">
-                    <Icons.LinkOut size={18} />
-                    <Trans>Claim on Firefly</Trans>
-                </Link>
+                {canClaim ?
+                    <Link
+                        className={classes.footer}
+                        href={`https://firefly.social/post/twitter/${postId}`}
+                        target="_blank"
+                        rel="noreferrer noopener">
+                        <Icons.LinkOut size={18} />
+                        <Trans>Claim on Firefly</Trans>
+                    </Link>
+                :   null}
             </>
         )
     }
