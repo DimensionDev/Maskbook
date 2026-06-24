@@ -1,5 +1,13 @@
 # @masknet/encryption
 
+## 0.5.5
+
+### Patch Changes
+
+- bf60a3e: Fix type definition when refer to Uint8Array
+- Updated dependencies [bf60a3e]
+  - @masknet/typed-message@0.2.1
+
 ## 0.5.4
 
 ### Patch Changes
