@@ -66,34 +66,6 @@ if (!globalThis[Symbol.for('mask_init_patch')]) {
         console.log('[Mask] applying intrinsic patches', patch)
         Object.defineProperties(window, patch)
     } catch {}
-
-    patch2: try {
-        if (location.protocol !== 'safari-web-extension:') break patch2
-        /**
-         * @param {Response | PromiseLike<Response>} source
-         */
-        WebAssembly.compileStreaming = async function (source) {
-            const response = await source
-            if (response.headers.get('content-type') === 'application/wasm') {
-                console.warn(`[Mask] Safari WebAssembly.compileStreaming patch is no longer needed.`)
-            }
-            const buffer = await response.arrayBuffer()
-            return WebAssembly.compile(buffer)
-        }
-        /**
-         *
-         * @param {Response | PromiseLike<Response>} source
-         * @param {WebAssembly.Imports | undefined} importObject=
-         */
-        WebAssembly.instantiateStreaming = async function (source, importObject) {
-            const response = await source
-            if (response.headers.get('content-type') === 'application/wasm') {
-                console.warn(`[Mask] Safari WebAssembly.instantiateStreaming patch is no longer needed.`)
-            }
-            const buffer = await response.arrayBuffer()
-            return WebAssembly.instantiate(buffer, importObject)
-        }
-    } catch {}
 }
 
 undefined

@@ -25,6 +25,9 @@ import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.ts'
 
 const require = createRequire(import.meta.url)
 const patchesDir = join(import.meta.dirname, '../../../patches')
+const wasm2jsLoader = require.resolve('./loaders/wasm2js-loader.ts')
+const splineWasm2JsLoader = require.resolve('./loaders/spline-wasm2js-loader.ts')
+const disableLongWasmLoader = require.resolve('./loaders/disable-long-wasm-loader.ts')
 
 export async function createConfiguration(
     isRspack: boolean,
@@ -77,7 +80,12 @@ export async function createConfiguration(
         cache: {
             type: 'filesystem',
             buildDependencies: {
-                config: [import.meta.filename],
+                config: [
+                    import.meta.filename,
+                    wasm2jsLoader,
+                    splineWasm2JsLoader,
+                    disableLongWasmLoader,
+                ],
                 patches: await pnpmPatches,
             },
             version: cacheKey,
@@ -87,7 +95,7 @@ export async function createConfiguration(
                 '.js': ['.js', '.tsx', '.ts'],
                 '.mjs': ['.mjs', '.mts'],
             },
-            extensions: ['.js', '.ts', '.tsx'],
+            extensions: ['.js', '.ts', '.tsx', '.wasm'],
             alias: (() => {
                 const alias: Record<string, string> = {
                     // conflict with SES
@@ -125,6 +133,21 @@ export async function createConfiguration(
                 },
             },
             rules: [
+                {
+                    test: /[/\\]@splinetool[/\\]runtime[/\\]build[/\\](runtime|process|boolean|physics)\.js$/,
+                    enforce: 'pre',
+                    use: [{ loader: splineWasm2JsLoader }],
+                },
+                {
+                    test: /[/\\]long[/\\](umd[/\\])?index\.js$/,
+                    enforce: 'pre',
+                    use: [{ loader: disableLongWasmLoader }],
+                },
+                {
+                    test: /\.wasm$/i,
+                    type: 'javascript/esm',
+                    use: [{ loader: wasm2jsLoader }],
+                },
                 // Source map for libraries
                 !rspack && computedFlags.sourceMapKind ? { test: /\.js$/, extractSourceMap: true } : null,
                 // TypeScript
