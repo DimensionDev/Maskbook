@@ -3,6 +3,9 @@
   "version": "0.2.3",
   "sideEffects": false,
   "description": "TypedMessage React render used in Mask Network.",
+  "repository": {
+    "url": "https://github.com/DimensionDev/Maskbook"
+  },
   "publishConfig": {
     "access": "public"
   },

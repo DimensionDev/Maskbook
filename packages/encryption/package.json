@@ -3,6 +3,9 @@
   "version": "0.5.5",
   "type": "module",
   "sideEffects": false,
+  "repository": {
+    "url": "https://github.com/DimensionDev/Maskbook"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

@@ -2,6 +2,9 @@
   "name": "@masknet/typed-message",
   "version": "0.2.1",
   "sideEffects": false,
+  "repository": {
+    "url": "https://github.com/DimensionDev/Maskbook"
+  },
   "description": "TypedMessage definition used in Mask Network.",
   "publishConfig": {
     "access": "public"
