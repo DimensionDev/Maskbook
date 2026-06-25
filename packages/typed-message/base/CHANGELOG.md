@@ -1,5 +1,11 @@
 # @masknet/typed-message
 
+## 0.2.1
+
+### Patch Changes
+
+- bf60a3e: Fix type definition when refer to Uint8Array
+
 ## 0.2.0
 
 ### Minor Changes
