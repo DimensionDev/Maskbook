@@ -80,12 +80,7 @@ export async function createConfiguration(
         cache: {
             type: 'filesystem',
             buildDependencies: {
-                config: [
-                    import.meta.filename,
-                    wasm2jsLoader,
-                    splineWasm2JsLoader,
-                    disableLongWasmLoader,
-                ],
+                config: [import.meta.filename, wasm2jsLoader, splineWasm2JsLoader, disableLongWasmLoader],
                 patches: await pnpmPatches,
             },
             version: cacheKey,

@@ -13,14 +13,19 @@ function resolveWasm2Js() {
 
 function runWasm2Js(args: string[]) {
     return new Promise<void>((resolve, reject) => {
-        execFile(process.execPath, [resolveWasm2Js(), ...args], { maxBuffer: 1024 * 1024 * 32 }, (error, stdout, stderr) => {
-            if (error) {
-                error.message = `${error.message}\n${stderr || stdout}`
-                reject(error)
-                return
-            }
-            resolve()
-        })
+        execFile(
+            process.execPath,
+            [resolveWasm2Js(), ...args],
+            { maxBuffer: 1024 * 1024 * 32 },
+            (error, stdout, stderr) => {
+                if (error) {
+                    error.message = `${error.message}\n${stderr || stdout}`
+                    reject(error)
+                    return
+                }
+                resolve()
+            },
+        )
     })
 }
 
