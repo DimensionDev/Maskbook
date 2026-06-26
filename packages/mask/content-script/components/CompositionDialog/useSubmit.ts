@@ -1,5 +1,6 @@
 import Services from '#services'
 import { encodeByNetwork } from '@masknet/encryption'
+import { delay } from '@masknet/kit'
 import { PluginID, RedPacketMetaKey, Sniffings, SOCIAL_MEDIA_NAME, SolanaRedPacketMetaKey } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -66,8 +67,13 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 })
             }
 
-            if (content.meta?.has(RedPacketMetaKey) || content.meta?.has(SolanaRedPacketMetaKey))
-                Telemetry.captureEvent(EventType.Interact, EventID.EntryAppLuckSend)
+            const getPostId = activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.getPostIdFromNewPostToast
+            if (hasRedpacket && getPostId) {
+                // fire-and-forget: only count the share once the tweet is actually posted
+                waitForPostSuccess(getPostId).then((posted) => {
+                    if (posted) Telemetry.captureEvent(EventType.Interact, EventID.EntryAppLuckSend)
+                })
+            }
             Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeEncrypt)
 
             onClose()
@@ -100,4 +106,17 @@ function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Me
         return `${promote_file_service}\n${encrypted}`
     }
     return null
+}
+
+/**
+ * Poll the "post sent" toast for a non-empty post id. Returns true once a post
+ * is detected as sent, or false if the user never posts within the timeout.
+ */
+async function waitForPostSuccess(getPostId: () => string, timeout = 15_000, interval = 500): Promise<boolean> {
+    const start = Date.now()
+    while (Date.now() - start < timeout) {
+        await delay(interval)
+        if (getPostId()) return true
+    }
+    return false
 }
