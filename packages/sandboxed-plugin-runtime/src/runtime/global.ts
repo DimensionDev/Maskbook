@@ -41,7 +41,6 @@ export function createGlobal(pluginID: string, manifest: unknown, signal: AbortS
         // TODO: provide a custom-scheme friendly URL constructor?
         URL,
         URLSearchParams,
-        WebAssembly,
         WritableStream,
         WritableStreamDefaultController,
         WritableStreamDefaultWriter,
