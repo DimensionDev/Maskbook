@@ -5,12 +5,8 @@
         "upgrade-insecure-requests",
         "require-trusted-types-for 'script'"
     ],
-    "@mv2": ["script-src 'self' 'wasm-eval'", "trusted-types default dompurify mask", "upgrade-insecure-requests"],
-    "@mv3": [
-        "script-src 'self' 'wasm-unsafe-eval'",
-        "trusted-types default dompurify mask",
-        "upgrade-insecure-requests"
-    ],
+    "@mv2": ["script-src 'self'", "trusted-types default dompurify mask", "upgrade-insecure-requests"],
+    "@mv3": ["script-src 'self'", "trusted-types default dompurify mask", "upgrade-insecure-requests"],
     "default-src": "self",
     "style-src": "unsafe-inline",
 
@@ -22,8 +18,6 @@
         "self",
 
         "@dev-only:ws://127.0.0.1:8080",
-
-        "https://unpkg.com/@splinetool/modelling-wasm@0.9.342/build/process.wasm",
 
         "wss://relay.walletconnect.com",
         "wss://relay.walletconnect.org",
