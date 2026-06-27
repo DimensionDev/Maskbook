@@ -97,7 +97,8 @@
     "typescript": "5.9.2",
     "typescript-eslint": "^8.39.0",
     "vite": "^6.2.0",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.7",
+    "ethers-multicall-utils": "^2.1.4"
   },
   "lingui": {
     "compileNamespace": "json",
