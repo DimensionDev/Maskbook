@@ -13,7 +13,7 @@ import {
     type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
-import { asHappyRedPacketV4Contract, getRedPacketContractAbi, useRedPacketContract } from './useRedPacketContract.js'
+import { getRedPacketLatestContractWithAddress, RED_PACKET_LATEST_ABI } from './useRedPacketContract.js'
 import { keccak256, type Address, type ContractFunctionArgs, type Hex } from 'viem'
 import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
@@ -79,14 +79,12 @@ export function getCreateRedPacketParameters(paramsObj: ParamsObjType): MethodPa
 function useCreateParamsCallback(
     expectedChainId: ChainId,
     redPacketSettings: RedPacketSettings | undefined,
-    version: number,
     publicKey: string,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
-        if (!redPacketSettings || !redPacketContract || !publicKey) return null
+        if (!redPacketSettings || !publicKey) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
         const tokenType = token!.schema === SchemaType.Native ? 0 : 1
@@ -122,63 +120,60 @@ function useCreateParamsCallback(
         }
 
         const params = getCreateRedPacketParameters(paramsObj)
-        const contract = asHappyRedPacketV4Contract(redPacketContract)
 
         let gasError: Error | null = null
         const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
 
-        const gas = await EVMContract.estimateContractGas(contract, 'create_red_packet', params, {
-            chainId,
-            from: account,
-            value,
-        }).catch((error: Error) => {
+        const gas = await EVMContract.estimateContractGas(
+            getRedPacketLatestContractWithAddress(chainId),
+            'create_red_packet',
+            params,
+            {
+                chainId,
+                from: account,
+                value,
+            },
+        ).catch((error: Error) => {
             gasError = error
         })
 
         return { gas: gas ? toFixed(gas) : undefined, params, paramsObj, gasError }
-    }, [redPacketSettings, account, redPacketContract, publicKey, chainId])
+    }, [redPacketSettings, account, publicKey, chainId])
 
     return getCreateParams
 }
 
-export function useCreateParams(
-    expectedChainId: ChainId,
-    redPacketSettings: RedPacketSettings,
-    version: number,
-    publicKey: string,
-) {
+export function useCreateParams(expectedChainId: ChainId, redPacketSettings: RedPacketSettings, publicKey: string) {
     const { pluginID } = useEnvironmentContext()
-    const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
+    const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, publicKey)
     // TODO get rid of JSON.stringify
     return useAsync(async () => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
 
         return getCreateParams()
-    }, [JSON.stringify(redPacketSettings), version, publicKey])
+    }, [JSON.stringify(redPacketSettings), publicKey])
 }
 
 export function useCreateCallback(
     expectedChainId: ChainId,
     redPacketSettings: RedPacketSettings,
-    version: number,
     publicKey: string,
     gasOption?: GasConfig,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
-    const redPacketContract = useRedPacketContract(chainId, version)
-    const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
+    const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, publicKey)
 
     return useAsyncFn(async (): Promise<
         | {
               hash: string
               receipt: TransactionReceipt
-              events: undefined | MultipleAbiEventsToMappedObject<ReturnType<typeof getRedPacketContractAbi>>
+              events: undefined | MultipleAbiEventsToMappedObject<RED_PACKET_LATEST_ABI>
           }
         | undefined
     > => {
         const token = redPacketSettings.token
         const createParams = await getCreateParams()
-        if (!token || !redPacketContract || !createParams) return
+        if (!token || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
         if (gasError) return
@@ -191,7 +186,7 @@ export function useCreateCallback(
 
         // estimate gas and compose transaction
         const tx = EVMContract.createTransactionRequest(
-            asHappyRedPacketV4Contract(redPacketContract),
+            getRedPacketLatestContractWithAddress(chainId),
             'create_red_packet',
             params,
             {
@@ -211,7 +206,7 @@ export function useCreateCallback(
         })
         const receipt = await EVMWeb3.getTransactionReceipt(hash, { chainId })
         if (receipt) {
-            const events = decodeEvents(getRedPacketContractAbi(version), receipt.logs)
+            const events = decodeEvents(RED_PACKET_LATEST_ABI, receipt.logs)
 
             return {
                 hash,
@@ -220,5 +215,5 @@ export function useCreateCallback(
             }
         }
         return { hash, receipt, events: undefined }
-    }, [account, redPacketContract, redPacketSettings.token, gasOption, chainId, getCreateParams])
+    }, [account, redPacketSettings.token, gasOption, chainId, getCreateParams])
 }

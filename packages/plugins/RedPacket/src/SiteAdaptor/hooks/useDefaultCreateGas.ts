@@ -10,20 +10,16 @@ import {
     type RedPacketSettings,
     type ParamsObjType,
 } from './useCreateCallback.js'
-import { asHappyRedPacketV4Contract, useRedPacketContract } from './useRedPacketContract.js'
+import { getRedPacketLatestContractWithAddress } from './useRedPacketContract.js'
 import { keccak256 } from 'viem'
+import { version } from 'react'
 
-export function useDefaultCreateGas(
-    redPacketSettings: RedPacketSettings | undefined,
-    version: number,
-    publicKey: string,
-) {
+export function useDefaultCreateGas(redPacketSettings: RedPacketSettings | undefined, publicKey: string) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    const redPacketContract = useRedPacketContract(chainId, version)
 
     return useAsync(async () => {
-        if (!redPacketSettings || !redPacketContract) return ZERO
+        if (!redPacketSettings) return ZERO
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         if (!token) return ZERO
         const seed = Math.random().toString()
@@ -58,7 +54,7 @@ export function useDefaultCreateGas(
         const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
 
         return EVMContract.estimateContractGas(
-            asHappyRedPacketV4Contract(redPacketContract),
+            getRedPacketLatestContractWithAddress(chainId),
             'create_red_packet',
             params,
             {
@@ -67,13 +63,5 @@ export function useDefaultCreateGas(
                 value,
             },
         )
-    }, [
-        JSON.stringify(redPacketSettings),
-        account,
-        chainId,
-        redPacketContract,
-        publicKey,
-        version,
-        NATIVE_TOKEN_ADDRESS,
-    ])
+    }, [JSON.stringify(redPacketSettings), account, chainId, publicKey, version, NATIVE_TOKEN_ADDRESS])
 }

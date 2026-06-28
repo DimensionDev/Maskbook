@@ -4,12 +4,22 @@ import { HappyRedPacketV3Abi } from '@masknet/web3-contracts/types/HappyRedPacke
 import { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import {
     type ChainId,
-    type ContractWithAddress,
     createContractWithAddress,
+    getRedPacketConstants,
     useRedPacketConstants,
 } from '@masknet/web3-shared-evm'
-import type { HappyRedPacketV4Abi as HappyRedPacketV4AbiType } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useMemo } from 'react'
+
+export const RED_PACKET_LATEST_VERSION = 4
+export { HappyRedPacketV4Abi as RED_PACKET_LATEST_ABI } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
+
+export function getRedPacketLatestContractAddress(chainId: ChainId) {
+    return getRedPacketConstants(chainId).HAPPY_RED_PACKET_ADDRESS_V4
+}
+
+export function getRedPacketLatestContractWithAddress(chainId: ChainId) {
+    return createContractWithAddress(getRedPacketConstants(chainId).HAPPY_RED_PACKET_ADDRESS_V4, HappyRedPacketV4Abi)
+}
 
 export function useRedPacketContract(chainId: ChainId, version: number) {
     const {
@@ -36,13 +46,4 @@ export function useRedPacketContract(chainId: ChainId, version: number) {
     )
     const versions = [v1, v2, v3, v4] as const
     return versions[version - 1]
-}
-
-export function getRedPacketContractAbi(version: number) {
-    const versions = [HappyRedPacketV1Abi, HappyRedPacketV2Abi, HappyRedPacketV3Abi, HappyRedPacketV4Abi] as const
-    return versions[version - 1]!
-}
-
-export function asHappyRedPacketV4Contract(contract: unknown) {
-    return contract as ContractWithAddress<HappyRedPacketV4AbiType> | null | undefined
 }

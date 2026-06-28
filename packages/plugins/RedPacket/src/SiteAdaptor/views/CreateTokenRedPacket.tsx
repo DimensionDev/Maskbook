@@ -214,12 +214,11 @@ export function CreateTokenRedPacket() {
 
     // #region gas
     const { account: publicKey } = useMemo(() => EVMWeb3.createAccount(), [])
-    const contract_version = 4
-    const { value: params } = useCreateParams(chainId, settings, contract_version, publicKey)
+    const { value: params } = useCreateParams(chainId, settings, publicKey)
     // #endregion
 
     // balance
-    const { value: defaultGas = ZERO } = useDefaultCreateGas(settings, contract_version, publicKey)
+    const { value: defaultGas = ZERO } = useDefaultCreateGas(settings, publicKey)
     const { isAvailableBalance, balance, isGasSufficient } = useAvailableBalance(
         NetworkPluginID.PLUGIN_EVM,
         token?.address,

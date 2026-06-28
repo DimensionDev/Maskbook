@@ -1,14 +1,14 @@
 import {
     createContractWithAddress,
-    createTransactionRequest,
-    encodeContractFunctionData,
-    estimateContractGas,
     getFunctionInputs,
     normalizeFunctionArgs,
+    normalizeTransaction,
     type ContractCallOptions,
     type ContractWithAddress,
     type ContractWriteOptions,
 } from '@masknet/web3-shared-evm'
+import { toHex } from '@masknet/shared-base'
+import { encodeFunctionData } from 'viem'
 
 import { AirdropV2Abi as AirDropV2ABI } from '@masknet/web3-contracts/types/AirdropV2.js'
 import { BalanceCheckerAbi as BalanceCheckerABI } from '@masknet/web3-contracts/types/BalanceChecker.js'
@@ -66,7 +66,7 @@ export class EVMContractReadonlyAPI {
         >
     }
 
-    estimateContractGas<
+    async estimateContractGas<
         TAbi extends Abi,
         TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
         TArgs extends ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
@@ -76,7 +76,17 @@ export class EVMContractReadonlyAPI {
         args: TArgs = [] as unknown as TArgs,
         initial?: EVMConnectionOptions & ContractCallOptions,
     ) {
-        return estimateContractGas(this.Request.getViem(initial), contract, functionName, args, initial)
+        if (!contract) return
+        const client = this.Request.getViem(initial)
+        const gas = await client.estimateContractGas({
+            address: contract.address,
+            abi: contract.abi,
+            functionName,
+            args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
+            account: (initial?.account ?? initial?.from) as Address | undefined,
+            value: typeof initial?.value === 'undefined' ? undefined : BigInt(toHex(initial.value)),
+        } as Parameters<typeof client.estimateContractGas>[0])
+        return Number(gas)
     }
 
     encodeContractFunctionData<
@@ -84,7 +94,11 @@ export class EVMContractReadonlyAPI {
         TFunctionName extends ContractFunctionName<TAbi>,
         TArgs extends ContractFunctionArgs<TAbi, AbiStateMutability, TFunctionName>,
     >(abi: TAbi, functionName: TFunctionName, args: TArgs = [] as unknown as TArgs) {
-        return encodeContractFunctionData(abi, functionName, args)
+        return encodeFunctionData({
+            abi,
+            functionName,
+            args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(abi, functionName)),
+        } as Parameters<typeof encodeFunctionData>[0])
     }
 
     createTransactionRequest<
@@ -97,7 +111,13 @@ export class EVMContractReadonlyAPI {
         args: TArgs = [] as unknown as TArgs,
         initial?: ContractWriteOptions,
     ) {
-        return createTransactionRequest(contract, functionName, args, initial)
+        if (!contract) return
+        return normalizeTransaction({
+            ...initial,
+            from: initial?.from ?? initial?.account,
+            to: contract.address,
+            data: this.encodeContractFunctionData(contract.abi, functionName, args),
+        })
     }
 
     getERC20Contract(address: string | undefined) {

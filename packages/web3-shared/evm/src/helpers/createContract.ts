@@ -3,19 +3,10 @@ import type {
     Abi,
     AbiFunction,
     AbiParameter,
-    AbiStateMutability,
     Address,
-    Client,
-    ContractFunctionArgs,
-    ContractFunctionName,
-    PublicActions,
-    WalletActions,
 } from 'viem'
-import { encodeFunctionData } from 'viem'
 import { isValidAddress } from './address.js'
 import type { Transaction } from '../types/index.js'
-
-type ViemClient = Client & PublicActions & WalletActions
 
 export interface ContractCallOptions {
     account?: string
@@ -49,64 +40,6 @@ export function createContractWithAddress<TAbi extends Abi>(
         address: address as Address,
         abi,
     }
-}
-
-export async function estimateContractGas<TAbi extends Abi>(
-    client: ViemClient,
-    contract: ContractWithAddress<TAbi> | null | undefined,
-    functionName: ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
-    args: ContractFunctionArgs<
-        TAbi,
-        'nonpayable' | 'payable',
-        typeof functionName
-    > = [] as unknown as ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', typeof functionName>,
-    options?: ContractCallOptions,
-) {
-    if (!contract) return
-    const gas = await client.estimateContractGas({
-        address: contract.address,
-        abi: contract.abi,
-        functionName,
-        args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
-        account: (options?.account ?? options?.from) as Address | undefined,
-        value: typeof options?.value === 'undefined' ? undefined : BigInt(toHex(options.value)),
-    } as Parameters<typeof client.estimateContractGas>[0])
-    return Number(gas)
-}
-
-export function encodeContractFunctionData<TAbi extends Abi>(
-    abi: TAbi,
-    functionName: ContractFunctionName<TAbi>,
-    args: ContractFunctionArgs<TAbi, AbiStateMutability, typeof functionName> = [] as unknown as ContractFunctionArgs<
-        TAbi,
-        AbiStateMutability,
-        typeof functionName
-    >,
-) {
-    return encodeFunctionData({
-        abi,
-        functionName,
-        args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(abi, functionName)),
-    } as Parameters<typeof encodeFunctionData>[0])
-}
-
-export function createTransactionRequest<TAbi extends Abi>(
-    contract: ContractWithAddress<TAbi> | null | undefined,
-    functionName: ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
-    args: ContractFunctionArgs<
-        TAbi,
-        'nonpayable' | 'payable',
-        typeof functionName
-    > = [] as unknown as ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', typeof functionName>,
-    options?: ContractWriteOptions,
-): Transaction | undefined {
-    if (!contract) return
-    return normalizeTransaction({
-        ...options,
-        from: options?.from ?? options?.account,
-        to: contract.address,
-        data: encodeContractFunctionData(contract.abi, functionName, args),
-    })
 }
 
 export function getFunctionInputs(abi: Abi, functionName: string) {
@@ -173,20 +106,6 @@ function isTupleParameter(
 
 function isIntegerType(type: string) {
     return /^u?int(?:\d+)?(?:\[.*\])?$/u.test(type)
-}
-
-function normalizeBlockNumber(block: string | number | bigint | undefined) {
-    if (typeof block === 'bigint') return block
-    if (typeof block === 'number') return BigInt(block)
-    if (typeof block === 'string' && /^\d+$/u.test(block)) return BigInt(block)
-    if (typeof block === 'string' && /^0x[\da-f]+$/iu.test(block)) return BigInt(block)
-    return
-}
-
-function normalizeBlockTag(block: string | number | bigint | undefined) {
-    if (typeof block !== 'string') return
-    if (/^\d+$/u.test(block) || /^0x[\da-f]+$/iu.test(block)) return
-    return block as never
 }
 
 export function normalizeTransaction(transaction: Record<string, unknown>): Transaction {

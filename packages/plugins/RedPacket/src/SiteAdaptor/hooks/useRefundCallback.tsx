@@ -7,7 +7,7 @@ import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMContract, EVMWeb3, SolanaChainResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, ContractWithAddress } from '@masknet/web3-shared-evm'
 import type { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Link } from '@mui/material'
 import type { Cluster } from '@solana/web3.js'
@@ -18,8 +18,9 @@ import { getRedpacket } from '../helpers/getRedpacket.js'
 import { getTokenAccount, getTokenProgram } from '../helpers/getTokenAccount.js'
 import { refundNativeToken } from '../helpers/refundNativeToken.js'
 import { refundSplToken } from '../helpers/refundSplToken.js'
-import { asHappyRedPacketV4Contract, useRedPacketContract } from './useRedPacketContract.js'
+import { useRedPacketContract } from './useRedPacketContract.js'
 import type { Hex } from 'viem'
+import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 const useStyles = makeStyles()({
     message: {
@@ -43,7 +44,7 @@ export function useRefundCallback(version: number, from: string, id?: string, ex
 
         setIsRefunded(false)
 
-        const contract = asHappyRedPacketV4Contract(redPacketContract)
+        const contract = redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>
         const tx = EVMContract.createTransactionRequest(contract, 'refund', [id as Hex], { from })
         if (!tx) return
         const gas = await EVMContract.estimateContractGas(contract, 'refund', [id as Hex], { chainId, from })
