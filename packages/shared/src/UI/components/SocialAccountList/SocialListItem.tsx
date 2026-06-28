@@ -167,8 +167,9 @@ export function SocialAccountListItem({
             if (platform !== NextIDPlatform.LENS || !identity || !account || !myAccountAddress) return null
             const client = new LensV3(account, (message) => EVMWeb3.signMessage('message', message))
             const profile = await client.getAccountByHandle(identity)
+            if (!profile?.address) return null
             const isFollowing = await client.getFollowStatus([
-                { account: profile?.address, follower: evmAddress(myAccountAddress) },
+                { account: profile.address, follower: evmAddress(myAccountAddress) },
             ])
             return {
                 ownedBy: profile?.username?.ownedBy as string,

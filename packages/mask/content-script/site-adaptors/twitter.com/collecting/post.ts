@@ -129,7 +129,11 @@ function registerPostCollectorInner(
             // To distinguish tweet nodes between timeline and detail page
             const isDetailPage = isDetailTweet(tweetNode)
             const isCollapsed = !!tweetNode.querySelector('[data-testid="tweet-text-show-more-link"]')
-            return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}/collapse:${isCollapsed}`
+            // Keep the collapse suffix only on the detail page (MF-5908): changing the key forces
+            // Mask content to re-inject when a collapsed tweet expands there. On the timeline the key
+            // change unmounts+remounts the whole post card on expand (flicker), so the post stays stable
+            // and onNodeMutation updates its content in place (MF-6769).
+            return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}${isDetailPage ? `/collapse:${isCollapsed}` : ''}`
         })
         .startWatch(250, cancel)
 }

@@ -5,7 +5,7 @@ import { UploadDropArea } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Radio, Typography } from '@mui/material'
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
-import { MAX_FILE_SIZE, MAX_FILE_SIZE_LOAD } from '../../constants.js'
+import { MAX_FILE_SIZE } from '../../constants.js'
 import { downloadFile } from '../../helpers.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
@@ -81,7 +81,7 @@ export function UploadFile() {
     const [provider, setProvider] = useState<Provider>(Provider.Arweave)
     const { recentFiles, uploadingFiles, uploadFile, attachToPost } = useFileManagement()
 
-    const FILE_SIZE = provider === Provider.Load ? MAX_FILE_SIZE_LOAD : MAX_FILE_SIZE
+    const FILE_SIZE = MAX_FILE_SIZE
 
     const files = useMemo(() => {
         return [...uploadingFiles, ...recentFiles]
@@ -95,10 +95,6 @@ export function UploadFile() {
         {
             provider: Provider.IPFS,
             name: <Trans>IPFS</Trans>,
-        },
-        {
-            provider: Provider.Load,
-            name: <Trans>Load Network</Trans>,
         },
     ]
 

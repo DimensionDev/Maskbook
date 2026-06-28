@@ -7,8 +7,7 @@ import { Trans } from '@lingui/react/macro'
 const recommendFeature = {
     description: (
         <Trans>
-            Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory
-            events.
+            Highly integrated Web3 news and events on X, providing information on tokens, AMAs, and regulatory events.
         </Trans>
     ),
     backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',

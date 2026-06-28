@@ -1,8 +1,8 @@
 import { InjectedDialog } from '@masknet/shared'
-import { DialogContent, IconButton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { Close as CloseIcon } from '@mui/icons-material'
-import { useTransakURL } from '../hooks/useTransakURL.js'
+import { DialogContent, IconButton, Stack, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useTransakWidgetURL } from '../hooks/useTransakWidgetURL.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
@@ -37,6 +37,11 @@ const useStyles = makeStyles()((theme) => ({
         border: 0,
         borderRadius: 12,
     },
+    status: {
+        height: 630,
+        padding: theme.spacing(2),
+        boxSizing: 'border-box',
+    },
 }))
 
 interface BuyTokenDialogProps extends withClasses<'root'> {
@@ -50,7 +55,11 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
     const { classes } = useStyles(undefined, { props })
     const { code, address, open, onClose } = props
 
-    const transakURL = useTransakURL({
+    const {
+        data: widgetUrl,
+        isLoading: loading,
+        error,
+    } = useTransakWidgetURL({
         defaultCryptoCurrency: code,
         walletAddress: address,
     })
@@ -69,10 +78,18 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                     <IconButton className={classes.close} size="small" onClick={onClose}>
                         <CloseIcon />
                     </IconButton>
-                    {transakURL ?
+                    {loading ?
+                        <Stack className={classes.status} alignItems="center" justifyContent="center">
+                            <LoadingBase size={36} />
+                        </Stack>
+                    : error || !widgetUrl ?
+                        <Stack className={classes.status} alignItems="center" justifyContent="center">
+                            <Typography variant="body1">
+                                Transak is temporarily unavailable. Please try again later.
+                            </Typography>
+                        </Stack>
                         // eslint-disable-next-line react/dom/no-missing-iframe-sandbox
-                        <iframe className={classes.frame} src={transakURL} />
-                    :   null}
+                    :   <iframe className={classes.frame} src={widgetUrl} allow="camera;microphone;payment" />}
                 </DialogContent>
             </InjectedDialog>
         </div>

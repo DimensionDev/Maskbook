@@ -1374,8 +1374,8 @@ msgid "Choose a Cover"
 msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/index.tsx
-msgid "Choose and show your Web3 footprints on X."
-msgstr ""
+#~ msgid "Choose and show your Web3 footprints on X."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Choose another wallet"
@@ -3115,12 +3115,16 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Tips/src/SiteAdaptor/index.tsx
-msgid "Gift crypto or NFTs tips to verified users on social media."
-msgstr ""
+#~ msgid "Gift crypto or NFTs tips to verified users on social media."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 #~ msgid "Gift crypto or NFTs to any users, first come, first served."
 #~ msgstr ""
+
+#: packages/plugins/Tips/src/SiteAdaptor/index.tsx
+msgid "Gift crypto tips to verified users on social media."
+msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 msgid "Gift crypto to any users, first come, first served."
@@ -3265,8 +3269,12 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
-msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
+msgid "Highly integrated Web3 news and events on X, providing information on tokens, AMAs, and regulatory events."
 msgstr ""
+
+#: packages/plugins/Calendar/src/SiteAdaptor/index.tsx
+#~ msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
@@ -3711,8 +3719,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
-msgid "Load Network"
-msgstr ""
+#~ msgid "Load Network"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/mask/popups/pages/Friends/Home/UI.tsx
@@ -4215,8 +4223,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
-msgid "NFT collection"
-msgstr ""
+#~ msgid "NFT collection"
+#~ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialog.tsx
 #~ msgid "NFT Details"
@@ -4244,8 +4252,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
-msgid "NFTs"
-msgstr ""
+#~ msgid "NFTs"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 #~ msgid "NFTs added"
@@ -4565,8 +4573,12 @@ msgid "Operation"
 msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
-msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
+msgid "Optimize search results with token names, ENS domains or wallet addresses."
 msgstr ""
+
+#: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
+#~ msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
+#~ msgstr ""
 
 #: packages/plugins/Handle/src/SiteAdaptor/index.tsx
 msgid "Optimize the display of search results about ENS in social media."
@@ -5405,8 +5417,8 @@ msgid "Search with an ENS domain or wallet address to get optimized results."
 msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
-msgid "Search with the name of an NFT collection or its symbol to get optimized results."
-msgstr ""
+#~ msgid "Search with the name of an NFT collection or its symbol to get optimized results."
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Security Detection"
@@ -5799,8 +5811,8 @@ msgid "Status"
 msgstr ""
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
-msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
-msgstr ""
+#~ msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Step {step}/{step}"
@@ -6154,6 +6166,10 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
 msgid "There was a network or RPC provider error, please try again later!"
+msgstr ""
+
+#: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
+msgid "There's no content associated with this address."
 msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/index.tsx
@@ -6869,7 +6885,11 @@ msgid "View real-time crypto prices, market cap, trading volume, etc."
 msgstr ""
 
 #: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
-msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+#~ msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+#~ msgstr ""
+
+#: packages/plugins/ProfileCard/src/SiteAdaptor/index.tsx
+msgid "View user's Web3 footprints, including social media posts and other transaction activities based on public data source."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
@@ -7004,12 +7024,15 @@ msgid "Web3 File Service"
 msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
-msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
+msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS and Arweave. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
 msgstr ""
+
+#: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
+#~ msgid "Web3 File Service is a decentralized storage solution provided by Mask Network that allows users to store files across multiple decentralized networks. This service is powered by Mask Network’s partner protocols, including IPFS, Arweave, and Load Network. It supports various file formats such as PDF, DOC, JPG, PNG, MP3, MP4, and more, with a maximum file size of 10MB per upload.<0/>Through the Web3 File Service, users can upload files to different decentralized networks and choose whether or not to encrypt them, thereby generating files with different levels of confidentiality. Mask Network users can share these files to social platforms via generated links. Using encryption helps protect file security and prevent privacy breaches.<1/>Please note that anyone with the link can access and share the file. Due to the immutable nature of decentralized storage systems, uploaded files cannot be deleted or modified, so please exercise caution when uploading files containing personal information.<2/>Mask Network’s Web3 File Service is designed to help users break free from the data limitations of traditional social platforms, enabling secure and decentralized file sharing. The service is currently free for all Mask Network users. Any future costs will be announced in advance."
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trending/PluginDescriptor.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
-#: packages/plugins/Web3Profile/src/SiteAdaptor/index.tsx
 #: packages/shared/src/UI/components/PluginCardFrame/index.tsx
 msgid "Web3 Profile"
 msgstr ""

@@ -1,5 +1,12 @@
 # @masknet/typed-message-react
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [bf60a3e]
+  - @masknet/typed-message@0.2.1
+
 ## 0.2.2
 
 ### Patch Changes

@@ -20,7 +20,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 category: 'dapp',
-                description: <Trans>Gift crypto or NFTs tips to verified users on social media.</Trans>,
+                description: <Trans>Gift crypto tips to verified users on social media.</Trans>,
                 ApplicationEntryID: base.ID,
                 icon,
                 name,

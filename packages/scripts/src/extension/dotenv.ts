@@ -4,13 +4,15 @@ import type { BuildFlags } from './flags.ts'
 import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 
 export function applyDotEnv(flags: BuildFlags) {
-    if (flags.mode === 'production') return
-
     const { parsed, error } = config({ path: new URL('./.env/dev-preference', ROOT_PATH) })
     if (error && !error.message.includes('no such file or directory')) {
         console.error(new TypeError('Failed to parse env file', { cause: error }))
     }
-    if (!parsed) return
+    flags.FIREFLY_X_CLIENT_ID ??= process.env.FIREFLY_X_CLIENT_ID
+    flags.FIREFLY_X_CLIENT_SECRET ??= process.env.FIREFLY_X_CLIENT_SECRET
+    flags.PRIVY_APP_ID ??= process.env.PRIVY_APP_ID
+
+    if (!parsed || flags.mode === 'production') return
 
     flags.sourceMapPreference ??= parseBooleanOrString(parsed.sourceMap)
     if (parsed.manifest) {
@@ -24,8 +26,6 @@ export function applyDotEnv(flags: BuildFlags) {
     flags.hmr ??= parseBoolean(parsed.hmr)
     flags.devtools ??= parseBoolean(parsed.devtools)
     flags.devtoolsEditorURI ??= parsed.devtoolsEditorURI
-    flags.FIREFLY_X_CLIENT_ID ??= parsed.FIREFLY_X_CLIENT_ID
-    flags.FIREFLY_X_CLIENT_SECRET ??= parsed.FIREFLY_X_CLIENT_SECRET
     const compiler = parseBooleanOrString(parsed.reactCompiler)
     if (typeof compiler === 'string') {
         if (compiler !== 'infer' && compiler !== 'annotation' && compiler !== 'all')

@@ -108,7 +108,7 @@ export function postEditorContentInPopupSelector() {
 }
 export function postEditorInPopupSelector() {
     return querySelector<E>(
-        '[role="dialog"] div[data-testid="toolBar"] [role="presentation"]:has(> button[data-testid="geoButton"])',
+        '[role="dialog"] div[data-testid="toolBar"] [role="presentation"]:has(button[data-testid="geoButton"])',
     )
 }
 export function sideBarProfileSelector() {
@@ -299,7 +299,7 @@ export function searchRetweetAvatarSelector() {
 
 export function searchReplyToolbarSelector() {
     return querySelector<E>(
-        'div[data-testid="primaryColumn"] div[data-testid="toolBar"] [role="presentation"]:has(> button[data-testid="geoButton"])',
+        'div[data-testid="primaryColumn"] div[data-testid="toolBar"] [role="presentation"]:has(button[data-testid="geoButton"])',
     )
 }
 
