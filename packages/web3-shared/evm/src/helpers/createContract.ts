@@ -64,12 +64,11 @@ export async function readContract<TAbi extends Abi>(
     options?: ContractCallOptions,
 ) {
     if (!contract) return
-    const functionAbi = getFunctionAbi(contract.abi, functionName)
     return client.readContract({
         address: contract.address,
         abi: contract.abi,
-        functionName: normalizeFunctionName(functionName),
-        args: normalizeFunctionArgs(args as readonly unknown[], functionAbi?.inputs),
+        functionName,
+        args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
         account: (options?.account ?? options?.from) as Address | undefined,
         blockNumber: normalizeBlockNumber(options?.block),
         blockTag: normalizeBlockTag(options?.block),
@@ -90,12 +89,11 @@ export async function estimateContractGas<TAbi extends Abi>(
     options?: ContractCallOptions,
 ) {
     if (!contract) return
-    const functionAbi = getFunctionAbi(contract.abi, functionName)
     const gas = await client.estimateContractGas({
         address: contract.address,
         abi: contract.abi,
-        functionName: normalizeFunctionName(functionName),
-        args: normalizeFunctionArgs(args as readonly unknown[], functionAbi?.inputs),
+        functionName,
+        args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
         account: (options?.account ?? options?.from) as Address | undefined,
         value: typeof options?.value === 'undefined' ? undefined : BigInt(toHex(options.value)),
     } as Parameters<typeof client.estimateContractGas>[0])
@@ -111,11 +109,10 @@ export function encodeContractFunctionData<TAbi extends Abi>(
         typeof functionName
     >,
 ) {
-    const functionAbi = getFunctionAbi(abi, functionName)
     return encodeFunctionData({
         abi,
-        functionName: normalizeFunctionName(functionName),
-        args: normalizeFunctionArgs(args as readonly unknown[], functionAbi?.inputs),
+        functionName,
+        args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(abi, functionName)),
     } as Parameters<typeof encodeFunctionData>[0])
 }
 
@@ -138,24 +135,9 @@ export function createTransactionRequest<TAbi extends Abi>(
     })
 }
 
-function normalizeFunctionName(functionName: string) {
-    const signatureStart = functionName.indexOf('(')
-    return signatureStart === -1 ? functionName : functionName.slice(0, signatureStart)
-}
-
-function getFunctionAbi(abi: Abi, functionName: string) {
-    const functions = abi.filter((item): item is AbiFunction => item.type === 'function')
-    if (!functionName.includes('(')) return functions.find((item) => item.name === functionName)
-    return functions.find((item) => formatFunctionSignature(item) === functionName)
-}
-
-function formatFunctionSignature(item: AbiFunction) {
-    return `${item.name}(${item.inputs.map(formatAbiParameter).join(',')})`
-}
-
-function formatAbiParameter(parameter: AbiParameter): string {
-    if (!isTupleParameter(parameter)) return parameter.type
-    return `(${(parameter.components ?? []).map(formatAbiParameter).join(',')})`
+function getFunctionInputs(abi: Abi, functionName: string) {
+    const functionAbi = abi.find((item): item is AbiFunction => item.type === 'function' && item.name === functionName)
+    return functionAbi?.inputs
 }
 
 function normalizeFunctionArgs(args: readonly unknown[], parameters: readonly AbiParameter[] | undefined): unknown[] {
