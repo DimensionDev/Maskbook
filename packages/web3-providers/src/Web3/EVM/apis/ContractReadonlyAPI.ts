@@ -5,7 +5,7 @@ import {
     type ContractWithAddress,
     type ContractWriteOptions,
 } from '@masknet/web3-shared-evm'
-import { toHex } from '@masknet/shared-base'
+import { toBigInt, toHex } from '@masknet/shared-base'
 import { encodeFunctionData } from 'viem'
 
 import { AirdropV2Abi as AirDropV2ABI } from '@masknet/web3-contracts/types/AirdropV2.js'
@@ -82,7 +82,7 @@ export class EVMContractReadonlyAPI {
             functionName,
             args: normalizeFunctionArgs(args, contract.abi, functionName),
             account: (initial?.account ?? initial?.from) as Address | undefined,
-            value: typeof initial?.value === 'undefined' ? undefined : BigInt(toHex(initial.value)),
+            value: typeof initial?.value === 'undefined' ? undefined : toBigInt(initial.value),
         } as Parameters<typeof client.estimateContractGas>[0])
         return Number(gas)
     }

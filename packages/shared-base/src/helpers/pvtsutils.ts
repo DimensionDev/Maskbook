@@ -21,6 +21,16 @@ export function toHex(value: string | number | bigint | boolean | ByteArray): He
     return viem_toHex(value)
 }
 
+export function toBigInt(value: string | number | bigint | boolean | ByteArray): bigint {
+    if (typeof value === 'bigint') return value
+    if (typeof value === 'number') return BigInt(value)
+    if (typeof value === 'string') {
+        if (/^0x[0-9a-fA-F]+$/u.test(value)) return BigInt(value)
+        if (/^\d+$/u.test(value)) return BigInt(value)
+    }
+    return BigInt(viem_toHex(value))
+}
+
 export function fromHex(x: string) {
     if (x.startsWith('0x')) x = x.slice(2)
     return new Uint8Array(Convert.FromHex(x))

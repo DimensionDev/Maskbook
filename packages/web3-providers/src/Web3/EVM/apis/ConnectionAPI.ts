@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import { NetworkPluginID, toHex } from '@masknet/shared-base'
+import { NetworkPluginID, toBigInt, toHex } from '@masknet/shared-base'
 import type { Account } from '@masknet/shared-base'
 import type { Address } from 'viem'
 import {
@@ -102,7 +102,7 @@ export class ConnectionAPI
         const tx = this.Contract.createTransactionRequest(
             contract,
             'approve',
-            [recipient as Address, BigInt(toHex(amount))],
+            [recipient as Address, toBigInt(amount)],
             {
                 ...options.overrides,
                 from: options.account,
@@ -144,7 +144,7 @@ export class ConnectionAPI
         const tx = this.Contract.createTransactionRequest(
             contract,
             'transfer',
-            [recipient as Address, BigInt(toHex(amount))],
+            [recipient as Address, toBigInt(amount)],
             {
                 ...options.overrides,
                 from: options.account,

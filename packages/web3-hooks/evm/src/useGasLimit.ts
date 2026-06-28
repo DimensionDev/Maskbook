@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { unreachable } from '@masknet/kit'
-import { toHex, type NetworkPluginID } from '@masknet/shared-base'
+import { toBigInt, type NetworkPluginID } from '@masknet/shared-base'
 import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
@@ -44,12 +44,12 @@ export function useGasLimit(
                 case SchemaType.ERC20:
                     return (
                         (await EVMContract.estimateContractGas(
-                            EVMContract.getERC20Contract(contractAddress),
-                            'transfer',
-                            [recipient as Address, BigInt(toHex(amount ?? 0))],
-                            {
-                                ...options,
-                                from: account,
+                        EVMContract.getERC20Contract(contractAddress),
+                        'transfer',
+                        [recipient as Address, toBigInt(amount ?? 0)],
+                        {
+                            ...options,
+                            from: account,
                             },
                         )) || null
                     )
