@@ -152,7 +152,7 @@ export class EVMConnectionReadonlyAPI
 
         try {
             const options = this.ConnectionOptions.fill(initial)
-            const erc165Contract = this.Contract.getERC165Contract(address, options)
+            const erc165Contract = this.Contract.getERC165Contract(address)
 
             const [isERC165, isERC721] = await Promise.all([
                 this.Contract.readContract(erc165Contract, 'supportsInterface', [ERC165_INTERFACE_ID], options),
@@ -195,7 +195,7 @@ export class EVMConnectionReadonlyAPI
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            const contractERC721 = this.Contract.getERC721Contract(address, options)
+            const contractERC721 = this.Contract.getERC721Contract(address)
             const results = await Promise.allSettled([
                 this.Contract.readContract(contractERC721, 'name', [], options) ?? EMPTY_STRING,
                 this.Contract.readContract(contractERC721, 'symbol', [], options) ?? EMPTY_STRING,
@@ -215,7 +215,7 @@ export class EVMConnectionReadonlyAPI
         }
 
         // ERC721
-        const contract = this.Contract.getERC721Contract(address, options)
+        const contract = this.Contract.getERC721Contract(address)
         const results = await Promise.allSettled([
             this.Contract.readContract(contract, 'name', [], options) ?? EMPTY_STRING,
             this.Contract.readContract(contract, 'symbol', [], options) ?? EMPTY_STRING,
@@ -265,7 +265,7 @@ export class EVMConnectionReadonlyAPI
         if (!address || isNativeTokenAddress(address)) return this.getNativeTokenBalance(options)
 
         // ERC20
-        const contract = this.Contract.getERC20Contract(address, options)
+        const contract = this.Contract.getERC20Contract(address)
         return (
             (
                 await this.Contract.readContract(contract, 'balanceOf', [options.account as Address], options)
@@ -300,7 +300,7 @@ export class EVMConnectionReadonlyAPI
         const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
 
         if (listOfNonNativeAddress.length) {
-            const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS, options)
+            const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS)
             const balances = (await this.Contract.readContract(
                 contract,
                 'balances',
@@ -333,8 +333,8 @@ export class EVMConnectionReadonlyAPI
         if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
 
         // ERC20
-        const contract = this.Contract.getERC20Contract(address, options)
-        const bytes32Contract = this.Contract.getERC20Bytes32Contract(address, options)
+        const contract = this.Contract.getERC20Contract(address)
+        const bytes32Contract = this.Contract.getERC20Bytes32Contract(address)
         const results = await queryClient.fetchQuery({
             staleTime: 600_000,
             queryKey: ['fungibleToken', options.chainId, address],

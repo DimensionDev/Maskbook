@@ -21,10 +21,7 @@ export function useGasLimit(fallback = DEFAULT_GAS_LIMIT) {
         if (isNativeToken || !isTippingToken) return MIN_GAS_LIMIT
         if (!token?.address) return fallback
 
-        const contract = EVMContract.getERC20Contract(token.address, {
-            chainId,
-            account,
-        })
+        const contract = EVMContract.getERC20Contract(token.address)
         const estimated = await EVMContract.estimateContractGas(
             contract,
             'transfer',

@@ -20,9 +20,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
         const address = getEthereumConstant(chainId, 'BALANCE_CHECKER_ADDRESS')
         if (!address) throw new Error('Failed to create balance checker contract.')
 
-        const contract = EVMContractReadonly.getBalanceCheckerContract(address, {
-            chainId,
-        })
+        const contract = EVMContractReadonly.getBalanceCheckerContract(address)
         if (!contract) throw new Error('Failed to create balance checker contract.')
 
         return contract

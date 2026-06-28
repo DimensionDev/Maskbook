@@ -44,7 +44,7 @@ export function useGasLimit(
                 case SchemaType.ERC20:
                     return (
                         (await EVMContract.estimateContractGas(
-                            EVMContract.getERC20Contract(contractAddress, options),
+                            EVMContract.getERC20Contract(contractAddress),
                             'transfer',
                             [recipient as Address, BigInt(toHex(amount ?? 0))],
                             {
@@ -57,7 +57,7 @@ export function useGasLimit(
                 case SchemaType.ERC721:
                     return (
                         (await EVMContract.estimateContractGas(
-                            EVMContract.getERC721Contract(contractAddress, options),
+                            EVMContract.getERC721Contract(contractAddress),
                             'transferFrom',
                             [account as Address, recipient as Address, BigInt(tokenId ?? 0)],
                             {

@@ -69,9 +69,7 @@ export function ConnectionContent() {
     }, [])
 
     const onEstimateCallback = useCallback(async () => {
-        const contract = EVMContract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7', {
-            chainId: ChainId.Mainnet,
-        })
+        const contract = EVMContract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7')
         const estimatedGas = await EVMWeb3.estimateTransaction?.(
             {
                 from: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',

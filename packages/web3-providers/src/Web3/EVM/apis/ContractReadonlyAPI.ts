@@ -3,7 +3,8 @@ import {
     createTransactionRequest,
     encodeContractFunctionData,
     estimateContractGas,
-    readContract,
+    getFunctionInputs,
+    normalizeFunctionArgs,
     type ContractCallOptions,
     type ContractWithAddress,
     type ContractWriteOptions,
@@ -23,6 +24,7 @@ import type { EVMConnectionOptions } from '../types/index.js'
 import type {
     Abi,
     AbiStateMutability,
+    Address,
     ContractFunctionArgs,
     ContractFunctionName,
     ContractFunctionReturnType,
@@ -39,17 +41,29 @@ export class EVMContractReadonlyAPI {
         return createContractWithAddress(address, abi)
     }
 
-    readContract<
+    async readContract<
         TAbi extends Abi,
         TFunctionName extends ContractFunctionName<TAbi, 'pure' | 'view'>,
         TArgs extends ContractFunctionArgs<TAbi, 'pure' | 'view', TFunctionName>,
     >(
         contract: ContractWithAddress<TAbi> | null | undefined,
         functionName: TFunctionName,
-        args: TArgs = [] as unknown as TArgs,
+        args: TArgs = [] as TArgs,
         initial?: EVMConnectionOptions & ContractCallOptions,
     ): Promise<ContractFunctionReturnType<TAbi, 'pure' | 'view', TFunctionName, TArgs> | undefined> {
-        return readContract(this.Request.getViem(initial), contract, functionName, args, initial)
+        if (!contract) return
+        const client = this.Request.getViem(initial)
+        const block = normalizeBlock(initial?.block)
+        return client.readContract({
+            address: contract.address,
+            abi: contract.abi,
+            functionName,
+            args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
+            account: (initial?.account ?? initial?.from) as Address | undefined,
+            ...block,
+        } as Parameters<typeof client.readContract>[0]) as Promise<
+            ContractFunctionReturnType<TAbi, 'pure' | 'view', TFunctionName, TArgs>
+        >
     }
 
     estimateContractGas<
@@ -86,44 +100,48 @@ export class EVMContractReadonlyAPI {
         return createTransactionRequest(contract, functionName, args, initial)
     }
 
-    getERC20Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getERC20Contract(address: string | undefined) {
         return this.getContract(address, ERC20ABI)
     }
 
-    getERC20Bytes32Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getERC20Bytes32Contract(address: string | undefined) {
         return this.getContract(address, ERC20Bytes32ABI)
     }
 
-    getERC721Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getERC721Contract(address: string | undefined) {
         return this.getContract(address, ERC721ABI)
     }
 
-    getERC1155Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getERC1155Contract(address: string | undefined) {
         return this.getContract(address, ERC1155ABI)
     }
 
-    getERC165Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getERC165Contract(address: string | undefined) {
         return this.getContract(address, ERC165ABI)
     }
 
-    getBalanceCheckerContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getBalanceCheckerContract(address: string | undefined) {
         return this.getContract(address, BalanceCheckerABI)
     }
 
-    getWalletContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getWalletContract(address: string | undefined) {
         return this.getContract(address, WalletABI)
     }
 
-    getAirdropV2Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        void initial
+    getAirdropV2Contract(address: string | undefined) {
         return this.getContract(address, AirDropV2ABI)
     }
 }
 export const EVMContractReadonly = EVMContractReadonlyAPI.Default
+
+function normalizeBlock(
+    block: string | number | bigint | undefined,
+): undefined | { blockNumber: bigint; blockTag: undefined } | { blockNumber: undefined; blockTag: string } {
+    if (typeof block === 'bigint') return { blockNumber: block, blockTag: undefined }
+    if (typeof block === 'number') return { blockNumber: BigInt(block), blockTag: undefined }
+    if (typeof block === 'string' && /^\d+$/u.test(block)) return { blockNumber: BigInt(block), blockTag: undefined }
+    if (typeof block === 'string' && /^0x[\da-f]+$/iu.test(block))
+        return { blockNumber: BigInt(block), blockTag: undefined }
+    if (typeof block === 'string') return { blockNumber: undefined, blockTag: block }
+    return
+}

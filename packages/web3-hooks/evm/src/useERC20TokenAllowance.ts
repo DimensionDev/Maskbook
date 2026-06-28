@@ -19,7 +19,7 @@ export function useERC20TokenAllowance(
         queryKey: ['erc20-allowance', address, account, spender, chainId],
         queryFn: async () => {
             if (!account || !address || !spender) return '0'
-            const contract = EVMContract.getERC20Contract(address, { chainId })
+            const contract = EVMContract.getERC20Contract(address)
             return (
                 (
                     await EVMContract.readContract(contract, 'allowance', [account as Address, spender as Address], {

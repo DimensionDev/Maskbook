@@ -98,7 +98,7 @@ export class ConnectionAPI
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
-        const contract = this.Contract.getERC20Contract(address, options)
+        const contract = this.Contract.getERC20Contract(address)
         const tx = this.Contract.createTransactionRequest(
             contract,
             'approve',
@@ -140,7 +140,7 @@ export class ConnectionAPI
         }
 
         // ERC20
-        const contract = this.Contract.getERC20Contract(address, options)
+        const contract = this.Contract.getERC20Contract(address)
         const tx = this.Contract.createTransactionRequest(
             contract,
             'transfer',
@@ -201,7 +201,7 @@ export class ConnectionAPI
 
     override async changeOwner(recipient: string, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-        const contract = this.Contract.getWalletContract(options.account, options)
+        const contract = this.Contract.getWalletContract(options.account)
         if (!contract) throw new Error('Failed to create contract.')
 
         const tx = {

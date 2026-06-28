@@ -26,7 +26,7 @@ export class Airdrop {
         const { CLAIMERS, CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
         if (!CLAIMERS || !CONTRACT_ADDRESS) return
 
-        const airdropContract = EVMContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS, { chainId })
+        const airdropContract = EVMContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS)
         const data = await fetchJSON<Record<string, string>>(`https://cors-next.r2d2.to/?${CLAIMERS}`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export class Airdrop {
         const { CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
         if (!CONTRACT_ADDRESS) return
 
-        const airdropContract = EVMContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS, { chainId })
+        const airdropContract = EVMContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS)
         return formatClaimEvent(
             await EVMContractReadonly.readContract(airdropContract, 'claimEvents', [BigInt(eventIndex)], { chainId }),
         )

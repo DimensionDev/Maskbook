@@ -8,7 +8,6 @@ import type {
     Client,
     ContractFunctionArgs,
     ContractFunctionName,
-    ContractFunctionReturnType,
     PublicActions,
     WalletActions,
 } from 'viem'
@@ -50,31 +49,6 @@ export function createContractWithAddress<TAbi extends Abi>(
         address: address as Address,
         abi,
     }
-}
-
-export async function readContract<TAbi extends Abi>(
-    client: ViemClient,
-    contract: ContractWithAddress<TAbi> | null | undefined,
-    functionName: ContractFunctionName<TAbi, 'pure' | 'view'>,
-    args: ContractFunctionArgs<TAbi, 'pure' | 'view', typeof functionName> = [] as unknown as ContractFunctionArgs<
-        TAbi,
-        'pure' | 'view',
-        typeof functionName
-    >,
-    options?: ContractCallOptions,
-) {
-    if (!contract) return
-    return client.readContract({
-        address: contract.address,
-        abi: contract.abi,
-        functionName,
-        args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
-        account: (options?.account ?? options?.from) as Address | undefined,
-        blockNumber: normalizeBlockNumber(options?.block),
-        blockTag: normalizeBlockTag(options?.block),
-    } as Parameters<typeof client.readContract>[0]) as Promise<
-        ContractFunctionReturnType<TAbi, 'pure' | 'view', typeof functionName, typeof args>
-    >
 }
 
 export async function estimateContractGas<TAbi extends Abi>(
@@ -135,12 +109,15 @@ export function createTransactionRequest<TAbi extends Abi>(
     })
 }
 
-function getFunctionInputs(abi: Abi, functionName: string) {
+export function getFunctionInputs(abi: Abi, functionName: string) {
     const functionAbi = abi.find((item): item is AbiFunction => item.type === 'function' && item.name === functionName)
     return functionAbi?.inputs
 }
 
-function normalizeFunctionArgs(args: readonly unknown[], parameters: readonly AbiParameter[] | undefined): unknown[] {
+export function normalizeFunctionArgs(
+    args: readonly unknown[],
+    parameters: readonly AbiParameter[] | undefined,
+): unknown[] {
     return args.map((arg, index) => normalizeFunctionArg(arg, parameters?.[index]))
 }
 
@@ -168,6 +145,7 @@ function normalizeFunctionArg(arg: unknown, parameter: AbiParameter | undefined)
 
 function normalizeIntegerLike(value: unknown) {
     if (typeof value === 'object' && value && 'toString' in value && typeof value.toString === 'function') {
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         return value.toString()
     }
     return value
