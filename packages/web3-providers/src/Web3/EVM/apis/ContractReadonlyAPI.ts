@@ -1,8 +1,6 @@
 import {
     createContractWithAddress,
-    getFunctionInputs,
     normalizeFunctionArgs,
-    normalizeTransaction,
     type ContractCallOptions,
     type ContractWithAddress,
     type ContractWriteOptions,
@@ -58,7 +56,7 @@ export class EVMContractReadonlyAPI {
             address: contract.address,
             abi: contract.abi,
             functionName,
-            args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
+            args: normalizeFunctionArgs(args, contract.abi, functionName),
             account: (initial?.account ?? initial?.from) as Address | undefined,
             ...block,
         } as Parameters<typeof client.readContract>[0]) as Promise<
@@ -82,7 +80,7 @@ export class EVMContractReadonlyAPI {
             address: contract.address,
             abi: contract.abi,
             functionName,
-            args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(contract.abi, functionName)),
+            args: normalizeFunctionArgs(args, contract.abi, functionName),
             account: (initial?.account ?? initial?.from) as Address | undefined,
             value: typeof initial?.value === 'undefined' ? undefined : BigInt(toHex(initial.value)),
         } as Parameters<typeof client.estimateContractGas>[0])
@@ -97,7 +95,7 @@ export class EVMContractReadonlyAPI {
         return encodeFunctionData({
             abi,
             functionName,
-            args: normalizeFunctionArgs(args as readonly unknown[], getFunctionInputs(abi, functionName)),
+            args: normalizeFunctionArgs(args, abi, functionName),
         } as Parameters<typeof encodeFunctionData>[0])
     }
 
@@ -164,4 +162,16 @@ function normalizeBlock(
         return { blockNumber: BigInt(block), blockTag: undefined }
     if (typeof block === 'string') return { blockNumber: undefined, blockTag: block }
     return
+}
+
+function normalizeTransaction(transaction: Record<string, unknown>) {
+    return Object.fromEntries(
+        Object.entries(transaction)
+            .filter(([, value]) => value !== undefined && value !== null && value !== '')
+            .map(([key, value]) => [key, isTransactionQuantity(key) ? toHex(value as never) : value]),
+    )
+}
+
+function isTransactionQuantity(key: string) {
+    return ['chainId', 'gas', 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas', 'nonce', 'value'].includes(key)
 }

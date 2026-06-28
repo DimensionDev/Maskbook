@@ -1,7 +1,13 @@
-import { toHex } from '@masknet/shared-base'
-import type { Abi, AbiFunction, AbiParameter, Address } from 'viem'
+import type {
+    Abi,
+    AbiFunction,
+    AbiParameter,
+    AbiStateMutability,
+    Address,
+    ContractFunctionArgs,
+    ContractFunctionName,
+} from 'viem'
 import { isValidAddress } from './address.js'
-import type { Transaction } from '../types/index.js'
 
 export interface ContractCallOptions {
     account?: string
@@ -37,16 +43,13 @@ export function createContractWithAddress<TAbi extends Abi>(
     }
 }
 
-export function getFunctionInputs(abi: Abi, functionName: string) {
+export function normalizeFunctionArgs<
+    TAbi extends Abi,
+    TFunctionName extends ContractFunctionName<TAbi>,
+    TArgs extends ContractFunctionArgs<TAbi, AbiStateMutability, TFunctionName>,
+>(args: TArgs, abi: TAbi, functionName: TFunctionName): unknown[] {
     const functionAbi = abi.find((item): item is AbiFunction => item.type === 'function' && item.name === functionName)
-    return functionAbi?.inputs
-}
-
-export function normalizeFunctionArgs(
-    args: readonly unknown[],
-    parameters: readonly AbiParameter[] | undefined,
-): unknown[] {
-    return args.map((arg, index) => normalizeFunctionArg(arg, parameters?.[index]))
+    return (args as readonly unknown[]).map((arg, index) => normalizeFunctionArg(arg, functionAbi?.inputs?.[index]))
 }
 
 function normalizeFunctionArg(arg: unknown, parameter: AbiParameter | undefined): unknown {
@@ -72,7 +75,13 @@ function normalizeFunctionArg(arg: unknown, parameter: AbiParameter | undefined)
 }
 
 function normalizeIntegerLike(value: unknown) {
-    if (typeof value === 'object' && value && 'toString' in value && typeof value.toString === 'function') {
+    if (
+        typeof value === 'object' &&
+        value &&
+        'toString' in value &&
+        typeof value.toString === 'function' &&
+        value.toString !== Object.prototype.toString
+    ) {
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
         return value.toString()
     }
@@ -101,16 +110,4 @@ function isTupleParameter(
 
 function isIntegerType(type: string) {
     return /^u?int(?:\d+)?(?:\[.*\])?$/u.test(type)
-}
-
-export function normalizeTransaction(transaction: Record<string, unknown>): Transaction {
-    return Object.fromEntries(
-        Object.entries(transaction)
-            .filter(([, value]) => value !== undefined && value !== null && value !== '')
-            .map(([key, value]) => [key, isTransactionQuantity(key) ? toHex(value as never) : value]),
-    ) as Transaction
-}
-
-function isTransactionQuantity(key: string) {
-    return ['chainId', 'gas', 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas', 'nonce', 'value'].includes(key)
 }
