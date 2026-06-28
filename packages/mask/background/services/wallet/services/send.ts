@@ -1,6 +1,6 @@
 import type { JsonRpcRequest } from 'web3-types'
 import { ECKeyIdentifier, SignType } from '@masknet/shared-base'
-import { EVMRequestReadonly, EVMWeb3Readonly } from '@masknet/web3-providers'
+import { EVMRequestReadonly, EVMWalletProviders, EVMWeb3Readonly } from '@masknet/web3-providers'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -25,13 +25,22 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
         signableMessage,
         signableTransaction,
     } = PayloadEditor.fromPayload(payload, options)
+    const isTransactionSigningMethod =
+        payload.method === EthereumMethodType.eth_sendTransaction ||
+        payload.method === EthereumMethodType.MASK_REPLACE_TRANSACTION ||
+        payload.method === EthereumMethodType.eth_signTransaction
+    const providerChainId =
+        options?.providerType && isTransactionSigningMethod ?
+            EVMWalletProviders[options.providerType].subscription.chainId.getCurrentValue()
+        :   undefined
+    const requestChainId = providerChainId ?? chainId
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
     const signTransaction = async (transaction: TransactionSerializable) => {
         const message = { type: SignType.Transaction as const, data: transaction }
         if (identifier) {
-            return signWithPersona(message, identifier)
+            return signWithPersona(message, identifier, undefined, false, providerChainId)
         } else {
-            return signWithWallet(message, owner || from!)
+            return signWithWallet(message, owner || from!, providerChainId)
         }
     }
     const signMessageOrTypedData = async (type: SignType.Message | SignType.TypedData, message: string) => {
@@ -47,12 +56,19 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
         case EthereumMethodType.eth_sendTransaction:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             if (!signableTransaction) throw new Error('No transaction to be sent.')
+            if (
+                providerChainId !== undefined &&
+                signableTransaction.chainId !== undefined &&
+                signableTransaction.chainId !== providerChainId
+            ) {
+                throw new Error('Chain ID mismatch.')
+            }
 
             try {
                 return createJsonRpcResponse(
                     pid,
                     await EVMWeb3Readonly.sendSignedTransaction(await signTransaction(signableTransaction), {
-                        chainId,
+                        chainId: requestChainId,
                         providerURL,
                     }),
                 )

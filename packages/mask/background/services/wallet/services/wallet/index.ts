@@ -5,6 +5,7 @@ import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
 import { ImportSource, toHex, type SignMessage, type Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import * as Mask from '../maskwallet/index.js'
 import * as database from './database/index.js'
 import * as password from './password.js'
@@ -247,8 +248,8 @@ export async function resetAllWallets() {
     await database.resetAllWallets()
 }
 
-export async function signWithWallet(message: SignMessage, address: string) {
-    return Signer.sign(message, Buffer.from(toBytes(`0x${await exportPrivateKey(address)}`)))
+export async function signWithWallet(message: SignMessage, address: string, chainId?: ChainId) {
+    return Signer.sign(message, Buffer.from(toBytes(`0x${await exportPrivateKey(address)}`)), chainId)
 }
 
 export async function exportMnemonicWords(address: string, unverifiedPassword?: string) {

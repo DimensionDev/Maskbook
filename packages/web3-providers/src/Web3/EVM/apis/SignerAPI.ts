@@ -1,10 +1,10 @@
 import defer * as _metamask_eth_sig_util from '@metamask/eth-sig-util'
-import { signTransaction } from '@masknet/web3-shared-evm'
+import { type ChainId, signTransaction } from '@masknet/web3-shared-evm'
 import { type SignMessage, SignType, toHex } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 
 export class Signer {
-    static async sign({ type, data }: SignMessage, key: Buffer<ArrayBuffer>): Promise<string> {
+    static async sign({ type, data }: SignMessage, key: Buffer<ArrayBuffer>, chainId?: ChainId): Promise<string> {
         switch (type) {
             case SignType.Message:
                 return _metamask_eth_sig_util.personalSign({
@@ -20,10 +20,10 @@ export class Signer {
             case SignType.Transaction:
                 const transaction = data
 
-                const chainId = transaction.chainId
-                if (!chainId) throw new Error('Invalid chain id.')
+                const transactionChainId = transaction.chainId
+                if (!transactionChainId) throw new Error('Invalid chain id.')
 
-                const rawTransaction = await signTransaction(transaction, toHex(key))
+                const rawTransaction = await signTransaction(transaction, toHex(key), chainId)
                 if (!rawTransaction) throw new Error('Failed to sign transaction.')
                 return rawTransaction
 

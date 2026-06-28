@@ -387,6 +387,7 @@ export interface RequestOptions {
     silent?: boolean
     owner?: string
     identifier?: string
+    providerType?: ProviderType
     providerURL?: string
     gasOptionType?: GasOptionType
     maxFeePerGas?: string
@@ -428,6 +429,7 @@ export interface TransactionOptions {
     chainId?: ChainId
     owner?: string
     identifier?: string
+    providerType?: ProviderType
     providerURL?: string
 
     // popups control
