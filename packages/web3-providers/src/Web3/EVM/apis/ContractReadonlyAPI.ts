@@ -1,11 +1,11 @@
 import {
-    createContractDescriptor,
+    createContractWithAddress,
     createTransactionRequest,
     encodeContractFunctionData,
     estimateContractGas,
     readContract,
     type ContractCallOptions,
-    type ContractDescriptor,
+    type ContractWithAddress,
     type ContractWriteOptions,
 } from '@masknet/web3-shared-evm'
 
@@ -36,7 +36,7 @@ export class EVMContractReadonlyAPI {
     protected Request
 
     getContract<TAbi extends Abi>(address: string | undefined, abi: TAbi) {
-        return createContractDescriptor(address, abi)
+        return createContractWithAddress(address, abi)
     }
 
     readContract<
@@ -44,7 +44,7 @@ export class EVMContractReadonlyAPI {
         TFunctionName extends ContractFunctionName<TAbi, 'pure' | 'view'>,
         TArgs extends ContractFunctionArgs<TAbi, 'pure' | 'view', TFunctionName>,
     >(
-        contract: ContractDescriptor<TAbi> | null | undefined,
+        contract: ContractWithAddress<TAbi> | null | undefined,
         functionName: TFunctionName,
         args: TArgs = [] as unknown as TArgs,
         initial?: EVMConnectionOptions & ContractCallOptions,
@@ -57,7 +57,7 @@ export class EVMContractReadonlyAPI {
         TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
         TArgs extends ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
     >(
-        contract: ContractDescriptor<TAbi> | null | undefined,
+        contract: ContractWithAddress<TAbi> | null | undefined,
         functionName: TFunctionName,
         args: TArgs = [] as unknown as TArgs,
         initial?: EVMConnectionOptions & ContractCallOptions,
@@ -78,7 +78,7 @@ export class EVMContractReadonlyAPI {
         TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
         TArgs extends ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
     >(
-        contract: ContractDescriptor<TAbi> | null | undefined,
+        contract: ContractWithAddress<TAbi> | null | undefined,
         functionName: TFunctionName,
         args: TArgs = [] as unknown as TArgs,
         initial?: ContractWriteOptions,

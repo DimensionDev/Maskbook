@@ -3,7 +3,7 @@ import { HappyRedPacketV1Abi } from '@masknet/web3-contracts/types/HappyRedPacke
 import { HappyRedPacketV2Abi } from '@masknet/web3-contracts/types/HappyRedPacketV2.js'
 import { HappyRedPacketV3Abi } from '@masknet/web3-contracts/types/HappyRedPacketV3.js'
 import { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import { type ChainId, type ContractDescriptor, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, type ContractWithAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import type { HappyRedPacketV4Abi as HappyRedPacketV4AbiType } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 export function useRedPacketContract(chainId: ChainId, version: number) {
@@ -27,5 +27,5 @@ export function getRedPacketContractAbi(version: number) {
 }
 
 export function asHappyRedPacketV4Contract(contract: unknown) {
-    return contract as ContractDescriptor<HappyRedPacketV4AbiType> | null | undefined
+    return contract as ContractWithAddress<HappyRedPacketV4AbiType> | null | undefined
 }

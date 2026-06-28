@@ -36,15 +36,15 @@ export interface ContractWriteOptions extends ContractCallOptions {
     data?: string
 }
 
-export interface ContractDescriptor<TAbi extends Abi = Abi> {
+export interface ContractWithAddress<TAbi extends Abi = Abi> {
     address: Address
     abi: TAbi
 }
 
-export function createContractDescriptor<TAbi extends Abi>(
+export function createContractWithAddress<TAbi extends Abi>(
     address: string | undefined,
     abi: TAbi,
-): ContractDescriptor<TAbi> | null {
+): ContractWithAddress<TAbi> | null {
     if (!address || !isValidAddress(address)) return null
     return {
         address: address as Address,
@@ -54,7 +54,7 @@ export function createContractDescriptor<TAbi extends Abi>(
 
 export async function readContract<TAbi extends Abi>(
     client: ViemClient,
-    contract: ContractDescriptor<TAbi> | null | undefined,
+    contract: ContractWithAddress<TAbi> | null | undefined,
     functionName: ContractFunctionName<TAbi, 'pure' | 'view'>,
     args: ContractFunctionArgs<TAbi, 'pure' | 'view', typeof functionName> = [] as unknown as ContractFunctionArgs<
         TAbi,
@@ -80,7 +80,7 @@ export async function readContract<TAbi extends Abi>(
 
 export async function estimateContractGas<TAbi extends Abi>(
     client: ViemClient,
-    contract: ContractDescriptor<TAbi> | null | undefined,
+    contract: ContractWithAddress<TAbi> | null | undefined,
     functionName: ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
     args: ContractFunctionArgs<
         TAbi,
@@ -120,7 +120,7 @@ export function encodeContractFunctionData<TAbi extends Abi>(
 }
 
 export function createTransactionRequest<TAbi extends Abi>(
-    contract: ContractDescriptor<TAbi> | null | undefined,
+    contract: ContractWithAddress<TAbi> | null | undefined,
     functionName: ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
     args: ContractFunctionArgs<
         TAbi,

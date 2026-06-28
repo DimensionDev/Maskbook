@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { type ChainId, createContractDescriptor } from '@masknet/web3-shared-evm'
+import { type ChainId, createContractWithAddress } from '@masknet/web3-shared-evm'
 import type { Abi } from 'viem'
 
 /**
@@ -12,6 +12,6 @@ import type { Abi } from 'viem'
 export function useContract<TAbi extends Abi>(chainId: ChainId, address: string | undefined, abi: TAbi) {
     return useMemo(() => {
         void chainId
-        return createContractDescriptor(address, abi)
+        return createContractWithAddress(address, abi)
     }, [address, abi, chainId])
 }
