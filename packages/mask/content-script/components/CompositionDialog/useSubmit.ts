@@ -71,7 +71,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             if (hasRedpacket && getPostId) {
                 // fire-and-forget: only count the share once the tweet is actually posted
                 waitForPostSuccess(getPostId).then((posted) => {
-                    if (posted) Telemetry.captureEvent(EventType.Interact, EventID.EntryAppLuckSend)
+                    if (!(posted)) return;Telemetry.captureEvent(EventType.Interact, EventID.EntryAppLuckSend)
                 })
             }
             Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeEncrypt)
