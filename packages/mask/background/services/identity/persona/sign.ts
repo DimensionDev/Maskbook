@@ -1,5 +1,6 @@
 import { timeout } from '@masknet/kit'
 import { Signer } from '@masknet/web3-providers'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import {
     type PersonaIdentifier,
     fromBase64URL,
@@ -43,6 +44,7 @@ export async function signWithPersona(
     identifier?: ECKeyIdentifier,
     origin?: string,
     silent = false,
+    chainId?: ChainId,
 ): Promise<string> {
     identifier = await getIdentifier(message.data, identifier, origin, silent)
 
@@ -50,5 +52,5 @@ export async function signWithPersona(
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier)
     if (!persona?.privateKey.d) throw new Error('Persona not found')
 
-    return Signer.sign(message, Buffer.from(fromBase64URL(persona.privateKey.d)))
+    return Signer.sign(message, Buffer.from(fromBase64URL(persona.privateKey.d)), chainId)
 }

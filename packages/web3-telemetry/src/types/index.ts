@@ -57,7 +57,6 @@ export enum EventID {
     EntryProfileUserDonationsSwitchTo = 'entry_profile_user_donations_switch_to',
     EntryProfileUserSocialSwitchTo = 'entry_profile_user_social_switch_to',
     EntryProfileConnectTwitter = 'entry_profile_connect_twitter',
-    EntryProfileConnectVerify = 'entry_profile_connect_verify',
     EntryMaskComposeConnectTwitter = 'entry_mask_compose_connect_twitter',
     EntryMaskComposeVerifyTwitter = 'entry_mask_compose_verify_twitter',
     // For debug only
