@@ -1,10 +1,5 @@
 import { toHex } from '@masknet/shared-base'
-import type {
-    Abi,
-    AbiFunction,
-    AbiParameter,
-    Address,
-} from 'viem'
+import type { Abi, AbiFunction, AbiParameter, Address } from 'viem'
 import { isValidAddress } from './address.js'
 import type { Transaction } from '../types/index.js'
 
