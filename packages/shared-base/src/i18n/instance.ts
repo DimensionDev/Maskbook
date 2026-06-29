@@ -1,6 +1,5 @@
 import { i18n } from '@lingui/core'
 import { LanguageOptions } from '@masknet/public-api'
-import { debounce, type DebouncedFunc } from 'lodash-es'
 
 if (process.env.NODE_ENV === 'development') {
     if (Reflect.get(globalThis, '__mask_shared_base__')) {
@@ -25,15 +24,4 @@ export function updateLanguage(next: LanguageOptions) {
     } else {
         i18n.activate(detectLanguage(next) || 'en')
     }
-}
-
-const cache = Symbol('shared-base i18n cache')
-
-// TODO: support lingui
-export function queryRemoteI18NBundle(
-    _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: Record<string, string>]>>,
-) {
-    const updater: typeof _updater & { [cache]?: DebouncedFunc<() => Promise<void>> } = _updater as any
-    updater[cache] ??= debounce(async () => {}, 1500)
-    updater[cache]()
 }

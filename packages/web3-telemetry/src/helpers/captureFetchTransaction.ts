@@ -10,8 +10,6 @@ function isIgnoredRequest(request: Request) {
         'https://abs.twimg.com',
         'https://twitter.com',
         'https://x.com',
-        // source code
-        'https://maskbook.pages.dev',
         // KV
         'https://kv.r2d2.to/api/com.maskbook.user',
         // ScamDB
