@@ -8,7 +8,7 @@ export class BrowserProvider extends EVMInjectedWalletProvider {
     }
 
     protected override onAccountsChanged(accounts: string[]): void {
-        if (accounts.length) this.emitter.emit('accounts', accounts)
+        if (!(accounts.length)) return;this.emitter.emit('accounts', accounts)
         // Same as MetaMask: an empty accounts list fires both on wallet lock (e.g.
         // after device standby) and on a genuine account removal. Treating it as a
         // disconnect tears the connection down on every standby/lock and breaks
