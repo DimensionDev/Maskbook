@@ -130,6 +130,8 @@ export namespace SiteAdaptorUI {
             attachImage?(img: Blob, options?: NativeCompositionAttachImageOptions): Promise<void>
             /** Append text on to the social network composition dialog */
             attachText?(text: string, options?: NativeCompositionAttachTextOptions): Promise<void>
+            /** Returns the post id of the most-recently posted native post (from the "post sent" toast), or '' if none. */
+            getPostIdFromNewPostToast?(): string
         }
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean

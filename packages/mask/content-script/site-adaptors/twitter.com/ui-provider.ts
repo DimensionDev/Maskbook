@@ -14,7 +14,7 @@ import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposi
 import { publishPostTwitter } from './automation/publishPost.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
-import { PostProviderTwitter } from './collecting/post.js'
+import { PostProviderTwitter, getPostIdFromNewPostToast } from './collecting/post.js'
 import { useThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
@@ -135,6 +135,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
             attachText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionTwitter,
+            getPostIdFromNewPostToast,
         },
         endpoint: {
             publishPost: publishPostTwitter,
