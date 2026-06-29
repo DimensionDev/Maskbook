@@ -16,7 +16,8 @@ export class MetaMaskProvider extends EVMInjectedWalletProvider {
     }
 
     protected override onAccountsChanged(accounts: string[]): void {
-        if (!(accounts.length)) return;this.emitter.emit('accounts', accounts)
+        if (!accounts.length) return
+        this.emitter.emit('accounts', accounts)
         // MetaMask emits an empty accounts list both when the wallet is locked
         // (e.g. after device standby) and when the account is genuinely removed.
         // Treating it as a disconnect tears the connection down on every standby/
