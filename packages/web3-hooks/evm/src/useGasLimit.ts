@@ -44,12 +44,12 @@ export function useGasLimit(
                 case SchemaType.ERC20:
                     return (
                         (await EVMContract.estimateContractGas(
-                        EVMContract.getERC20Contract(contractAddress),
-                        'transfer',
-                        [recipient as Address, toBigInt(amount ?? 0)],
-                        {
-                            ...options,
-                            from: account,
+                            EVMContract.getERC20Contract(contractAddress),
+                            'transfer',
+                            [recipient as Address, toBigInt(amount ?? 0)],
+                            {
+                                ...options,
+                                from: account,
                             },
                         )) || null
                     )
