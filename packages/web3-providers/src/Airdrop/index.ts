@@ -13,9 +13,7 @@ type ClaimEvent = {
 
 type ClaimEventOutput = AbiFunctionToObjectMapped<AirdropV2Abi, 'claimEvents', 'outputs'>
 
-function formatClaimEvent(
-    value: ClaimEventOutput | undefined,
-): ClaimEvent | undefined {
+function formatClaimEvent(value: ClaimEventOutput | undefined): ClaimEvent | undefined {
     if (!value) return
     return {
         token: value.token,
