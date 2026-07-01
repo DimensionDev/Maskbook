@@ -31,38 +31,26 @@ export function useClaimCallback(account: string, payload: RedPacketJSONPayload 
             from: account,
         }
 
+        type V4 = ContractWithAddress<HappyRedPacketV4Abi>
+        type Old = ContractWithAddress<Exclude<RedPacketContractAnyVersion, HappyRedPacketV4Abi>>
+        const v4Arg = [rpid as Hex, signedMsg as Hex, account as Address] as const
+        const oldArg = [rpid as Hex, signedMsg, account as Address, keccak256(toHex(account))] as const
         const tx =
             version === 4 ?
-                EVMContract.createTransactionRequest(
-                    redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
-                    'claim',
-                    [rpid as Hex, signedMsg as Hex, account as Address],
-                    config,
-                )
-            :   EVMContract.createTransactionRequest(
-                    redPacketContract as ContractWithAddress<Exclude<RedPacketContractAnyVersion, HappyRedPacketV4Abi>>,
-                    'claim',
-                    [rpid as Hex, signedMsg, account as Address, keccak256(toHex(account))],
-                    config,
-                )
+                EVMContract.createTransactionRequest(redPacketContract as V4, 'claim', v4Arg, config)
+            :   EVMContract.createTransactionRequest(redPacketContract as Old, 'claim', oldArg, config)
         if (!tx) return
         if (!tx.gas) {
             const gas =
                 version === 4 ?
-                    await EVMContract.estimateContractGas(
-                        redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
-                        'claim',
-                        [rpid as Hex, signedMsg as Hex, account as Address],
-                        { chainId, ...config },
-                    )
-                :   await EVMContract.estimateContractGas(
-                        redPacketContract as ContractWithAddress<
-                            Exclude<RedPacketContractAnyVersion, HappyRedPacketV4Abi>
-                        >,
-                        'claim',
-                        [rpid as Hex, signedMsg, account as Address, keccak256(toHex(account))],
-                        { chainId, ...config },
-                    )
+                    await EVMContract.estimateContractGas(redPacketContract as V4, 'claim', v4Arg, {
+                        chainId,
+                        ...config,
+                    })
+                :   await EVMContract.estimateContractGas(redPacketContract as Old, 'claim', oldArg, {
+                        chainId,
+                        ...config,
+                    })
             tx.gas = gas ? String(gas) : undefined
         }
 
