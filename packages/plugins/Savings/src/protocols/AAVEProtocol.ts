@@ -163,9 +163,9 @@ export class AAVEProtocol implements SavingsProtocol {
             AaveLendingPoolAddressProviderAbi,
         )
 
-        return (await EVMContract.readContract(lPoolAddressProviderContract, 'getLendingPool', [], {
+        return EVMContract.readContract(lPoolAddressProviderContract, 'getLendingPool', [], {
             chainId,
-        })) as Address | undefined
+        })
     }
 
     public async deposit(account: string, chainId: ChainId, value: BigNumber.Value) {
