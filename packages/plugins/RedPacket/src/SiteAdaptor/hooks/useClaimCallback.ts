@@ -4,7 +4,6 @@ import { EVMChainResolver, EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import type { ChainId, ContractWithAddress } from '@masknet/web3-shared-evm'
 import type { HappyRedPacketV3Abi } from '@masknet/web3-contracts/types/HappyRedPacketV3.js'
-import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useAsyncFn } from 'react-use'
 import { useRedPacketContract } from './useRedPacketContract.js'
 import { useSignedMessage } from './useSignedMessage.js'
@@ -35,13 +34,13 @@ export function useClaimCallback(account: string, payload: RedPacketJSONPayload 
         const tx =
             version === 4 ?
                 EVMContract.createTransactionRequest(
-                    redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
+                    redPacketContract,
                     'claim',
                     [rpid as Hex, signedMsg as Hex, account as Address],
                     config,
                 )
             :   EVMContract.createTransactionRequest(
-                    redPacketContract as ContractWithAddress<HappyRedPacketV3Abi>,
+                    redPacketContract,
                     'claim',
                     [rpid as Hex, signedMsg, account as Address, keccak256(toHex(account))],
                     config,
@@ -50,7 +49,7 @@ export function useClaimCallback(account: string, payload: RedPacketJSONPayload 
         const gas =
             version === 4 ?
                 await EVMContract.estimateContractGas(
-                    redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
+                    redPacketContract,
                     'claim',
                     [rpid as Hex, signedMsg as Hex, account as Address],
                     { chainId, ...config },

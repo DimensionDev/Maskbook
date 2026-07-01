@@ -1,4 +1,4 @@
-import type { ChainId, ContractWithAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 import type { BaseConnectionOptions } from '@masknet/web3-providers/types'
 import { EVMContract } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -6,7 +6,6 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRedPacketContract } from './useRedPacketContract.js'
 import { useQuery } from '@tanstack/react-query'
 import type { Hex } from 'viem'
-import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 export type RedPacketAvailability = {
     token_address: string
@@ -50,16 +49,11 @@ export function useAvailability(
         queryFn: async () => {
             if (!id || !redPacketContract) return null
             return formatRedPacketAvailability(
-                await EVMContract.readContract(
-                    redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
-                    'check_availability',
-                    [id as Hex],
-                    {
-                        chainId,
-                        // check availability is ok w/o account
-                        from: account,
-                    },
-                ),
+                await EVMContract.readContract(redPacketContract, 'check_availability', [id as Hex], {
+                    chainId,
+                    // check availability is ok w/o account
+                    from: account,
+                }),
             )
         },
         refetchInterval(query) {

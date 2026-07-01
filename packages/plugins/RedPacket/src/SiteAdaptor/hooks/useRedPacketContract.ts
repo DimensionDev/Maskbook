@@ -4,6 +4,7 @@ import { HappyRedPacketV3Abi } from '@masknet/web3-contracts/types/HappyRedPacke
 import { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import {
     type ChainId,
+    type ContractWithAddress,
     createContractWithAddress,
     getRedPacketConstants,
     useRedPacketConstants,
@@ -21,7 +22,16 @@ export function getRedPacketLatestContractWithAddress(chainId: ChainId) {
     return createContractWithAddress(getRedPacketConstants(chainId).HAPPY_RED_PACKET_ADDRESS_V4, HappyRedPacketV4Abi)
 }
 
-export function useRedPacketContract(chainId: ChainId, version: number) {
+export type RedPacketContractAnyVersion =
+    | HappyRedPacketV1Abi
+    | HappyRedPacketV2Abi
+    | HappyRedPacketV3Abi
+    | HappyRedPacketV4Abi
+
+export function useRedPacketContract(
+    chainId: ChainId,
+    version: number,
+): ContractWithAddress<RedPacketContractAnyVersion> {
     const {
         HAPPY_RED_PACKET_ADDRESS_V1: addressV1,
         HAPPY_RED_PACKET_ADDRESS_V2: addressV2,
@@ -45,5 +55,5 @@ export function useRedPacketContract(chainId: ChainId, version: number) {
         [addressV4, HappyRedPacketV4Abi],
     )
     const versions = [v1, v2, v3, v4] as const
-    return versions[version - 1]
+    return versions[version - 1] as ContractWithAddress<RedPacketContractAnyVersion>
 }

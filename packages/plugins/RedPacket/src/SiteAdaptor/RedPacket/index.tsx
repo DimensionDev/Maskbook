@@ -12,7 +12,7 @@ import { NetworkContextProvider, useChainContext, useNetwork } from '@masknet/we
 import { EVMChainResolver, EVMContract } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId, useRedPacketConstant, type ContractWithAddress } from '@masknet/web3-shared-evm'
+import { ChainId, useRedPacketConstant } from '@masknet/web3-shared-evm'
 import { Card, Grow, Link } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
@@ -27,7 +27,6 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { ClaimOnFirefly } from '../components/ClaimOnFirefly.js'
 import type { Hex } from 'viem'
-import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -148,16 +147,11 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     const checkResult = useCallback(async () => {
         if (!redPacketContract) return
         const data = formatRedPacketAvailability(
-            await EVMContract.readContract(
-                redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
-                'check_availability',
-                [payload.rpid as Hex],
-                {
-                    chainId: redpacketChainId,
-                    // check availability is ok w/o account
-                    from: account,
-                },
-            ),
+            await EVMContract.readContract(redPacketContract, 'check_availability', [payload.rpid as Hex], {
+                chainId: redpacketChainId,
+                // check availability is ok w/o account
+                from: account,
+            }),
         )
         if (!data) return
         if (isZero(data.claimed_amount)) return
