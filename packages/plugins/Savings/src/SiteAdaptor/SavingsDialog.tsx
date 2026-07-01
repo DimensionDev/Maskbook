@@ -77,14 +77,17 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
             const protocolDataContract = EVMContract.getContract(address, AaveProtocolDataProviderAbi)
 
-            const [tokens, aTokens] = (await Promise.all([
+            const [tokens, aTokens] = await Promise.all([
                 EVMContract.readContract(protocolDataContract, 'getAllReservesTokens', [], { chainId }),
                 EVMContract.readContract(protocolDataContract, 'getAllATokens', [], { chainId }),
-            ])) as [Array<[string, string]> | undefined, Array<[string, string]> | undefined]
+            ])
 
-            if (!tokens) return EMPTY_LIST
+            if (!tokens?.length) return EMPTY_LIST
             return tokens.map((token) => {
-                return [token[1], aTokens?.find((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())?.[1]]
+                return [
+                    token.tokenAddress,
+                    aTokens?.find((f) => f.symbol.toUpperCase() === `a${token.symbol}`.toUpperCase())?.tokenAddress,
+                ]
             })
         },
         staleTime: 3600_000,

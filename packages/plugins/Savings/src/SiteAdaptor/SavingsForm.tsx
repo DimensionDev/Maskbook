@@ -173,9 +173,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         return {
             approveToken: token.schema === SchemaType.ERC20 ? token : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
-            approveAddress: (await EVMContract.readContract(lPoolAddressProviderContract, 'getLendingPool', [], {
+            approveAddress: await EVMContract.readContract(lPoolAddressProviderContract, 'getLendingPool', [], {
                 chainId,
-            })) as string | undefined,
+            }),
         }
     }, [chainId, protocol.bareToken, inputAmount])
 
