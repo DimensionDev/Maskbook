@@ -6,7 +6,7 @@ import { LidoWithdrawAbi } from '@masknet/web3-contracts/types/LidoWithdraw.js'
 import { LidoStETHAbi } from '@masknet/web3-contracts/types/LidoStETH.js'
 
 import { EVMContract, EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
-import type { Address, Hex } from 'viem'
+import type { Address, ContractFunctionArgs, Hex } from 'viem'
 import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
 const MAX_DEADLINE = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
@@ -165,7 +165,11 @@ export class LidoProtocol implements SavingsProtocol {
 
         const contract = EVMContract.getContract(getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'), LidoWithdrawAbi)
 
-        const args = [
+        const args: ContractFunctionArgs<
+            typeof LidoWithdrawAbi,
+            'nonpayable' | 'payable',
+            'requestWithdrawalsWithPermit'
+        > = [
             [amount],
             account as Address,
             {
@@ -175,7 +179,7 @@ export class LidoProtocol implements SavingsProtocol {
                 r: r as Hex,
                 s: s as Hex,
             },
-        ] as const
+        ]
 
         const gas = await EVMContract.estimateContractGas(contract, 'requestWithdrawalsWithPermit', args, {
             chainId,
