@@ -185,7 +185,9 @@ export class AAVEProtocol implements SavingsProtocol {
         if (!tx) {
             throw new Error("Can't create deposit transaction")
         }
-        return EVMWeb3.sendTransaction(tx, { chainId })
+        const hash = await EVMWeb3.sendTransaction(tx, { chainId })
+        await EVMWeb3.confirmTransaction(hash, { chainId })
+        return hash
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, value: BigNumber.Value) {
@@ -224,6 +226,8 @@ export class AAVEProtocol implements SavingsProtocol {
         if (!tx) {
             throw new Error("Can't create withdraw transaction")
         }
-        return EVMWeb3.sendTransaction(tx, { chainId })
+        const hash = await EVMWeb3.sendTransaction(tx, { chainId })
+        await EVMWeb3.confirmTransaction(hash, { chainId })
+        return hash
     }
 }
