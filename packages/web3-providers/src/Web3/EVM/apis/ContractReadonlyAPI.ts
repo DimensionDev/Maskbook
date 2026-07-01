@@ -4,6 +4,7 @@ import {
     type ContractCallOptions,
     type ContractWithAddress,
     type ContractWriteOptions,
+    type Transaction,
 } from '@masknet/web3-shared-evm'
 import { toBigInt, toHex } from '@masknet/shared-base'
 import { encodeFunctionData } from 'viem'
@@ -164,12 +165,12 @@ function normalizeBlock(
     return
 }
 
-function normalizeTransaction(transaction: Record<string, unknown>) {
+function normalizeTransaction(transaction: ContractWriteOptions): Transaction {
     return Object.fromEntries(
         Object.entries(transaction)
             .filter(([, value]) => value !== undefined && value !== null && value !== '')
             .map(([key, value]) => [key, isTransactionQuantity(key) ? toHex(value as never) : value]),
-    )
+    ) as Transaction
 }
 
 function isTransactionQuantity(key: string) {
