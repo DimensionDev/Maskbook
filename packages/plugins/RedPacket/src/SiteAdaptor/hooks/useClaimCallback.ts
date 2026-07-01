@@ -46,21 +46,25 @@ export function useClaimCallback(account: string, payload: RedPacketJSONPayload 
                     config,
                 )
         if (!tx) return
-        const gas =
-            version === 4 ?
-                await EVMContract.estimateContractGas(
-                    redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
-                    'claim',
-                    [rpid as Hex, signedMsg as Hex, account as Address],
-                    { chainId, ...config },
-                )
-            :   await EVMContract.estimateContractGas(
-                    redPacketContract as ContractWithAddress<Exclude<RedPacketContractAnyVersion, HappyRedPacketV4Abi>>,
-                    'claim',
-                    [rpid as Hex, signedMsg, account as Address, keccak256(toHex(account))],
-                    { chainId, ...config },
-                )
-        tx.gas ??= gas ? String(gas) : undefined
+        if (!tx.gas) {
+            const gas =
+                version === 4 ?
+                    await EVMContract.estimateContractGas(
+                        redPacketContract as ContractWithAddress<HappyRedPacketV4Abi>,
+                        'claim',
+                        [rpid as Hex, signedMsg as Hex, account as Address],
+                        { chainId, ...config },
+                    )
+                :   await EVMContract.estimateContractGas(
+                        redPacketContract as ContractWithAddress<
+                            Exclude<RedPacketContractAnyVersion, HappyRedPacketV4Abi>
+                        >,
+                        'claim',
+                        [rpid as Hex, signedMsg, account as Address, keccak256(toHex(account))],
+                        { chainId, ...config },
+                    )
+            tx.gas = gas ? String(gas) : undefined
+        }
 
         return EVMWeb3.sendTransaction(tx, {
             chainId,
