@@ -46,8 +46,10 @@ export function useRefundCallback(version: number, from: string, id?: string, ex
         const contract = redPacketContract
         const tx = EVMContract.createTransactionRequest(contract, 'refund', [id as Hex], { from })
         if (!tx) return
-        const gas = await EVMContract.estimateContractGas(contract, 'refund', [id as Hex], { chainId, from })
-        tx.gas ??= gas ? String(gas) : undefined
+        if (!tx.gas) {
+            const gas = await EVMContract.estimateContractGas(contract, 'refund', [id as Hex], { chainId, from })
+            tx.gas = gas ? String(gas) : undefined
+        }
         const hash = await EVMWeb3.sendTransaction(tx, {
             chainId,
         })

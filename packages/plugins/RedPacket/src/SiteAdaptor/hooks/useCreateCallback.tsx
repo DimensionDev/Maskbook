@@ -53,7 +53,7 @@ export function checkParams(paramsObj: ParamsObjType) {
     return true
 }
 
-export type MethodParameters = ContractFunctionArgs<HappyRedPacketV4Abi, 'payable', 'create_red_packet'>
+type MethodParameters = ContractFunctionArgs<HappyRedPacketV4Abi, 'payable', 'create_red_packet'>
 interface CreateParams {
     gas: string | undefined
     params: MethodParameters
