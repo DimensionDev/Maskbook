@@ -197,8 +197,8 @@ export class EVMConnectionReadonlyAPI
         if (actualSchema === SchemaType.ERC1155) {
             const contractERC721 = this.Contract.getERC721Contract(address)
             const results = await Promise.allSettled([
-                this.Contract.readContract(contractERC721, 'name', [], options) ?? EMPTY_STRING,
-                this.Contract.readContract(contractERC721, 'symbol', [], options) ?? EMPTY_STRING,
+                this.Contract.readContract(contractERC721, 'name', [], options),
+                this.Contract.readContract(contractERC721, 'symbol', [], options),
             ])
 
             const [name, symbol] = results.map((result) =>
