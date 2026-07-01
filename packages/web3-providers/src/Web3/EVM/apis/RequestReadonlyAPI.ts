@@ -16,7 +16,7 @@ import { createViemClientFromURL } from '../../../helpers/createViemClient.js'
 export class EVMRequestReadonlyAPI {
     static Default = new EVMRequestReadonlyAPI()
 
-    constructor(protected options?: EVMConnectionOptions) {
+    constructor(options?: EVMConnectionOptions) {
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(options)
     }
 

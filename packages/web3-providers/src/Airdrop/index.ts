@@ -1,4 +1,5 @@
-import { type ChainId, getAirdropClaimersConstants } from '@masknet/web3-shared-evm'
+import { type AbiFunctionToObjectMapped, type ChainId, getAirdropClaimersConstants } from '@masknet/web3-shared-evm'
+import type { AirdropV2Abi } from '@masknet/web3-contracts/types/AirdropV2.js'
 import type { Address } from 'viem'
 import { EVMContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
@@ -10,14 +11,17 @@ type ClaimEvent = {
     merkleRoot: string
 }
 
-function formatClaimEvent(value: unknown): ClaimEvent | undefined {
-    if (!Array.isArray(value)) return
-    const [token, startTime, endTime, merkleRoot] = value
+type ClaimEventOutput = AbiFunctionToObjectMapped<AirdropV2Abi, 'claimEvents', 'outputs'>
+
+function formatClaimEvent(
+    value: ClaimEventOutput | undefined,
+): ClaimEvent | undefined {
+    if (!value) return
     return {
-        token: String(token ?? ''),
-        startTime: String(startTime ?? '0'),
-        endTime: String(endTime ?? '0'),
-        merkleRoot: String(merkleRoot ?? ''),
+        token: value.token,
+        startTime: value.startTime.toString(),
+        endTime: value.endTime.toString(),
+        merkleRoot: value.merkleRoot,
     }
 }
 
@@ -37,11 +41,15 @@ export class Airdrop {
             chainId,
         })
         const currentEventIndex = Number(eventIndex ?? 0n) - 1
-        const claimEvents = formatClaimEvent(
-            await EVMContractReadonly.readContract(airdropContract, 'claimEvents', [BigInt(currentEventIndex)], {
+        const claimEvent = (await EVMContractReadonly.readContract(
+            airdropContract,
+            'claimEvents',
+            [BigInt(currentEventIndex)],
+            {
                 chainId,
-            }),
-        )
+            },
+        )) as ClaimEventOutput | undefined
+        const claimEvents = formatClaimEvent(claimEvent)
         const isClaimed = Boolean(
             address ?
                 await EVMContractReadonly.readContract(
@@ -72,8 +80,12 @@ export class Airdrop {
         if (!CONTRACT_ADDRESS) return
 
         const airdropContract = EVMContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS)
-        return formatClaimEvent(
-            await EVMContractReadonly.readContract(airdropContract, 'claimEvents', [BigInt(eventIndex)], { chainId }),
-        )
+        const claimEvent = (await EVMContractReadonly.readContract(
+            airdropContract,
+            'claimEvents',
+            [BigInt(eventIndex)],
+            { chainId },
+        )) as ClaimEventOutput | undefined
+        return formatClaimEvent(claimEvent)
     }
 }

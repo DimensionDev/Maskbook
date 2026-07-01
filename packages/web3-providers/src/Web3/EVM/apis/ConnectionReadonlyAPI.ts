@@ -217,8 +217,8 @@ export class EVMConnectionReadonlyAPI
         // ERC721
         const contract = this.Contract.getERC721Contract(address)
         const results = await Promise.allSettled([
-            this.Contract.readContract(contract, 'name', [], options) ?? EMPTY_STRING,
-            this.Contract.readContract(contract, 'symbol', [], options) ?? EMPTY_STRING,
+            this.Contract.readContract(contract, 'name', [], options),
+            this.Contract.readContract(contract, 'symbol', [], options),
         ])
 
         const [name, symbol] = results.map((result) =>
@@ -337,14 +337,14 @@ export class EVMConnectionReadonlyAPI
         const bytes32Contract = this.Contract.getERC20Bytes32Contract(address)
         const results = await queryClient.fetchQuery({
             staleTime: 600_000,
-            queryKey: ['fungibleToken', options.chainId, address],
+            queryKey: ['fungibleToken', options.chainId, address, contract, options, bytes32Contract],
             queryFn: async () => {
                 return Promise.allSettled([
-                    this.Contract.readContract(contract, 'name', [], options) ?? EMPTY_STRING,
-                    this.Contract.readContract(bytes32Contract, 'name', [], options) ?? EMPTY_STRING,
-                    this.Contract.readContract(contract, 'symbol', [], options) ?? EMPTY_STRING,
-                    this.Contract.readContract(bytes32Contract, 'symbol', [], options) ?? EMPTY_STRING,
-                    this.Contract.readContract(contract, 'decimals', [], options) ?? ZERO,
+                    this.Contract.readContract(contract, 'name', [], options),
+                    this.Contract.readContract(bytes32Contract, 'name', [], options),
+                    this.Contract.readContract(contract, 'symbol', [], options),
+                    this.Contract.readContract(bytes32Contract, 'symbol', [], options),
+                    this.Contract.readContract(contract, 'decimals', [], options),
                 ])
             },
         })
