@@ -40,3 +40,4 @@
 ## CSP
 
 - @protobufjs/inquire: We don't allow eval.
+- @marsidev/react-turnstile: remove remote `script.src = ...` from extension output
