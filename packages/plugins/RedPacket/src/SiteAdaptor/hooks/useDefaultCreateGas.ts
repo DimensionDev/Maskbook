@@ -12,7 +12,6 @@ import {
 } from './useCreateCallback.js'
 import { getRedPacketLatestContractWithAddress } from './useRedPacketContract.js'
 import { keccak256 } from 'viem'
-import { version } from 'react'
 
 export function useDefaultCreateGas(redPacketSettings: RedPacketSettings | undefined, publicKey: string) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -63,5 +62,5 @@ export function useDefaultCreateGas(redPacketSettings: RedPacketSettings | undef
                 value,
             },
         )
-    }, [JSON.stringify(redPacketSettings), account, chainId, publicKey, version, NATIVE_TOKEN_ADDRESS])
+    }, [JSON.stringify(redPacketSettings), account, chainId, publicKey, NATIVE_TOKEN_ADDRESS])
 }
