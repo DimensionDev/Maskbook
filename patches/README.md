@@ -40,3 +40,7 @@
 ## CSP
 
 - @protobufjs/inquire: We don't allow eval.
+
+## Manifest V3 / Chrome Web Store
+
+- @marsidev/react-turnstile: Privy uses Turnstile for captcha. The upstream package loads Cloudflare's script from a CDN, which violates MV3 "no remotely hosted code". We bundle `packages/mask/public/js/turnstile-api.js` and patch the package to load it locally instead.

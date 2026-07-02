@@ -31,6 +31,7 @@ patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1': c84653dcea8e61f29204ef658a2a5943ad11468491b9b235c78653aaeb2330d6
   '@cyberlab/cyberconnect@4.2.2': 4dbfa79010216f49a3d2b06b7d75ff505e42abec33c31f3f7fd21a86a1fe5a59
   '@lingui/cli': 0f450594799bb7255ad28e9c619f5575410bd01f806b88988ff430e406c37ce2
+  '@marsidev/react-turnstile@1.4.1': 098168382d7776f65276088991b2f4a206295e98b14ae00db4fbf57eb8a07be5
   '@protobufjs/inquire@1.1.0': 6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d
   '@scamsniffer/detector': 15d2dcb03f520305f2c94623328db1bd3a19322d38feeaff86833982542b5713
   '@splinetool/runtime@0.9.342': a131e328a83b5ef1ccc97e2008268b10035de64ec76328b548b420349e28bc6c
@@ -19520,7 +19521,7 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@marsidev/react-turnstile@1.4.1(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)':
+  '@marsidev/react-turnstile@1.4.1(patch_hash=098168382d7776f65276088991b2f4a206295e98b14ae00db4fbf57eb8a07be5)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)':
     dependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -20394,7 +20395,7 @@ snapshots:
       '@hcaptcha/react-hcaptcha': 1.17.2(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       '@headlessui/react': 2.2.8(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       '@heroicons/react': 2.2.0(react@0.0.0-experimental-58af67a8f8-20240628)
-      '@marsidev/react-turnstile': 1.4.1(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+      '@marsidev/react-turnstile': 1.4.1(patch_hash=098168382d7776f65276088991b2f4a206295e98b14ae00db4fbf57eb8a07be5)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       '@privy-io/api-base': 1.8.1
       '@privy-io/api-types': 0.4.0
       '@privy-io/chains': 0.0.6
