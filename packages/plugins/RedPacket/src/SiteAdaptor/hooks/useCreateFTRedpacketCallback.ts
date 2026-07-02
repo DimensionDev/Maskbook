@@ -72,6 +72,7 @@ export function useCreateFTRedpacketCallback(
         if (!CreationSuccess?.id) return
         const senderName = settings.name || getLastRecognizedIdentity()?.identifier?.userId
         const redpacketPayload = {
+            txid: hash,
             sender: {
                 address: account,
                 name: senderName,
@@ -80,7 +81,7 @@ export function useCreateFTRedpacketCallback(
             is_random: settings.isRandom,
             shares: settings.shares,
             rpid: CreationSuccess.id,
-            total: CreationSuccess.total,
+            total: CreationSuccess.total.toString(),
             duration: settings.duration,
             creation_time: Number(CreationSuccess.creation_time * 1000n),
             token: settings.token,
@@ -93,7 +94,7 @@ export function useCreateFTRedpacketCallback(
 
         // output the redpacket as JSON payload
         onCreated?.(payload.current)
-    }, [createCallback, settings, onCreated])
+    }, [account, createCallback, settings, onCreated])
 
     const payload = useRef<RedPacketJSONPayload>({
         network: EVMChainResolver.chainName(chainId),

@@ -42,7 +42,7 @@ export function useHandleCreateOrSelect({ senderName, onClose }: Options) {
             }
 
             if (senderName) {
-                payload.sender.name === senderName
+                payload.sender.name = senderName
             }
 
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
@@ -54,6 +54,6 @@ export function useHandleCreateOrSelect({ senderName, onClose }: Options) {
             ApplicationBoardModal.close()
             onClose?.()
         },
-        [senderName, onClose, compositionType],
+        [account, senderName, onClose, compositionType],
     )
 }
