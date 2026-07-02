@@ -4,13 +4,13 @@ import type { BuildFlags } from './flags.ts'
 import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 
 export function applyDotEnv(flags: BuildFlags) {
-    if (flags.mode === 'production') return
-
     const { parsed, error } = config({ path: new URL('./.env/dev-preference', ROOT_PATH) })
     if (error && !error.message.includes('no such file or directory')) {
         console.error(new TypeError('Failed to parse env file', { cause: error }))
     }
     if (!parsed) return
+
+    if (flags.mode === 'production') return
 
     flags.sourceMapPreference ??= parseBooleanOrString(parsed.sourceMap)
     if (parsed.manifest) {

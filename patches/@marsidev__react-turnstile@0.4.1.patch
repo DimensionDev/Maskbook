@@ -1,0 +1,683 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index 9229990fe188d40a667bfa7a84628be4a25709be..b736b836451eea678347a859d004cdecdc0297ce 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -6,315 +6,27 @@ Object.defineProperty(exports, '__esModule', { value: true });
+ const jsxRuntime = require('react/jsx-runtime');
+ const react = require('react');
+ 
+-const Component = ({ as: Element = "div", ...props }, ref) => {
+-  return /* @__PURE__ */ jsxRuntime.jsx(Element, { ...props, ref });
+-};
+-const Container = react.forwardRef(Component);
+-
+-const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js";
++const SCRIPT_URL = "";
+ const DEFAULT_SCRIPT_ID = "cf-turnstile-script";
+ const DEFAULT_CONTAINER_ID = "cf-turnstile";
+ const DEFAULT_ONLOAD_NAME = "onloadTurnstileCallback";
+-const checkElementExistence = (id) => !!document.getElementById(id);
+-const injectTurnstileScript = ({
+-  render = "explicit",
+-  onLoadCallbackName = DEFAULT_ONLOAD_NAME,
+-  scriptOptions: {
+-    nonce = "",
+-    defer = true,
+-    async = true,
+-    id = "",
+-    appendTo,
+-    onError,
+-    crossOrigin = ""
+-  } = {}
+-}) => {
+-  const scriptId = id || DEFAULT_SCRIPT_ID;
+-  if (checkElementExistence(scriptId)) {
+-    return;
+-  }
+-  const script = document.createElement("script");
+-  script.id = scriptId;
+-  script.src = `${SCRIPT_URL}?onload=${onLoadCallbackName}&render=${render}`;
+-  if (document.querySelector(`script[src="${script.src}"]`)) {
+-    return;
+-  }
+-  script.defer = !!defer;
+-  script.async = !!async;
+-  if (nonce) {
+-    script.nonce = nonce;
+-  }
+-  if (crossOrigin) {
+-    script.crossOrigin = crossOrigin;
+-  }
+-  if (onError) {
+-    script.onerror = onError;
+-  }
+-  const parentEl = appendTo === "body" ? document.body : document.getElementsByTagName("head")[0];
+-  parentEl.appendChild(script);
+-};
+-const CONTAINER_STYLE_SET = {
+-  normal: {
+-    width: 300,
+-    height: 65
+-  },
+-  compact: {
+-    width: 130,
+-    height: 120
+-  },
+-  invisible: {
+-    width: 0,
+-    height: 0,
+-    overflow: "hidden"
+-  },
+-  interactionOnly: {
+-    width: "fit-content",
+-    height: "auto"
+-  }
+-};
+-function getTurnstileSizeOpts(size) {
+-  let result;
+-  if (size !== "invisible") {
+-    result = size;
+-  }
+-  return result;
+-}
+-
+-function useObserveScript(scriptId = DEFAULT_SCRIPT_ID) {
+-  const [scriptLoaded, setScriptLoaded] = react.useState(false);
+-  react.useEffect(() => {
+-    const checkScriptExists = () => {
+-      if (checkElementExistence(scriptId)) {
+-        setScriptLoaded(true);
+-      }
+-    };
+-    const observer = new MutationObserver(checkScriptExists);
+-    observer.observe(document, { childList: true, subtree: true });
+-    checkScriptExists();
+-    return () => {
+-      observer.disconnect();
+-    };
+-  }, [scriptId]);
+-  return scriptLoaded;
+-}
+ 
+ const Turnstile = react.forwardRef((props, ref) => {
+-  const {
+-    scriptOptions,
+-    options = {},
+-    siteKey,
+-    onWidgetLoad,
+-    onSuccess,
+-    onExpire,
+-    onError,
+-    onBeforeInteractive,
+-    onAfterInteractive,
+-    onUnsupported,
+-    onLoadScript,
+-    id,
++  const { id, style, as: Element = "div", ...divProps } = props;
++  react.useImperativeHandle(ref, () => ({
++    render: () => void 0,
++    execute: () => void 0,
++    reset: () => void 0,
++    remove: () => void 0,
++    getResponse: () => void 0,
++    isExpired: () => void 0
++  }), []);
++
++  return jsxRuntime.jsx(Element, {
++    id: id ?? DEFAULT_CONTAINER_ID,
+     style,
+-    as = "div",
+-    injectScript = true,
+     ...divProps
+-  } = props;
+-  const widgetSize = options.size ?? "normal";
+-  const [containerStyle, setContainerStyle] = react.useState(
+-    options.execution === "execute" ? CONTAINER_STYLE_SET.invisible : options.appearance === "interaction-only" ? CONTAINER_STYLE_SET.interactionOnly : CONTAINER_STYLE_SET[widgetSize]
+-  );
+-  const containerRef = react.useRef(null);
+-  const firstRendered = react.useRef(false);
+-  const [widgetId, setWidgetId] = react.useState();
+-  const [turnstileLoaded, setTurnstileLoaded] = react.useState(false);
+-  const containerId = id ?? DEFAULT_CONTAINER_ID;
+-  const scriptId = injectScript ? scriptOptions?.id || `${DEFAULT_SCRIPT_ID}__${containerId}` : scriptOptions?.id || DEFAULT_SCRIPT_ID;
+-  const scriptLoaded = useObserveScript(scriptId);
+-  const onLoadCallbackName = scriptOptions?.onLoadCallbackName ? `${scriptOptions.onLoadCallbackName}__${containerId}` : `${DEFAULT_ONLOAD_NAME}__${containerId}`;
+-  const renderConfig = react.useMemo(
+-    () => ({
+-      sitekey: siteKey,
+-      action: options.action,
+-      cData: options.cData,
+-      callback: onSuccess,
+-      "error-callback": onError,
+-      "expired-callback": onExpire,
+-      "before-interactive-callback": onBeforeInteractive,
+-      "after-interactive-callback": onAfterInteractive,
+-      "unsupported-callback": onUnsupported,
+-      theme: options.theme ?? "auto",
+-      language: options.language ?? "auto",
+-      tabindex: options.tabIndex,
+-      "response-field": options.responseField,
+-      "response-field-name": options.responseFieldName,
+-      size: getTurnstileSizeOpts(widgetSize),
+-      retry: options.retry ?? "auto",
+-      "retry-interval": options.retryInterval ?? 8e3,
+-      "refresh-expired": options.refreshExpired ?? "auto",
+-      execution: options.execution ?? "render",
+-      appearance: options.appearance ?? "always"
+-    }),
+-    [
+-      siteKey,
+-      options,
+-      onSuccess,
+-      onError,
+-      onExpire,
+-      widgetSize,
+-      onBeforeInteractive,
+-      onAfterInteractive,
+-      onUnsupported
+-    ]
+-  );
+-  const renderConfigStringified = react.useMemo(() => JSON.stringify(renderConfig), [renderConfig]);
+-  react.useImperativeHandle(
+-    ref,
+-    () => {
+-      if (typeof window === "undefined" || !scriptLoaded) {
+-        return;
+-      }
+-      const { turnstile } = window;
+-      return {
+-        getResponse() {
+-          if (!turnstile?.getResponse || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          return turnstile.getResponse(widgetId);
+-        },
+-        reset() {
+-          if (!turnstile?.reset || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          if (options.execution === "execute") {
+-            setContainerStyle(CONTAINER_STYLE_SET.invisible);
+-          }
+-          try {
+-            turnstile.reset(widgetId);
+-          } catch (error) {
+-            console.warn(`Failed to reset Turnstile widget ${widgetId}`, error);
+-          }
+-        },
+-        remove() {
+-          if (!turnstile?.remove || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          setWidgetId("");
+-          setContainerStyle(CONTAINER_STYLE_SET.invisible);
+-          turnstile.remove(widgetId);
+-        },
+-        render() {
+-          if (!turnstile?.render || !containerRef.current || widgetId) {
+-            console.warn("Turnstile has not been loaded or widget already rendered");
+-            return;
+-          }
+-          const id2 = turnstile.render(containerRef.current, renderConfig);
+-          setWidgetId(id2);
+-          if (options.execution !== "execute") {
+-            setContainerStyle(CONTAINER_STYLE_SET[widgetSize]);
+-          }
+-          return id2;
+-        },
+-        execute() {
+-          if (options.execution !== "execute") {
+-            return;
+-          }
+-          if (!turnstile?.execute || !containerRef.current || !widgetId) {
+-            console.warn("Turnstile has not been loaded or widget has not been rendered");
+-            return;
+-          }
+-          turnstile.execute(containerRef.current, renderConfig);
+-          setContainerStyle(CONTAINER_STYLE_SET[widgetSize]);
+-        },
+-        isExpired() {
+-          if (!turnstile?.isExpired || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          return turnstile.isExpired(widgetId);
+-        }
+-      };
+-    },
+-    [scriptLoaded, widgetId, options.execution, widgetSize, renderConfig, containerRef]
+-  );
+-  react.useEffect(() => {
+-    window[onLoadCallbackName] = () => setTurnstileLoaded(true);
+-    return () => {
+-      delete window[onLoadCallbackName];
+-    };
+-  }, [onLoadCallbackName]);
+-  react.useEffect(() => {
+-    if (injectScript && !turnstileLoaded) {
+-      injectTurnstileScript({
+-        onLoadCallbackName,
+-        scriptOptions: {
+-          ...scriptOptions,
+-          id: scriptId
+-        }
+-      });
+-    }
+-  }, [injectScript, turnstileLoaded, onLoadCallbackName, scriptOptions, scriptId]);
+-  react.useEffect(() => {
+-    if (scriptLoaded && !turnstileLoaded && window.turnstile) {
+-      setTurnstileLoaded(true);
+-    }
+-  }, [turnstileLoaded, scriptLoaded]);
+-  react.useEffect(() => {
+-    if (!siteKey) {
+-      console.warn("sitekey was not provided");
+-      return;
+-    }
+-    if (!scriptLoaded || !containerRef.current || !turnstileLoaded || firstRendered.current) {
+-      return;
+-    }
+-    const id2 = window.turnstile.render(containerRef.current, renderConfig);
+-    setWidgetId(id2);
+-    firstRendered.current = true;
+-  }, [scriptLoaded, siteKey, renderConfig, firstRendered, turnstileLoaded]);
+-  react.useEffect(() => {
+-    if (!window.turnstile)
+-      return;
+-    if (containerRef.current && widgetId) {
+-      if (checkElementExistence(widgetId)) {
+-        window.turnstile.remove(widgetId);
+-      }
+-      const newWidgetId = window.turnstile.render(containerRef.current, renderConfig);
+-      setWidgetId(newWidgetId);
+-      firstRendered.current = true;
+-    }
+-  }, [renderConfigStringified, siteKey]);
+-  react.useEffect(() => {
+-    if (!window.turnstile)
+-      return;
+-    if (!widgetId)
+-      return;
+-    if (!checkElementExistence(widgetId))
+-      return;
+-    onWidgetLoad?.(widgetId);
+-    return () => {
+-      window.turnstile.remove(widgetId);
+-    };
+-  }, [widgetId, onWidgetLoad]);
+-  react.useEffect(() => {
+-    setContainerStyle(
+-      options.execution === "execute" ? CONTAINER_STYLE_SET.invisible : renderConfig.appearance === "interaction-only" ? CONTAINER_STYLE_SET.interactionOnly : CONTAINER_STYLE_SET[widgetSize]
+-    );
+-  }, [options.execution, widgetSize, renderConfig.appearance]);
+-  react.useEffect(() => {
+-    if (!scriptLoaded || typeof onLoadScript !== "function")
+-      return;
+-    onLoadScript();
+-  }, [scriptLoaded, onLoadScript]);
+-  return /* @__PURE__ */ jsxRuntime.jsx(
+-    Container,
+-    {
+-      ref: containerRef,
+-      as,
+-      id: containerId,
+-      style: { ...containerStyle, ...style },
+-      ...divProps
+-    }
+-  );
++  });
+ });
+ Turnstile.displayName = "Turnstile";
+ 
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 33cf204e578a090170b1ee7b6670af7ed9da0ee4..2e102668b47fd843c61c4b0d54d140f08b03f5e8 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -338,7 +338,7 @@ type TurnstileServerValidationErrorCode =
+ 
+ declare const Turnstile: react.ForwardRefExoticComponent<TurnstileProps & react.RefAttributes<TurnstileInstance | undefined>>;
+ 
+-declare const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js";
++declare const SCRIPT_URL = "";
+ declare const DEFAULT_SCRIPT_ID = "cf-turnstile-script";
+ declare const DEFAULT_CONTAINER_ID = "cf-turnstile";
+ declare const DEFAULT_ONLOAD_NAME = "onloadTurnstileCallback";
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 0232f844cc355a338fdd406a04eb91a3894c33bc..9ed715c64d9dd4dc0c11c31761930f4044d30e41 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -1,316 +1,28 @@
+ 'use client';
+ import { jsx } from 'react/jsx-runtime';
+-import { forwardRef, useState, useEffect, useRef, useMemo, useImperativeHandle } from 'react';
++import { forwardRef, useImperativeHandle } from 'react';
+ 
+-const Component = ({ as: Element = "div", ...props }, ref) => {
+-  return /* @__PURE__ */ jsx(Element, { ...props, ref });
+-};
+-const Container = forwardRef(Component);
+-
+-const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js";
++const SCRIPT_URL = "";
+ const DEFAULT_SCRIPT_ID = "cf-turnstile-script";
+ const DEFAULT_CONTAINER_ID = "cf-turnstile";
+ const DEFAULT_ONLOAD_NAME = "onloadTurnstileCallback";
+-const checkElementExistence = (id) => !!document.getElementById(id);
+-const injectTurnstileScript = ({
+-  render = "explicit",
+-  onLoadCallbackName = DEFAULT_ONLOAD_NAME,
+-  scriptOptions: {
+-    nonce = "",
+-    defer = true,
+-    async = true,
+-    id = "",
+-    appendTo,
+-    onError,
+-    crossOrigin = ""
+-  } = {}
+-}) => {
+-  const scriptId = id || DEFAULT_SCRIPT_ID;
+-  if (checkElementExistence(scriptId)) {
+-    return;
+-  }
+-  const script = document.createElement("script");
+-  script.id = scriptId;
+-  script.src = `${SCRIPT_URL}?onload=${onLoadCallbackName}&render=${render}`;
+-  if (document.querySelector(`script[src="${script.src}"]`)) {
+-    return;
+-  }
+-  script.defer = !!defer;
+-  script.async = !!async;
+-  if (nonce) {
+-    script.nonce = nonce;
+-  }
+-  if (crossOrigin) {
+-    script.crossOrigin = crossOrigin;
+-  }
+-  if (onError) {
+-    script.onerror = onError;
+-  }
+-  const parentEl = appendTo === "body" ? document.body : document.getElementsByTagName("head")[0];
+-  parentEl.appendChild(script);
+-};
+-const CONTAINER_STYLE_SET = {
+-  normal: {
+-    width: 300,
+-    height: 65
+-  },
+-  compact: {
+-    width: 130,
+-    height: 120
+-  },
+-  invisible: {
+-    width: 0,
+-    height: 0,
+-    overflow: "hidden"
+-  },
+-  interactionOnly: {
+-    width: "fit-content",
+-    height: "auto"
+-  }
+-};
+-function getTurnstileSizeOpts(size) {
+-  let result;
+-  if (size !== "invisible") {
+-    result = size;
+-  }
+-  return result;
+-}
+-
+-function useObserveScript(scriptId = DEFAULT_SCRIPT_ID) {
+-  const [scriptLoaded, setScriptLoaded] = useState(false);
+-  useEffect(() => {
+-    const checkScriptExists = () => {
+-      if (checkElementExistence(scriptId)) {
+-        setScriptLoaded(true);
+-      }
+-    };
+-    const observer = new MutationObserver(checkScriptExists);
+-    observer.observe(document, { childList: true, subtree: true });
+-    checkScriptExists();
+-    return () => {
+-      observer.disconnect();
+-    };
+-  }, [scriptId]);
+-  return scriptLoaded;
+-}
+ 
+ const Turnstile = forwardRef((props, ref) => {
+-  const {
+-    scriptOptions,
+-    options = {},
+-    siteKey,
+-    onWidgetLoad,
+-    onSuccess,
+-    onExpire,
+-    onError,
+-    onBeforeInteractive,
+-    onAfterInteractive,
+-    onUnsupported,
+-    onLoadScript,
+-    id,
++  const { id, style, as: Element = "div", ...divProps } = props;
++  useImperativeHandle(ref, () => ({
++    render: () => void 0,
++    execute: () => void 0,
++    reset: () => void 0,
++    remove: () => void 0,
++    getResponse: () => void 0,
++    isExpired: () => void 0
++  }), []);
++
++  return jsx(Element, {
++    id: id ?? DEFAULT_CONTAINER_ID,
+     style,
+-    as = "div",
+-    injectScript = true,
+     ...divProps
+-  } = props;
+-  const widgetSize = options.size ?? "normal";
+-  const [containerStyle, setContainerStyle] = useState(
+-    options.execution === "execute" ? CONTAINER_STYLE_SET.invisible : options.appearance === "interaction-only" ? CONTAINER_STYLE_SET.interactionOnly : CONTAINER_STYLE_SET[widgetSize]
+-  );
+-  const containerRef = useRef(null);
+-  const firstRendered = useRef(false);
+-  const [widgetId, setWidgetId] = useState();
+-  const [turnstileLoaded, setTurnstileLoaded] = useState(false);
+-  const containerId = id ?? DEFAULT_CONTAINER_ID;
+-  const scriptId = injectScript ? scriptOptions?.id || `${DEFAULT_SCRIPT_ID}__${containerId}` : scriptOptions?.id || DEFAULT_SCRIPT_ID;
+-  const scriptLoaded = useObserveScript(scriptId);
+-  const onLoadCallbackName = scriptOptions?.onLoadCallbackName ? `${scriptOptions.onLoadCallbackName}__${containerId}` : `${DEFAULT_ONLOAD_NAME}__${containerId}`;
+-  const renderConfig = useMemo(
+-    () => ({
+-      sitekey: siteKey,
+-      action: options.action,
+-      cData: options.cData,
+-      callback: onSuccess,
+-      "error-callback": onError,
+-      "expired-callback": onExpire,
+-      "before-interactive-callback": onBeforeInteractive,
+-      "after-interactive-callback": onAfterInteractive,
+-      "unsupported-callback": onUnsupported,
+-      theme: options.theme ?? "auto",
+-      language: options.language ?? "auto",
+-      tabindex: options.tabIndex,
+-      "response-field": options.responseField,
+-      "response-field-name": options.responseFieldName,
+-      size: getTurnstileSizeOpts(widgetSize),
+-      retry: options.retry ?? "auto",
+-      "retry-interval": options.retryInterval ?? 8e3,
+-      "refresh-expired": options.refreshExpired ?? "auto",
+-      execution: options.execution ?? "render",
+-      appearance: options.appearance ?? "always"
+-    }),
+-    [
+-      siteKey,
+-      options,
+-      onSuccess,
+-      onError,
+-      onExpire,
+-      widgetSize,
+-      onBeforeInteractive,
+-      onAfterInteractive,
+-      onUnsupported
+-    ]
+-  );
+-  const renderConfigStringified = useMemo(() => JSON.stringify(renderConfig), [renderConfig]);
+-  useImperativeHandle(
+-    ref,
+-    () => {
+-      if (typeof window === "undefined" || !scriptLoaded) {
+-        return;
+-      }
+-      const { turnstile } = window;
+-      return {
+-        getResponse() {
+-          if (!turnstile?.getResponse || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          return turnstile.getResponse(widgetId);
+-        },
+-        reset() {
+-          if (!turnstile?.reset || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          if (options.execution === "execute") {
+-            setContainerStyle(CONTAINER_STYLE_SET.invisible);
+-          }
+-          try {
+-            turnstile.reset(widgetId);
+-          } catch (error) {
+-            console.warn(`Failed to reset Turnstile widget ${widgetId}`, error);
+-          }
+-        },
+-        remove() {
+-          if (!turnstile?.remove || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          setWidgetId("");
+-          setContainerStyle(CONTAINER_STYLE_SET.invisible);
+-          turnstile.remove(widgetId);
+-        },
+-        render() {
+-          if (!turnstile?.render || !containerRef.current || widgetId) {
+-            console.warn("Turnstile has not been loaded or widget already rendered");
+-            return;
+-          }
+-          const id2 = turnstile.render(containerRef.current, renderConfig);
+-          setWidgetId(id2);
+-          if (options.execution !== "execute") {
+-            setContainerStyle(CONTAINER_STYLE_SET[widgetSize]);
+-          }
+-          return id2;
+-        },
+-        execute() {
+-          if (options.execution !== "execute") {
+-            return;
+-          }
+-          if (!turnstile?.execute || !containerRef.current || !widgetId) {
+-            console.warn("Turnstile has not been loaded or widget has not been rendered");
+-            return;
+-          }
+-          turnstile.execute(containerRef.current, renderConfig);
+-          setContainerStyle(CONTAINER_STYLE_SET[widgetSize]);
+-        },
+-        isExpired() {
+-          if (!turnstile?.isExpired || !widgetId) {
+-            console.warn("Turnstile has not been loaded");
+-            return;
+-          }
+-          return turnstile.isExpired(widgetId);
+-        }
+-      };
+-    },
+-    [scriptLoaded, widgetId, options.execution, widgetSize, renderConfig, containerRef]
+-  );
+-  useEffect(() => {
+-    window[onLoadCallbackName] = () => setTurnstileLoaded(true);
+-    return () => {
+-      delete window[onLoadCallbackName];
+-    };
+-  }, [onLoadCallbackName]);
+-  useEffect(() => {
+-    if (injectScript && !turnstileLoaded) {
+-      injectTurnstileScript({
+-        onLoadCallbackName,
+-        scriptOptions: {
+-          ...scriptOptions,
+-          id: scriptId
+-        }
+-      });
+-    }
+-  }, [injectScript, turnstileLoaded, onLoadCallbackName, scriptOptions, scriptId]);
+-  useEffect(() => {
+-    if (scriptLoaded && !turnstileLoaded && window.turnstile) {
+-      setTurnstileLoaded(true);
+-    }
+-  }, [turnstileLoaded, scriptLoaded]);
+-  useEffect(() => {
+-    if (!siteKey) {
+-      console.warn("sitekey was not provided");
+-      return;
+-    }
+-    if (!scriptLoaded || !containerRef.current || !turnstileLoaded || firstRendered.current) {
+-      return;
+-    }
+-    const id2 = window.turnstile.render(containerRef.current, renderConfig);
+-    setWidgetId(id2);
+-    firstRendered.current = true;
+-  }, [scriptLoaded, siteKey, renderConfig, firstRendered, turnstileLoaded]);
+-  useEffect(() => {
+-    if (!window.turnstile)
+-      return;
+-    if (containerRef.current && widgetId) {
+-      if (checkElementExistence(widgetId)) {
+-        window.turnstile.remove(widgetId);
+-      }
+-      const newWidgetId = window.turnstile.render(containerRef.current, renderConfig);
+-      setWidgetId(newWidgetId);
+-      firstRendered.current = true;
+-    }
+-  }, [renderConfigStringified, siteKey]);
+-  useEffect(() => {
+-    if (!window.turnstile)
+-      return;
+-    if (!widgetId)
+-      return;
+-    if (!checkElementExistence(widgetId))
+-      return;
+-    onWidgetLoad?.(widgetId);
+-    return () => {
+-      window.turnstile.remove(widgetId);
+-    };
+-  }, [widgetId, onWidgetLoad]);
+-  useEffect(() => {
+-    setContainerStyle(
+-      options.execution === "execute" ? CONTAINER_STYLE_SET.invisible : renderConfig.appearance === "interaction-only" ? CONTAINER_STYLE_SET.interactionOnly : CONTAINER_STYLE_SET[widgetSize]
+-    );
+-  }, [options.execution, widgetSize, renderConfig.appearance]);
+-  useEffect(() => {
+-    if (!scriptLoaded || typeof onLoadScript !== "function")
+-      return;
+-    onLoadScript();
+-  }, [scriptLoaded, onLoadScript]);
+-  return /* @__PURE__ */ jsx(
+-    Container,
+-    {
+-      ref: containerRef,
+-      as,
+-      id: containerId,
+-      style: { ...containerStyle, ...style },
+-      ...divProps
+-    }
+-  );
++  });
+ });
+ Turnstile.displayName = "Turnstile";
+ 

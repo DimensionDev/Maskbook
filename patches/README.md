@@ -40,3 +40,4 @@
 ## CSP
 
 - @protobufjs/inquire: We don't allow eval.
+- @marsidev/react-turnstile: include `script.src = ...` and let our extension rejected by the Chrome store

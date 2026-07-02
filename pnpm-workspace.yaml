@@ -49,6 +49,7 @@ patchedDependencies:
   gulp: patches/gulp.patch
   ts-results-es: patches/ts-results-es.patch
   '@lingui/cli': patches/@lingui__cli.patch
+  '@marsidev/react-turnstile@0.4.1': patches/@marsidev__react-turnstile@0.4.1.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:

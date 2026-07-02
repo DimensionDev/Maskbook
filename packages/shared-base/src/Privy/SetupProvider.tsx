@@ -14,6 +14,7 @@ export function PrivySetupProvider({ children }: PropsWithChildren) {
         <PrivyProvider
             appId={process.env.PRIVY_APP_ID}
             config={{
+                captchaEnabled: false,
                 supportedChains: chains,
             }}>
             {children}
