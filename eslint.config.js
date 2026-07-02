@@ -22,7 +22,6 @@ const deferPackages = [
     '@masknet/gun-utils',
     'web3-eth',
     'twitter-text',
-    'web3-utils',
     '@solana/web3.js',
     // add package names here.
 ]

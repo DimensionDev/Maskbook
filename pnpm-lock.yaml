@@ -637,9 +637,6 @@ importers:
       web3-types:
         specifier: 1.10.0
         version: 1.10.0
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
       webextension-polyfill:
         specifier: ^0.12.0
         version: 0.12.0
@@ -902,9 +899,6 @@ importers:
       viem:
         specifier: ^2.45.0
         version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
 
   packages/plugins/CrossChainBridge:
     dependencies:
@@ -1380,9 +1374,6 @@ importers:
       web3-types:
         specifier: 1.10.0
         version: 1.10.0
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
 
   packages/plugins/Savings:
     dependencies:
@@ -1431,9 +1422,6 @@ importers:
       viem:
         specifier: ^2.45.0
         version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
 
   packages/plugins/ScamSniffer:
     dependencies:
@@ -1632,9 +1620,6 @@ importers:
       viem:
         specifier: ^2.45.0
         version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
 
   packages/plugins/Trader:
     dependencies:
@@ -2140,9 +2125,6 @@ importers:
       web3-types:
         specifier: 1.10.0
         version: 1.10.0
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
       zod:
         specifier: ^3.24.2
         version: 3.24.4
@@ -2465,9 +2447,6 @@ importers:
       viem:
         specifier: ^2.45.0
         version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
 
   packages/web3-providers:
     dependencies:
@@ -2615,9 +2594,6 @@ importers:
       web3-types:
         specifier: 1.10.0
         version: 1.10.0
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
       zod:
         specifier: ^3.24.2
         version: 3.24.4
@@ -2722,9 +2698,6 @@ importers:
       web3-types:
         specifier: 1.10.0
         version: 1.10.0
-      web3-utils:
-        specifier: 1.10.4
-        version: 1.10.4
 
   packages/web3-shared/flow:
     dependencies:
