@@ -16,9 +16,13 @@ export class MetaMaskProvider extends EVMInjectedWalletProvider {
     }
 
     protected override onAccountsChanged(accounts: string[]): void {
-        if (accounts.length) this.emitter.emit('accounts', accounts)
-        // disconnection will trigger an empty accounts list
-        else this.emitter.emit('disconnect', ProviderType.MetaMask)
+        if (!accounts.length) return
+        this.emitter.emit('accounts', accounts)
+        // MetaMask emits an empty accounts list both when the wallet is locked
+        // (e.g. after device standby) and when the account is genuinely removed.
+        // Treating it as a disconnect tears the connection down on every standby/
+        // lock and breaks auto-restore. Keep the connection; it recovers once
+        // MetaMask re-emits the account. (mf-5445)
     }
 
     override get ready() {

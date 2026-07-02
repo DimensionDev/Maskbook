@@ -1,4 +1,5 @@
-import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, type ChainId, type RequestArguments } from '@masknet/web3-shared-evm'
+import type { TransactionSerializable } from 'viem'
 import { Composer } from './ComposerAPI.js'
 import { evm } from '../../../Manager/registry.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
@@ -9,6 +10,12 @@ import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import { chainIdToChain, createViemClient } from '../../../helpers/createViemClient.js'
+
+function assertTransactionChainId(transaction: TransactionSerializable | undefined, chainId: ChainId) {
+    if (!transaction) return
+    if (transaction.chainId !== undefined && transaction.chainId !== chainId)
+        throw new Error('Transaction chain id does not match current chain id.')
+}
 
 export class EVMRequestAPI extends EVMRequestReadonlyAPI {
     static override Default = new EVMRequestAPI()
@@ -47,7 +54,15 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                                     context.write(await this.Provider?.disconnect(options.providerType))
                                     break
                                 default: {
-                                    if (!PayloadEditor.fromPayload(context.request).readonly) {
+                                    const payloadEditor = PayloadEditor.fromPayload(context.request)
+                                    if (!payloadEditor.readonly) {
+                                        assertTransactionChainId(
+                                            payloadEditor.signableTransaction,
+                                            EVMWalletProviders[
+                                                options.providerType
+                                            ].subscription.chainId.getCurrentValue(),
+                                        )
+
                                         const web3Provider = EVMWalletProviders[
                                             options.providerType
                                         ].createWeb3Provider({
