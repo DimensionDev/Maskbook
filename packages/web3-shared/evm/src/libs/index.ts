@@ -1,6 +1,5 @@
 export * from './AccountTransaction.js'
 export * from './Composer.js'
-export * from './ContractTransaction.js'
 export * from './EIP155Editor.js'
 export * from './ErrorEditor.js'
 export * from './EtherscanURL.js'

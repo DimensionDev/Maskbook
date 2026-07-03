@@ -1,19 +1,12 @@
 import { BigNumber } from 'bignumber.js'
-import {
-    type ChainId,
-    type Web3,
-    createContract,
-    TransactionEventType,
-    ZERO_ADDRESS,
-    getLidoConstant,
-    splitSignature,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, ZERO_ADDRESS, getLidoConstant, splitSignature } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
-import { LidoAbi, type Lido } from '@masknet/web3-contracts/types/Lido.js'
-import { LidoWithdrawAbi, type LidoWithdraw } from '@masknet/web3-contracts/types/LidoWithdraw.js'
-import { LidoStETHAbi, type LidoStETH } from '@masknet/web3-contracts/types/LidoStETH.js'
+import { LidoAbi } from '@masknet/web3-contracts/types/Lido.js'
+import { LidoWithdrawAbi } from '@masknet/web3-contracts/types/LidoWithdraw.js'
+import { LidoStETHAbi } from '@masknet/web3-contracts/types/LidoStETH.js'
 
-import { EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
+import { EVMContract, EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
+import type { Address, ContractFunctionArgs, Hex } from 'viem'
 import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
 const MAX_DEADLINE = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
@@ -30,7 +23,7 @@ export class LidoProtocol implements SavingsProtocol {
         return this.pair[1]
     }
 
-    async getApr(chainId: ChainId, web3: Web3) {
+    async getApr(chainId: ChainId) {
         try {
             return await LidoAPI.getStEthAPR()
         } catch {
@@ -38,25 +31,33 @@ export class LidoProtocol implements SavingsProtocol {
             return '5.30'
         }
     }
-    async getBalance(chainId: ChainId, web3: Web3, account: string) {
+    async getBalance(chainId: ChainId, account: string) {
         try {
-            const contract = createContract<Lido>(web3, getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
-            return new BigNumber((await contract?.methods.balanceOf(account).call()) ?? 0)
+            const contract = EVMContract.getContract(getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
+            return new BigNumber(
+                (
+                    await EVMContract.readContract(contract, 'balanceOf', [account as Address], { chainId })
+                )?.toString() ?? 0,
+            )
         } catch {}
         return ZERO
     }
 
-    public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async depositEstimate(account: string, chainId: ChainId, value: BigNumber.Value) {
         try {
-            const contract = createContract<Lido>(web3, getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
-            const gasEstimate = await contract?.methods
-                .submit(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS)
-                .estimateGas({
+            const contract = EVMContract.getContract(getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
+            const gasEstimate = await EVMContract.estimateContractGas(
+                contract,
+                'submit',
+                [(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS) as Address],
+                {
+                    chainId,
                     from: account,
                     // it's a BigNumber so it's ok
                     // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     value: value.toString(),
-                })
+                },
+            )
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
@@ -65,38 +66,37 @@ export class LidoProtocol implements SavingsProtocol {
         }
     }
 
-    public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
-        return new Promise<string>((resolve, reject) => {
-            const contract = createContract<Lido>(web3, getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
-            contract?.methods
-                .submit(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS)
-                .send({
-                    from: account,
-                    // it's a BigNumber so it's ok
-                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                    value: value.toString(),
-                    gas: gasEstimate.toNumber(),
-                })
-                .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-        })
+    public async deposit(account: string, chainId: ChainId, value: BigNumber.Value) {
+        const gasEstimate = new BigNumber(await this.depositEstimate(account, chainId, value))
+        const contract = EVMContract.getContract(getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoAbi)
+        const tx = EVMContract.createTransactionRequest(
+            contract,
+            'submit',
+            [(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS) as Address],
+            {
+                from: account,
+                // it's a BigNumber so it's ok
+                // eslint-disable-next-line @typescript-eslint/no-base-to-string
+                value: value.toString(),
+                gas: gasEstimate.toFixed(),
+                chainId,
+            },
+        )
+        if (!tx) throw new Error("Can't create deposit transaction")
+        const hash = await EVMWeb3.sendTransaction(tx, { chainId })
+        await EVMWeb3.confirmTransaction(hash, { chainId })
+        return hash
     }
 
-    public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async withdrawEstimate(account: string, chainId: ChainId, value: BigNumber.Value) {
         return ZERO
     }
 
-    public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const lidoStETHContract = createContract<LidoStETH>(
-            web3,
-            getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
-            LidoStETHAbi,
-        )
+    public async withdraw(account: string, chainId: ChainId, value: BigNumber.Value) {
+        const lidoStETHContract = EVMContract.getContract(getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'), LidoStETHAbi)
 
-        const nonces = await lidoStETHContract?.methods.nonces(account).call()
+        const nonce = await EVMContract.readContract(lidoStETHContract, 'nonces', [account as Address], { chainId })
+        const amount = BigInt(new BigNumber(value).toFixed(0))
 
         const signature = await EVMWeb3.signMessage(
             'typedData',
@@ -155,7 +155,7 @@ export class LidoProtocol implements SavingsProtocol {
                     spender: getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'),
                     // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     value: value.toString(),
-                    nonce: nonces,
+                    nonce: nonce?.toString() ?? '0',
                     deadline: MAX_DEADLINE.toString(),
                 },
             }),
@@ -163,31 +163,36 @@ export class LidoProtocol implements SavingsProtocol {
 
         const { v, r, s } = splitSignature(signature)
 
-        const contract = createContract<LidoWithdraw>(
-            web3,
-            getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'),
-            LidoWithdrawAbi,
-        )
+        const contract = EVMContract.getContract(getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'), LidoWithdrawAbi)
 
-        const result = contract?.methods.requestWithdrawalsWithPermit([value], account, [
-            value,
-            MAX_DEADLINE.toString(),
-            v,
-            r,
-            s,
-        ])
+        const args: ContractFunctionArgs<
+            typeof LidoWithdrawAbi,
+            'nonpayable' | 'payable',
+            'requestWithdrawalsWithPermit'
+        > = [
+            [amount],
+            account as Address,
+            {
+                value: amount,
+                deadline: MAX_DEADLINE,
+                v,
+                r: r as Hex,
+                s: s as Hex,
+            },
+        ]
 
-        const gas = await result?.estimateGas({ from: account })
-        return new Promise<string>((resolve, reject) => {
-            result
-                ?.send({
-                    from: account,
-                    gas,
-                })
-                .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
+        const gas = await EVMContract.estimateContractGas(contract, 'requestWithdrawalsWithPermit', args, {
+            chainId,
+            from: account,
         })
+        const tx = EVMContract.createTransactionRequest(contract, 'requestWithdrawalsWithPermit', args, {
+            from: account,
+            gas,
+            chainId,
+        })
+        if (!tx) throw new Error("Can't create withdraw transaction")
+        const hash = await EVMWeb3.sendTransaction(tx, { chainId })
+        await EVMWeb3.confirmTransaction(hash, { chainId })
+        return hash
     }
 }

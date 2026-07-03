@@ -4,10 +4,10 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { EVMWeb3, SolanaChainResolver } from '@masknet/web3-providers'
+import { EVMContract, EVMWeb3, SolanaChainResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Link } from '@mui/material'
 import type { Cluster } from '@solana/web3.js'
@@ -19,6 +19,7 @@ import { getTokenAccount, getTokenProgram } from '../helpers/getTokenAccount.js'
 import { refundNativeToken } from '../helpers/refundNativeToken.js'
 import { refundSplToken } from '../helpers/refundSplToken.js'
 import { useRedPacketContract } from './useRedPacketContract.js'
+import type { Hex } from 'viem'
 
 const useStyles = makeStyles()({
     message: {
@@ -42,12 +43,13 @@ export function useRefundCallback(version: number, from: string, id?: string, ex
 
         setIsRefunded(false)
 
-        const tx = await new ContractTransaction(redPacketContract.options.address).fillAll(
-            redPacketContract.methods.refund(id),
-            {
-                from,
-            },
-        )
+        const contract = redPacketContract
+        const tx = EVMContract.createTransactionRequest(contract, 'refund', [id as Hex], { from })
+        if (!tx) return
+        if (!tx.gas) {
+            const gas = await EVMContract.estimateContractGas(contract, 'refund', [id as Hex], { chainId, from })
+            tx.gas = gas ? String(gas) : undefined
+        }
         const hash = await EVMWeb3.sendTransaction(tx, {
             chainId,
         })

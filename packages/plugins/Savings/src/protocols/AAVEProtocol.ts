@@ -1,20 +1,12 @@
 import { BigNumber } from 'bignumber.js'
-import { AaveLendingPoolAbi, type AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool.js'
-import {
-    AaveLendingPoolAddressProviderAbi,
-    type AaveLendingPoolAddressProvider,
-} from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
-import { ERC20Abi, type ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
+import { AaveLendingPoolAbi } from '@masknet/web3-contracts/types/AaveLendingPool.js'
+import { AaveLendingPoolAddressProviderAbi } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
+import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
+import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import { ZERO, pow10, type FungibleToken } from '@masknet/web3-shared-base'
-import {
-    type Web3,
-    type ChainId,
-    type SchemaType,
-    TransactionEventType,
-    createContract,
-    getAaveConstant,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType, getAaveConstant } from '@masknet/web3-shared-evm'
+import type { Address } from 'viem'
 import { ProtocolType, type SavingsProtocol } from '../types.js'
 
 export class AAVEProtocol implements SavingsProtocol {
@@ -40,7 +32,7 @@ export class AAVEProtocol implements SavingsProtocol {
         return this.pair[1]
     }
 
-    public async getApr(chainId: ChainId, web3: Web3) {
+    public async getApr(chainId: ChainId) {
         try {
             const subgraphUrl = getAaveConstant(chainId, 'AAVE_SUBGRAPHS')
             if (!subgraphUrl) {
@@ -91,7 +83,7 @@ export class AAVEProtocol implements SavingsProtocol {
         }
     }
 
-    public async getBalance(chainId: ChainId, web3: Web3, account: string) {
+    public async getBalance(chainId: ChainId, account: string) {
         try {
             const subgraphUrl = getAaveConstant(chainId, 'AAVE_SUBGRAPHS')
 
@@ -131,20 +123,31 @@ export class AAVEProtocol implements SavingsProtocol {
             })
 
             const aTokenId = response.data.reserves[0].aToken.id
-            const contract = createContract<ERC20>(web3, aTokenId, ERC20Abi)
-            return new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
+            const contract = EVMContract.getContract(aTokenId, ERC20Abi)
+            return new BigNumber(
+                (
+                    await EVMContract.readContract(contract, 'balanceOf', [account as Address], { chainId })
+                )?.toString() ?? '0',
+            )
         } catch (error) {
             console.error('AAVE BALANCE ERROR:', error)
             return ZERO
         }
     }
 
-    public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async depositEstimate(account: string, chainId: ChainId, value: BigNumber.Value) {
         try {
-            const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
-            const gasEstimate = await operation?.estimateGas({
-                from: account,
-            })
+            const poolAddress = await this.getPoolAddress(chainId)
+            const contract = EVMContract.getContract(poolAddress, AaveLendingPoolAbi)
+            const gasEstimate = await EVMContract.estimateContractGas(
+                contract,
+                'deposit',
+                [this.bareToken.address as Address, BigInt(new BigNumber(value).toFixed(0)), account as Address, 0],
+                {
+                    chainId,
+                    from: account,
+                },
+            )
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
@@ -153,83 +156,78 @@ export class AAVEProtocol implements SavingsProtocol {
         }
     }
 
-    private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    private async getPoolAddress(chainId: ChainId) {
         const aaveLPoolAddress = getAaveConstant(chainId, 'AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS')
-        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-            web3,
+        const lPoolAddressProviderContract = EVMContract.getContract(
             aaveLPoolAddress,
             AaveLendingPoolAddressProviderAbi,
         )
 
-        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
-        const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolAbi)
-        return contract?.methods.deposit(this.bareToken.address, new BigNumber(value).toFixed(), account, '0')
-    }
-
-    public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
-        const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
-        if (!operation) {
-            throw new Error("Can't create deposit operation")
-        }
-        return new Promise<string>((resolve, reject) => {
-            operation
-                .send({
-                    from: account,
-                    gas: gasEstimate.toNumber(),
-                })
-                .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
+        return EVMContract.readContract(lPoolAddressProviderContract, 'getLendingPool', [], {
+            chainId,
         })
     }
 
-    public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async deposit(account: string, chainId: ChainId, value: BigNumber.Value) {
+        const gasEstimate = new BigNumber(await this.depositEstimate(account, chainId, value))
+        const poolAddress = await this.getPoolAddress(chainId)
+        const contract = EVMContract.getContract(poolAddress, AaveLendingPoolAbi)
+        const tx = EVMContract.createTransactionRequest(
+            contract,
+            'deposit',
+            [this.bareToken.address as Address, BigInt(new BigNumber(value).toFixed(0)), account as Address, 0],
+            {
+                from: account,
+                gas: gasEstimate.toFixed(),
+                chainId,
+            },
+        )
+        if (!tx) {
+            throw new Error("Can't create deposit transaction")
+        }
+        const hash = await EVMWeb3.sendTransaction(tx, { chainId })
+        await EVMWeb3.confirmTransaction(hash, { chainId })
+        return hash
+    }
+
+    public async withdrawEstimate(account: string, chainId: ChainId, value: BigNumber.Value) {
         try {
-            const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-                web3,
-                getAaveConstant(chainId, 'AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS'),
-                AaveLendingPoolAddressProviderAbi,
-            )
-
-            const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
-            const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolAbi)
-            const gasEstimate = await contract?.methods
-                .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)
-                .estimateGas({
+            const poolAddress = await this.getPoolAddress(chainId)
+            const contract = EVMContract.getContract(poolAddress, AaveLendingPoolAbi)
+            const gasEstimate = await EVMContract.estimateContractGas(
+                contract,
+                'withdraw',
+                [this.bareToken.address as Address, BigInt(new BigNumber(value).toFixed(0)), account as Address],
+                {
+                    chainId,
                     from: account,
-                })
+                },
+            )
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
             return ZERO
         }
     }
 
-    public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-            web3,
-            getAaveConstant(chainId, 'AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS'),
-            AaveLendingPoolAddressProviderAbi,
+    public async withdraw(account: string, chainId: ChainId, value: BigNumber.Value) {
+        const poolAddress = await this.getPoolAddress(chainId)
+        const gasEstimate = new BigNumber(await this.withdrawEstimate(account, chainId, value))
+        const contract = EVMContract.getContract(poolAddress, AaveLendingPoolAbi)
+        const tx = EVMContract.createTransactionRequest(
+            contract,
+            'withdraw',
+            [this.bareToken.address as Address, BigInt(new BigNumber(value).toFixed(0)), account as Address],
+            {
+                from: account,
+                gas: gasEstimate.toFixed(),
+                chainId,
+            },
         )
-
-        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
-        const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
-        const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolAbi)
-        return new Promise<string>((resolve, reject) => {
-            contract?.methods
-                .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)
-                .send({
-                    from: account,
-                    gas: gasEstimate.toNumber(),
-                })
-                .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-        })
+        if (!tx) {
+            throw new Error("Can't create withdraw transaction")
+        }
+        const hash = await EVMWeb3.sendTransaction(tx, { chainId })
+        await EVMWeb3.confirmTransaction(hash, { chainId })
+        return hash
     }
 }

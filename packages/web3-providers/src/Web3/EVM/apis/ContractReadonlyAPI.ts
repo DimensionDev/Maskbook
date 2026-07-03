@@ -1,13 +1,13 @@
-import { createContract } from '@masknet/web3-shared-evm'
-import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
-import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
-import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
-import type { ERC165 } from '@masknet/web3-contracts/types/ERC165.js'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
-import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
-import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
-import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
+import {
+    createContractWithAddress,
+    normalizeFunctionArgs,
+    type ContractCallOptions,
+    type ContractWithAddress,
+    type ContractWriteOptions,
+    type Transaction,
+} from '@masknet/web3-shared-evm'
+import { toBigInt, toHex } from '@masknet/shared-base'
+import { encodeFunctionData } from 'viem'
 
 import { AirdropV2Abi as AirDropV2ABI } from '@masknet/web3-contracts/types/AirdropV2.js'
 import { BalanceCheckerAbi as BalanceCheckerABI } from '@masknet/web3-contracts/types/BalanceChecker.js'
@@ -20,7 +20,14 @@ import { WalletAbi as WalletABI } from '@masknet/web3-contracts/types/Wallet.js'
 
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
-import type { Abi } from 'viem'
+import type {
+    Abi,
+    AbiStateMutability,
+    Address,
+    ContractFunctionArgs,
+    ContractFunctionName,
+    ContractFunctionReturnType,
+} from 'viem'
 
 export class EVMContractReadonlyAPI {
     static Default = new EVMContractReadonlyAPI()
@@ -29,45 +36,143 @@ export class EVMContractReadonlyAPI {
     }
     protected Request
 
-    getWeb3Contract<T extends BaseContract>(
-        address: string | undefined,
-        abi: Abi,
-        initial?: Pick<EVMConnectionOptions, 'chainId'>,
+    getContract<TAbi extends Abi>(address: string | undefined, abi: TAbi) {
+        return createContractWithAddress(address, abi)
+    }
+
+    async readContract<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi, 'pure' | 'view'>,
+        TArgs extends ContractFunctionArgs<TAbi, 'pure' | 'view', TFunctionName>,
+    >(
+        contract: ContractWithAddress<TAbi> | null | undefined,
+        functionName: TFunctionName,
+        args: TArgs = [] as TArgs,
+        initial?: EVMConnectionOptions & ContractCallOptions,
+    ): Promise<ContractFunctionReturnType<TAbi, 'pure' | 'view', TFunctionName, TArgs> | undefined> {
+        if (!contract) return
+        const client = this.Request.getViem(initial)
+        const block = normalizeBlock(initial?.block)
+        return client.readContract({
+            address: contract.address,
+            abi: contract.abi,
+            functionName,
+            args: normalizeFunctionArgs(args, contract.abi, functionName),
+            account: (initial?.account ?? initial?.from) as Address | undefined,
+            ...block,
+        } as Parameters<typeof client.readContract>[0]) as Promise<
+            ContractFunctionReturnType<TAbi, 'pure' | 'view', TFunctionName, TArgs>
+        >
+    }
+
+    async estimateContractGas<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+        TArgs extends ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
+    >(
+        contract: ContractWithAddress<TAbi> | null | undefined,
+        functionName: TFunctionName,
+        args: TArgs = [] as unknown as TArgs,
+        initial?: EVMConnectionOptions & ContractCallOptions,
     ) {
-        const web3 = this.Request.getWeb3(initial)
-        return createContract<T>(web3, address, abi)
+        if (!contract) return
+        const client = this.Request.getViem(initial)
+        const gas = await client.estimateContractGas({
+            address: contract.address,
+            abi: contract.abi,
+            functionName,
+            args: normalizeFunctionArgs(args, contract.abi, functionName),
+            account: (initial?.account ?? initial?.from) as Address | undefined,
+            value: typeof initial?.value === 'undefined' ? undefined : toBigInt(initial.value),
+        } as Parameters<typeof client.estimateContractGas>[0])
+        return Number(gas)
     }
 
-    getERC20Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC20>(address, ERC20ABI, initial)
+    encodeContractFunctionData<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi>,
+        TArgs extends ContractFunctionArgs<TAbi, AbiStateMutability, TFunctionName>,
+    >(abi: TAbi, functionName: TFunctionName, args: TArgs = [] as unknown as TArgs) {
+        return encodeFunctionData({
+            abi,
+            functionName,
+            args: normalizeFunctionArgs(args, abi, functionName),
+        } as Parameters<typeof encodeFunctionData>[0])
     }
 
-    getERC20Bytes32Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI, initial)
+    createTransactionRequest<
+        TAbi extends Abi,
+        TFunctionName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+        TArgs extends ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TFunctionName>,
+    >(
+        contract: ContractWithAddress<TAbi> | null | undefined,
+        functionName: TFunctionName,
+        args: TArgs = [] as unknown as TArgs,
+        initial?: ContractWriteOptions,
+    ) {
+        if (!contract) return
+        return normalizeTransaction({
+            ...initial,
+            from: initial?.from ?? initial?.account,
+            to: contract.address,
+            data: this.encodeContractFunctionData(contract.abi, functionName, args),
+        })
     }
 
-    getERC721Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC721>(address, ERC721ABI, initial)
+    getERC20Contract(address: string | undefined) {
+        return this.getContract(address, ERC20ABI)
     }
 
-    getERC1155Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC1155>(address, ERC1155ABI, initial)
+    getERC20Bytes32Contract(address: string | undefined) {
+        return this.getContract(address, ERC20Bytes32ABI)
     }
 
-    getERC165Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<ERC165>(address, ERC165ABI, initial)
+    getERC721Contract(address: string | undefined) {
+        return this.getContract(address, ERC721ABI)
     }
 
-    getBalanceCheckerContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<BalanceChecker>(address, BalanceCheckerABI, initial)
+    getERC1155Contract(address: string | undefined) {
+        return this.getContract(address, ERC1155ABI)
     }
 
-    getWalletContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<Wallet>(address, WalletABI, initial)
+    getERC165Contract(address: string | undefined) {
+        return this.getContract(address, ERC165ABI)
     }
 
-    getAirdropV2Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<AirdropV2>(address, AirDropV2ABI, initial)
+    getBalanceCheckerContract(address: string | undefined) {
+        return this.getContract(address, BalanceCheckerABI)
+    }
+
+    getWalletContract(address: string | undefined) {
+        return this.getContract(address, WalletABI)
+    }
+
+    getAirdropV2Contract(address: string | undefined) {
+        return this.getContract(address, AirDropV2ABI)
     }
 }
 export const EVMContractReadonly = EVMContractReadonlyAPI.Default
+
+function normalizeBlock(
+    block: string | number | bigint | undefined,
+): undefined | { blockNumber: bigint; blockTag: undefined } | { blockNumber: undefined; blockTag: string } {
+    if (typeof block === 'bigint') return { blockNumber: block, blockTag: undefined }
+    if (typeof block === 'number') return { blockNumber: BigInt(block), blockTag: undefined }
+    if (typeof block === 'string' && /^\d+$/u.test(block)) return { blockNumber: BigInt(block), blockTag: undefined }
+    if (typeof block === 'string' && /^0x[\da-f]+$/iu.test(block))
+        return { blockNumber: BigInt(block), blockTag: undefined }
+    if (typeof block === 'string') return { blockNumber: undefined, blockTag: block }
+    return
+}
+
+function normalizeTransaction(transaction: ContractWriteOptions): Transaction {
+    return Object.fromEntries(
+        Object.entries(transaction)
+            .filter(([, value]) => value !== undefined && value !== null && value !== '')
+            .map(([key, value]) => [key, isTransactionQuantity(key) ? toHex(value as never) : value]),
+    ) as Transaction
+}
+
+function isTransactionQuantity(key: string) {
+    return ['chainId', 'gas', 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas', 'nonce', 'value'].includes(key)
+}

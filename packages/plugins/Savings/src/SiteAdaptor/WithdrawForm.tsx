@@ -94,12 +94,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
         if (chainId !== actualChainId) {
             await EVMWeb3.switchChain(chainId)
         }
-        const hash = await protocol?.withdraw(
-            account,
-            chainId,
-            EVMWeb3.getWeb3({ chainId }),
-            formatAmount(amount, token.decimals),
-        )
+        const hash = await protocol?.withdraw(account, chainId, formatAmount(amount, token.decimals))
 
         if (typeof hash !== 'string') {
             throw new Error('Failed to deposit token.')

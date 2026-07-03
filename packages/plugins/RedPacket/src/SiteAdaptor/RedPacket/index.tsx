@@ -8,9 +8,8 @@ import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { NetworkContextProvider, useChainContext, useNetwork } from '@masknet/web3-hooks-base'
-import { EVMChainResolver } from '@masknet/web3-providers'
+import { EVMChainResolver, EVMContract } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId, useRedPacketConstant } from '@masknet/web3-shared-evm'
@@ -18,6 +17,7 @@ import { Card, Grow, Link } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 import { Conditions } from '../Conditions/index.js'
+import { formatRedPacketAvailability } from '../hooks/useAvailability.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useIsFireflyRedpacket } from '../hooks/useIsFireflyRedpacket.js'
@@ -26,6 +26,7 @@ import { useRedPacketCover } from '../hooks/useRedPacketCover.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { ClaimOnFirefly } from '../components/ClaimOnFirefly.js'
+import type { Hex } from 'viem'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -142,12 +143,17 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         redpacketChainId,
     )
 
-    const redPacketContract = useRedPacketContract(redpacketChainId, payload.contract_version) as HappyRedPacketV4
+    const redPacketContract = useRedPacketContract(redpacketChainId, payload.contract_version)
     const checkResult = useCallback(async () => {
-        const data = await redPacketContract.methods.check_availability(payload.rpid).call({
-            // check availability is ok w/o account
-            from: account,
-        })
+        if (!redPacketContract) return
+        const data = formatRedPacketAvailability(
+            await EVMContract.readContract(redPacketContract, 'check_availability', [payload.rpid as Hex], {
+                chainId: redpacketChainId,
+                // check availability is ok w/o account
+                from: account,
+            }),
+        )
+        if (!data) return
         if (isZero(data.claimed_amount)) return
         TransactionConfirmModal.open({
             shareText: claimedShareText,
@@ -160,7 +166,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             title: _(msg`Lucky Drop`),
             share: (text) => share?.(text, source ? source : undefined),
         })
-    }, [redPacketContract.methods, payload.rpid, account, claimedShareText, token, _, source])
+    }, [redPacketContract, payload.rpid, redpacketChainId, account, claimedShareText, token, _, source])
 
     const [showRequirements, setShowRequirements] = useState(false)
     const onClaimOrRefund = useCallback(async () => {

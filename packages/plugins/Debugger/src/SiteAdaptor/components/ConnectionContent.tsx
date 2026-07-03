@@ -8,17 +8,13 @@ import { useChainContext, useNetworkContext, useNetworks, useWeb3State } from '@
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 
-interface ConnectionContentProps {
-    onClose?: () => void
-}
-
 const useStyles = makeStyles()({
     container: {
         overflow: 'auto',
     },
 })
 
-export function ConnectionContent(props: ConnectionContentProps) {
+export function ConnectionContent() {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -73,15 +69,16 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [])
 
     const onEstimateCallback = useCallback(async () => {
-        const contract = EVMContract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7', {
-            chainId: ChainId.Mainnet,
-        })
+        const contract = EVMContract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7')
         const estimatedGas = await EVMWeb3.estimateTransaction?.(
             {
                 from: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 to: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
                 value: '1',
-                data: contract?.methods.approve('0x31f42841c2db5173425b5223809cf3a38fede360', '1').encodeABI(),
+                data: EVMContract.encodeContractFunctionData(contract!.abi, 'approve', [
+                    '0x31f42841c2db5173425b5223809cf3a38fede360',
+                    1n,
+                ]),
             },
             0,
             {

@@ -5,11 +5,12 @@ import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { EVMChainResolver } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, useRedPacketConstants, type GasConfig } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useCreateCallback, useCreateParams, type RedPacketSettings } from './useCreateCallback.js'
 import { getLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { getRedPacketLatestContractAddress, RED_PACKET_LATEST_VERSION } from './useRedPacketContract.js'
 
 export function useCreateFTRedpacketCallback(
     redpacketPubkey: string,
@@ -20,10 +21,8 @@ export function useCreateFTRedpacketCallback(
 ) {
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
-    const contract_version = 4
-
     const { chainId, networkType, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: createParams } = useCreateParams(chainId, settings, contract_version, redpacketPubkey)
+    const { value: createParams } = useCreateParams(chainId, settings, redpacketPubkey)
     const isNativeToken = isNativeTokenAddress(settings.token?.address)
     const { transactionValue, estimateGasFee } = useTransactionValue(
         settings.total,
@@ -55,7 +54,6 @@ export function useCreateFTRedpacketCallback(
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         chainId,
         settingsWithTotal,
-        contract_version,
         redpacketPubkey,
         gasOption,
     )
@@ -74,6 +72,7 @@ export function useCreateFTRedpacketCallback(
         if (!CreationSuccess?.id) return
         const senderName = settings.name || getLastRecognizedIdentity()?.identifier?.userId
         const redpacketPayload = {
+            txid: hash,
             sender: {
                 address: account,
                 name: senderName,
@@ -82,7 +81,7 @@ export function useCreateFTRedpacketCallback(
             is_random: settings.isRandom,
             shares: settings.shares,
             rpid: CreationSuccess.id,
-            total: CreationSuccess.total,
+            total: CreationSuccess.total.toString(),
             duration: settings.duration,
             creation_time: Number(CreationSuccess.creation_time * 1000n),
             token: settings.token,
@@ -95,24 +94,23 @@ export function useCreateFTRedpacketCallback(
 
         // output the redpacket as JSON payload
         onCreated?.(payload.current)
-    }, [createCallback, settings, onCreated])
+    }, [account, createCallback, settings, onCreated])
 
     const payload = useRef<RedPacketJSONPayload>({
         network: EVMChainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
 
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
-
     useEffect(() => {
-        const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
+        const contractAddress = getRedPacketLatestContractAddress(chainId)
+        const contractVersion = RED_PACKET_LATEST_VERSION
         if (!contractAddress) {
             onClose?.()
             return
         }
         payload.current.contract_address = contractAddress
-        payload.current.contract_version = contract_version
+        payload.current.contract_version = contractVersion
         payload.current.network = EVMChainResolver.networkType(chainId)
-    }, [chainId, networkType, contract_version])
+    }, [chainId, networkType])
 
     return {
         createRedpacket,

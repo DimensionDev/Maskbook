@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { unreachable } from '@masknet/kit'
+import { toBigInt, type NetworkPluginID } from '@masknet/shared-base'
 import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
+import type { Address } from 'viem'
 
 export function useGasLimit(
     schemaType?: SchemaType,
@@ -42,20 +43,28 @@ export function useGasLimit(
                     return Number.parseInt(gas ?? '0', 16)
                 case SchemaType.ERC20:
                     return (
-                        (await EVMContract.getERC20Contract(contractAddress, options)
-                            ?.methods?.transfer(recipient, amount ?? 0)
-                            .estimateGas({
+                        (await EVMContract.estimateContractGas(
+                            EVMContract.getERC20Contract(contractAddress),
+                            'transfer',
+                            [recipient as Address, toBigInt(amount ?? 0)],
+                            {
+                                ...options,
                                 from: account,
-                            })) || null
+                            },
+                        )) || null
                     )
                 case SchemaType.SBT:
                 case SchemaType.ERC721:
                     return (
-                        (await EVMContract.getERC721Contract(contractAddress, options)
-                            ?.methods.transferFrom(account, recipient, tokenId ?? '')
-                            .estimateGas({
+                        (await EVMContract.estimateContractGas(
+                            EVMContract.getERC721Contract(contractAddress),
+                            'transferFrom',
+                            [account as Address, recipient as Address, BigInt(tokenId ?? 0)],
+                            {
+                                ...options,
                                 from: account,
-                            })) || null
+                            },
+                        )) || null
                     )
                 case SchemaType.ERC1155:
                     throw new Error('Method not implemented.')

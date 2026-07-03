@@ -1,14 +1,13 @@
 import { toHex, type NetworkPluginID } from '@masknet/shared-base'
-import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { EVMChainResolver, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMChainResolver, EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
+import type { ChainId, ContractWithAddress } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import { useRedPacketContract } from './useRedPacketContract.js'
+import { useRedPacketContract, type RedPacketContractAnyVersion } from './useRedPacketContract.js'
 import { useSignedMessage } from './useSignedMessage.js'
-import { keccak256 } from 'viem'
+import { keccak256, type Address, type Hex } from 'viem'
+import type { HappyRedPacketV4Abi } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 /**
  * Claim fungible token red packet.
@@ -31,24 +30,29 @@ export function useClaimCallback(account: string, payload: RedPacketJSONPayload 
         const config = {
             from: account,
         }
-        // note: despite the method params type of V1 and V2 is the same,
-        // but it is more understandable to declare respectively
-        const contractTransaction = new ContractTransaction(redPacketContract.options.address)
+
+        type V4 = ContractWithAddress<HappyRedPacketV4Abi>
+        type Old = ContractWithAddress<Exclude<RedPacketContractAnyVersion, HappyRedPacketV4Abi>>
+        const v4Arg = [rpid as Hex, signedMsg as Hex, account as Address] as const
+        const oldArg = [rpid as Hex, signedMsg, account as Address, keccak256(toHex(account))] as const
         const tx =
             version === 4 ?
-                await contractTransaction.fillAll(
-                    (redPacketContract as HappyRedPacketV4).methods.claim(rpid, signedMsg, account),
-                    config,
-                )
-            :   await contractTransaction.fillAll(
-                    (redPacketContract as HappyRedPacketV1).methods.claim(
-                        rpid,
-                        signedMsg,
-                        account,
-                        keccak256(toHex(account)),
-                    ),
-                    config,
-                )
+                EVMContract.createTransactionRequest(redPacketContract as V4, 'claim', v4Arg, config)
+            :   EVMContract.createTransactionRequest(redPacketContract as Old, 'claim', oldArg, config)
+        if (!tx) return
+        if (!tx.gas) {
+            const gas =
+                version === 4 ?
+                    await EVMContract.estimateContractGas(redPacketContract as V4, 'claim', v4Arg, {
+                        chainId,
+                        ...config,
+                    })
+                :   await EVMContract.estimateContractGas(redPacketContract as Old, 'claim', oldArg, {
+                        chainId,
+                        ...config,
+                    })
+            tx.gas = gas ? String(gas) : undefined
+        }
 
         return EVMWeb3.sendTransaction(tx, {
             chainId,

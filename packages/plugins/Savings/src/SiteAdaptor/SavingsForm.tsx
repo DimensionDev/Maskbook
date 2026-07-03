@@ -15,10 +15,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import {
-    AaveLendingPoolAddressProviderAbi,
-    type AaveLendingPoolAddressProvider,
-} from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
+import { AaveLendingPoolAddressProviderAbi } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import {
     useChainContext,
     useFungibleTokenBalance,
@@ -128,8 +125,8 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         try {
             setEstimatedGas(
                 isDeposit ?
-                    await protocol.depositEstimate(account, chainId, EVMWeb3.getWeb3({ chainId }), tokenAmount)
-                :   await protocol.withdrawEstimate(account, chainId, EVMWeb3.getWeb3({ chainId }), tokenAmount),
+                    await protocol.depositEstimate(account, chainId, tokenAmount)
+                :   await protocol.withdrawEstimate(account, chainId, tokenAmount),
             )
         } catch {
             // do nothing
@@ -169,17 +166,16 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         const aavePoolAddress = getAaveConstant(chainId, 'AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS')
         if (!aavePoolAddress) return
 
-        const lPoolAddressProviderContract = EVMContract.getWeb3Contract<AaveLendingPoolAddressProvider>(
-            aavePoolAddress,
-            AaveLendingPoolAddressProviderAbi,
-        )
+        const lPoolAddressProviderContract = EVMContract.getContract(aavePoolAddress, AaveLendingPoolAddressProviderAbi)
 
         const token = protocol.bareToken
 
         return {
             approveToken: token.schema === SchemaType.ERC20 ? token : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
-            approveAddress: await lPoolAddressProviderContract?.methods.getLendingPool().call(),
+            approveAddress: await EVMContract.readContract(lPoolAddressProviderContract, 'getLendingPool', [], {
+                chainId,
+            }),
         }
     }, [chainId, protocol.bareToken, inputAmount])
 
@@ -198,7 +194,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const [, executor] = useAsyncFn(async () => {
         const methodName = isDeposit ? 'deposit' : 'withdraw'
         if (chainId !== currentChainId) await EVMWeb3.switchChain?.(chainId)
-        const hash = await protocol[methodName](account, chainId, EVMWeb3.getWeb3({ chainId }), tokenAmount)
+        const hash = await protocol[methodName](account, chainId, tokenAmount)
         if (typeof hash !== 'string') {
             throw new Error('Failed to deposit token.')
         } else {
