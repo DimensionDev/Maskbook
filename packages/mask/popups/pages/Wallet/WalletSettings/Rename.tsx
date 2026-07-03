@@ -1,10 +1,9 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PersistentStorages, PrivyEnvGuard } from '@masknet/shared-base'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useFireflyEmbeddedWallets, useWallet } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useWallets } from '@privy-io/react-auth'
 import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import { WalletRenameModal } from '../../../modals/modal-controls.js'
@@ -13,7 +12,7 @@ import { useStyles } from './useStyles.js'
 export const Rename = PrivyEnvGuard(function Rename() {
     const wallet = useWallet()
     const { classes, theme } = useStyles()
-    const { wallets: fireflyWallets } = useWallets()
+    const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
     const isFireflyWallet = useMemo(
         () => fireflyWallets.some((w) => isSameAddress(w.address, wallet?.address)),
         [fireflyWallets, wallet?.address],

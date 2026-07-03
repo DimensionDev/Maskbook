@@ -9,7 +9,7 @@ import {
     type Wallet,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useReverseAddress } from '@masknet/web3-hooks-base'
+import { useFireflyEmbeddedWallets, useReverseAddress } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import {
@@ -21,7 +21,6 @@ import {
     listItemSecondaryActionClasses,
     type ListItemProps,
 } from '@mui/material'
-import { useWallets } from '@privy-io/react-auth'
 import { memo, useCallback, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import { WalletBalance } from '../index.js'
@@ -114,7 +113,7 @@ export const WalletItem = memo<WalletItemProps>(
         }, [wallet])
 
         const extraName = domain && domain !== wallet.name ? ` (${formatDomainName(domain)})` : ''
-        const { wallets: fireflyWallets } = useWallets()
+        const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
         const isFireflyWallet = useMemo(
             () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),
             [fireflyWallets, wallet.address],

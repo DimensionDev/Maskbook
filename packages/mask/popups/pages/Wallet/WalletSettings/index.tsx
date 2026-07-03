@@ -2,10 +2,9 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, PersistentStorages, PopupModalRoutes, PrivyEnvGuard } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
-import { useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { useFireflyEmbeddedWallets, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, List, Typography } from '@mui/material'
-import { useWallets as usePrivyWallets } from '@privy-io/react-auth'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
@@ -37,7 +36,7 @@ export const Component = memo(
         const modalNavigate = useModalNavigate()
         const wallet = useWallet()
         const allWallets = useWallets()
-        const { wallets: fireflyWallets } = usePrivyWallets()
+        const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
         const isFireflyWallet = useMemo(
             () => fireflyWallets.some((w) => isSameAddress(w.address, wallet?.address)),
             [fireflyWallets, wallet?.address],

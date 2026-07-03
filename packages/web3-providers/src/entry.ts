@@ -46,10 +46,6 @@ export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 export { SolanaChainResolver, SolanaExplorerResolver } from './Web3/Solana/apis/ResolverAPI.js'
 export { SOLWeb3 } from './Web3/Solana/apis/ConnectionAPI.js'
 
-// Privy
-export * from './Privy/index.js'
-export * from './Privy/constants.js'
-
 // Web3Bio
 export { Web3Bio } from './Web3Bio/index.js'
 
@@ -88,8 +84,15 @@ export {
     FireflyRedPacket,
     FireflyTwitter,
     FireflyFarcaster,
+    FIREFLY_BASE_URL,
     FIREFLY_SITE_URL,
     FireflyDomain,
+    // Embedded wallet (replaces @privy-io/react-auth)
+    FireflyEmbeddedWalletClient,
+    FireflyEmbeddedProvider,
+    createFireflyEmbeddedWallet,
+    PRIVY_SUPPORTED_CHAINS,
+    type FireflyEmbeddedWallet,
 } from './Firefly/index.js'
 
 // FiatCurrencyRate

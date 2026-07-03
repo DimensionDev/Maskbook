@@ -34,6 +34,10 @@ export interface BackupConfig {
 }
 
 interface FireflyAccount {
+    /**
+     * @deprecated Legacy v1 bearer token. Kept for backward compat with sessions
+     * created before the JWT v3 rollout. Prefer `access_token_v3` when present.
+     */
     accessToken: string
     accountId: string
     avatar: string
@@ -42,6 +46,26 @@ interface FireflyAccount {
     displayName: string
     isNew: boolean
     uid: string
+    /** Firefly JWT v3 access token (short TTL). Preferred over `accessToken`. */
+    access_token_v3?: string
+    /** Firefly JWT v3 refresh token (longer TTL, rotated on each use). */
+    refresh_token_v3?: string
+    /** Session ID for client-side tracking. Not used in auth headers. */
+    session_id?: string
+}
+
+/**
+ * Extract the active Firefly access token from a stored account value.
+ *
+ * Mirrors Firefly's own read order (`jwt.accessToken ?? legacyToken`): prefer the
+ * JWT v3 token (`access_token_v3`) and fall back to the legacy `accessToken` so
+ * sessions created before and after the v3 rollout both authenticate. Null-safe —
+ * returns `undefined` for missing/malformed values instead of throwing, so a
+ * partially-stored or legacy `firefly_account` can't crash consumers.
+ */
+export function getFireflyAccessToken(account?: FireflyAccount | null): string | undefined {
+    if (!account) return undefined
+    return account.access_token_v3 || account.accessToken || undefined
 }
 
 export const PersistentStorages = {

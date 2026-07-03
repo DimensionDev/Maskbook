@@ -7,7 +7,7 @@ import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
-import { useWallets } from '@privy-io/react-auth'
+import { useFireflyEmbeddedWallets } from '@masknet/web3-hooks-base'
 import { memo, useMemo, type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSubscription } from 'use-subscription'
@@ -150,7 +150,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
     }) {
         const { classes, cx } = useStyles({ disabled })
         const { data: connectedWallets, isPending } = useConnectedWallets(origin)
-        const { wallets: fireflyWallets } = useWallets()
+        const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
         const connected = connectedWallets?.has(wallet.address)
         const isFireflyWallet = useMemo(
             () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),

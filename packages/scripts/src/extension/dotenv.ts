@@ -10,7 +10,6 @@ export function applyDotEnv(flags: BuildFlags) {
     }
     flags.FIREFLY_X_CLIENT_ID ??= process.env.FIREFLY_X_CLIENT_ID
     flags.FIREFLY_X_CLIENT_SECRET ??= process.env.FIREFLY_X_CLIENT_SECRET
-    flags.PRIVY_APP_ID ??= process.env.PRIVY_APP_ID
 
     if (!parsed || flags.mode === 'production') return
 

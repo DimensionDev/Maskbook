@@ -10,12 +10,18 @@ import {
     type Wallet,
 } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useFireflyEmbeddedWallets,
+    useNetworks,
+    useWallet,
+    useWallets,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
 import { EVMWeb3, PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
-import { useWallets as usePrivyWallets } from '@privy-io/react-auth'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ActionModal, useActionModal } from '../../../components/index.js'
@@ -55,7 +61,7 @@ const SwitchWallet = memo(
         const { closeModal } = useActionModal()
         const wallet = useWallet()
         const wallets = useWallets()
-        const { wallets: privyWallets } = usePrivyWallets()
+        const { wallets: privyWallets } = useFireflyEmbeddedWallets()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
         const handleImport = useCallback(async () => {

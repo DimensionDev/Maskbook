@@ -1,34 +1,9 @@
-import { PrivyProvider } from '@privy-io/react-auth'
-import type { PropsWithChildren } from 'react'
-import { chains } from './configs'
-
-export function PrivySetupProvider({ children }: PropsWithChildren) {
-    if (!process.env.PRIVY_APP_ID) {
-        return (
-            <span>
-                No <code>process.env.PRIVY_APP_ID</code> set.
-            </span>
-        )
-    }
-    return (
-        <PrivyProvider
-            appId={process.env.PRIVY_APP_ID}
-            config={{
-                captchaEnabled: false,
-                supportedChains: chains,
-            }}>
-            {children}
-        </PrivyProvider>
-    )
-}
-
+/**
+ * @deprecated `@privy-io/react-auth` has been removed; the embedded wallet is now
+ * served by the Firefly backend directly. `PrivySetupProvider` is gone, and
+ * `PrivyEnvGuard` is retained as an identity HOC so the many legacy wrapped
+ * components keep compiling without changes.
+ */
 export function PrivyEnvGuard<T>(component: React.FunctionComponent<T>): React.FunctionComponent<T> {
-    if (process.env.PRIVY_APP_ID) {
-        return component
-    }
-    return () => (
-        <span>
-            No <code>process.env.PRIVY_APP_ID</code> set.
-        </span>
-    )
+    return component
 }

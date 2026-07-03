@@ -1,18 +1,22 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { useWallets } from '@privy-io/react-auth'
 import { timeout } from '@masknet/kit'
 import { LoadingStatus } from '@masknet/shared'
 import { DashboardRoutes, PrivyEnvGuard, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
+import { useQueryClient } from '@tanstack/react-query'
 import { alpha, Box, Typography, type BoxProps } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { EVMWeb3 } from '@masknet/web3-providers'
+import {
+    FIREFLY_EMBEDDED_WALLETS_QUERY_KEY,
+    useChainContext,
+    useFireflyEmbeddedWallets,
+} from '@masknet/web3-hooks-base'
+import { EVMWeb3, FireflyEmbeddedWalletClient } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
@@ -99,13 +103,18 @@ export const ImportCreateWallet = memo<Props>(
             [onChoose],
         )
 
+        const queryClient = useQueryClient()
         const timeoutMessage = 'X account authorization timed out'
         const [{ loading: creatingPrivy, error }, createPrivyWallet] = useAsyncFn(async () => {
-            return timeout(loginFirefly(), 3 * 60 * 1000, timeoutMessage)
-        }, [])
+            await timeout(loginFirefly(), 3 * 60 * 1000, timeoutMessage)
+            // Idempotently create the embedded wallet on the Firefly backend, then
+            // refresh the shared embedded-wallets query so the discovery hook picks it up.
+            await FireflyEmbeddedWalletClient.ensureEmbeddedWallet()
+            await queryClient.invalidateQueries({ queryKey: FIREFLY_EMBEDDED_WALLETS_QUERY_KEY })
+        }, [queryClient])
 
         const isCreatingFireflyWallet = !!params.get('creatingFireflyWallet')
-        const { wallets } = useWallets()
+        const { wallets } = useFireflyEmbeddedWallets()
         const selectPrivyWallet = useCallback(async () => {
             if (!wallets.length) return
             if (wallets.length > 1) {
