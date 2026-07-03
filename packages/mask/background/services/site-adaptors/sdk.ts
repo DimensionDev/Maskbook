@@ -1,23 +1,14 @@
 import { Sniffings } from '@masknet/shared-base'
-import { maskSDK_URL, injectUserScriptMV2, evaluateContentScript } from '../../utils/injectScript.js'
+import { maskSDK_URL, evaluateContentScript } from '../../utils/injectScript.js'
 
 export async function attachMaskSDKToCurrentActivePage(): Promise<boolean> {
-    if (browser.scripting) {
-        const [{ id }] = await browser.tabs.query({ active: true })
-        if (!id) return false
-        await Promise.all([attachMaskSDK3(id), evaluateContentScript(id)])
-    } else if (browser.tabs) {
-        await Promise.all([attachMaskSDK2(), evaluateContentScript(undefined)])
-    }
+    const [{ id }] = await browser.tabs.query({ active: true })
+    if (!id) return false
+    await Promise.all([attachMaskSDK(id), evaluateContentScript(id)])
     return true
 }
 
-async function attachMaskSDK2() {
-    await browser.tabs.executeScript(undefined, {
-        code: await injectUserScriptMV2(maskSDK_URL),
-    })
-}
-async function attachMaskSDK3(id: number) {
+async function attachMaskSDK(id: number) {
     // TODO: Firefox MV3
     const target = {
         target: { tabId: id },
@@ -31,13 +22,9 @@ async function attachMaskSDK3(id: number) {
 export async function developmentMaskSDKReload(): Promise<void> {
     if (process.env.NODE_ENV !== 'development') return
 
-    if (browser.scripting) {
-        const [{ id }] = await browser.tabs.query({ active: true })
-        if (!id) return
-        await attachMaskSDK3(id)
-    } else if (browser.tabs) {
-        await attachMaskSDK2()
-    }
+    const [{ id }] = await browser.tabs.query({ active: true })
+    if (!id) return
+    await attachMaskSDK(id)
 }
 
 export async function shouldSuggestConnectInPopup(url?: string): Promise<boolean> {

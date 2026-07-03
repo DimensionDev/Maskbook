@@ -449,7 +449,7 @@ export async function createConfiguration(
         dashboard: withReactDevTools(join(import.meta.dirname, '../dashboard/initialization/index.ts')),
         popups: withReactDevTools(join(import.meta.dirname, '../popups/initialization/index.ts')),
         contentScript: withReactDevTools(join(import.meta.dirname, '../content-script/index.ts')),
-        background: normalizeEntryDescription(join(import.meta.dirname, '../background/initialization/mv2-entry.ts')),
+        background: normalizeEntryDescription(join(import.meta.dirname, '../background/initialization/mv3-entry.ts')),
         backgroundWorker: normalizeEntryDescription(
             join(import.meta.dirname, '../background/initialization/mv3-entry.ts'),
         ),

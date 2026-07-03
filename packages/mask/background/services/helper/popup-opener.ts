@@ -22,7 +22,7 @@ async function openOrFocusPopupWindow(initialURL: string): Promise<void> {
                 // opened from the background chrome process for the extension that
                 // has no physical dimensions
 
-                // Note: DOM is only available in MV2 or MV3 page mode.
+                // Note: DOM is only available in page-based background contexts.
                 const { screenX, outerWidth, screenY } = globalThis as any
                 if (typeof screenX === 'number' && typeof screenY === 'number' && typeof outerWidth === 'number') {
                     top = Math.max(screenY, 0)

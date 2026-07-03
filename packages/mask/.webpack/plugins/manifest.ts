@@ -14,8 +14,6 @@ export function emitManifestFile(flags: NormalizedFlags, computedFlags: Computed
         readFileSync(new URL('../../../../security/content-security-policy.json', import.meta.url), 'utf-8'),
     )
     const cspContent = {
-        mv2: Array.from(data['@mv2']).join('; ') + '; ',
-        mv2dev: Array.from(data['@mv2dev']).join('; ') + '; ',
         mv3: Array.from(data['@mv3']).join('; ') + '; ',
     }
     if (flags.csp && flags.mode === 'development') {
@@ -41,12 +39,10 @@ export function emitManifestFile(flags: NormalizedFlags, computedFlags: Computed
             csp += '; '
         }
         csp.trim()
-        cspContent.mv2 += csp
-        cspContent.mv2dev += csp
         cspContent.mv3 += csp
     }
 
-    const manifest = prepareAllManifest(flags, computedFlags, cspContent)
+    const manifest = prepareAllManifest(flags, cspContent)
     const plugins = []
     for (const [fileName, fileContent] of manifest) {
         plugins.push(
@@ -77,29 +73,21 @@ export function emitManifestFile(flags: NormalizedFlags, computedFlags: Computed
     return plugins
 }
 
-type ManifestV2 = Manifest.WebExtensionManifest & { manifest_version: 2; key?: string }
 type ManifestV3 = Manifest.WebExtensionManifest & { manifest_version: 3; key?: string }
-type ModifyAcceptFlags = Pick<NormalizedFlags, 'mode' | 'channel' | 'devtools' | 'hmr'>
+type ModifyAcceptFlags = Pick<NormalizedFlags, 'mode' | 'channel' | 'devtools'>
 type CSP = {
-    mv2: string
-    mv2dev: string
     mv3: string
 }
-type ManifestPresets =
-    | [flags: ModifyAcceptFlags, base: ManifestV2, modify?: (manifest: ManifestV2) => void]
-    | [flags: ModifyAcceptFlags, base: ManifestV3, modify?: (manifest: ManifestV3) => void]
+type ManifestPresets = [flags: ModifyAcceptFlags, base: ManifestV3, modify?: (manifest: ManifestV3) => void]
 
-function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags, csp: CSP) {
-    const mv2Base: ManifestV2 = parseJSONc(readFileSync(new URL('../manifest/manifest.json', import.meta.url), 'utf-8'))
+function prepareAllManifest(flags: NormalizedFlags, csp: CSP) {
     const mv3Base: ManifestV3 = parseJSONc(
         readFileSync(new URL('../manifest/manifest-mv3.json', import.meta.url), 'utf-8'),
     )
 
     const manifestFlags: Record<NormalizedFlags['manifestFile'], ManifestPresets> = {
         'chromium-beta-mv3': [{ ...flags, channel: 'beta' }, mv3Base],
-        'chromium-mv2': [flags, mv2Base, (manifest: ManifestV2) => (manifest.browser_specific_settings = undefined)],
         'chromium-mv3': [flags, mv3Base, (manifest: ManifestV3) => (manifest.browser_specific_settings = undefined)],
-        'firefox-mv2': [flags, mv2Base, (manifest: ManifestV2) => manifest.permissions!.push('tabs')],
         'firefox-mv3': [
             flags,
             mv3Base,
@@ -123,24 +111,19 @@ function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags
             },
         ],
     }
-    const manifest = new Map<NormalizedFlags['manifestFile'], ManifestV2 | ManifestV3>()
+    const manifest = new Map<NormalizedFlags['manifestFile'], ManifestV3>()
     for (const fileName in manifestFlags) {
         if (!Object.hasOwn(manifestFlags, fileName)) continue
         const [flags, base, modify]: ManifestPresets = (manifestFlags as any)[fileName]
         const fileContent = cloneDeep(base)
-        editManifest(fileContent, cloneDeep(flags), cloneDeep(computedFlags), csp)
+        editManifest(fileContent, cloneDeep(flags), csp)
         modify?.(fileContent as any)
         manifest.set(fileName as any, fileContent)
     }
     return manifest
 }
 
-function editManifest(
-    manifest: ManifestV2 | ManifestV3,
-    flags: ModifyAcceptFlags,
-    computedFlags: ComputedFlags,
-    csp: CSP,
-) {
+function editManifest(manifest: ManifestV3, flags: ModifyAcceptFlags, csp: CSP) {
     if (flags.mode === 'development') manifest.name += ' (dev)'
     else if (flags.channel === 'beta') manifest.name += ' (beta)'
     else if (flags.channel === 'insider') manifest.name += ' (insider)'
@@ -151,21 +134,12 @@ function editManifest(
     const topPackageJSON = JSON.parse(readFileSync(new URL('../../../../package.json', import.meta.url), 'utf-8'))
     manifest.version = topPackageJSON.version
 
-    if (manifest.manifest_version === 2) {
-        if (String(computedFlags.sourceMapKind).includes('eval')) manifest.content_security_policy = csp.mv2dev
-        else manifest.content_security_policy = csp.mv2
-
-        if (flags.hmr) {
-            ;(manifest.web_accessible_resources as string[]).push('*.json', '*.js')
-        }
-    } else {
-        manifest.content_security_policy = { extension_pages: csp.mv3 }
-    }
+    manifest.content_security_policy = { extension_pages: csp.mv3 }
 }
 
 // cspell: disable-next-line
 // Note: with this key you cannot upload it to the extension store
-function fixTheExtensionID(manifest: ManifestV2 | ManifestV3) {
+function fixTheExtensionID(manifest: ManifestV3) {
     manifest.key =
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +
         '0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9' +

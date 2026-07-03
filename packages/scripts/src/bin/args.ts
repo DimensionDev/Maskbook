@@ -14,7 +14,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
 
         .options('manifest', {
             type: 'string',
-            choices: ['2', '3', ...manifestFiles] as const,
+            choices: ['3', ...manifestFiles] as const,
             description: 'Select which manifest file/version to use',
         })
 

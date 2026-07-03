@@ -1,11 +1,4 @@
 {
-    "@mv2dev": [
-        "script-src 'self' 'unsafe-eval'",
-        "trusted-types default dompurify webpack mask",
-        "upgrade-insecure-requests",
-        "require-trusted-types-for 'script'"
-    ],
-    "@mv2": ["script-src 'self'", "trusted-types default dompurify mask", "upgrade-insecure-requests"],
     "@mv3": ["script-src 'self'", "trusted-types default dompurify mask", "upgrade-insecure-requests"],
     "default-src": "self",
     "style-src": "unsafe-inline",

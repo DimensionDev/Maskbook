@@ -4,7 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/background/",
     "tsBuildInfoFile": "../dist/background.tsbuildinfo",
-    // MV3 = WebWorker, MV2 = DOM
+    // Chrome MV3 = WebWorker, Firefox MV3 = DOM
     // but we cannot build the same code in two env
     "lib": ["ESNext", "WebWorker", "DOM.Iterable"]
   },
