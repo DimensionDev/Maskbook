@@ -9,15 +9,7 @@ function contentFetch(input: RequestInfo | URL, init?: RequestInit) {
     const request = new Request(input, init)
 
     if (shouldAccessViaContent(request.url)) {
-        if (
-            navigator.userAgent.includes('Firefox') &&
-            browser.runtime.getManifest().manifest_version === 2 &&
-            typeof content === 'object'
-        ) {
-            return content.fetch(request, init)
-        } else {
-            return original_fetch(request, init)
-        }
+        return original_fetch(request, init)
     }
 
     const signal = init?.signal

@@ -2,10 +2,8 @@ import type { Configuration } from 'webpack'
 import { join, isAbsolute } from 'node:path'
 
 export const ManifestFile = {
-    ChromiumMV2: 'chromium-mv2',
     ChromiumMV3: 'chromium-mv3',
     ChromiumBetaMV3: 'chromium-beta-mv3',
-    FirefoxMV2: 'firefox-mv2',
     FirefoxMV3: 'firefox-mv3',
     SafariMV3: 'safari-mv3',
 }
@@ -114,8 +112,7 @@ export function computedBuildFlags(
     if (flags.sourceMapPreference) {
         // React 19 requires a precise source map to make "Open in Editor" feature work
         if (flags.devtools) sourceMapKind = 'source-map'
-        else if (flags.manifestFile.includes('3')) sourceMapKind = 'inline-cheap-source-map'
-        else sourceMapKind = 'eval-cheap-source-map'
+        else sourceMapKind = 'inline-cheap-source-map'
 
         if (flags.mode === 'production') sourceMapKind = 'source-map'
         if (typeof flags.sourceMapPreference === 'string') sourceMapKind = flags.sourceMapPreference
