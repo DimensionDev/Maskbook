@@ -21,6 +21,7 @@ import { ProfilingPlugin } from './plugins/ProfilingPlugin.ts'
 import { joinEntryItem, normalizeEntryDescription, type EntryDescription } from './utils.ts'
 
 import './clean-hmr.ts'
+import { BanRemoteScriptSrcPlugin } from './plugins/BanRemoteScriptSrcPlugin.ts'
 import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.ts'
 
 const require = createRequire(import.meta.url)
@@ -327,6 +328,7 @@ export async function createConfiguration(
                     emitJSONFile({ content: { ...json, channel: 'beta' }, name: 'build-info-beta.json' }),
                 ]
             })(),
+            new BanRemoteScriptSrcPlugin(),
         ],
         // Focus on performance optimization. Not for download size/cache stability optimization.
         optimization: {
