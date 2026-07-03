@@ -123,11 +123,7 @@ function prepareAllManifest(flags: NormalizedFlags, csp: CSP) {
     return manifest
 }
 
-function editManifest(
-    manifest: ManifestV3,
-    flags: ModifyAcceptFlags,
-    csp: CSP,
-) {
+function editManifest(manifest: ManifestV3, flags: ModifyAcceptFlags, csp: CSP) {
     if (flags.mode === 'development') manifest.name += ' (dev)'
     else if (flags.channel === 'beta') manifest.name += ' (beta)'
     else if (flags.channel === 'insider') manifest.name += ' (insider)'
