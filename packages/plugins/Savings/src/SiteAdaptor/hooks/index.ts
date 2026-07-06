@@ -9,7 +9,6 @@ export function useApr(protocol: SavingsProtocol, enabled: boolean) {
     const isAAve = protocol instanceof AAVEProtocol
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     return useQuery({
-         
         queryKey: ['savings', 'apr', chainId, isAAve ? protocol.bareToken.address : 'lido'],
         enabled,
         queryFn: () => protocol.getApr(chainId),
@@ -19,7 +18,6 @@ export function useApr(protocol: SavingsProtocol, enabled: boolean) {
 export function useBalance(protocol: SavingsProtocol, enabled: boolean) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useQuery({
-         
         queryKey: ['savings', 'balance', chainId, protocol.bareToken.address, account],
         enabled,
         queryFn: () => protocol.getBalance(chainId, account),

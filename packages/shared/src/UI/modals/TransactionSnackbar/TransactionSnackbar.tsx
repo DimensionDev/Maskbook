@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
-import { type JsonRpcRequest , TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
+import { type JsonRpcRequest, TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
 import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
