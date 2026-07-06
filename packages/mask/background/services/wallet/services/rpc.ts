@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import type { JsonRpcRequest } from 'web3-types'
+import type { JsonRpcRequest } from '@masknet/web3-shared-base'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
 import { createTransaction } from '../../../database/utils/openDB.js'
 import type { RequestPayload } from '../database/types.js'

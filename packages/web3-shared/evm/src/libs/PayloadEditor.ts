@@ -1,5 +1,5 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
-import type { JsonRpcRequest } from 'web3-types'
+import type { JsonRpcRequest } from '@masknet/web3-shared-base'
 import type { Wallet } from '@masknet/shared-base'
 import { parseChainId } from '../helpers/parseChainId.js'
 import { createJsonRpcRequest } from '../helpers/createJsonRpcRequest.js'

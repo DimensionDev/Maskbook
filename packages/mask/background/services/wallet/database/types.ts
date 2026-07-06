@@ -1,4 +1,4 @@
-import type { JsonRpcRequest } from 'web3-types'
+import type { JsonRpcRequest } from '@masknet/web3-shared-base'
 import type { EIP2255Permission } from '@masknet/sdk'
 import type { LegacyWalletRecord } from '@masknet/shared-base'
 

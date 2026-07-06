@@ -1,5 +1,4 @@
-import type { JsonRpcRequest } from 'web3-types'
-import type { TransactionDescriptor, TransactionContext, GasOptionType } from '@masknet/web3-shared-base'
+import type { JsonRpcRequest , TransactionDescriptor, TransactionContext, GasOptionType } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter, Transaction } from '@masknet/web3-shared-evm'
 
 export enum ReplaceType {

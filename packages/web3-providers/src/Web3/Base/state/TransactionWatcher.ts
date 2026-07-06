@@ -1,8 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
-import type { JsonRpcRequest } from 'web3-types'
-import { mergeSubscription, type NetworkPluginID } from '@masknet/shared-base'
 import {
+    type JsonRpcRequest,
     type TransactionChecker,
     TransactionStatusType,
     type WatchEvents,
@@ -10,6 +9,7 @@ import {
     type RecentTransaction,
     type RecognizableError,
 } from '@masknet/web3-shared-base'
+import { mergeSubscription, type NetworkPluginID } from '@masknet/shared-base'
 
 class Checker<ChainId extends PropertyKey, Transaction> {
     private timer: ReturnType<typeof setTimeout> | null = null

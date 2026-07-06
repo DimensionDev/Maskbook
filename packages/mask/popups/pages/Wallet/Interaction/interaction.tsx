@@ -5,13 +5,12 @@ import { delay } from '@masknet/kit'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import type { ReasonableMessage } from '@masknet/web3-shared-base'
+import type { ReasonableMessage , JsonRpcResponse } from '@masknet/web3-shared-base'
 import { EthereumMethodType, type MessageRequest } from '@masknet/web3-shared-evm'
 import { Box, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, Typography } from '@mui/material'
 import React, { memo, startTransition, useCallback, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import type { JsonRpcResponse } from 'web3-types'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { AddChainRequest } from './AddChainRequest.js'
 import { PermissionRequest } from './PermissionRequest.js'
@@ -35,7 +34,7 @@ const useStyles = makeStyles()({
 })
 
 interface InteractionProps {
-    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse<unknown, unknown>>
+    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse>
     totalMessages: number
     currentMessageIndex: number
     setMessageIndex(count: number): void
@@ -154,7 +153,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
 Interaction.displayName = 'Interaction'
 
 export interface InteractionItemProps {
-    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse<unknown, unknown>>
+    currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse>
     setIsDanger(isDanger: boolean): void
     setConfirmVerb(verb: ReactNode): void
     setConfirmAction(action: (isLastRequest: boolean) => Promise<void>): void

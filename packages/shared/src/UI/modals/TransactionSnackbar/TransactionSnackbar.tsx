@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { JsonRpcRequest } from 'web3-types'
+import type { JsonRpcRequest , TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
 import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
@@ -12,7 +12,6 @@ import {
     usePopupCustomSnackbar,
 } from '@masknet/theme'
 import { type NetworkPluginID, createLookupTableResolver, Sniffings } from '@masknet/shared-base'
-import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'

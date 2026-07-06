@@ -337,6 +337,7 @@ export class EVMConnectionReadonlyAPI
         const bytes32Contract = this.Contract.getERC20Bytes32Contract(address)
         const results = await queryClient.fetchQuery({
             staleTime: 600_000,
+            // eslint-disable-next-line @tanstack/query/exhaustive-deps
             queryKey: ['fungibleToken', options.chainId, address, contract, options, bytes32Contract],
             queryFn: async () => {
                 return Promise.allSettled([
