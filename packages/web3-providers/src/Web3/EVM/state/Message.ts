@@ -1,7 +1,6 @@
 import { omitBy } from 'lodash-es'
-import type { JsonRpcResponse } from 'web3-types'
+import { MessageStateType, type JsonRpcResponse, type ReasonableMessage } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, PopupRoutes, Sniffings, type StorageItem } from '@masknet/shared-base'
-import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
     createJsonRpcRequest,
     PayloadEditor,

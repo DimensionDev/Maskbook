@@ -1,4 +1,4 @@
-import type { JsonRpcRequest } from 'web3-types'
+import type { JsonRpcRequest } from '@masknet/web3-shared-base'
 import { ECKeyIdentifier, SignType } from '@masknet/shared-base'
 import { EVMRequestReadonly, EVMWalletProviders, EVMWeb3Readonly } from '@masknet/web3-providers'
 import {

@@ -1,7 +1,7 @@
 import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { JsonRpcRequest } from 'web3-types'
+import type { JsonRpcRequest } from '@masknet/web3-shared-base'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'

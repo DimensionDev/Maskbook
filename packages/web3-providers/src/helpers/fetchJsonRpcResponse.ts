@@ -1,4 +1,4 @@
-import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
+import type { JsonRpcRequest, JsonRpcResponse } from '@masknet/web3-shared-base'
 import { fetchSquashedJSON } from './fetchJSON.js'
 import stringify from 'json-stable-stringify'
 

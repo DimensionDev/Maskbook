@@ -1,6 +1,6 @@
-import type { JsonRpcResponse, JsonRpcResponseWithError, JsonRpcId } from 'web3-types'
+import type { JsonRpcId, JsonRpcResponse, JsonRpcResponseWithError } from '@masknet/web3-shared-base'
 
-export function createJsonRpcResponse(id: JsonRpcId, result: unknown): JsonRpcResponse<unknown, unknown> {
+export function createJsonRpcResponse(id: JsonRpcId, result: unknown): JsonRpcResponse {
     return {
         jsonrpc: '2.0',
         id,
@@ -8,10 +8,7 @@ export function createJsonRpcResponse(id: JsonRpcId, result: unknown): JsonRpcRe
     }
 }
 
-export function createJsonRpcResponseError(
-    id: JsonRpcId,
-    error: JsonRpcResponseWithError<unknown>['error'],
-): JsonRpcResponse<unknown, unknown> {
+export function createJsonRpcResponseError(id: JsonRpcId, error: JsonRpcResponseWithError['error']): JsonRpcResponse {
     return {
         jsonrpc: '2.0',
         id,

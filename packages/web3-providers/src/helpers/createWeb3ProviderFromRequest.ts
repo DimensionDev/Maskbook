@@ -1,4 +1,4 @@
-import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
+import type { JsonRpcRequest, JsonRpcResponse } from '@masknet/web3-shared-base'
 import {
     createJsonRpcResponse,
     createJsonRpcResponseError,
@@ -20,13 +20,13 @@ export function createWeb3ProviderFromRequest(
 
         request,
 
-        send(payload, callback: (error: Error | null, response?: JsonRpcResponse<unknown, unknown>) => void) {
+        send(payload, callback: (error: Error | null, response?: JsonRpcResponse) => void) {
             return this.sendAsync(payload, callback)
         },
         // some pkg (eth-rpc) needs this method
         sendAsync: async (
             payload: JsonRpcRequest,
-            callback: (error: Error | null, response?: JsonRpcResponse<unknown, unknown>) => void,
+            callback: (error: Error | null, response?: JsonRpcResponse) => void,
         ) => {
             try {
                 const result = await request({

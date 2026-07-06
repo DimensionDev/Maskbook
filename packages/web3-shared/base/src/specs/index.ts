@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import type { Subscription } from 'use-subscription'
-import type { JsonRpcRequest } from 'web3-types'
 import type { Emitter } from '@servie/events'
 import type {
     EnhanceableSite,
@@ -13,6 +12,7 @@ import type {
     SocialAccount,
     Web3BioProfile,
 } from '@masknet/shared-base'
+import type { JsonRpcRequest } from '../types/JsonRpc.js'
 
 export enum CurrencyType {
     NATIVE = 'native',

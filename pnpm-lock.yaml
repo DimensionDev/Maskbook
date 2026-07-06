@@ -635,9 +635,6 @@ importers:
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
-      web3-types:
-        specifier: 1.10.0
-        version: 1.10.0
       webextension-polyfill:
         specifier: ^0.12.0
         version: 0.12.0
@@ -1375,9 +1372,6 @@ importers:
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
-      web3-types:
-        specifier: 1.10.0
-        version: 1.10.0
 
   packages/plugins/Savings:
     dependencies:
@@ -1708,9 +1702,6 @@ importers:
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
-      web3-types:
-        specifier: 1.10.0
-        version: 1.10.0
       zod:
         specifier: ^3.24.2
         version: 3.24.4
@@ -2126,9 +2117,6 @@ importers:
       viem:
         specifier: ^2.45.0
         version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
-      web3-types:
-        specifier: 1.10.0
-        version: 1.10.0
       zod:
         specifier: ^3.24.2
         version: 3.24.4
@@ -2595,9 +2583,6 @@ importers:
       web3-eth:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
-      web3-types:
-        specifier: 1.10.0
-        version: 1.10.0
       zod:
         specifier: ^3.24.2
         version: 3.24.4
@@ -2650,9 +2635,6 @@ importers:
       viem:
         specifier: ^2.45.0
         version: 2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.2.1)
-      web3-types:
-        specifier: 1.10.0
-        version: 1.10.0
     devDependencies:
       '@types/use-subscription':
         specifier: ^1.0.2
@@ -2699,9 +2681,6 @@ importers:
       web3-eth:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
-      web3-types:
-        specifier: 1.10.0
-        version: 1.10.0
 
   packages/web3-shared/flow:
     dependencies:
@@ -15366,10 +15345,6 @@ packages:
   web3-providers-ws@1.10.4:
     resolution: {integrity: sha512-j3FBMifyuFFmUIPVQR4pj+t5ILhAexAui0opgcpu9R5LxQrLRUZxHSnU+YO25UycSOa/NAX8A+qkqZNpcFAlxA==}
     engines: {node: '>=8.0.0'}
-
-  web3-types@1.10.0:
-    resolution: {integrity: sha512-0IXoaAFtFc8Yin7cCdQfB9ZmjafrbP6BO0f0KT/khMhXKUpoJ6yShrVhiNpyRBo8QQjuOagsWzwSK2H49I7sbw==}
-    engines: {node: '>=14', npm: '>=6.12.0'}
 
   web3-utils@1.10.4:
     resolution: {integrity: sha512-tsu8FiKJLk2PzhDl9fXbGUWTkkVXYhtTA+SmEFkKft+9BgwLxfCRpU96sWv7ICC8zixBNd3JURVoiR3dUXgP8A==}
@@ -33508,8 +33483,6 @@ snapshots:
       websocket: 1.0.34
     transitivePeerDependencies:
       - supports-color
-
-  web3-types@1.10.0: {}
 
   web3-utils@1.10.4:
     dependencies:

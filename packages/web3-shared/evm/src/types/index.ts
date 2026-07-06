@@ -3,8 +3,12 @@ import type {
     TransactionReceipt as Web3TransactionReceipt,
     AbstractProvider,
 } from 'web3-core'
-import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
-import type { Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
+import type {
+    JsonRpcRequest,
+    JsonRpcResponse,
+    Web3State as Web3StateShared,
+    GasOptionType,
+} from '@masknet/web3-shared-base'
 import type { Web3 } from '../libs/Web3.js'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
@@ -395,7 +399,7 @@ export interface MessageRequest {
     options: RequestOptions
 }
 
-export type MessageResponse = JsonRpcResponse<unknown, unknown>
+export type MessageResponse = JsonRpcResponse
 
 export interface Transaction {
     from?: string

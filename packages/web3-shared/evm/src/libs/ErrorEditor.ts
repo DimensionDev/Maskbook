@@ -1,6 +1,5 @@
 import { isNil } from 'lodash-es'
-import type { JsonRpcResponse } from 'web3-types'
-import type { RecognizableError } from '@masknet/web3-shared-base'
+import type { JsonRpcResponse, RecognizableError } from '@masknet/web3-shared-base'
 
 // https://www.jsonrpc.org/specification#error_object
 export enum JSON_RPC_ERROR_CODE {
@@ -18,7 +17,7 @@ export enum JSON_RPC_ERROR_CODE {
 export class ErrorEditor {
     constructor(
         private unknownError: unknown,
-        private response?: JsonRpcResponse<unknown, unknown> | null,
+        private response?: JsonRpcResponse | null,
         private fallback?: string,
     ) {}
 
@@ -93,7 +92,7 @@ export class ErrorEditor {
         return new ErrorEditor(error, null, fallback)
     }
 
-    static from(error: unknown, response?: JsonRpcResponse<unknown, unknown> | null, fallback?: string) {
+    static from(error: unknown, response?: JsonRpcResponse | null, fallback?: string) {
         return new ErrorEditor(error, response, fallback)
     }
 }
