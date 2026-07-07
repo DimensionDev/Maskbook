@@ -1,4 +1,4 @@
-import { toHex, type Account, type ECKeyIdentifier, type Proof } from '@masknet/shared-base'
+import { toHex, type Account } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import {
     createNonFungibleTokenContract,
@@ -30,10 +30,9 @@ import {
     type TransactionDetailed,
     type TransactionReceipt,
     type TransactionSignature,
-    type Web3,
 } from '@masknet/web3-shared-evm'
-import { first, omit, toNumber } from 'lodash-es'
-import type { Address } from 'viem'
+import { first, omit } from 'lodash-es'
+import type { Address, BlockTag, Hash, GetFeeHistoryParameters } from 'viem'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
@@ -42,9 +41,6 @@ import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { EVMChainResolver } from './ResolverAPI.js'
-
-const EMPTY_STRING = Promise.resolve('')
-const ZERO = Promise.resolve(0)
 
 export class EVMConnectionReadonlyAPI
     implements
@@ -57,9 +53,7 @@ export class EVMConnectionReadonlyAPI
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
-            TransactionSignature,
-            Block,
-            Web3
+            TransactionSignature
         >
 {
     static Default = new EVMConnectionReadonlyAPI()
@@ -73,14 +67,6 @@ export class EVMConnectionReadonlyAPI
     protected Request
     protected Contract
     protected ConnectionOptions: ConnectionOptionsProvider<ChainId, ProviderType, NetworkType, Transaction>
-
-    getWeb3(initial?: EVMConnectionOptions) {
-        return this.Request.getWeb3(initial)
-    }
-
-    getViem(initial?: EVMConnectionOptions) {
-        return this.Request.getViem(initial)
-    }
 
     getWeb3Provider(initial?: EVMConnectionOptions) {
         return this.Request.getWeb3Provider(initial)
@@ -126,13 +112,11 @@ export class EVMConnectionReadonlyAPI
     }
 
     async getGasPrice(initial?: EVMConnectionOptions): Promise<string> {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.eth_gasPrice,
-                params: [],
-            },
-            initial,
-        )
+        return (await this.Request.getViem(initial).getGasPrice()).toString()
+    }
+
+    getFeeHistory(initial: EVMConnectionOptions, options: GetFeeHistoryParameters) {
+        return this.Request.getViem(initial).getFeeHistory(options)
     }
 
     async getAddressType(address: string, initial?: EVMConnectionOptions): Promise<AddressType | undefined> {
@@ -385,61 +369,32 @@ export class EVMConnectionReadonlyAPI
         return Number.parseInt(chainId, 16)
     }
 
-    getBlock(noOrId: number | string, initial?: EVMConnectionOptions) {
-        return this.Request.request<Block>(
-            {
-                method: EthereumMethodType.eth_getBlockByNumber,
-                params: [toHex(noOrId), false],
-            },
-            initial,
-        )
+    getBlockTag(blockTag: BlockTag, initial?: EVMConnectionOptions): Promise<Block | null> {
+        return this.Request.getViem(initial).getBlock({ blockTag })
     }
 
     getBlockNumber(initial?: EVMConnectionOptions) {
-        return this.Request.request<number>(
-            {
-                method: EthereumMethodType.eth_blockNumber,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    async getBlockTimestamp(initial?: EVMConnectionOptions): Promise<number> {
-        const options = this.ConnectionOptions.fill(initial)
-        const blockNumber = await this.getBlockNumber(options)
-        const block = await this.getBlock(blockNumber, options)
-        return Number.parseInt(block.timestamp, 16)
+        return this.Request.getViem(initial).getBlockNumber().then(Number)
     }
 
     getBalance(address: string, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.eth_getBalance,
-                params: [address, 'latest'],
-            },
-            initial,
-        )
+        return this.Request.getViem(initial)
+            .getBalance({ address: address as Address, blockTag: 'latest' })
+            .then((balance) => balance.toString())
     }
 
     getCode(address: string, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.eth_getCode,
-                params: [address, 'latest'],
-            },
-            initial,
-        )
+        return this.Request.getViem(initial)
+            .getCode({ address: address as Address })
+            .then((code) => code ?? '0x')
     }
 
     async getTransaction(hash: string, initial?: EVMConnectionOptions) {
-        return this.Request.request<TransactionDetailed>(
-            {
-                method: EthereumMethodType.eth_getTransactionByHash,
-                params: [hash],
-            },
-            initial,
-        )
+        try {
+            return await this.Request.getViem(initial).getTransaction({ hash: hash as Hash })
+        } catch {
+            return null
+        }
     }
 
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVMConnectionOptions) {
@@ -464,13 +419,9 @@ export class EVMConnectionReadonlyAPI
     }
 
     getTransactionReceipt(hash: string, initial?: EVMConnectionOptions) {
-        return this.Request.request<TransactionReceipt>(
-            {
-                method: EthereumMethodType.eth_getTransactionReceipt,
-                params: [hash],
-            },
-            initial,
-        )
+        return this.Request.getViem(initial)
+            .getTransactionReceipt({ hash: hash as Hash })
+            .catch(() => null) as Promise<TransactionReceipt | null>
     }
 
     async getTransactionStatus(hash: string, initial?: EVMConnectionOptions): Promise<TransactionStatusType> {
@@ -479,14 +430,7 @@ export class EVMConnectionReadonlyAPI
     }
 
     async getTransactionNonce(address: string, initial?: EVMConnectionOptions) {
-        const nonce = await this.Request.request<number | string>(
-            {
-                method: EthereumMethodType.eth_getTransactionCount,
-                params: [address, 'latest'],
-            },
-            initial,
-        )
-        return toNumber(nonce)
+        return this.Request.getViem(initial).getTransactionCount({ address: address as Address, blockTag: 'latest' })
     }
 
     signMessage(
@@ -505,18 +449,6 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async changeOwner(recipient: string, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async fund(proof: Proof, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     async sendTransaction(transaction: Transaction, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -529,18 +461,6 @@ export class EVMConnectionReadonlyAPI
             },
             initial,
         )
-    }
-
-    async confirmTransaction(hash: string, initial?: EVMConnectionOptions): Promise<TransactionReceipt> {
-        throw new Error('Method not implemented.')
-    }
-
-    replaceTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    cancelTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
     }
 }
 

@@ -9,6 +9,7 @@ import {
     ProviderType,
     formatEtherToWei,
     createContractWithAddress,
+    isTransactionReceiptSuccess,
 } from '@masknet/web3-shared-evm'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { toFixed } from '@masknet/web3-shared-base'
@@ -83,7 +84,7 @@ export function useClaimAirdrop(
                 chainId,
             })
 
-            if (receipt) {
+            if (isTransactionReceiptSuccess(receipt)) {
                 callback()
                 setDialog({
                     open: true,

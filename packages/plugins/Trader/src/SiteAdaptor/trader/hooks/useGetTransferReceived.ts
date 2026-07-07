@@ -16,9 +16,11 @@ export function useGetTransferReceived() {
 
             const data = receipt?.logs
                 .filter((x) => {
-                    return x.topics.length === 3 && x.topics[0] === TOPIC && x.topics[2].toLowerCase() === receiverTopic
+                    return (
+                        x.topics.length === 3 && x.topics[0] === TOPIC && x.topics[2]?.toLowerCase() === receiverTopic
+                    )
                 })
-                .map((log) => log.data)
+                .map((log) => BigInt(log.data).toString())
 
             return data?.length ? BigNumber.sum(...data).toFixed() : undefined
         },

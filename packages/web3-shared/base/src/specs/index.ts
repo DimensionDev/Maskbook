@@ -880,18 +880,6 @@ export interface NetworkState<ChainId, SchemaType, NetworkType> {
     removeNetwork: (id: string) => Promise<void>
 }
 
-export interface RiskWarningState {
-    /** Is approved */
-    approved?: Subscription<boolean>
-
-    /** Detect if an account is approved the statement */
-    isApproved?: (address: string) => Promise<boolean>
-    /** Approve statement of designate account */
-    approve?: (address: string, pluginID?: string) => Promise<void>
-    /** Revoke statement of designate account */
-    revoke?: (address: string, pluginID?: string) => Promise<void>
-}
-
 export interface IdentityServiceState<ChainId> {
     /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
     mergeSocialAddressesAllDoNotOverride(socialAddresses: Array<SocialAddress<ChainId>>): Array<SocialAccount<ChainId>>
@@ -1112,8 +1100,6 @@ export interface Web3State<
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
-    /** @deprecated */
-    RiskWarning?: RiskWarningState
     Message?: MessageState<MessageRequest, MessageResponse>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>

@@ -7,7 +7,6 @@ import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
-import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import { chainIdToChain, createViemClient } from '../../../helpers/createViemClient.js'
 
@@ -98,14 +97,6 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                 }
             })()
         }
-    }
-
-    override getWeb3(initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        if (options.readonly) return this.Request.getWeb3(options)
-        return createWeb3FromProvider(
-            createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options)),
-        )
     }
 
     override getViem(initial?: EVMConnectionOptions) {

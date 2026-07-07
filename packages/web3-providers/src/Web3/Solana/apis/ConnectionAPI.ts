@@ -5,8 +5,6 @@ import {
     type Signature,
     type TransactionDetailed,
     type TransactionReceipt,
-    type Block,
-    type Web3,
     isNativeTokenAddress,
     getNativeTokenAddress,
     decodeAddress,
@@ -16,15 +14,9 @@ import {
     serializeTransaction,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
-import {
-    TransactionStatusType,
-    type FungibleToken,
-    type NonFungibleTokenContract,
-    isSameAddress,
-} from '@masknet/web3-shared-base'
+import { TransactionStatusType, type FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, NetworkPluginID, type Account } from '@masknet/shared-base'
 import defer * as SolanaWeb3 from '@solana/web3.js'
-import type { BlockResponse } from '@solana/web3.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
@@ -46,9 +38,7 @@ export class SolanaConnectionAPI
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
-            TransactionSignature,
-            Block,
-            Web3
+            TransactionSignature
         >
 {
     constructor(options?: SolanaConnectionOptions) {
@@ -71,7 +61,7 @@ export class SolanaConnectionAPI
         return Promise.resolve(options.chainId)
     }
 
-    createAccount(initial?: SolanaConnectionOptions): Account<ChainId> {
+    createAccount(): Account<ChainId> {
         const { publicKey, secretKey } = SolanaWeb3.Keypair.generate()
 
         return {
@@ -83,15 +73,6 @@ export class SolanaConnectionAPI
 
     async switchChain(chainId: ChainId, initial?: SolanaConnectionOptions) {
         await this.Web3.getProviderInstance(initial).switchChain(chainId)
-    }
-
-    approveFungibleToken(
-        address: string,
-        recipient: string,
-        amount: string,
-        initial?: SolanaConnectionOptions | undefined,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
     }
 
     async transferFungibleToken(
@@ -118,10 +99,6 @@ export class SolanaConnectionAPI
     async disconnect(initial?: SolanaConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
         await solana.state?.Provider?.disconnect(options.providerType)
-    }
-
-    getWeb3(initial?: SolanaConnectionOptions): never {
-        throw new Error('Method not implemented.')
     }
 
     async getBalance(account: string, initial?: SolanaConnectionOptions) {
@@ -174,41 +151,23 @@ export class SolanaConnectionAPI
         return records
     }
 
-    getGasPrice(initial?: SolanaConnectionOptions): Promise<string> {
+    getGasPrice(): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    getCode(address: string, initial?: SolanaConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    getAddressType(address: string, initial?: SolanaConnectionOptions): Promise<AddressType | undefined> {
+    getAddressType(): Promise<AddressType | undefined> {
         return Promise.resolve(AddressType.Default)
-    }
-
-    getSchemaType(address: string, initial?: SolanaConnectionOptions): Promise<SchemaType> {
-        throw new Error('Method not implemented.')
-    }
-
-    async getBlock(no: number, initial?: SolanaConnectionOptions): Promise<BlockResponse | null> {
-        return this.Web3.getConnection(initial).getBlock(no as number)
     }
 
     async getBlockNumber(initial?: SolanaConnectionOptions) {
         return this.Web3.getConnection(initial).getSlot()
     }
 
-    async getBlockTimestamp(initial?: SolanaConnectionOptions): Promise<number> {
-        const slot = await this.getBlockNumber(initial)
-        const response = await this.Web3.getConnection(initial).getBlockTime(slot)
-        return response ?? 0
-    }
-
     getTransaction(id: string, initial?: SolanaConnectionOptions): Promise<TransactionDetailed | null> {
         return this.Web3.getConnection(initial).getTransaction(id)
     }
 
-    async getTransactionReceipt(id: string, initial?: SolanaConnectionOptions): Promise<TransactionReceipt | null> {
+    async getTransactionReceipt(): Promise<TransactionReceipt | null> {
         return null
     }
 
@@ -217,11 +176,6 @@ export class SolanaConnectionAPI
         if (response.value?.err) return TransactionStatusType.FAILED
         if (response.value?.confirmations && response.value.confirmations > 0) return TransactionStatusType.SUCCEED
         return TransactionStatusType.NOT_DEPEND
-    }
-
-    async getTransactionNonce(account: string, initial?: SolanaConnectionOptions): Promise<number> {
-        const response = await this.Web3.getConnection(initial).getNonce(decodeAddress(account))
-        return response?.nonce ? Number.parseInt(response.nonce, 10) : 0
     }
 
     async getNativeToken(initial?: SolanaConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
@@ -246,43 +200,10 @@ export class SolanaConnectionAPI
         )
     }
 
-    getNonFungibleTokenContract(
-        address: string,
-        schema?: SchemaType,
-        initial?: SolanaConnectionOptions,
-    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-
-    confirmTransaction(id: string, initial?: SolanaConnectionOptions): Promise<TransactionReceipt> {
-        throw new Error('Method not implemented.')
-    }
-
-    estimateTransaction(
-        transaction: Transaction,
-        fallback?: number,
-        initial?: SolanaConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
         const raw = serializeTransaction(signedTransaction)
         return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
-    }
-
-    sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
-        const raw = serializeTransaction(signature)
-        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
-    }
-
-    replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    cancelTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
     }
 
     async signMessage(type: string, message: string, initial?: SolanaConnectionOptions) {

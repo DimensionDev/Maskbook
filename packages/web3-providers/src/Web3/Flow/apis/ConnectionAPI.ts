@@ -1,23 +1,19 @@
 import { first } from 'lodash-es'
-import { getUnixTime } from 'date-fns'
 import { unreachable } from '@masknet/kit'
 import {
     AddressType,
     type SchemaType,
     ChainId,
-    type Web3,
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
-    type Block,
     isNativeTokenAddress,
     type TransactionSignature,
     TransactionStatusCode,
-    type BlockHeader,
     type ProviderType,
     type Signature,
 } from '@masknet/web3-shared-flow'
-import { type FungibleToken, type NonFungibleTokenContract, TransactionStatusType } from '@masknet/web3-shared-base'
+import { type FungibleToken, TransactionStatusType } from '@masknet/web3-shared-base'
 import { toHex, type Account } from '@masknet/shared-base'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { FlowConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
@@ -37,9 +33,7 @@ export class FlowConnectionAPI
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
-            TransactionSignature,
-            Block,
-            Web3
+            TransactionSignature
         >
 {
     constructor(options?: FlowConnectionOptions) {
@@ -50,7 +44,7 @@ export class FlowConnectionAPI
     private Web3
     private ConnectionOptions
 
-    getWeb3(initial?: FlowConnectionOptions) {
+    private getWeb3(initial?: FlowConnectionOptions) {
         return this.Web3.getWeb3(initial)
     }
 
@@ -82,16 +76,8 @@ export class FlowConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    getCode(address: string, initial?: FlowConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     getAddressType() {
         return Promise.resolve(AddressType.Default)
-    }
-
-    getSchemaType(address: string, initial?: FlowConnectionOptions): Promise<SchemaType> {
-        throw new Error('Method not implemented.')
     }
 
     async getAccount(initial?: FlowConnectionOptions): Promise<string> {
@@ -104,21 +90,10 @@ export class FlowConnectionAPI
         return options.chainId
     }
 
-    getBlock(no: number, initial?: FlowConnectionOptions): Promise<Block | null> {
-        const web3 = this.getWeb3(initial)
-        return web3.send([web3.getBlock(), web3.atBlockHeight(no as number)]).then(web3.decode)
-    }
-
     async getBlockNumber(initial?: FlowConnectionOptions): Promise<number> {
         const web3 = this.getWeb3(initial)
         const blockHeader = await web3.send([web3.getBlockHeader()]).then(web3.decode)
         return blockHeader.height
-    }
-
-    async getBlockTimestamp(initial?: FlowConnectionOptions): Promise<number> {
-        const web3 = this.getWeb3(initial)
-        const blockHeader: BlockHeader = await web3.send([web3.getBlockHeader()]).then(web3.decode)
-        return getUnixTime(new Date(blockHeader.timestamp as unknown as string))
     }
 
     async getTransaction(id: string, initial?: FlowConnectionOptions | undefined): Promise<TransactionDetailed | null> {
@@ -150,13 +125,6 @@ export class FlowConnectionAPI
         }
     }
 
-    async getTransactionNonce(address: string, initial?: FlowConnectionOptions): Promise<number> {
-        const web3 = this.getWeb3(initial)
-        const account = web3.getAccount(address)
-        const key = first(account.keys)
-        return key?.sequenceNumber ?? 0
-    }
-
     getNativeToken(initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         const token = FlowChainResolver.nativeCurrency(options.chainId)
@@ -165,23 +133,6 @@ export class FlowConnectionAPI
 
     getFungibleToken(address: string, initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         if (!address || isNativeTokenAddress(address)) return this.getNativeToken(initial)
-        throw new Error('Method not implemented.')
-    }
-
-    getNonFungibleTokenContract(
-        address: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-
-    approveFungibleToken(
-        address: string,
-        recipient: string,
-        amount: string,
-        initial?: FlowConnectionOptions,
-    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
@@ -217,10 +168,6 @@ export class FlowConnectionAPI
         return signed.signature
     }
 
-    createAccount(initial?: FlowConnectionOptions): Account<ChainId> {
-        throw new Error('Method not implemented.')
-    }
-
     async switchChain(chainId: ChainId, initial?: FlowConnectionOptions): Promise<void> {
         await this.Web3.getProviderInstance(initial).switchChain(chainId)
     }
@@ -232,35 +179,11 @@ export class FlowConnectionAPI
         return id
     }
 
-    confirmTransaction(hash: string, initial?: FlowConnectionOptions): Promise<TransactionReceipt> {
-        throw new Error('Method not implemented.')
-    }
-
-    estimateTransaction(
-        transaction: Transaction,
-        fallback?: number | undefined,
-        initial?: FlowConnectionOptions | undefined,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     signTransaction(mutation: Transaction, initial?: FlowConnectionOptions): Promise<never> {
         throw new Error('Method not implemented.')
     }
 
     signTransactions(mutations: Transaction[], initial?: FlowConnectionOptions): Promise<never> {
-        throw new Error('Method not implemented.')
-    }
-
-    sendSignedTransaction(signature: never, initial?: FlowConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    replaceTransaction(hash: string, config: Transaction, initial?: FlowConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    cancelTransaction(hash: string, config: Transaction, initial?: FlowConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

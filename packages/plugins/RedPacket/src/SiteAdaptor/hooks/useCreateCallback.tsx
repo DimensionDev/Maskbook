@@ -11,6 +11,7 @@ import {
     type MultipleAbiEventsToMappedObject,
     type GasConfig,
     type TransactionReceipt,
+    isTransactionReceiptSuccess,
 } from '@masknet/web3-shared-evm'
 import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import { getRedPacketLatestContractWithAddress, RED_PACKET_LATEST_ABI } from './useRedPacketContract.js'
@@ -166,7 +167,7 @@ export function useCreateCallback(
     return useAsyncFn(async (): Promise<
         | {
               hash: string
-              receipt: TransactionReceipt
+              receipt: TransactionReceipt | null
               events: undefined | MultipleAbiEventsToMappedObject<RED_PACKET_LATEST_ABI>
           }
         | undefined
@@ -205,7 +206,7 @@ export function useCreateCallback(
             gasOptionType: gasOption?.gasOptionType,
         })
         const receipt = await EVMWeb3.getTransactionReceipt(hash, { chainId })
-        if (receipt) {
+        if (receipt && isTransactionReceiptSuccess(receipt)) {
             const events = decodeEvents(RED_PACKET_LATEST_ABI, receipt.logs)
 
             return {

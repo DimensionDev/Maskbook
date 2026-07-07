@@ -2,8 +2,6 @@ import { Table, TableBody, TableCell, TableRow, Typography } from '@mui/material
 import { makeStyles } from '@masknet/theme'
 import {
     useBalance,
-    useBlockNumber,
-    useBlockTimestamp,
     useNetworkContext,
     useReverseAddress,
     useLookupAddress,
@@ -35,8 +33,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const Utils = useWeb3Utils()
     const { account, chainId, networkType, providerType } = useChainContext()
     const { data: balance = '0' } = useBalance()
-    const { value: blockNumber = 0 } = useBlockNumber()
-    const { value: blockTimestamp = 0 } = useBlockTimestamp()
     const { data: reversedName } = useReverseAddress(currentPluginID, account)
     const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
     const currentVisitingIdentity = useCurrentVisitingIdentity()
@@ -73,14 +69,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
         {
             name: 'Balance',
             content: <Typography variant="body2">{balance}</Typography>,
-        },
-        {
-            name: 'Block Number',
-            content: <Typography variant="body2">{blockNumber}</Typography>,
-        },
-        {
-            name: 'Block Timestamp',
-            content: <Typography variant="body2">{blockTimestamp}</Typography>,
         },
         {
             name: 'Reversed Name',

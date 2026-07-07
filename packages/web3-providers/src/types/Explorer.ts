@@ -1,7 +1,12 @@
-import type { Transaction as Web3Transaction } from 'web3-core'
+import type { TransactionDetailed } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
-    export type Transaction = Web3Transaction & {
+    export type Transaction = Partial<TransactionDetailed> & {
+        from: string
+        hash: string
+        input: string
+        to: string | null
+        value: string | bigint
         status: '0' | '1'
         confirmations: number
     }

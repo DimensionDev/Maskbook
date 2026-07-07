@@ -8,7 +8,6 @@ import {
     useChainContext,
     useFungibleToken,
     useNetwork,
-    useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
 import { useGasLimit } from '@masknet/web3-hooks-evm'
@@ -150,7 +149,6 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         providerURL: network?.rpcUrl,
     })
 
-    const wallet = useWallet()
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         account,

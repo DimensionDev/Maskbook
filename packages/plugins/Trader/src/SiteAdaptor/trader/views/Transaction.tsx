@@ -6,7 +6,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, leftShift, TransactionStatusType } from '@masknet/web3-shared-base'
-import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress, isTransactionReceiptSuccess } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Link as MuiLink, Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -297,7 +297,7 @@ export const Transaction = memo(function Transaction() {
         if (!isPending || !toChainId || !toTxHash || !toToken) return
         const receipt = await waitForTransaction({ chainId: toChainId, hash: toTxHash, confirmationCount: 1 })
 
-        if (!receipt.status) {
+        if (!isTransactionReceiptSuccess(receipt)) {
             showSnackbar(t`Bridge`, {
                 message: <Trans>Failed to bridge</Trans>,
             })

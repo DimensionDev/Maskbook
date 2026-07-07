@@ -47,7 +47,6 @@ export enum TransactionStatusCode {
     EXPIRED = 5,
 }
 
-export type Web3 = typeof import('@blocto/fcl')
 export type Web3Provider = Record<string, never>
 export type Signature = string
 export type GasOption = never
@@ -81,7 +80,6 @@ export type Web3Definition = {
     NetworkType: NetworkType
     Signature: Signature
     GasOption: GasOption
-    Block: Block
     MessageRequest: MessageRequest
     MessageResponse: MessageResponse
     Transaction: Transaction
@@ -89,6 +87,4 @@ export type Web3Definition = {
     TransactionDetailed: TransactionDetailed
     TransactionSignature: TransactionSignature
     TransactionParameter: TransactionParameter
-    Web3: Web3
-    Web3Provider: Web3Provider
 }

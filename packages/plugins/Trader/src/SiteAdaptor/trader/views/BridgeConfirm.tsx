@@ -27,7 +27,13 @@ import {
     multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { addGasMargin, ChainId, formatEthereumAddress, formatWeiToEther } from '@masknet/web3-shared-evm'
+import {
+    addGasMargin,
+    ChainId,
+    formatEthereumAddress,
+    formatWeiToEther,
+    isTransactionReceiptSuccess,
+} from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
@@ -326,7 +332,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             }
             queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
             const receipt = await Web3.getTransactionReceipt(hash)
-            if (!receipt?.status) {
+            if (!isTransactionReceiptSuccess(receipt)) {
                 showSnackbar(t`Bridge`, {
                     message: <Trans>Failed to bridge</Trans>,
                 })

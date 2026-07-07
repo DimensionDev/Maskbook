@@ -29,7 +29,6 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "date-fns": "^3.6.0",
-    "merkletreejs": "^0.3.11",
     "react-use": "^17.5.0",
     "viem": "^2.45.0"
   }
