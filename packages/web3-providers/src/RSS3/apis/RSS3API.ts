@@ -3,13 +3,12 @@ import { queryClient } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
-import defer * as RSS3Next from 'rss3-next'
 import urlcat, { query } from 'urlcat'
 import type { BaseHubOptions, RSS3BaseAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import { NameServiceToChainMap, RSS3_ENDPOINT, RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT } from '../constants.js'
+import { NameServiceToChainMap, RSS3_ENDPOINT, RSS3_FEED_ENDPOINT } from '../constants.js'
 import { normalizedFeed } from '../helpers.js'
-import { type RSS3NameServiceResponse, TAG, TYPE } from '../types.js'
+import type { RSS3NameServiceResponse } from '../types.js'
 
 interface RSS3Result<T> {
     total: number
@@ -29,64 +28,6 @@ const fetchFromRSS3 = <T>(url: string) => {
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class RSS3 {
-    static createRSS3(address: string, sign: (message: string) => Promise<string>): RSS3Next.default {
-        return new RSS3Next.default({
-            endpoint: RSS3_LEGACY_ENDPOINT,
-            address,
-            sign,
-        })
-    }
-    static async getFileData<T>(rss3: RSS3Next.default, address: string, key: string) {
-        const file = await rss3.files.get(address)
-        if (!file) throw new Error('The account was not found.')
-        const descriptor = Object.getOwnPropertyDescriptor(file, key)
-        return descriptor?.value as T | undefined
-    }
-    static async setFileData<T>(rss3: RSS3Next.default, address: string, key: string, data: T): Promise<T> {
-        const file = await rss3.files.get(address)
-        if (!file) throw new Error('The account was not found.')
-        const descriptor = Object.getOwnPropertyDescriptor(file, key)
-        const value = {
-            ...(descriptor?.value as T | undefined),
-            ...data,
-        }
-        rss3.files.set(Object.assign(file, { [key]: value }))
-        await rss3.files.sync()
-        return value
-    }
-    /** @deprecated */
-    static async getDonations(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
-        if (!address) return createPageable([], createIndicator(indicator))
-        const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
-            tag: TAG.donation,
-            type: TYPE.donate,
-            limit: size,
-            cursor: indicator?.id || undefined,
-            include_poap: true,
-        })
-        const { data: donations, meta } = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Donation>>(collectionURL)
-        // A donation Feed contains multiple donation Actions. Let's flatten them.
-        const result = donations.flatMap((donation) => {
-            return donation.actions.map((action) => ({
-                ...donation,
-                actions: [action],
-            }))
-        })
-        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, meta?.cursor))
-    }
-    /** @deprecated */
-    static async getFootprints(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
-        if (!address) return createPageable([], createIndicator(indicator))
-        const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
-            tag: TAG.collectible,
-            type: TYPE.poap,
-            limit: size,
-            cursor: indicator?.id,
-            include_poap: true,
-        })
-        const { data, meta } = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Footprint>>(collectionURL)
-        return createPageable(data, createIndicator(indicator), createNextIndicator(indicator, meta?.cursor))
-    }
     /** get .csb handle info */
     static async getNameInfo(handle: string) {
         if (!handle) return

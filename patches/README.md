@@ -15,8 +15,6 @@
 - urlcat: <https://github.com/balazsbotond/urlcat/issues/248>
 - ts-results-es: ts type resolution looks wrong under `moduleResolution: bundler`
 
-- rss3-next: The repo has been archived. See <https://github.com/NaturalSelectionLabs/RSS3-SDK-for-JavaScript#readme>
-
 ## Other problems
 
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>

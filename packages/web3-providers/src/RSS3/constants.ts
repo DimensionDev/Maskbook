@@ -1,7 +1,6 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { RSS3BaseAPI } from '../types/RSS3.js'
 
-export const RSS3_LEGACY_ENDPOINT = 'https://hub.pass3.me'
 export const RSS3_ENDPOINT = 'https://kurora-v2.rss3.dev'
 export const RSS3_FEED_ENDPOINT = 'https://gi.rss3.io/decentralized'
 
