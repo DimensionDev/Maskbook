@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST, PersistentStorages, PopupModalRoutes, PrivyEnvGuard } from '@masknet/shared-base'
+import { EMPTY_LIST, PersistentStorages, PopupModalRoutes } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useFireflyEmbeddedWallets, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -29,90 +29,87 @@ function getPathIndex(path?: string) {
     if (!rawIndex) return
     return Number.parseInt(rawIndex, 10)
 }
-export const Component = memo(
-    PrivyEnvGuard(function WalletSettings() {
-        const { t } = useLingui()
-        const { classes, cx, theme } = useStyles()
-        const modalNavigate = useModalNavigate()
-        const wallet = useWallet()
-        const allWallets = useWallets()
-        const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
-        const isFireflyWallet = useMemo(
-            () => fireflyWallets.some((w) => isSameAddress(w.address, wallet?.address)),
-            [fireflyWallets, wallet?.address],
-        )
-        const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
+export const Component = memo(function WalletSettings() {
+    const { t } = useLingui()
+    const { classes, cx, theme } = useStyles()
+    const modalNavigate = useModalNavigate()
+    const wallet = useWallet()
+    const allWallets = useWallets()
+    const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
+    const isFireflyWallet = useMemo(
+        () => fireflyWallets.some((w) => isSameAddress(w.address, wallet?.address)),
+        [fireflyWallets, wallet?.address],
+    )
+    const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
 
-        const handleSwitchWallet = useCallback(() => {
-            modalNavigate(PopupModalRoutes.WalletAccount)
-        }, [modalNavigate])
+    const handleSwitchWallet = useCallback(() => {
+        modalNavigate(PopupModalRoutes.WalletAccount)
+    }, [modalNavigate])
 
-        useTitle(t`Wallet Settings`)
-        const siblingWallets = useMemo(() => {
-            if (!wallet?.mnemonicId) return EMPTY_LIST
-            return allWallets
-                .filter((x) => x.mnemonicId === wallet.mnemonicId)
-                .sort((a, z) => {
-                    const msA = a.createdAt.getTime()
-                    const msZ = z.createdAt.getTime()
-                    if (msA !== msZ) return msA - msZ
-                    const pathIndexA = getPathIndex(a.derivationPath)
-                    const pathIndexZ = getPathIndex(z.derivationPath)
-                    if (pathIndexA === pathIndexZ) return 0
-                    if (pathIndexA === undefined) return 1
-                    if (pathIndexZ === undefined) return -1
-                    return pathIndexA - pathIndexZ
-                })
-        }, [allWallets, wallet?.mnemonicId])
+    useTitle(t`Wallet Settings`)
+    const siblingWallets = useMemo(() => {
+        if (!wallet?.mnemonicId) return EMPTY_LIST
+        return allWallets
+            .filter((x) => x.mnemonicId === wallet.mnemonicId)
+            .sort((a, z) => {
+                const msA = a.createdAt.getTime()
+                const msZ = z.createdAt.getTime()
+                if (msA !== msZ) return msA - msZ
+                const pathIndexA = getPathIndex(a.derivationPath)
+                const pathIndexZ = getPathIndex(z.derivationPath)
+                if (pathIndexA === pathIndexZ) return 0
+                if (pathIndexA === undefined) return 1
+                if (pathIndexZ === undefined) return -1
+                return pathIndexA - pathIndexZ
+            })
+    }, [allWallets, wallet?.mnemonicId])
 
-        if (!wallet) return null
-        const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
+    if (!wallet) return null
+    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
 
-        // The wallet has derivationPath is also the one with minimum derivation path
-        const isTheFirstWallet =
-            wallet.mnemonicId ? isSameAddress(first(siblingWallets)?.address, wallet.address) : false
+    // The wallet has derivationPath is also the one with minimum derivation path
+    const isTheFirstWallet = wallet.mnemonicId ? isSameAddress(first(siblingWallets)?.address, wallet.address) : false
 
-        return (
-            <div className={classes.content}>
-                <Box className={cx(classes.item, classes.primaryItem)} onClick={handleSwitchWallet}>
-                    <Box className={classes.primaryItemBox}>
-                        <WalletAvatar size={24} address={wallet.address} />
-                        <div className={classes.walletInfo}>
-                            <Typography className={classes.primaryItemText}>{walletName}</Typography>
-                            <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
-                        </div>
-                    </Box>
-                    <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
+    return (
+        <div className={classes.content}>
+            <Box className={cx(classes.item, classes.primaryItem)} onClick={handleSwitchWallet}>
+                <Box className={classes.primaryItemBox}>
+                    <WalletAvatar size={24} address={wallet.address} />
+                    <div className={classes.walletInfo}>
+                        <Typography className={classes.primaryItemText}>{walletName}</Typography>
+                        <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
+                    </div>
                 </Box>
-                <List dense className={classes.list} data-hide-scrollbar>
-                    <Rename />
-                    <Contacts />
-                    <HidingScamTx />
-                    <DisablePermit />
-                    <ConnectedOrigins />
-                    <AutoLock />
-                    <ChangeCurrency />
-                    <ChangePaymentPassword />
-                    <ShowPrivateKey disabled={isFireflyWallet} />
-                    <ChangeNetwork />
-                </List>
-                <Box className={classes.bottomAction}>
-                    <ActionButton
-                        fullWidth
-                        disabled={isTheFirstWallet}
-                        onClick={async () => {
-                            await WalletRemoveModal.openAndWaitForClose({
-                                title: <Trans>Remove</Trans>,
-                                wallet,
-                            })
-                        }}
-                        width={368}
-                        color="error"
-                        className={classes.removeWalletButton}>
-                        <Trans>Remove Wallet</Trans>
-                    </ActionButton>
-                </Box>
-            </div>
-        )
-    }),
-)
+                <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
+            </Box>
+            <List dense className={classes.list} data-hide-scrollbar>
+                <Rename />
+                <Contacts />
+                <HidingScamTx />
+                <DisablePermit />
+                <ConnectedOrigins />
+                <AutoLock />
+                <ChangeCurrency />
+                <ChangePaymentPassword />
+                <ShowPrivateKey disabled={isFireflyWallet} />
+                <ChangeNetwork />
+            </List>
+            <Box className={classes.bottomAction}>
+                <ActionButton
+                    fullWidth
+                    disabled={isTheFirstWallet}
+                    onClick={async () => {
+                        await WalletRemoveModal.openAndWaitForClose({
+                            title: <Trans>Remove</Trans>,
+                            wallet,
+                        })
+                    }}
+                    width={368}
+                    color="error"
+                    className={classes.removeWalletButton}>
+                    <Trans>Remove Wallet</Trans>
+                </ActionButton>
+            </Box>
+        </div>
+    )
+})
