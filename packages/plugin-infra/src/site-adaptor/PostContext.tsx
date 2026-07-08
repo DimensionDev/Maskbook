@@ -26,17 +26,8 @@ export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
     readonly author: Subscription<ProfileIdentifier | null>
-    readonly handle: Subscription<string | null>
     /** post id on the network. */
     readonly postID: Subscription<string | null>
-}
-
-export interface PostContextCoAuthor {
-    nickname?: string
-    /** TODO Refactor to string */
-    avatarURL?: URL
-    author: ProfileIdentifier
-    post: PostIdentifier
 }
 
 export interface PostContextComment {
@@ -49,7 +40,6 @@ export interface PostContextCreation extends PostContextAuthor {
     readonly isFocusing?: boolean
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
-    readonly coAuthors: Subscription<PostContextCoAuthor[]>
     /**
      * The result of this subscription will be merged with `PostContext.postMentionedLinks`.
      *
@@ -77,7 +67,6 @@ export interface PostContext extends PostContextAuthor {
     /** Auto computed */
     readonly identifier: Subscription<PostIdentifier | null>
     readonly url: Subscription<URL | null>
-    readonly coAuthors: Subscription<PostContextCoAuthor[] | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */
@@ -161,7 +150,6 @@ export const {
     mentionedLinks: usePostInfoMentionedLinks,
     author: usePostInfoAuthor,
     nickname: usePostInfoNickname,
-    coAuthors: usePostInfoCoAuthors,
     encryptComment: usePostInfoEncryptComment,
     decryptComment: usePostInfoDecryptComment,
     url: usePostInfoURL,

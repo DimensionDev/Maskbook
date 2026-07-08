@@ -1,5 +1,5 @@
-import { EMPTY_LIST, createConstantSubscription, type Account, type Wallet } from '@masknet/shared-base'
-import { ChainId, type ProviderType, type Transaction, type Web3Provider } from '@masknet/web3-shared-solana'
+import type { Account } from '@masknet/shared-base'
+import type { ChainId, ProviderType, Transaction, Web3Provider } from '@masknet/web3-shared-solana'
 import { Emitter } from '@servie/events'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { SolanaWalletProvider } from './index.js'
@@ -11,12 +11,8 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
 
     emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
 
-    get subscription() {
-        return {
-            account: createConstantSubscription(''),
-            chainId: createConstantSubscription(ChainId.Mainnet),
-            wallets: createConstantSubscription<Wallet[]>(EMPTY_LIST),
-        }
+    get subscription(): SolanaWalletProvider['subscription'] | undefined {
+        return undefined
     }
 
     get connected() {

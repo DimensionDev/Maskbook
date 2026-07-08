@@ -833,8 +833,6 @@ export interface TransactionChecker<ChainId, Transaction> {
 }
 
 export interface SettingsState {
-    /** Is testnets valid */
-    allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
     currencyType?: Subscription<CurrencyType>
     /** The gas options type */

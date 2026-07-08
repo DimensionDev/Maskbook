@@ -86,7 +86,7 @@ export function getDefaultProviderType() {
     return ProviderType.None
 }
 
-export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+export function getMaskTokenAddress() {
     return ''
 }
 

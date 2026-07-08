@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
-import { useSubscription } from 'use-subscription'
 import type { RecentTransactionComputed, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_ARRAY, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
+import { useSubscriptionMaybe } from '@masknet/shared-base-ui'
 
 export function useRecentTransactions<T extends NetworkPluginID>(pluginID?: T, status?: TransactionStatusType) {
     const { Transaction } = useWeb3State(pluginID)
-    const transactions = useSubscription(Transaction?.transactions ?? EMPTY_ARRAY)
+    const transactions = useSubscriptionMaybe(Transaction?.transactions, EMPTY_LIST)
 
     type ChainId = Web3Helper.Definition[T]['ChainId']
     type Tx = Web3Helper.Definition[T]['Transaction']

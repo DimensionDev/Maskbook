@@ -1,18 +1,15 @@
 import { Emitter } from '@servie/events'
-import { EMPTY_LIST, createConstantSubscription, type Account, type Wallet } from '@masknet/shared-base'
-import { ChainId, type ProviderType, type Web3Provider } from '@masknet/web3-shared-flow'
+import type { Account } from '@masknet/shared-base'
+import type { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-flow'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { FlowWalletProvider } from './index.js'
 
 export abstract class BaseFlowWalletProvider implements FlowWalletProvider {
+    readyPromise?: Promise<void> | undefined
     emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
 
-    get subscription() {
-        return {
-            account: createConstantSubscription(''),
-            chainId: createConstantSubscription(ChainId.Mainnet),
-            wallets: createConstantSubscription<Wallet[]>(EMPTY_LIST),
-        }
+    get subscription(): FlowWalletProvider['subscription'] | undefined {
+        return undefined
     }
 
     get connected() {
