@@ -112,7 +112,6 @@
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src/index.ts"],
       "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src/index.ts"],
       "@masknet/plugin-template": ["./packages/plugins/template/src/index.ts"],
-      "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src/index.ts"],
       "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src/index.ts"],
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src/index.ts"],
       "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src/index.ts"],
