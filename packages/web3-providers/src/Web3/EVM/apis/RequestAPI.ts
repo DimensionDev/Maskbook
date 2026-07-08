@@ -10,7 +10,8 @@ import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import { chainIdToChain, createViemClient } from '../../../helpers/createViemClient.js'
 
-function assertTransactionChainId(transaction: TransactionSerializable | undefined, chainId: ChainId) {
+function assertTransactionChainId(transaction: TransactionSerializable | undefined, chainId: ChainId | undefined) {
+    if (chainId === undefined) return
     if (!transaction) return
     if (transaction.chainId !== undefined && transaction.chainId !== chainId)
         throw new Error('Transaction chain id does not match current chain id.')
@@ -59,7 +60,7 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                                             payloadEditor.signableTransaction,
                                             EVMWalletProviders[
                                                 options.providerType
-                                            ].subscription.chainId.getCurrentValue(),
+                                            ].subscription?.chainId.getCurrentValue(),
                                         )
 
                                         const web3Provider = EVMWalletProviders[

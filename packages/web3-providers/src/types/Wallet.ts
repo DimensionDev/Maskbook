@@ -91,7 +91,7 @@ export namespace WalletAPI {
         readonly readyPromise?: Promise<void> | undefined
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
 
-        readonly subscription: {
+        readonly subscription?: {
             account: Subscription<string>
             chainId: Subscription<ChainId>
             wallets: Subscription<Wallet[]>

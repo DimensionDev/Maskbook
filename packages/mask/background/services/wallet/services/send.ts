@@ -31,7 +31,7 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
         payload.method === EthereumMethodType.eth_signTransaction
     const providerChainId =
         options?.providerType && isTransactionSigningMethod ?
-            EVMWalletProviders[options.providerType].subscription.chainId.getCurrentValue()
+            EVMWalletProviders[options.providerType].subscription?.chainId.getCurrentValue()
         :   undefined
     const requestChainId = providerChainId ?? chainId
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)

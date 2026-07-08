@@ -2,14 +2,12 @@ import { first } from 'lodash-es'
 import { isInPageEthereumInjected } from '@masknet/shared-base'
 import type { InjectedWalletBridge } from '@masknet/injected-script'
 import {
-    type ChainId,
     EthereumMethodType,
     type ProviderType,
     type Web3Provider,
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import { BaseEVMWalletProvider } from './Base.js'
-import type { WalletAPI } from '../../../entry-types.js'
 
 export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
     constructor(
@@ -46,16 +44,13 @@ export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
+    override createWeb3Provider() {
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')
         return this.bridge as unknown as Web3Provider
     }
 
-    override async request(
-        requestArguments: RequestArguments,
-        options?: WalletAPI.ProviderOptions<ChainId>,
-    ): Promise<unknown> {
-        const provider = this.createWeb3Provider(options)
+    override async request(requestArguments: RequestArguments): Promise<unknown> {
+        const provider = this.createWeb3Provider()
         return provider.request(requestArguments)
     }
 
