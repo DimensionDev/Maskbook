@@ -123,6 +123,7 @@ common/autoinstallers/*/.npmrc
 /yarn.lock
 quick-lint-js.config
 .aider*
+*.har
 
 .claude
 .pnpm-store/

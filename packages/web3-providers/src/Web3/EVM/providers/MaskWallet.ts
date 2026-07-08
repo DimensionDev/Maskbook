@@ -15,7 +15,7 @@ import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { BaseHostedProvider, type BaseHostedStorage } from './BaseHosted.js'
-import { Privy } from '@masknet/web3-providers'
+import { FireflyEmbeddedWalletClient } from '../../../Firefly/EmbeddedWalletClient.js'
 
 export let MaskWalletProviderInstance: MaskWalletProvider
 export function setMaskWalletProviderInstance(mask: MaskWalletProvider) {
@@ -49,7 +49,7 @@ export class MaskWalletProvider extends BaseHostedProvider {
 
         const now = new Date()
 
-        const privyWallets = await Privy.getEvmWallets()
+        const privyWallets = await FireflyEmbeddedWalletClient.getEmbeddedWallets().catch(() => [])
         const formattedPrivyWallets: Wallet[] = privyWallets.map((wallet) => ({
             id: wallet.address,
             name: this.walletStorage.wallets.value.find((w) => isSameAddress(w.address, wallet.address))?.name || '',

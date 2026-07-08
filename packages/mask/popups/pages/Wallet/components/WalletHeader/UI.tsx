@@ -1,13 +1,13 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
-import { PersistentStorages, PopupRoutes, PrivyEnvGuard, type Wallet } from '@masknet/shared-base'
+import { PersistentStorages, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
-import { useWallets } from '@privy-io/react-auth'
+import { useFireflyEmbeddedWallets } from '@masknet/web3-hooks-base'
 import { memo, useMemo, type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSubscription } from 'use-subscription'
@@ -137,132 +137,130 @@ interface WalletHeaderUIProps {
     disableCopy?: boolean
 }
 
-export const WalletHeaderUI = memo<WalletHeaderUIProps>(
-    PrivyEnvGuard(function WalletHeaderUI({
-        currentNetwork,
-        chainId,
-        onOpenNetworkSelector,
-        onActionClick,
-        wallet,
-        disabled = false,
-        disableCopy = false,
-        origin,
-    }) {
-        const { classes, cx } = useStyles({ disabled })
-        const { data: connectedWallets, isPending } = useConnectedWallets(origin)
-        const { wallets: fireflyWallets } = useWallets()
-        const connected = connectedWallets?.has(wallet.address)
-        const isFireflyWallet = useMemo(
-            () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),
-            [fireflyWallets, wallet.address],
-        )
-        const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
-        const addressLink = EVMExplorerResolver.addressLink(chainId, wallet.address)
+export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI({
+    currentNetwork,
+    chainId,
+    onOpenNetworkSelector,
+    onActionClick,
+    wallet,
+    disabled = false,
+    disableCopy = false,
+    origin,
+}) {
+    const { classes, cx } = useStyles({ disabled })
+    const { data: connectedWallets, isPending } = useConnectedWallets(origin)
+    const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
+    const connected = connectedWallets?.has(wallet.address)
+    const isFireflyWallet = useMemo(
+        () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),
+        [fireflyWallets, wallet.address],
+    )
+    const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
+    const addressLink = EVMExplorerResolver.addressLink(chainId, wallet.address)
 
-        const networkName = currentNetwork?.name || currentNetwork?.fullName
-        const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
+    const networkName = currentNetwork?.name || currentNetwork?.fullName
+    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
 
-        const navigate = useNavigate()
+    const navigate = useNavigate()
 
-        return (
-            <Box className={classes.container}>
-                <div className={classes.topBar}>
-                    <div
-                        className={classes.networkSelector}
-                        onClick={(event) => {
-                            if (disabled) return
-                            onOpenNetworkSelector(event)
-                        }}>
-                        {currentNetwork?.iconUrl ?
-                            <ImageIcon size={30} icon={currentNetwork.iconUrl} name={currentNetwork.name || '?'} />
-                        :   <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />}
+    return (
+        <Box className={classes.container}>
+            <div className={classes.topBar}>
+                <div
+                    className={classes.networkSelector}
+                    onClick={(event) => {
+                        if (disabled) return
+                        onOpenNetworkSelector(event)
+                    }}>
+                    {currentNetwork?.iconUrl ?
+                        <ImageIcon size={30} icon={currentNetwork.iconUrl} name={currentNetwork.name || '?'} />
+                    :   <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />}
 
-                        <Box ml={0.5} overflow="auto">
-                            <Box overflow="auto" display="flex">
-                                <TextOverflowTooltip title={networkName}>
-                                    <Typography className={classes.chainName} component="div">
-                                        {networkName}
-                                    </Typography>
-                                </TextOverflowTooltip>
-                                {!disabled ?
-                                    <Icons.ArrowDrop
-                                        size={20}
-                                        className={classes.arrow}
-                                        style={{ transform: status ? 'rotate(-180deg)' : undefined }}
-                                    />
-                                :   null}
-                            </Box>
-                            {isPending ? null : (
-                                <ProgressiveText className={classes.connected} loading={isPending} skeletonWidth={50}>
-                                    <span
-                                        className={cx(
-                                            classes.dot,
-                                            connected ? classes.connectedDot : classes.unconnectedDot,
-                                        )}
-                                    />
-                                    <span>
-                                        {connected ?
-                                            <Trans>Connected</Trans>
-                                        :   <Trans>Not Connected</Trans>}
-                                    </span>
-                                </ProgressiveText>
-                            )}
-                        </Box>
-                    </div>
-                    <div
-                        className={classes.action}
-                        onClick={() => {
-                            if (disabled) return
-                            onActionClick()
-                        }}>
-                        <WalletAvatar address={wallet.address} size={30} />
-                        <Box ml={0.5} overflow="hidden">
-                            <TextOverflowTooltip title={wallet.name}>
-                                <Typography className={classes.nickname}>{walletName}</Typography>
+                    <Box ml={0.5} overflow="auto">
+                        <Box overflow="auto" display="flex">
+                            <TextOverflowTooltip title={networkName}>
+                                <Typography className={classes.chainName} component="div">
+                                    {networkName}
+                                </Typography>
                             </TextOverflowTooltip>
-                            <Typography className={classes.identifier}>
-                                <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                                {!disableCopy ?
-                                    <CopyButton text={wallet.address} className={classes.icon} size={12} />
-                                :   null}
-                                {addressLink ?
-                                    <Link
-                                        className={classes.icon}
-                                        onClick={(event) => event.stopPropagation()}
-                                        href={addressLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        <Icons.PopupLink size={12} />
-                                    </Link>
-                                :   null}
-                            </Typography>
+                            {!disabled ?
+                                <Icons.ArrowDrop
+                                    size={20}
+                                    className={classes.arrow}
+                                    style={{ transform: status ? 'rotate(-180deg)' : undefined }}
+                                />
+                            :   null}
                         </Box>
-                        {isFireflyWallet ?
-                            <Icons.QrcodeIcon
-                                size={20}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    navigate(
-                                        urlcat(PopupRoutes.SyncTwitterCookies, {
-                                            address: wallet.address,
-                                            name: walletName,
-                                        }),
-                                    )
-                                }}
-                            />
-                        :   null}
-                        {!disabled ?
-                            <Icons.ArrowDrop className={classes.arrow} />
-                        :   null}
-                    </div>
+                        {isPending ? null : (
+                            <ProgressiveText className={classes.connected} loading={isPending} skeletonWidth={50}>
+                                <span
+                                    className={cx(
+                                        classes.dot,
+                                        connected ? classes.connectedDot : classes.unconnectedDot,
+                                    )}
+                                />
+                                <span>
+                                    {connected ?
+                                        <Trans>Connected</Trans>
+                                    :   <Trans>Not Connected</Trans>}
+                                </span>
+                            </ProgressiveText>
+                        )}
+                    </Box>
                 </div>
-                {!disabled ?
-                    <>
-                        <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-                        <ActionGroup chainId={chainId} mt={2} />
-                    </>
-                :   null}
-            </Box>
-        )
-    }),
-)
+                <div
+                    className={classes.action}
+                    onClick={() => {
+                        if (disabled) return
+                        onActionClick()
+                    }}>
+                    <WalletAvatar address={wallet.address} size={30} />
+                    <Box ml={0.5} overflow="hidden">
+                        <TextOverflowTooltip title={wallet.name}>
+                            <Typography className={classes.nickname}>{walletName}</Typography>
+                        </TextOverflowTooltip>
+                        <Typography className={classes.identifier}>
+                            <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
+                            {!disableCopy ?
+                                <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            :   null}
+                            {addressLink ?
+                                <Link
+                                    className={classes.icon}
+                                    onClick={(event) => event.stopPropagation()}
+                                    href={addressLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.PopupLink size={12} />
+                                </Link>
+                            :   null}
+                        </Typography>
+                    </Box>
+                    {isFireflyWallet ?
+                        <Icons.QrcodeIcon
+                            size={20}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                navigate(
+                                    urlcat(PopupRoutes.SyncTwitterCookies, {
+                                        address: wallet.address,
+                                        name: walletName,
+                                    }),
+                                )
+                            }}
+                        />
+                    :   null}
+                    {!disabled ?
+                        <Icons.ArrowDrop className={classes.arrow} />
+                    :   null}
+                </div>
+            </div>
+            {!disabled ?
+                <>
+                    <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
+                    <ActionGroup chainId={chainId} mt={2} />
+                </>
+            :   null}
+        </Box>
+    )
+})

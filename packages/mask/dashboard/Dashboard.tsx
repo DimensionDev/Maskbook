@@ -12,7 +12,7 @@ import {
 import { LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { DashboardRoutes, jsxCompose, PrivySetupProvider } from '@masknet/shared-base'
+import { DashboardRoutes, jsxCompose } from '@masknet/shared-base'
 
 import { Pages } from './pages/routes.js'
 import { UserContext, useAppearance } from '../shared-ui/index.js'
@@ -53,7 +53,6 @@ export default function Dashboard() {
     // #endregion
 
     return jsxCompose(
-        <PrivySetupProvider />,
         <RootWeb3ContextProvider enforceEVM />,
         <LinguiProviderHMR i18n={i18n} />,
         <StyledEngineProvider injectFirst />,
