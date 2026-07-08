@@ -26,9 +26,7 @@ export function createConnectionCreator<
         Web3Helper.Definition[T]['Transaction'],
         Web3Helper.Definition[T]['TransactionReceipt'],
         Web3Helper.Definition[T]['TransactionDetailed'],
-        Web3Helper.Definition[T]['TransactionSignature'],
-        Web3Helper.Definition[T]['Block'],
-        Web3Helper.Definition[T]['Web3']
+        Web3Helper.Definition[T]['TransactionSignature']
     >,
     ConnectionOptions extends ConnectionOptionsProvider<
         Web3Helper.Definition[T]['ChainId'],

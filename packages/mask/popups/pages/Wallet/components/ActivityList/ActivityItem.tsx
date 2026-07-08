@@ -213,7 +213,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         queryFn: async () => {
             if (!transaction.chainId || !transaction.id) return null
             const tx = await EVMWeb3.getTransaction(transaction.id, { chainId: transaction.chainId })
-            return tx.input
+            return tx?.input || null
         },
     })
 

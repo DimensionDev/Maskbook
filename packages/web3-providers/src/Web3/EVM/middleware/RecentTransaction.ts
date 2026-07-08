@@ -1,10 +1,10 @@
-import type { TransactionReceipt } from 'web3-core'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     EthereumMethodType,
     type Transaction,
     type Middleware,
     getTransactionStatusType,
+    type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
@@ -37,10 +37,11 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                         account: receipt.from,
                     })
                     // it could be a contract address, but it doesn't matter
-                    BalanceNotifier?.emitter.emit('update', {
-                        chainId: context.chainId,
-                        account: receipt.to,
-                    })
+                    if (receipt.to)
+                        BalanceNotifier?.emitter.emit('update', {
+                            chainId: context.chainId,
+                            account: receipt.to,
+                        })
                     BlockNumberNotifier?.emitter.emit('update', context.chainId)
                     break
                 case EthereumMethodType.MASK_REPLACE_TRANSACTION:

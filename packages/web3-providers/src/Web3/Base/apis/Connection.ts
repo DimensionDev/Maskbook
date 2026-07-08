@@ -1,5 +1,5 @@
-import type { Account, ECKeyIdentifier, Proof } from '@masknet/shared-base'
-import type { FungibleToken, NonFungibleTokenContract, TransactionStatusType } from '@masknet/web3-shared-base'
+import type { Account } from '@masknet/shared-base'
+import type { FungibleToken, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { BaseConnectionOptions } from './ConnectionOptions.js'
 
 export interface BaseConnection<
@@ -12,13 +12,8 @@ export interface BaseConnection<
     TransactionReceipt,
     TransactionDetailed,
     TransactionSignature,
-    Block,
-    Web3,
     Options = BaseConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
-    /** Get web3 instance */
-    getWeb3(initial?: Options): Web3
-
     /** Get the latest balance of the account. */
     getBalance(address: string, initial?: Options): Promise<string>
 
@@ -34,23 +29,11 @@ export interface BaseConnection<
     /** Get gas price */
     getGasPrice(initial?: Options): Promise<string>
 
-    /** Get the source code of a on-chain program. */
-    getCode(address: string, initial?: Options): Promise<string>
-
     /** Get address type of given address. */
     getAddressType(address: string, initial?: Options): Promise<AddressType | undefined>
 
-    /** Get schema type of given token address. */
-    getSchemaType(address: string, initial?: Options): Promise<SchemaType | undefined>
-
-    /** Get the latest block by number. */
-    getBlock(no: number, initial?: Options): Promise<Block | null>
-
     /** Get the latest block number. */
     getBlockNumber(initial?: Options): Promise<number>
-
-    /** Get the latest block unix timestamp. */
-    getBlockTimestamp(initial?: Options): Promise<number>
 
     /** Get the detailed of transaction by id. */
     getTransaction(id: string, initial?: Options): Promise<TransactionDetailed | null>
@@ -61,21 +44,8 @@ export interface BaseConnection<
     /** Get the latest transaction status. */
     getTransactionStatus(id: string, initial?: Options): Promise<TransactionStatusType>
 
-    /** Get the latest transaction nonce. */
-    getTransactionNonce(address: string, initial?: Options): Promise<number>
-
-    /** Get a native fungible token. */
-    getNativeToken(initial?: Options): Promise<FungibleToken<ChainId, SchemaType>>
-
     /** Get a fungible token. */
     getFungibleToken(address: string, initial?: Options): Promise<FungibleToken<ChainId, SchemaType>>
-
-    /** Get a non-fungible token contract. */
-    getNonFungibleTokenContract(
-        address: string,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
 
     /** Get the currently connected account. */
     getAccount(initial?: Options): Promise<string>
@@ -83,17 +53,11 @@ export interface BaseConnection<
     /** Get the currently chain id. */
     getChainId(initial?: Options): Promise<ChainId>
 
-    /** Create a new account */
-    createAccount(initial?: Options): Account<ChainId>
-
     /** Switch to sub network */
     switchChain?: (chainId: ChainId, initial?: Options) => Promise<void>
 
     /** Sign message */
     signMessage(type: string, message: string, initial?: Options): Promise<Signature>
-
-    /** Approve a recipient for using a fungible token. */
-    approveFungibleToken(address: string, recipient: string, amount: string, initial?: Options): Promise<string>
 
     /** Transfer fungible token to */
     transferFungibleToken(
@@ -104,15 +68,6 @@ export interface BaseConnection<
         initial?: Options,
     ): Promise<string>
 
-    /** Transfer some native tokens from contract wallet */
-    transfer?: (recipient: string, amount: string, initial?: Options) => Promise<string>
-    /** Change owner of contract wallet */
-    changeOwner?: (recipient: string, initial?: Options) => Promise<string>
-    /** Fund contract wallet */
-    fund?: (proof: Proof, initial?: Options) => Promise<string>
-    /** Deploy contract wallet */
-    deploy?: (owner: string, identifier?: ECKeyIdentifier, initial?: Options) => Promise<string>
-
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Options): Promise<TransactionSignature>
 
@@ -121,12 +76,6 @@ export interface BaseConnection<
 
     /** Send a transaction and wait for mining */
     sendTransaction(transaction: Transaction, initial?: Options): Promise<string>
-
-    /** Estimate a transaction */
-    estimateTransaction?: (transaction: Transaction, fallback?: number, initial?: Options) => Promise<string>
-
-    /** Send a signed transaction */
-    sendSignedTransaction(signature: TransactionSignature, initial?: Options): Promise<string>
 
     /** Build connection */
     connect(initial?: Options): Promise<Account<ChainId>>
@@ -140,13 +89,4 @@ export interface BaseConnection<
     removeWallet?: (address: string, password?: string | undefined, initial?: Options) => Promise<void>
     /** Reset all wallets */
     resetAllWallets?: (initial?: Options) => Promise<void>
-
-    /** Confirm transaction */
-    confirmTransaction(hash: string, initial?: Options): Promise<TransactionReceipt>
-
-    /** Replace transaction */
-    replaceTransaction(hash: string, config: Transaction, initial?: Options): Promise<void>
-
-    /** Cancel transaction */
-    cancelTransaction(hash: string, config: Transaction, initial?: Options): Promise<void>
 }

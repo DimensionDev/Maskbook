@@ -833,8 +833,6 @@ export interface TransactionChecker<ChainId, Transaction> {
 }
 
 export interface SettingsState {
-    /** Is testnets valid */
-    allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
     currencyType?: Subscription<CurrencyType>
     /** The gas options type */
@@ -878,18 +876,6 @@ export interface NetworkState<ChainId, SchemaType, NetworkType> {
     ) => Promise<void>
     /** Remove a network */
     removeNetwork: (id: string) => Promise<void>
-}
-
-export interface RiskWarningState {
-    /** Is approved */
-    approved?: Subscription<boolean>
-
-    /** Detect if an account is approved the statement */
-    isApproved?: (address: string) => Promise<boolean>
-    /** Approve statement of designate account */
-    approve?: (address: string, pluginID?: string) => Promise<void>
-    /** Revoke statement of designate account */
-    revoke?: (address: string, pluginID?: string) => Promise<void>
 }
 
 export interface IdentityServiceState<ChainId> {
@@ -1112,8 +1098,6 @@ export interface Web3State<
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
-    /** @deprecated */
-    RiskWarning?: RiskWarningState
     Message?: MessageState<MessageRequest, MessageResponse>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>

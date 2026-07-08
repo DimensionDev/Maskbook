@@ -17,7 +17,6 @@ export {
 export {
     type PostContext,
     type PostContextAuthor,
-    type PostContextCoAuthor,
     type PostContextComment,
     type PostContextCreation,
     type PostContextActions,
@@ -28,7 +27,6 @@ export {
     usePostInfoRawMessage,
     usePostInfoMentionedLinks,
     usePostInfoAuthor,
-    usePostInfoCoAuthors,
     usePostInfoNickname,
     usePostInfoEncryptComment,
     usePostInfoDecryptComment,

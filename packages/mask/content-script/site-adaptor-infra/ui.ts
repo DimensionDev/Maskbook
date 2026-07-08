@@ -15,7 +15,6 @@ import {
     SetupGuideStep,
     setDebugObject,
 } from '@masknet/shared-base'
-import { Flags } from '@masknet/flags'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createSharedContext, createPluginHost } from '../../shared/plugin-infra/host.js'
@@ -173,9 +172,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             createWallet: () => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm),
         } satisfies ModalProps),
     )
-
-    // TODO: receive the signal
-    if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin.js')
 
     function $unknownIdentityResolution() {
         const provider = ui.collecting.identityProvider

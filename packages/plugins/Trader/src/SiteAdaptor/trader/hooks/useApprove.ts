@@ -3,7 +3,7 @@ import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { OKX } from '@masknet/web3-providers'
 import { isGte, isZero } from '@masknet/web3-shared-base'
-import { addGasMargin, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { addGasMargin, ChainId, isNativeTokenAddress, isTransactionReceiptSuccess } from '@masknet/web3-shared-evm'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTrade } from '../contexts/TradeProvider.js'
 import { useSpender } from './useSpender.js'
@@ -68,7 +68,7 @@ export function useApprove() {
                 },
             )
             const receipt = await waitForTransaction({ chainId, hash, confirmationCount: 1 })
-            if (!receipt?.status) throw new Error('Failed to approve')
+            if (!isTransactionReceiptSuccess(receipt)) throw new Error('Failed to approve')
             await refetchAllowance()
             return hash
         },

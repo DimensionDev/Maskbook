@@ -7,7 +7,6 @@ import {
     twitterDomainMigrate,
 } from '@masknet/shared-base'
 import { CurrencyType, SourceType } from '../specs/index.js'
-import { memoize } from 'lodash-es'
 
 export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
     {
@@ -89,38 +88,6 @@ export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginI
     },
     (network) => {
         throw new Error(`Unknown network plugin-id: ${network}`)
-    },
-)
-
-export const resolveNextIDPlatformWalletName: (platform: NextIDPlatform) => string = memoize(function (
-    platform: NextIDPlatform,
-) {
-    const pluginId = resolveNextID_NetworkPluginID(platform)
-    if (!pluginId) return `${platform} wallet`
-    return resolveNetworkWalletName(pluginId)
-})
-
-export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
-    {
-        [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
-        [NextIDPlatform.NextID]: undefined,
-        [NextIDPlatform.GitHub]: undefined,
-        [NextIDPlatform.Keybase]: undefined,
-        [NextIDPlatform.Twitter]: undefined,
-        [NextIDPlatform.ENS]: undefined,
-        [NextIDPlatform.RSS3]: undefined,
-        [NextIDPlatform.LENS]: undefined,
-        [NextIDPlatform.REDDIT]: undefined,
-        [NextIDPlatform.SYBIL]: undefined,
-        [NextIDPlatform.EthLeaderboard]: undefined,
-        [NextIDPlatform.SpaceId]: NetworkPluginID.PLUGIN_EVM,
-        [NextIDPlatform.Farcaster]: undefined,
-        [NextIDPlatform.Bit]: undefined,
-        [NextIDPlatform.Unstoppable]: undefined,
-        [NextIDPlatform.CyberConnect]: undefined,
-    },
-    () => {
-        return undefined
     },
 )
 

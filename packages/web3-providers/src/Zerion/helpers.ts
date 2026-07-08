@@ -1,64 +1,15 @@
 import { createLookupTableResolver } from '@masknet/shared-base'
 import {
-    type FungibleAsset,
     isGte,
-    leftShift,
-    multipliedBy,
     toFixed,
     TokenType,
     type Transaction,
     type TransactionAsset,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    formatAmount,
-    formatEthereumAddress,
-    getTokenConstant,
-    isValidAddress,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
-import { BigNumber } from 'bignumber.js'
+import { ChainId, formatAmount, SchemaType } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-es'
 import type { Transaction as RestTransaction } from './reset-types.js'
-import type { ZerionAddressPosition } from './types.js'
-
-export function isValidAsset(data: ZerionAddressPosition) {
-    const { asset, chain } = data
-    const { address } = asset.implementations[chain]
-    return isValidAddress(address)
-}
-
-function isNativeToken(symbol: string) {
-    // cspell:disable-next-line
-    return ['ETH', 'BNB', 'MATIC', 'POL', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
-}
-export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
-    const { asset, chain, quantity } = data
-    const { address: address_, decimals } = asset.implementations[chain]
-    const balance = leftShift(quantity, decimals).toNumber()
-    const price = asset.price?.value ?? 0
-    const address = isNativeToken(asset.symbol) ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '') : address_
-
-    return {
-        id: address,
-        chainId,
-        type: TokenType.Fungible,
-        schema: SchemaType.ERC20,
-        name: asset.name ?? 'Unknown Token',
-        symbol: asset.symbol,
-        decimals,
-        address: formatEthereumAddress(address),
-        logoURL: asset.icon_url,
-        balance: quantity,
-        price: {
-            usd: new BigNumber(price).toString(),
-        },
-        value: {
-            usd: multipliedBy(balance, price).toString(),
-        },
-    }
-}
 
 // lower than real maximum.
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffff0000000000000000000000')
@@ -160,7 +111,7 @@ export function formatRestTransaction(transaction: RestTransaction): Transaction
 
 export const zerionChainIdResolver = createLookupTableResolver<string, ChainId | undefined>(
     {
-        // cspell: ignore taiko,opbnb,degen,okbchain
+        // cspell: ignore okbchain
         arbitrum: ChainId.Arbitrum,
         aurora: ChainId.Aurora,
         avalanche: ChainId.Avalanche,
@@ -175,18 +126,6 @@ export const zerionChainIdResolver = createLookupTableResolver<string, ChainId |
         scroll: ChainId.Scroll,
         xdai: ChainId.xDai,
         zora: ChainId.Zora,
-        // unused chains
-        // 'meta-pacific': ChainId.MetaPacific
-        // 'zksync-ara':ChainId.ZKSyncEra
-        // blast: ChainId.Blast
-        // cyber: ChainId.Cyber
-        // degen: ChainId.Degen,
-        // linea: ChainId.Linea
-        // mantle: ChainId.Mantle
-        // metis-andromeda: ChainId.MetisAndromeda
-        // mode: ChainId.Mode
-        // opbnb:ChainId.opBNB
-        // taiko: ChainId.WorldChain,
     },
     () => undefined,
 )

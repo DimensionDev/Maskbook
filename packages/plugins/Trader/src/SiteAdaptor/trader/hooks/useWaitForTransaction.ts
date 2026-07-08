@@ -1,8 +1,7 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkDescriptors, useWeb3Connection } from '@masknet/web3-hooks-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionReceipt } from '@masknet/web3-shared-evm'
 import { useCallback, useEffect, useRef } from 'react'
-import type { TransactionReceipt } from 'web3-core'
 
 interface WaitOptions {
     chainId: ChainId
@@ -40,7 +39,10 @@ export function useWaitForTransaction() {
                         web3.getTransactionReceipt(hash, { chainId }),
                         web3.getBlockNumber({ chainId }),
                     ])
-                    if (receipt?.blockNumber && blockNumber - receipt.blockNumber >= confirmationCount) {
+                    if (
+                        receipt?.blockNumber &&
+                        BigInt(blockNumber) - receipt.blockNumber >= BigInt(confirmationCount)
+                    ) {
                         resolve(receipt)
                     } else {
                         const timer = setTimeout(() => {

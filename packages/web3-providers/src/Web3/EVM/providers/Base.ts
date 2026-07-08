@@ -2,14 +2,14 @@ import { first } from 'lodash-es'
 import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
 import {
-    ChainId,
+    type ChainId,
     ProviderURL,
     EthereumMethodType,
     type ProviderType,
     type RequestArguments,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription, toHex } from '@masknet/shared-base'
+import { type Account, toHex } from '@masknet/shared-base'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -20,12 +20,8 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
 
     public emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
 
-    get subscription() {
-        return {
-            account: createConstantSubscription(''),
-            chainId: createConstantSubscription(ChainId.Mainnet),
-            wallets: createConstantSubscription<Wallet[]>(EMPTY_LIST),
-        }
+    get subscription(): EVMWalletProvider['subscription'] | undefined {
+        return undefined
     }
 
     get connected() {

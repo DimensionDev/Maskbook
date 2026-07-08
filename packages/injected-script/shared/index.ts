@@ -73,7 +73,7 @@ export function encodeEvent(key: string, args: unknown[]) {
     })
 }
 
-export function decodeEvent(data: unknown) {
+export function decodeEvent(data: unknown): EventItemBeforeSerialization {
     const result = parse(String(data), function reviver(key: string, value: unknown) {
         if (
             typeof value === 'object' &&

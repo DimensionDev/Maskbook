@@ -1,5 +1,4 @@
-import type { EventLog, Log } from 'web3-core'
-import { decodeEventLog, type ContractEventName, type DecodeEventLogReturnType } from 'viem'
+import { decodeEventLog, type ContractEventName, type DecodeEventLogReturnType, type Hex, type Log } from 'viem'
 import type { Abi, ExtractAbiEventNames } from 'abitype'
 
 export type AbiEventToPrimitiveType<
@@ -9,13 +8,29 @@ export type AbiEventToPrimitiveType<
 
 export type MultipleAbiEventsToMappedObject<abi extends Abi> = {
     [eventName in ExtractAbiEventNames<abi> & ContractEventName<abi>]:
-        | (Omit<EventLog, 'returnValues'> & { returnValues: AbiEventToPrimitiveType<abi, eventName> })
+        | (Log & {
+              event: eventName
+              raw: {
+                  data: Hex
+                  topics: readonly Hex[]
+              }
+              returnValues: AbiEventToPrimitiveType<abi, eventName>
+          })
         | undefined
 }
 
 export function decodeEvents<abi extends Abi>(allAbis: abi, logs: Log[]): MultipleAbiEventsToMappedObject<abi> {
     const events: {
-        [eventName: string]: EventLog | undefined
+        [eventName: string]:
+            | (Log & {
+                  event: string
+                  raw: {
+                      data: Hex
+                      topics: readonly Hex[]
+                  }
+                  returnValues: unknown
+              })
+            | undefined
     } = {}
     // decode events
     for (const log of logs) {

@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import { createConstantSubscription, type StorageObject } from '@masknet/shared-base'
+import type { StorageObject } from '@masknet/shared-base'
 import type {
     CurrencyType,
     GasOptionType,
@@ -15,14 +15,12 @@ interface SettingsStorage {
 }
 
 export abstract class SettingsState implements Web3SettingsState {
-    public allowTestnet: Subscription<boolean>
     public currencyType: Subscription<CurrencyType>
     public gasOptionType: Subscription<GasOptionType>
     public fungibleAssetSourceType: Subscription<SourceType>
     public nonFungibleAssetSourceType: Subscription<SourceType>
 
     constructor(private storage: StorageObject<SettingsStorage>) {
-        this.allowTestnet = createConstantSubscription(process.env.NODE_ENV === 'development')
         this.currencyType = this.storage.currencyType.subscription
         this.gasOptionType = this.storage.gasOptionType.subscription
         this.fungibleAssetSourceType = this.storage.fungibleAssetSourceType.subscription

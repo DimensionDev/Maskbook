@@ -1,9 +1,8 @@
-import { useSubscription } from 'use-subscription'
-import { UNDEFINED } from '@masknet/shared-base'
 import { lastRecognizedProfile } from './context.js'
+import { useSubscriptionMaybe } from '@masknet/shared-base-ui'
 
 export function useLastRecognizedIdentity() {
-    return useSubscription(lastRecognizedProfile ?? UNDEFINED)
+    return useSubscriptionMaybe(lastRecognizedProfile, undefined)
 }
 
 export function getLastRecognizedIdentity() {

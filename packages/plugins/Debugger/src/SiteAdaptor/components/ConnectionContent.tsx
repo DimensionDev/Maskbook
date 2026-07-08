@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EVMWeb3, EVMContract, EVMChainResolver } from '@masknet/web3-providers'
-import { NetworkPluginID, ProofType } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -109,38 +109,6 @@ export function ConnectionContent() {
                 account,
             },
         )
-    }, [])
-
-    const onDeployCallback = useCallback(() => {
-        return EVMWeb3.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
-            chainId: ChainId.Polygon,
-            account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
-        })
-    }, [])
-
-    const onFundCallback = useCallback(() => {
-        return EVMWeb3.fund?.(
-            {
-                publicKey: '',
-                type: ProofType.Persona,
-                payload: JSON.stringify({
-                    ownerAddress: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
-                    nonce: 0,
-                }),
-                signature: '',
-            },
-            {
-                chainId: ChainId.Polygon,
-                account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
-            },
-        )
-    }, [])
-
-    const onChangeOwnerChange = useCallback(() => {
-        return EVMWeb3.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
-            chainId: ChainId.Polygon,
-            account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
-        })
     }, [])
 
     const onApproveFungibleTokenCallback = useCallback(() => {
@@ -376,42 +344,6 @@ export function ConnectionContent() {
                         <TableCell>
                             <Button size="small" onClick={() => onTransferCallback()}>
                                 Transfer
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Deploy
-                            </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Button size="small" onClick={() => onDeployCallback()}>
-                                Deploy
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Fund
-                            </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Button size="small" onClick={() => onFundCallback()}>
-                                Fund
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Change Owner
-                            </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Button size="small" onClick={() => onChangeOwnerChange()}>
-                                Change Owner
                             </Button>
                         </TableCell>
                     </TableRow>

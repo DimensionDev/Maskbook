@@ -76,7 +76,6 @@ export interface Payload {
     params?: unknown
 }
 
-export type Web3 = typeof import('@solana/web3.js')
 export type Web3Provider = {
     publicKey: PublicKey
     on(name: string, callback: () => void): void
@@ -117,7 +116,6 @@ export type Web3Definition = {
     NetworkType: NetworkType
     Signature: Signature
     GasOption: GasOption
-    Block: Block
     MessageRequest: MessageRequest
     MessageResponse: MessageResponse
     Operation: Operation
@@ -127,7 +125,5 @@ export type Web3Definition = {
     TransactionSignature: TransactionSignature
     TransactionParameter: TransactionParameter
     UserOperation: Operation
-    Web3: Web3
-    Web3Provider: Web3Provider
     Web3State: Web3State
 }

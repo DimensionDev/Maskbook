@@ -11,8 +11,6 @@ export * from './helpers/getAssetFullName.js'
 export * from './helpers/getNativeAssets.js'
 export * from './helpers/getPaymentToken.js'
 export * from './helpers/parseJSON.js'
-export * from './helpers/createWeb3FromURL.js'
-export * from './helpers/createWeb3FromProvider.js'
 export * from './helpers/createWeb3ProviderFromRequest.js'
 export * from './helpers/createWeb3ProviderFromURL.js'
 

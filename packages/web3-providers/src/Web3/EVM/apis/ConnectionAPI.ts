@@ -9,11 +9,9 @@ import {
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
-    type Block,
     type TransactionSignature,
     type ProviderType,
     type Signature,
-    type Web3,
     EthereumMethodType,
     AccountTransaction,
     getAverageBlockDelay,
@@ -43,9 +41,7 @@ export class ConnectionAPI
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
-            TransactionSignature,
-            Block,
-            Web3
+            TransactionSignature
         >
 {
     protected override Request = new EVMRequestAPI(this.options)
@@ -199,31 +195,6 @@ export class ConnectionAPI
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
-    override async changeOwner(recipient: string, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const contract = this.Contract.getWalletContract(options.account)
-        if (!contract) throw new Error('Failed to create contract.')
-
-        const tx = {
-            from: options.account,
-            to: options.account,
-            data: this.Contract.encodeContractFunctionData(contract.abi, 'changeOwner', [recipient as Address]),
-        }
-
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.eth_sendTransaction,
-                params: [
-                    {
-                        ...tx,
-                        gas: await this.estimateTransaction(tx, 50000, options),
-                    },
-                ],
-            },
-            options,
-        )
-    }
-
     override async connect(initial?: EVMConnectionOptions): Promise<Account<ChainId>> {
         return this.Request.request<Account<ChainId>>(
             {
@@ -287,7 +258,7 @@ export class ConnectionAPI
         })
     }
 
-    override async confirmTransaction(hash: string, initial?: EVMConnectionOptions): Promise<TransactionReceipt> {
+    async confirmTransaction(hash: string, initial?: EVMConnectionOptions): Promise<TransactionReceipt> {
         const options = this.ConnectionOptions.fill(initial)
         const times = 49
         const interval = getAverageBlockDelay(options.chainId)
@@ -311,7 +282,7 @@ export class ConnectionAPI
         throw new Error('Not confirm yet')
     }
 
-    override replaceTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
+    replaceTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
@@ -321,7 +292,7 @@ export class ConnectionAPI
         )
     }
 
-    override cancelTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
+    cancelTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,

@@ -33,13 +33,6 @@ export async function getSubscriptionCurrentValue<T>(
     return
 }
 
-export function createConstantSubscription<T>(value: T): Subscription<T> {
-    return {
-        getCurrentValue: () => value,
-        subscribe: () => noop,
-    }
-}
-
 export function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,

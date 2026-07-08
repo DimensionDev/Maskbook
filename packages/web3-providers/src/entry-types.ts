@@ -27,11 +27,9 @@ export type * from './types/Wallet.js'
 export * from './types/LensV3.js'
 export type * from './types/Storage.js'
 export type * from './types/Snapshot.js'
-export type * from './types/Store.js'
 
 // Provider Implementations
 export * from './DeBank/types.js'
-export * from './Zerion/types.js'
 export * from './RSS3/types.js'
 export * from './GoPlusLabs/types.js'
 export type * from './Web3/Router/types/index.js'

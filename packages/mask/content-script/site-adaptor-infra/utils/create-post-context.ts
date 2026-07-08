@@ -14,12 +14,10 @@ import {
     EMPTY_LIST,
     PostIVIdentifier,
     EnhanceableSite,
-    NULL,
 } from '@masknet/shared-base'
 import type {
     PostContext,
     PostContextAuthor,
-    PostContextCoAuthor,
     PostContextCreation,
     PostContextActions,
 } from '@masknet/plugin-infra/content-script'
@@ -52,7 +50,6 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
         // #endregion
         const author: PostContextAuthor = {
             source: null,
-            handle: NULL,
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
             author: opt.author,
@@ -78,8 +75,6 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
             author: author.author,
-            handle: NULL,
-            coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
             site,
@@ -146,7 +141,6 @@ export function createRefsForCreatePostContext() {
     const avatarURL = new ValueRef<string | null>(null)
     const nickname = new ValueRef<string | null>(null)
     const postBy = new ValueRef<ProfileIdentifier | null>(null)
-    const postCoAuthors = new ValueRef<PostContextCoAuthor[]>([])
     const postID = new ValueRef<string | null>(null)
     const postMessage = new ValueRef<TypedMessage>(makeTypedMessageEmpty())
     const postMetadataImages = new ObservableSet<string>()
@@ -160,7 +154,6 @@ export function createRefsForCreatePostContext() {
             if (!URL.canParse(x)) return null
             return new URL(x)
         }),
-        handle: NULL,
         nickname: createSubscriptionFromValueRef(nickname),
         author: createSubscriptionFromValueRef(postBy),
         postID: createSubscriptionFromValueRef(postID),
@@ -174,7 +167,6 @@ export function createRefsForCreatePostContext() {
             getCurrentValue: () => postMetadataMentionedLinks.asValues,
             subscribe: (sub) => postMetadataMentionedLinks.event.on(postMetadataMentionedLinks.ALL_EVENTS, sub),
         }),
-        coAuthors: createSubscriptionFromValueRef(postCoAuthors),
     }
     return {
         subscriptions,
@@ -182,7 +174,6 @@ export function createRefsForCreatePostContext() {
         nickname,
         postBy,
         postID,
-        postCoAuthors,
         postMessage,
         postMetadataMentionedLinks,
         postMetadataImages,

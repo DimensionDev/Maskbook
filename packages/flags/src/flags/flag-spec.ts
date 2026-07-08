@@ -15,7 +15,6 @@ const FlagSpec = z.object({
 
     using_emoji_flag: bool,
     post_actions_enabled: bool,
-    sandboxedPluginRuntime: bool,
 
     twitter_token: str,
 

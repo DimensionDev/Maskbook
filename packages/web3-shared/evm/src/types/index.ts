@@ -1,15 +1,14 @@
 import type {
-    Transaction as Web3Transaction,
-    TransactionReceipt as Web3TransactionReceipt,
-    AbstractProvider,
-} from 'web3-core'
-import type {
     JsonRpcRequest,
     JsonRpcResponse,
     Web3State as Web3StateShared,
     GasOptionType,
 } from '@masknet/web3-shared-base'
-import type { Web3 } from '../libs/Web3.js'
+import type {
+    Block as ViemBlock,
+    Transaction as ViemTransaction,
+    TransactionReceipt as ViemTransactionReceipt,
+} from 'viem'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -347,13 +346,11 @@ export enum ProviderType {
 /**
  * EIP-1193 compatible provider
  */
-export interface Web3Provider extends AbstractProvider {
-    // TODO(web3@4): review after upgrade
+export interface Web3Provider {
     sendAsync(
         payload: JsonRpcRequest,
         callback?: (error: Error | null, result?: any) => Promise<unknown> | void,
     ): Promise<any>
-    // TODO(web3@4): review after upgrade
     send(payload: JsonRpcRequest, callback: (error: Error | null, result?: any) => unknown): void
     request(args: RequestArguments): Promise<unknown>
 
@@ -369,12 +366,7 @@ export interface Web3Provider extends AbstractProvider {
 
 export type Signature = string
 
-export interface Block {
-    hash: string
-    nonce: string
-    timestamp: string
-    baseFeePerGas?: number
-}
+export type Block = ViemBlock
 
 export interface RequestArguments {
     method: EthereumMethodType
@@ -417,8 +409,8 @@ export interface Transaction {
     _disableSnackbar?: boolean
     _disableSuccessSnackbar?: boolean
 }
-export type TransactionReceipt = Web3TransactionReceipt
-export type TransactionDetailed = Web3Transaction
+export type TransactionReceipt = ViemTransactionReceipt
+export type TransactionDetailed = ViemTransaction
 export type TransactionSignature = string
 export type TransactionParameter = string | boolean | undefined
 
@@ -455,7 +447,6 @@ export type Web3Definition = {
     NetworkType: NetworkType
     Signature: Signature
     GasOption: GasOption
-    Block: Block
     MessageRequest: MessageRequest
     MessageResponse: MessageResponse
     Transaction: Transaction
@@ -463,6 +454,4 @@ export type Web3Definition = {
     TransactionDetailed: TransactionDetailed
     TransactionSignature: TransactionSignature
     TransactionParameter: TransactionParameter
-    Web3: Web3
-    Web3Provider: Web3Provider
 }
