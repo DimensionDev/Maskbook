@@ -28,10 +28,6 @@ const GlobalCss = (
                     display: 'none',
                 },
             },
-            // privy modal error text overflow
-            '#privy-modal-content [class^=TransactionErrorScreenContainer] [class^=ErrorCode]': {
-                wordBreak: 'break-all',
-            },
         }}
     />
 )

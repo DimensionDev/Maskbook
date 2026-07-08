@@ -1,5 +1,5 @@
 import { PageUIProvider, PersonaContext, PrivySetup } from '@masknet/shared'
-import { jsxCompose, MaskMessages, PopupRoutes, PrivySetupProvider } from '@masknet/shared-base'
+import { jsxCompose, MaskMessages, PopupRoutes } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -110,16 +110,7 @@ export default function Popups() {
         throttle: 10000,
     })
 
-    if (!process.env.PRIVY_APP_ID) {
-        return (
-            <span>
-                No <code>process.env.PRIVY_APP_ID</code> set.
-            </span>
-        )
-    }
-
     return jsxCompose(
-        <PrivySetupProvider />,
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
         // eslint-disable-next-line react-compiler/react-compiler
         <PageUIProvider useTheme={usePopupTheme} />,

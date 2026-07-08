@@ -3,7 +3,7 @@ import { Image } from '@masknet/shared'
 import { PersistentStorages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useWallets } from '@privy-io/react-auth'
+import { useFireflyEmbeddedWallets } from '@masknet/web3-hooks-base'
 import { memo, useMemo, type HTMLProps } from 'react'
 import { useSubscription } from 'use-subscription'
 
@@ -27,7 +27,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 export const WalletAvatar = memo<Props>(function WalletAvatar({ size = 30, address, badgeSize = 12, ...rest }) {
     const { classes, cx } = useStyles()
-    const { wallets: fireflyWallets } = useWallets()
+    const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
 
     const isFireflyWallet = useMemo(
         () => fireflyWallets.some((w) => isSameAddress(w.address, address)),
