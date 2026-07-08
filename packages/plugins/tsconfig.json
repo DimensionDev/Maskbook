@@ -16,7 +16,6 @@
     { "path": "./RSS3/tsconfig.json" },
     { "path": "./RedPacket/tsconfig.json" },
     { "path": "./Savings/tsconfig.json" },
-    { "path": "./ScamSniffer/tsconfig.json" },
     { "path": "./ScamWarning/tsconfig.json" },
     { "path": "./Snapshot/tsconfig.json" },
     { "path": "./SwitchLogo/tsconfig.json" },

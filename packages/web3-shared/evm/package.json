@@ -15,7 +15,6 @@
     "@masknet/flags": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/web3-constants": "workspace:^",
-    "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "abitype": "1.2.3",

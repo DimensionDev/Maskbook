@@ -22,7 +22,6 @@
     "@masknet/sdk": "workspace:^",
     "@masknet/typed-message": "workspace:^",
     "@servie/events": "^3.0.0",
-    "@types/dompurify": "^3.0.5",
     "@types/json-stable-stringify": "^1.0.36",
     "async-call-rpc": "^6.4.2",
     "bignumber.js": "9.1.2",

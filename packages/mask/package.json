@@ -56,7 +56,6 @@
     "@masknet/plugin-rss3": "workspace:^",
     "@masknet/plugin-savings": "workspace:^",
     "@masknet/plugin-scam-warning": "workspace:^",
-    "@masknet/plugin-scamsniffer": "workspace:^",
     "@masknet/plugin-snapshot": "workspace:^",
     "@masknet/plugin-switch-logo": "workspace:^",
     "@masknet/plugin-tips": "workspace:^",

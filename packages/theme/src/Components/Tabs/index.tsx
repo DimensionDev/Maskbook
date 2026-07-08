@@ -146,7 +146,6 @@ const tabMapping: {
 
 /**
  * This component is like TabList + Tabs in the @mui/material.
- * It should be used with <ButtonGroupTab>.
  *
  * Warning: Only a few "value" and "label" props on the @mui/material <Tab> component will work.
  *

@@ -32,7 +32,6 @@ export enum PluginID {
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     Web3Profile = 'io.mask.web3-profile',
     Web3ProfileCard = 'io.mask.web3-profile-card',
-    ScamSniffer = 'io.scamsniffer.mask-plugin',
     ScamWarning = 'com.mask.scam-warning',
     SmartPay = 'com.mask.smart-pay',
     Claim = 'com.mask.claim',

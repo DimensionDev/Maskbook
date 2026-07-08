@@ -20,7 +20,6 @@
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@solana/web3.js": "^1.98.1",
-    "@types/bs58": "^4.0.4",
     "bs58": "^5.0.0",
     "buffer": "^6.0.3"
   }
