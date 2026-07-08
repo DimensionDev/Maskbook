@@ -2542,6 +2542,9 @@ importers:
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../../web3-constants
+      '@masknet/web3-contracts':
+        specifier: workspace:^
+        version: link:../../web3-contracts
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../base
