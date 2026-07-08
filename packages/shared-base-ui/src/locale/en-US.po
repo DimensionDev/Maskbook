@@ -635,8 +635,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
-msgid "Account successfully connected to persona"
-msgstr ""
+#~ msgid "Account successfully connected to persona"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletAssets/index.tsx
 msgid "Activities"
@@ -709,7 +709,6 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
-#: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Add Wallet"
 msgstr ""
 
@@ -946,8 +945,8 @@ msgid "Authorization Failed"
 msgstr ""
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
-msgid "Auto report the scam links to MetaMask"
-msgstr ""
+#~ msgid "Auto report the scam links to MetaMask"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
@@ -1011,7 +1010,6 @@ msgstr ""
 msgid "Backup on {0}"
 msgstr ""
 
-#: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Backup password"
 msgstr ""
@@ -1095,8 +1093,8 @@ msgid "Be aware, check the token before adding it."
 msgstr ""
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
-msgid "Be careful what you visit and sign!"
-msgstr ""
+#~ msgid "Be careful what you visit and sign!"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/PreviewRedPacket.tsx
@@ -1227,7 +1225,6 @@ msgid "Can't find a valid user address data source."
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
-#: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/modals/ConfirmModal/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
@@ -1299,7 +1296,6 @@ msgstr ""
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfilePopup.tsx
 #: packages/shared/src/UI/components/WalletStatusBar/Action.tsx
-#: packages/shared/src/UI/components/WalletStatusBar/WalletMenuItem.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "Change"
 msgstr ""
@@ -1531,7 +1527,6 @@ msgstr ""
 msgid "Close [Check Security]?"
 msgstr ""
 
-#: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
@@ -1571,7 +1566,6 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/dashboard/modals/ConfirmModal/index.tsx
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
@@ -1827,7 +1821,6 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Phrase.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
@@ -2054,8 +2047,8 @@ msgid "Currency Symbol (Optional)"
 msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/ProfileCard.tsx
-msgid "Current"
-msgstr ""
+#~ msgid "Current"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Current account is not the verifying account."
@@ -2155,8 +2148,8 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
-msgid "Decrypt failed, please check password"
-msgstr ""
+#~ msgid "Decrypt failed, please check password"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "Decrypt this post with #mask_io! 🎭🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install Mask.io to send your first encrypted tweet. {encrypted}"
@@ -2431,12 +2424,12 @@ msgid "Eligible to claim"
 msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-msgid "Email"
-msgstr ""
+#~ msgid "Email"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-msgid "Email verification code"
-msgstr ""
+#~ msgid "Email verification code"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
@@ -3573,8 +3566,8 @@ msgid "Invalid Block Explorer URL."
 msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-msgid "Invalid email address."
-msgstr ""
+#~ msgid "Invalid email address."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/UploadDropArea/index.tsx
 msgid "Invalid file type"
@@ -3599,8 +3592,8 @@ msgid "Invalid slippage tolerance."
 msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-msgid "Invalid verification code."
-msgstr ""
+#~ msgid "Invalid verification code."
+#~ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/UploadFile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/InformationCard.tsx
@@ -5277,7 +5270,6 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
-#: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Restore"
 msgstr ""
@@ -5669,8 +5661,8 @@ msgid "Signing Message (Text)"
 msgstr ""
 
 #: packages/plugins/ScamSniffer/src/SiteAdaptor/ScamAlert.tsx
-msgid "Similar Project"
-msgstr ""
+#~ msgid "Similar Project"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/UpdatePermissionModal/index.tsx
 msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
@@ -5835,7 +5827,6 @@ msgstr ""
 msgid "Step 2/2"
 msgstr ""
 
-#: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Success"
@@ -5946,8 +5937,8 @@ msgid "Switch to {0}"
 msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
-msgid "Switch to other accounts"
-msgstr ""
+#~ msgid "Switch to other accounts"
+#~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
@@ -6809,8 +6800,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-msgid "Verification code has been sent to your email. Please check your mailbox."
-msgstr ""
+#~ msgid "Verification code has been sent to your email. Please check your mailbox."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #~ msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
@@ -6832,8 +6823,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
-msgid "Verify Account"
-msgstr ""
+#~ msgid "Verify Account"
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 #~ msgid "Verify your wallet"
@@ -7193,8 +7184,8 @@ msgid "You have successfully restored the backup from Google Drive to your brows
 msgstr ""
 
 #: packages/mask/dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
-msgid "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"
-msgstr ""
+#~ msgid "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftHistory.tsx
 #~ msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
