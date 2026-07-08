@@ -1399,11 +1399,6 @@ msgstr ""
 msgid "Circulating Supply"
 msgstr "流通总量"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimDialog/index.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimEntry/index.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claim"
@@ -1436,7 +1431,6 @@ msgstr ""
 msgid "Claim on Firefly"
 msgstr ""
 
-#: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Claim your Airdrop"
 msgstr "确认领取空投"
@@ -1450,17 +1444,16 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Claimable"
-msgstr "可领取"
+#~ msgid "Claimable"
+#~ msgstr "可领取"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #~ msgid "Claimed"
 #~ msgstr ""
 
-#. placeholder {0}: tokenDetail.symbol
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid "Claimed {amount} ${0} successfully."
-msgstr ""
+#~ msgid "Claimed {amount} ${0} successfully."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #~ msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
@@ -1472,11 +1465,9 @@ msgstr ""
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2><3>{tokenSymbol}</3></2>"
 msgstr ""
 
-#. placeholder {0}: duration.hours ?? ''
-#. placeholder {1}: duration.minutes ?? ''
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Claiming will be live until: <0> {days} d {0} h {1} m</0>"
-msgstr ""
+#~ msgid "Claiming will be live until: <0> {days} d {0} h {1} m</0>"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
@@ -1673,7 +1664,6 @@ msgstr "确认中"
 #~ msgid "Congratulations"
 #~ msgstr "恭喜您！"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 #: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 msgid "Congratulations!"
@@ -2092,8 +2082,8 @@ msgstr "自定义"
 #~ msgstr "通过连接社交账户自定义NFT体验。享受具有 Web3 氛围的 Web2 。"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
-msgid "CyberConnect"
-msgstr ""
+#~ msgid "CyberConnect"
+#~ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/index.tsx
 msgid "DAO"
@@ -2148,8 +2138,8 @@ msgid "Decentralized file storage, permanently. Upload and share files to your M
 msgstr "永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
-msgid "Decentralized social graph protocol for user-centric Web3."
-msgstr "以用户为中心的去中心化的Web3社交图协议."
+#~ msgid "Decentralized social graph protocol for user-centric Web3."
+#~ msgstr "以用户为中心的去中心化的Web3社交图协议."
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
@@ -2425,8 +2415,8 @@ msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Eligible to claim"
-msgstr "有资格领取"
+#~ msgid "Eligible to claim"
+#~ msgstr "有资格领取"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #~ msgid "Email"
@@ -2487,10 +2477,9 @@ msgstr "结束日期"
 msgid "Ended {relativeEndTime}"
 msgstr ""
 
-#. placeholder {0}: format(endTime, 'MM-dd-yyyy HH:mm')
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Ended on <0>{0}</0>"
-msgstr ""
+#~ msgid "Ended on <0>{0}</0>"
+#~ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Ends in {relativeEndTime}"
@@ -2634,7 +2623,6 @@ msgstr "兑换"
 msgid "Experience in X"
 msgstr "Twitter体验"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
@@ -2921,8 +2909,8 @@ msgid "Follow Lens handle"
 msgstr "关注Lens handle"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
-msgid "Follow Now"
-msgstr "立即关注"
+#~ msgid "Follow Now"
+#~ msgstr "立即关注"
 
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
@@ -2935,7 +2923,6 @@ msgstr "跟随系统"
 msgid "Follow User"
 msgstr ""
 
-#: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
 msgid "Followers"
 msgstr "粉丝"
@@ -2948,8 +2935,8 @@ msgid "Following"
 msgstr "已关注"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
-msgid "Followings"
-msgstr "正在关注"
+#~ msgid "Followings"
+#~ msgstr "正在关注"
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Forgot payment password?"
@@ -3304,12 +3291,11 @@ msgstr ""
 msgid "I just claimed a lucky drop from @{sender} on Solana."
 msgstr ""
 
-#. placeholder {0}: tokenDetail.symbol
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid ""
-"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
-" Install https://mask.io to explore more airdrop activities."
-msgstr ""
+#~ msgid ""
+#~ "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
+#~ " Install https://mask.io to explore more airdrop activities."
+#~ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @masknetwork to get yours."
@@ -3704,8 +3690,6 @@ msgid "Listed"
 msgstr "显示"
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
-#: packages/plugins/CyberConnect/src/SiteAdaptor/FollowersPage.tsx
-#: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/FailedTrendingView.tsx
 #: packages/shared/src/UI/components/ReloadStatus/index.tsx
@@ -3859,8 +3843,8 @@ msgid "Market Cap"
 msgstr "市值"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Mask Community $ARB Giveaway"
-msgstr ""
+#~ msgid "Mask Community $ARB Giveaway"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
@@ -4262,8 +4246,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
-msgid "No activities found."
-msgstr "未找到活动"
+#~ msgid "No activities found."
+#~ msgstr "未找到活动"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No Airdrop Scam"
@@ -4345,12 +4329,12 @@ msgid "No Enough Gas Fees"
 msgstr "没有足够的 Gas 费"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
-msgid "No followers."
-msgstr "无关注者"
+#~ msgid "No followers."
+#~ msgstr "无关注者"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
-msgid "No following friends."
-msgstr "没有关注任何人"
+#~ msgid "No following friends."
+#~ msgstr "没有关注任何人"
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -4780,12 +4764,12 @@ msgid "Please connect {0} before using dApps."
 msgstr "请在使用 dApp之前连接到 {0} 。"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
-msgid "Please connect wallet"
-msgstr "请连接钱包"
+#~ msgid "Please connect wallet"
+#~ msgstr "请连接钱包"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Please connect wallet to check if you are eligible to claim $ARB."
-msgstr ""
+#~ msgid "Please connect wallet to check if you are eligible to claim $ARB."
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 #~ msgid "Please connect your persona"
@@ -5613,7 +5597,6 @@ msgstr "设置您的身份名称，最大长度为24个字符"
 msgid "Settings"
 msgstr "设置"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
@@ -5747,8 +5730,8 @@ msgstr "出现了一些问题。"
 #~ msgstr "对不起，签名失败！请再试一次。"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Sorry, you are not eligible to claim $ARB in this campaign."
-msgstr "对不起，您没有资格在此活动中领取 $ARB。"
+#~ msgid "Sorry, you are not eligible to claim $ARB in this campaign."
+#~ msgstr "对不起，您没有资格在此活动中领取 $ARB。"
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/SpaceMenu.tsx
 msgid "Space"
@@ -5789,10 +5772,9 @@ msgstr "开始"
 msgid "Start date"
 msgstr "开始日期"
 
-#. placeholder {0}: format(startTime, 'MM-dd-yyyy HH:mm')
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Start Time: <0>{0}</0>"
-msgstr ""
+#~ msgid "Start Time: <0>{0}</0>"
+#~ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Starts {relativeStartTime}"
@@ -6380,8 +6362,8 @@ msgid "to <0>{toAddress}</0>"
 msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
-msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
-msgstr "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。"
+#~ msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
+#~ msgstr "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。"
 
 #. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
@@ -6624,7 +6606,6 @@ msgstr ""
 msgid "Tx Fee"
 msgstr ""
 
-#: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
 msgstr "取消关注"
@@ -7165,10 +7146,9 @@ msgstr ""
 msgid "You didn't approve {0}. Please do not set spending cap to 0 and try it again."
 msgstr ""
 
-#. placeholder {0}: amount ?? ''
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "You have claimed {0} $ARB."
-msgstr ""
+#~ msgid "You have claimed {0} $ARB."
+#~ msgstr ""
 
 #. placeholder {0}: message.amount
 #. placeholder {1}: message.symbol
@@ -7240,8 +7220,8 @@ msgid "You need to open the dApp to view the specific content."
 msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
-msgstr ""
+#~ msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "You've already claimed the lucky drop"
@@ -7303,8 +7283,8 @@ msgid "Your voting power"
 msgstr "您的投票权"
 
 #: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
-msgid "Your wallet cancelled the transaction."
-msgstr "你的钱包已取消交易。"
+#~ msgid "Your wallet cancelled the transaction."
+#~ msgstr "你的钱包已取消交易。"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."

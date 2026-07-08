@@ -1399,11 +1399,6 @@ msgstr ""
 msgid "Circulating Supply"
 msgstr "유통량"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimDialog/index.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimEntry/index.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-#: packages/plugins/Claim/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Claim"
@@ -1436,7 +1431,6 @@ msgstr ""
 msgid "Claim on Firefly"
 msgstr ""
 
-#: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
 #: packages/shared/src/UI/translate.ts
 msgid "Claim your Airdrop"
 msgstr "에어드랍 수령"
@@ -1450,17 +1444,16 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Claimable"
-msgstr "수령 가능"
+#~ msgid "Claimable"
+#~ msgstr "수령 가능"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #~ msgid "Claimed"
 #~ msgstr ""
 
-#. placeholder {0}: tokenDetail.symbol
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid "Claimed {amount} ${0} successfully."
-msgstr ""
+#~ msgid "Claimed {amount} ${0} successfully."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #~ msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
@@ -1472,11 +1465,9 @@ msgstr ""
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2><3>{tokenSymbol}</3></2>"
 msgstr ""
 
-#. placeholder {0}: duration.hours ?? ''
-#. placeholder {1}: duration.minutes ?? ''
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Claiming will be live until: <0> {days} d {0} h {1} m</0>"
-msgstr ""
+#~ msgid "Claiming will be live until: <0> {days} d {0} h {1} m</0>"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
@@ -1673,7 +1664,6 @@ msgstr "확인 중"
 #~ msgid "Congratulations"
 #~ msgstr "축하합니다"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 #: packages/shared/src/UI/components/TokenTransactionConfirmModal/index.tsx
 msgid "Congratulations!"
@@ -2092,8 +2082,8 @@ msgstr "커스텀"
 #~ msgstr "소셜 계정을 연결하여 맞춤형 NFT를 경험합니다. 새로운 웹3 바이브로 웹2를 즐기세요."
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
-msgid "CyberConnect"
-msgstr ""
+#~ msgid "CyberConnect"
+#~ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/index.tsx
 msgid "DAO"
@@ -2148,8 +2138,8 @@ msgid "Decentralized file storage, permanently. Upload and share files to your M
 msgstr "탈중앙화 영구적 파일 저장. Arweave Network를 통해 파일을 업로드하고 Mask 친구에게 공유합니다."
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/index.tsx
-msgid "Decentralized social graph protocol for user-centric Web3."
-msgstr "사용자 중심 웹3를 위한 탈중앙화 소셜 그래프 프로토콜"
+#~ msgid "Decentralized social graph protocol for user-centric Web3."
+#~ msgstr "사용자 중심 웹3를 위한 탈중앙화 소셜 그래프 프로토콜"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
@@ -2425,8 +2415,8 @@ msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Eligible to claim"
-msgstr "수령 가능"
+#~ msgid "Eligible to claim"
+#~ msgstr "수령 가능"
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #~ msgid "Email"
@@ -2487,10 +2477,9 @@ msgstr "종료 날짜"
 msgid "Ended {relativeEndTime}"
 msgstr ""
 
-#. placeholder {0}: format(endTime, 'MM-dd-yyyy HH:mm')
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Ended on <0>{0}</0>"
-msgstr ""
+#~ msgid "Ended on <0>{0}</0>"
+#~ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Ends in {relativeEndTime}"
@@ -2634,7 +2623,6 @@ msgstr "스왑"
 msgid "Experience in X"
 msgstr "트위터에서 체험하기"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
@@ -2921,8 +2909,8 @@ msgid "Follow Lens handle"
 msgstr "Lens 핸들 팔로우"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
-msgid "Follow Now"
-msgstr "바로 팔로우하기"
+#~ msgid "Follow Now"
+#~ msgstr "바로 팔로우하기"
 
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
@@ -2935,7 +2923,6 @@ msgstr "시스템에 따라 설정"
 msgid "Follow User"
 msgstr ""
 
-#: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
 msgid "Followers"
 msgstr "팔로워"
@@ -2948,8 +2935,8 @@ msgid "Following"
 msgstr "팔로잉"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
-msgid "Followings"
-msgstr "팔로잉"
+#~ msgid "Followings"
+#~ msgstr "팔로잉"
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Forgot payment password?"
@@ -3304,12 +3291,11 @@ msgstr ""
 msgid "I just claimed a lucky drop from @{sender} on Solana."
 msgstr ""
 
-#. placeholder {0}: tokenDetail.symbol
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid ""
-"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
-" Install https://mask.io to explore more airdrop activities."
-msgstr ""
+#~ msgid ""
+#~ "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
+#~ " Install https://mask.io to explore more airdrop activities."
+#~ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @masknetwork to get yours."
@@ -3704,8 +3690,6 @@ msgid "Listed"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileTabContent.tsx
-#: packages/plugins/CyberConnect/src/SiteAdaptor/FollowersPage.tsx
-#: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/LoadingFailCard.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/FailedTrendingView.tsx
 #: packages/shared/src/UI/components/ReloadStatus/index.tsx
@@ -3859,8 +3843,8 @@ msgid "Market Cap"
 msgstr "시가 총액"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Mask Community $ARB Giveaway"
-msgstr ""
+#~ msgid "Mask Community $ARB Giveaway"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
@@ -4262,8 +4246,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
-msgid "No activities found."
-msgstr "사용 활동을 찾을 수 없습니다"
+#~ msgid "No activities found."
+#~ msgstr "사용 활동을 찾을 수 없습니다"
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No Airdrop Scam"
@@ -4345,12 +4329,12 @@ msgid "No Enough Gas Fees"
 msgstr "가스비 부족"
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
-msgid "No followers."
-msgstr "팔로워가 없습니다."
+#~ msgid "No followers."
+#~ msgstr "팔로워가 없습니다."
 
 #: packages/plugins/CyberConnect/src/SiteAdaptor/Profile.tsx
-msgid "No following friends."
-msgstr "팔로잉 친구가 없습니다."
+#~ msgid "No following friends."
+#~ msgstr "팔로잉 친구가 없습니다."
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -4780,12 +4764,12 @@ msgid "Please connect {0} before using dApps."
 msgstr "디엡을 이용하기 전에 {0} 연결하세요."
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
-msgid "Please connect wallet"
-msgstr "월렛을 연결하세요"
+#~ msgid "Please connect wallet"
+#~ msgstr "월렛을 연결하세요"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Please connect wallet to check if you are eligible to claim $ARB."
-msgstr ""
+#~ msgid "Please connect wallet to check if you are eligible to claim $ARB."
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 #~ msgid "Please connect your persona"
@@ -5613,7 +5597,6 @@ msgstr "최대 24자로 페로소나 이름 설정합니다"
 msgid "Settings"
 msgstr "설정"
 
-#: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
@@ -5747,8 +5730,8 @@ msgstr "오류가 발생합니다."
 #~ msgstr "사인 살패, 다시 시도하기"
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Sorry, you are not eligible to claim $ARB in this campaign."
-msgstr "$ARB 수령하는 자격이 없습니다."
+#~ msgid "Sorry, you are not eligible to claim $ARB in this campaign."
+#~ msgstr "$ARB 수령하는 자격이 없습니다."
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/SpaceMenu.tsx
 msgid "Space"
@@ -5789,10 +5772,9 @@ msgstr "시작"
 msgid "Start date"
 msgstr "시작 날짜"
 
-#. placeholder {0}: format(startTime, 'MM-dd-yyyy HH:mm')
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Start Time: <0>{0}</0>"
-msgstr ""
+#~ msgid "Start Time: <0>{0}</0>"
+#~ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Starts {relativeStartTime}"
@@ -6380,8 +6362,8 @@ msgid "to <0>{toAddress}</0>"
 msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/index.tsx
-msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
-msgstr "에어드롭에 참여하기 위해서는 거래 비용을 충당할 수 있는 네이티브 토큰이 지정된 네트워크의 월렛에 충분히 있어야 합니다."
+#~ msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
+#~ msgstr "에어드롭에 참여하기 위해서는 거래 비용을 충당할 수 있는 네이티브 토큰이 지정된 네트워크의 월렛에 충분히 있어야 합니다."
 
 #. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
@@ -6624,7 +6606,6 @@ msgstr ""
 msgid "Tx Fee"
 msgstr ""
 
-#: packages/plugins/CyberConnect/src/SiteAdaptor/ConnectButton.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
 msgstr "언팔로우"
@@ -7165,10 +7146,9 @@ msgstr ""
 msgid "You didn't approve {0}. Please do not set spending cap to 0 and try it again."
 msgstr ""
 
-#. placeholder {0}: amount ?? ''
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "You have claimed {0} $ARB."
-msgstr ""
+#~ msgid "You have claimed {0} $ARB."
+#~ msgstr ""
 
 #. placeholder {0}: message.amount
 #. placeholder {1}: message.symbol
@@ -7240,8 +7220,8 @@ msgid "You need to open the dApp to view the specific content."
 msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
-msgstr ""
+#~ msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "You've already claimed the lucky drop"
@@ -7303,8 +7283,8 @@ msgid "Your voting power"
 msgstr "투표 파워"
 
 #: packages/plugins/Claim/src/hooks/useClaimAirdrop.tsx
-msgid "Your wallet cancelled the transaction."
-msgstr "월렛은 이미 해당 거래를 취소했습니다."
+#~ msgid "Your wallet cancelled the transaction."
+#~ msgstr "월렛은 이미 해당 거래를 취소했습니다."
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."

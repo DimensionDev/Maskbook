@@ -3,7 +3,6 @@
   "references": [
     { "path": "./Approval/tsconfig.json" },
     { "path": "./Calendar/tsconfig.json" },
-    { "path": "./Claim/tsconfig.json" },
     { "path": "./CrossChainBridge/tsconfig.json" },
     { "path": "./Debugger/tsconfig.json" },
     { "path": "./EFP/tsconfig.json" },
