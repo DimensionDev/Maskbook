@@ -8,6 +8,9 @@ function createConstantSubscription<T>(value: T): Subscription<T> {
     }
 }
 
+const subscriptions = new Map<unknown, Subscription<unknown>>()
+
 export function useSubscriptionMaybe<T>(subscription: Subscription<T> | undefined, defaultValue: T): T {
-    return useSubscription(subscription ?? createConstantSubscription(defaultValue))
+    if (!subscriptions.has(subscription)) subscriptions.set(subscription, createConstantSubscription(defaultValue))
+    return useSubscription(subscription ?? (subscriptions.get(subscription) as Subscription<T>))
 }
