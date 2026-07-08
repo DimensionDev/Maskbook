@@ -25,7 +25,6 @@
     { "path": "../../plugins/Trader/tsconfig.json" },
     { "path": "../../plugins/SwitchLogo/tsconfig.json" },
     { "path": "../../plugins/Calendar/tsconfig.json" },
-    { "path": "../../sandboxed-plugin-runtime/src/site-adaptor/tsconfig.json" },
     { "path": "../web-workers/tsconfig.json" },
     { "path": "../utils-pure/tsconfig.json" },
     { "path": "../background/tsconfig.json" },

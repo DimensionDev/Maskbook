@@ -12,7 +12,6 @@
     { "path": "../../plugin-infra/tsconfig.json" },
     { "path": "../../web3-telemetry/tsconfig.json" },
     { "path": "../../web3-shared/base/tsconfig.json" },
-    { "path": "../../flags/tsconfig.json" },
-    { "path": "../../sandboxed-plugin-runtime/src/runtime/tsconfig.json" }
+    { "path": "../../flags/tsconfig.json" }
   ]
 }

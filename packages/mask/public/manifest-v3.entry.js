@@ -12,8 +12,6 @@ importScripts(
     '/js/polyfill/lockdown.js',
     // '/js/trusted-types.js',
     '/js/lockdown.js',
-    '/js/module-loader.js',
-    '/sandboxed-modules/mv3-preload.js',
     //
     './sw.js',
 )

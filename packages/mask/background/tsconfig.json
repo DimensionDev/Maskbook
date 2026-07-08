@@ -18,7 +18,6 @@
     { "path": "../../gun-utils/tsconfig.json" },
     { "path": "../../flags/tsconfig.json" },
     { "path": "../../web3-telemetry/tsconfig.json" },
-    { "path": "../../web3-providers/tsconfig.json" },
-    { "path": "../../sandboxed-plugin-runtime/src/background/tsconfig.json" }
+    { "path": "../../web3-providers/tsconfig.json" }
   ]
 }

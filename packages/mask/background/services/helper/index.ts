@@ -13,7 +13,6 @@ export {
     requestExtensionPermissionFromContentScript,
 } from './request-permission.js'
 export { getTelemetryID, setTelemetryID } from './telemetry-id.js'
-export { fetchSandboxedPluginManifest } from './sandboxed.js'
 export { getActiveTab } from './tabs.js'
 export { requestXOAuthToken, resolveXOAuth, resetXOAuth } from './oauth-x.js'
 export { loginFireflyViaTwitter } from './firefly.js'

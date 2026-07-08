@@ -11,7 +11,6 @@ export { buildInjectedScript, watchInjectedScript } from './projects/injected-sc
 export { buildMaskSDK, watchMaskSDK } from './projects/mask-sdk.ts'
 export { buildPolyfill } from './projects/polyfill.ts'
 export { buildGun } from './projects/gun.ts'
-export { buildSandboxedPlugin, watchSandboxedPlugin } from './projects/sandboxed-plugins.ts'
 export { buildConstants } from './projects/build-constants.ts'
 export { buildContracts } from './projects/build-contracts.ts'
 

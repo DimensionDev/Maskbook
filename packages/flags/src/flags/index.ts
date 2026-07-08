@@ -27,7 +27,6 @@ export const flags: FlagSpec = {
 
     using_emoji_flag: true,
     post_actions_enabled: true,
-    sandboxedPluginRuntime: false,
 
     // twitter
     twitter_token:
