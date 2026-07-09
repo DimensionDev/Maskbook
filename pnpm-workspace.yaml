@@ -40,6 +40,10 @@ overrides:
   # by @scamsniffer/detector
   ts-jest: '-'
   ts-node: '-'
+  # unused
+  '@onflow/config>eslint': '-'
+  '@onflow/config>eslint-plugin-jsdoc': '-'
+  'web-ext>addons-linter': '-'
   # CVEs
   protobufjs: 7.6.5
   node-forge: 1.4.0

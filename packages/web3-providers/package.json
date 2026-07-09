@@ -68,7 +68,7 @@
     "graphql-request": "^7.0.1",
     "immer": "^10.1.1",
     "lru-cache": "^10.3.0",
-    "metamask-extension-provider": "^4.0.1",
+    "metamask-extension-provider": "^5.0.0",
     "twitter-text": "^3.1.0",
     "urlcat": "^3.1.0",
     "uuid": "^9.0.0",
