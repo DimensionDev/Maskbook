@@ -24,7 +24,6 @@ allowBuilds: []
 overrides:
   '@emotion/styled': $@emotion/styled
   '@emotion/react': $@emotion/react
-  '@mui/base': $@mui/base
   '@mui/icons-material': $@mui/icons-material
   '@mui/material': $@mui/material
   '@swc/core': $@swc/core

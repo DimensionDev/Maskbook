@@ -39,7 +39,6 @@
     "@lingui/core": "^5.5.1",
     "@lingui/react": "^5.5.1",
     "@masknet/kit": "0.4.1",
-    "@mui/base": "5.0.0-beta.40",
     "@mui/icons-material": "5.15.21",
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "5.15.20",

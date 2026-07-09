@@ -6,8 +6,7 @@ import { makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from 
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { PopperOwnProps } from '@mui/base'
-import { ClickAwayListener, InputBase, Typography } from '@mui/material'
+import { ClickAwayListener, InputBase, Typography, type PopperProps } from '@mui/material'
 import { useState, type HTMLProps } from 'react'
 import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
 
@@ -120,7 +119,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const popperOptions: PopperOwnProps['popperOptions'] = {
+const popperOptions: PopperProps['popperOptions'] = {
     strategy: 'absolute',
     modifiers: [
         {

@@ -7,7 +7,6 @@ settings:
 overrides:
   '@emotion/styled': 11.11.5
   '@emotion/react': 11.11.4
-  '@mui/base': 5.0.0-beta.40
   '@mui/icons-material': 5.15.21
   '@mui/material': 5.15.20
   '@swc/core': 1.13.3
@@ -83,9 +82,6 @@ importers:
       '@masknet/kit':
         specifier: 0.4.1
         version: 0.4.1
-      '@mui/base':
-        specifier: 5.0.0-beta.40
-        version: 5.0.0-beta.40(@types/react@19.2.10)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       '@mui/icons-material':
         specifier: 5.15.21
         version: 5.15.21(@mui/material@5.15.20(@emotion/react@11.11.4(@types/react@19.2.10)(react@0.0.0-experimental-58af67a8f8-20240628))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@19.2.10)(react@0.0.0-experimental-58af67a8f8-20240628))(@types/react@19.2.10)(react@0.0.0-experimental-58af67a8f8-20240628))(@types/react@19.2.10)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628))(@types/react@19.2.10)(react@0.0.0-experimental-58af67a8f8-20240628)
