@@ -28,7 +28,6 @@ const require = createRequire(import.meta.url)
 const patchesDir = join(import.meta.dirname, '../../../patches')
 const wasm2jsLoader = require.resolve('./loaders/wasm2js-loader.ts')
 const splineWasm2JsLoader = require.resolve('./loaders/spline-wasm2js-loader.ts')
-const disableLongWasmLoader = require.resolve('./loaders/disable-long-wasm-loader.ts')
 
 export async function createConfiguration(
     isRspack: boolean,
@@ -81,7 +80,7 @@ export async function createConfiguration(
         cache: {
             type: 'filesystem',
             buildDependencies: {
-                config: [import.meta.filename, wasm2jsLoader, splineWasm2JsLoader, disableLongWasmLoader],
+                config: [import.meta.filename, wasm2jsLoader, splineWasm2JsLoader],
                 patches: await pnpmPatches,
             },
             version: cacheKey,
@@ -133,11 +132,6 @@ export async function createConfiguration(
                     test: /[/\\]@splinetool[/\\]runtime[/\\]build[/\\](runtime|process|boolean|physics)\.js$/,
                     enforce: 'pre',
                     use: [{ loader: splineWasm2JsLoader }],
-                },
-                {
-                    test: /[/\\]long[/\\](umd[/\\])?index\.js$/,
-                    enforce: 'pre',
-                    use: [{ loader: disableLongWasmLoader }],
                 },
                 {
                     test: /\.wasm$/i,

@@ -1,4 +1,6 @@
 import { test, expect, beforeAll } from 'vitest'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore not want to install @types/node for this
 import { webcrypto } from 'node:crypto'
 import { encryptBackup, decryptBackup } from '../src/index.js'
 

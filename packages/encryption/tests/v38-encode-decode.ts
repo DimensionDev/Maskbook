@@ -3,6 +3,9 @@ import { encodePayload, parsePayload, type PayloadWellFormed, importAESFromJWK }
 import { None, Some } from 'ts-results-es'
 import { ProfileIdentifier } from '@masknet/base'
 import { queryTestPublicKey } from './keys.js'
+// we installed buffer
+// eslint-disable-next-line unicorn/prefer-node-protocol
+import { Buffer } from 'buffer'
 
 test('Parse v38 encoded by old infra', async () => {
     const out = (await parsePayload(oldInfraOutput)).unwrap()
