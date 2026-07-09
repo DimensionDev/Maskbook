@@ -6,12 +6,12 @@ import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ReactCompilerPlugin from 'eslint-plugin-react-compiler'
-// @ts-expect-error
-import ImportPlugin from 'eslint-plugin-i'
+import ImportPlugin from 'eslint-plugin-import-x'
 import ReactPlugin from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import ReactQueryPlugin from '@tanstack/eslint-plugin-query'
 import LinguiPlugin from 'eslint-plugin-lingui'
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript'
 import { fixupPluginRules } from '@eslint/compat'
 
 const deferPackages = [
@@ -585,12 +585,10 @@ export default tseslint.config(
     {
         settings: {
             react: { version: '18.3' },
-            'import/parsers': {
+            'import-x/parsers': {
                 '@typescript-eslint/parser': ['.ts', '.tsx'],
             },
-            'import/resolver': {
-                typescript: {},
-            },
+            'import-x/resolver-next': [createTypeScriptImportResolver({})],
         },
     },
     {
@@ -612,7 +610,6 @@ export default tseslint.config(
             parserOptions: {
                 ecmaVersion: 'latest',
                 projectService: true,
-                // @ts-expect-error
                 tsconfigRootDir: import.meta.dirname,
                 warnOnUnsupportedTypeScriptVersion: false,
                 allowAutomaticSingleRunInference: true,

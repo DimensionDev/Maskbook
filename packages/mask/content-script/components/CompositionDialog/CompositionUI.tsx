@@ -20,7 +20,12 @@ import {
     type PluginEntryRenderRef,
 } from '@masknet/shared'
 import { CompositionContext, type CompositionType } from '@masknet/plugin-infra/content-script'
-import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-base'
+import {
+    EncryptionTargetType,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
+    type ProfileInformation,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -28,7 +33,6 @@ import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
-import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -110,6 +114,10 @@ export interface CompositionProps extends RefAttributes<CompositionRef> {
     onQueryClipboardPermission?(): void
     initialMeta?: Record<string, unknown>
     personaAction?: React.ReactNode
+}
+export interface EncryptTargetE2EFromProfileIdentifier {
+    type: 'E2E'
+    target: ReadonlyArray<{ profile: ProfileIdentifier; persona?: PersonaIdentifier }>
 }
 export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier

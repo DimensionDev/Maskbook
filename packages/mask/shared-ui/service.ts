@@ -20,6 +20,7 @@ import type {
     SiteAdaptorService,
     Services as ServicesType,
     WalletService,
+    // eslint-disable-next-line import/no-restricted-paths
 } from '../background/services/types.js'
 import { setDebugObject } from '@masknet/shared-base'
 assertNotEnvironment(Environment.ManifestBackground)

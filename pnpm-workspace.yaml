@@ -64,7 +64,6 @@ patchedDependencies:
   reflect-metadata@0.1.13: patches/reflect-metadata@0.1.13.patch
   bloom-filters@3.0.0: patches/bloom-filters@3.0.0.patch
   urlcat@3.1.0: patches/urlcat@3.1.0.patch
-  eslint-plugin-i@2.29.1: patches/eslint-plugin-i@2.29.1.patch
   react-use@17.5.0: patches/react-use@17.5.0.patch
   react-devtools-inline@5.3.0: patches/react-devtools-inline@5.3.0.patch
   '@splinetool/runtime@0.9.342': patches/@splinetool__runtime@0.9.342.patch

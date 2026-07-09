@@ -9,13 +9,25 @@ import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'
 import { DecryptPostFailed } from './DecryptPostFailed.js'
 import { encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
-import type { DecryptionContext, EncodedPayload } from '../../../../background/services/crypto/decryption.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results-es'
 import { uniqWith } from 'lodash-es'
 
 type PossibleProgress = SuccessDecryption | FailureDecryption | DecryptionProgress
+type EncodedPayload =
+    | {
+          type: 'text'
+          text: string
+      }
+    | {
+          type: 'image'
+          image: Blob
+      }
+    | {
+          type: 'image-url'
+          image: string
+      }
 
 function progressReducer(
     state: Array<{
@@ -217,14 +229,13 @@ async function makeProgress(
     reportProgress: ReportProgress,
     signal: AbortSignal,
 ) {
-    const context: DecryptionContext = {
+    let iv: Uint8Array<ArrayBuffer> | undefined
+    for await (const progress of GeneratorServices.decrypt(payload, {
         postURL,
         authorHint,
         currentProfile,
         encryptPayloadNetwork: activatedSiteAdaptorUI!.encryptPayloadNetwork,
-    }
-    let iv: Uint8Array<ArrayBuffer> | undefined
-    for await (const progress of GeneratorServices.decrypt(payload, context)) {
+    })) {
         if (signal.aborted) return
         if (progress.type === DecryptProgressKind.Success) {
             done(progress.content, iv || new Uint8Array())
