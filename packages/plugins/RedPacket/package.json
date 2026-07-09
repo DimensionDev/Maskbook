@@ -41,7 +41,7 @@
     "bignumber.js": "9.1.2",
     "date-fns": "^3.6.0",
     "immer": "^10.1.1",
-    "react-router-dom": "^7.13.0",
+    "react-router-dom": "^7.18.1",
     "react-use": "^17.5.0",
     "tweetnacl": "^1.0.3",
     "urlcat": "^3.1.0",
