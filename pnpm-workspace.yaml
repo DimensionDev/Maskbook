@@ -52,6 +52,10 @@ overrides:
   js-yaml: 4.2.0
   'ws@8': 8.21.0
   'ws@7': 7.5.11
+  'picomatch@2': 2.3.2
+  'picomatch@4': 4.0.4
+  'glob@10': 10.5.0
+  'glob@11': 11.1.0
 patchedDependencies:
   '@types/react-avatar-editor@13.0.2': patches/@types__react-avatar-editor@13.0.2.patch
   '@types/react-highlight-words@0.20.0': patches/@types__react-highlight-words@0.20.0.patch
