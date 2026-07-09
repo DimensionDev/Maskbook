@@ -62,8 +62,9 @@ export function readTypedMessageMetadataUntyped<T>(
 }
 
 export function isDataMatchJSONSchema(data: any, jsonSchema: object) {
-    const validator = new z_schema({})
-    if (!validator.validate(data, jsonSchema)) return Err(validator.getLastErrors())
+    const validator = z_schema.create({ version: 'none' })
+    const result = validator.validateSafe(data, jsonSchema)
+    if (!result.valid) return Err(result.err)
     return Ok.EMPTY
 }
 
