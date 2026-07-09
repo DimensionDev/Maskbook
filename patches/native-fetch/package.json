@@ -1,0 +1,13 @@
+{
+  "name": "native-fetch",
+  "version": "4.0.2",
+  "type": "module",
+  "main": "./cjs.cjs",
+  "module": "./esm.js",
+  "exports": {
+    ".": {
+      "import": "./esm.js",
+      "require": "./cjs.cjs"
+    }
+  }
+}

@@ -42,6 +42,9 @@ overrides:
   # by @scamsniffer/detector
   ts-jest: '-'
   ts-node: '-'
+  # native-fetch imports undici with CVE, it no longer maintained for 5 years.
+  # now Node.js has global fetch, no need.
+  'native-fetch>undici': '-'
 patchedDependencies:
   '@types/react-avatar-editor@13.0.2': patches/@types__react-avatar-editor@13.0.2.patch
   '@types/react-highlight-words@0.20.0': patches/@types__react-highlight-words@0.20.0.patch
@@ -57,6 +60,7 @@ patchedDependencies:
   gulp: patches/gulp.patch
   ts-results-es: patches/ts-results-es.patch
   '@lingui/cli': patches/@lingui__cli.patch
+  native-fetch@4.0.2: patches/native-fetch@4.0.2.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:
