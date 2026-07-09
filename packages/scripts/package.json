@@ -33,6 +33,6 @@
     "@types/proper-lockfile": "^4.1.4",
     "@types/yargs": "^17.0.33",
     "gulp-cli": "^3.0.0",
-    "web-ext": "^8.4.0"
+    "web-ext": "^10.4.0"
   }
 }
