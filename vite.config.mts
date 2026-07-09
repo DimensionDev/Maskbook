@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 import { fileURLToPath } from 'url'
 
 const resolve = (spec: string) => fileURLToPath(new URL(spec, import.meta.url))
@@ -19,6 +19,7 @@ export default defineConfig({
     ],
     test: {
         include: ['./packages/**/tests/**/*.ts'],
+        exclude: [...configDefaults.exclude, '**/dist/**'],
         alias: {
             '@masknet/sdk': resolve('./packages/mask-sdk/server/index.ts'),
             '@masknet/base': resolve('./packages/base/src/index.ts'),
