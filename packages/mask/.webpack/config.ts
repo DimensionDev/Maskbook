@@ -76,6 +76,9 @@ export async function createConfiguration(
             :   {
                     futureDefaults: true,
                     deferImport: true,
+                    // Webpack's experimental TypeScript parser cannot process TSX.
+                    // Keep TS/TSX compilation on the swc loader below.
+                    typescript: false,
                 },
         cache: {
             type: 'filesystem',
