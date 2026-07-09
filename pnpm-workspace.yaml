@@ -44,8 +44,9 @@ overrides:
   # native-fetch imports undici with CVE, it no longer maintained for 5 years.
   # now Node.js has global fetch, no need.
   'native-fetch>undici': '-'
-  # CVE
+  # CVEs
   protobufjs: 7.6.5
+  node-forge: 1.4.0
 patchedDependencies:
   '@types/react-avatar-editor@13.0.2': patches/@types__react-avatar-editor@13.0.2.patch
   '@types/react-highlight-words@0.20.0': patches/@types__react-highlight-words@0.20.0.patch

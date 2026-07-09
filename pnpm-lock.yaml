@@ -25,6 +25,7 @@ overrides:
   ts-node: '-'
   native-fetch>undici: '-'
   protobufjs: 7.6.5
+  node-forge: 1.4.0
 
 pnpmfileChecksum: sha256-Xl5PgZOFeeSKaQCC4XqKbhoXqjEUcv+C8Je36aygMb8=
 
@@ -10471,8 +10472,8 @@ packages:
       encoding:
         optional: true
 
-  node-forge@1.3.1:
-    resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
+  node-forge@1.4.0:
+    resolution: {integrity: sha512-LarFH0+6VfriEhqMMcLX2F7SwSXeWwnEAJEsYm5QKWchiVYVvJyV9v7UDvUv+w5HO23ZpQTXDv/GxdDdMyOuoQ==}
     engines: {node: '>= 6.13.0'}
 
   node-gyp-build@4.8.4:
@@ -14531,7 +14532,7 @@ snapshots:
       bluebird: 3.7.2
       commander: 9.5.0
       debug: 4.3.7
-      node-forge: 1.3.1
+      node-forge: 1.4.0
       split: 1.0.1
     transitivePeerDependencies:
       - supports-color
@@ -22632,7 +22633,7 @@ snapshots:
       http-shutdown: 1.2.2
       jiti: 1.21.6
       mlly: 1.7.3
-      node-forge: 1.3.1
+      node-forge: 1.4.0
       pathe: 1.1.2
       std-env: 3.8.0
       ufo: 1.5.4
@@ -23367,7 +23368,7 @@ snapshots:
     optionalDependencies:
       encoding: 0.1.13
 
-  node-forge@1.3.1: {}
+  node-forge@1.4.0: {}
 
   node-gyp-build@4.8.4: {}
 
@@ -24616,7 +24617,7 @@ snapshots:
   selfsigned@2.4.1:
     dependencies:
       '@types/node-forge': 1.3.11
-      node-forge: 1.3.1
+      node-forge: 1.4.0
 
   semver-compare@1.0.0: {}
 
