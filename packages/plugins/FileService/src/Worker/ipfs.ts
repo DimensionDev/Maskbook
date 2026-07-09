@@ -1,13 +1,14 @@
+// cspell:words kubo
 import urlcat from 'urlcat'
 import { isEmpty } from 'lodash-es'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
-import { create, type IPFSHTTPClient } from 'ipfs-http-client'
+import { create, type KuboRPCClient } from 'kubo-rpc-client'
 import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { makeFileKeySigned } from '../helpers.js'
 
-function createClient(): IPFSHTTPClient {
+function createClient() {
     return create({
         host: 'ipfs.infura.io',
         port: 5001,
@@ -20,11 +21,11 @@ function createClient(): IPFSHTTPClient {
 
 class IPFSAgent implements ProviderAgent {
     static providerName = 'IPFS'
-    client!: IPFSHTTPClient
+    private client_!: KuboRPCClient
 
-    init() {
-        if (this.client) return
-        this.client = createClient()
+    private get client() {
+        if (!this.client_) this.client_ = createClient()
+        return this.client_
     }
 
     async makeAttachment(options: AttachmentOptions) {
@@ -34,7 +35,7 @@ class IPFSAgent implements ProviderAgent {
             mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
             metadata: null,
         })
-        return this.makePayload(encoded, 'application/octet-stream')
+        return this.makePayload(encoded)
     }
 
     // currently not native support progress track
@@ -59,11 +60,10 @@ class IPFSAgent implements ProviderAgent {
             .replace('Over Arweave', `Over ${IPFSAgent.providerName}`)
             .replace('__METADATA__', encodedMetadata)
         const data = encodeText(replaced)
-        return this.makePayload(data, 'text/html')
+        return this.makePayload(data)
     }
 
-    async makePayload(data: Uint8Array, type: string) {
-        this.init()
+    private async makePayload(data: Uint8Array) {
         const file = await this.client.add(data)
         return file.cid.toString()
     }

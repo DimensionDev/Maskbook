@@ -40,9 +40,6 @@ overrides:
   # by @scamsniffer/detector
   ts-jest: '-'
   ts-node: '-'
-  # native-fetch imports undici with CVE, it no longer maintained for 5 years.
-  # now Node.js has global fetch, no need.
-  'native-fetch>undici': '-'
   # CVEs
   protobufjs: 7.6.5
   node-forge: 1.4.0
@@ -70,7 +67,6 @@ patchedDependencies:
   gulp: patches/gulp.patch
   ts-results-es: patches/ts-results-es.patch
   '@lingui/cli': patches/@lingui__cli.patch
-  native-fetch@4.0.2: patches/native-fetch@4.0.2.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:

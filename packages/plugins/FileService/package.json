@@ -31,7 +31,7 @@
     "@servie/events": "^3.0.0",
     "arweave": "^1.13.6",
     "date-fns": "^3.6.0",
-    "ipfs-http-client": "^60.0.1",
+    "kubo-rpc-client": "^7.1.0",
     "react-router-dom": "^7.18.1",
     "react-use": "^17.5.0",
     "urlcat": "^3.1.0",

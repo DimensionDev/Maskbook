@@ -23,7 +23,3 @@
 - typeson-registry: <https://github.com/dfahlander/typeson-registry/issues/37>
 - @scamsniffer/detector: <https://github.com/scamsniffer/scamsniffer/pull/3>
 - @lingui/cli: <https://github.com/lingui/js-lingui/issues/2308> and <https://github.com/lingui/js-lingui/pull/2309>
-
-## CVEs
-
-- native-fetch > undici: package no longer maintained, Node.js now with built-in fetch.
