@@ -81,7 +81,7 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "@msgpack/msgpack": "^3.0.0-beta2",
-    "@react-hookz/web": "^24.0.4",
+    "@react-hookz/web": "^25.2.0",
     "@servie/events": "^3.0.0",
     "@splinetool/runtime": "0.9.342",
     "@tanstack/query-async-storage-persister": "^5.48.0",
