@@ -19,6 +19,6 @@
     "gun": "0.2020.1234"
   },
   "devDependencies": {
-    "@swc/core": "1.11.7"
+    "@swc/core": "1.15.43"
   }
 }
