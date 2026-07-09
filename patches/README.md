@@ -25,6 +25,6 @@
 - @scamsniffer/detector: <https://github.com/scamsniffer/scamsniffer/pull/3>
 - @lingui/cli: <https://github.com/lingui/js-lingui/issues/2308> and <https://github.com/lingui/js-lingui/pull/2309>
 
-## CSP
+## CVEs
 
-- @protobufjs/inquire: We don't allow eval.
+- native-fetch > undici: package no longer maintained, Node.js now with built-in fetch.

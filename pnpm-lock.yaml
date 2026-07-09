@@ -5,14 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  native-fetch>undici: '-'
   '@emotion/styled': 11.11.5
   '@emotion/react': 11.11.4
   '@mui/base': 5.0.0-beta.40
   '@mui/icons-material': 5.15.21
   '@mui/material': 5.15.20
   '@swc/core': 1.13.3
-  '@protobufjs/inquire': 1.1.0
   '@splinetool/runtime': 0.9.342
   '@tanstack/react-query': ^5.49.2
   '@types/node': 22.13.9
@@ -25,12 +23,13 @@ overrides:
   reflect-metadata: 0.1.13
   ts-jest: '-'
   ts-node: '-'
+  native-fetch>undici: '-'
+  protobufjs: 7.6.5
 
 pnpmfileChecksum: sha256-Xl5PgZOFeeSKaQCC4XqKbhoXqjEUcv+C8Je36aygMb8=
 
 patchedDependencies:
   '@lingui/cli': 0f450594799bb7255ad28e9c619f5575410bd01f806b88988ff430e406c37ce2
-  '@protobufjs/inquire@1.1.0': 6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d
   '@scamsniffer/detector': 15d2dcb03f520305f2c94623328db1bd3a19322d38feeaff86833982542b5713
   '@splinetool/runtime@0.9.342': a131e328a83b5ef1ccc97e2008268b10035de64ec76328b548b420349e28bc6c
   '@types/react-avatar-editor@13.0.2': 964633ba75b95702d6968fe8758b1f14f1e84ae66b941d42ccf852710d60d9df
@@ -338,7 +337,7 @@ importers:
     dependencies:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)
+        version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.6.5)
       '@ethereumjs/util':
         specifier: ^9.0.3
         version: 9.0.3
@@ -1930,7 +1929,7 @@ importers:
     dependencies:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)
+        version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.6.5)
       '@masknet/base':
         specifier: workspace:^
         version: link:../base
@@ -2242,7 +2241,7 @@ importers:
         version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.4.9(@solana/web3.js@1.98.4(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.9.2)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.2)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.4(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.9.2)(utf-8-validate@5.0.10))(bn.js@4.12.2)(borsh@0.7.0)(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)
+        version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.6.5)
       '@lens-protocol/client':
         specifier: 0.0.0-canary-20250408064617
         version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))
@@ -3310,7 +3309,7 @@ packages:
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f':
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
-      protobufjs: '>= 6.10 < 7'
+      protobufjs: 7.6.5
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -4681,20 +4680,17 @@ packages:
   '@protobufjs/base64@1.1.2':
     resolution: {integrity: sha512-AZkcAA5vnN/v4PDqKyMR5lx7hZttPDgClv83E//FMNhR2TMcLUhfRUBHCmSl0oi9zMgDDqRUJkSxO3wm85+XLg==}
 
-  '@protobufjs/codegen@2.0.4':
-    resolution: {integrity: sha512-YyFaikqM5sH0ziFZCN3xDC7zeGaB/d0IUb9CATugHWbd1FRFwWwt4ld4OYMPWu5a3Xe01mGAULCdqhMlPl29Jg==}
+  '@protobufjs/codegen@2.0.5':
+    resolution: {integrity: sha512-zgXFLzW3Ap33e6d0Wlj4MGIm6Ce8O89n/apUaGNB/jx+hw+ruWEp7EwGUshdLKVRCxZW12fp9r40E1mQrf/34g==}
 
-  '@protobufjs/eventemitter@1.1.0':
-    resolution: {integrity: sha512-j9ednRT81vYJ9OfVuXG6ERSTdEL1xVsNgqpkxMsbIabzSo3goCjDIveeGv5d03om39ML71RdmrGNjG5SReBP/Q==}
+  '@protobufjs/eventemitter@1.1.1':
+    resolution: {integrity: sha512-vW1GmwMZNnL+gMRaovlh9yZX74kc+TTU3FObkkurpMaRtBfLP3ldjS9KQWlwZgraRE0+dheEEoAxdzcJQ8eXZg==}
 
-  '@protobufjs/fetch@1.1.0':
-    resolution: {integrity: sha512-lljVXpqXebpsijW71PZaCYeIcE5on1w5DlQy5WH6GLbFryLUrBD4932W/E2BSpfRJWseIL4v/KPgBFxDOIdKpQ==}
+  '@protobufjs/fetch@1.1.1':
+    resolution: {integrity: sha512-GpptLrs57adMSuHi3VNj0mAF8dwh36LMaYF6XyJ6JMWlVsc+t42tm1HSEDmOs3A8fC9yyeisgLhsTVQokOZ0zw==}
 
   '@protobufjs/float@1.0.2':
     resolution: {integrity: sha512-Ddb+kVXlXst9d+R9PfTIxh1EdNkgoRe5tOX6t01f1lYWOvJnSPDBlG241QLzcyPdoNTsblLUdujGSE4RzrTZGQ==}
-
-  '@protobufjs/inquire@1.1.0':
-    resolution: {integrity: sha512-kdSefcPdruJiFMVSbn801t4vFK7KB/5gd2fYvrxhuJYg8ILrmn9SKSX2tZdV6V+ksulWqS7aXjBcRXl3wHoD9Q==}
 
   '@protobufjs/path@1.1.2':
     resolution: {integrity: sha512-6JOcJ5Tm08dOHAbdR3GrvP+yUUfkjG5ePsHYczMFLq3ZmMkAD98cDgcT2iA1lJ9NVwFd4tH/iSSoe44YWkltEA==}
@@ -4702,8 +4698,8 @@ packages:
   '@protobufjs/pool@1.1.0':
     resolution: {integrity: sha512-0kELaGSIDBKvcgS4zkjz1PeddatrjYcmMWOlAuAPwAeccUrPHdUqo/J6LiymHHEiJT5NrF1UVwxY14f+fy4WQw==}
 
-  '@protobufjs/utf8@1.1.0':
-    resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
+  '@protobufjs/utf8@1.1.2':
+    resolution: {integrity: sha512-b1UQwcEZ4yCnMCD8DAL1VlbvBJE9/IX4FTIp7BG1xYpf29SLazLSrqUkj4w7Y5y7cCVP6E5tcqqcI0xemPkHug==}
 
   '@react-hookz/deep-equal@1.0.4':
     resolution: {integrity: sha512-N56fTrAPUDz/R423pag+n6TXWbvlBZDtTehaGFjK0InmN+V2OFWLE/WmORhmn6Ce7dlwH5+tQN1LJFw3ngTJVg==}
@@ -10017,6 +10013,9 @@ packages:
   long@5.2.1:
     resolution: {integrity: sha512-GKSNGeNAtw8IryjjkhZxuKB3JzlcLTwjtiQCHKvqQet81I93kXslhDQruGI/QsddO83mcDToBVy7GqGS/zYf/A==}
 
+  long@5.3.2:
+    resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==}
+
   longest-streak@3.0.1:
     resolution: {integrity: sha512-cHlYSUpL2s7Fb3394mYxwTYj8niTaNHUCLr0qdiCXQfSjfuA7CKofpX2uSwEfFDQ0EB7JcnMnm+GjbqqoinYYg==}
 
@@ -10996,8 +10995,8 @@ packages:
   proto-list@1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
 
-  protobufjs@7.2.3:
-    resolution: {integrity: sha512-TtpvOqwB5Gdz/PQmOjgsrGH1nHjAQVCN7JG4A6r1sXRWESL5rNMAiRcBQlCAdKxZcAbstExQePYG8xof/JVRgg==}
+  protobufjs@7.6.5:
+    resolution: {integrity: sha512-/FPD0nUc9jH6rfFjji9IBqOz4pcSE3CsT1m7Ep6Mdb0LxSUMj8hgl6GomOvZzpNpAqqGaXA0P3VSrZLFzIhQrw==}
     engines: {node: '>=12.0.0'}
 
   proxy-addr@2.0.7:
@@ -14549,9 +14548,9 @@ snapshots:
     optionalDependencies:
       '@types/webextension-polyfill': 0.10.7
 
-  '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)':
+  '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.6.5)':
     dependencies:
-      protobufjs: 7.2.3
+      protobufjs: 7.6.5
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -16119,24 +16118,21 @@ snapshots:
 
   '@protobufjs/base64@1.1.2': {}
 
-  '@protobufjs/codegen@2.0.4': {}
+  '@protobufjs/codegen@2.0.5': {}
 
-  '@protobufjs/eventemitter@1.1.0': {}
+  '@protobufjs/eventemitter@1.1.1': {}
 
-  '@protobufjs/fetch@1.1.0':
+  '@protobufjs/fetch@1.1.1':
     dependencies:
       '@protobufjs/aspromise': 1.1.2
-      '@protobufjs/inquire': 1.1.0(patch_hash=6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d)
 
   '@protobufjs/float@1.0.2': {}
-
-  '@protobufjs/inquire@1.1.0(patch_hash=6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d)': {}
 
   '@protobufjs/path@1.1.2': {}
 
   '@protobufjs/pool@1.1.0': {}
 
-  '@protobufjs/utf8@1.1.0': {}
+  '@protobufjs/utf8@1.1.2': {}
 
   '@react-hookz/deep-equal@1.0.4': {}
 
@@ -22008,7 +22004,7 @@ snapshots:
   ipfs-unixfs@9.0.1:
     dependencies:
       err-code: 3.0.1
-      protobufjs: 7.2.3
+      protobufjs: 7.6.5
 
   ipfs-utils@9.0.14(encoding@0.1.13):
     dependencies:
@@ -22732,6 +22728,8 @@ snapshots:
   loglevel@1.9.2: {}
 
   long@5.2.1: {}
+
+  long@5.3.2: {}
 
   longest-streak@3.0.1: {}
 
@@ -23962,20 +23960,19 @@ snapshots:
 
   proto-list@1.2.4: {}
 
-  protobufjs@7.2.3:
+  protobufjs@7.6.5:
     dependencies:
       '@protobufjs/aspromise': 1.1.2
       '@protobufjs/base64': 1.1.2
-      '@protobufjs/codegen': 2.0.4
-      '@protobufjs/eventemitter': 1.1.0
-      '@protobufjs/fetch': 1.1.0
+      '@protobufjs/codegen': 2.0.5
+      '@protobufjs/eventemitter': 1.1.1
+      '@protobufjs/fetch': 1.1.1
       '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0(patch_hash=6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d)
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
-      '@protobufjs/utf8': 1.1.0
+      '@protobufjs/utf8': 1.1.2
       '@types/node': 22.13.9
-      long: 5.2.1
+      long: 5.3.2
 
   proxy-addr@2.0.7:
     dependencies:
