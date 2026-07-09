@@ -19,7 +19,6 @@ msgstr ""
 "X-Crowdin-File-ID: 1010\n"
 
 #: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
-#: packages/shared/src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "(beta)"
 msgstr ""
 
@@ -166,7 +165,6 @@ msgstr ""
 #. placeholder {0}: fromNetwork?.name
 #. placeholder {0}: toNetwork?.name
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} Network fee"
 msgstr ""
 
@@ -206,7 +204,6 @@ msgstr ""
 
 #. placeholder {0}: fromNetwork?.name || ''
 #. placeholder {0}: toNetwork?.name || ''
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/TradingRoute.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/TradingRoute.tsx
 msgid "{0} Pool"
 msgstr ""
@@ -581,7 +578,6 @@ msgid "2. If you have installed the {name} Wallet"
 msgstr ""
 
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
-#: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "24 Hour Trading Vol"
 msgstr ""
 
@@ -626,11 +622,6 @@ msgstr ""
 msgid "About Permit"
 msgstr ""
 
-#: packages/web3-providers/src/GoPlusLabs/rules.ts
-#: packages/web3-providers/src/GoPlusLabs/rules.ts
-#: packages/web3-providers/src/GoPlusLabs/rules.ts
-#: packages/web3-providers/src/GoPlusLabs/rules.ts
-#: packages/web3-providers/src/GoPlusLabs/rules.ts
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Above 10% may be considered a high tax rate. More than 50% tax rate means may not be tradable."
 msgstr ""
@@ -780,7 +771,6 @@ msgid "Airdrop Scam"
 msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "All"
 msgstr ""
 
@@ -847,7 +837,6 @@ msgid "Applications"
 msgstr ""
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalDialog.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/index.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/index.tsx
 msgid "Approval"
 msgstr ""
@@ -1011,7 +1000,6 @@ msgstr ""
 #. placeholder {0}: user.cloudBackupAt
 #. placeholder {0}: user.localBackupAt
 #: packages/mask/popups/pages/Settings/index.tsx
-#: packages/mask/popups/pages/Settings/index.tsx
 msgid "Backup on {0}"
 msgstr ""
 
@@ -1046,7 +1034,6 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
-#: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 msgid "Backup to Google Drive"
 msgstr ""
@@ -1089,7 +1076,6 @@ msgid "Basic"
 msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
-#: packages/mask/popups/pages/Settings/index.tsx
 msgid "Basic setting"
 msgstr ""
 
@@ -1103,7 +1089,6 @@ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/MessageInput.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/PreviewRedPacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketRecord.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketRecord.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/contexts/RedPacketContext.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/contexts/SolRedpacketContext.tsx
@@ -1134,13 +1119,8 @@ msgstr ""
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/TradingRoute.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridge"
 msgstr ""
@@ -1273,7 +1253,6 @@ msgid "Cannot switch to a unknown network."
 msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Cast your vote"
 msgstr ""
 
@@ -1292,7 +1271,6 @@ msgstr ""
 
 #. placeholder {0}: currentNetwork?.chainId ?? currentChainId
 #. placeholder {0}: nextNetwork?.chainId ?? nextChainId
-#: packages/mask/popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Chain ID: {0}"
 msgstr ""
@@ -1326,7 +1304,6 @@ msgstr ""
 msgid "Change Owner"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 msgid "Change Payment Password"
 msgstr ""
@@ -1394,7 +1371,6 @@ msgstr ""
 msgid "Chrome - external extension"
 msgstr ""
 
-#: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Circulating Supply"
 msgstr ""
@@ -1549,7 +1525,6 @@ msgstr "雲端備份"
 #~ msgstr ""
 
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
-#: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Community"
 msgstr ""
 
@@ -1595,7 +1570,6 @@ msgstr ""
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/SelectLiquidity.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #: packages/shared/src/UI/modals/ConfirmDialog/index.tsx
-#: packages/shared/src/UI/modals/ConfirmModal/Dialog.tsx
 #: packages/shared/src/UI/modals/ConfirmModal/Dialog.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
@@ -1678,7 +1652,6 @@ msgstr ""
 
 #. placeholder {0}: persona.nickname ?? ''
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
-#: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Connect {0}"
 msgstr ""
 
@@ -1734,7 +1707,6 @@ msgid "Connect with {providerName}"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/AddChainRequest.tsx
-#: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Connect with Mask Wallet"
@@ -1804,7 +1776,6 @@ msgstr ""
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 #: packages/mask/popups/pages/Friends/Home/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
-#: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/Contacts.tsx
 msgid "Contacts"
 msgstr "聯繫人"
@@ -1826,7 +1797,6 @@ msgstr ""
 
 #: packages/mask/popups/components/UnlockERC20Token/index.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
-#: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Contract"
 msgstr "合約"
@@ -2057,8 +2027,6 @@ msgid "Current base fee is {0} Gwei"
 msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Current results"
 msgstr ""
 
@@ -2069,7 +2037,6 @@ msgstr ""
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
-#: packages/shared/src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: packages/shared/src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: packages/shared/src/UI/components/SettingsBoard/Context.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
@@ -2142,7 +2109,6 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
-#: packages/mask/dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #~ msgid "Decrypt failed, please check password"
 #~ msgstr "備份解密失敗，請檢查密碼"
 
@@ -2196,7 +2162,6 @@ msgid "Deposit"
 msgstr ""
 
 #. placeholder {0}: protocol.bareToken.symbol
-#: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Deposit {0}"
 msgstr ""
@@ -2257,7 +2222,6 @@ msgstr ""
 #~ msgid "Disconnect Wallet?"
 #~ msgstr ""
 
-#: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Disconnected successfully."
 msgstr ""
@@ -2327,14 +2291,9 @@ msgstr ""
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
-#: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
-#: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
-#: packages/shared/src/hooks/useSnackbarCallback.tsx
 #: packages/shared/src/hooks/useSnackbarCallback.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Done"
@@ -2588,7 +2547,6 @@ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Everyone"
 msgstr ""
 
@@ -2609,9 +2567,7 @@ msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
-#: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/index.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TickersTable.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingView.tsx
@@ -2623,7 +2579,6 @@ msgstr ""
 msgid "Experience in X"
 msgstr ""
 
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Expired"
@@ -2639,12 +2594,9 @@ msgid "Export"
 msgstr "導出"
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
-#: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
-#: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
-#: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/TransactionList.tsx
@@ -2770,7 +2722,6 @@ msgid "Failed to send token."
 msgstr ""
 
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Failed to set Avatar."
 msgstr ""
 
@@ -2885,7 +2836,6 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Follow"
@@ -2904,7 +2854,6 @@ msgid "Follow @masknetwork to explore Web3."
 msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
-#: packages/plugins/Web3Profile/src/SiteAdaptor/hooks/Lens/useFollow.tsx
 msgid "Follow Lens handle"
 msgstr ""
 
@@ -2914,7 +2863,6 @@ msgstr ""
 
 #: packages/mask/popups/modals/SelectAppearanceModal/index.tsx
 #: packages/mask/popups/modals/SelectLanguageModal/index.tsx
-#: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Follow System"
 msgstr ""
@@ -2982,7 +2930,6 @@ msgstr ""
 msgid "Gas Fee"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSettingModal.tsx
 msgid "Gas fee settings"
@@ -3149,18 +3096,11 @@ msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have
 msgstr ""
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
-#: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Gwei"
 msgstr ""
 
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
-#: packages/mask/popups/hooks/useGasOptionsMenu.tsx
-#: packages/mask/popups/hooks/useGasOptionsMenu.tsx
-#: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "GWEI"
 msgstr ""
@@ -3183,15 +3123,13 @@ msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim.
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-#~ msgid ""
-#~ "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n"
+#~ msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @masknetwork  for Web3 updates and insights.\n"
 #~ "\n"
 #~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 #~ msgstr ""
 
 #: build/bundled/101.js
-#~ msgid ""
-#~ "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
+#~ msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
 #~ "\n"
 #~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 #~ msgstr ""
@@ -3292,8 +3230,7 @@ msgid "I just claimed a lucky drop from @{sender} on Solana."
 msgstr ""
 
 #: packages/plugins/Claim/src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-#~ msgid ""
-#~ "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
+#~ msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n"
 #~ " Install https://mask.io to explore more airdrop activities."
 #~ msgstr ""
 
@@ -3318,15 +3255,13 @@ msgstr ""
 #. placeholder {2}: recipientName ? 'name' : 'address'
 #. placeholder {3}: recipientName || recipientAddress
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-msgid ""
-"I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\n"
+msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\n"
 "\n"
 "Install https://mask.io/download-links to send your first tip."
 msgstr ""
 
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-#~ msgid ""
-#~ "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\n"
+#~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\n"
 #~ "\n"
 #~ "Install https://mask.io/download-links to send your first tip."
 #~ msgstr ""
@@ -3345,11 +3280,9 @@ msgid "Identity ID"
 msgstr ""
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
-#: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "If this kind of code exists, the token maybe be frozen to buy or sell, which is a honeypot risk."
 msgstr ""
 
-#: packages/web3-providers/src/GoPlusLabs/rules.ts
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "If this kind of function exists, it is possible for the project owner to regain ownership even after relinquishing it."
 msgstr ""
@@ -3362,7 +3295,6 @@ msgstr ""
 msgid "If you forget payment password, you can type 'RESET' to reset your wallet. <0>Remember, this action will erase all your previous wallets.</0>"
 msgstr ""
 
-#: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Image"
 msgstr ""
@@ -3397,9 +3329,7 @@ msgid "Imported Wallets"
 msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-msgid ""
-"In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
+msgid "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
 "than estimated, and any unused funds will remain in the original address."
 msgstr ""
@@ -3422,7 +3352,6 @@ msgid "Incorrect Backup Password."
 msgstr ""
 
 #: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: packages/mask/dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
 msgstr ""
 
@@ -3443,11 +3372,6 @@ msgstr ""
 msgid "Incorrect password"
 msgstr ""
 
-#: packages/mask/dashboard/hooks/useBackupFormState.ts
-#: packages/mask/dashboard/hooks/useBackupFormState.ts
-#: packages/mask/dashboard/hooks/useBackupFormState.ts
-#: packages/mask/dashboard/hooks/useBackupFormState.ts
-#: packages/mask/dashboard/hooks/useBackupFormState.ts
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
@@ -3481,7 +3405,6 @@ msgstr ""
 msgid "Infinite"
 msgstr ""
 
-#: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Info"
 msgstr ""
@@ -3542,8 +3465,6 @@ msgstr "餘額不足"
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "Insufficient Balance for Gas Fee"
 msgstr ""
@@ -3621,7 +3542,6 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-#: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
 msgstr ""
 
@@ -3629,8 +3549,6 @@ msgstr ""
 msgid "Keystore password"
 msgstr ""
 
-#: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
-#: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Lack of number, letter or special character."
@@ -3744,7 +3662,6 @@ msgstr ""
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
-#: packages/mask/popups/pages/Personas/Logout/index.tsx
 msgid "Log out"
 msgstr ""
 
@@ -3782,7 +3699,6 @@ msgid "Low Risk"
 msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
@@ -3838,7 +3754,6 @@ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
-#: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Market Cap"
 msgstr ""
 
@@ -3874,7 +3789,6 @@ msgid "Max"
 msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "MAX"
 msgstr ""
 
@@ -3886,7 +3800,6 @@ msgstr ""
 msgid "Max base fee"
 msgstr ""
 
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/schema.ts
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/schema.ts
 msgid "Max base fee should be greater than 0"
 msgstr ""
@@ -4082,8 +3995,6 @@ msgid "My Wallets"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-#: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
-#: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #~ msgid "N/A"
 #~ msgstr ""
 
@@ -4106,7 +4017,6 @@ msgstr "代幣名稱或合約地址"
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Network"
 msgstr ""
@@ -4139,8 +4049,6 @@ msgstr ""
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Network fee"
 msgstr ""
@@ -4274,7 +4182,6 @@ msgid "No associated wallet. <0>Add Wallet.</0>"
 msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
-#: packages/mask/popups/pages/Settings/index.tsx
 msgid "No back up"
 msgstr ""
 
@@ -4378,7 +4285,6 @@ msgid "No more data available."
 msgstr ""
 
 #: packages/mask/popups/components/NFTAvatarPicker/CollectionList.tsx
-#: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #: packages/shared/src/UI/components/AssetsManagement/CollectionList.tsx
 #~ msgid "No NFTs found."
 #~ msgstr ""
@@ -4646,9 +4552,7 @@ msgid "Payment password changed."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
-#: packages/mask/popups/pages/Wallet/hooks/usePasswordForm.ts
 #: packages/mask/popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Payment password must be 6 to 20 characters."
 msgstr ""
@@ -4836,7 +4740,6 @@ msgid "Please select the wallet to activate the function after saving the settin
 msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
-#: packages/mask/popups/pages/Settings/index.tsx
 msgid "Please set the backup password to back up"
 msgstr ""
 
@@ -4856,7 +4759,6 @@ msgstr ""
 msgid "Please switch to <0>@{expectAccount}</0> to continue the account verification progress."
 msgstr ""
 
-#: packages/shared/src/UI/components/ChainBoundary/index.tsx
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Please switch to this network in the mobile application wallet you are connected to."
 msgstr ""
@@ -4896,8 +4798,6 @@ msgid "Pop-up trading widget allows you to instantly view prices of the hottest 
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #~ msgid "Post content:"
 #~ msgstr ""
@@ -4953,7 +4853,6 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
-#: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Price Statistic"
 msgstr ""
 
@@ -4982,7 +4881,6 @@ msgid "Privacy Policy"
 msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Private"
 msgstr ""
 
@@ -4990,11 +4888,9 @@ msgstr ""
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-#: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
 msgstr ""
 
-#: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Deposit"
 msgstr ""
@@ -5016,7 +4912,6 @@ msgstr ""
 msgid "Project details"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #: packages/plugins/Collectible/src/SiteAdaptor/Shared/PropertiesCard.tsx
 #~ msgid "Properties"
@@ -5045,7 +4940,6 @@ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
-#: packages/plugins/ArtBlocks/src/SiteAdaptor/PurchaseDialog.tsx
 #~ msgid "Purchase"
 #~ msgstr ""
 
@@ -5067,8 +4961,6 @@ msgid "Quote route"
 msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
-#: packages/mask/popups/pages/Trader/Header.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Quote Route"
 msgstr ""
@@ -5190,7 +5082,6 @@ msgstr ""
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/Rename.tsx
-#: packages/mask/popups/pages/Wallet/WalletSettings/Rename.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Rename"
@@ -5288,8 +5179,6 @@ msgid "Restore or Login"
 msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/ResultCard.tsx
 msgid "Results"
 msgstr ""
 
@@ -5299,9 +5188,6 @@ msgstr ""
 msgid "Retry"
 msgstr "重試"
 
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoke"
 msgstr ""
@@ -5320,12 +5206,10 @@ msgid "Revoke Token"
 msgstr ""
 
 #: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
-#: packages/plugins/Approval/src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoking"
 msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
-#: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
 msgstr ""
@@ -5491,7 +5375,6 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
-#: packages/plugins/RedPacket/src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Send"
 msgstr "發送"
@@ -5559,8 +5442,6 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
-#: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
-#: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
 msgstr ""
@@ -5676,7 +5557,6 @@ msgstr "跳過"
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/Quote.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Slippage"
 msgstr ""
@@ -5862,9 +5742,6 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/components/ActionGroup/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trending/TrendingViewDeck.tsx
@@ -5905,7 +5782,6 @@ msgstr ""
 msgid "Switch between the classic Twitter logo and the new one."
 msgstr ""
 
-#: packages/shared/src/UI/components/ChainBoundary/index.tsx
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Switch Network"
 msgstr ""
@@ -5959,7 +5835,6 @@ msgstr ""
 msgid "Tell friends what's happening..."
 msgstr ""
 
-#: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Text"
 msgstr ""
@@ -6269,7 +6144,6 @@ msgstr ""
 
 #. placeholder {0}: network.name
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
-#: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This RPC URL is currently used by the {0} network"
 msgstr ""
 
@@ -6331,7 +6205,6 @@ msgid "Timestamp"
 msgstr ""
 
 #: packages/plugins/Tips/src/components/TipDialog.tsx
-#: packages/plugins/Tips/src/components/TipDialog.tsx
 msgid "Tips"
 msgstr ""
 
@@ -6348,7 +6221,6 @@ msgstr ""
 
 #. placeholder {0}: formatDomainName(domain)
 #. placeholder {0}: formatEthereumAddress(toAddress, 4)
-#: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "to {0}"
 msgstr ""
@@ -6451,7 +6323,6 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/TokenPanel.tsx
-#: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Total Supply"
 msgstr ""
@@ -6666,11 +6537,9 @@ msgid "Unlock Token"
 msgstr ""
 
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-#: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #~ msgid "Unlocking {hasSymbolName}..."
 #~ msgstr ""
 
-#: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #: packages/shared/src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #~ msgid "Unlocking ALL..."
 #~ msgstr ""
@@ -6684,7 +6553,6 @@ msgstr ""
 msgid "Unpacking"
 msgstr ""
 
-#: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Unsupported data backup"
 msgstr "不支持數據備份格式"
@@ -6773,7 +6641,6 @@ msgid "Users can only delete local links of these files. Files on the decentrali
 msgstr ""
 
 #: packages/plugins/VCent/src/SiteAdaptor/index.tsx
-#: packages/plugins/VCent/src/SiteAdaptor/index.tsx
 msgid "Valuables"
 msgstr ""
 
@@ -6799,7 +6666,6 @@ msgstr ""
 #~ msgid "Verified by {0}"
 #~ msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Verify"
 msgstr "驗證"
@@ -6846,7 +6712,6 @@ msgstr ""
 msgid "View on EFP"
 msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
@@ -6895,13 +6760,9 @@ msgstr ""
 
 #: packages/plugins/Snapshot/src/SiteAdaptor/Snapshot.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/VotingDialog.tsx
 msgid "Vote"
 msgstr ""
 
-#: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
-#: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 #: packages/plugins/Snapshot/src/SiteAdaptor/VotesCard.tsx
 msgid "Votes"
 msgstr ""
@@ -6940,7 +6801,6 @@ msgid "Wallet Group #{0}"
 msgstr ""
 
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
-#: packages/mask/popups/modals/WalletRenameModal/index.tsx
 msgid "Wallet name must between 3 to 18 characters."
 msgstr ""
 
@@ -6954,9 +6814,7 @@ msgid "Wallet Settings"
 msgstr ""
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
-#: packages/plugins/NextID/src/components/BindDialog.tsx
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
-#: packages/plugins/NextID/src/hooks/useWalletSign.ts
 #: packages/plugins/NextID/src/hooks/useWalletSign.ts
 #~ msgid "Wallet Sign"
 #~ msgstr ""
@@ -6991,7 +6849,6 @@ msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
 
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
-#: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #~ msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
 #~ msgstr ""
 
@@ -7022,7 +6879,6 @@ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
-#: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Website"
 msgstr ""
@@ -7075,7 +6931,6 @@ msgstr ""
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsDialog.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/SavingsRow.tsx
-#: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw"
 msgstr ""
