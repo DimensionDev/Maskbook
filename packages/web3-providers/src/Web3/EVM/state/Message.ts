@@ -1,4 +1,4 @@
-import { omitBy } from 'lodash-es'
+import { isUndefined, omitBy } from 'lodash-es'
 import { MessageStateType, type JsonRpcResponse, type ReasonableMessage } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, PopupRoutes, Sniffings, type StorageItem } from '@masknet/shared-base'
 import {
@@ -10,7 +10,6 @@ import {
     EthereumMethodType,
     ErrorEditor,
 } from '@masknet/web3-shared-evm'
-import { isUndefined } from '@walletconnect/utils'
 import { MessageState } from '../../Base/state/Message.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
