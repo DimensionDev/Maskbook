@@ -29,6 +29,7 @@
         "Metis": ["https://tokens.r2d2.to/latest/1088/tokens.json"],
         "Sei": ["https://tokens.r2d2.to/latest/1329/tokens.json"],
         "XLayer": ["https://tokens.r2d2.to/latest/196/tokens.json"],
-        "XLayer_Testnet": ["https://tokens.r2d2.to/latest/195/tokens.json"]
+        "XLayer_Testnet": ["https://tokens.r2d2.to/latest/195/tokens.json"],
+        "Robinhood": ["https://tokens.r2d2.to/latest/4663/tokens.json"]
     }
 }

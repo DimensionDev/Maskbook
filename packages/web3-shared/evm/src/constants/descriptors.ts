@@ -363,6 +363,18 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         isMainnet: false,
         averageBlockDelay: 10,
     },
+    {
+        ID: `${PLUGIN_ID}_robinhood`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Robinhood,
+        type: NetworkType.Robinhood,
+        name: 'Robinhood',
+        shortName: 'Robinhood',
+        icon: new URL('../assets/robinhood.png', import.meta.url).href,
+        iconColor: 'rgb(0, 200, 5)',
+        averageBlockDelay: 1,
+        isMainnet: true,
+    },
 ]
 
 export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {
