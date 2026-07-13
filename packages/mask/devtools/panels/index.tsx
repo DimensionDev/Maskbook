@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-global-object-property-assignment */
 /// <reference path="../../../polyfills/types/dom.d.ts" />
 import { attachListener } from './utils.js'
 

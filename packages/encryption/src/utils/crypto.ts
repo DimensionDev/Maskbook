@@ -42,10 +42,16 @@ export function importEC_Key(
         [EC_KeyCurve.secp256p1]: { name: 'ECDH', namedCurve: 'P-256' } as EcKeyImportParams,
     } as const
     return Result.wrapAsync(async () => {
-        const args = [ImportParamsMap[kind], true, DeriveKeyUsage] as const
-        return key instanceof Uint8Array ?
-                (crypto.subtle.importKey('raw', key, ...args) as Promise<EC_CryptoKey>)
-            :   (crypto.subtle.importKey('jwk', key, ...args) as Promise<EC_CryptoKey>)
+        return (
+            key instanceof Uint8Array ?
+                crypto.subtle.importKey('raw', key, ImportParamsMap[kind], true, DeriveKeyUsage)
+            :   crypto.subtle.importKey(
+                    'jwk',
+                    key,
+                    ImportParamsMap[kind],
+                    true,
+                    DeriveKeyUsage,
+                )) as Promise<EC_CryptoKey>
     })
 }
 

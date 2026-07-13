@@ -42,6 +42,7 @@ const disabledRules = {
     // TypeScript can do the check
     'getter-return': 'off',
     'unicorn/no-array-callback-reference': 'off',
+    'unicorn/no-invalid-argument-count': 'off',
     // false positives
     'unicorn/require-number-to-fixed-digits-argument': 'off', // BigNumber
     'unicorn/no-useless-coercion': 'off',
@@ -81,18 +82,13 @@ const disabledRules = {
     'unicorn/consistent-boolean-name': 'off', // better done in another PR
     'unicorn/consistent-compound-words': 'off', // better done in another PR
 
-    // 'unicorn/consistent-conditional-object-spread': 'off',
-    // 'unicorn/consistent-tuple-labels': 'off',
-    // 'unicorn/logical-assignment-operators': 'off',
-    // 'unicorn/new-for-builtins': 'off',
-    'unicorn/no-duplicate-logical-operands': 'off',
-    'unicorn/no-duplicate-loops': 'off',
-    'unicorn/no-error-property-assignment': 'off',
-    'unicorn/no-for-loop': 'off',
-    'unicorn/no-global-object-property-assignment': 'off',
-    'unicorn/no-immediate-mutation': 'off',
-    'unicorn/no-incorrect-template-string-interpolation': 'off',
-    'unicorn/no-invalid-argument-count': 'off',
+    // 'unicorn/no-duplicate-logical-operands': 'off',
+    // 'unicorn/no-duplicate-loops': 'off',
+    // 'unicorn/no-error-property-assignment': 'off',
+    // 'unicorn/no-for-loop': 'off',
+    // 'unicorn/no-global-object-property-assignment': 'off',
+    // 'unicorn/no-immediate-mutation': 'off',
+    // 'unicorn/no-incorrect-template-string-interpolation': 'off',
     'unicorn/no-lonely-if': 'off',
     'unicorn/no-negated-array-predicate': 'off',
     'unicorn/no-negated-comparison': 'off',

@@ -269,12 +269,11 @@ export async function queryPersonasWithPrivateKey(
     t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecordWithPrivateKey[]> {
     t ||= createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
-    const records: PersonaRecord[] = []
-    records.push(
+    const records: PersonaRecord[] = [
         ...(await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))).map(
             personaRecordOutDB,
         ),
-    )
+    ]
     return records as PersonaRecordWithPrivateKey[]
 }
 

@@ -67,4 +67,5 @@ function isHostName(url: URL | Location, domain: string) {
     return url.hostname === domain || url.hostname.endsWith('.' + domain)
 }
 
+// eslint-disable-next-line unicorn/no-global-object-property-assignment
 globalThis.fetch = contentFetch

@@ -31,8 +31,8 @@ function concat(...buf: Array<Uint8Array | number[]>) {
     const res = new Uint8Array(sum(buf.map((item) => item.length)))
     let offset = 0
     buf.forEach((item) => {
-        for (let i = 0; i < item.length; i += 1) {
-            res[offset + i] = item[i]
+        for (const [i, element] of item.entries()) {
+            res[offset + i] = element
         }
         offset += item.length
     })

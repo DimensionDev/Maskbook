@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-global-object-property-assignment */
 import { setupServer } from 'msw/node'
 import { BundlerHandlers } from './handlers/SmartPayBundler.js'
 import { DSearchHandlers } from './handlers/DSearch.js'

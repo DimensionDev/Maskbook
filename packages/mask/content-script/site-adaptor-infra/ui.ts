@@ -40,6 +40,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 
     configureSelectorMissReporter((name) => {
         const error = new Error(`Selector "${name}" does not match anything ${location.href}.`)
+        // eslint-disable-next-line unicorn/no-error-property-assignment
         error.stack = ''
         Telemetry.captureException(ExceptionType.Error, ExceptionID.Debug, error, {
             sampleRate: 0.01,

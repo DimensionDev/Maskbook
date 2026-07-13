@@ -33,8 +33,7 @@ test('Encode v37 payload', async () => {
     }
     // test 2
     {
-        const newPayload = { ...payload }
-        newPayload.author = Some(ProfileIdentifier.of('localhost', 'unknown').unwrap())
+        const newPayload = { ...payload, author: Some(ProfileIdentifier.of('localhost', 'unknown').unwrap()) }
         const k256Key = (await queryTestPublicKey(ProfileIdentifier.of('localhost', 'alice').unwrap()))!
         newPayload.authorPublicKey = k256Key
         newPayload.encryption = {

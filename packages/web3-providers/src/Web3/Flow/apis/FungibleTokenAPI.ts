@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-incorrect-template-string-interpolation */
 import { type Pageable, createPageable, type PageIndicator, createIndicator } from '@masknet/shared-base'
 import { ChainId as ChainId_EVM } from '@masknet/web3-shared-evm'
 import {
