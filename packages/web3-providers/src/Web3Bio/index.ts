@@ -24,25 +24,19 @@ export class Web3Bio {
 
     static async getProfilesByTwitterId(handle: string) {
         const url = urlcat(WEB3_BIO_HOST, `/profile/twitter,${handle.toLowerCase()}`)
-        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
+        const profiles = await this.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
         return Array.isArray(profiles) ? profiles : []
     }
 
     /** Get profiles by address or domain */
     static async getProfilesBy(domainOrAddress: string) {
         const url = urlcat(WEB3_BIO_HOST, '/profile/:id', { id: domainOrAddress })
-        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
-        return Array.isArray(profiles) ? profiles : []
-    }
-
-    static async getProfilesByNextId(pubkey: string) {
-        const url = urlcat(WEB3_BIO_HOST, '/profile/nextid,:pubkey', { pubkey })
-        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
+        const profiles = await this.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
         return Array.isArray(profiles) ? profiles : []
     }
 
     static async getAllLens(twitterId: string) {
-        const profiles = await Web3Bio.getProfilesByTwitterId(twitterId)
+        const profiles = await this.getProfilesByTwitterId(twitterId)
         return profiles.filter((x) => x.platform === NextIDPlatform.LENS)
     }
 }

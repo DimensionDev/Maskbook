@@ -18,7 +18,6 @@ import type {
     GetLiquidityResponse,
     GetQuotesOptions,
     GetQuotesResponse,
-    GetTokenPairsResponse,
     GetTokensResponse,
     SupportedChainResponse,
     SwapOptions,
@@ -81,45 +80,7 @@ export class OKX {
     }
 
     static async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | null> {
-        return OKX.baseGetTokens(chainId, '/api/v5/dex/aggregator/all-tokens')
-    }
-
-    static async getBridgeTokens(chainId: ChainId) {
-        return OKX.baseGetTokens(chainId, '/api/v5/dex/cross-chain/supported/tokens')
-    }
-
-    static async getBridgeTokenPairs(fromChainId: ChainId) {
-        if (!fromChainId) return []
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/bridge-tokens-pairs', {
-            fromChainId,
-        })
-        const res = await fetchFromOKX<GetTokenPairsResponse>(url)
-        if (res.code !== 0) throw new Error('Failed to get token pairs')
-        const tokens = res.data
-        return tokens.map((x) => {
-            return {
-                ...x,
-                fromChainId: +x.fromChainId,
-                toChainId: +x.toChainId,
-            }
-        })
-    }
-
-    static async getSupportedBridges(chainId: ChainId) {
-        if (!chainId) return []
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/bridges', {
-            chainId,
-        })
-        const res = await fetchFromOKX<GetTokenPairsResponse>(url)
-        if (res.code !== 0) throw new Error('Failed to get supported bridges')
-        const tokens = res.data
-        return tokens.map((x) => {
-            return {
-                ...x,
-                fromChainId: +x.fromChainId,
-                toChainId: +x.toChainId,
-            }
-        })
+        return this.baseGetTokens(chainId, '/api/v5/dex/aggregator/all-tokens')
     }
 
     static async getLiquidity(chainId: string) {
@@ -191,7 +152,7 @@ export class OKX {
         const intChainId = +chainId
         const tokens = await queryClient.fetchQuery({
             queryKey: ['okx-tokens', intChainId],
-            queryFn: () => OKX.baseGetTokens(intChainId, '/api/v5/dex/aggregator/all-tokens'),
+            queryFn: () => this.baseGetTokens(intChainId, '/api/v5/dex/aggregator/all-tokens'),
         })
         if (!tokens?.length) return
         const isNativeToken = isNativeTokenAddress(fromOkxNativeAddress(address))
@@ -211,7 +172,7 @@ export class OKX {
         }
         const quoteRes = await queryClient.fetchQuery({
             queryKey: ['okx-swap', 'get-quotes', options],
-            queryFn: () => OKX.getQuotes(options),
+            queryFn: () => this.getQuotes(options),
         })
         if (quoteRes.code !== 0 || !quoteRes.data.length) return
         const quote = quoteRes.data[0]
@@ -227,8 +188,8 @@ export class OKX {
         const res = await fetchFromOKX<GetBridgeQuoteResponse>(url)
         if (res.code !== 0) throw new Error('Failed to get bridge quote')
         const [fromTokenPrice = '0', toTokenPrice = '0'] = await Promise.all([
-            OKX.getTokenPrice(options.fromTokenAddress, options.fromChainId),
-            OKX.getTokenPrice(options.toTokenAddress, options.toChainId),
+            this.getTokenPrice(options.fromTokenAddress, options.fromChainId),
+            this.getTokenPrice(options.toTokenAddress, options.toChainId),
         ])
         // Patch data
         res.data.forEach((quote) => {

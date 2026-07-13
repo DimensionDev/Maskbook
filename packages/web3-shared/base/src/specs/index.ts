@@ -435,17 +435,6 @@ export interface FungibleTokenSpender<ChainId, SchemaType> {
     rawAmount?: number
 }
 
-/**
- * Authorization about a non-fungible contract.
- */
-export interface NonFungibleContractSpender<ChainId, SchemaType> {
-    amount: string
-    contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
-    address: string
-    name: string | undefined
-    logo: ReactNode | undefined
-}
-
 export interface Result<ChainId> {
     pluginID: NetworkPluginID
     chainId: ChainId

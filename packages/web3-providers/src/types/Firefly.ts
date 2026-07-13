@@ -225,31 +225,6 @@ export namespace FireflyRedPacketAPI {
         icon?: string
     }
 
-    export interface PostReaction {
-        platform: PlatformType
-        postId: string
-    }
-
-    export interface ProfileReaction {
-        platform: PlatformType
-        profileId: string
-        lensToken?: string
-        farcasterSignature?: HexString
-        farcasterSigner?: HexString
-        farcasterMessage?: HexString
-    }
-
-    export interface PostOn {
-        platform: PlatformType
-        postId: string
-        handle: string
-    }
-
-    export interface ClaimPlatform {
-        platformName: PlatformType
-        platformId: string
-    }
-
     export interface RedPacketBaseInfo {
         rp_msg: string
         token_symbol: string
@@ -485,10 +460,6 @@ export namespace FireflyRedPacketAPI {
     export type CheckClaimStrategyStatusResponse = FireflyResponse<{
         claimStrategyStatus: ClaimStrategyStatus[]
         canClaim: boolean
-    }>
-
-    export type ThemeListResponse = FireflyResponse<{
-        list: ThemeGroupSettings[]
     }>
 
     export type ThemeByIdResponse = FireflyResponse<ThemeGroupSettings>

@@ -3,15 +3,9 @@ import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, getGoPlusLabsConstants, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { type FungibleTokenSpender, isSameAddress, type NonFungibleContractSpender } from '@masknet/web3-shared-base'
+import { type FungibleTokenSpender, isSameAddress } from '@masknet/web3-shared-base'
 import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
-import {
-    type GoPlusNFTInfo,
-    type GoPlusTokenInfo,
-    type GoPlusTokenSpender,
-    type NFTSpenderInfo,
-    SecurityMessageLevel,
-} from './types.js'
+import { type GoPlusTokenInfo, type GoPlusTokenSpender, SecurityMessageLevel } from './types.js'
 import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
@@ -30,63 +24,6 @@ interface SupportedChainResponse {
 class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
     async getSupportChainIds() {
         return [ChainId.Mainnet, ChainId.BSC]
-    }
-    async getNonFungibleTokenSpenders(chainId: ChainId, addresses: string) {
-        const supportedChainIds = await this.getSupportChainIds()
-        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
-
-        const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-        const response = await fetchJSON<{
-            result: GoPlusNFTInfo[]
-        }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft721_approval_security/:chainId', { chainId, addresses }))
-
-        const nft1155Response = await fetchJSON<{
-            result: GoPlusNFTInfo[]
-        }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft1155_approval_security/:chainId', { chainId, addresses }))
-
-        if (!response.result.length && !nft1155Response.result.length) return EMPTY_LIST
-
-        return [...response.result, ...nft1155Response.result]
-            .reduce<NFTSpenderInfo[]>((acc, cur) => {
-                return acc.concat(
-                    cur.approved_list.map((rawSpender) => {
-                        const maskDappContractInfo = maskDappContractInfoList.find((y) =>
-                            isSameAddress(y.address, rawSpender.approved_contract),
-                        )
-
-                        if (maskDappContractInfo) {
-                            return {
-                                isMaskDapp: true,
-                                address: rawSpender.approved_contract,
-                                amount: '1',
-                                name: maskDappContractInfo.name,
-                                logo: maskDappContractInfo.logo,
-                                contract: {
-                                    address: cur.nft_address,
-                                    name: cur.nft_name,
-                                },
-                            }
-                        }
-
-                        return {
-                            isMaskDapp: false,
-                            address: rawSpender.approved_contract,
-                            amount: '1',
-                            name: rawSpender.address_info.tag,
-                            logo: undefined,
-                            contract: {
-                                address: cur.nft_address,
-                                name: cur.nft_name,
-                            },
-                        }
-                    }),
-                )
-            }, [])
-            .sort((a, b) => {
-                if (a.isMaskDapp && !b.isMaskDapp) return -1
-                if (!a.isMaskDapp && b.isMaskDapp) return 1
-                return Number(b.amount) - Number(a.amount)
-            }) as Array<NonFungibleContractSpender<ChainId, SchemaType>>
     }
 
     async getFungibleTokenSpenders(chainId: ChainId, addresses: string) {
@@ -164,24 +101,6 @@ export class GoPlusLabs {
         return createTokenSecurity(response.result, chainId)
     }
 
-    static async getSolTokenSecurity(address: string) {
-        const response = await fetchJSON<{
-            code: 0 | 1
-            message: 'OK' | string
-            result: Record<
-                string,
-                SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
-            >
-        }>(
-            urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/token_security/:id', {
-                contract_addresses: address,
-            }),
-        )
-
-        if (response.code !== 1) return
-        return createTokenSecurity(response.result)
-    }
-
     static async getAddressSecurity(
         chainId: ChainId | 'solana' | 'tron',
         address: string,
@@ -203,7 +122,7 @@ export class GoPlusLabs {
     }
 
     static async checkIfAddressIsScam(chainId: ChainId | 'solana' | 'tron', address: string): Promise<boolean> {
-        const security = await GoPlusLabs.getAddressSecurity(chainId, address)
+        const security = await this.getAddressSecurity(chainId, address)
         if (!security) return false
         const values: string[] = Object.values(security)
         return values.includes('1')

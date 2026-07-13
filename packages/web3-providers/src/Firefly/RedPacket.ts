@@ -4,15 +4,11 @@ import {
     createPageable,
     type Pageable,
     type PageIndicator,
-    getSiteType,
-    EnhanceableSite,
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
-import { FireflyRedPacketAPI, type FireflyResponse } from '../entry-types.js'
+import { FireflyRedPacketAPI } from '../entry-types.js'
 
-const siteType = getSiteType()
-const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.social'
 const FIREFLY_ROOT_URL =
     process.env.NEXT_PUBLIC_FIREFLY_API_URL ||
     (process.env.NODE_ENV === 'development' ? 'https://api-dev.firefly.land' : 'https://api.firefly.land')
@@ -28,11 +24,6 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export class FireflyRedPacket {
-    static async getThemes() {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
-        const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
-        return data.list
-    }
     static async createTheme(options: FireflyRedPacketAPI.CreateThemeOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createTheme')
         const res = await fetchFireflyJSON<FireflyRedPacketAPI.CreateThemeResponse>(url, {
@@ -49,93 +40,11 @@ export class FireflyRedPacket {
         })
         return data
     }
-    static async getPayloadUrls(from: string, amount?: string, type?: string, symbol?: string, decimals?: number) {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
-
-        return data.list.map((theme) => ({
-            themeId: theme.tid,
-            backgroundImageUrl: theme.cover.bg_image,
-            backgroundColor: theme.cover.bg_color,
-            url: urlcat(SITE_URL, '/api/rp', {
-                'theme-id': theme.tid,
-                usage: 'payload',
-                from,
-                amount,
-                type,
-                symbol,
-                decimals,
-            }),
-        }))
-    }
 
     static async getTheme(options: FireflyRedPacketAPI.ThemeOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', options)
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
         return data
-    }
-
-    static async getPayloadUrlByThemeId(
-        themeId: string,
-        from: string,
-        amount?: string,
-        type?: string,
-        symbol?: string,
-        decimals?: number,
-    ) {
-        const data = await FireflyRedPacket.getTheme({ themeId })
-        return {
-            themeId,
-            url: urlcat(SITE_URL, '/api/rp', {
-                'theme-id': themeId,
-                usage: 'payload',
-                from,
-                amount,
-                type,
-                symbol,
-                decimals,
-            }),
-            backgroundImageUrl: data.cover.bg_image,
-            backgroundColor: data.cover.bg_color,
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    static async getCoverUrlByRpid(
-        rpid: string,
-        symbol?: string,
-        decimals?: number,
-        shares?: number,
-        amount?: string,
-        from?: string,
-        message?: string,
-        remainingAmount?: string,
-        remainingShares?: string,
-    ) {
-        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
-            rpid,
-        })
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
-
-        return {
-            themeId: data.tid,
-            backgroundImageUrl: data.normal.bg_image,
-            backgroundColor: data.normal.bg_color,
-            url: urlcat(SITE_URL, '/api/rp', {
-                'theme-id': data.tid,
-                usage: 'cover',
-                symbol,
-                decimals,
-                shares,
-                amount,
-                from,
-                message,
-                'remaining-amount': remainingAmount,
-                'remaining-shares': remainingShares,
-            }),
-        }
     }
 
     static async createPublicKey(
@@ -154,26 +63,6 @@ export class FireflyRedPacket {
             }),
         })
         return data.publicKey
-    }
-
-    static async updateClaimStrategy(
-        rpid: string,
-        reactions: FireflyRedPacketAPI.PostReaction[],
-        claimPlatform: FireflyRedPacketAPI.ClaimPlatform[],
-        postOn: FireflyRedPacketAPI.PostOn[],
-        publicKey: string,
-    ): Promise<void> {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
-        await fetchFireflyJSON(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                publicKey,
-                rpid,
-                postReaction: reactions,
-                postOn,
-                claimPlatform,
-            }),
-        })
     }
 
     static async createClaimSignature(
@@ -227,25 +116,6 @@ export class FireflyRedPacket {
         return fetchFireflyJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),
-        })
-    }
-    static async finishClaiming(
-        rpid: string,
-        platform: FireflyRedPacketAPI.PlatformType,
-        profileId: string,
-        handle: string,
-        txHash: string,
-    ) {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/finishClaiming')
-        return fetchFireflyJSON<FireflyResponse<string>>(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                rpid,
-                claimPlatform: platform,
-                claimProfileId: profileId,
-                claimHandle: handle,
-                txHash,
-            }),
         })
     }
 }
