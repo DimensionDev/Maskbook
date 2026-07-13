@@ -27,7 +27,7 @@ export const BundlerHandlers = [
         return HttpResponse.json(
             {
                 tokenTransferTx: '0xfc6e7a01101e17994538dd014628602a44b03a00980a66afbd1697c8095b18f4',
-                createdAt: 1669970510248,
+                createdAt: 1_669_970_510_248,
                 twitterHandle: 'test',
                 nonce: 1,
                 id: '29fdf280-721d-11ed-a079-6f6f72e92e8a',

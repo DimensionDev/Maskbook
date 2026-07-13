@@ -21,9 +21,9 @@ export function useWallets() {
             .sort((a, b) => {
                 const timestampA = a.createdAt.getTime()
                 const timestampB = b.createdAt.getTime()
-                if (timestampA - timestampB > 10000) {
+                if (timestampA - timestampB > 10_000) {
                     return 1
-                } else if (timestampB - timestampA > 10000) {
+                } else if (timestampB - timestampA > 10_000) {
                     return -1
                 }
                 const numA = a.name.split('Wallet ', 2)[1]

@@ -39,7 +39,7 @@ export function useCreateRedPacketReceipt(txHashOrAccountId: string, chainId: Ch
                 id: txHashOrAccountId as `0x${string}`,
                 creation_time: BigInt(result.createTime.toString()),
                 creator: result.creator.toBase58() as `0x${string}`,
-                duration: 86400n,
+                duration: 86_400n,
                 ifrandom: result.ifSpiltRandom,
                 message: result.message,
                 name: result.name,

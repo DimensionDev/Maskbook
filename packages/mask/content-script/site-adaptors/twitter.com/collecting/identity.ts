@@ -102,7 +102,7 @@ function resolveCurrentVisitingIdentityInner(
     const update = async (screenName: string) => {
         const user = await queryClient.fetchQuery({
             retry: 0,
-            staleTime: 3600_000,
+            staleTime: 3_600_000,
             queryKey: ['twitter', 'profile', screenName],
             queryFn: () => FireflyTwitter.getUserInfo(screenName),
         })

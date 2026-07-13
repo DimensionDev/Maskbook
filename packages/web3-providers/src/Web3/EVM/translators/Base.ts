@@ -17,7 +17,7 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
             if (config.gas) {
                 if (context.providerType !== ProviderType.MaskWallet) {
                     const gas = toHex(
-                        BigNumber.max(toHex(config.gas), context.chainId === ChainId.Optimism ? 25000 : 21000).toFixed(
+                        BigNumber.max(toHex(config.gas), context.chainId === ChainId.Optimism ? 25_000 : 21_000).toFixed(
                             0,
                         ),
                     )

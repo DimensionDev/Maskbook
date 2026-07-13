@@ -47,7 +47,7 @@ function ProfileCardHolder() {
 
     const { data: identity } = useQuery({
         queryKey: ['twitter', 'profile', twitterId],
-        staleTime: 3600_000,
+        staleTime: 3_600_000,
         refetchOnWindowFocus: false,
         queryFn: () => FireflyTwitter.getUserInfo(twitterId),
         select: (user) => {

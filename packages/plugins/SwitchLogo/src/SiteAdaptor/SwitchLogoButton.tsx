@@ -16,7 +16,7 @@ const BlueBirdHTML = `
  `
 
 const LogoSelector = new LiveSelector()
-    .querySelector<HTMLElement>('h1[role="heading"] a > div > svg')
+    .querySelector<HTMLElement>(':scope h1[role="heading"] a > div > svg')
     .enableSingleMode()
 
 const defaultXIcon = `

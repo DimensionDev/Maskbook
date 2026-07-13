@@ -29,7 +29,7 @@ export async function deriveLocalKeyFromECDHKey(
         'deriveKey',
     ])
     const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: encodeText(mnemonicWord), iterations: 100000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: encodeText(mnemonicWord), iterations: 100_000, hash: 'SHA-256' },
         pbkdf2,
         { name: 'AES-GCM', length: 256 },
         true,

@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { z as zod } from 'zod'
 
 const gtZero = (v: string) => isGreaterThan(v, 0)
-export function useSchema(supported1559: boolean, minGasLimit = 21000) {
+export function useSchema(supported1559: boolean, minGasLimit = 21_000) {
     const { t } = useLingui()
     const gasLimit = zod
         .string()

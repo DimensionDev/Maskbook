@@ -397,7 +397,7 @@ export class EVMConnectionReadonlyAPI
         }
     }
 
-    async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVMConnectionOptions) {
+    async estimateTransaction(transaction: Transaction, fallback = 21_000, initial?: EVMConnectionOptions) {
         try {
             const options = this.ConnectionOptions.fill(initial)
             return await this.Request.request<string>(

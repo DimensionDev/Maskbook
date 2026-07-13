@@ -259,7 +259,7 @@ export const Transaction = memo(function Transaction() {
     const { data: status, isPending: isStatusPending } = useQuery({
         queryKey: ['transaction-status', chainId, hash],
         queryFn: hash ? () => Web3.getTransactionStatus(hash) : skipToken,
-        refetchInterval: 5_000,
+        refetchInterval: 5000,
     })
 
     const { data: bridgeStatus } = useQuery({

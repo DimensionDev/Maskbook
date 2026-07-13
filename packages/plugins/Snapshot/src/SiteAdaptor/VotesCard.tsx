@@ -94,7 +94,7 @@ function Content() {
             lazy
             title={
                 <Badge
-                    max={9999999}
+                    max={9_999_999}
                     classes={{ badge: classes.badge }}
                     badgeContent={proposal.voterAmounts}
                     color="primary">

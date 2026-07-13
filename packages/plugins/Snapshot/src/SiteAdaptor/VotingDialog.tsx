@@ -151,7 +151,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
             const domain = SNAPSHOT_VOTE_DOMAIN
             showSnackbar(<Trans>Vote</Trans>, {
                 message: <Trans>Confirm this Signature in your wallet.</Trans>,
-                autoHideDuration: 3_000,
+                autoHideDuration: 3000,
             })
             const sig = await EVMWeb3.signMessage(
                 'typedData',

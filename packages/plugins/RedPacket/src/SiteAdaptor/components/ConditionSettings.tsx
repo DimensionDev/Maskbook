@@ -214,7 +214,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                             autoCorrect: 'off',
                                             inputMode: 'decimal',
                                             maxlength: 16,
-                                            max: 10000000000,
+                                            max: 10_000_000_000,
                                             spellCheck: false,
                                         }}
                                     />

@@ -99,7 +99,7 @@ function collectPostsMindsInner(
                     new LiveSelector([activityNode]).querySelectorAll<HTMLImageElement>(
                         ':scope .m-activityContent__media--image img',
                     ),
-                    10000,
+                    10_000,
                 )
                     .then(() => getMetadataImages(activityNode))
                     .then((urls) => {

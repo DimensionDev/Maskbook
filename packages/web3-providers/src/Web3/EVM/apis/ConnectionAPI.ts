@@ -105,7 +105,7 @@ export class ConnectionAPI
             },
         )
         if (!tx) throw new Error('Failed to create contract transaction.')
-        tx.gas ??= await this.estimateTransaction(tx, 50000, options)
+        tx.gas ??= await this.estimateTransaction(tx, 50_000, options)
         return this.sendTransaction(tx, options)
     }
 
@@ -129,7 +129,7 @@ export class ConnectionAPI
             return this.sendTransaction(
                 {
                     ...tx,
-                    gas: await this.estimateTransaction(tx, 50000, options),
+                    gas: await this.estimateTransaction(tx, 50_000, options),
                 },
                 options,
             )
@@ -147,7 +147,7 @@ export class ConnectionAPI
             },
         )
         if (!tx) throw new Error('Failed to create contract transaction.')
-        tx.gas ??= await this.estimateTransaction(tx, 50000, options)
+        tx.gas ??= await this.estimateTransaction(tx, 50_000, options)
         return this.sendTransaction(tx, options)
     }
 

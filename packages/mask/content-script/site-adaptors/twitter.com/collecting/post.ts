@@ -193,7 +193,7 @@ function collectPostInfo(
 
     // decode stenographic image
     // don't add await on this
-    const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
+    const images = untilElementAvailable(postsImageSelector(tweetNode), 10_000)
         .then(() => postImagesParser(tweetNode))
         .then((images) => {
             for (const image of images) {

@@ -107,7 +107,7 @@ export default function Popups() {
 
     useIdleTimer({
         onAction: () => Services.Wallet.setAutoLockTimer(),
-        throttle: 10000,
+        throttle: 10_000,
     })
 
     return jsxCompose(

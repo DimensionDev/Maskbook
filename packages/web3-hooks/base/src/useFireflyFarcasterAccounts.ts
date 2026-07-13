@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 export function useFireflyFarcasterAccounts(identity?: string) {
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', identity],
-        staleTime: 3600_000,
+        staleTime: 3_600_000,
         refetchOnWindowFocus: false,
         queryFn: identity ? () => FireflyTwitter.getUserInfo(identity) : skipToken,
     })

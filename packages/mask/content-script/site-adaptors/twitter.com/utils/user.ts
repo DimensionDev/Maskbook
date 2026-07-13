@@ -22,7 +22,7 @@ export async function getUserIdentity(screenName: string): Promise<SocialIdentit
         queryKey: ['twitter', 'profile', screenName],
         queryFn: () => FireflyTwitter.getUserInfo(screenName),
         retry: 0,
-        staleTime: 3600_000,
+        staleTime: 3_600_000,
     })
     if (!user) return
 

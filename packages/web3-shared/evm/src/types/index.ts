@@ -37,7 +37,7 @@ export enum ChainId {
 
     // Base
     Base = 8453,
-    Base_Goerli = 84531,
+    Base_Goerli = 84_531,
 
     // BSC
     BSC = 56,
@@ -45,30 +45,30 @@ export enum ChainId {
 
     // Polygon
     Polygon = 137,
-    Mumbai = 80001,
+    Mumbai = 80_001,
 
     // Arbitrum
-    Arbitrum = 42161,
-    Arbitrum_Rinkeby = 421611,
-    Arbitrum_Nova = 42170,
+    Arbitrum = 42_161,
+    Arbitrum_Rinkeby = 421_611,
+    Arbitrum_Nova = 42_170,
 
     // xDai
     xDai = 100,
 
     // Avalanche
     /** C-Chain */
-    Avalanche = 43114,
-    Avalanche_Fuji = 43113,
+    Avalanche = 43_114,
+    Avalanche_Fuji = 43_113,
 
     // Celo
-    Celo = 42220,
+    Celo = 42_220,
 
     // Fantom
     Fantom = 250,
 
     // Aurora
-    Aurora = 1313161554,
-    Aurora_Testnet = 1313161555,
+    Aurora = 1_313_161_554,
+    Aurora_Testnet = 1_313_161_555,
 
     // Fuse
     Fuse = 122,
@@ -78,7 +78,7 @@ export enum ChainId {
 
     // Metis
     Metis = 1088,
-    Metis_Sepolia = 59902,
+    Metis_Sepolia = 59_902,
 
     // Sei
     Sei = 1329,
@@ -94,7 +94,7 @@ export enum ChainId {
     // Astar
     Astar = 592,
 
-    Scroll = 534352,
+    Scroll = 534_352,
 
     ZKSync_Alpha_Testnet = 280,
 
@@ -106,17 +106,17 @@ export enum ChainId {
 
     Klaytn = 8217,
 
-    Harmony = 1666600000,
+    Harmony = 1_666_600_000,
 
     Moonriver = 1285,
 
     Cronos = 25,
     // cspell:disable-next-line
-    Brise = 32520,
+    Brise = 32_520,
 
     Canto = 7700,
 
-    DFK = 53935,
+    DFK = 53_935,
 
     Doge = 2000,
 
@@ -134,11 +134,11 @@ export enum ChainId {
 
     OKXChain = 66,
 
-    Palm = 11297108109,
+    Palm = 11_297_108_109,
 
     RSK = 30,
 
-    SmartBitcoinCash = 10000,
+    SmartBitcoinCash = 10_000,
 
     Shiden = 336,
 
@@ -156,7 +156,7 @@ export enum ChainId {
     /** BitTorrent Chain Mainnet */
     BitTorrent = 199,
 
-    Zora = 7777777,
+    Zora = 7_777_777,
 
     // For any chains not supported yet.
     Invalid = 0,

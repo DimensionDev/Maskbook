@@ -14,11 +14,11 @@ export class MaskEthereumProviderRpcError extends Error implements Ethereum.Prov
     data?: unknown
 }
 export enum ErrorCode {
-    ParseError = -32700,
-    InvalidRequest = -32600,
-    MethodNotFound = -32601,
-    InvalidParams = -32602,
-    InternalError = -32603,
+    ParseError = -32_700,
+    InvalidRequest = -32_600,
+    MethodNotFound = -32_601,
+    InvalidParams = -32_602,
+    InternalError = -32_603,
     UserRejectedTheRequest = 4001,
     RequestedAccountHasNotBeenAuthorized = 4100,
 }

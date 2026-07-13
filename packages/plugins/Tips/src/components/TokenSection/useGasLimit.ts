@@ -7,8 +7,8 @@ import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { Address } from 'viem'
 import { useTip } from '../../contexts/index.js'
 
-const MIN_GAS_LIMIT = 21000
-const DEFAULT_GAS_LIMIT = 50000
+const MIN_GAS_LIMIT = 21_000
+const DEFAULT_GAS_LIMIT = 50_000
 
 // We only care about fungible tokens
 export function useGasLimit(fallback = DEFAULT_GAS_LIMIT) {

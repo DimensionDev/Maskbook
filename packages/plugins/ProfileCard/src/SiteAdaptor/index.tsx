@@ -41,7 +41,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     AvatarRealm: {
         ID: `${PLUGIN_ID}_profile_card`,
         label: 'Web3 Profile Card',
-        priority: 99999,
+        priority: 99_999,
         UI: {
             Decorator: function ProfileAvatarRealmDecorator({ identity, socialAccounts }) {
                 if (!identity?.identifier?.userId) return null
