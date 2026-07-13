@@ -29,7 +29,7 @@ class ZerionAPI {
         })
         const res = await fetchJSON<TransactionsResponse>(url)
         const transactions = compact(res.data.map((x) => formatRestTransaction(x)))
-        let nextIndicator: PageIndicator | undefined = undefined
+        let nextIndicator: PageIndicator | undefined
         if (res.links.next) {
             const url = new URL(res.links.next)
             const pageAfter = url ? url.searchParams.get('page[after]') : undefined

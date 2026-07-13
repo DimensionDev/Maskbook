@@ -29,7 +29,7 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
                     const response = await fetchJSON<{ name: string; id: string; error: string }>(requestPath)
                     return response.error ? undefined : { name: response.name, id: response.id, chainId }
                 } catch {
-                    return undefined
+                    return
                 }
             }),
             undefined,

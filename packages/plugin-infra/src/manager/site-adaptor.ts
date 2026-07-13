@@ -93,13 +93,13 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
     const minimalMode = useIsMinimalMode(pluginID)
 
     const result = plugins.find((x) => x.ID === pluginID)
-    if (!result) return undefined
+    if (!result) return
     if (minimalModeEqualsTo === 'any') return result
     else if (minimalModeEqualsTo) {
         if (minimalMode) return result
-        return undefined
+        return
     } else if (!minimalModeEqualsTo) {
-        if (minimalMode) return undefined
+        if (minimalMode) return
         return result
     }
     unreachable(minimalModeEqualsTo)

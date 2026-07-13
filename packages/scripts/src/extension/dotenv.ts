@@ -41,7 +41,7 @@ export function parseManifest(manifest: '3' | 3 | undefined | ManifestFile) {
     return ManifestFile.ChromiumMV3
 }
 function parseBoolean(val: string | undefined) {
-    if (val === undefined) return undefined
+    if (val === undefined) return
     else if (val === 'true') return true
     else if (val === 'false') return false
     throw new TypeError(`Unexpected value "${val}" in env file, expected true or false.`)

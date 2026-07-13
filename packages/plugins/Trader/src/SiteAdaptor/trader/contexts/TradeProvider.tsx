@@ -120,9 +120,9 @@ export function TradeProvider({ children }: PropsWithChildren) {
     const [disabledDexIds, setDisabledDexIds] = useModeState<string[]>(mode, EMPTY_LIST)
     const { data: liquidityList } = useLiquidityResources(chainId)
     const dexIds = useMemo(() => {
-        if (!liquidityList?.length) return undefined
+        if (!liquidityList?.length) return
         const allIds = liquidityList.map((x) => x.id)
-        if (!disabledDexIds.length) return undefined
+        if (!disabledDexIds.length) return
         return allIds.filter((x) => !disabledDexIds.includes(x))
     }, [disabledDexIds, liquidityList])
 

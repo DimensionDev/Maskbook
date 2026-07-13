@@ -75,7 +75,7 @@ export abstract class NameServiceState implements Web3NameServiceState {
         try {
             return await this.reverse(address, domainOnly)
         } catch {
-            return undefined
+            return
         }
     }
 

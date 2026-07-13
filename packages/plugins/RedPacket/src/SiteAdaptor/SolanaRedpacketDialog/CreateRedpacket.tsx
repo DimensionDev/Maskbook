@@ -287,7 +287,7 @@ export function CreateSolRedPacket() {
                     The minimum amount for each share is {formatBalance(1, token.decimals)} {token.symbol}
                 </Trans>
             )
-        return undefined
+        return
     })()
 
     const gasValidationMessage = (() => {

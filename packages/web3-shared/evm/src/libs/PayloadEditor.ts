@@ -190,7 +190,7 @@ function toBigInt(hex: string | number | undefined) {
         if (isHex(hex)) return hexToBigInt(hex)
         return BigInt(hex)
     }
-    return undefined
+    return
 }
 
 function toNumber(hex: string | number | undefined) {
@@ -199,5 +199,5 @@ function toNumber(hex: string | number | undefined) {
         if (isHex(hex)) return Number(hexToNumber(hex))
         return Number(hex)
     }
-    return undefined
+    return
 }

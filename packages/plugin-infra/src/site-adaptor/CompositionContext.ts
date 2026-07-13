@@ -10,7 +10,7 @@ export interface CompositionContext {
 }
 export const CompositionContext = createContext<CompositionContext>({
     type: 'popup',
-    getMetadata: () => undefined,
+    getMetadata: () => {},
     attachMetadata() {},
     dropMetadata() {},
 })

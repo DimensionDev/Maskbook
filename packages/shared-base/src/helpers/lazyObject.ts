@@ -27,7 +27,7 @@ export function lazyProxy<T extends object>(lazyInit: () => T): T {
         get() {
             Object.setPrototypeOf(target, lazyInit())
             Object.setPrototypeOf(handler2, null)
-            return undefined
+            return
         },
     })
     const handler2 = Object.create(handler)

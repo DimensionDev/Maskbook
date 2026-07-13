@@ -137,7 +137,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     // #region form validation
     const validationMessage = (() => {
-        if (needsSwap) return undefined
+        if (needsSwap) return
         if (tokenAmount.isZero() || !inputAmount) return <Trans>Enter an amount</Trans>
         if (isLessThan(tokenAmount, 0)) return <Trans>Input amount is below the minimum amount</Trans>
         if (isLessThan(balanceGasMinus, tokenAmount)) {

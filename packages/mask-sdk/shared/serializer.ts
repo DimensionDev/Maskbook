@@ -67,7 +67,7 @@ function createClassSerializer<T, Q>(
         },
         (v: { $type: string; value: Q }) => {
             if (v.$type === clz.name) return decode(v.value)
-            return undefined
+            return
         },
     ] as const
 }

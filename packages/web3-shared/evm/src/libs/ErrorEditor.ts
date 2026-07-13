@@ -77,7 +77,7 @@ export class ErrorEditor {
             ) {
                 return 'Transaction was failed due to an internal JSON-RPC server error.'
             }
-            return undefined
+            return
         })()
 
         if (RecognizableErrorMessage) {

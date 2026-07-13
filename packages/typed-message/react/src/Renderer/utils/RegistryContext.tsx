@@ -5,6 +5,6 @@ export const RegistryContext = createContext<(type: string) => undefined | Rende
     console.error(
         '[@masknet/typed-message] Please create a TypedMessageRenderRegistry and provide it via RegistryContext',
     )
-    return undefined
+    return
 })
 RegistryContext.displayName = 'RegistryContext'

@@ -115,7 +115,7 @@ export const usePostInfoDetails: {
         { __proto__: null },
         {
             get(_, key) {
-                if (typeof key === 'symbol') return undefined
+                if (typeof key === 'symbol') return
                 function usePostInfoDetails() {
                     const postInfo = useContext(PostInfoContext)
                     if (!postInfo) throw new TypeError('No post context')

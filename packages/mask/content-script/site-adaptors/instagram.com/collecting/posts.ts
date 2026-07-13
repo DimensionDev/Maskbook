@@ -30,7 +30,8 @@ function collectPostsInstagramInner(
                 comments: undefined,
                 rootElement: metadata,
                 suggestedInjectionPoint:
-                    metadata.realCurrent!.querySelector<HTMLDivElement>('header+div+div') || metadata.realCurrent!,
+                    metadata.realCurrent!.querySelector<HTMLDivElement>(':scope header+div+div') ||
+                    metadata.realCurrent!,
                 ...subscriptions,
             })
 
@@ -70,5 +71,5 @@ function getPostBy(node: DOMProxy): ProfileIdentifier | null {
 }
 function getPostID(node: DOMProxy): null | string {
     if (node.destroyed) return null
-    return node.current?.querySelector<HTMLAnchorElement>('span a[href^="/"]')?.text || null
+    return node.current?.querySelector<HTMLAnchorElement>(':scope span a[href^="/"]')?.text || null
 }

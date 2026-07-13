@@ -48,9 +48,9 @@ export function createManager<
             {},
             {
                 get(_, pluginID) {
-                    if (typeof pluginID === 'symbol') return undefined
+                    if (typeof pluginID === 'symbol') return
                     if (activated.has(pluginID)) return activated.get(pluginID)!.minimalModeEnabled
-                    return undefined
+                    return
                 },
             },
         ) as Partial<Record<string, ValueRefWithReady<boolean>>>,

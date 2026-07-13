@@ -19,7 +19,7 @@ export async function changesetRelease() {
             .then(JSON.parse)
             .then((json) => {
                 if (json.scripts?.build) return shell.cwd(ROOT_PATH)`pnpm -C ${fileURLToPath(path)} run build`
-                return undefined
+                return
             }),
     )
     await Promise.all(buildTask.concat(tsgo))

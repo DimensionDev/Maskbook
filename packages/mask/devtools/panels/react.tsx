@@ -291,7 +291,7 @@ export async function startReactDevTools(signal: AbortSignal) {
 function getMountPoint(window: Window, signal: AbortSignal): HTMLElement
 function getMountPoint(window: Window | undefined, signal: AbortSignal): HTMLElement | undefined
 function getMountPoint(window: Window | undefined, signal: AbortSignal) {
-    if (!window) return undefined
+    if (!window) return
     const dom = window.document.querySelector('#container')
     if (dom) return dom
 

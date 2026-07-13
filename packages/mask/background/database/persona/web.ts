@@ -128,18 +128,17 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
         })
     },
     async (db) => {
-        if (db.version === 1) {
-            const map: V1To2 = { version: 2, data: new Map() }
-            const t = createTransaction(db, 'readonly')('personas', 'profiles')
-            const a = await t.objectStore('personas').getAll()
-            const b = await t.objectStore('profiles').getAll()
-            for (const rec of [...a, ...b]) {
-                if (!rec.localKey) continue
-                map.data.set(rec.identifier, (await CryptoKeyToJsonWebKey(rec.localKey as any)) as any)
-            }
-            return map
+        if (db.version !== 1) return
+
+        const map: V1To2 = { version: 2, data: new Map() }
+        const t = createTransaction(db, 'readonly')('personas', 'profiles')
+        const a = await t.objectStore('personas').getAll()
+        const b = await t.objectStore('profiles').getAll()
+        for (const rec of [...a, ...b]) {
+            if (!rec.localKey) continue
+            map.data.set(rec.identifier, (await CryptoKeyToJsonWebKey(rec.localKey as any)) as any)
         }
-        return undefined
+        return map
     },
     'maskbook-persona',
 )

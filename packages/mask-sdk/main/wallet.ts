@@ -7,7 +7,7 @@ import type { Ethereum } from '../public-api/mask-wallet.js'
 class EthereumEventEmitter extends EventTarget implements Ethereum.MaskEthereumEventEmitter {
     #mapping = new WeakMap()
     #getMappedFunction(listener: unknown) {
-        if (typeof listener !== 'function') return undefined
+        if (typeof listener !== 'function') return
         if (!this.#mapping.has(listener)) {
             const mapped = (event: CustomEvent<unknown>) => {
                 listener(event.detail)

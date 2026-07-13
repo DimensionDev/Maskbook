@@ -300,7 +300,7 @@ export const Component = memo(function SyncTwitterCookies() {
             }, 2000)
             return () => clearTimeout(timer)
         }
-        return undefined
+        return
     }, [isInvalid, session, resetStates, refetchDesktopLinkInfo])
 
     const [{ loading: isUploading }, uploadCookies] = useAsyncFn(async () => {

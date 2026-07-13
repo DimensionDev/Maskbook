@@ -4,7 +4,7 @@ export interface MaskEthereumProviderRpcErrorOptions extends ErrorOptions {
 }
 export class MaskEthereumProviderRpcError extends Error implements Ethereum.ProviderRpcError {
     constructor(code: number, message: string, options: MaskEthereumProviderRpcErrorOptions = {}) {
-        const { cause = undefined, data } = options
+        const { cause, data } = options
         super(message, { cause })
         this.code = code
         this.data = data

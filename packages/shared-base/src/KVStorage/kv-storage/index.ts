@@ -78,7 +78,7 @@ function createScope(
         },
     })
     function get(key: string | symbol) {
-        if (typeof key === 'symbol') return undefined
+        if (typeof key === 'symbol') return
         const value = createState(signal, backend, message, currentScope, key, defaultValues[key])
         Object.defineProperty(storage_inner, key, { enumerable: true, value })
         return value

@@ -12,7 +12,7 @@ export type MaskCSSVariableColor = string & {
 } & ((defaultValue?: string) => string)
 
 function set(key: string | symbol) {
-    if (typeof key === 'symbol') return undefined
+    if (typeof key === 'symbol') return
     const cssVar = kebabCase(key)
     function value(defaultValue?: string) {
         // it might be an object when used in styled components.

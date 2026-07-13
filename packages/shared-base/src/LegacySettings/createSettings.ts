@@ -71,7 +71,7 @@ export function createBulkSettings<T>(settingsKey: string, defaultValue: T, comp
     }
     return new Proxy(item, {
         get(target, ns) {
-            if (typeof ns !== 'string') return undefined
+            if (typeof ns !== 'string') return
             // if we're the first one to access this property, notify all others to create this property too.
             if (setup(ns)) {
                 target[ns].readyPromise.then(() => MaskMessages.events.legacySettings_bulkDiscoverNS.sendToAll(ns))

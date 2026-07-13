@@ -24,7 +24,7 @@ export function createViemClientFromURL(chain: ChainId, url: string) {
         const editor = ErrorEditor.from(null, response)
         if (editor.presence) throw editor.error
         if ('result' in response) return response.result
-        return undefined
+        return
     })
 }
 
@@ -157,7 +157,7 @@ export function chainIdToChain(chainId: ChainId) {
         case ChainId.Zora:
             return chains.zora
         case ChainId.Invalid:
-            return undefined
+            return
     }
 }
 

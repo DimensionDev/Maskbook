@@ -292,7 +292,7 @@ export const GasSetting1559 = memo(() => {
 
     // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
-        if (getGasOptionsLoading) return undefined
+        if (getGasOptionsLoading) return
         if (
             isLessThan(
                 formatGweiToWei(maxPriorityFeePerGas),
@@ -310,11 +310,11 @@ export const GasSetting1559 = memo(() => {
             )
         )
             return <Trans>Max priority fee is higher than necessary. You may pay more than needed.</Trans>
-        return undefined
+        return
     }, [maxPriorityFeePerGas, gasOptions, getGasOptionsLoading])
 
     const maxFeeGasHelperText = useMemo(() => {
-        if (getGasOptionsLoading) return undefined
+        if (getGasOptionsLoading) return
         if (isLessThan(formatGweiToWei(maxFeePerGas), gasOptions?.[GasOptionType.SLOW]?.estimatedBaseFee ?? 0))
             return <Trans>Max fee is too low for network conditions.</Trans>
         if (
@@ -324,7 +324,7 @@ export const GasSetting1559 = memo(() => {
             )
         )
             return <Trans>Max fee is higher than necessary</Trans>
-        return undefined
+        return
     }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
     // #endregion
 
