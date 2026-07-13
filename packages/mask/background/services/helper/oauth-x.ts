@@ -151,7 +151,7 @@ async function getRequestToken(client: OAuth) {
     if (response.ok) {
         return new URLSearchParams(body)
     } else {
-        throw body
+        throw new Error('Request failed: ' + body)
     }
 }
 function toBody(rec: Record<string, any>) {
@@ -177,7 +177,7 @@ async function getAccessToken(client: OAuth, options: { oauth_verifier: string; 
     if (response.ok) {
         return new URLSearchParams(body)
     } else {
-        throw body
+        throw new Error('Request failed: ' + body)
     }
 }
 

@@ -42,12 +42,13 @@ export const {
 } = window
 // eslint-disable-next-line unicorn/no-uncalled-method
 export const Array_values = takeThisF(window.Array.prototype.values)<readonly unknown[]>
-export const reportError = takeThisF(window.reportError)<Window> || noop
+export const reportError = takeThisF(window.reportError)<Window>
 
 const _window = window
 export { _window as window }
 
 /** Return the unsafe object without XRayVision from the main Realm. */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class NewObject {
     constructor() {
         // eslint-disable-next-line no-constructor-return

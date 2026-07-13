@@ -135,6 +135,7 @@ function createState(
     const subscription: Subscription<any> = {
         getCurrentValue: () => {
             // TODO: suspense
+            // eslint-disable-next-line @typescript-eslint/only-throw-error
             if (!initialized) throw initializedPromise
             return state
         },

@@ -44,6 +44,7 @@ export function createSubscriptionFromAsyncSuspense<T>(
     return {
         getCurrentValue: () => {
             // TODO: suspense
+            // eslint-disable-next-line @typescript-eslint/only-throw-error
             if (value.isNone()) throw promise
             return value.value
         },
@@ -70,7 +71,9 @@ function getEventTarget() {
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)
-        return () => event.removeEventListener(EVENT, f)
+        return () => {
+            event.removeEventListener(EVENT, f)
+        }
     }
     return { trigger, subscribe }
 }
@@ -101,7 +104,11 @@ export function mergeSubscription<T extends Array<Subscription<unknown>>>(
         },
         subscribe: (callback: () => void) => {
             const removeListeners = subscriptions.map((x) => x.subscribe(callback))
-            return () => removeListeners.forEach((x) => x())
+            return () => {
+                removeListeners.forEach((x) => {
+                    x()
+                })
+            }
         },
     }
 }
