@@ -25,7 +25,7 @@ export class Sequin {
     public update() {
         // apply forces to velocity
         this.velocity.x -= this.velocity.x * dragSequins
-        this.velocity.y = this.velocity.y + gravitySequins
+        this.velocity.y += gravitySequins
 
         // set position
         this.position.x += this.velocity.x

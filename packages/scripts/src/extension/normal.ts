@@ -103,7 +103,7 @@ async function webpack(rspack: boolean, flags: BuildFlagsExtended) {
         // this command runs in the /packages/mask folder.
         flags.profiling && '--json=../../compilation-stats.json',
         '--env',
-        'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'),
+        'flags=' + Buffer.from(JSON.stringify(flags), 'utf8').toString('hex'),
     ]
 
     if (rspack) {

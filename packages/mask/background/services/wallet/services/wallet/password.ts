@@ -19,7 +19,7 @@ const inMemoryPassword = {
         }
     },
 }
-// eslint-disable-next-line unicorn/no-top-level-side-effects
+ 
 browser.storage.session?.get([key, atKey]).then(async (result) => {
     if (Date.now() - result[atKey] > (await database.getAutoLockerDuration())) {
         browser.storage.session.clear()

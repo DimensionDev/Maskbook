@@ -12,13 +12,13 @@ interface ConstantsConfig {
 
 // Function to read the constants from a file
 async function readConstantsFile(filePath: string): Promise<ConstantsConfig> {
-    const data = await fs.readFile(filePath, 'utf-8')
+    const data = await fs.readFile(filePath, 'utf8')
     return JSON.parse(data)
 }
 
 // Function to write constants to a file
 async function writeConstantsFile(filePath: string, constants: ConstantsConfig): Promise<void> {
-    await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
+    await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf8')
 }
 
 // Function to get the default value for a given value type

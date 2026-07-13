@@ -144,6 +144,7 @@ async function generateIcons() {
                 return (
                     '{' +
                     [
+                        // eslint-disable-next-line unicorn/require-array-sort-compare
                         variant.length === 0 ? null : `c: ${JSON.stringify(variant.toSorted())}`,
                         variant.length === 0 && jsx ? null : `u: () => ${url}`,
                         jsx ? `j: () => ${jsx}` : null,
@@ -216,7 +217,9 @@ async function generateIcons() {
     ])
 }
 function attachJSDoc(jsdoc: readonly string[], lines: string[]) {
-    return `/**\n${jsdoc.map((x) => ' * ' + x + '\n').join('')} */`.split('\n').forEach((x) => lines.push(x))
+    return `/**\n${jsdoc.map((x) => ' * ' + x + '\n').join('')} */`.split('\n').forEach((x) => {
+        lines.push(x)
+    })
 }
 function createLink(x: string) {
     // Cannot render images in JSDoc in VSCode by relative path

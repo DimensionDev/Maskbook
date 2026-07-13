@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/no-top-level-side-effects */
+ 
 import { $, $safe, $unsafe } from '../intrinsic.js'
 import { PatchDescriptor_NonNull } from '../utils.js'
 

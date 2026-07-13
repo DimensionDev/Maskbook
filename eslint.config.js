@@ -39,6 +39,7 @@ const disabledRules = {
     'no-unused-vars': 'off',
     'no-undef': 'off',
     'no-redeclare': 'off',
+    'unicorn/no-optional-chaining-on-undeclared-variable': 'off',
     // TypeScript can do the check
     'getter-return': 'off',
     'unicorn/no-array-callback-reference': 'off',
@@ -50,6 +51,8 @@ const disabledRules = {
     // WebExtension: in Firefox content scripts, window !== globalThis (instanceof SandBox).
     'unicorn/prefer-global-this': 'off',
     'unicorn/no-unnecessary-global-this': 'off',
+    // with Prettier
+    'unicorn/number-literal-case': 'off',
 
     // bad practice
     'unicorn/prefer-top-level-await': 'off', // top-level await is bad for applications. scripts are ok.
@@ -75,45 +78,23 @@ const disabledRules = {
     'unicorn/explicit-length-check': 'off',
     'unicorn/import-style': 'off',
     'unicorn/prefer-await': 'off', // sometimes a .then/catch more readable
-
-    // TODO: review
-    '@tanstack/query/prefer-query-options': 'off',
-    'unicorn/name-replacements': 'off', // better done in another PR
-    'unicorn/prefer-number-coercion': 'off', // better done in another PR
-    'unicorn/consistent-boolean-name': 'off', // better done in another PR
-    'unicorn/consistent-compound-words': 'off', // better done in another PR
-
-    'unicorn/no-lonely-if': 'off',
-    'unicorn/no-negated-array-predicate': 'off',
-    'unicorn/no-negated-comparison': 'off',
-    'unicorn/no-negated-condition': 'off',
-    'unicorn/no-new-array': 'off',
     'unicorn/no-non-function-verb-prefix': 'off',
-    'unicorn/no-nonstandard-builtin-properties': 'off',
-    'unicorn/no-optional-chaining-on-undeclared-variable': 'off',
-    'unicorn/no-process-exit': 'off',
-    'unicorn/no-return-array-push': 'off',
-    'unicorn/no-static-only-class': 'off',
-    'unicorn/no-subtraction-comparison': 'off',
-    'unicorn/no-this-outside-of-class': 'off',
+    'unicorn/switch-case-braces': 'off', // we have a rule that warns for decelaration in switch case
+
+    // TODO: review, maybe add them back
+    '@tanstack/query/prefer-query-options': 'off',
+    'unicorn/name-replacements': 'off',
+    'unicorn/prefer-number-coercion': 'off',
+    'unicorn/consistent-boolean-name': 'off',
+    'unicorn/consistent-compound-words': 'off',
     'unicorn/no-top-level-assignment-in-function': 'off',
     'unicorn/no-top-level-side-effects': 'off',
-    'unicorn/no-typeof-undefined': 'off',
-    'unicorn/no-uncalled-method': 'off',
-    'unicorn/no-unsafe-property-key': 'off',
-    'unicorn/no-unsafe-string-replacement': 'off',
-    'unicorn/no-unused-array-method-return': 'off',
-    'unicorn/no-useless-continue': 'off',
-    'unicorn/no-useless-logical-operand': 'off',
-    'unicorn/no-useless-recursion': 'off',
-    'unicorn/no-useless-spread': 'off',
-    'unicorn/number-literal-case': 'off',
-    'unicorn/operator-assignment': 'off',
-    'unicorn/require-array-sort-compare': 'off',
-    'unicorn/require-css-escape': 'off',
-    'unicorn/switch-case-braces': 'off',
-    'unicorn/template-indent': 'off',
-    'unicorn/text-encoding-identifier-case': 'off',
+
+    // 'unicorn/operator-assignment': 'off',
+    // 'unicorn/require-array-sort-compare': 'off',
+    // 'unicorn/require-css-escape': 'off',
+    // 'unicorn/template-indent': 'off',
+    // 'unicorn/text-encoding-identifier-case': 'off',
 }
 
 /** @type {Partial<import('eslint/config').Config['rules']>} */
@@ -281,6 +262,7 @@ const avoidMistakeRules = {
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
     '@typescript-eslint/no-duplicate-enum-values': 'error', // enum { a = 1, b = 1 }
     '@masknet/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
+    'unicorn/no-invalid-file-input-accept': 'error', // <input type="file" accept="invalid" />
 
     // Performance
     '@eslint-react/no-missing-key': 'warn',
@@ -370,6 +352,7 @@ const codeStyleRules = {
     // '@typescript-eslint/prefer-readonly-parameter-types': 'error',
 
     // More readable code
+    // 'unicorn/comment-content': 'warn', // comment content should use corret spelling
     // 'max-lines': ['warn', { max: 400 }],
     // 'no-else-return': 'warn',
     'object-shorthand': 'warn',
@@ -630,6 +613,14 @@ export default defineConfig(
         files: ['packages/**/tests/**/*.ts'],
         rules: {
             'unicorn/consistent-function-scoping': 'off',
+            'unicorn/template-indent': 'off',
+        },
+    },
+    {
+        name: 'scripts',
+        files: ['packages/**/scripts/**/*.ts'],
+        rules: {
+            'unicorn/no-process-exit': 'off',
         },
     },
     {

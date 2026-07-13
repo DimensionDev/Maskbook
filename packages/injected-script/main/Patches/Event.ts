@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/no-top-level-side-effects */
+ 
 import { $, $safe, $unsafe, isDocument, isNode, isShadowRoot, isWindow } from '../intrinsic.js'
 import { PatchDescriptor, PatchDescriptor_NonNull } from '../utils.js'
 import { __DataTransfer, __DataTransferItemList } from './DataTransfer.js'

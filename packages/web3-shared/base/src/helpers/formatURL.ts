@@ -8,7 +8,10 @@ export function formatURL(url: string): string {
 
     // Step 3: Arrange search parameters in fixed order
     const sortedSearchParams = new URLSearchParams()
-    const searchParamKeys = searchParams.keys().toArray().toSorted()
+    const searchParamKeys = searchParams
+        .keys()
+        .toArray()
+        .toSorted((a, b) => a.localeCompare(b))
     for (const key of searchParamKeys) {
         sortedSearchParams.set(key, searchParams.get(key)!)
     }

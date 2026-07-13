@@ -17,15 +17,15 @@ export async function buildContracts() {
     await fs.writeFile(
         join(GENERATED_PATH, 'index.d.ts'),
         `${header()}${abis.map((abiName) => `export type { ${abiName}Abi } from './${abiName}.js'`).join('\n')}\n`,
-        'utf-8',
+        'utf8',
     )
 
     for (const abiName of abis) {
-        const abi = JSON.stringify(JSON.parse(await fs.readFile(join(ABIS_PATH, `${abiName}.json`), 'utf-8')))
+        const abi = JSON.stringify(JSON.parse(await fs.readFile(join(ABIS_PATH, `${abiName}.json`), 'utf8')))
         await fs.writeFile(
             join(GENERATED_PATH, `${abiName}.d.ts`),
             `${header()}// prettier-ignore\nexport type ${abiName}Abi = ${abi}\nexport const ${abiName}Abi: ${abiName}Abi\n`,
-            'utf-8',
+            'utf8',
         )
         await fs.writeFile(
             join(GENERATED_PATH, `${abiName}.js`),

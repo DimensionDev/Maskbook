@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/no-top-level-side-effects */
+ 
 import {
     composeTransformers,
     FlattenTypedMessage,

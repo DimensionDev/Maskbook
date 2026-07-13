@@ -115,7 +115,7 @@ function resolveCurrentVisitingIdentityInner(
         const handle = legacy.screen_name
         const ownerHandle = ownerRef.value.identifier?.userId
         const isOwner = !!ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase()
-        const domAvatar = document.querySelector(`a[href="/${handle}/photo"] img`)
+        const domAvatar = document.querySelector(`a[href="/${CSS.escape(handle)}/photo"] img`)
         // DOM avatar is more accurate, avatar from api could be outdate
         const avatar = domAvatar?.getAttribute('src') || legacy.profile_image_url_https
         const bio = legacy.description
