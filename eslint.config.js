@@ -36,21 +36,21 @@ const deferPackages = [
 const disabledRules = {
     // Not compatible
     // with TypeScript
-    'no-unused-vars': 'off',
-    'no-undef': 'off',
     'no-redeclare': 'off',
+    'no-undef': 'off',
+    'no-unused-vars': 'off',
     'unicorn/no-optional-chaining-on-undeclared-variable': 'off',
     // TypeScript can do the check
     'getter-return': 'off',
     'unicorn/no-array-callback-reference': 'off',
     'unicorn/no-invalid-argument-count': 'off',
     // false positives
-    'unicorn/require-number-to-fixed-digits-argument': 'off', // BigNumber
     'unicorn/no-useless-coercion': 'off',
     'unicorn/prefer-spread': 'off', // TypedArrays
+    'unicorn/require-number-to-fixed-digits-argument': 'off', // BigNumber
     // WebExtension: in Firefox content scripts, window !== globalThis (instanceof SandBox).
-    'unicorn/prefer-global-this': 'off',
     'unicorn/no-unnecessary-global-this': 'off',
+    'unicorn/prefer-global-this': 'off',
     // with Prettier
     'unicorn/number-literal-case': 'off',
 
@@ -66,35 +66,29 @@ const disabledRules = {
 
     // style, readibility and convention
     'unicorn/consistent-class-member-order': 'off',
+    'unicorn/explicit-length-check': 'off',
     'unicorn/filename-case': 'off',
+    'unicorn/import-style': 'off',
+    'unicorn/max-nested-calls': 'off',
     'unicorn/no-for-each': 'off',
     'unicorn/no-nested-ternary': 'off',
+    'unicorn/no-non-function-verb-prefix': 'off',
     'unicorn/no-null': 'off',
     'unicorn/no-unreadable-for-of-expression': 'off',
     'unicorn/no-useless-else': 'off', // useless else sometime is more readable than early return.
-    'unicorn/prefer-switch': 'off', // switch is bad
-    'unicorn/prefer-includes-over-repeated-comparisons': 'off', // not worth
-    'unicorn/max-nested-calls': 'off',
-    'unicorn/explicit-length-check': 'off',
-    'unicorn/import-style': 'off',
     'unicorn/prefer-await': 'off', // sometimes a .then/catch more readable
-    'unicorn/no-non-function-verb-prefix': 'off',
+    'unicorn/prefer-includes-over-repeated-comparisons': 'off', // not worth
+    'unicorn/prefer-switch': 'off', // switch is bad
     'unicorn/switch-case-braces': 'off', // we have a rule that warns for decelaration in switch case
 
     // TODO: review, maybe add them back
     '@tanstack/query/prefer-query-options': 'off',
-    'unicorn/name-replacements': 'off',
-    'unicorn/prefer-number-coercion': 'off',
     'unicorn/consistent-boolean-name': 'off',
     'unicorn/consistent-compound-words': 'off',
+    'unicorn/name-replacements': 'off',
     'unicorn/no-top-level-assignment-in-function': 'off',
     'unicorn/no-top-level-side-effects': 'off',
-
-    // 'unicorn/operator-assignment': 'off',
-    // 'unicorn/require-array-sort-compare': 'off',
-    // 'unicorn/require-css-escape': 'off',
-    // 'unicorn/template-indent': 'off',
-    // 'unicorn/text-encoding-identifier-case': 'off',
+    'unicorn/prefer-number-coercion': 'off',
 }
 
 /** @type {Partial<import('eslint/config').Config['rules']>} */
@@ -177,28 +171,29 @@ const avoidMistakeRules = {
     // '@masknet/type-no-force-cast-via-top-type': 'error', // expr as any as T
 
     // Security
-    'no-script-url': 'error', // javascript:
-    // 'unicorn/require-post-message-target-origin': 'warn', // postMessage(data, 'origin')
-    '@eslint-react/dom-no-dangerously-set-innerhtml': 'error', // dangerouslySetInnerHTML
     '@eslint-react/dom-no-dangerously-set-innerhtml-with-children': 'error', // dangerouslySetInnerHTML + children
+    '@eslint-react/dom-no-dangerously-set-innerhtml': 'error', // dangerouslySetInnerHTML
     '@eslint-react/dom-no-missing-iframe-sandbox': 'error', // <iframe sandbox="..." />
     '@eslint-react/dom-no-script-url': 'error', // javascript:
     '@eslint-react/dom-no-unsafe-iframe-sandbox': 'error', // <iframe sandbox="..." />
     '@eslint-react/dom-no-unsafe-target-blank': 'error',
-    '@typescript-eslint/no-implied-eval': 'error', // setTimeout('code')
     '@masknet/browser-no-set-html': 'error', // .innerHTML =
-    // '@masknet/string-no-data-url': 'error', // data:...
     '@masknet/unicode-no-bidi': 'error',
     '@masknet/unicode-no-invisible': 'error',
     '@masknet/unicode-specific-set': 'off',
+    '@typescript-eslint/no-implied-eval': 'error', // setTimeout('code')
+    'no-script-url': 'error', // javascript:
+    'unicorn/no-unsafe-dom-html': 'error',
+    // '@masknet/string-no-data-url': 'error', // data:...
+    // 'unicorn/require-post-message-target-origin': 'warn', // postMessage(data, 'origin')
 
     // Confusing code
+    '@typescript-eslint/no-confusing-non-null-assertion': 'error', // a! == b
     'no-bitwise': 'error', // need mark out
     'no-div-regex': 'error', // RegEx
     'no-label-var': 'warn', // name collision
     'no-plusplus': 'warn', // ++i? i++?
     'no-sequences': 'warn', // (a, b)
-    '@typescript-eslint/no-confusing-non-null-assertion': 'error', // a! == b
 
     // Problematic language features
     /// API with trap
@@ -208,23 +203,39 @@ const avoidMistakeRules = {
     '@eslint-react/dom-no-missing-button-type': 'error', // default type is "submit" which refresh the page
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
     /// Footgun language features
-    'no-new-wrappers': 'error', // wrapper objects are bad
     '@typescript-eslint/prefer-enum-initializers': 'warn', // add a new item in the middle is an API breaking change.
+    'no-new-wrappers': 'error', // wrapper objects are bad
     /// Little-known language features
-    'no-constructor-return': 'error', // constructor() { return expr }
     '@eslint-react/jsx-no-namespace': 'error', // <svg:rect> react does not support
-    '@typescript-eslint/no-unsafe-declaration-merging': 'error',
     '@typescript-eslint/no-mixed-enums': 'error', // enum { a = 1, b = "b" }
+    '@typescript-eslint/no-unsafe-declaration-merging': 'error',
     '@typescript-eslint/prefer-literal-enum-member': 'error', // enum { a = outsideVar }
+    'no-constructor-return': 'error', // constructor() { return expr }
 
     // Prevent bugs
-    // 'array-callback-return': 'error', // .map .some ... calls should have a return value
+    '@eslint-react/dom-no-void-elements-with-children': 'warn', // <img>children</img>
+    '@eslint-react/jsx-no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
+    '@eslint-react/no-leaked-conditional-rendering': 'error', // <div>{0 && <Something />}</div> will render "0"!
+    '@eslint-react/no-nested-component-definitions': 'error', // rerender bugs
+    '@eslint-react/no-nested-lazy-component-declarations': 'error', // rerender bugs
+    '@eslint-react/rules-of-hooks': 'error', // react hooks
+    '@eslint-react/web-api-no-leaked-event-listener': 'warn', // addEventListener in hooks without removeEventListener
+    '@eslint-react/web-api-no-leaked-interval': 'warn', // setInterval in hooks without clearInterval
+    '@eslint-react/web-api-no-leaked-resize-observer': 'warn', // new ResizeObserver in hooks without disconnect
+    '@eslint-react/web-api-no-leaked-timeout': 'warn', // setTimeout in hooks without clearTimeout
+    '@masknet/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
+    '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
+    '@typescript-eslint/no-duplicate-enum-values': 'error', // enum { a = 1, b = 1 }
+    '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
     'default-case-last': 'error', // default: should be the last
-    eqeqeq: 'error', // ===
     'no-duplicate-case': 'error', // switch
     'no-self-compare': 'error', // a === a
+    'no-template-curly-in-string': 'error', // "${expr}" looks like a bug
     'no-unmodified-loop-condition': 'error', // loop bug
     'no-unreachable-loop': 'error', // loop bug
+    'unicorn/no-invalid-file-input-accept': 'error', // <input type="file" accept="invalid" />
+    // 'array-callback-return': 'error', // .map .some ... calls should have a return value
+    eqeqeq: 'error', // ===
     'no-restricted-globals': [
         'error',
         // source of bug (those names are too common)
@@ -245,24 +256,8 @@ const avoidMistakeRules = {
                 "If you're in the background script, sessionStorage is banned. It will cause Manifest V3 to crash. If you're in the chrome-extension:// pages, sessionStorage is discouraged. If you're in the content scripts, we can only use sessionStorage to read websites' data and MUST NOT store our own data.",
         },
     ],
-    'no-template-curly-in-string': 'error', // "${expr}" looks like a bug
-    // 'require-atomic-updates': 'error', // await/yield race condition
-    '@eslint-react/dom-no-void-elements-with-children': 'warn', // <img>children</img>
-    '@eslint-react/web-api-no-leaked-event-listener': 'warn', // addEventListener in hooks without removeEventListener
-    '@eslint-react/web-api-no-leaked-interval': 'warn', // setInterval in hooks without clearInterval
-    '@eslint-react/web-api-no-leaked-resize-observer': 'warn', // new ResizeObserver in hooks without disconnect
-    '@eslint-react/web-api-no-leaked-timeout': 'warn', // setTimeout in hooks without clearTimeout
-    '@eslint-react/jsx-no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
     // '@eslint-react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} /> this rule has bug?
-    '@eslint-react/no-leaked-conditional-rendering': 'error', // <div>{0 && <Something />}</div> will render "0"!
-    '@eslint-react/no-nested-component-definitions': 'error', // rerender bugs
-    '@eslint-react/no-nested-lazy-component-declarations': 'error', // rerender bugs
-    '@eslint-react/rules-of-hooks': 'error', // react hooks
-    '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
-    '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
-    '@typescript-eslint/no-duplicate-enum-values': 'error', // enum { a = 1, b = 1 }
-    '@masknet/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
-    'unicorn/no-invalid-file-input-accept': 'error', // <input type="file" accept="invalid" />
+    // 'require-atomic-updates': 'error', // await/yield race condition
 
     // Performance
     '@eslint-react/no-missing-key': 'warn',
@@ -278,113 +273,119 @@ const avoidMistakeRules = {
 /** @type {Partial<import('eslint/config').Config['rules']>} */
 const codeStyleRules = {
     // Deprecated
-    'no-alert': 'warn', // alert()
-    'no-proto': 'error', // __proto__ accessor
-    'no-var': 'error', // var x
     '@eslint-react/no-class-component': 'error',
     '@eslint-react/no-context-provider': 'error',
     '@eslint-react/no-forward-ref': 'error',
-    // '@typescript-eslint/no-namespace': 'error', // namespace T {}, they won't support type only namespace
     '@typescript-eslint/prefer-namespace-keyword': 'error', // but if you really need to, don't use `module T {}`
+    'no-alert': 'warn', // alert()
+    'no-proto': 'error', // __proto__ accessor
+    'no-var': 'error', // var x
+    // '@typescript-eslint/no-namespace': 'error', // namespace T {}, they won't support type only namespace
 
     // Useless code
+    '@eslint-react/jsx-no-useless-fragment': ['warn', { allowEmptyFragment: true }],
+    '@eslint-react/no-missing-context-display-name': 'warn',
+    '@masknet/string-no-simple-template-literal': 'warn', // prefer simple string
+    '@masknet/string-no-unneeded-to-string': 'warn', // useless .toString()
+    '@typescript-eslint/await-thenable': 'warn', // await 1
+    '@typescript-eslint/no-extra-non-null-assertion': 'warn', // foo!!!.bar
+    '@typescript-eslint/no-meaningless-void-operator': 'warn', // void a_void_call()
+    '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'warn', // foo! ?? bar
+    '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
+    '@typescript-eslint/no-unnecessary-type-arguments': 'warn', // provided type argument equals the default
+    '@typescript-eslint/no-unnecessary-type-constraint': 'warn', // T extends any
     'no-extra-bind': 'warn', // unused bind on a function that does not uses this
     'no-extra-label': 'warn', // break/continue is ok without label
     'no-unneeded-ternary': 'warn', // expr ? true : false
     'no-useless-call': 'warn', // expr.call(undefined, ...)
     'no-useless-concat': 'warn', // "a" + "b"
-    // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
-    '@eslint-react/no-missing-context-display-name': 'warn',
     // '@eslint-react/no-unused-props': 'warn',
-    '@eslint-react/jsx-no-useless-fragment': ['warn', { allowEmptyFragment: true }],
-    '@typescript-eslint/await-thenable': 'warn', // await 1
+    // '@masknet/array-no-unneeded-flat-map': 'warn', // bans Array#flatMap((x) => x)
     // '@typescript-eslint/no-empty-interface': 'warn', // interface T extends Q {}
-    '@typescript-eslint/no-extra-non-null-assertion': 'warn', // foo!!!.bar
     // '@typescript-eslint/no-inferrable-types': 'warn', // let x: number = 1
-    '@typescript-eslint/no-meaningless-void-operator': 'warn', // void a_void_call()
-    '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'warn', // foo! ?? bar
+    // '@typescript-eslint/no-redundant-type-constituents': 'warn', // type Q = any | T
     // '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'warn', // no if (nullable_bool === true)
     // '@typescript-eslint/no-unnecessary-condition': 'warn', // no if (some_object)
-    '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
-    '@typescript-eslint/no-unnecessary-type-arguments': 'warn', // provided type argument equals the default
-    // Note: this rule seems like does not have the correct type checking behavior. before typescript-eslint has project reference support, don't use it.
     // '@typescript-eslint/no-unnecessary-type-assertion': 'warn', // non_nullable!
-    '@typescript-eslint/no-unnecessary-type-constraint': 'warn', // T extends any
     // '@typescript-eslint/no-useless-constructor': 'warn', // empty constructor
     // '@typescript-eslint/no-useless-empty-export': 'warn', // export {}
-    // '@typescript-eslint/no-redundant-type-constituents': 'warn', // type Q = any | T
-    // '@masknet/array-no-unneeded-flat-map': 'warn', // bans Array#flatMap((x) => x)
-    '@masknet/string-no-unneeded-to-string': 'warn', // useless .toString()
-    '@masknet/string-no-simple-template-literal': 'warn', // prefer simple string
+    // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
+    // Note: this rule seems like does not have the correct type checking behavior. before typescript-eslint has project reference support, don't use it.
 
     // Prefer modern things
     'prefer-const': 'warn',
-    // 'prefer-exponentiation-operator': 'warn', // **
-    // 'prefer-named-capture-group': 'warn', // RegEx
     'prefer-object-has-own': 'warn',
+    'unicorn/prefer-dispose': 'warn',
+    'unicorn/prefer-error-is-error': 'warn',
+    'unicorn/prefer-import-meta-properties': 'warn',
+    'unicorn/prefer-iterator-concat': 'warn',
+    'unicorn/prefer-uint8array-base64': 'warn',
+    'prefer-exponentiation-operator': 'warn', // **
+    // 'prefer-named-capture-group': 'warn', // RegEx
     // 'prefer-object-spread': 'warn', // { ... } than Object.assign
     // 'prefer-rest-params': 'warn',
 
-    '@typescript-eslint/no-this-alias': 'warn',
+    // Prefer modern things (web)
+    '@masknet/browser-prefer-location-assign': 'warn',
     '@masknet/jsx-no-class-component': 'error',
-    // '@masknet/type-no-number-constructor': 'warn',
-    // '@masknet/array-prefer-from': 'warn',
-    '@typescript-eslint/prefer-string-starts-ends-with': 'warn',
+    '@masknet/prefer-fetch': 'error',
+    '@typescript-eslint/no-for-in-array': 'warn',
+    '@typescript-eslint/no-this-alias': 'warn',
     '@typescript-eslint/prefer-for-of': 'warn',
     '@typescript-eslint/prefer-includes': 'warn',
-    '@typescript-eslint/no-for-in-array': 'warn',
-    // '@typescript-eslint/prefer-nullish-coalescing': 'warn',
     '@typescript-eslint/prefer-optional-chain': 'warn',
-    '@masknet/browser-prefer-location-assign': 'warn',
+    '@typescript-eslint/prefer-string-starts-ends-with': 'warn',
+    'unicorn/prefer-explicit-viewport-units': 'warn',
+    // '@masknet/array-prefer-from': 'warn',
     // '@masknet/no-unsafe-date': 'error', // use date-fns or Temporal instead
-    '@masknet/prefer-fetch': 'error',
+    // '@masknet/type-no-number-constructor': 'warn',
+    // '@typescript-eslint/prefer-nullish-coalescing': 'warn',
 
     // Better debug
-    // 'prefer-promise-reject-errors': 'warn', // Promise.reject(need_error)
     'symbol-description': 'warn', // Symbol(desc)
-    // '@eslint-react/no-missing-component-display-name': 'warn',
     'unicorn/catch-error-name': ['warn', { ignore: ['^err$'] }], // catch (err)
+    // '@eslint-react/no-missing-component-display-name': 'warn',
     // '@typescript-eslint/only-throw-error': 'warn', // no throw 'string'
+    // 'prefer-promise-reject-errors': 'warn', // Promise.reject(need_error)
 
     // API design
     // '@typescript-eslint/no-extraneous-class': 'error', // no class with only static members
-    // '@typescript-eslint/prefer-readonly': 'error',
     // '@typescript-eslint/prefer-readonly-parameter-types': 'error',
+    // '@typescript-eslint/prefer-readonly': 'error',
 
     // More readable code
-    // 'unicorn/comment-content': 'warn', // comment content should use corret spelling
-    // 'max-lines': ['warn', { max: 400 }],
-    // 'no-else-return': 'warn',
+    '@typescript-eslint/prefer-as-const': 'warn',
     'object-shorthand': 'warn',
     'prefer-numeric-literals': 'warn', // 0b111110111 === 503
     'prefer-regex-literals': 'warn', // RegEx
     'spaced-comment': ['warn', 'always', { line: { markers: ['/'] } }],
-    'unicorn/prefer-import-meta-properties': 'warn',
-    '@typescript-eslint/prefer-as-const': 'warn',
     // '@typescript-eslint/no-unnecessary-type-conversion': 'warn', // for code like str.toString()
+    // 'max-lines': ['warn', { max: 400 }],
+    // 'no-else-return': 'warn',
+    // 'unicorn/comment-content': 'warn', // comment content should use corret spelling
 
     // Consistency
-    yoda: 'warn',
-    'unicorn/relative-url-style': ['warn', 'always'], // prefer relative url starts with ./
+    '@masknet/prefer-early-return': 'warn',
     '@typescript-eslint/array-type': ['warn', { default: 'array-simple' }], // prefer T[] than Array<T>
-    // '@typescript-eslint/consistent-generic-constructors': 'warn', // prefer const map = new Map<string, number>() than generics on the left
     '@typescript-eslint/consistent-type-assertions': [
         'warn',
         { assertionStyle: 'as' /* objectLiteralTypeAssertions: 'never' */ },
     ], // prefer a as T than <T>a, and bans it on object literal
-    // '@typescript-eslint/consistent-type-definitions': 'warn', // prefer interface, also has better performance when type checking
     '@typescript-eslint/dot-notation': 'warn', // prefer a.b than a['b']
     '@typescript-eslint/no-array-constructor': 'warn',
+    '@typescript-eslint/prefer-reduce-type-parameter': 'warn',
+    'unicorn/relative-url-style': ['warn', 'always'], // prefer relative url starts with ./
+    // '@masknet/jsx-no-template-literal': 'warn',
+    // '@masknet/no-redundant-variable': 'warn',
+    // '@masknet/no-single-return': 'warn',
+    // '@typescript-eslint/consistent-generic-constructors': 'warn', // prefer const map = new Map<string, number>() than generics on the left
+    // '@typescript-eslint/consistent-type-definitions': 'warn', // prefer interface, also has better performance when type checking
     // '@typescript-eslint/non-nullable-type-assertion-style': 'warn', // prefer a! than a as T
     // '@typescript-eslint/prefer-function-type': 'warn',
-    '@typescript-eslint/prefer-reduce-type-parameter': 'warn',
     // '@typescript-eslint/sort-type-constituents': 'warn',
     // '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'always' }],
     // '@typescript-eslint/unified-signatures': 'warn', // prefer merging overload
-    '@masknet/prefer-early-return': 'warn',
-    // '@masknet/no-redundant-variable': 'warn',
-    // '@masknet/no-single-return': 'warn',
-    // '@masknet/jsx-no-template-literal': 'warn',
+    yoda: 'warn',
 
     // Naming convention
     // 'func-name-matching': 'warn',
@@ -394,22 +395,22 @@ const codeStyleRules = {
     // @eslint-react/naming-convention-ref-name
 
     // Bad practice
-    'no-multi-assign': 'warn', // a = b = c
-    // 'no-param-reassign': 'warn',
-    'no-return-assign': 'warn', // return x = expr
     '@typescript-eslint/default-param-last': 'warn', // (a, b = 1, c)
     '@typescript-eslint/no-dynamic-delete': 'error', // this usually means you should use Map/Set
-    /// Async functions / Promise bad practice
+    '@typescript-eslint/return-await': 'warn', // return await expr
+    'no-multi-assign': 'warn', // a = b = c
     'no-promise-executor-return': 'error', // new Promise(() => result)
+    'no-return-assign': 'warn', // return x = expr
     // '@typescript-eslint/no-floating-promises': 'warn', // unhandled promises
     // '@typescript-eslint/promise-function-async': 'warn', // avoid Zalgo
-    '@typescript-eslint/return-await': 'warn', // return await expr
+    // 'no-param-reassign': 'warn',
+    /// Async functions / Promise bad practice
 
     // No unused
     'tss-unused-classes/unused-classes': 'warn',
-    // 'unicorn/no-unused-properties': 'warn',
     // '@typescript-eslint/no-unused-expressions': 'warn',
     // '@typescript-eslint/no-unused-vars': 'warn',
+    // 'unicorn/no-unused-properties': 'warn',
 }
 
 /** @type {Partial<import('eslint/config').Config['rules']>} */
