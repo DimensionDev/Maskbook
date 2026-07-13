@@ -240,7 +240,7 @@ export function MaskTabList(props: MaskTabListProps) {
     // #region hide tab should up to first when chick
     const flexibleTabs = useMemo(() => {
         if (variant !== 'flexible') return null
-        return children?.sort((a, b) => {
+        return children?.toSorted((a, b) => {
             if (a.props.value === firstId) return -1
             if (b.props.value === firstId) return 1
             return 0

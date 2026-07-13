@@ -29,7 +29,7 @@ export function useSocialAddressesAll(
             )
 
             const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
+            const sorted = sorter && listOfAddress.length ? listOfAddress.toSorted(sorter) : listOfAddress
             return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
         },
     })

@@ -35,7 +35,7 @@ export const [getLanguage, setLanguage] = create(languageSettings)
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise
     const personas = (await queryPersonasDB({ hasPrivateKey: true }))
-        .sort((a, b) => (a.createdAt > b.createdAt ? 1 : 0))
+        .toSorted((a, b) => (a.createdAt > b.createdAt ? 1 : 0))
         .map((x) => x.identifier)
     const newVal = currentPersonaIdentifier.value || personas[0]
     if (!newVal) return

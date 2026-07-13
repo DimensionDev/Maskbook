@@ -80,7 +80,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
 
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
-            .sort((a, z) => {
+            .toSorted((a, z) => {
                 // mask token with position value
                 const aUSD = new BigNumber(a.value?.[CurrencyType.USD] || 0)
                 const zUSD = new BigNumber(z.value?.[CurrencyType.USD] || 0)

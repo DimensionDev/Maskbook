@@ -3,36 +3,6 @@ import type { Subscription } from 'use-subscription'
 import { None, type Option, Some } from 'ts-results-es'
 import type { ValueRef } from '@masknet/shared-base'
 
-export async function getSubscriptionCurrentValue<T>(
-    getSubscription: () => Subscription<T> | undefined,
-    retries = 3,
-): Promise<T | undefined> {
-    const getValue = () => {
-        return getSubscription()?.getCurrentValue()
-    }
-
-    const createReader = async () => {
-        try {
-            return getValue()
-        } catch (error: unknown) {
-            if (!(error instanceof Promise)) return
-            await error
-            return getValue()
-        }
-    }
-
-    const createReaders = Array.from<() => Promise<T | undefined>>({ length: retries }).fill(() => createReader())
-
-    for (const createReader of createReaders) {
-        try {
-            return await createReader()
-        } catch {
-            continue
-        }
-    }
-    return
-}
-
 export function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,

@@ -30,7 +30,7 @@ export async function getSupportedSites(options: SitesQueryOptions = {}): Promis
         .values()
         .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
         .toArray()
-        .sort((a, b) => (a.sortIndex || 0) - (b.sortIndex || 0))
+        .toSorted((a, b) => (a.sortIndex || 0) - (b.sortIndex || 0))
         .map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 

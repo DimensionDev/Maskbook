@@ -12,7 +12,7 @@ export async function buildContracts() {
     const abis = (await fs.readdir(ABIS_PATH))
         .filter((file) => file.endsWith('.json'))
         .map((file) => file.slice(0, -'.json'.length))
-        .sort((a, b) => a.localeCompare(b))
+        .toSorted((a, b) => a.localeCompare(b))
 
     await fs.writeFile(
         join(GENERATED_PATH, 'index.d.ts'),

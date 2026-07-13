@@ -26,7 +26,7 @@ export class SnapshotSearch {
         )
 
         return uniqBy(
-            resultsFromSpecificList.concat(filteredResults).sort((a, b) => b.followersCount - a.followersCount),
+            resultsFromSpecificList.concat(filteredResults).toSorted((a, b) => b.followersCount - a.followersCount),
             (x) => x.spaceId + x.twitterHandler,
         ).map((x) => ({
             ...x,

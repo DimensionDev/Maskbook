@@ -34,7 +34,7 @@ async function getAllWalletRecords() {
                 }
             }),
         )
-    ).sort(sortWallet)
+    ).toSorted(sortWallet)
     return wallets
 }
 

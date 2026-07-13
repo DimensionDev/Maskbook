@@ -73,7 +73,7 @@ class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
                     }),
                 )
             }, [])
-            .sort((a, b) => {
+            .toSorted((a, b) => {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return 0
@@ -181,7 +181,7 @@ function isHighRisk(tokenSecurity?: SecurityAPI.TokenSecurityType) {
                     x.level !== SecurityMessageLevel.Safe &&
                     !x.shouldHide(tokenSecurity) &&
                     x.level === SecurityMessageLevel.High,
-            ).sort((a, z) => {
+            ).toSorted((a, z) => {
                 if (a.level === SecurityMessageLevel.High) return -1
                 if (z.level === SecurityMessageLevel.High) return 1
                 return 0
@@ -194,7 +194,7 @@ function getMessageList(tokenSecurity: SecurityAPI.TokenSecurityType) {
         :   SecurityMessages.filter(
                 (x) =>
                     x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
-            ).sort((a, z) => {
+            ).toSorted((a, z) => {
                 if (a.level === SecurityMessageLevel.High) return -1
                 if (z.level === SecurityMessageLevel.High) return 1
                 return 0

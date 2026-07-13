@@ -42,6 +42,6 @@ export function useVotes(identifier: ProposalIdentifier, account?: string) {
                 timestamp: v.created,
             }
         })
-        .sort((a, b) => (isSameAddress(a.address, account) ? -1 : b.balance - a.balance))
+        .toSorted((a, b) => (isSameAddress(a.address, account) ? -1 : b.balance - a.balance))
         .filter((v) => v.balance > 0)
 }

@@ -136,7 +136,7 @@ function useEFPCardLink(enabled: boolean): EFPProfileLink | null {
                 if (!isEFPCard(card)) continue
                 for (const anchor of card.querySelectorAll<HTMLAnchorElement>('a[href]')) found.add(anchor.href)
             }
-            const next = [...found].sort()
+            const next = [...found].toSorted()
             // eslint-disable-next-line @eslint-react/set-state-in-effect
             setHrefs((prev) => (prev.length === next.length && prev.every((x, i) => x === next[i]) ? prev : next))
         }

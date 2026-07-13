@@ -28,7 +28,7 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
 
         this.networks = mapSubscription(this.networksStorage.subscription, (storage) => {
             // Newest to oldest
-            const customizedNetworks = Object.values(storage).sort(
+            const customizedNetworks = Object.values(storage).toSorted(
                 (a, z) => z.createdAt.getTime() - a.createdAt.getTime(),
             )
             const registeredChains = getRegisteredWeb3Chains(this.pluginID)

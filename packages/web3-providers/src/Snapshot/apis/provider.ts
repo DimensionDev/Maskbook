@@ -67,7 +67,7 @@ export class Snapshot {
                     choice: x,
                     score: proposal.scores[i],
                 }))
-                .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+                .toSorted((a, b) => (b.score ?? 0) - (a.score ?? 0))
 
             return {
                 ...proposal,

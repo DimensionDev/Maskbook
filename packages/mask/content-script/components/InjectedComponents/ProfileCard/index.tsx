@@ -156,7 +156,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                     const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
                     return isAllowed && shouldDisplay
                 })
-                .sort((a, z) => a.priority - z.priority)
+                .toSorted((a, z) => a.priority - z.priority)
         })
         return displayProfileTabs.map((x) => ({
             id: x.ID,

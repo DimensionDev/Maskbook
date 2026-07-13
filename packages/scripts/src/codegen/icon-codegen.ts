@@ -102,7 +102,7 @@ async function generateIcons() {
 
     // Process in order of files
     filePaths
-        .sort((a, z) => a.localeCompare(z, 'en-US'))
+        .toSorted((a, z) => a.localeCompare(z, 'en-US'))
         .forEach((path) => {
             const { name } = parsePath(path)
 
@@ -138,13 +138,13 @@ async function generateIcons() {
         const Ident = upperFirst(icon.replace(/\.(\w)/u, (_, c: string) => c.toUpperCase()))
         const nameField = JSON.stringify(icon)
         const variantsField = variant
-            .sort((a, b) => a.args[0].length - b.args[0].length)
+            .toSorted((a, b) => a.args[0].length - b.args[0].length)
             .map((x) => x.args)
             .map(([variant, url, jsx, isColorful]) => {
                 return (
                     '{' +
                     [
-                        variant.length === 0 ? null : `c: ${JSON.stringify(variant.sort())}`,
+                        variant.length === 0 ? null : `c: ${JSON.stringify(variant.toSorted())}`,
                         variant.length === 0 && jsx ? null : `u: () => ${url}`,
                         jsx ? `j: () => ${jsx}` : null,
                         isColorful ? 's: true' : null,

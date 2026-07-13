@@ -27,7 +27,7 @@ export async function hasLocalKey(identifier: ProfileIdentifier) {
 export async function queryOwnedProfilesInformation(network?: string): Promise<ProfileInformation[]> {
     let profiles: ProfileRecord[]
     await createPersonaDBReadonlyAccess(async (t) => {
-        const personas = (await queryPersonasDB({ hasPrivateKey: true }, t)).sort(
+        const personas = (await queryPersonasDB({ hasPrivateKey: true }, t)).toSorted(
             (a, b) => Number(a.updatedAt) - Number(b.updatedAt),
         )
         const ids = new Set(personas.flatMap((x) => x.linkedProfiles.keys().toArray()))

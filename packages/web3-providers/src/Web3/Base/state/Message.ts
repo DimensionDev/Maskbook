@@ -19,7 +19,7 @@ export abstract class MessageState<Request extends object, Response extends obje
         this.messages = mapSubscription(this.storage.subscription, (storage) => {
             return Object.values(storage)
                 .filter((x) => x.state === MessageStateType.NOT_DEPEND)
-                .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
+                .toSorted((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
         })
     }
 

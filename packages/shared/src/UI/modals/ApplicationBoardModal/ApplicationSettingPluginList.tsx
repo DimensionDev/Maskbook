@@ -97,7 +97,7 @@ export function ApplicationSettingPluginList() {
                     .filter((entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature)
                     .map((entry) => ({ entry, pluginID: ID }))
             })
-            .sort((a, b) => {
+            .toSorted((a, b) => {
                 return a.entry.appBoardSortingDefaultPriority! - b.entry.appBoardSortingDefaultPriority!
             })
     }, [plugins])

@@ -29,7 +29,7 @@ const codeMap = {
 const format = /(?<code>-?\d+)\s+(?<method>\w+_\w+)?\s+(?<message>.+)/g
 const interpolation = /\$\{(?<interpolation>\w+)\}/g
 let lastTopic = undefined
-for (const line of message.split('\n').sort()) {
+for (const line of message.split('\n').toSorted()) {
     if (line === '' || line.startsWith('#')) continue
     format.lastIndex = 0
     const match = format.exec(line)

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-array-fill-with-reference-type -- false positive */
 import { EMPTY_LIST, createIndicator, createPageable, type Pageable } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import {

@@ -133,7 +133,7 @@ export const TokenPicker = memo(function TokenPicker({
                 const balance = balances.get(x.address.toLowerCase())
                 return !balance ? x : { ...x, balance: rightShift(balance.balance, x.decimals).toFixed(0) }
             }) as Array<Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>> // typeof okxTokens
-            return assets.sort((a, z) => {
+            return assets.toSorted((a, z) => {
                 // native token
                 const isNativeTokenA = isSameAddress(a.address, getNativeTokenAddress(a.chainId))
                 if (isNativeTokenA) return -1

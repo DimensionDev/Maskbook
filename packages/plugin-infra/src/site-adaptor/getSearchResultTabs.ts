@@ -14,7 +14,7 @@ export function getSearchResultTabs(
         return plugins
             .flatMap((x) => x.SearchResultTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => x?.Utils?.shouldDisplay?.(result) ?? true)
-            .sort((a, z) => a.priority - z.priority)
+            .toSorted((a, z) => a.priority - z.priority)
     })
 
     return displayPlugins.map((x) => ({

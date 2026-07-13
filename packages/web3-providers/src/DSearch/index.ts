@@ -207,13 +207,13 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
             .filter((x) => {
                 return isSameAddress(address, x.address) && x.type === SearchResultType.FungibleToken
             })
-            .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+            .toSorted((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
         const normalTokensFiltered = normalTokens
             .filter((x) => {
                 return isSameAddress(address, x.address) && x.type === SearchResultType.FungibleToken
             })
-            .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+            .toSorted((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
         if (specificTokensFiltered.length > 0) return [specificTokensFiltered[0]]
 
@@ -274,7 +274,7 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                 }
             }
         }
-        return result.sort((a, b) => {
+        return result.toSorted((a, b) => {
             if (
                 a.rank &&
                 a.rank <= 200 &&

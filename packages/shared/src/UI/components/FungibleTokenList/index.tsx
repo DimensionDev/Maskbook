@@ -159,7 +159,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
         return uniqBy([...(nativeToken ? [nativeToken] : []), ...fungibleTokens, ...trustedFungibleTokens], (x) =>
             x.address.toLowerCase(),
-        ).sort((a, z) => {
+        ).toSorted((a, z) => {
             // trusted token
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
@@ -203,7 +203,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 // To avoid reduce re-render, merge balance into token, when value is `undefined` to represent loading
                 balance: fungibleTokensBalance[x.address],
             }))
-            .sort((a, z) => {
+            .toSorted((a, z) => {
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
                     if (a.chainId === chainId) return -1

@@ -41,7 +41,7 @@ export async function fixPluginsTSConfig() {
         )
     )
         .filter(Boolean)
-        .sort()
+        .toSorted()
         .map((path) => ({ path }))
     return writeFile(file, await prettier(JSON.stringify(config), 'json', 2), 'utf-8')
 }

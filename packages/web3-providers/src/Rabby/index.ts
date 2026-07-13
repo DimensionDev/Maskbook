@@ -53,7 +53,7 @@ class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
                     }),
                 )
             }, [])
-            .sort((a, b) => {
+            .toSorted((a, b) => {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return b.exposure_usd - a.exposure_usd

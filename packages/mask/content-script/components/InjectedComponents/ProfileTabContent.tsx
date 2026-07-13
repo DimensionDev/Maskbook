@@ -185,7 +185,7 @@ function Content(props: ProfileTabContentProps) {
                 .filter((x) => {
                     return x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 })
-                .sort((a, z) => a.priority - z.priority)
+                .toSorted((a, z) => a.priority - z.priority)
         })
 
         return displayProfileTabs.map((x) => ({

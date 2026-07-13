@@ -136,7 +136,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                             !account && isWalletConnectedRequired && !entry.entryWalletConnectedNotRequired,
                     }))
                 })
-                .sort((a, b) => {
+                .toSorted((a, b) => {
                     return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
                 })
                 .filter((x) => !!x.entry.RenderEntryComponent),
@@ -144,7 +144,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     )
     const recommendFeatureAppList = applicationList
         .filter((x) => x.entry.recommendFeature)
-        .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
+        .toSorted((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
     const unlistedEntries = useUnlistedEntries()
     const listedAppList = applicationList.filter(

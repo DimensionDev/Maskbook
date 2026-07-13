@@ -64,7 +64,7 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
         if (!txes?.length) return
 
         return txes
-            .sort((a, b) => new Date(b.block_timestamp).getTime() - new Date(a.block_timestamp).getTime())
+            .toSorted((a, b) => new Date(b.block_timestamp).getTime() - new Date(a.block_timestamp).getTime())
             .map((x) => {
                 return {
                     input: x.input,

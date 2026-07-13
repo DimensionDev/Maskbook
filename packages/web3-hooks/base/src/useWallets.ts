@@ -18,7 +18,7 @@ export function useWallets() {
                     updatedAt: new Date(w.updatedAt),
                 } as Wallet
             })
-            .sort((a, b) => {
+            .toSorted((a, b) => {
                 const timestampA = a.createdAt.getTime()
                 const timestampB = b.createdAt.getTime()
                 if (timestampA - timestampB > 10_000) {

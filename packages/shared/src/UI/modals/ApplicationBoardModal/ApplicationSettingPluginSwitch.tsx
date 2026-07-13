@@ -85,7 +85,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
         return plugins
             .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginID: ID })))
             .filter((x) => x.entry.category === 'dapp' && !x.entry.hiddenInList)
-            .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
+            .toSorted((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
     }, [plugins])
 
     const targetPluginRef = useRef<HTMLLIElement | null>(undefined)

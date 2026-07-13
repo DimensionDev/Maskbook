@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-array-fill-with-reference-type -- false positive */
 import { EMPTY_LIST, type Pageable, createPageable, createIndicator } from '@masknet/shared-base'
 import { attemptUntil, type Transaction as Web3Transaction } from '@masknet/web3-shared-base'
 import { ChainId, type GasOption, type SchemaType } from '@masknet/web3-shared-evm'

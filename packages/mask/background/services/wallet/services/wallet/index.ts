@@ -78,7 +78,7 @@ export async function getWalletPrimary(mnemonicId?: string) {
     const { Mnemonic } = api.StoredKeyType
     const list = wallets
         .filter((x) => x.storedKeyInfo?.type === Mnemonic && (mnemonicId ? mnemonicId === x.mnemonicId : true))
-        .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
+        .toSorted((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
     return first(list) ?? null
 }
 

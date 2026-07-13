@@ -32,7 +32,7 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
 
     const personas = compact(
         ownerPersonas
-            .sort((p) => (p.nickname.unwrapOr(false) ? -1 : 0))
+            .toSorted((p) => (p.nickname.unwrapOr(false) ? -1 : 0))
             .map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey).trim()),
     )
     const contacts = json.profiles

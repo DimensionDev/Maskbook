@@ -41,6 +41,7 @@ const disabledRules = {
     'no-redeclare': 'off',
     // TypeScript can do the check
     'getter-return': 'off',
+    'unicorn/no-array-callback-reference': 'off',
     // false positives
     'unicorn/require-number-to-fixed-digits-argument': 'off', // BigNumber
     'unicorn/no-useless-coercion': 'off',
@@ -54,7 +55,7 @@ const disabledRules = {
 
     // too strict
     'lingui/no-expression-in-message': 'off',
-    // 'unicorn/prefer-logical-operator-over-ternary': 'off', // in this project we have a lot of "" used (mostly in web3 code), and "" is falsy
+    'unicorn/no-array-reduce': 'off',
 
     // style, readibility and convention
     'unicorn/consistent-class-member-order': 'off',
@@ -71,10 +72,9 @@ const disabledRules = {
     '@tanstack/query/prefer-query-options': 'off',
     'unicorn/name-replacements': 'off', // better done in another PR
     'unicorn/prefer-number-coercion': 'off', // better done in another PR
+    'unicorn/consistent-boolean-name': 'off', // better done in another PR
+    'unicorn/consistent-compound-words': 'off', // better done in another PR
 
-    'unicorn/class-reference-in-static-methods': 'off',
-    'unicorn/consistent-boolean-name': 'off',
-    'unicorn/consistent-compound-words': 'off',
     'unicorn/consistent-conditional-object-spread': 'off',
     'unicorn/consistent-tuple-labels': 'off',
     'unicorn/explicit-length-check': 'off',
@@ -82,12 +82,6 @@ const disabledRules = {
     'unicorn/logical-assignment-operators': 'off',
     'unicorn/max-nested-calls': 'off',
     'unicorn/new-for-builtins': 'off',
-    'unicorn/no-array-callback-reference': 'off',
-    'unicorn/no-array-fill-with-reference-type': 'off',
-    'unicorn/no-array-from-fill': 'off',
-    'unicorn/no-array-reduce': 'off',
-    'unicorn/no-array-reverse': 'off',
-    'unicorn/no-array-sort': 'off',
     'unicorn/no-await-expression-member': 'off',
     'unicorn/no-break-in-nested-loop': 'off',
     'unicorn/no-computed-property-existence-check': 'off',
@@ -126,7 +120,6 @@ const disabledRules = {
     'unicorn/no-useless-recursion': 'off',
     'unicorn/no-useless-spread': 'off',
     'unicorn/number-literal-case': 'off',
-    // 'unicorn/numeric-separators-style': 'off',
     'unicorn/operator-assignment': 'off',
     'unicorn/prefer-add-event-listener-options': 'off',
     'unicorn/prefer-array-find': 'off',
