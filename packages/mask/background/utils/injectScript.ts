@@ -28,7 +28,6 @@ export const contentScriptList = [
     '/js/polyfill/lockdown.js',
     '/js/trusted-types.js',
     '/js/lockdown.js',
-    '/js/module-loader.js',
     '/cs.js',
 ]
 

@@ -122,7 +122,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
             return 'complete'
         } catch (error) {
-            if (error instanceof Error) {
+            if (Error.isError(error)) {
                 if (error.message === 'Chain currently not supported' || error.message === 'Invalid Request') {
                     showSnackbar(<Trans>Switch Network</Trans>, {
                         processing: false,

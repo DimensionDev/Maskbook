@@ -210,7 +210,7 @@ export const Component = memo(function SetPaymentPassword() {
                     navigate({ pathname: from || PopupRoutes.Wallet, search: params.toString() }, { replace: true })
                 }
             } catch (error) {
-                if (error instanceof Error) {
+                if (Error.isError(error)) {
                     setError('password', { message: error.message })
                 }
             }

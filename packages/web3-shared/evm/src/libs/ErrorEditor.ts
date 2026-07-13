@@ -24,7 +24,7 @@ export class ErrorEditor {
     private get internalError(): Error {
         {
             const rpcError = this.unknownError
-            if (rpcError instanceof Error && rpcError.message) return rpcError
+            if (Error.isError(rpcError) && rpcError.message) return rpcError
             if (rpcError && typeof (rpcError as Error).message === 'string')
                 return new Error((rpcError as Error).message)
             if (rpcError && typeof rpcError === 'string') return new Error(rpcError)
@@ -32,7 +32,7 @@ export class ErrorEditor {
 
         if (this.response && 'error' in this.response) {
             const responseError = this.response?.error
-            if (responseError instanceof Error) return responseError
+            if (Error.isError(responseError)) return responseError
             if (responseError && typeof responseError.message === 'string') return new Error(responseError.message)
             if (responseError && typeof responseError === 'string') return new Error(responseError)
         }

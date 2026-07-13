@@ -51,7 +51,7 @@ export function useFollow({ accountAddress, onSuccess, onFailed }: FollowOptions
                 const target = event.target as HTMLButtonElement
                 onSuccess?.(target.offsetWidth, target.offsetHeight)
             } catch (error) {
-                if (!(error instanceof Error)) return
+                if (!Error.isError(error)) return
                 const message = error.message
                 if (/Bad user input .* is already following/u.test(message)) {
                     showSingletonSnackbar(t`Follow Lens handle`, {

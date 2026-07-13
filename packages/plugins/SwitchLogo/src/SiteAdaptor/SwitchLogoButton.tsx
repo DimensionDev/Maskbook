@@ -70,9 +70,10 @@ export function SwitchLogoButton() {
         if (node.parentElement?.style.position !== 'relative') {
             node.parentElement?.style.setProperty('position', 'relative')
         }
-        // eslint-disable-next-line @masknet/browser-no-set-html
-        node.innerHTML =
-            logoType === SwitchLogoType.Classics && !isMinimalMode ? BlueBirdHTML : LetterHTML || defaultXIcon
+        // eslint-disable-next-line unicorn/no-unsafe-dom-html
+        node.setHTMLUnsafe(
+            logoType === SwitchLogoType.Classics && !isMinimalMode ? BlueBirdHTML : LetterHTML || defaultXIcon,
+        )
     }, [logoType, isMinimalMode, theme.palette.mode, theme.palette.primary.main])
 
     const onClick = useCallback(() => {

@@ -233,7 +233,6 @@ const avoidMistakeRules = {
     'no-template-curly-in-string': 'error', // "${expr}" looks like a bug
     'no-unmodified-loop-condition': 'error', // loop bug
     'no-unreachable-loop': 'error', // loop bug
-    'unicorn/no-invalid-file-input-accept': 'error', // <input type="file" accept="invalid" />
     // 'array-callback-return': 'error', // .map .some ... calls should have a return value
     eqeqeq: 'error', // ===
     'no-restricted-globals': [
@@ -318,9 +317,9 @@ const codeStyleRules = {
     'unicorn/prefer-dispose': 'warn',
     'unicorn/prefer-error-is-error': 'warn',
     'unicorn/prefer-import-meta-properties': 'warn',
-    'unicorn/prefer-iterator-concat': 'warn',
     'unicorn/prefer-uint8array-base64': 'warn',
     'prefer-exponentiation-operator': 'warn', // **
+    // 'unicorn/prefer-iterator-concat': 'warn', // no TypeScript .d yet
     // 'prefer-named-capture-group': 'warn', // RegEx
     // 'prefer-object-spread': 'warn', // { ... } than Object.assign
     // 'prefer-rest-params': 'warn',
@@ -335,7 +334,6 @@ const codeStyleRules = {
     '@typescript-eslint/prefer-includes': 'warn',
     '@typescript-eslint/prefer-optional-chain': 'warn',
     '@typescript-eslint/prefer-string-starts-ends-with': 'warn',
-    'unicorn/prefer-explicit-viewport-units': 'warn',
     // '@masknet/array-prefer-from': 'warn',
     // '@masknet/no-unsafe-date': 'error', // use date-fns or Temporal instead
     // '@masknet/type-no-number-constructor': 'warn',

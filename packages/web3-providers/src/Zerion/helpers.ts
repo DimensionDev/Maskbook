@@ -127,5 +127,7 @@ export const zerionChainIdResolver = createLookupTableResolver<string, ChainId |
         xdai: ChainId.xDai,
         zora: ChainId.Zora,
     },
-    () => {},
+    () => {
+        return undefined
+    },
 )

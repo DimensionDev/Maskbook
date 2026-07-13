@@ -71,7 +71,7 @@ export class ECKeyIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<ECKeyIdentifier> {
         if (!input) return None
         input = String(input)
-        if (input.startsWith('ec_key:')) return this.from(input) as Option<ECKeyIdentifier>
+        if (input.startsWith('ec_key:')) return super.from(input) as Option<ECKeyIdentifier>
         return None
     }
     static fromHexPublicKeyK256(hex: string | null | undefined): Option<ECKeyIdentifier> {
@@ -155,7 +155,7 @@ export class PostIVIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<PostIVIdentifier> {
         if (!input) return None
         input = String(input)
-        if (input.startsWith('post_iv:')) return this.from(input) as Option<PostIVIdentifier>
+        if (input.startsWith('post_iv:')) return super.from(input) as Option<PostIVIdentifier>
         return None
     }
     declare readonly network: string
@@ -210,7 +210,7 @@ export class PostIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<PostIdentifier> {
         if (!input) return None
         input = String(input)
-        if (input.startsWith('post:')) return this.from(input) as Option<PostIdentifier>
+        if (input.startsWith('post:')) return super.from(input) as Option<PostIdentifier>
         return None
     }
     declare readonly identifier: ProfileIdentifier
@@ -259,7 +259,7 @@ export class ProfileIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<ProfileIdentifier> {
         input = String(input)
         if (input === 'person:localhost/$unknown') return None
-        if (input.startsWith('person:')) return this.from(input) as Option<ProfileIdentifier>
+        if (input.startsWith('person:')) return super.from(input) as Option<ProfileIdentifier>
         return None
     }
     static of(network: string | undefined | null, userID: string | undefined | null): Option<ProfileIdentifier> {

@@ -1,5 +1,5 @@
 import { use, useDebugValue, useEffect, useSyncExternalStore } from 'react'
-import type { ValueRef, ValueRefJSON, ValueRefWithReady } from '@masknet/shared-base'
+import type { ValueRef, ValueRefWithReady } from '@masknet/shared-base'
 import { useQuery } from '@tanstack/react-query'
 
 function getServerSnapshot(): never {
@@ -33,12 +33,4 @@ export function useValueRefReactQuery<T>(key: `@@${string}`, ref: ValueRefWithRe
     }, [refetch, ref])
     useDebugValue(data)
     return data
-}
-
-/** @deprecated */
-export function useValueRefJSON<T extends object>(ref: ValueRefJSON<T>): Readonly<T> {
-    return useSyncExternalStore(
-        (f) => ref.addListener(f),
-        () => ref.asJSON,
-    )
 }
