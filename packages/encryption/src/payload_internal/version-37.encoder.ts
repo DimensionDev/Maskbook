@@ -40,7 +40,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
         const { ephemeralPublicKey, iv, ownersAESKeyEncrypted } = payload.encryption
         const keyMaterials: Partial<Record<EC_KeyCurve, Uint8Array>> = {}
         const subArr: Array<KeyMaterials | number | Uint8Array> = [1, ownersAESKeyEncrypted, iv, keyMaterials]
-        for (const [alg, key] of ephemeralPublicKey.entries()) {
+        for (const [alg, key] of ephemeralPublicKey) {
             const k = await exportCryptoKeyToRaw(key)
             if (k.isErr()) warn(key, k.isErr())
             else {

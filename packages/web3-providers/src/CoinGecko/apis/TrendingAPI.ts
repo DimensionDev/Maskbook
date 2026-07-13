@@ -109,7 +109,7 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
                         (x) => x.toLowerCase(),
                     ),
                 ),
-                source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
+                source_code_urls: Object.values(info.links.repos_url).flat(),
                 home_urls: info.links.homepage.filter(Boolean),
                 blockchain_urls: uniq(
                     [platform_url, ...info.links.blockchain_site].filter(Boolean).map((url) => url.toLowerCase()),

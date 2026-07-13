@@ -18,9 +18,9 @@ const registerOnStyleChange = (() => {
         callback(lastText)
     }
     function updateStyle() {
-        const cssText = Array.from(document.head.querySelectorAll('style'))
-            .map((style) => style.textContent || '')
-            .join('\n')
+        const cssText = Array.from(document.head.querySelectorAll('style'), (style) => style.textContent || '').join(
+            '\n',
+        )
         if (cssText === lastText) return
         lastText = cssText
         StyleChange.dispatchEvent(new Event('style'))

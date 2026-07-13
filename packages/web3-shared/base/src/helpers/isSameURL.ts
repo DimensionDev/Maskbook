@@ -19,7 +19,7 @@ export function isSameURL(a: string | URL | undefined, b: string | URL | undefin
     const paramsB = new URLSearchParams(urlB.search)
 
     // Compare the search parameters, allowing different sequence but same values
-    for (const [paramA, valueA] of paramsA.entries()) {
+    for (const [paramA, valueA] of paramsA) {
         const valueB = paramsB.get(paramA)
         if (valueA !== valueB) {
             return false
@@ -27,7 +27,7 @@ export function isSameURL(a: string | URL | undefined, b: string | URL | undefin
     }
 
     // Check if all the parameters in B are also in A
-    for (const [paramB] of paramsB.entries()) {
+    for (const [paramB] of paramsB) {
         if (!paramsA.has(paramB)) {
             return false
         }

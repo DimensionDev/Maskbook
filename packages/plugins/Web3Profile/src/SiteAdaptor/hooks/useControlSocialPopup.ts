@@ -48,7 +48,7 @@ export function useControlSocialPopup(holderRef: RefObject<HTMLDivElement | null
             hoverRef.current = false
             setActive(false)
         }
-        document.body.addEventListener('click', onClick, true)
+        document.body.addEventListener('click', onClick, { capture: true })
         return () => document.body.removeEventListener('click', onClick, true)
     }, [])
 

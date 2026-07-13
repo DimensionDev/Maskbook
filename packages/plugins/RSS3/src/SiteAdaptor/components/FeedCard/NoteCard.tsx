@@ -160,7 +160,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const { classes: mdClasses } = useMarkdownStyles()
 
     // You might see a collectible action on a note minting feed
-    const action = feed.actions.filter((x) => x.tag === Tag.Social)[0]
+    const action = feed.actions.find((x) => x.tag === Tag.Social)!
     const metadata = 'target' in action.metadata! ? action.metadata.target : action.metadata
 
     const type = action.type

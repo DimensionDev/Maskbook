@@ -106,11 +106,10 @@ export async function queryAvatarOutdatedDB(
 ) {
     const outdated: IdentifierWithAvatar[] = []
     for await (const { value } of t.objectStore('metadata')) {
-        if (deadline > value[attribute]) {
-            const id = Identifier.from(value.identifier)
-            if (id.isNone()) continue
-            if (id.value instanceof ProfileIdentifier || id.value instanceof ECKeyIdentifier) outdated.push(id.value)
-        }
+        if (!(deadline > value[attribute])) continue
+        const id = Identifier.from(value.identifier)
+        if (id.isNone()) continue
+        if (id.value instanceof ProfileIdentifier || id.value instanceof ECKeyIdentifier) outdated.push(id.value)
     }
     return outdated
 }

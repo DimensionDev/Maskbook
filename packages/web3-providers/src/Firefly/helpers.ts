@@ -121,8 +121,7 @@ function formatContent(cast: FireflyFarcasterAPI.Cast): Social.Post['metadata'][
     const attachments = embedUrls.filter((x) => {
         if (!x.url) return false
         const type = resolveEmbedMediaType(x.url, x.type)
-        if (!type) return false
-        return true
+        return !!type
     })
 
     if (attachments.length) {

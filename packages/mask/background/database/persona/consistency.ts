@@ -9,10 +9,7 @@ export async function assertPersonaDBConsistency(
     behavior: 'fix' | 'throw',
     ...[checkRange, t]: Parameters<typeof checkFullPersonaDBConsistency>
 ): Promise<Diagnosis[]> {
-    const diag: Diagnosis[] = []
-    for await (const w of checkFullPersonaDBConsistency(checkRange, t)) {
-        diag.push(w)
-    }
+    const diag: Diagnosis[] = await Array.fromAsync(checkFullPersonaDBConsistency(checkRange, t))
     if (diag.length) {
         const warn = 'PersonaDB is in the inconsistency state'
         console.warn(warn)

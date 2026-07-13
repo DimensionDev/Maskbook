@@ -11,8 +11,6 @@ export function useIsImageURL(url: string | undefined): AsyncState<boolean> {
 
         const { pathname } = new URL(resolvedURL)
         if (/\.(gif|svg|png|webp|jpg|jpeg)$/u.test(pathname)) return true
-        if (/\.(mp4|webm|mov|ogg|mp3|wav)$/u.test(pathname)) return false
-
-        return true
+        return !/\.(mp4|webm|mov|ogg|mp3|wav)$/u.test(pathname)
     }, [url])
 }

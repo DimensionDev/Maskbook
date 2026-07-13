@@ -38,8 +38,7 @@ function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is Pr
     // TODO: this should be read from the payload.
     const authorInPayload = currentPostBy
     const postAuthor = authorInPayload || currentPostBy
-    if (whoAmI !== postAuthor) return false
-    return true
+    return whoAmI === postAuthor
 }
 const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     props: React.PropsWithChildren<DecryptPostSuccessProps>,

@@ -26,8 +26,8 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
         const result = links
             .filter(Boolean)
             .map((x) => ({ nickname: x!.ariaLabel || x!.textContent?.trim(), id: getUserID(x!.href), dom: x }))
-            .filter((x) => x.id)
-        const { dom, id, nickname } = result[0] || {}
+            .find((x) => x.id)
+        const { dom, id, nickname } = result || {}
         const identifier = ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(null)
         if (identifier) {
             const currentProfile = getCurrentIdentifier()

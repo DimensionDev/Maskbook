@@ -124,7 +124,7 @@ export const Component = memo(function EditNetwork() {
         return createSchema(
             _,
             async (name) => {
-                return !networks.find((network) => network.name === name && network.ID !== id)
+                return !networks.some((network) => network.name === name && network.ID !== id)
             },
             networks,
             id,

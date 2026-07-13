@@ -12,15 +12,12 @@ import {
 export function toProfileInformation(profiles: ProfileRecord[]) {
     return {
         mustNotAwaitThisWithInATransaction: (async () => {
-            const result: ProfileInformation[] = []
-            for (const profile of profiles) {
-                result.push({
-                    identifier: profile.identifier,
-                    nickname: profile.nickname,
-                    linkedPersona: profile.linkedPersona,
-                    createAt: profile.createdAt,
-                })
-            }
+            const result: ProfileInformation[] = Array.from(profiles, (profile) => ({
+                identifier: profile.identifier,
+                nickname: profile.nickname,
+                linkedPersona: profile.linkedPersona,
+                createAt: profile.createdAt,
+            }))
 
             const avatars = await queryAvatarsDataURL(result.map((x) => x.identifier))
             result.forEach((x) => avatars.has(x.identifier) && (x.avatar = avatars.get(x.identifier)))

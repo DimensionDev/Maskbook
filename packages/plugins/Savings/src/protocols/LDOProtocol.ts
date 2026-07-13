@@ -9,7 +9,7 @@ import { EVMContract, EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
 import type { Address, ContractFunctionArgs, Hex } from 'viem'
 import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
-const MAX_DEADLINE = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+const MAX_DEADLINE = 0xff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ff_ffn
 export class LidoProtocol implements SavingsProtocol {
     readonly type = ProtocolType.Lido
 

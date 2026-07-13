@@ -306,7 +306,7 @@ function MetaFromJson(meta: string | undefined): Map<string, unknown> {
     return new Map(Object.entries(raw))
 }
 function MetaToJson(meta: ReadonlyMap<string, unknown>) {
-    return encodeArrayBuffer(encode(Object.fromEntries(meta.entries())))
+    return encodeArrayBuffer(encode(Object.fromEntries(meta)))
 }
 
 /**

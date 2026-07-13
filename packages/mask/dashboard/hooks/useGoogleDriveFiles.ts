@@ -19,7 +19,7 @@ export function useGoogleDriveFiles(client: GoogleDriveClient) {
         },
         getNextPageParam: () => '',
         select(data) {
-            return compact(data.pages.flatMap((x) => x))
+            return compact(data.pages.flat())
         },
     })
     return query

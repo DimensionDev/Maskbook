@@ -22,9 +22,7 @@ export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkP
 })
 
 export function useTagEnhancer(kind: 'hash' | 'cash', content: string) {
-    const plugin = useActivatedPluginsSiteAdaptor(false)
-        .filter((x) => x.enhanceTag)
-        .at(0)
+    const plugin = useActivatedPluginsSiteAdaptor(false).find((x) => x.enhanceTag)
 
     const onClick: React.EventHandler<React.MouseEvent<HTMLAnchorElement>> = useCallback(
         (event) => {

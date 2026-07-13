@@ -39,7 +39,7 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
         .map((x) => x.identifier)
     const newVal = currentPersonaIdentifier.value || personas[0]
     if (!newVal) return
-    if (personas.find((x) => x === newVal)) return newVal
+    if (personas.includes(newVal)) return newVal
     if (personas[0]) currentPersonaIdentifier.value = personas[0]
     return personas[0]
 }

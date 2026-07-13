@@ -256,9 +256,9 @@ function Content(props: ProfileTabContentProps) {
 
     useEffect(() => {
         const listener = () => setMenuOpen(false)
-        window.addEventListener('scroll', listener, false)
+        window.addEventListener('scroll', listener, { capture: false })
         // <ClickAwayListener /> not work, when it is out of shadow root.
-        window.addEventListener('click', listener, false)
+        window.addEventListener('click', listener, { capture: false })
 
         return () => {
             window.removeEventListener('scroll', listener, false)

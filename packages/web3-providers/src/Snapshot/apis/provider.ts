@@ -95,7 +95,7 @@ export class Snapshot {
 
     static async getCurrentAccountVote(proposalId: string, totalVotes: number, account: string) {
         const allSettled = await Promise.allSettled(
-            Array.from(new Array(Math.ceil(totalVotes / 1000))).map(async (x, i) => {
+            Array.from(new Array(Math.ceil(totalVotes / 1000)), async (x, i) => {
                 const queryCurrentAccountVote = `
                     query {
                         votes (

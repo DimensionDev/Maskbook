@@ -116,7 +116,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     const isConnected = useMemo(() => {
         if (!selectedPersona || !currentProfileIdentify) return false
         // Selected persona does not link the current site
-        const linked = selectedPersona.persona.linkedProfiles.find((x) =>
+        const linked = selectedPersona.persona.linkedProfiles.some((x) =>
             isSameProfile(x, currentProfileIdentify.identifier),
         )
         if (!linked) return false

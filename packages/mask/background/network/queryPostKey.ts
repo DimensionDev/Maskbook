@@ -36,8 +36,7 @@ export async function GUN_queryPostKey_version40(
         if (!x) return false
 
         const { encryptedKey, salt: encryptedKeyIV } = x
-        if (typeof encryptedKey !== 'string' || typeof encryptedKeyIV !== 'string') return false
-        return true
+        return typeof encryptedKey === 'string' && typeof encryptedKeyIV === 'string';
     }
 }
 
@@ -67,8 +66,7 @@ namespace Version38Or39 {
             )
                 .filter(isNonNull)
                 .filter(isObject)
-                .map(Object.keys)
-                .flat()
+                .flatMap(Object.keys)
                 .filter((x) => x !== '_'),
         )
         // ? In this step we get all keys in this category (gun2[postHash][keyHash])

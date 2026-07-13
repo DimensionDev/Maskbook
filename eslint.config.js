@@ -74,6 +74,7 @@ const disabledRules = {
     'unicorn/max-nested-calls': 'off',
     'unicorn/explicit-length-check': 'off',
     'unicorn/import-style': 'off',
+    'unicorn/prefer-await': 'off', // sometimes a .then/catch more readable
 
     // TODO: review
     '@tanstack/query/prefer-query-options': 'off',
@@ -82,13 +83,6 @@ const disabledRules = {
     'unicorn/consistent-boolean-name': 'off', // better done in another PR
     'unicorn/consistent-compound-words': 'off', // better done in another PR
 
-    // 'unicorn/no-duplicate-logical-operands': 'off',
-    // 'unicorn/no-duplicate-loops': 'off',
-    // 'unicorn/no-error-property-assignment': 'off',
-    // 'unicorn/no-for-loop': 'off',
-    // 'unicorn/no-global-object-property-assignment': 'off',
-    // 'unicorn/no-immediate-mutation': 'off',
-    // 'unicorn/no-incorrect-template-string-interpolation': 'off',
     'unicorn/no-lonely-if': 'off',
     'unicorn/no-negated-array-predicate': 'off',
     'unicorn/no-negated-comparison': 'off',
@@ -115,18 +109,6 @@ const disabledRules = {
     'unicorn/no-useless-spread': 'off',
     'unicorn/number-literal-case': 'off',
     'unicorn/operator-assignment': 'off',
-    'unicorn/prefer-add-event-listener-options': 'off',
-    'unicorn/prefer-array-find': 'off',
-    'unicorn/prefer-array-flat-map': 'off',
-    'unicorn/prefer-array-flat': 'off',
-    'unicorn/prefer-array-from-async': 'off',
-    'unicorn/prefer-array-from-map': 'off',
-    'unicorn/prefer-array-some': 'off',
-    'unicorn/prefer-await': 'off',
-    'unicorn/prefer-bigint-literals': 'off',
-    'unicorn/prefer-boolean-return': 'off',
-    'unicorn/prefer-continue': 'off',
-    'unicorn/prefer-direct-iteration': 'off',
     'unicorn/require-array-sort-compare': 'off',
     'unicorn/require-css-escape': 'off',
     'unicorn/switch-case-braces': 'off',
