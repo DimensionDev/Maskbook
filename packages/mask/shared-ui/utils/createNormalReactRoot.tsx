@@ -7,15 +7,15 @@ function cleanup() {
     // Make the document cleaner
     setTimeout(() => document.querySelectorAll('script').forEach((x) => x.remove()), 200)
 }
-function getContainer(container?: HTMLElement) {
-    if (!container) container = document.querySelector('#root') ?? void 0
+function getContainer(container?: Element | null) {
+    if (!container) container = document.querySelector('#root')
     if (!container) {
         container = document.createElement('div')
         document.body.append(container)
     }
     return container
 }
-export function createNormalReactRoot(jsx: JSX.Element, dom?: HTMLElement) {
+export function createNormalReactRoot(jsx: JSX.Element, dom?: Element | null) {
     cleanup()
     const container = getContainer(dom)
     return createRoot(container).render(

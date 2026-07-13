@@ -128,6 +128,7 @@ export const zerionChainIdResolver = createLookupTableResolver<string, ChainId |
         zora: ChainId.Zora,
     },
     () => {
+        // eslint-disable-next-line unicorn/no-useless-undefined
         return undefined
     },
 )
