@@ -97,10 +97,11 @@ export function WalletSignRequest(props: InteractionItemProps) {
 
     useEffect(() => {
         if (typeof message !== 'object') return
-        if (origin && !origin.startsWith('https:')) setIsDanger(true)
-        else if (message.invalidFields.filter((x) => x !== 'chainId' && x !== 'version').length || !message.parsed)
-            setIsDanger(true)
-        else setIsDanger(false)
+        const isDanger =
+            (origin && !origin.startsWith('https:')) ||
+            message.invalidFields.filter((x) => x !== 'chainId' && x !== 'version').length ||
+            !message.parsed
+        setIsDanger(!!isDanger)
     }, [message])
 
     return <SignRequestInfo message={message} rawMessage={rawMessage} origin={origin} />

@@ -56,6 +56,9 @@ const disabledRules = {
     // too strict
     'lingui/no-expression-in-message': 'off',
     'unicorn/no-array-reduce': 'off',
+    'unicorn/no-await-expression-member': 'off',
+    'unicorn/no-break-in-nested-loop': 'off',
+    'unicorn/no-computed-property-existence-check': 'off',
 
     // style, readibility and convention
     'unicorn/consistent-class-member-order': 'off',
@@ -82,11 +85,6 @@ const disabledRules = {
     'unicorn/logical-assignment-operators': 'off',
     'unicorn/max-nested-calls': 'off',
     'unicorn/new-for-builtins': 'off',
-    'unicorn/no-await-expression-member': 'off',
-    'unicorn/no-break-in-nested-loop': 'off',
-    'unicorn/no-computed-property-existence-check': 'off',
-    'unicorn/no-declarations-before-early-exit': 'off',
-    'unicorn/no-duplicate-if-branches': 'off',
     'unicorn/no-duplicate-logical-operands': 'off',
     'unicorn/no-duplicate-loops': 'off',
     'unicorn/no-error-property-assignment': 'off',

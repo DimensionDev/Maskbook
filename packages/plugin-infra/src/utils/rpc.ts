@@ -57,8 +57,8 @@ function startPluginRPCInternal(
     Promise.resolve(impl).catch((error) => {
         console.error('[@masknet/plugin-infra] Background service of plugin', pluginID, 'failed to start.', error)
     })
-    const delegate = getOrUpdateLocalImplementationHMR(() => impl, message[entry])
     if (cache.has(pluginID)) return
+    const delegate = getOrUpdateLocalImplementationHMR(() => impl, message[entry])
     cache.set(pluginID, delegate)
     starter(delegate, {
         key: pluginID,

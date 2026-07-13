@@ -121,7 +121,6 @@ export async function deriveWallet(name: string, defaultMnemonicId?: string) {
     const primaryWallet = await getWalletPrimary(defaultMnemonicId)
     if (!primaryWallet?.storedKeyInfo) throw new Error('Cannot find the primary wallet.')
 
-    let derivedTimes = 0
     let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
@@ -131,6 +130,7 @@ export async function deriveWallet(name: string, defaultMnemonicId?: string) {
         mnemonicId = await createMnemonicId(mnemonic)
     }
 
+    let derivedTimes = 0
     while (true) {
         derivedTimes += 1
 
@@ -191,10 +191,10 @@ export async function generateNextDerivationAddress() {
     const primaryWallet = await getWalletPrimary()
     if (!primaryWallet?.storedKeyInfo) throw new Error('Cannot find the primary wallet.')
 
-    let derivedTimes = 0
     let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
+    let derivedTimes = 0
     while (true) {
         derivedTimes += 1
 

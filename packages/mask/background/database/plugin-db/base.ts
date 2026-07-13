@@ -45,8 +45,8 @@ export function pluginDataHasValidKeyPath(value: unknown): value is InStore {
     try {
         if (typeof value !== 'object' || value === null) return false
         const id = Reflect.get(value, 'id')
-        const type = Reflect.get(value, 'type')
         if (typeof id !== 'string' && typeof id !== 'number') return false
+        const type = Reflect.get(value, 'type')
         if (typeof type !== 'string' && typeof type !== 'number') return false
         return true
     } catch {

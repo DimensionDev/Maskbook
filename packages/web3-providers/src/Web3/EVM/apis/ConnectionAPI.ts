@@ -88,11 +88,10 @@ export class ConnectionAPI
         amount: string,
         initial?: EVMConnectionOptions,
     ): Promise<string> {
-        const options = this.ConnectionOptions.fill(initial)
-
         // Native
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
+        const options = this.ConnectionOptions.fill(initial)
         // ERC20
         const contract = this.Contract.getERC20Contract(address)
         const tx = this.Contract.createTransactionRequest(

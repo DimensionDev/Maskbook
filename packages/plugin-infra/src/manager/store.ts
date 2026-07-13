@@ -39,9 +39,10 @@ export function registerPlugin(def: Plugin.DeferredDefinition) {
 function __meetRegisterRequirement(def: Plugin.Shared.Definition, currentChannel: BuildInfoFile['channel']) {
     // build variant check
     if (process.env.NODE_ENV === 'production') {
-        if (currentChannel === 'stable' && def.enableRequirement.target !== 'stable') {
-            return false
-        } else if (currentChannel === 'beta' && def.enableRequirement.target === 'insider') {
+        if (
+            (currentChannel === 'stable' && def.enableRequirement.target !== 'stable') ||
+            (currentChannel === 'beta' && def.enableRequirement.target === 'insider')
+        ) {
             return false
         }
     }

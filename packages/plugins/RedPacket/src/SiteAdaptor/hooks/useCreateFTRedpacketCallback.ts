@@ -102,11 +102,11 @@ export function useCreateFTRedpacketCallback(
 
     useEffect(() => {
         const contractAddress = getRedPacketLatestContractAddress(chainId)
-        const contractVersion = RED_PACKET_LATEST_VERSION
         if (!contractAddress) {
             onClose?.()
             return
         }
+        const contractVersion = RED_PACKET_LATEST_VERSION
         payload.current.contract_address = contractAddress
         payload.current.contract_version = contractVersion
         payload.current.network = EVMChainResolver.networkType(chainId)

@@ -47,11 +47,11 @@ function encodeMeta(tm: TypedMessage) {
 }
 function collectValue(val: any): any {
     try {
-        const type = typeof val
         if (val === undefined) {
             console.warn(`${HEAD}undefined converted to null.`)
             return null
         }
+        const type = typeof val
         if (type === 'number' || val === null || type === 'boolean' || type === 'string') return val
 
         if (type === 'bigint' || type === 'function' || type === 'symbol') {

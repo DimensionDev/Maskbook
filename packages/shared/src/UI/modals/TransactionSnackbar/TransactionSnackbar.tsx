@@ -175,10 +175,9 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
         }
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
         const title = format(computed?.title)
+        if (!title) return
         const message =
             errorInfo.error.isRecognized ? errorInfo.error.message : format(computed?.snackbar?.failedDescription)
-
-        if (!title) return
 
         if (
             title === 'Claim your Airdrop' &&

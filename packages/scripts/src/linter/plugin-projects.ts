@@ -33,8 +33,8 @@ export async function fixPluginsTSConfig() {
                 .map(async (folder) => {
                     const pkg = join(folder.parentPath, folder.name)
                     const root = join(pkg, 'tsconfig.json')
-                    const src = join(pkg, 'src', 'tsconfig.json')
                     if (await exists(root)) return './' + folder.name + '/tsconfig.json'
+                    const src = join(pkg, 'src', 'tsconfig.json')
                     if (await exists(src)) return './' + folder.name + '/src/tsconfig.json'
                     return null!
                 }),

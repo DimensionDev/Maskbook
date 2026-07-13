@@ -121,8 +121,8 @@ export function TradeProvider({ children }: PropsWithChildren) {
     const { data: liquidityList } = useLiquidityResources(chainId)
     const dexIds = useMemo(() => {
         if (!liquidityList?.length) return
-        const allIds = liquidityList.map((x) => x.id)
         if (!disabledDexIds.length) return
+        const allIds = liquidityList.map((x) => x.id)
         return allIds.filter((x) => !disabledDexIds.includes(x))
     }, [disabledDexIds, liquidityList])
 

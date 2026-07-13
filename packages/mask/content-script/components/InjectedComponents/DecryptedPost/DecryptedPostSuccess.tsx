@@ -30,14 +30,14 @@ interface DecryptPostSuccessProps {
 function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is ProfileIdentifier {
     const version = usePostInfoDetails.version()
     const sharedPublic = usePostInfoDetails.publicShared()
+    if (sharedPublic) return false
+    if (version !== -38 && version !== -37) return false
+    if (!whoAmI) return false
+
     const currentPostBy = usePostInfoDetails.author()
     // TODO: this should be read from the payload.
     const authorInPayload = currentPostBy
     const postAuthor = authorInPayload || currentPostBy
-
-    if (sharedPublic) return false
-    if (version !== -38 && version !== -37) return false
-    if (!whoAmI) return false
     if (whoAmI !== postAuthor) return false
     return true
 }

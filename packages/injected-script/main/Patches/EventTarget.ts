@@ -57,10 +57,9 @@ function addEventListener(
             listener.type === 'touchstart' ||
             listener.type === 'touchmove' ||
             listener.type === 'wheel' ||
-            listener.type === 'mousewheel'
+            listener.type === 'mousewheel' ||
+            isWindow(this)
         ) {
-            listener.passive = true
-        } else if (isWindow(this)) {
             listener.passive = true
         } else if (isNode(this)) {
             const nodeDocument = $.Node_ownerDocument(this)

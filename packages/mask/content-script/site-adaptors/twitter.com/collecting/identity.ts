@@ -26,8 +26,8 @@ function collectSelfInfo() {
 
 function getNickname(nickname?: string) {
     const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
-    let _nickname = ''
     if (!nicknameNode?.childNodes.length) return nickname
+    let _nickname = ''
 
     for (const child of nicknameNode.childNodes) {
         const ele = child as HTMLDivElement

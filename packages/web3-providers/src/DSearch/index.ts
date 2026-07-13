@@ -208,15 +208,13 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                 return isSameAddress(address, x.address) && x.type === SearchResultType.FungibleToken
             })
             .toSorted((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+        if (specificTokensFiltered.length > 0) return [specificTokensFiltered[0]]
 
         const normalTokensFiltered = normalTokens
             .filter((x) => {
                 return isSameAddress(address, x.address) && x.type === SearchResultType.FungibleToken
             })
             .toSorted((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
-
-        if (specificTokensFiltered.length > 0) return [specificTokensFiltered[0]]
-
         if (normalTokensFiltered.length > 0) return [normalTokensFiltered[0]]
 
         const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address)

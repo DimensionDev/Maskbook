@@ -117,11 +117,11 @@ export class __Event extends $unsafe.NewObject implements Event {
             }
             if (clearTargetsStruct) {
                 const { shadowAdjustedTarget, relatedTarget, touchTargetList } = clearTargetsStruct
-                if (isNode(shadowAdjustedTarget) && isShadowRoot($.Node_getRootNode(shadowAdjustedTarget))) {
-                    clearTargets = true
-                } else if (isNode(relatedTarget) && isShadowRoot($.Node_getRootNode(relatedTarget))) {
-                    clearTargets = true
-                } else if (touchTargetList.some((t) => isNode(t) && isShadowRoot($.Node_getRootNode(t)))) {
+                if (
+                    (isNode(shadowAdjustedTarget) && isShadowRoot($.Node_getRootNode(shadowAdjustedTarget))) ||
+                    (isNode(relatedTarget) && isShadowRoot($.Node_getRootNode(relatedTarget))) ||
+                    touchTargetList.some((t) => isNode(t) && isShadowRoot($.Node_getRootNode(t)))
+                ) {
                     clearTargets = true
                 }
             }

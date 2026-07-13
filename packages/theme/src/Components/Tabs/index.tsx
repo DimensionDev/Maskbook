@@ -202,6 +202,7 @@ export function MaskTabList(props: MaskTabListProps) {
             if (child === null) return null
             throw new TypeError(`Invalided child at ${index}, got ${typeof child}`)
         }
+        if (child.type !== Tab) return child
         const childProps: any = child.props
         const extra = {
             'aria-controls': getPanelId(context, childProps.value),
@@ -217,8 +218,6 @@ export function MaskTabList(props: MaskTabListProps) {
             },
             disabled: childProps.disabled,
         }
-
-        if (child.type !== Tab) return child
 
         if (variant === 'flexible') {
             Object.assign(extra, {

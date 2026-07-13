@@ -138,7 +138,6 @@ function tabClickHandler() {
 
 async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector(':scope div > div')
-    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
     // hide the activated indicator
@@ -152,6 +151,7 @@ async function hideTwitterActivatedContent() {
         tab.addEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (loseConnectionEle) return
 
     // hide the empty list indicator on the page
@@ -173,7 +173,6 @@ async function hideTwitterActivatedContent() {
 
 function resetTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector(':scope div > div')
-    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
 
     const tabList = searchProfileTabListSelector().evaluate()
@@ -185,6 +184,7 @@ function resetTwitterActivatedContent() {
         tab.removeEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (loseConnectionEle) return
 
     const eleEmpty = searchProfileEmptySelector().evaluate()

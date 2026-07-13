@@ -47,6 +47,9 @@ const IGNORE_ERRORS = [
 export class SentryAPI extends TelemetryProvider {
     constructor(env: BuildInfoFile) {
         super(Flags.sentry_sample_rate)
+        if (typeof Sentry === 'undefined') {
+            return
+        }
 
         const release =
             env.channel === 'stable' && process.env.NODE_ENV === 'production' ?
@@ -54,9 +57,6 @@ export class SentryAPI extends TelemetryProvider {
                     `mask-${env.COMMIT_HASH}`
                 :   `mask-${env.VERSION}-reproducible`
             :   undefined
-        if (typeof Sentry === 'undefined') {
-            return
-        }
 
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,

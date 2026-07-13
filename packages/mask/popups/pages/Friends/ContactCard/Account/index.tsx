@@ -37,9 +37,9 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Account = memo<AccountProps>(function Account({ userId, displayName, platform }) {
     const { classes } = useStyles()
-    const Icon = PlatformIconMap[platform]
 
     if (!userId) return null
+    const Icon = PlatformIconMap[platform]
     const name =
         platform === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4)
         : platform === NextIDPlatform.Farcaster && displayName ? displayName

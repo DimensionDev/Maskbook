@@ -73,10 +73,10 @@ export class RSS3 {
             handle,
         })
         const response = await fetchFromRSS3<RSS3NameServiceResponse>(url)
-        const suffix = handle.split('.').pop() as keyof typeof NameServiceToChainMap
 
         if ('error' in response) return
 
+        const suffix = handle.split('.').pop() as keyof typeof NameServiceToChainMap
         return {
             address: response.address,
             chainId: NameServiceToChainMap[suffix],

@@ -64,16 +64,16 @@ function UserCellBadgesSlot({ userId }: Props) {
     const { classes, cx } = useStyles()
 
     const component = useMemo(() => {
+        if (userId.includes('/')) return null
+        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
+        if (!identifier) return null
+
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.Badges?.UI?.Content,
             undefined,
             createRootElement,
         )
-        if (userId.includes('/')) return null
-        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
-        if (!identifier) return null
-
         return (
             <Component
                 identity={identifier}

@@ -91,10 +91,10 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
 
     for (const post of posts) {
         const identifier = PostIVIdentifier.from(post.identifier)
+        if (identifier.isNone()) continue
+
         const postBy = ProfileIdentifier.from(post.postBy)
         const encryptBy = ECKeyIdentifier.from(post.encryptBy)
-
-        if (identifier.isNone()) continue
         const interestedMeta = new Map<string, any>()
         const normalizedPost: NormalizedBackup.PostBackup = {
             identifier: identifier.value,

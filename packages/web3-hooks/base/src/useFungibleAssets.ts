@@ -102,8 +102,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
                 }
 
                 const isMaskTokenA = isSameAddress(a.address, Utils.getMaskTokenAddress(a.chainId))
-                const isMaskTokenZ = isSameAddress(z.address, Utils.getMaskTokenAddress(z.chainId))
                 if (aUSD.isPositive() && isMaskTokenA) return -1
+                const isMaskTokenZ = isSameAddress(z.address, Utils.getMaskTokenAddress(z.chainId))
                 if (zUSD.isPositive() && isMaskTokenZ) return 1
 
                 // token balance

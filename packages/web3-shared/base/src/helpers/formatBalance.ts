@@ -31,8 +31,8 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, opt
 
     if (isFixed) {
         const value = leftShift(balance, decimals)
-        const minimum = scale10(1, -fixedDecimals)
         if (value.eq(0)) return '0'
+        const minimum = scale10(1, -fixedDecimals)
         if (isLessThan(value, minimum)) return '<' + minimum.toFixed()
         const result = trimZero(value.toFixed(fixedDecimals))
         return hasSeparators ? addThousandSeparators(result) : result

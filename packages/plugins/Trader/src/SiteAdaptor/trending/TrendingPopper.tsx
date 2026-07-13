@@ -59,12 +59,12 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
     const location = useLocation()
     useRenderPhraseCallbackOnDepsChange(() => setActive(false), [location.state?.key, location.href])
 
+    if (!type) return null
+
     const badgeBoundingBottom = badgeBounding?.bottom || 0
     const badgeBoundingLeft = badgeBounding?.left || 0
     const badgeBoundingWidth = badgeBounding?.width || 0
     const positionY_Type = badgeBoundingBottom < 550 ? 'bottom' : 'top'
-
-    if (!type) return null
 
     return (
         <ClickAwayListener
