@@ -24,6 +24,7 @@ export const structuredCloneFromSafeReal: <T extends object>(value: T) => T =
     :   globalThis.structuredClone || globalThis.Object
 export const unwrapXRayVision: <const T extends object>(value: T) => T =
     typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper.unwrap.bind(XPCNativeWrapper) : window.Object
+// eslint-disable-next-line unicorn/new-for-builtins
 const empty: NullPrototype = unwrapXRayVision(structuredCloneFromSafe({ __proto__: null }))
 window.Object.freeze(empty)
 // TODO: use the original info?

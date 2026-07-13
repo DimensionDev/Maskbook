@@ -18,7 +18,7 @@ function createWorkerContext(
     return {
         ...createSharedContext(pluginID, signal),
         getDatabaseStorage() {
-            return storage || (storage = createPluginDatabase(pluginID, signal))
+            return (storage ||= createPluginDatabase(pluginID, signal))
         },
     }
 }

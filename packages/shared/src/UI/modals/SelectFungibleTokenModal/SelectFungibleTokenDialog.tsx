@@ -52,7 +52,7 @@ const useStyles = makeStyles<StyleProps, 'container' | 'sidebar' | 'tokenList'>(
     },
     tokenList: {},
     content: {
-        ...(compact ? { minWidth: 552 } : {}),
+        ...(compact && { minWidth: 552 }),
         padding: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',

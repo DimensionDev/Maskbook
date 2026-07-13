@@ -47,7 +47,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
                 width: 36,
                 height: 36,
             },
-            ...(iconFilterColor ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})` } : {}),
+            ...(iconFilterColor && { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})` }),
         },
         arrow: {
             color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,

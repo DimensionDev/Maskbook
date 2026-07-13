@@ -36,31 +36,27 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        ...(loading ?
-            {
-                '&:before': {
-                    content: "''",
-                    boxSizing: 'border-box',
-                    position: 'absolute',
-                    top: -5,
-                    left: -5,
-                    width: 56,
-                    height: 56,
-                    borderRadius: '50%',
-                    border: `2px solid ${theme.palette.maskColor.main}`,
-                    borderTopColor: theme.palette.maskColor.second,
-                    animation: 'spinner 2s linear infinite',
-                },
-            }
-        :   {}),
-
-        ...(timeout ?
-            {
-                border: `2px solid ${theme.palette.maskColor.danger}`,
+        ...(loading && {
+            '&:before': {
+                content: "''",
+                boxSizing: 'border-box',
+                position: 'absolute',
+                top: -5,
+                left: -5,
+                width: 56,
+                height: 56,
                 borderRadius: '50%',
-                padding: 10,
-            }
-        :   {}),
+                border: `2px solid ${theme.palette.maskColor.main}`,
+                borderTopColor: theme.palette.maskColor.second,
+                animation: 'spinner 2s linear infinite',
+            },
+        }),
+
+        ...(timeout && {
+            border: `2px solid ${theme.palette.maskColor.danger}`,
+            borderRadius: '50%',
+            padding: 10,
+        }),
     },
 }))
 

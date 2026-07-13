@@ -171,12 +171,11 @@ export function TransactionRequest(props: InteractionItemProps) {
 
                 return {
                     ...x,
-                    ...(gasConfig ?
+                    ...(gasConfig &&
                         mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
                             if (key === 'gasCurrency' || !value) return
                             return toHex(value)
-                        })
-                    :   {}),
+                        })),
                     gasLimit: toHex(gasConfig?.gas ?? x.gas),
                     chainId: toHex(x.chainId),
                     nonce: toHex(x.nonce),

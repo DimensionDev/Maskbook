@@ -213,7 +213,7 @@ export async function queryPersonaByProfileDB(
     query: ProfileIdentifier,
     t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecord | null> {
-    t = t || createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
+    t ||= createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
     const x = await t.objectStore('profiles').get(query.toText())
     if (!x?.linkedPersona) return null
     return queryPersonaDB(
@@ -231,7 +231,7 @@ export async function queryPersonaDB(
     t?: PersonasTransaction<'readonly'>,
     isIncludeLogout?: boolean,
 ): Promise<PersonaRecord | null> {
-    t = t || createTransaction(await db(), 'readonly')('personas')
+    t ||= createTransaction(await db(), 'readonly')('personas')
     const x = await t.objectStore('personas').get(query.toText())
     if (x && (isIncludeLogout || !x.hasLogout)) return personaRecordOutDB(x)
     return null
@@ -247,7 +247,7 @@ export async function queryPersonasDB(
     t?: PersonasTransaction<'readonly'>,
     isIncludeLogout?: boolean,
 ): Promise<PersonaRecord[]> {
-    t = t || createTransaction(await db(), 'readonly')('personas')
+    t ||= createTransaction(await db(), 'readonly')('personas')
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas')) {
         const out = personaRecordOutDB(each.value)
@@ -268,7 +268,7 @@ export async function queryPersonasDB(
 export async function queryPersonasWithPrivateKey(
     t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecordWithPrivateKey[]> {
-    t = t || createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
+    t ||= createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
     const records: PersonaRecord[] = []
     records.push(
         ...(await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))).map(
@@ -368,7 +368,7 @@ export async function safeDeletePersonaDB(
     id: PersonaIdentifier,
     t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<boolean> {
-    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles', 'relations')
+    t ||= createTransaction(await db(), 'readwrite')('personas', 'profiles', 'relations')
     const r = await queryPersonaDB(id, t)
     if (!r) return true
     if (r.linkedProfiles.size !== 0) return false
@@ -387,7 +387,7 @@ export async function queryProfileDB(
     id: ProfileIdentifier,
     t?: ProfileTransaction<'readonly'>,
 ): Promise<ProfileRecord | null> {
-    t = t || createTransaction(await db(), 'readonly')('profiles')
+    t ||= createTransaction(await db(), 'readonly')('profiles')
     const result = await t.objectStore('profiles').get(id.toText())
     if (result) return profileOutDB(result)
     return null
@@ -402,7 +402,7 @@ export async function queryProfilesDB(
     },
     t?: ProfileTransaction<'readonly'>,
 ): Promise<ProfileRecord[]> {
-    t = t || createTransaction(await db(), 'readonly')('profiles')
+    t ||= createTransaction(await db(), 'readonly')('profiles')
     const result: ProfileRecord[] = []
 
     if (isEmpty(query)) {
@@ -503,7 +503,7 @@ export async function detachProfileDB(
     identifier: ProfileIdentifier,
     t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
-    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles', 'relations')
+    t ||= createTransaction(await db(), 'readwrite')('personas', 'profiles', 'relations')
     const profile = await queryProfileDB(identifier, t)
     if (!profile?.linkedPersona) return
 
@@ -526,7 +526,7 @@ export async function attachProfileDB(
     data: LinkedProfileDetails,
     t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
-    t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles', 'relations')
+    t ||= createTransaction(await db(), 'readwrite')('personas', 'profiles', 'relations')
     const profile =
         (await queryProfileDB(identifier, t)) ||
         (await createProfileDB({ identifier, createdAt: new Date(), updatedAt: new Date() }, t)) ||
@@ -565,7 +565,7 @@ export async function createRelationDB(
 
 /** @internal */
 export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
-    t = t || createTransaction(await db(), 'readonly')('relations')
+    t ||= createTransaction(await db(), 'readonly')('relations')
     const records: RelationRecord[] = []
 
     for await (const each of t.objectStore('relations')) {

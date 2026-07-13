@@ -9,7 +9,7 @@ export const TypedMessageTupleRender = memo(function TypedMessageTupleRender(pro
     if (useMemo(() => hasCircular(props.items), [props.items])) return null
 
     return (
-        <span style={Object(props.meta?.get(unstable_STYLE_META))}>
+        <span style={new Object(props.meta?.get(unstable_STYLE_META))}>
             {props.items.map((message, index) => (
                 <TypedMessageRenderInline key={index} {...props} message={message} />
             ))}

@@ -35,7 +35,7 @@ class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
                 number: blockNumber + index,
                 baseFeePerGas: nth(result.baseFeePerGas, index) ?? 0n,
                 gasUsedRatio: nth(result.gasUsedRatio, index) || 0,
-                priorityFeePerGas: nth(result.reward, index) ?? Array(3).fill(0n),
+                priorityFeePerGas: nth(result.reward, index) ?? new Array(3).fill(0n),
             })
             index += 1
         }

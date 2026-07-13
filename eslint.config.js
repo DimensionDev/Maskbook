@@ -70,6 +70,9 @@ const disabledRules = {
     'unicorn/no-useless-else': 'off', // useless else sometime is more readable than early return.
     'unicorn/prefer-switch': 'off', // switch is bad
     'unicorn/prefer-includes-over-repeated-comparisons': 'off', // not worth
+    'unicorn/max-nested-calls': 'off',
+    'unicorn/explicit-length-check': 'off',
+    'unicorn/import-style': 'off',
 
     // TODO: review
     '@tanstack/query/prefer-query-options': 'off',
@@ -78,13 +81,10 @@ const disabledRules = {
     'unicorn/consistent-boolean-name': 'off', // better done in another PR
     'unicorn/consistent-compound-words': 'off', // better done in another PR
 
-    'unicorn/consistent-conditional-object-spread': 'off',
-    'unicorn/consistent-tuple-labels': 'off',
-    'unicorn/explicit-length-check': 'off',
-    'unicorn/import-style': 'off',
-    'unicorn/logical-assignment-operators': 'off',
-    'unicorn/max-nested-calls': 'off',
-    'unicorn/new-for-builtins': 'off',
+    // 'unicorn/consistent-conditional-object-spread': 'off',
+    // 'unicorn/consistent-tuple-labels': 'off',
+    // 'unicorn/logical-assignment-operators': 'off',
+    // 'unicorn/new-for-builtins': 'off',
     'unicorn/no-duplicate-logical-operands': 'off',
     'unicorn/no-duplicate-loops': 'off',
     'unicorn/no-error-property-assignment': 'off',

@@ -60,7 +60,7 @@ export class StyleSheet {
                 )
             }
 
-            this._alreadyInsertedOrderInsensitiveRule = this._alreadyInsertedOrderInsensitiveRule || !isImportRule
+            this._alreadyInsertedOrderInsensitiveRule ||= !isImportRule
         }
         this.implementation.insert(rule)
     }

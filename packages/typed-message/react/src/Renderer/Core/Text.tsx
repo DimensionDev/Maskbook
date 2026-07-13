@@ -7,7 +7,7 @@ export const TypedMessageTextRender = memo(function TypedMessageTextRender(props
     const { content } = props
     return (
         <>
-            <RenderTextFragment style={Object(props.meta?.get(unstable_STYLE_META))} text={content} />
+            <RenderTextFragment style={new Object(props.meta?.get(unstable_STYLE_META))} text={content} />
             {useMetadataRender(props)}
         </>
     )

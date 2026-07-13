@@ -143,7 +143,7 @@ export class SolanaConnectionAPI
         // In the token picker UI, if balance of a token is undefined, then it
         // will keep loading. We set it 0 to walk around that, since fetching is done.
         listOfAddress.forEach((address) => {
-            records[address] = records[address] ?? '0'
+            records[address] ??= '0'
         })
         return records
     }
