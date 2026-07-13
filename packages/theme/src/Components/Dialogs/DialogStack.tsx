@@ -57,7 +57,8 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
     useLayoutEffect(() => setParent(selfID, parentID), [parentID])
 
     useLayoutEffect(() => {
-        open ? push(selfID) : pop(selfID)
+        if (open) push(selfID)
+        else pop(selfID)
         return () => pop(selfID)
     }, [open])
 

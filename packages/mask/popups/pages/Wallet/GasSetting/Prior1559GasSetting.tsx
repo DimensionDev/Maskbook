@@ -227,7 +227,8 @@ export const Prior1559GasSetting = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             if (!value) return
             const config = value.payload.params!.map((param) => ({
-                ...new Object(param),
+                // eslint-disable-next-line unicorn/new-for-builtins
+                ...Object(param),
                 gas: toHex(data.gasLimit),
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toFixed(0)),
             }))

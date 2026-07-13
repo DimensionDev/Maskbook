@@ -265,7 +265,7 @@ export function resolveCrossOriginURL<T extends string | undefined>(url: T) {
     return `${CORS_HOST}?${encodeURIComponent(url)}`
 }
 
-export function resolveResourceURL<T extends string | undefined>(url: T) {
+export function resolveResourceURL(url: string | undefined) {
     if (!url) return url
     if (isLocaleResource(url)) return resolveLocalURL(url)
     if (isArweaveResource(url)) return resolveArweaveURL(url)

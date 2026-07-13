@@ -79,9 +79,9 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, (err) => {
+        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, (err: unknown) => {
             console.warn(err)
-            onReject(err)
+            onReject(new Error('Failed to share with selected people.', { cause: err }))
         })
     }, [handleClose, people, selectedProfiles, onSelect])
 

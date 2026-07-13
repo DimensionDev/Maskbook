@@ -88,7 +88,7 @@ function createScope(
         for (const [key, value] of Object.entries(defaultValues)) {
             if (value === removed) continue
             // trigger the auto sync
-            storage[key].initialized
+            void storage[key].initialized
         }
     })
 

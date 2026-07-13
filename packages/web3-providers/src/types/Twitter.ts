@@ -112,10 +112,12 @@ export namespace TwitterBaseAPI {
     export interface ResponseError {
         code: number
         extensions: ResponseError
+        // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
         kind: 'Validation' | string
         message: string
         /** Error constructor */
         name: string
+        // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
         source: 'Client' | string
         tracking: {
             trace_id: string

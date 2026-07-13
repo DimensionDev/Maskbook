@@ -60,7 +60,7 @@ export class ConnectionAPI
 
     override async removeWallet(
         address: string,
-        password?: string | undefined,
+        password?: string  ,
         initial?: EVMConnectionOptions,
     ): Promise<void> {
         await this.Request.request<void>(

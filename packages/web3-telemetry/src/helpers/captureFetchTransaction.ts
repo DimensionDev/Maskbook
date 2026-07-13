@@ -92,10 +92,11 @@ export async function captureFetchTransaction(
                 response_redirected: response?.redirected,
             },
         })
-        options?.status &&
+        if (options?.status) {
             span.setStatus({
                 code: options.status === 'succeed' ? 1 : 2,
             })
+        }
         span.end(options?.endAt)
     })
 }

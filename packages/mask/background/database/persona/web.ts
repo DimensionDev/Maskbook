@@ -205,7 +205,7 @@ export async function consistentPersonaDBWriteAccess(
 /** @internal */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('personas').add(personaRecordToDB(record))
-    record.privateKey && MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
+    if (record.privateKey) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 /** @internal */
@@ -318,7 +318,7 @@ export async function updatePersonaDB(
         updatedAt: nextRecord.updatedAt ?? new Date(),
     })
     await t.objectStore('personas').put(next)
-    ;(next.privateKey || old.privateKey) && MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
+    if (next.privateKey || old.privateKey) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 /** @internal */
@@ -355,7 +355,7 @@ export async function deletePersonaDB(
     if (confirm !== 'delete even with private' && r.privateKey)
         throw new TypeError('Cannot delete a persona with a private key')
     await t.objectStore('personas').delete(id.toText())
-    r.privateKey && MaskMessages.events.ownPersonaChanged.sendToAll()
+    if (r.privateKey) MaskMessages.events.ownPersonaChanged.sendToAll()
 }
 /**
  * Delete a Persona

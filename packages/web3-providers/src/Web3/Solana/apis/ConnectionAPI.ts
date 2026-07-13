@@ -51,12 +51,12 @@ export class SolanaConnectionAPI
     private Transfer
     private ConnectionOptions
 
-    getAccount(initial?: SolanaConnectionOptions | undefined): Promise<string> {
+    getAccount(initial?: SolanaConnectionOptions  ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.account)
     }
 
-    getChainId(initial?: SolanaConnectionOptions | undefined): Promise<ChainId> {
+    getChainId(initial?: SolanaConnectionOptions  ): Promise<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.chainId)
     }
@@ -164,7 +164,7 @@ export class SolanaConnectionAPI
         return this.Web3.getConnection(initial).getTransaction(id)
     }
 
-    async getTransactionReceipt(): Promise<TransactionReceipt | null> {
+    async getTransactionReceipt(): Promise<null> {
         return null
     }
 

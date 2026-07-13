@@ -276,7 +276,7 @@ export const Confirm = memo(function Confirm() {
 
         await approveMutation.mutateAsync()
         try {
-            const hash = await sendSwap().catch((err) => {
+            const hash = await sendSwap().catch((err: unknown) => {
                 const message = (err as Error).message
                 if (message.includes('Transaction was rejected!')) return null
                 throw err

@@ -64,7 +64,7 @@ export async function encryptTo(
             encryptBy: usingPersona,
             ...collectInterestedMeta(content),
         })
-    })().catch((error) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
+    })().catch((error: unknown) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
 
     if (target.type === 'E2E') {
         if (version === -37) {

@@ -50,7 +50,7 @@ function getPromiseWithStatus<T>(promise: Promise<T>): StatusExposedPromise<T> {
                 value: { value },
             })
         },
-        (error) => {
+        (error: unknown) => {
             Object.defineProperties(_, {
                 status: { value: 'rejected' },
                 reason: { value: error },

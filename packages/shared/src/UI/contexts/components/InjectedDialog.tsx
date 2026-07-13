@@ -218,7 +218,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 maxWidth="sm"
                 onClose={(event, reason) => {
                     if (reason === 'backdropClick' && disableBackdropClick) return
-                    props.isOnBack ? onClose?.() : closeBothCompositionDialog()
+                    if (props.isOnBack) onClose?.()
+                    else closeBothCompositionDialog()
                 }}
                 BackdropProps={{
                     transitionDuration: 0,

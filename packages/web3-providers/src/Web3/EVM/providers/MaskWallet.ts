@@ -108,7 +108,7 @@ export class MaskWalletProvider extends BaseHostedProvider {
         await this.context.addWallet(ImportSource.WalletRPC, wallet.address, wallet)
     }
 
-    override async removeWallet(address: string, password?: string | undefined): Promise<void> {
+    override async removeWallet(address: string, password?: string  ): Promise<void> {
         if (isSameAddress(this.hostedAccount, address)) await this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
         await this.context.removeWallet(address, password)

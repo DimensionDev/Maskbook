@@ -28,7 +28,9 @@ export function SettingsBoard(props: SettingsBoardProps) {
         onChange?.({
             transaction: (transaction ?
                 {
+                    // eslint-disable-next-line @typescript-eslint/no-misused-spread
                     ...transaction,
+                    // eslint-disable-next-line @typescript-eslint/no-misused-spread
                     ...transactionOptions,
                 }
             :   undefined) as Web3Helper.TransactionAll | undefined,

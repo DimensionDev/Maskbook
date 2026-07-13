@@ -1,4 +1,5 @@
- 
+/* eslint-disable prefer-rest-params */
+
 import { $, $safe, $unsafe } from '../intrinsic.js'
 import { PatchDescriptor_NonNull } from '../utils.js'
 
@@ -81,7 +82,7 @@ export class __DataTransfer extends $unsafe.NewObject implements DataTransfer {
         return object.#types
     }
     // #endregion
-    clearData(format?: string | undefined): void {
+    clearData(format?: string  ): void {
         const object = $unsafe.unwrapXRayVision(this)
         if (!(#items in object)) return $.apply($.DataTransferPrototypeDesc.clearData.value!, this, arguments)
         return

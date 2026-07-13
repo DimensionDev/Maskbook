@@ -236,7 +236,7 @@ interface ApplicationEntryStatusContextProps {
     shouldDisplayTooltipHint: boolean | undefined
     currentPersonaPublicKey: string | undefined
     currentSiteConnectedPersonaPublicKey: string | undefined
-    personaAction: ((target?: string | undefined, position?: 'center' | 'top-right' | undefined) => void) | undefined
+    personaAction: ((target?: string  , position?: 'center' | 'top-right'  ) => void) | undefined
     isLoading: boolean
 }
 

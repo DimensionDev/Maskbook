@@ -9,9 +9,9 @@ Object.assign(globalThis, {
 initialize(globalThis as typeof window)
 if (process.env.NODE_ENV === 'development') {
     // @ts-expect-error conditionally import
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-call
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { injectIntoGlobalHook } = require('react-refresh/runtime')
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+     
     injectIntoGlobalHook(globalThis)
 }
 

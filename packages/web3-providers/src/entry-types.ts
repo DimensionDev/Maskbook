@@ -24,7 +24,6 @@ export * from './types/Twitter.js'
 export type * from './types/RedPacket.js'
 export type * from './types/NameService.js'
 export type * from './types/Wallet.js'
-export type * from './types/Storage.js'
 export type * from './types/Snapshot.js'
 
 // Provider Implementations

@@ -231,7 +231,7 @@ export const Component = memo(function EditNetwork() {
         const data = getValues()
         const result = await schema.parseAsync(data).then(
             () => true,
-            (err) => checkZodError((err as Error).message),
+            (err: unknown) => checkZodError((err as Error).message),
         )
         setIsChecking(false)
         if (!result) return

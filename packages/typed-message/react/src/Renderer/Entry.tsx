@@ -38,7 +38,8 @@ export function TypedMessageRenderInline(props: RenderProps) {
             <span
                 data-kind={message.type}
                 ref={(ref) => {
-                    ref && Object.assign(ref, { message })
+                    if (!ref) return
+                    Object.assign(ref, { message })
                 }}>
                 <Render {...message} />
             </span>

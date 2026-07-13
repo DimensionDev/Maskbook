@@ -33,11 +33,13 @@ function getPluginRPCInternal(
 }
 const cache = new Map<string, object>()
 const cacheGenerator = new Map<string, object>()
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export function getPluginRPC<T>(pluginID: string): T {
     if (isEnvironment(Environment.ManifestBackground))
         startPluginRPC(pluginID, new AbortController().signal, Object.create(null))
     return getPluginRPCInternal(cache, pluginID, AsyncCall, '_') as T
 }
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export function getPluginRPCGenerator<T>(pluginID: string): T {
     if (isEnvironment(Environment.ManifestBackground))
         startPluginGeneratorRPC(pluginID, new AbortController().signal, Object.create(null))
@@ -54,7 +56,7 @@ function startPluginRPCInternal(
 ) {
     if (!isEnvironment(Environment.ManifestBackground)) throw new Error('Cannot start RPC in the UI.')
     const message = getPluginMessage<RPCMessage>(pluginID, DOMAIN_RPC)
-    Promise.resolve(impl).catch((error) => {
+    Promise.resolve(impl).catch((error: unknown) => {
         console.error('[@masknet/plugin-infra] Background service of plugin', pluginID, 'failed to start.', error)
     })
     if (cache.has(pluginID)) return

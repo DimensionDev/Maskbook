@@ -75,13 +75,9 @@ export class GoogleDriveClient {
         interactive?: boolean,
     ): Promise<Response> {
         const token = await this.getToken(interactive)
-        const response = await fetch(input, {
-            ...init,
-            headers: {
-                ...init?.headers,
-                Authorization: `Bearer ${token}`,
-            },
-        })
+        const headers = new Headers(init?.headers)
+        headers.set('Authorization', `Bearer ${token}`)
+        const response = await fetch(input, { ...init, headers })
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
                 await this.logout()

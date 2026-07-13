@@ -84,7 +84,7 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async removeWallet(address: string, password?: string | undefined, initial?: EVMConnectionOptions): Promise<void> {
+    async removeWallet(address: string, password?: string  , initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
@@ -218,7 +218,7 @@ export class EVMConnectionReadonlyAPI
         )
     }
 
-    createAccount(initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
+    createAccount(initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction>  ): Account<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         const account = createAccount()
         return {

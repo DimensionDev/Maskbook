@@ -16,7 +16,7 @@ type Raw<T> = Plugin.InjectUIRaw<T>
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => readonly PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-    PluginWrapperComponent?: ComponentType<PluginWrapperComponentProps<PluginDefinition>> | undefined,
+    PluginWrapperComponent?: ComponentType<PluginWrapperComponentProps<PluginDefinition>>  ,
     rootElement?: 'div' | 'span' | (() => HTMLDivElement | HTMLSpanElement),
 ) {
     function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {
@@ -37,7 +37,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         }
         return element
     }
-    function SinglePluginWithinErrorBoundary({ plugin, props }: { plugin: PluginDefinition; props: unknown }) {
+    function SinglePluginWithinErrorBoundary({ plugin, props }: { plugin: PluginDefinition; props: object }) {
         const t = usePluginTransField()
         const ui = pickInjectorHook(plugin)
         return usePluginWrapperProvider(
@@ -70,7 +70,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
     })
 }
 
-function Main<T>(props: { data: T; UI: Inject<any> }) {
+function Main(props: { data: object; UI: Inject<any> }) {
     const { data, UI: Render } = props
     if (isRawInjectHook(Render)) return <RawHookRender UI={Render} data={data} />
     return <Render {...data} />

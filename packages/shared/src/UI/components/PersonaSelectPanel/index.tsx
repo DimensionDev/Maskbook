@@ -6,7 +6,6 @@ import { attachProfile, openDashboard, setCurrentPersonaIdentifier } from '@mask
 import {
     CrossIsolationMessages,
     DashboardRoutes,
-    EMPTY_LIST,
     isSamePersona,
     isSameProfile,
     type PersonaIdentifier,
@@ -74,7 +73,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     const [selectedPersona, setSelectedPersona] = useState<PersonaItem>()
 
     const currentProfileIdentify = useLastRecognizedIdentity()
-    const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
+    const { personas, isPending, error, refetch } = useConnectedPersonas()
 
     useRenderPhraseCallbackOnDepsChange(() => {
         if (!currentPersonaIdentifier) {

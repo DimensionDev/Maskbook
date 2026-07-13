@@ -106,15 +106,13 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
             if (snackbarKeyRef.current !== undefined)
-                Sniffings.is_popup_page ?
-                    closePopupSnackbar(snackbarKeyRef.current)
-                :   closeSnackbar(snackbarKeyRef.current)
+                if (Sniffings.is_popup_page) closePopupSnackbar(snackbarKeyRef.current)
+                else closeSnackbar(snackbarKeyRef.current)
             snackbarKeyRef.current =
                 Sniffings.is_popup_page ? showPopupSnackbar(title, options) : showSnackbar(title, options)
             return () => {
-                Sniffings.is_popup_page ?
-                    closePopupSnackbar(snackbarKeyRef.current)
-                :   closeSnackbar(snackbarKeyRef.current)
+                if (Sniffings.is_popup_page) closePopupSnackbar(snackbarKeyRef.current)
+                else closeSnackbar(snackbarKeyRef.current)
             }
         },
         [showSnackbar, closeSnackbar, showPopupSnackbar, closePopupSnackbar],

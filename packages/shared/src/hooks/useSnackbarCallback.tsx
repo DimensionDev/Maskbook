@@ -45,13 +45,13 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     onSuccess?.(res)
                     return res
                 },
-                (error) => {
-                    showSnackbar(errorText ?? `Error: ${error.message || error}`, {
+                (error: unknown) => {
+                    showSnackbar(errorText ?? `Error: ${(error as Error).message || error}`, {
                         key,
                         preventDuplicate: true,
                         variant: 'error',
                     })
-                    onError?.(error)
+                    onError?.(error as Error)
                     throw error
                 },
             ),
@@ -95,13 +95,13 @@ export function usePopupSnackbarCallback<P extends (...args: any[]) => Promise<T
                     onSuccess?.(res)
                     return res
                 },
-                (error) => {
-                    showSnackbar(error.message, {
+                (error: unknown) => {
+                    showSnackbar((error as Error).message, {
                         key,
                         preventDuplicate: true,
                         variant: 'error',
                     })
-                    onError?.(error)
+                    onError?.(error as Error)
                     throw error
                 },
             ),

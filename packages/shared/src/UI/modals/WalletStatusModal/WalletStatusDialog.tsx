@@ -27,7 +27,7 @@ interface WalletStatusDialogProps {
     setHidden: (isHidden: boolean) => void
 }
 
-export function WalletStatusDialog({ open, onClose, isHidden = false, setHidden }: WalletStatusDialogProps) {
+export function WalletStatusDialog({ open, onClose, isHidden, setHidden }: WalletStatusDialogProps) {
     const { classes } = useStyles()
 
     // #region remote controlled dialog logic

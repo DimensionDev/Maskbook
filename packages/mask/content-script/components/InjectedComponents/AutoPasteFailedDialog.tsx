@@ -82,7 +82,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                             horizontal: 'center',
                                         },
                                     })
-                                    data.image ?? onClose()
+                                    if (!data.image) onClose()
                                 }}>
                                 <Trans>Copy text</Trans>
                             </Button>

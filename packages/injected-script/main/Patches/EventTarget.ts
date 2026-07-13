@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 /* eslint-disable unicorn/no-this-outside-of-class */
 import { PatchDescriptor } from '../utils.js'
 import { $, $safe, isNode, isWindow } from '../intrinsic.js'
@@ -25,7 +26,7 @@ function addEventListener(
     this: EventTarget,
     type: string,
     callback: EventListenerOrEventListenerObject | null,
-    options?: boolean | AddEventListenerOptions | undefined,
+    options?: boolean | AddEventListenerOptions  ,
 ) {
     const original = $.EventTargetPrototypeDesc.addEventListener.value!
     if (
@@ -104,7 +105,7 @@ function removeEventListener(
     this: EventTarget,
     type: string,
     callback: EventListenerOrEventListenerObject | null,
-    options?: boolean | EventListenerOptions | undefined,
+    options?: boolean | EventListenerOptions  ,
 ) {
     const original = $.EventTargetPrototypeDesc.removeEventListener.value!
     if (!CapturingEvents.has(type)) return $.apply(original, this, arguments)
@@ -144,7 +145,7 @@ export function RemoveListener(listener: EventListenerDescriptor, listenerList: 
 function normalizeAddEventListenerArgs(
     type: string,
     callback: EventListenerOrEventListenerObject | null,
-    options?: boolean | AddEventListenerOptions | undefined,
+    options?: boolean | AddEventListenerOptions  ,
 ): EventListenerDescriptor {
     // https://dom.spec.whatwg.org/#event-flatten-more
     const capture = $.Boolean(typeof options === 'boolean' ? options : (options?.capture ?? false))

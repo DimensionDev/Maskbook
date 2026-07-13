@@ -91,7 +91,8 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
     const currentValue = useRef(value)
     const [inputRef, setInputRef] = useState<{ focus(): void } | null>(null)
     useEffect(() => {
-        props.autoFocus && inputRef?.focus()
+        if (!props.autoFocus) return
+        inputRef?.focus()
     }, [props.autoFocus, inputRef])
 
     currentValue.current = value

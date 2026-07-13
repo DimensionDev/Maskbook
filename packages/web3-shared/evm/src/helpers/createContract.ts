@@ -43,11 +43,11 @@ export function createContractWithAddress<TAbi extends Abi>(
     }
 }
 
-export function normalizeFunctionArgs<
-    TAbi extends Abi,
-    TFunctionName extends ContractFunctionName<TAbi>,
-    TArgs extends ContractFunctionArgs<TAbi, AbiStateMutability, TFunctionName>,
->(args: TArgs, abi: TAbi, functionName: TFunctionName): unknown[] {
+export function normalizeFunctionArgs<TAbi extends Abi, TFunctionName extends ContractFunctionName<TAbi>>(
+    args: ContractFunctionArgs<TAbi, AbiStateMutability, TFunctionName>,
+    abi: TAbi,
+    functionName: TFunctionName,
+): unknown[] {
     const functionAbi = abi.find((item): item is AbiFunction => item.type === 'function' && item.name === functionName)
     return (args as readonly unknown[]).map((arg, index) => normalizeFunctionArg(arg, functionAbi?.inputs?.[index]))
 }

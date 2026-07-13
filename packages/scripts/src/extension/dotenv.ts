@@ -18,7 +18,7 @@ export function applyDotEnv(flags: BuildFlags) {
         if (parsed.manifest !== '3' && !Object.values(ManifestFile).includes(parsed.manifest as ManifestFile)) {
             throw new TypeError(`Invalid manifest version "${parsed.manifest}" specified in the env file`)
         }
-        flags.manifestFile ??= parseManifest(parsed.manifest as ManifestFile | '3')
+        flags.manifestFile ??= parseManifest(parsed.manifest as ManifestFile)
     }
     flags.hmr ??= parseBoolean(parsed.hmr)
     flags.devtools ??= parseBoolean(parsed.devtools)
@@ -31,7 +31,7 @@ export function applyDotEnv(flags: BuildFlags) {
     flags.csp ??= parseBoolean(parsed.csp)
     flags.sourceMapHideFrameworks ??= parseBoolean(parsed.sourceMapHideFrameworks)
 }
-export function parseManifest(manifest: '3' | 3 | undefined | ManifestFile) {
+export function parseManifest(manifest: 3 | undefined | ManifestFile) {
     if (manifest === 3 || manifest === '3') return ManifestFile.ChromiumMV3
     if (typeof manifest === 'string') return manifest
     return ManifestFile.ChromiumMV3

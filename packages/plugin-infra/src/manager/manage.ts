@@ -185,7 +185,7 @@ export function createManager<
                 resolved.set(id, (await _).default)
 
                 console.log('[HMR] Plugin', id, 'hot reloaded.')
-                isActivated(id) && setTimeout(() => activatePlugin(id), 200)
+                if (isActivated(id)) setTimeout(() => activatePlugin(id), 200)
                 stopPlugin(id)
             })
         }

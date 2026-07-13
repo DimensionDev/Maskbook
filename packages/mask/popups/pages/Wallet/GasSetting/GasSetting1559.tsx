@@ -268,7 +268,8 @@ export const GasSetting1559 = memo(() => {
             const config = value.payload.params!.map((param) =>
                 param === 'latest' ? param : (
                     {
-                        ...new Object(param),
+                        // eslint-disable-next-line unicorn/new-for-builtins
+                        ...Object(param),
                         gas: toHex(data.gasLimit),
                         maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                         maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),

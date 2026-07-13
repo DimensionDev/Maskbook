@@ -1,4 +1,5 @@
- 
+/* eslint-disable prefer-rest-params */
+
 import { $, $safe, $unsafe, isDocument, isNode, isShadowRoot, isWindow } from '../intrinsic.js'
 import { PatchDescriptor, PatchDescriptor_NonNull } from '../utils.js'
 import { __DataTransfer, __DataTransferItemList } from './DataTransfer.js'
@@ -229,7 +230,7 @@ export class __Event extends $unsafe.NewObject implements Event {
             if (listener.once) {
                 $.removeEventListener(event.#currentTarget!, listener.type, listener.callback!, listener.capture)
                 const list = CapturedListeners.get(event.#currentTarget!)
-                list && RemoveListener(listener, list)
+                if (list) RemoveListener(listener, list)
             }
             // Legacy TODO: Let global be ...
             // Legacy TODO: Let currentEvent be ...
@@ -319,7 +320,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         return null
     }
     declare isTrusted: boolean
-    constructor(type: string, eventInitDict?: EventInit | undefined) {
+    constructor(type: string, eventInitDict?: EventInit  ) {
         super()
         this.#type = type
         this.#bubbles = eventInitDict?.bubbles || false
@@ -523,7 +524,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         event.#cancelable = cancelable
     }
     static UIEvent = class UIEvent extends __Event {
-        constructor(type: string, eventInitDict?: UIEventInit | undefined) {
+        constructor(type: string, eventInitDict?: UIEventInit  ) {
             super(type, eventInitDict)
             $.setPrototypeOf(this, $.UIEventPrototype)
             this.#detail = eventInitDict?.detail || 0
@@ -578,7 +579,7 @@ export class __Event extends $unsafe.NewObject implements Event {
     }
     static ClipboardEvent = class ClipboardEvent extends __Event implements ClipboardEvent {
         #clipboardData: DataTransfer | null
-        constructor(type: string, eventInitDict?: (ClipboardEventInit & { __proto__: null }) | undefined) {
+        constructor(type: string, eventInitDict?: (ClipboardEventInit & { __proto__: null })  ) {
             super(type, eventInitDict)
             this.#clipboardData = eventInitDict?.clipboardData || new __DataTransfer(__DataTransferItemList.from())
             $.setPrototypeOf(this, $.ClipboardEventPrototype)
@@ -590,7 +591,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         }
     }
     static InputEvent = class InputEvent extends __Event.UIEvent {
-        constructor(type: string, eventInitDict?: (InputEventInit & { __proto__: null }) | undefined) {
+        constructor(type: string, eventInitDict?: (InputEventInit & { __proto__: null })  ) {
             super(type, eventInitDict)
             $.setPrototypeOf(this, $.InputEventPrototype)
             this.#data = eventInitDict?.data || null

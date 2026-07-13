@@ -32,7 +32,7 @@ export class ValueRef<T> {
 }
 
 export class ValueRefWithReady<T> extends ValueRef<T> {
-    constructor(value?: T | undefined, isEqual: ValueComparer<T> = defaultComparer) {
+    constructor(value?: T  , isEqual: ValueComparer<T> = defaultComparer) {
         // this is unsafe. we assigned T | undefined to T
         super(value!, isEqual)
         const { promise, resolve } = Promise.withResolvers<void>()

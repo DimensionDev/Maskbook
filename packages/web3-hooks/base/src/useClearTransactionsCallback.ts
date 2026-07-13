@@ -3,7 +3,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from './useContext.js'
 import { useWeb3State } from './useWeb3State.js'
 
-export function useClearTransactionsCallback<T extends NetworkPluginID>(pluginID?: T) {
+export function useClearTransactionsCallback(pluginID?: NetworkPluginID) {
     const { account, chainId } = useChainContext()
     const { Transaction } = useWeb3State(pluginID)
 

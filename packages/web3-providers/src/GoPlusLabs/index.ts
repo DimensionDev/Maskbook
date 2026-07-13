@@ -85,6 +85,7 @@ export const GoPlusLabs = {
     async getTokenSecurity(chainId: ChainId, addresses: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
+            // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
             message: 'OK' | string
             result: Record<
                 string,
@@ -108,6 +109,7 @@ export const GoPlusLabs = {
         if (chainId !== 'solana' && chainId !== 'tron' && !isValidChainId(chainId)) return
         const response = await fetchJSON<{
             code: 0 | 1
+            // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
             message: 'OK' | string
             result: SecurityAPI.AddressSecurity
         }>(
@@ -131,6 +133,7 @@ export const GoPlusLabs = {
     async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
         const { code, result } = await fetchJSON<{
             code: 0 | 1
+            // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
             message: 'OK' | string
             result: SupportedChainResponse[]
         }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/supported_chains'))

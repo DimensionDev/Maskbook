@@ -158,7 +158,7 @@ function Content(props: ProfileTabContentProps) {
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
-        data: socialAccounts = EMPTY_LIST,
+        data: socialAccounts,
         isPending: loadingSocialAccounts,
         error: loadSocialAccounts,
         refetch: retrySocialAccounts,
@@ -250,7 +250,7 @@ function Content(props: ProfileTabContentProps) {
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
-            data.type && setProfileTabType(data.type)
+            if (data.type) setProfileTabType(data.type)
         })
     }, [currentVisitingUserId])
 

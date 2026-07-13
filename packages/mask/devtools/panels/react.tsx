@@ -59,7 +59,7 @@ function syncSavedPreferences(runInContentScript: boolean) {
         __REACT_DEVTOOLS_BROWSER_THEME__: browser.devtools.panels.themeName === 'dark' ? 'dark' : 'light',
     }
     const data = JSON.stringify(obj)
-    devtoolsEval(runInContentScript)`
+    void devtoolsEval(runInContentScript)`
         Object.assign(window, ${data});
         undefined;
     `
@@ -82,14 +82,14 @@ export async function startReactDevTools(signal: AbortSignal) {
     const bridge = createBridge(null!, wall)
     bridge.addListener('reloadAppForProfiling', () => {
         setLocalStorage('React::DevTools::supportsProfiling', 'true')
-        __eval`
+        void __eval`
             sessionStorage.setItem('React::DevTools::reloadAndProfile', 'true')
             sessionStorage.setItem('React::DevTools::recordChangeDescriptions', 'true')
             window.location.reload();
         `
     })
     bridge.addListener('syncSelectionToNativeElementsPanel', () => {
-        __eval`
+        void __eval`
             if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
                 inspect(__REACT_DEVTOOLS_GLOBAL_HOOK__.$0)
             }
@@ -132,7 +132,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         if (rendererID !== null) {
             bridge.send('viewAttributeSource', { id, path, rendererID })
             setTimeout(() => {
-                __eval`
+                void __eval`
                     window.$attribute && inspect($attribute)
                 `
             }, 100)
@@ -222,15 +222,15 @@ export async function startReactDevTools(signal: AbortSignal) {
         const root = createRoot(container)
         document.body.append(container)
         uninstallLast?.()
-        componentsWindow && removeDisabled(componentsWindow)
-        profilerWindow && removeDisabled(profilerWindow)
+        if (componentsWindow) removeDisabled(componentsWindow)
+        if (profilerWindow) removeDisabled(profilerWindow)
         root.render(<Host />)
         signal.addEventListener(
             'abort',
 
             () => {
-                componentsWindow && showDisabled(componentsWindow)
-                profilerWindow && showDisabled(profilerWindow)
+                if (componentsWindow) showDisabled(componentsWindow)
+                if (profilerWindow) showDisabled(profilerWindow)
                 uninstallLast = () => {
                     flushSync(() => root.unmount())
                     container.remove()
@@ -312,7 +312,7 @@ function setEditorPreference() {
         setLocalStorage(editorURL, JSON.stringify(preset))
     }
 }
-function getLocalStorage<T = string>(key: string, defaultValue?: T | undefined): T | undefined {
+function getLocalStorage<T = string>(key: string, defaultValue?: T  ): T | undefined {
     try {
         // eslint-disable-next-line no-restricted-globals
         const item = localStorage.getItem(key)

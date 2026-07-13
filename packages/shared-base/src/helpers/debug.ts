@@ -10,7 +10,7 @@ class Opaque {
             },
             value,
         }
-        this.#DebugOnlyValue
+        void this.#DebugOnlyValue
         Object.setPrototypeOf(this, null)
         Object.freeze(this)
     }

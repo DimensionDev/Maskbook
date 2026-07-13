@@ -86,7 +86,8 @@ export function PriceChart(props: PriceChartProps) {
                             viewBox={`0 0 ${DEFAULT_DIMENSION.width} ${DEFAULT_DIMENSION.height}`}
                             preserveAspectRatio="xMidYMid meet"
                             onClick={() => {
-                                stats.length && openWindow(coin?.platform_url)
+                                if (!stats.length) return
+                                openWindow(coin?.platform_url)
                             }}
                         />
                     :   <EmptyStatus className={classes.placeholder} />}

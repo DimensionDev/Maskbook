@@ -44,7 +44,7 @@ export interface TrendingViewDescriptorProps {
 
 export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
     const { result, resultList, setResult } = props
-    const { isProfilePage, isTokenTagPopper = true } = useContext(TrendingViewContext)
+    const { isProfilePage, isTokenTagPopper } = useContext(TrendingViewContext)
 
     const { classes } = useStyles({ isTokenTagPopper })
 

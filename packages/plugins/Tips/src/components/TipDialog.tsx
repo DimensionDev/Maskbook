@@ -52,7 +52,7 @@ interface TipDialogProps {
 }
 
 const site = getSiteType()
-export function TipDialog({ open = false, onClose }: TipDialogProps) {
+export function TipDialog({ open, onClose }: TipDialogProps) {
     const { _ } = useLingui()
     const { classes } = useStyles()
 

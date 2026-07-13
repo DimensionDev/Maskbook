@@ -70,7 +70,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     }
 }
 
-export async function validateMnemonic(mnemonic: string, wordList?: string[] | undefined): Promise<boolean> {
+export async function validateMnemonic(mnemonic: string, wordList?: string[]  ): Promise<boolean> {
     return bip39.validateMnemonic(mnemonic, wordList)
 }
 

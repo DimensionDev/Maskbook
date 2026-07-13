@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/no-uncalled-method */
 export const takeThisF: <Args extends readonly unknown[], This, Return>(
     f: (this: This, ...args: Args) => Return,
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 ) => <AssignedThis extends This>(self: AssignedThis, ...args: Args) => Return = Function.prototype.bind.bind(
     Function.prototype.call,
 )

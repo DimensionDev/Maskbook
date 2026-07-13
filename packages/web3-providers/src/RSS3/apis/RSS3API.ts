@@ -57,7 +57,7 @@ export const RSS3 = {
                 ExceptionID.FetchError,
                 new Error(`No feeds response from ${url}`),
             )
-        const { data = [], meta } = res
+        const { data, meta } = res
         data.forEach(normalizedFeed)
         // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`
         // which will fail the API, so we pass undefined if cursor is undefined

@@ -317,7 +317,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
         await approveMutation.mutateAsync()
         try {
-            const hash = await sendBridge().catch((err) => {
+            const hash = await sendBridge().catch((err: unknown) => {
                 const message = (err as Error).message
                 if (message.includes('Transaction was rejected!')) return null
                 throw err

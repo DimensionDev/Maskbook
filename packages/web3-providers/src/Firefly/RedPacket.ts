@@ -14,13 +14,9 @@ const FIREFLY_ROOT_URL =
     (process.env.NODE_ENV === 'development' ? 'https://api-dev.firefly.land' : 'https://api.firefly.land')
 
 function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
-    return fetchJSON<T>(url, {
-        ...init,
-        headers: {
-            'Content-Type': 'application/json',
-            ...init?.headers,
-        },
-    })
+    const headers = new Headers(init?.headers)
+    headers.set('Content-Type', 'application/json')
+    return fetchJSON<T>(url, { ...init, headers })
 }
 
 export const FireflyRedPacket = {

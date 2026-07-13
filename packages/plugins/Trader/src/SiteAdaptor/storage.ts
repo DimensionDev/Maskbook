@@ -24,7 +24,7 @@ export function useTradeHistory(address: string) {
     }, [transactions])
 }
 
-export async function addTransaction<T extends OkxTransaction>(address: string, transaction: T) {
+export async function addTransaction(address: string, transaction: OkxTransaction) {
     if (!storage?.storage?.transactions) return
     const txObject = storage.storage.transactions
     await txObject.initializedPromise

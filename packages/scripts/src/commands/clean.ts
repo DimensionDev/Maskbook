@@ -7,6 +7,7 @@ export async function clean() {
             ROOT_PATH,
         )`git clean -xdf -e node_modules -e plugins-local.json -e i18n_generated.* -e icon-generated-as-* ./packages/`,
     )
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     printShell`rm -rf **/node_modules/.cache`
     await rm('**/node_modules/.cache', {
         glob: { cwd: ROOT_PATH },

@@ -54,12 +54,12 @@ export const pasteTextToCompositionMinds: SiteAdaptorUI.AutomationCapabilities.N
         }
     }
 
-    const fail = (e: Error) => {
+    const fail = (e: unknown) => {
         if (opt?.recover) MaskMessages.events.autoPasteFailed.sendToLocal({ text })
         throw e
     }
 
-    return worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
+    return worker(AbortSignal.timeout(timeout)).then(undefined, (error: unknown) => fail(error))
 }
 
 function SimulateTextareaInput(id: string) {

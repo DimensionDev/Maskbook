@@ -122,7 +122,7 @@ export class WalletConnectProvider extends BaseEVMWalletProvider {
 
         let clean: () => boolean | undefined
         return new Promise<void>((resolve, reject) => {
-            super.switchChain(chainId).catch((error) => {
+            super.switchChain(chainId).catch((error: unknown) => {
                 reject(error)
             })
             clean = this.emitter.on('chainId', () => {
