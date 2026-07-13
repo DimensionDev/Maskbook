@@ -18,6 +18,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const { pluginID: contextPluginID } = useNetworkContext(pluginID)
     const networks = useNetworks(contextPluginID)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         enabled: !!address && isValidAddress(address),
         queryKey: ['fungible-token', contextPluginID, address, chainId, options],

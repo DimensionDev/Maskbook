@@ -115,7 +115,9 @@ class TokenAmount extends BN {
         }
 
         return new BN(
-            [...buffer]
+            buffer
+                .values()
+                .toArray()
                 .reverse()
                 .map((i) => `00${i.toString(16)}`.slice(-2))
                 .join(''),

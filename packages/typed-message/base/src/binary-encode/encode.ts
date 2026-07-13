@@ -15,7 +15,7 @@ export function encodeTypedMessageToDocument(tm: SerializableTypedMessages): Uin
     return encode(doc) as Uint8Array<ArrayBuffer>
 }
 function encodeTypedMessage(tm: SerializableTypedMessages): any[] {
-    if (tm.serializable === false) {
+    if (!tm.serializable) {
         if (tm.alt) return encodeTypedMessage(tm.alt)
         throw new TypeError(`${HEAD}TypedMessage ${tm.type} does not support serialization.`)
     }
@@ -71,9 +71,8 @@ function collectValue(val: any): any {
         }
 
         const result: Record<string, any> = {}
-        for (const key of Object.keys(val)) {
-            const v = val[key]
-            result[key] = collectValue(v)
+        for (const [key, value] of Object.entries(val)) {
+            result[key] = collectValue(value)
         }
         return result
     } catch (err) {

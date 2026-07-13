@@ -169,7 +169,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const firstURL = action.related_urls?.[0]
     const transformUri = useCallback(
         (uri: string) => {
-            if (action.platform === 'Planet' && firstURL && !uri.match(/^https?:\/\//u))
+            if (action.platform === 'Planet' && firstURL && !/^https?:\/\//u.test(uri))
                 return `https://thumbor.rss3.dev/unsafe/${firstURL}/${uri}`
             return resolveIPFS_URL(uri)!
         },

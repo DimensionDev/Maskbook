@@ -241,7 +241,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                     </Box>
                 :   <Box className={classes.container}>
                         <Avatar
-                            src={avatar ?? new URL('../../assets/Lens.png', import.meta.url).toString()}
+                            src={avatar ?? new URL('../../assets/Lens.png', import.meta.url).href}
                             sx={{ width: 64, height: 64 }}
                         />
                         <Typography className={classes.name}>

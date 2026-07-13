@@ -377,6 +377,7 @@ export function CreateSolRedPacket() {
                     </Box>
                     <FungibleTokenInput
                         className={classes.input}
+                        // eslint-disable-next-line unicorn/prefer-minimal-ternary
                         label={isRandom ? _(msg`Total amount`) : _(msg`Amount Each`)}
                         token={token}
                         placeholder="0"

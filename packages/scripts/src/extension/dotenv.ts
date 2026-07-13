@@ -13,8 +13,6 @@ export function applyDotEnv(flags: BuildFlags) {
 
     if (!parsed || flags.mode === 'production') return
 
-    if (flags.mode === 'production') return
-
     flags.sourceMapPreference ??= parseBooleanOrString(parsed.sourceMap)
     if (parsed.manifest) {
         if (parsed.manifest !== '3') {

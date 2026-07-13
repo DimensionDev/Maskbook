@@ -28,6 +28,7 @@ export abstract class BaseHubFungible<ChainId, SchemaType> extends AbstractBaseH
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, chainId })
         const allProviders = this.getProvidersFungible(initial)
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         return queryClient.fetchQuery({
             queryKey: ['get-fungible-token-list', options.chainId, initial],
             queryFn: async () => {

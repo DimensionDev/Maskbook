@@ -23,8 +23,7 @@ export function setupLegacySettingsAtNonBackground(getStorage: (key: string) => 
 function setupValueRef<T>(settings: ValueRef<T>, key: string) {
     let duringInitialValueSet = false
     let duringBroadcastSet = false
-    Promise.resolve()
-        .then(() => getValue(key))
+    Promise.try(() => getValue(key))
         .then((value) => {
             duringInitialValueSet = true
             if (value.isSome()) settings.value = value.value

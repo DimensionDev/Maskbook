@@ -58,7 +58,9 @@ export function composeButtonSelector() {
 }
 
 export function composeTextareaSelector() {
-    return new LiveSelector().querySelector<HTMLTextAreaElement>('m-composer__textarea textarea').enableSingleMode()
+    return new LiveSelector()
+        .querySelector<HTMLTextAreaElement>(':scope m-composer__textarea textarea')
+        .enableSingleMode()
 }
 
 export function composeDialogIndicatorSelector() {
@@ -67,13 +69,15 @@ export function composeDialogIndicatorSelector() {
 
 export function composerModalTextAreaSelector() {
     return new LiveSelector()
-        .querySelector<HTMLTextAreaElement>('m-composer__modal m-composer__textArea .m-composer__textArea textarea')
+        .querySelector<HTMLTextAreaElement>(
+            ':scope m-composer__modal m-composer__textArea .m-composer__textArea textarea',
+        )
         .enableSingleMode()
 }
 
 export function composerPreviewSelector() {
     return new LiveSelector()
-        .querySelector<HTMLDivElement>('m-composer__modal m-composer__preview img')
+        .querySelector<HTMLDivElement>(':scope m-composer__modal m-composer__preview img')
         .enableSingleMode()
 }
 

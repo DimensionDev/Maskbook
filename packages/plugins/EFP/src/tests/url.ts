@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-https */
 import { describe, expect, it } from 'vitest'
 import { EFP_PROFILE_URL_PATTERN } from '../constants.js'
 import { parseEFPProfileLink } from '../helpers/url.js'

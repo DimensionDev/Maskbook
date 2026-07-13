@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-type-literal-last */
 import type { ReactNode } from 'react'
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'

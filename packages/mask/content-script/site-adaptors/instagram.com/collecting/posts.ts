@@ -9,7 +9,7 @@ import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/util
 import { instagramShared } from '../shared.js'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    'main[role="main"] article[role="presentation"][tabindex="-1"]',
+    ':scope main[role="main"] article[role="presentation"][tabindex="-1"]',
 )
 
 export const PostProviderInstagram: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
@@ -63,7 +63,7 @@ function getPostBy(node: DOMProxy): ProfileIdentifier | null {
     const author = node.current.querySelector('a')
     if (!author) return null
     const href = new URL(author.href).pathname
-    if (href.startsWith('/') && href.endsWith('/') && href.slice(1, -1).includes('/') === false) {
+    if (href.startsWith('/') && href.endsWith('/') && !href.slice(1, -1).includes('/')) {
         return ProfileIdentifier.of(instagramBase.networkIdentifier, href.slice(1, -1)).unwrapOr(null)
     }
     return null

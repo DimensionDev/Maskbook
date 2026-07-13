@@ -75,7 +75,7 @@ function scheduleAvatarMetaUpdate(id: IdentifierWithAvatar, meta: Partial<Avatar
     pendingUpdate.set(id, meta)
 
     if (pendingUpdateTimer) return
-    const timeout = browser.runtime.getManifest().version === '2' ? 60 * 1000 : 10 * 1000
+    const timeout = (browser.runtime.getManifest().version === '2' ? 60 : 10) * 1000
     // eslint-disable-next-line no-restricted-globals
     pendingUpdateTimer = setTimeout(async () => {
         try {

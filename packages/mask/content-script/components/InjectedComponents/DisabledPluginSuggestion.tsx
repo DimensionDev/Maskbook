@@ -48,7 +48,7 @@ export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMa
 
     const matches = disabled.filter((x) => {
         const contributes = x.contribution!.metadataKeys!
-        return [...meta.keys()].some((key) => contributes.has(key))
+        return meta.keys().some((key) => contributes.has(key))
     })
     return matches
 }
@@ -109,7 +109,6 @@ export function PossiblePluginSuggestionUISingle(props: {
 
     return (
         <MaskPostExtraInfoWrapper
-            ID={props.define.ID}
             open
             title={<PluginTransFieldRender field={define.name} pluginID={define.ID} />}
             publisher={

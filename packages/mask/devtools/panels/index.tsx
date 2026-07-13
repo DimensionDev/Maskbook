@@ -13,13 +13,13 @@ function init() {
     const FRAME_TIME = 16
     let lastTime = 0
     globalThis.requestAnimationFrame = function (callback: FrameRequestCallback) {
-        const now = window.performance.now()
+        const now = performance.now()
         const nextTime = Math.max(lastTime + FRAME_TIME, now)
         return setTimeout(function () {
             callback((lastTime = nextTime))
         }, nextTime - now)
     }
-    window.cancelAnimationFrame = clearTimeout
+    globalThis.cancelAnimationFrame = clearTimeout
 
     import('@masknet/flags/build-info')
         .then((mod) => mod.setupBuildInfo())

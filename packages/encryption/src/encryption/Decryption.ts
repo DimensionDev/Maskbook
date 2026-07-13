@@ -252,7 +252,9 @@ async function* parseTypedMessage(
         return yield makeDecryptError(DecryptErrorReasons.PayloadDecryptedButTypedMessageBroken, { cause: _.error })
     try {
         report?.(_.value)
-    } catch {}
+    } catch {
+        // ignore
+    }
     return yield progress(DecryptProgressKind.Success, { content: _.value })
 }
 

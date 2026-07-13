@@ -100,6 +100,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
             <>
                 {transaction.assets.map((asset, index) => (
                     <SummaryTypography key={`burn-${index}`} {...rest}>
+                        {/* eslint-disable-next-line lingui/no-single-variables-to-translate */}
                         <Trans>
                             <AccountLabel address={owner.address} />{' '}
                             <Select
@@ -126,6 +127,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
         return (
             <>
                 <SummaryTypography {...rest}>
+                    {/* eslint-disable-next-line lingui/no-single-variables-to-translate */}
                     <Trans>
                         <AccountLabel address={owner.address} />
                         <Select value={txType} _deploy="deployed" _execute="executed" other="" />

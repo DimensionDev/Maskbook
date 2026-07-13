@@ -30,6 +30,7 @@ export function useTransactions() {
     // TODO invalidQueries after sending transitions
     const queries = useQueries({
         queries: networks.map((network) => {
+            // eslint-disable-next-line @tanstack/query/exhaustive-deps
             return {
                 enabled: !!account && ((response.data?.length || 0) > 0 || !response.isPending),
                 queryKey: ['transitions', network.chainId, account],

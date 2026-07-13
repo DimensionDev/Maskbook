@@ -4,7 +4,7 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import type { ButtonProps } from '@mui/material/Button'
 import { Check as CheckIcon, Error as ErrorIcon } from '@mui/icons-material'
 import { red, green } from '@mui/material/colors'
-import { useUpdateEffect } from 'react-use'
+import { useComponentWillReceiveUpdate } from 'foxact/use-component-will-receive-update'
 
 const circle = <CircularProgress color="inherit" size={18} />
 
@@ -71,7 +71,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const completeClick = completeOnClick === 'use executor' ? run : completeOnClick
     const failClick = failedOnClick === 'use executor' ? run : failedOnClick
 
-    useUpdateEffect(() => {
+    useComponentWillReceiveUpdate(() => {
         if (noUpdateEffect) return
         setState((prev) => (prev === 'init' ? prev : 'init'))
     }, [executor, noUpdateEffect])

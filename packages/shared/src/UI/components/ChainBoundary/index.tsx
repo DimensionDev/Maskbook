@@ -79,8 +79,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         switchText,
         forceShowingWrongNetworkButton = false,
         disableConnectWallet = false,
-        predicate = (actualPluginID, actualChainId) =>
-            actualPluginID === expectedPluginID && actualChainId === expectedChainId,
+        predicate,
     } = props
     const { classes } = useStyles(undefined, { props })
 
@@ -105,7 +104,10 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const expectedChainAllowed = expectedUtils.chainResolver.isValidChainId(expectedChainId, expectedAllowTestnet)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
-    const isMatched = predicate(actualPluginID, actualChainId)
+    const isMatched = (
+        predicate ||
+        ((actualPluginID, actualChainId) => actualPluginID === expectedPluginID && actualChainId === expectedChainId)
+    )(actualPluginID, actualChainId)
 
     const connectWalletLabel =
         actualNetworkPluginID ?

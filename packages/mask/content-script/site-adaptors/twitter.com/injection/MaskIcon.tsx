@@ -77,9 +77,9 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
 const ifUsingMask = memoizePromise(
     memoize,
     async (pid: ProfileIdentifier | null) => {
-        if (!pid) throw new Error()
+        if (!pid) throw new Error('pid is null')
         const p = await Services.Identity.queryProfilesInformation([pid])
-        if (!p[0].linkedPersona?.rawPublicKey) throw new Error()
+        if (!p[0].linkedPersona?.rawPublicKey) throw new Error('pid is not linked to a persona')
     },
     (x) => x,
 )

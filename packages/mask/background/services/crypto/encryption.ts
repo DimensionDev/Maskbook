@@ -45,7 +45,7 @@ export async function encryptTo(
         },
         {
             async deriveAESKey(pub) {
-                const result = Array.from((await deriveAESByECDH(pub, whoAmI)).values())
+                const result = (await deriveAESByECDH(pub, whoAmI)).values().toArray()
                 if (result.length === 0) throw new Error('No key found')
                 return result[0]
             },

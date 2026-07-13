@@ -106,7 +106,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             ])
             const decoded = decode(decrypted)
             setBackupValue(JSON.stringify(decoded))
-        } catch (error_) {
+        } catch {
             setError(<Trans>Incorrect Backup Password.</Trans>)
         } finally {
             setReadingFile(false)

@@ -23,7 +23,7 @@ interface Props extends PropsWithChildren {
 function useRecipients(pluginID: NetworkPluginID, tipsAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>) {
     const _recipients = useTipAccountsCompletion(tipsAccounts)
     const recipients = useMemo(() => {
-        return [..._recipients].sort((a, z) => {
+        return _recipients.toSorted((a, z) => {
             if (a.pluginID === z.pluginID) return 0
             return a.pluginID === pluginID ? -1 : 1
         })

@@ -97,7 +97,10 @@ export class BanRemoteScriptSrcPlugin {
                     assetName: asset.name,
                     expression: trimForMessage(expression),
                     literal,
-                    urls: [...literal.matchAll(URL_IN_LITERAL)].map((url) => url[0]),
+                    urls: literal
+                        .matchAll(URL_IN_LITERAL)
+                        .map((url) => url[0])
+                        .toArray(),
                     generated,
                 })
             }
@@ -129,7 +132,7 @@ export class BanRemoteScriptSrcPlugin {
                     })
             }
 
-            result.set(violation, [...matches.values()])
+            result.set(violation, matches.values().toArray())
         }
         return result
     }

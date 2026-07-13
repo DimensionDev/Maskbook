@@ -71,7 +71,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                     variant: 'success',
                     message: <Trans>File {file.name} deleted.</Trans>,
                 })
-            } catch (err) {
+            } catch {
                 showSnackbar(<Trans>File delete failed</Trans>, {
                     variant: 'error',
                     message: <Trans>Failed to delete, please try again.</Trans>,

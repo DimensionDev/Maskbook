@@ -1,5 +1,5 @@
 /* eslint-disable react-compiler/react-compiler */
-/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @eslint-react/rules-of-hooks */
 import { useRef, useContext } from 'react'
 import { Flags } from '@masknet/flags'
 import type { PopperProps } from '@mui/material'
@@ -48,27 +48,30 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
             shadow.addEventListener(each, stopPropagation, { signal: signal.current.signal })
         }
 
-        const container = shadow.appendChild(document.createElement('main'))
+        const container = document.createElement('main')
+        shadow.append(container)
 
         sheet.addContainer(shadow)
 
         // This is important to make the portal orders correct.
-        Object.defineProperty(container, 'appendChild', {
-            configurable: true,
-            writable: true,
-            value: (child: Node) => {
-                if (!root.parentElement) portal.appendChild(root)
-                Node.prototype.appendChild.call(container, child)
-                return child
+        Object.defineProperties(container, {
+            appendChild: {
+                configurable: true,
+                writable: true,
+                value: (child: Node) => {
+                    if (!root.parentElement) portal.append(root)
+                    Node.prototype.appendChild.call(container, child)
+                    return child
+                },
             },
-        })
-        Object.defineProperty(container, 'removeChild', {
-            configurable: true,
-            writable: true,
-            value: (child: Node) => {
-                Node.prototype.removeChild.call(container, child)
-                if (container.childElementCount === 0) portal.removeChild(root)
-                return child
+            removeChild: {
+                configurable: true,
+                writable: true,
+                value: (child: Node) => {
+                    Node.prototype.removeChild.call(container, child)
+                    if (container.childElementCount === 0) root.remove()
+                    return child
+                },
             },
         })
 

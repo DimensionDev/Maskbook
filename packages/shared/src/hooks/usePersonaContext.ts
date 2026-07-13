@@ -17,6 +17,7 @@ import { useQuery, type RefetchOptions, type QueryObserverResult } from '@tansta
 function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const { data: personas = EMPTY_LIST, refetch } = useQuery({
         queryKey: ['@@my-own-persona-info'],
         queryFn: async () => (await queryOwnedPersonaInformation?.(false)) || null,
@@ -41,9 +42,9 @@ function usePersonaContext(initialState?: {
 
     const currentPersona = personas?.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const { data: avatar, refetch: refetchAvatar } = useQuery({
         enabled: !!currentPersona,
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
         queryFn: async (): Promise<string | null> => {
             if (!initialState?.queryPersonaAvatarLastUpdateTime || !initialState.queryPersonaAvatar)

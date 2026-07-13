@@ -40,7 +40,7 @@ interface LumaRawEvent {
     }>
 }
 function fixEvent(event: Event): ParsedEvent {
-    const rawEvent = event.raw_data ? (event.raw_data as LumaRawEvent) : null
+    const rawEvent = event.raw_data as LumaRawEvent | null
     if (!rawEvent) return fixEventDate(event)
     const host = rawEvent.hosts[0]
 

@@ -73,7 +73,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Gorli,
         type: NetworkType.Ethereum,
-        name: 'G\u00F6rli',
+        name: 'G\u{F6}rli',
         icon: new URL('../assets/ethereum.png', import.meta.url).href,
         iconColor: 'rgb(48, 153, 242)',
         averageBlockDelay: 10,

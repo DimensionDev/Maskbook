@@ -140,6 +140,7 @@ function ProfileTabAtInstagram() {
 
     useLayoutEffect(() => {
         const tabStyles = getStyleProps({ activeColor, color })
+        // eslint-disable-next-line @eslint-react/set-state-in-effect
         setStyles(tabStyles)
     }, [])
 

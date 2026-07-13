@@ -1,6 +1,6 @@
 export function formatURL(url: string): string {
     // Step 1: Remove fragment part
-    const urlWithoutFragment = url.split('#')[0]
+    const urlWithoutFragment = url.split('#', 1)[0]
 
     // Step 2: Parse the URL to get the search parameters
     const urlObj = new URL(urlWithoutFragment)
@@ -8,7 +8,7 @@ export function formatURL(url: string): string {
 
     // Step 3: Arrange search parameters in fixed order
     const sortedSearchParams = new URLSearchParams()
-    const searchParamKeys = Array.from(searchParams.keys()).sort()
+    const searchParamKeys = searchParams.keys().toArray().sort()
     for (const key of searchParamKeys) {
         sortedSearchParams.set(key, searchParams.get(key)!)
     }

@@ -36,9 +36,8 @@ interface Props extends FormControlProps {}
 
 export function RecipientSection({ className, ...rest }: Props) {
     const { classes, cx } = useStyles()
-    const {
-        recipientValidation: [isValid, validateMessage],
-    } = useTip()
+    const { recipientValidation } = useTip()
+    const [isValid, validateMessage] = recipientValidation
     return (
         <FormControl fullWidth className={cx(classes.container, className)} {...rest}>
             <div className={classes.receiverRow}>

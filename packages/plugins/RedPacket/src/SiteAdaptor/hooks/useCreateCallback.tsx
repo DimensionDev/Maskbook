@@ -181,7 +181,7 @@ export function useCreateCallback(
 
         try {
             checkParams(paramsObj)
-        } catch (error) {
+        } catch {
             return
         }
 

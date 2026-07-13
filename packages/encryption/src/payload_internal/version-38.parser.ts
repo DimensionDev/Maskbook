@@ -71,11 +71,8 @@ export async function parse38(payload: string): PayloadParserResult {
     if (signature && raw_iv.isOk() && raw_aes.isOk() && normalized.encrypted.isOk()) {
         const message = encodeText(`4/4|${AESKeyEncrypted}|${iv}|${encryptedText}`)
         const sig = decodeUint8Array(signature)
-        if (sig.isOk()) {
-            normalized.signature = OptionalResult.Some<Signature>({ signee: message, signature: sig.value })
-        } else {
-            normalized.signature = sig
-        }
+        normalized.signature =
+            sig.isOk() ? OptionalResult.Some<Signature>({ signee: message, signature: sig.value }) : sig
     }
     return Ok(normalized)
     // #endregion

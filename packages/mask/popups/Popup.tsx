@@ -53,7 +53,7 @@ const PopupShell = memo(function PopupShell() {
     }, [navigate])
 
     useEffect(() => {
-        document.getElementById('app-spinner')?.remove()
+        document.querySelector('#app-spinner')?.remove()
     }, [])
 
     return (

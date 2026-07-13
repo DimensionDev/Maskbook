@@ -5,13 +5,13 @@ import { DisableShadowRootContext } from '@masknet/theme'
 function cleanup() {
     if (!(process.env.NODE_ENV === 'development')) return
     // Make the document cleaner
-    setTimeout(() => [...document.querySelectorAll('script')].forEach((x) => x.remove()), 200)
+    setTimeout(() => document.querySelectorAll('script').forEach((x) => x.remove()), 200)
 }
 function getContainer(container?: HTMLElement) {
-    if (!container) container = document.getElementById('root') ?? void 0
+    if (!container) container = document.querySelector('#root') ?? void 0
     if (!container) {
         container = document.createElement('div')
-        document.body.appendChild(container)
+        document.body.append(container)
     }
     return container
 }

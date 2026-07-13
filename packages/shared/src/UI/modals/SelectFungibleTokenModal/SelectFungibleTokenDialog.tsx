@@ -167,12 +167,7 @@ export function SelectFungibleTokenDialog({
                 // reset
                 setMode(TokenListMode.List)
             }}
-            title={
-                title ? title
-                : mode === TokenListMode.Manage ?
-                    <Trans>Manage Token List</Trans>
-                :   <Trans>Select</Trans>
-            }
+            title={title || (mode === TokenListMode.Manage ? <Trans>Manage Token List</Trans> : <Trans>Select</Trans>)}
             titleTail={<Icons.Plus size={24} onClick={() => setMode(TokenListMode.Manage)} />}>
             <DialogContent classes={{ root: classes.content }}>
                 <div className={cx(classes.container, mode === TokenListMode.Select ? classes.paddedContainer : null)}>

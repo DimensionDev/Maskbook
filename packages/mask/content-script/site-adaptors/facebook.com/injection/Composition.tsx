@@ -33,10 +33,10 @@ const composeBox: LiveSelector<Element> =
         new LiveSelector()
             .querySelector('[id="toolbarLabel"]')
             .closest(1)
-            .querySelector('div:nth-child(2) > div:nth-child(4)')
+            .querySelector(':scope div:nth-child(2) > div:nth-child(4)')
     :   new LiveSelector()
             .querySelectorAll(
-                '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child  > div:last-child > div > div',
+                ':scope [role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child  > div:last-child > div > div',
             )
             .at(-2)
 
@@ -57,7 +57,7 @@ function CompositionUI() {
         () =>
             CrossIsolationMessages.events.compositionDialogEvent.on((data) => {
                 if (data.reason === 'popup') return
-                if (data.open === false) {
+                if (!data.open) {
                     if (data.options?.isOpenFromApplicationBoard) taskCloseNativeComposeBoxFacebook()
                     return
                 }

@@ -43,7 +43,9 @@ export function __unsafe__getValue(path: string, id: number, property: string) {
         if (path === 'solflare' && property === 'publicKey') {
             try {
                 return (__unsafe__value as any).toBase58()
-            } catch {}
+            } catch {
+                // ignore
+            }
         }
 
         return __unsafe__value
@@ -80,7 +82,9 @@ export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvent
                 sendEvent(bridgeEvent, path, event, args)
             }),
         ])
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
 
 function __unsafe__untilInner(name: string) {

@@ -26,12 +26,12 @@ export async function getSupportedSites(options: SitesQueryOptions = {}): Promis
         networkIdentifier: string
     }>
 > {
-    return sortBy(
-        [...definedSiteAdaptors.values()].filter((x) =>
-            options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork,
-        ),
-        (x) => x.sortIndex,
-    ).map((x) => ({ networkIdentifier: x.networkIdentifier }))
+    return definedSiteAdaptors
+        .values()
+        .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
+        .toArray()
+        .sort((a, b) => (a.sortIndex || 0) - (b.sortIndex || 0))
+        .map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 
 export async function getSupportedOrigins(options: SitesQueryOptions = {}): Promise<
@@ -40,7 +40,7 @@ export async function getSupportedOrigins(options: SitesQueryOptions = {}): Prom
         origins: string[]
     }>
 > {
-    return sortBy([...definedSiteAdaptors.values()], (x) => x.sortIndex)
+    return sortBy(definedSiteAdaptors.values().toArray(), (x) => x.sortIndex)
         .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
         .map((x) => ({ networkIdentifier: x.networkIdentifier, origins: [...x.declarativePermissions.origins] }))
 }
@@ -80,8 +80,7 @@ export async function getAllOrigins() {
 }
 
 export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definition[]> {
-    const groups = [...definedSiteAdaptors.values()]
-    const promises = groups.map(async (x) => {
+    const promises = definedSiteAdaptors.values().map(async (x) => {
         const origins = x.declarativePermissions.origins
         const unGrantedOrigins = compact(
             await Promise.all(origins.map((origin) => hasPermission(origin).then((yes) => (yes ? null : origin)))),

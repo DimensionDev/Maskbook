@@ -87,8 +87,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
         )
 
     if (isFirstConnection) {
-        if (Sniffings.is_twitter_page) {
-            return (
+        return Sniffings.is_twitter_page ?
                 <Frame {...rest}>
                     <Typography className={classes.text}>
                         <Trans>Sent verification post successfully.</Trans>
@@ -100,10 +99,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                         </Trans>
                     </Typography>
                 </Frame>
-            )
-        } else {
-            return (
-                <Frame {...rest}>
+            :   <Frame {...rest}>
                     <Typography className={classes.text}>
                         <Trans>Connected successfully.</Trans>
                     </Typography>
@@ -111,8 +107,6 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                         <Trans>Trying exploring more features powered by Mask Network.</Trans>
                     </Typography>
                 </Frame>
-            )
-        }
     }
 
     if (connected)

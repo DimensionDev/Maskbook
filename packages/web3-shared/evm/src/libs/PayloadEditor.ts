@@ -40,9 +40,10 @@ export class PayloadEditor {
                 return String(params?.[1])
             case EthereumMethodType.eth_signTypedData_v4:
                 return String(first(params))
-            default:
+            default: {
                 const config = this.config
                 return config.from
+            }
         }
     }
 
@@ -57,9 +58,10 @@ export class PayloadEditor {
     get chainDescriptor() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.wallet_addEthereumChain:
+            case EthereumMethodType.wallet_addEthereumChain: {
                 const [descriptor] = params as [EIP3085Descriptor]
                 return descriptor
+            }
             default:
                 return null
         }
@@ -97,9 +99,10 @@ export class PayloadEditor {
     get wallet() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.MASK_ADD_WALLET:
+            case EthereumMethodType.MASK_ADD_WALLET: {
                 const [wallet] = params as [Wallet]
                 return wallet
+            }
             default:
                 return
         }

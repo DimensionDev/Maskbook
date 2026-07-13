@@ -52,7 +52,7 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, opt
     fraction = fraction.slice(0, balance.div(base).gt(pow10(-6)) ? 6 : 8)
 
     // match significant digits
-    const matchSignificantDigits = new RegExp(`^0*[1-9]\\d{0,${significant > 0 ? significant - 1 : 0}}`, 'u')
+    const matchSignificantDigits = new RegExp(String.raw`^0*[1-9]\d{0,${significant > 0 ? significant - 1 : 0}}`, 'u')
     fraction = fraction.match(matchSignificantDigits)?.[0] ?? ''
 
     // trim tailing zeros

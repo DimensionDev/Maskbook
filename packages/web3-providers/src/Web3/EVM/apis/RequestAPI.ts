@@ -32,7 +32,7 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
         return <T>(requestArguments: RequestArguments, initial?: EVMConnectionOptions) => {
             return (async () => {
                 const options = this.ConnectionOptions.fill(initial)
-                // eslint-disable-next-line react/no-missing-context-display-name
+                // eslint-disable-next-line @eslint-react/no-missing-context-display-name
                 const context = createContext(requestArguments, options)
 
                 try {

@@ -14,8 +14,8 @@ export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(
     const Hub = useWeb3Hub(pluginID, options)
     const Utils = useWeb3Utils(pluginID)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['get-gas-options', pluginID, chainId, JSON.stringify(options)],
         queryFn: async () => {
             if (!Utils.isValidChainId(chainId)) return null

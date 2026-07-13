@@ -341,7 +341,7 @@ export class EVMConnectionReadonlyAPI
             address,
             parseStringOrBytes32(name, toHex(nameBytes32), 'Unknown Token'),
             parseStringOrBytes32(symbol, toHex(symbolBytes32), 'UNKNOWN'),
-            typeof decimals === 'string' ? Number.parseInt(decimals ? decimals : '0', 10) : decimals,
+            typeof decimals === 'string' ? Number.parseInt(decimals || '0', 10) : decimals,
         )
     }
 

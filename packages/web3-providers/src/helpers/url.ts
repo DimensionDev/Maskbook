@@ -16,7 +16,7 @@ export function parseUrl(url: string): URL | null {
     return null
 }
 
-const TLD_DOMAIN = [
+const TLD_DOMAIN = new Set([
     '.aaa',
     '.aarp',
     '.abarth',
@@ -1608,7 +1608,7 @@ const TLD_DOMAIN = [
     '.zone',
     '.zuerich',
     '.zw',
-]
+])
 
 export function isTopLevelDomain(url: URL | string) {
     const u = typeof url === 'string' ? parseUrl(url) : url
@@ -1620,7 +1620,7 @@ export function isTopLevelDomain(url: URL | string) {
         }
     }
 
-    return !!domain && TLD_DOMAIN.includes(`.${domain}`)
+    return !!domain && TLD_DOMAIN.has(`.${domain}`)
 }
 
 export function sanitizeDStorageUrl(hash?: string, gateway?: string) {

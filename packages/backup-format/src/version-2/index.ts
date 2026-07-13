@@ -20,7 +20,9 @@ export function isBackupVersion2(item: unknown): item is BackupJSONFileVersion2 
     try {
         const x = item as BackupJSONFileVersion2
         return x._meta_.version === 2
-    } catch {}
+    } catch {
+        // ignore
+    }
     return false
 }
 
@@ -149,7 +151,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
             const key = ec.keyFromPrivate(wallet.privateKey.d)
             const hexPub = key.getPublic('hex').slice(2)
             const hexX = hexPub.slice(0, hexPub.length / 2)
-            const hexY = hexPub.slice(hexPub.length / 2, hexPub.length)
+            const hexY = hexPub.slice(hexPub.length / 2)
             wallet.privateKey.x = Convert.ToBase64Url(hex2buffer(hexX))
             wallet.privateKey.y = Convert.ToBase64Url(hex2buffer(hexY))
         }
@@ -204,10 +206,10 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
             createdAt: Number(data.createdAt.unwrapOr(now)),
             updatedAt: Number(data.updatedAt.unwrapOr(now)),
             nickname: data.nickname.unwrapOr(undefined),
-            linkedProfiles: [...data.linkedProfiles.keys()].map((id) => [
-                id.toText(),
-                { connectionConfirmState: 'confirmed' } as LinkedProfileDetails,
-            ]),
+            linkedProfiles: data.linkedProfiles
+                .keys()
+                .map((id) => [id.toText(), { connectionConfirmState: 'confirmed' }] as [string, LinkedProfileDetails])
+                .toArray(),
             publicKey: data.publicKey,
             privateKey: data.privateKey.unwrapOr(undefined),
             mnemonic: data.mnemonic

@@ -177,9 +177,9 @@ function Content() {
                             // TODO: use URL.createObjectURL instead
                             link.setAttribute('href', `data:text/csv;charset=utf-8,${csv}`)
                             link.setAttribute('download', `snapshot-report-${identifier.id}.csv`)
-                            document.body.appendChild(link)
+                            document.body.append(link)
                             link.click()
-                            document.body.removeChild(link)
+                            link.remove()
                         }}>
                         <Trans>Download report</Trans>
                     </Button>

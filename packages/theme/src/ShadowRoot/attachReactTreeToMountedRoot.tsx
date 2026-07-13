@@ -47,8 +47,8 @@ function attachReactTreeToMountedRoot(
         }
     }
 
-    const child = typeof tag === 'function' ? tag() : document.createElement(tag)
-    const container = shadow.appendChild(child)
+    const container = typeof tag === 'function' ? tag() : document.createElement(tag)
+    shadow.append(container)
     const instanceKey = `${key}(${Math.random().toString(36).slice(2)})`
     container.classList.add(key)
 

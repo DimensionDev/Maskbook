@@ -16,11 +16,12 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
             // add gas margin
             if (config.gas) {
                 if (context.providerType !== ProviderType.MaskWallet) {
-                    config.gas = toHex(
+                    const gas = toHex(
                         BigNumber.max(toHex(config.gas), context.chainId === ChainId.Optimism ? 25000 : 21000).toFixed(
                             0,
                         ),
                     )
+                    config.gas = gas
                 } else {
                     config.gas = toHex(config.gas)
                 }
@@ -30,7 +31,8 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
             const options = await EVMHub.getGasOptions(context.chainId, {
                 chainId: context.chainId,
             })
-            const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}
+            const slowOption = options?.[GasOptionType.SLOW]
+            const normalOption = options?.[GasOptionType.NORMAL]
 
             // TODO: this field seems like not documented anywhere. should we just stop changing gasPrice?
             const legacyTransactionUsed = config.type === '0x0'

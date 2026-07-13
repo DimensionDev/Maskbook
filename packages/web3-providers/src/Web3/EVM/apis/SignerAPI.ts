@@ -17,7 +17,7 @@ export class Signer {
                     data: JSON.parse(data),
                     version: _metamask_eth_sig_util.SignTypedDataVersion.V4,
                 })
-            case SignType.Transaction:
+            case SignType.Transaction: {
                 const transaction = data
 
                 const transactionChainId = transaction.chainId
@@ -26,6 +26,7 @@ export class Signer {
                 const rawTransaction = await signTransaction(transaction, toHex(key), chainId)
                 if (!rawTransaction) throw new Error('Failed to sign transaction.')
                 return rawTransaction
+            }
 
             default:
                 unreachable(type)

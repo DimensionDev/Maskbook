@@ -97,7 +97,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
         const hash = await protocol?.withdraw(account, chainId, formatAmount(amount, token.decimals))
 
         if (typeof hash !== 'string') {
-            throw new Error('Failed to deposit token.')
+            throw new TypeError('Failed to deposit token.')
         } else {
             queryClient.invalidateQueries({
                 queryKey: ['savings', 'balance', chainId, protocol.bareToken.address, account],

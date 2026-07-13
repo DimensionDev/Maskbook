@@ -18,7 +18,9 @@ export class OKXProvider extends InjectedWalletBridge {
         for (const f of this.events.get(event) || []) {
             try {
                 Reflect.apply(f, null, event === 'chainChanged' ? [`0x${Number(data[0]).toString(16)}`] : data)
-            } catch {}
+            } catch {
+                // ignore
+            }
         }
     }
 }
@@ -44,7 +46,9 @@ export class OKXSolanaProvider extends InjectedWalletBridge {
         for (const f of this.events.get(event) || []) {
             try {
                 Reflect.apply(f, null, event === 'chainChanged' ? [`0x${Number(data[0]).toString(16)}`] : data)
-            } catch {}
+            } catch {
+                // ignore
+            }
         }
     }
 }

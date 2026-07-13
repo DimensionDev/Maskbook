@@ -1,4 +1,4 @@
-import { Plural, Trans } from '@lingui/react/macro'
+import { Plural } from '@lingui/react/macro'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
 import { CryptoScamDB } from '@masknet/web3-providers'
@@ -49,10 +49,13 @@ export function PreviewCard({ links }: PreviewCardProps) {
                         </Typography>
                     ))}
                     <Typography variant="body1" color="textPrimary">
-                        <Trans>
-                            <Plural value={value.length} one="This domain is" other="These domains are" /> currently on
-                            the Mask Network warning list which may include malicious entries, phishing or scams.
-                        </Trans>
+                        <Plural
+                            value={value.length}
+                            one="This domain is currently on
+                            the Mask Network warning list which may include malicious entries, phishing or scams."
+                            other="These domains are currently on
+                            the Mask Network warning list which may include malicious entries, phishing or scams."
+                        />
                     </Typography>
                 </Stack>
             </Stack>

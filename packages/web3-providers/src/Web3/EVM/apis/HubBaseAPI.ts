@@ -28,7 +28,7 @@ export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> 
             if (chainId === ChainId.Aurora) return await GasOptions.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.AstarGas.getGasOptions()
             return await DeBank.DeBankGasOption.getGasOptions(options.chainId)
-        } catch (error) {
+        } catch {
             return GasOptions.getGasOptions(options.chainId)
         }
     }

@@ -37,19 +37,13 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
     const signTransaction = async (transaction: TransactionSerializable) => {
         const message = { type: SignType.Transaction as const, data: transaction }
-        if (identifier) {
-            return signWithPersona(message, identifier, undefined, false, providerChainId)
-        } else {
-            return signWithWallet(message, owner || from!, providerChainId)
-        }
+        return identifier ?
+                signWithPersona(message, identifier, undefined, false, providerChainId)
+            :   signWithWallet(message, owner || from!, providerChainId)
     }
     const signMessageOrTypedData = async (type: SignType.Message | SignType.TypedData, message: string) => {
         const msg = { type, data: message }
-        if (identifier) {
-            return signWithPersona(msg, identifier)
-        } else {
-            return signWithWallet(msg, owner || from!)
-        }
+        return identifier ? signWithPersona(msg, identifier) : signWithWallet(msg, owner || from!)
     }
 
     switch (payload.method) {

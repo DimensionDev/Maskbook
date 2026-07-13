@@ -11,4 +11,6 @@ try {
             { signal },
         )
     }
-} catch {}
+} catch {
+    // ignore
+}

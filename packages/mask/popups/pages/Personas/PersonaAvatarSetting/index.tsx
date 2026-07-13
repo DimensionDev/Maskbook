@@ -5,7 +5,6 @@ import AvatarEditor from 'react-avatar-editor'
 import { Box, Button, Slider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useUpdateEffect } from '@react-hookz/web'
 import { PersonaContext } from '@masknet/shared'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { NormalHeader } from '../../../components/index.js'
@@ -75,6 +74,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
             showSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
             return
         }
+        setAvatarLoaded(false)
         setFile(file)
     }, [])
 
@@ -112,13 +112,6 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     }, [file, currentPersona, refreshAvatar, queryClient])
 
     useTitle(t`Profile Photo`)
-
-    // reset loaded state after file be changed
-
-    useUpdateEffect(() => {
-        if (!file) return
-        setAvatarLoaded(false)
-    }, [file])
 
     if (file) {
         return (

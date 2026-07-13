@@ -33,7 +33,7 @@ export async function loginFireflyViaTwitter() {
         headers: {
             'X-Access-Token': oauth.oauth_token,
             'X-Access-Token-Secret': oauth.oauth_token_secret,
-            'X-Client-Id': oauth.oauth_token.split('-')[0],
+            'X-Client-Id': oauth.oauth_token.split('-', 1)[0],
             'X-Consumer-Key': process.env.FIREFLY_X_CLIENT_ID,
             'X-Consumer-Secret': '[HIDE_FROM_CLIENT]',
         },
@@ -86,7 +86,6 @@ export interface DesktopLinkInfoResponse {
 export async function getDesktopSyncLinkInfo(accessToken: string): Promise<DesktopLinkInfoResponse> {
     const url = `${FIREFLY_API_URL}/desktop/sync/linkInfo`
     const response = await fetch(url, {
-        method: 'GET',
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },

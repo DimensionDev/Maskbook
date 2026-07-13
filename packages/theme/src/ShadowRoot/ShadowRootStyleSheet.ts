@@ -27,7 +27,8 @@ export class StyleSheet {
         } else {
             // global style
             const un_global = Reflect.get(options.container, 'sheet')
-            if (!(un_global instanceof StyleSheet)) throw new TypeError()
+            if (!(un_global instanceof StyleSheet))
+                throw new TypeError('container must be a ShadowRoot or a global container with a StyleSheet')
 
             // A hack to the emotion StyleSheet
             // eslint-disable-next-line no-constructor-return
@@ -112,7 +113,7 @@ class SynchronizeStyleSheet {
         const head = getShadowRootHead(container)
         const localContainer = document.createElement('div')
         localContainer.dataset.styleContainer = tag
-        head.appendChild(localContainer)
+        head.append(localContainer)
         this.containers.set(container, localContainer)
 
         {
@@ -128,9 +129,9 @@ class SynchronizeStyleSheet {
 
         const frag = document.createDocumentFragment()
         for (const x of first.value[1].children) {
-            frag.appendChild(x.cloneNode(true))
+            frag.append(x.cloneNode(true))
         }
-        localContainer.appendChild(frag)
+        localContainer.append(frag)
     }
     insert(rule: string) {
         if (this.ctr % 25 === 0) {
@@ -139,13 +140,13 @@ class SynchronizeStyleSheet {
 
         for (const container of this.containers.values()) {
             const tag = container.lastElementChild!
-            tag.appendChild(document.createTextNode(rule))
+            tag.append(document.createTextNode(rule))
         }
         this.ctr += 1
     }
     insertGlobal(rule: string) {
         for (const style of this.globalStyles.values()) {
-            style.appendChild(document.createTextNode(rule))
+            style.append(document.createTextNode(rule))
         }
     }
     flush() {
@@ -157,11 +158,11 @@ class SynchronizeStyleSheet {
         this.ctr = 0
     }
     flushGlobal() {
-        this.globalStyles.forEach((x) => (x.innerText = ''))
+        this.globalStyles.forEach((x) => (x.textContent = ''))
     }
     private _insertTag = () => {
         for (const container of this.containers.values()) {
-            container.appendChild(createStyleElement())
+            container.append(createStyleElement())
         }
     }
     private globalStyles = new Map<ShadowRoot, HTMLStyleElement>()
@@ -178,7 +179,7 @@ function getShadowRootHead(shadow: ShadowRoot) {
 
 function createStyleElement(): HTMLStyleElement {
     const tag = document.createElement('style')
-    tag.appendChild(document.createTextNode(''))
+    tag.append(document.createTextNode(''))
     return tag
 }
 function insertRuleSpeedy(sheet: CSSStyleSheet, rule: string) {

@@ -18,11 +18,16 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
 
     try {
         files = Number((json.plugins['com.maskbook.fileservice'] as any)?.length || 0)
-    } catch {}
+    } catch {
+        // ignore
+    }
 
-    const ownerPersonas = [...json.personas.values()].filter((persona) => !persona.privateKey.isNone())
-    const ownerProfiles = flatten(ownerPersonas.map((persona) => [...persona.linkedProfiles.keys()])).map((item) =>
-        item.toText(),
+    const ownerPersonas = json.personas
+        .values()
+        .filter((persona) => !persona.privateKey.isNone())
+        .toArray()
+    const ownerProfiles = new Set(
+        flatten(ownerPersonas.map((persona) => persona.linkedProfiles.keys().toArray())).map((item) => item.toText()),
     )
 
     const personas = compact(
@@ -30,9 +35,12 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
             .sort((p) => (p.nickname.unwrapOr(false) ? -1 : 0))
             .map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey).trim()),
     )
-    const contacts = [...json.profiles.values()].filter((profile) => {
-        return !ownerProfiles.includes(profile.identifier.toText()) && profile.linkedPersona.isSome()
-    })
+    const contacts = json.profiles
+        .values()
+        .filter((profile) => {
+            return !ownerProfiles.has(profile.identifier.toText()) && profile.linkedPersona.isSome()
+        })
+        .toArray()
     return {
         // Names or publicKeys */
         personas,

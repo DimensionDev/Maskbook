@@ -450,14 +450,13 @@ export const Component = memo(function SyncTwitterCookies() {
                         <Trans>Use the Firefly app to scan the QR code</Trans>
                     </Typography>
                     <Typography className={classes.statusMessage}>
-                        {errorMessage ?
-                            errorMessage
-                        : channelStatus === DesktopSyncChannelStatus.Scanned ?
-                            <Trans>
-                                You've received a login request from the Firefly app. If you want to sign in, please
-                                confirm.
-                            </Trans>
-                        :   null}
+                        {errorMessage ||
+                            (channelStatus === DesktopSyncChannelStatus.Scanned ?
+                                <Trans>
+                                    You've received a login request from the Firefly app. If you want to sign in, please
+                                    confirm.
+                                </Trans>
+                            :   null)}
                     </Typography>
                 </Box>
             </div>

@@ -12,7 +12,6 @@ import { RedPacketTabs } from '../types.js'
 
 interface RedPacketDialogProps {
     onClose: () => void
-    open: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({

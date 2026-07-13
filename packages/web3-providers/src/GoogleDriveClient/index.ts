@@ -65,7 +65,9 @@ export class GoogleDriveClient {
             }
             await this.clearToken()
             this.callbacks.forEach((callback) => callback(false))
-        } catch {}
+        } catch {
+            return
+        }
     }
     private async request(
         input: string | URL | globalThis.Request,

@@ -39,8 +39,9 @@ export class LidoProtocol implements SavingsProtocol {
                     await EVMContract.readContract(contract, 'balanceOf', [account as Address], { chainId })
                 )?.toString() ?? 0,
             )
-        } catch {}
-        return ZERO
+        } catch {
+            return ZERO
+        }
     }
 
     public async depositEstimate(account: string, chainId: ChainId, value: BigNumber.Value) {

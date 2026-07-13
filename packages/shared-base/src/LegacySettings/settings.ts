@@ -79,7 +79,9 @@ try {
     else if (lng === 'ja') languageSettings.value = LanguageOptions.jaJP
     else if (lng === 'ko') languageSettings.value = LanguageOptions.koKR
     else languageSettings.value = LanguageOptions.__auto__
-} catch {}
+} catch {
+    // ignore
+}
 
 export const switchLogoSettings = createBulkSettings('SwitchLogo', SwitchLogoType.New)
 

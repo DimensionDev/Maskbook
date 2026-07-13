@@ -18,6 +18,7 @@ interface AdditionalContentProps {
     headerActions?: React.ReactNode
     progress?: boolean | CircularProgressProps
     /** this component does not accept children */
+     
     children?: never
     /** Can handle typed message or normal string */
     message?: TypedMessage | string

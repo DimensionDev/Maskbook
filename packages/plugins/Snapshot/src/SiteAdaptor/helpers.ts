@@ -3,7 +3,7 @@ import type { ProposalIdentifier } from '../types.js'
 export function getProposalIdentifier(url: string): ProposalIdentifier {
     const parsedURL = new URL(url)
     const [, space, , id] = parsedURL.hash.split('/')
-    if (id.match(/^\d+$/u)) {
+    if (/^\d+$/u.test(id)) {
         return {
             id: `${space.split(':').pop()}/${id}`,
             space,

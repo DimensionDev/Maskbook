@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-// eslint-disable-next-line react/no-useless-fragment
+ 
 const emptyRender = () => <></>
 export const Prior1559GasSetting = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {

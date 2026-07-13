@@ -65,7 +65,7 @@ export class ErrorEditor {
             if (message.includes('transaction underpriced')) return 'Transaction underpriced.'
             if (
                 message.includes('The NFT is bounded to your soul, you cannot transfer it!') ||
-                message.match(/Please go to .* for mint/u)
+                /Please go to .* for mint/u.test(message)
             ) {
                 return 'This NFT can not be transferred.'
             }

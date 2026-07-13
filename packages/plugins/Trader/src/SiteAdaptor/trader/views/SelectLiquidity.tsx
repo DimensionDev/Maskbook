@@ -120,7 +120,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
     const liquidityGroups = useMemo(() => {
         const items = keyword ? fuse.search(keyword).map((r) => r.item) : liquidityList
         const groups = groupBy(items, (x) => {
-            return x.name.match(/^\d/u) ? '0-9' : x.name.charAt(0).toUpperCase()
+            return /^\d/u.test(x.name) ? '0-9' : x.name.charAt(0).toUpperCase()
         })
         return sortBy(Object.entries(groups), (x) => x[0])
     }, [liquidityList, fuse, keyword])

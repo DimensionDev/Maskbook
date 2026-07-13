@@ -9,7 +9,7 @@ export function ConsoleDialog() {
     return (
         <InjectedDialog title="Debugger" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <ConsoleContent onClose={closeDialog} />
+                <ConsoleContent />
             </DialogContent>
         </InjectedDialog>
     )

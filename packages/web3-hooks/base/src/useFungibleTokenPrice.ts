@@ -15,6 +15,7 @@ export function useFungibleTokenPrice<T extends NetworkPluginID = NetworkPluginI
         ...options,
     } as HubOptions<T>)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         enabled: !!chainId && !!address,
         queryKey: ['fungible', 'token-price', pluginID, chainId, address, options],

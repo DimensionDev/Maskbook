@@ -36,7 +36,7 @@ interface PluginEntryRenderProps extends RefAttributes<PluginEntryRenderRef> {
 export const PluginEntryRender = memo((props: PluginEntryRenderProps) => {
     const [trackPluginRef] = useSetPluginEntryRenderRef(props.ref)
     const pluginField = usePluginTransField()
-    const plugins = [...useActivatedPluginsSiteAdaptor('any')].sort((plugin) => {
+    const plugins = useActivatedPluginsSiteAdaptor('any').toSorted((plugin) => {
         // TODO: support priority order
         if (plugin.ID === PluginID.RedPacket) return -1
         return 1

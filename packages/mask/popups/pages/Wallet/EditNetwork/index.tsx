@@ -153,7 +153,9 @@ export const Component = memo(function EditNetwork() {
                         message: issue.message,
                     })
                 })
-            } catch {}
+            } catch {
+                return false
+            }
             return false
         },
         [setError],

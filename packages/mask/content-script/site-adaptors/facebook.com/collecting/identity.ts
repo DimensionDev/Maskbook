@@ -53,7 +53,7 @@ function resolveCurrentVisitingIdentityInner(
         const bio = getBioDescription()
         const handle = getFacebookId()
         const ownerHandle = ownerRef.value.identifier?.userId
-        const isOwner = !!(handle && ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
+        const isOwner = handle ? handle.toLowerCase() === ownerHandle?.toLowerCase() : false
         const homepage = getPersonalHomepage()
         const avatar = getAvatar()
 
@@ -99,7 +99,7 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
 const myUsernameLiveSelector = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
         // cspell:disable-next-line
-        '[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
+        ':scope [data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
     )
 
-    .filter((x) => x.innerText)
+    .filter((x) => x.textContent)

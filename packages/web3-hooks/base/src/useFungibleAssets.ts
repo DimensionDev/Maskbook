@@ -37,6 +37,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     const { BalanceNotifier, Network } = useWeb3State(pluginID)
     const networks = useNetworks()
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const query = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
         queryKey: ['fungible-assets', pluginID, account],
         queryFn: async () => {
@@ -53,14 +54,14 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             })
             const assets = await asyncIteratorToArray(iterator)
             const trustedAssets = await asyncIteratorToArray(trustedAssetsIterator)
-            const networkIds = networks.map((x) => x.chainId)
+            const networkIds = new Set(networks.map((x) => x.chainId))
 
             const list = unionWith(
                 assets,
                 trustedAssets.map((x) => ({ ...x, isCustomToken: true })),
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             )
-            return list.filter((x) => networkIds.includes(x.chainId))
+            return list.filter((x) => networkIds.has(x.chainId))
         },
     })
     const mergedAssets = query.data || EMPTY_LIST

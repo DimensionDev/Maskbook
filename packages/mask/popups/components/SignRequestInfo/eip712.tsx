@@ -109,13 +109,13 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
                             </Link>
                         </Tooltip>
         }
-        if (fieldType.match(/\[(\d+)?\]$/u)) {
+        if (/\[(\d+)?\]$/u.test(fieldType)) {
             const type = fieldType.replace(/\[(\d+)?\]$/u, '')
             const data = Array.isArray(fieldData) ? fieldData : []
             return (
                 <ol className={classes.list}>
                     {data.map((field, index) => (
-                        // eslint-disable-next-line react/no-missing-key
+                        // eslint-disable-next-line @eslint-react/no-missing-key
                         <li>{renderField(field, type, schema)}</li>
                     ))}
                 </ol>
@@ -128,7 +128,7 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
                         This request is missing the definition of {fieldType}
                     </Alert>
                 )
-            if (!(typeof fieldData === 'object' && fieldData !== null))
+            if (typeof fieldData !== 'object' || fieldData === null)
                 return (
                     <Alert className={classes.error} severity="error">
                         Field is not an object.
@@ -137,7 +137,7 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
             return (
                 <ul className={classes.object}>
                     {define.map((field) => (
-                        // eslint-disable-next-line react/no-missing-key
+                        // eslint-disable-next-line @eslint-react/no-missing-key
                         <li>
                             <Tooltip title={field.type}>
                                 <span>

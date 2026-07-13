@@ -38,7 +38,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         return true
     }
     protected isSupportedChainId(chainId: number) {
-        return chainId > 0 && Number.isInteger(chainId)
+        return chainId > 0 && Number.isSafeInteger(chainId)
     }
     protected getDefaultAccount() {
         return ''

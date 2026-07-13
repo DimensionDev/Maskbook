@@ -43,7 +43,7 @@ import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useComponentWillReceiveUpdate } from 'foxact/use-component-will-receive-update'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import {
     useCurrentVisitingIdentity,
@@ -217,7 +217,7 @@ function Content(props: ProfileTabContentProps) {
         onChange(undefined, first(tabs)?.id)
     })
 
-    useUpdateEffect(() => {
+    useComponentWillReceiveUpdate(() => {
         onChange(undefined, first(tabs)?.id)
         setSelectedAddress(undefined)
     }, [currentVisitingUserId])

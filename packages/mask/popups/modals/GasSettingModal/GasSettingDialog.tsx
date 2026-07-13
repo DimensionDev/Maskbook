@@ -89,14 +89,14 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: token } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
-        config.paymentToken ? config.paymentToken : nativeTokenAddress,
+        config.paymentToken || nativeTokenAddress,
         undefined,
         { chainId },
     )
 
     const { data: tokenPrice } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
-        config.paymentToken ? config.paymentToken : nativeTokenAddress,
+        config.paymentToken || nativeTokenAddress,
     )
 
     const [minGas, defaultGas, maxGas] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })

@@ -6,7 +6,7 @@ import { produce, enableMapSet, type Draft } from 'immer'
 
 const metadataSchemaStore = new Map<string, object>()
 export function getKnownMetadataKeys() {
-    return [...metadataSchemaStore.keys()]
+    return metadataSchemaStore.keys().toArray()
 }
 
 export function getMetadataSchema(key: string): Option<object> {

@@ -35,7 +35,7 @@ export function FileViewer({ files }: { files: FileInfo[] }) {
                     variant: 'success',
                     message: <Trans>You've saved {file.name} to Web3 file service.</Trans>,
                 })
-            } catch (err) {
+            } catch {
                 showSnackbar(<Trans>Failed to save file</Trans>, {
                     variant: 'error',
                     message: <Trans>Failed to save the file. Please try again.</Trans>,

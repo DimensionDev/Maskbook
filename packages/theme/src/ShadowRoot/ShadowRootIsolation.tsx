@@ -1,5 +1,5 @@
 /* eslint-disable react-compiler/react-compiler */
-/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @eslint-react/rules-of-hooks */
 import { type DetailedHTMLProps, type HTMLAttributes, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { Flags } from '@masknet/flags'
 import { createPortal } from 'react-dom'
@@ -33,7 +33,7 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
 
         // Note: ShadowRootIsolation is expected to use inside other closed ShadowRoot
         const shadow = dom.attachShadow({ ...Flags.shadowRootInit, mode: 'open', delegatesFocus: false })
-        shadow.appendChild(container.current!)
+        shadow.append(container.current!)
     }, [dom])
 
     if (!dom?.shadowRoot) return <span {...props} ref={(x) => (x !== dom ? setDOM(x) : undefined)} />

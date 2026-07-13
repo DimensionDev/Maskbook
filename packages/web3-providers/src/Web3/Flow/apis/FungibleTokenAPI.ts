@@ -73,7 +73,7 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
             'Flow USD',
             'FUSD',
             8,
-            new URL('../assets/FUSD.png', import.meta.url).toString(),
+            new URL('../assets/FUSD.png', import.meta.url).href,
         ),
         balance,
         {
@@ -101,7 +101,7 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
             'Flow',
             'FLOW',
             8,
-            new URL('../assets/flow.png', import.meta.url).toString(),
+            new URL('../assets/flow.png', import.meta.url).href,
         ),
         balance,
         {
@@ -129,7 +129,7 @@ async function getAssetTether(chainId: ChainId, account: string) {
             'Tether USD',
             'tUSD',
             8,
-            new URL('../assets/tUSD.png', import.meta.url).toString(),
+            new URL('../assets/tUSD.png', import.meta.url).href,
         ),
         balance,
         {
@@ -167,7 +167,7 @@ class FlowFungibleAPI
                 'Flow',
                 'FLOW',
                 8,
-                new URL('../assets/flow.png', import.meta.url).toString(),
+                new URL('../assets/flow.png', import.meta.url).href,
             ),
             createFungibleToken(
                 chainId,
@@ -175,7 +175,7 @@ class FlowFungibleAPI
                 'Flow USD',
                 'FUSD',
                 8,
-                new URL('../assets/FUSD.png', import.meta.url).toString(),
+                new URL('../assets/FUSD.png', import.meta.url).href,
             ),
             createFungibleToken(
                 chainId,
@@ -183,7 +183,7 @@ class FlowFungibleAPI
                 'Tether USD',
                 'tUSD',
                 8,
-                new URL('../assets/tUSD.png', import.meta.url).toString(),
+                new URL('../assets/tUSD.png', import.meta.url).href,
             ),
         ]
     }

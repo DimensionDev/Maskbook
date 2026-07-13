@@ -101,7 +101,9 @@ export function ConnectWalletModal({
             setProviderType(providerType)
             if (!account) throw new Error('Failed to build connection.')
         } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to connect to provider. Unknown reason')
+            throw new Error(err instanceof Error ? err.message : 'Failed to connect to provider. Unknown reason', {
+                cause: err,
+            })
         }
 
         const site = getSiteType()

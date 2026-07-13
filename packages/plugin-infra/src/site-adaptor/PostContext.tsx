@@ -121,17 +121,13 @@ export const usePostInfoDetails: {
                     if (!postInfo) throw new TypeError('No post context')
                     if (!(key in postInfo)) throw new TypeError('postInfo.' + (key as string) + ' is not found')
                     const k = postInfo[key as keyof PostInfo]
-                    // eslint-disable-next-line react-compiler/react-compiler
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    // eslint-disable-next-line @eslint-react/rules-of-hooks, react-compiler/react-compiler
                     if (k instanceof ValueRef) return useValueRef<any>(k)
-                    // eslint-disable-next-line react-compiler/react-compiler
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    // eslint-disable-next-line @eslint-react/rules-of-hooks, react-compiler/react-compiler
                     if (k instanceof ObservableMap) return useObservableValues<any>(k)
-                    // eslint-disable-next-line react-compiler/react-compiler
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    // eslint-disable-next-line @eslint-react/rules-of-hooks, react-compiler/react-compiler
                     if (k instanceof ObservableSet) return useObservableValues<any>(k)
-                    // eslint-disable-next-line react-compiler/react-compiler
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    // eslint-disable-next-line @eslint-react/rules-of-hooks, react-compiler/react-compiler
                     if (isSubscription(k)) return useSubscription<any>(k)
                     return k
                 }

@@ -91,7 +91,6 @@ interface WizardDialogProps {
     small?: boolean
     title?: string
     dialogType: SetupGuideStep
-    optional?: boolean
     content?: React.ReactNode
     tip?: React.ReactNode
     footer?: React.ReactNode

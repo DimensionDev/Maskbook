@@ -30,7 +30,6 @@ export async function* progressDownload(request: string | null | (() => Promise<
         typeof request === 'function' ?
             await request()
         :   await fetch(request, {
-                method: 'GET',
                 cache: 'no-store',
             })
 

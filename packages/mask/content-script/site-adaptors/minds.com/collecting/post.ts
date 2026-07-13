@@ -40,7 +40,7 @@ function collectPostsMindsInner(
             // ? inject after comments
             const commentsSelector = activitySelector
                 .clone()
-                .querySelectorAll<HTMLElement>('m-activity__content .m-comment__message')
+                .querySelectorAll<HTMLElement>(':scope m-activity__content .m-comment__message')
 
             // ? inject comment text field
             const commentBoxSelector = activitySelector
@@ -62,7 +62,10 @@ function collectPostsMindsInner(
             function collectLinks() {
                 if (!activityNode) return
 
-                const links = [...activityNode.querySelectorAll('a')].filter((x) => x.rel)
+                const links = activityNode
+                    .querySelectorAll('a')
+                    .values()
+                    .filter((x) => x.rel)
                 const seen = new Set<string>()
                 for (const x of links) {
                     if (seen.has(x.href)) continue
@@ -94,7 +97,7 @@ function collectPostsMindsInner(
                 // don't add await on this
                 const images = untilElementAvailable(
                     new LiveSelector([activityNode]).querySelectorAll<HTMLImageElement>(
-                        '.m-activityContent__media--image img',
+                        ':scope .m-activityContent__media--image img',
                     ),
                     10000,
                 )
@@ -128,16 +131,19 @@ function collectPostsMindsInner(
 }
 
 function getMetadataImages(activityNode: HTMLElement): string[] {
-    const imgNodes = activityNode.querySelectorAll<HTMLImageElement>('.m-activityContent__media--image img') || []
+    const imgNodes =
+        activityNode.querySelectorAll<HTMLImageElement>(':scope .m-activityContent__media--image img') || []
 
     if (!imgNodes.length) return []
-    const imgUrls = Array.from(imgNodes)
+    const imgUrls = imgNodes
+        .values()
         .map((node) => node.src)
         // FIXME! there's a CORS issue on the CDN
         .map((src) => src.replace('cdn.minds.com', 'minds.com'))
         // Use the master version of the image so the dimensions don't change
         .map((src) => src.replace('xlarge', 'master'))
         .filter(Boolean)
+        .toArray()
     if (!imgUrls.length) return []
     return imgUrls
 }

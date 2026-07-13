@@ -92,15 +92,15 @@ export function TransactionRequest(props: InteractionItemProps) {
     {
         const client = useQueryClient()
         const queryKey = ['popup', 'wallet', 'interaction', request.ID, chainId]
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         ;({ data: transaction } = useSuspenseQuery({
-            // eslint-disable-next-line @tanstack/query/exhaustive-deps
             queryKey,
             networkMode: 'always',
             queryFn: async (): Promise<TransactionDetail> => {
                 const payload = createJsonRpcRequest(0, request.request.arguments)
                 const computedPayload = PayloadEditor.fromPayload(payload).config
                 const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
-                // eslint-disable-next-line react/no-missing-context-display-name
+                // eslint-disable-next-line @eslint-react/no-missing-context-display-name
                 const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
 
                 return {

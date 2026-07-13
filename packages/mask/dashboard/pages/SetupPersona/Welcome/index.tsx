@@ -66,7 +66,7 @@ export const Component = memo(function Welcome() {
         setAgreed(true)
 
         try {
-            const siteOrigins = [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins)
+            const siteOrigins = definedSiteAdaptors.values().flatMap((x) => x.declarativePermissions.origins)
             const granted = await requestPermissionFromExtensionPage([...siteOrigins, ...XOAuthRequestOrigins])
             if (!granted) return
             if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'

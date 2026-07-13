@@ -12,7 +12,6 @@ import { useTermsConfirmed } from './storage.js'
 
 interface FileServiceDialogProps {
     onClose: () => void
-    open: boolean
     selectMode?: boolean
     selectedFileIds?: string[]
     compositionType: CompositionType

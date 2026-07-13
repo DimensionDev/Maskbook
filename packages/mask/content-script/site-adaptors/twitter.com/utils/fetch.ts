@@ -22,8 +22,8 @@ import { toHex } from '@masknet/shared-base'
  * Get post id from dom, including normal tweet, quoted tweet and retweet one
  */
 export function getPostId(node: HTMLElement) {
-    let idNode: HTMLAnchorElement | undefined | null = null
-    let timeNode = node.querySelector('a[href*="/status/"] time')
+    let idNode: HTMLAnchorElement | undefined | null
+    let timeNode = node.querySelector(':scope a[href*="/status/"] time')
     if (timeNode) {
         idNode = timeNode.parentElement as HTMLAnchorElement
     } else {
@@ -33,7 +33,7 @@ export function getPostId(node: HTMLElement) {
     }
     const isRetweet = !!node.querySelector('[data-testid=socialContext]')
 
-    let pid = ''
+    let pid: string
     if (idNode) {
         pid = parseId(idNode.href)
     } else if (timeNode) {
@@ -41,7 +41,7 @@ export function getPostId(node: HTMLElement) {
         // so use the timestamp as post id instead
         pid = `timestamp-keccak256:${keccak256(toHex(timeNode.getAttribute('datetime')!))}`
     } else {
-        pid = `keccak256:${keccak256(toHex(node.innerText))}`
+        pid = `keccak256:${keccak256(toHex(node.textContent))}`
     }
 
     // You can't retweet a tweet or a retweet, but only cancel retweeting
@@ -50,12 +50,17 @@ export function getPostId(node: HTMLElement) {
 
 function postNameParser(node: HTMLElement) {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a div div > span'))
+    const name = collectNodeText(
+        tweetElement.querySelector<HTMLElement>(':scope [data-testid^="User-Name"] a div div > span'),
+    )
     // Note: quoted tweet has no [data-testid^="User-Name"]
     const handle =
-        Array.from(tweetElement.querySelectorAll<HTMLElement>('[tabindex]'))
-            .map((node) => node.innerText || '')
+        tweetElement
+            .querySelectorAll<HTMLElement>('[tabindex]')
+            .values()
+            .map((node) => node.textContent)
             .filter((text) => text.startsWith('@'))
+            .toArray()
             .at(0) || ''
 
     // post matched, return the result
@@ -67,7 +72,7 @@ function postNameParser(node: HTMLElement) {
     }
     const quotedTweetName = collectNodeText(
         tweetElement.querySelector<HTMLElement>(
-            'div[role="link"] div[data-testid="UserAvatar-Container-unknown"] + div > span',
+            ':scope div[role="link"] div[data-testid="UserAvatar-Container-unknown"] + div > span',
         ),
     )
     const quotedTweetHandle = collectNodeText(
@@ -87,7 +92,7 @@ function postNameParser(node: HTMLElement) {
 
 function postAvatarParser(node: HTMLElement) {
     const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
-    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>('img[src*="twimg.com"]')
+    const avatarElement = tweetElement.firstElementChild!.querySelector<HTMLImageElement>('img[src*="twimg.com"]')
     return avatarElement ? avatarElement.src : undefined
 }
 
@@ -114,7 +119,7 @@ function getVisibleText(node: Node) {
 }
 
 export function postContentMessageParser(node: HTMLElement): TypedMessage {
-    function make(node: Node): TypedMessage {
+    function make(node: ChildNode): TypedMessage {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
             return makeTypedMessageText(node.nodeValue, getElementStyle(node.parentElement))
@@ -173,13 +178,13 @@ export function postContentMessageParser(node: HTMLElement): TypedMessage {
         } else if (node instanceof HTMLSpanElement) {
             return makeTypedMessageText(node.textContent ?? '')
         } else if (node.childNodes.length) {
-            const messages = makeTypedMessageTuple(flattenDeep(Array.from(node.childNodes).map(make)))
+            const messages = makeTypedMessageTuple(flattenDeep(node.childNodes.values().map(make).toArray()))
             return FlattenTypedMessage.NoContext(messages)
         } else return makeTypedMessageEmpty()
     }
     const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
     return lang ?
-            FlattenTypedMessage.NoContext(makeTypedMessageTuple(Array.from(lang.childNodes).flatMap(make)))
+            FlattenTypedMessage.NoContext(makeTypedMessageTuple(lang.childNodes.values().map(make).toArray()))
         :   makeTypedMessageEmpty()
 }
 
@@ -197,19 +202,23 @@ export async function postImagesParser(node: HTMLElement): Promise<TypedMessageI
     const isQuotedTweet = !!node.closest('div[role="link"]')
     const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
     if (!imgNodes.length) return []
-    const tms = Array.from(imgNodes)
+    const tms = imgNodes
+        .values()
         .filter((node) => isQuotedTweet || !node.closest('div[role="link"]'))
         .flatMap((node) => {
             let src = normalizeImageURL(node.getAttribute('src') ?? '')
             if (Array.isArray(src)) src = src.filter(Boolean)
             if (!src.length) return []
             // TODO: the parser may return 2 different URLs for png and jpeg
-            return makeTypedMessageImage(
-                Array.isArray(src) ? src[0] : src,
-                { width: node.width, height: node.height },
-                new Map([[IMAGE_RENDER_IGNORE, true]]),
-            )
+            return [
+                makeTypedMessageImage(
+                    Array.isArray(src) ? src[0] : src,
+                    { width: node.width, height: node.height },
+                    new Map([[IMAGE_RENDER_IGNORE, true]]),
+                ),
+            ]
         })
+        .toArray()
     return tms
 }
 

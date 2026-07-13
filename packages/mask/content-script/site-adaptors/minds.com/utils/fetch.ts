@@ -13,14 +13,16 @@ function parseNameArea(nameArea: HTMLAnchorElement) {
     const displayNameNode = nameArea.querySelector('span')
 
     return {
-        name: displayNameNode && assertNonNull(displayNameNode) ? displayNameNode.innerText : nameArea.innerText,
-        handle: nameArea.href.slice(8).split('/')[1],
+        name: (displayNameNode && assertNonNull(displayNameNode) ? displayNameNode : nameArea).textContent,
+        handle: nameArea.href.slice(8).split('/', 2)[1],
     }
 }
 
 function postIdParser(node: HTMLElement) {
-    const idNode = node.querySelector<HTMLAnchorElement>('m-activity__permalink .m-activityPermalink__wrapper--link')
-    return idNode ? (idNode.getAttribute('href')?.split('/')[2] ?? undefined) : undefined
+    const idNode = node.querySelector<HTMLAnchorElement>(
+        ':scope m-activity__permalink .m-activityPermalink__wrapper--link',
+    )
+    return idNode ? (idNode.getAttribute('href')?.split('/', 3)[2] ?? undefined) : undefined
 }
 
 function postNameParser(node: HTMLElement) {
@@ -37,7 +39,7 @@ function postNameParser(node: HTMLElement) {
 }
 
 function postAvatarParser(node: HTMLElement) {
-    const avatarElement = node.querySelector<HTMLImageElement>('m-hovercard img')
+    const avatarElement = node.querySelector<HTMLImageElement>(':scope m-hovercard img')
     return avatarElement ? avatarElement.src : undefined
 }
 
@@ -48,34 +50,34 @@ function resolveType(content: string) {
     return 'normal'
 }
 function postContentMessageParser(node: HTMLElement) {
-    function make(node: Node): TypedMessage | TypedMessage[] {
+    function make(node: ChildNode): TypedMessage[] {
         if (node.nodeType === Node.TEXT_NODE) {
-            if (!node.nodeValue) return makeTypedMessageEmpty()
-            return makeTypedMessageText(node.nodeValue)
+            if (!node.nodeValue) return [makeTypedMessageEmpty()]
+            return [makeTypedMessageText(node.nodeValue)]
         } else if (node instanceof HTMLAnchorElement && !node.className.includes('m-activityContentMedia__link')) {
             const anchor = node
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
-            if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolveType(content), href ?? '', content)
+            if (!content) return [makeTypedMessageEmpty()]
+            return [makeTypedMessageAnchor(resolveType(content), href ?? '', content)]
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
             const matched = src?.match(/emoji\/v2\/svg\/([\w-]+)\.svg/u)
-            if (!matched) return makeTypedMessageEmpty()
+            if (!matched) return [makeTypedMessageEmpty()]
             const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
-            return makeTypedMessageText(String.fromCodePoint(...points))
+            return [makeTypedMessageText(String.fromCodePoint(...points))]
         } else if (node.childNodes.length) {
             const flattened = flattenDeep(Array.from(node.childNodes, make))
             // conjunct text messages under same node
             if (flattened.every(isTypedMessageText))
-                return makeTypedMessageText(flattened.map((x) => x.content).join(''))
+                return [makeTypedMessageText(flattened.map((x) => x.content).join(''))]
             return flattened
-        } else return makeTypedMessageEmpty()
+        } else return [makeTypedMessageEmpty()]
     }
 
     const content = node.querySelector<HTMLDivElement>('m-activity__content')
-    return content ? Array.from(content.childNodes).flatMap(make) : []
+    return content ? content.childNodes.values().flatMap(make) : []
 }
 
 export function postParser(node: HTMLElement) {

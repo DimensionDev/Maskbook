@@ -5,7 +5,7 @@ const definedSiteAdaptorsUILocal = new Map<string, SiteAdaptorUI.DeferredDefinit
 export const definedSiteAdaptorsUI: ReadonlyMap<string, SiteAdaptorUI.DeferredDefinition> = definedSiteAdaptorsUILocal
 
 export async function activateSiteAdaptorUI(): Promise<void> {
-    const ui_deferred = [...definedSiteAdaptorsUI.values()].find((x) => x.shouldActivate(location))
+    const ui_deferred = definedSiteAdaptorsUI.values().find((x) => x.shouldActivate(location))
     if (!ui_deferred) return
     const { activateSiteAdaptorUIInner } = await import('./ui.js')
     try {

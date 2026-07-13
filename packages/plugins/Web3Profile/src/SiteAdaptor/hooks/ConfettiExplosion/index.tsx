@@ -156,11 +156,12 @@ export function useConfettiExplosion() {
             canvas.height = window.innerHeight
         }
 
-        window.addEventListener('resize', resize)
+        const o = new ResizeObserver(resize)
+        o.observe(document.body)
         renderConfetti()
         return () => {
+            o.disconnect()
             if (getRequestId()) window.cancelAnimationFrame(getRequestId()!)
-            window.removeEventListener('resize', resize)
         }
     }, [])
 

@@ -96,7 +96,7 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                     )
                 }
 
-                const type = action ? action.type : feed.type
+                const type = (action || feed).type
                 const context = contextMap[type] || 'send'
                 const value = formatValue(metadata)
                 const symbol = metadata!.symbol

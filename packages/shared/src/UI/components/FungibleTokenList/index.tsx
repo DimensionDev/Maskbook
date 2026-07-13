@@ -260,7 +260,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const isAddressNotContract = addressType !== AddressType.Contract && Utils.isValidAddress(keyword)
 
     const searchError =
-        keyword.match(/^0x.+/iu) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
+        /^0x.+/iu.test(keyword) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
     useEffect(() => {
         onSearchError?.(!!searchError)
     }, [searchError, !searchError])
@@ -317,14 +317,14 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                     return
                 }
                 if (strategy === 'add') await Token?.addToken?.(account, token)
-                if (strategy === 'remove') await Token?.removeToken?.(account, token)
+                else if (strategy === 'remove') await Token?.removeToken?.(account, token)
             },
             trustOrBlockTokenToLocal: async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy: 'trust' | 'block',
             ) => {
                 if (strategy === 'trust') await Token?.trustToken?.(account, token)
-                if (strategy === 'block') await Token?.blockToken?.(account, token)
+                else if (strategy === 'block') await Token?.blockToken?.(account, token)
             },
             isHiddenChainIcon,
             isCustomToken,

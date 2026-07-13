@@ -8,7 +8,7 @@ export function toTransaction(transaction: Transaction): ExplorerAPI.Transaction
         blockHash: transaction.blockHash as Hash,
         blockNumber: BigInt(transaction.blockNumber),
         from: transaction.from as Address,
-        to: transaction.to ? (transaction.to as Address) : null,
+        to: (transaction.to as Address | null) || null,
         gas: BigInt(transaction.gas),
         gasPrice: BigInt(transaction.gasPrice),
         hash: transaction.hash as Hash,

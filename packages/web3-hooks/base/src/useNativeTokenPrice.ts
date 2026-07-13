@@ -10,6 +10,7 @@ export function useNativeTokenPrice<T extends NetworkPluginID = NetworkPluginID>
     const Hub = useWeb3Hub(pluginID, options)
     const nativeTokenAddress = useNativeTokenAddress(pluginID, options)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         enabled: !!nativeTokenAddress,
         queryKey: ['native-token', 'price', pluginID, chainId, nativeTokenAddress, options],

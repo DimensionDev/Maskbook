@@ -45,8 +45,8 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(() => {
             const fraction = token?.decimals || 2
             return {
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${fraction}}$`, 'u'),
-                RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${fraction}}$`, 'u'), // d.ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(String.raw`^\.\d{0,${fraction}}$`, 'u'),
+                RE_MATCH_WHOLE_AMOUNT: new RegExp(String.raw`^\d*\.?\d{0,${fraction}}$`, 'u'), // d.ddd...d
             }
         }, [token?.decimals])
         const onChange = useCallback(

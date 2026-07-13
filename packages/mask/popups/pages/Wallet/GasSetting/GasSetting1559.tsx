@@ -240,6 +240,7 @@ export const GasSetting1559 = memo(() => {
             )
             setValue('maxFeePerGas', formatGwei(BigInt(toFixed(value.formatterTransaction._tx.maxFeePerGas))))
         } else {
+            // eslint-disable-next-line @eslint-react/set-state-in-effect -- Select the default gas option only when an incoming transaction omits EIP-1559 fees.
             setOption(1)
         }
     }, [value, setValue])
@@ -329,7 +330,7 @@ export const GasSetting1559 = memo(() => {
 
     // #region If the payload is consumed it needs to be redirected
     useUpdateEffect(() => {
-        if (!(!value && !getValueLoading)) return
+        if (value || getValueLoading) return
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value, getValueLoading])
     // #endregion

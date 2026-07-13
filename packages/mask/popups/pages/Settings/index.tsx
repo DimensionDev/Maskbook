@@ -166,7 +166,8 @@ export const Component = memo(function SettingsPage() {
 
     useTitle(t`Settings`)
 
-    const websiteCount = data?.filter((x) => x.allowInject && x.hasPermission).length
+    const websiteCountNum = data?.filter((x) => x.allowInject && x.hasPermission).length
+    const websiteCount = <span style={{ color: theme.palette.maskColor.main }}>{websiteCountNum}</span>
     return (
         <>
             <NormalHeader />
@@ -213,10 +214,11 @@ export const Component = memo(function SettingsPage() {
                                 classes={itemClasses}
                                 primary={<Trans>Supported Sites</Trans>}
                                 secondary={
-                                    <Trans>
-                                        <span style={{ color: theme.palette.maskColor.main }}>{websiteCount}</span>{' '}
-                                        <Plural value={websiteCount || 0} one="Website" other="Websites" />
-                                    </Trans>
+                                    <Plural
+                                        value={websiteCountNum || 0}
+                                        one={<Trans>{websiteCount} website</Trans>}
+                                        other={<Trans>{websiteCount} websites</Trans>}
+                                    />
                                 }
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />

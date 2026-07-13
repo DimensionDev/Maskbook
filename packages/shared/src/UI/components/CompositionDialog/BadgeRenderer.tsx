@@ -23,43 +23,46 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
     const i18n = usePluginTransField()
     if (!meta) return null
 
-    const result = [...meta.entries()].flatMap(([metaKey, metaValue]) => {
-        return plugins.map((plugin) => {
-            const render = plugin.CompositionDialogMetadataBadgeRender
-            if (!render) return null
+    const result = meta
+        .entries()
+        .flatMap(([metaKey, metaValue]) => {
+            return plugins.map((plugin) => {
+                const render = plugin.CompositionDialogMetadataBadgeRender
+                if (!render) return null
 
-            try {
-                if (typeof render === 'function') {
-                    return normalizeBadgeDescriptor(render(metaKey, metaValue))
-                } else {
-                    const f = render.get(metaKey)
-                    if (!f) return null
-                    return normalizeBadgeDescriptor(f(metaValue))
-                }
-            } catch (error) {
-                console.error(error)
-                return null
-            }
-
-            function normalizeBadgeDescriptor(desc: Plugin.SiteAdaptor.BadgeDescriptor | string | null) {
-                if (!desc) return null
-                if (typeof desc === 'string')
-                    desc = {
-                        text: desc,
-                        tooltip: <Trans>Provided by plugin "{i18n(plugin.name)}"</Trans>,
+                try {
+                    if (typeof render === 'function') {
+                        return normalizeBadgeDescriptor(render(metaKey, metaValue))
+                    } else {
+                        const f = render.get(metaKey)
+                        if (!f) return null
+                        return normalizeBadgeDescriptor(f(metaValue))
                     }
-                return (
-                    <MetaBadge
-                        readonly={readonly}
-                        key={metaKey + ';' + plugin.ID}
-                        title={desc.tooltip || ''}
-                        onDelete={() => onDeleteMeta(metaKey)}>
-                        {desc.text}
-                    </MetaBadge>
-                )
-            }
+                } catch (error) {
+                    console.error(error)
+                    return null
+                }
+
+                function normalizeBadgeDescriptor(desc: Plugin.SiteAdaptor.BadgeDescriptor | string | null) {
+                    if (!desc) return null
+                    if (typeof desc === 'string')
+                        desc = {
+                            text: desc,
+                            tooltip: <Trans>Provided by plugin "{i18n(plugin.name)}"</Trans>,
+                        }
+                    return (
+                        <MetaBadge
+                            readonly={readonly}
+                            key={metaKey + ';' + plugin.ID}
+                            title={desc.tooltip || ''}
+                            onDelete={() => onDeleteMeta(metaKey)}>
+                            {desc.text}
+                        </MetaBadge>
+                    )
+                }
+            })
         })
-    })
+        .toArray()
     return <>{result}</>
 }
 interface MetaBadgeProps {

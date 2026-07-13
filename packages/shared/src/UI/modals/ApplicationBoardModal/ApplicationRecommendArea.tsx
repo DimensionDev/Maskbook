@@ -74,7 +74,7 @@ export function ApplicationRecommendArea(props: Props) {
 
     return (
         <>
-            <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
+            <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).href} />
             {recommendFeatureAppList.length > 2 && isCarouselReady?.() ?
                 <CarouselProvider
                     naturalSlideWidth={220}

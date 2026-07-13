@@ -57,7 +57,7 @@ TypedMessageTransformers.addTransformer(function visitor(message, context) {
         let index = startFrom
         while (index < message.content.length) {
             const char = message.content[index]
-            if (char === '\uD83C') {
+            if (char === '\u{D83C}') {
                 if (pendingChar.length) {
                     result.push(makeTypedMessageText(pendingChar.join('')))
                     pendingChar.length = 0
@@ -66,7 +66,7 @@ TypedMessageTransformers.addTransformer(function visitor(message, context) {
                 index += 2 // unicode pair
                 // here we at the start of the payload char,
                 // then we should drop rest chars until it no longer matches the RegExp or we met ":||".
-                while (message.content[index].match(textPayloadChar)) {
+                while (textPayloadChar.test(message.content[index])) {
                     index += 1
                     if (
                         message.content[index] === ':' &&

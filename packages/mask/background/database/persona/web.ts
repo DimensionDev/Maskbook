@@ -93,7 +93,9 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                         transaction
                             .objectStore('relations')
                             .createIndex('linked, profile, favor', ['linked', 'profile', 'favor'], { unique: true })
-                    } catch {}
+                    } catch {
+                        // ignore
+                    }
                 }
                 async function v3_v4() {
                     try {
@@ -114,7 +116,9 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                                 await rec.update(rec.value)
                             }
                         }
-                    } catch {}
+                    } catch {
+                        // ignore
+                    }
                 }
                 if (oldVersion < 1) v0_v1()
                 if (oldVersion < 2) v1_v2()
@@ -251,7 +255,7 @@ export async function queryPersonasDB(
         if (
             (query?.hasPrivateKey && !out.privateKey) ||
             (query?.nameContains && out.nickname !== query.nameContains) ||
-            (query?.identifiers && !query.identifiers.some((x) => x === out.identifier)) ||
+            (query?.identifiers && !query.identifiers.includes(out.identifier)) ||
             (query?.initialized && out.uninitialized)
         )
             continue
@@ -296,9 +300,10 @@ export async function updatePersonaDB(
     const old = personaRecordOutDB(_old)
     let nextLinkedProfiles = old.linkedProfiles
     if (nextRecord.linkedProfiles) {
-        if (howToMerge.linkedProfiles === 'merge')
-            nextLinkedProfiles = new Map([...nextLinkedProfiles, ...nextRecord.linkedProfiles])
-        else nextLinkedProfiles = nextRecord.linkedProfiles
+        nextLinkedProfiles =
+            howToMerge.linkedProfiles === 'merge' ?
+                new Map([...nextLinkedProfiles, ...nextRecord.linkedProfiles])
+            :   nextRecord.linkedProfiles
     }
     if (howToMerge.explicitUndefinedField === 'ignore') {
         const keys = Object.keys(nextRecord) as Array<keyof typeof nextRecord>
@@ -327,20 +332,19 @@ export async function createOrUpdatePersonaDB(
 ) {
     const personaInDB = await t.objectStore('personas').get(record.identifier.toText())
     if (personaInDB) return updatePersonaDB(record, howToMerge, t)
-    else
-        return createPersonaDB(
-            {
-                ...record,
-                address:
-                    record.privateKey?.d ?
-                        bytesToHex(publicToAddress(privateToPublic(fromBase64URL(record.privateKey.d))))
-                    :   undefined,
-                createdAt: record.createdAt ?? new Date(),
-                updatedAt: record.updatedAt ?? new Date(),
-                linkedProfiles: record.linkedProfiles ?? new Map(),
-            },
-            t,
-        )
+    return createPersonaDB(
+        {
+            ...record,
+            address:
+                record.privateKey?.d ?
+                    bytesToHex(publicToAddress(privateToPublic(fromBase64URL(record.privateKey.d))))
+                :   undefined,
+            createdAt: record.createdAt ?? new Date(),
+            updatedAt: record.updatedAt ?? new Date(),
+            linkedProfiles: record.linkedProfiles ?? new Map(),
+        },
+        t,
+    )
 }
 
 /** @internal */
@@ -422,7 +426,7 @@ export async function queryProfilesDB(
         for await (const each of t.objectStore('profiles').iterate()) {
             const out = profileOutDB(each.value)
             if (query.hasLinkedPersona && !out.linkedPersona) continue
-            if (query.identifiers.some((x) => out.identifier === x)) result.push(out)
+            if (query.identifiers.includes(out.identifier)) result.push(out)
         }
     } else {
         for await (const each of t.objectStore('profiles').iterate()) {
@@ -492,8 +496,7 @@ async function updateProfileDB(
 
 /** @internal */
 export async function createOrUpdateProfileDB(rec: ProfileRecord, t: FullPersonaDBTransaction<'readwrite'>) {
-    if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
-    else return createProfileDB(rec, t)
+    return (await queryProfileDB(rec.identifier, t)) ? updateProfileDB(rec, t) : createProfileDB(rec, t)
 }
 
 /** @internal */
@@ -736,12 +739,11 @@ function relationRecordToDB(x: Omit<RelationRecord, 'network'>): RelationRecordD
             profile: x.profile.toText(),
             linked: x.linked.toText(),
         }
-    } else {
-        return {
-            ...x,
-            profile: x.profile.toText(),
-            linked: x.linked.toText(),
-        }
+    }
+    return {
+        ...x,
+        profile: x.profile.toText(),
+        linked: x.linked.toText(),
     }
 }
 
@@ -756,16 +758,15 @@ function relationRecordOutDB(x: RelationRecordDB): RelationRecord {
                 `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.linked}`,
             ),
         }
-    } else {
-        return {
-            ...x,
-            profile: ECKeyIdentifier.from(x.profile).expect(
-                `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.profile}`,
-            ),
-            linked: ECKeyIdentifier.from(x.linked).expect(
-                `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.linked}`,
-            ),
-        }
+    }
+    return {
+        ...x,
+        profile: ECKeyIdentifier.from(x.profile).expect(
+            `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.profile}`,
+        ),
+        linked: ECKeyIdentifier.from(x.linked).expect(
+            `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.linked}`,
+        ),
     }
 }
 

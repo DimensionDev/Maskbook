@@ -25,7 +25,7 @@ export async function getIncompleteRecipientsOfPost(id: PostIVIdentifier): Promi
 
     const profiles = (
         await queryProfilesDB({
-            identifiers: [...nameInDB.keys()],
+            identifiers: nameInDB.keys().toArray(),
             hasLinkedPersona: true,
         })
     ).filter((x) => x.linkedPersona)

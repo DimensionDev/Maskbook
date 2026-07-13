@@ -318,7 +318,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     </div>
                 </div>
                 <TextOverflowTooltip title={rp_msg || <Trans>Best Wishes!</Trans>} as={ShadowRootTooltip}>
-                    <Typography className={classes.message}>{rp_msg ? rp_msg : <Trans>Best Wishes!</Trans>}</Typography>
+                    <Typography className={classes.message}>{rp_msg || <Trans>Best Wishes!</Trans>}</Typography>
                 </TextOverflowTooltip>
             </div>
             {onlyView ?

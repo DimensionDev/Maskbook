@@ -73,7 +73,7 @@ function _parseEIP4361Message(message: string): ParsedEIP4361Message | EIP4361Me
         }
         // address LF
         else if (step === S.expect_address) {
-            if (!line.match(/^0x[\d,A-Fa-f]{40}$/gu)) return EIP4361MessageState.Invalid
+            if (!/^0x[\d,A-Fa-f]{40}$/gu.test(line)) return EIP4361MessageState.Invalid
             address = line
             step = S.expect_lf_1
         }

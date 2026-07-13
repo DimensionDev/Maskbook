@@ -17,8 +17,8 @@ export function useValueRef<T>(ref: ValueRef<T>): T {
     )
 }
 export function useValueRefReactQuery<T>(key: `@@${string}`, ref: ValueRefWithReady<T>) {
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const { data, refetch } = useQuery({
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: [key],
         queryFn: async () => {
             await ref.readyPromise

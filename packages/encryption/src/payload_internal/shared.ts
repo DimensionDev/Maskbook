@@ -35,7 +35,7 @@ export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.P
     if (id === '' || id === null || id === undefined) return OptionalResult.None
     if (typeof id !== 'string') return new CheckedError(PayloadException.InvalidPayload, 'Invalid user id').toErr()
 
-    let net = ''
+    let net: string
     if (network === EncryptPayloadNetwork.Facebook) net = 'facebook.com'
     else if (network === EncryptPayloadNetwork.Twitter) net = 'twitter.com'
     else if (network === EncryptPayloadNetwork.Instagram) net = 'instagram.com'

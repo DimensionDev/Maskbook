@@ -141,11 +141,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         if (tokenAmount.isZero() || !inputAmount) return <Trans>Enter an amount</Trans>
         if (isLessThan(tokenAmount, 0)) return <Trans>Input amount is below the minimum amount</Trans>
         if (isLessThan(balanceGasMinus, tokenAmount)) {
-            return (
-                <Trans>
-                    Insufficient ${isDeposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol} balance
-                </Trans>
-            )
+            return <Trans>Insufficient ${(isDeposit ? protocol.bareToken : protocol.stakeToken).symbol} balance</Trans>
         }
         return ''
     })()
@@ -196,7 +192,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         if (chainId !== currentChainId) await EVMWeb3.switchChain?.(chainId)
         const hash = await protocol[methodName](account, chainId, tokenAmount)
         if (typeof hash !== 'string') {
-            throw new Error('Failed to deposit token.')
+            throw new TypeError('Failed to deposit token.')
         } else {
             queryClient.invalidateQueries({
                 queryKey: ['savings', 'balance', chainId, protocol.bareToken.address, account],

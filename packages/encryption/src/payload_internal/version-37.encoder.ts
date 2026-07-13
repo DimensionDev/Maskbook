@@ -29,8 +29,8 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
         payload_arr[Index.authorPublicKeyAlgorithm] = algr
         const raw = await exportCryptoKeyToRaw(key)
         if (raw.isOk()) {
-            if (algr === EC_KeyCurve.secp256k1) payload_arr[Index.authorPublicKey] = await compressK256KeyRaw(raw.value)
-            else payload_arr[Index.authorPublicKey] = raw.value
+            payload_arr[Index.authorPublicKey] =
+                algr === EC_KeyCurve.secp256k1 ? await compressK256KeyRaw(raw.value) : raw.value
         } else {
             payload_arr[Index.authorPublicKey] = null
             warn(key, raw.isErr())
@@ -44,10 +44,10 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
             const k = await exportCryptoKeyToRaw(key)
             if (k.isErr()) warn(key, k.isErr())
             else {
-                if (alg === EC_KeyCurve.secp256k1) keyMaterials[alg] = await compressK256KeyRaw(k.value)
-                else keyMaterials[alg] = k.value
+                keyMaterials[alg] = alg === EC_KeyCurve.secp256k1 ? await compressK256KeyRaw(k.value) : k.value
             }
         }
+        // eslint-disable-next-line unicorn/prefer-hoisting-branch-code -- subArr definition is local
         payload_arr[Index.encryption] = subArr
     } else {
         const { AESKey, iv } = payload.encryption

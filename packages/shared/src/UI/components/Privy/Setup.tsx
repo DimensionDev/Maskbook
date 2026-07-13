@@ -1,4 +1,4 @@
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { usePersistSubscription } from '@masknet/shared-base-ui'
 import { useAccount, useChainContext, useFireflyEmbeddedWallets } from '@masknet/web3-hooks-base'
 import { EVMWeb3, MaskWalletProvider } from '@masknet/web3-providers'
@@ -15,10 +15,7 @@ export const PrivySetup = memo(function PrivySetup() {
     const { wallets, ready } = useFireflyEmbeddedWallets()
     const account = useAccount()
 
-    const existedWallets = usePersistSubscription(
-        '@@mask-wallets',
-        MaskWalletProvider.subscription.wallets ?? EMPTY_LIST,
-    )
+    const existedWallets = usePersistSubscription('@@mask-wallets', MaskWalletProvider.subscription.wallets)
     const { providerType } = useChainContext()
     useAsync(async () => {
         const newWallets = wallets.filter((x) => !existedWallets.find((y) => isSameAddress(y.address, x.address)))

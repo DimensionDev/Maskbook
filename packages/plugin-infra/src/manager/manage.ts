@@ -88,7 +88,7 @@ export function createManager<
         signal.addEventListener(
             'abort',
             () => {
-                ;[...activated.keys()].forEach(stopPlugin)
+                activated.keys().forEach(stopPlugin)
                 removeListener1()
                 removeListener2()
                 removeListener3()
@@ -136,7 +136,7 @@ export function createManager<
 
         verifyHostHooks()
         const abort = new AbortController()
-        // eslint-disable-next-line react/no-missing-context-display-name
+        // eslint-disable-next-line @eslint-react/no-missing-context-display-name
         const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
             controller: abort,

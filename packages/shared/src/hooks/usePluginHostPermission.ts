@@ -12,7 +12,7 @@ export function usePluginHostPermissionCheck(plugins: Plugin.Shared.Definition[]
 
         await Promise.allSettled(
             plugins_.map((plugin) =>
-                hasHostPermission?.(plugin.enableRequirement.host_permissions!).then(
+                Promise.resolve(hasHostPermission?.(plugin.enableRequirement.host_permissions!)).then(
                     (result) => !result && lackPermission.add(plugin.ID),
                 ),
             ),

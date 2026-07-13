@@ -236,7 +236,6 @@ export const Component = memo(function CreateMnemonic() {
             {verified ?
                 <VerifyMnemonicUI
                     setVerified={setVerified}
-                    words={words}
                     loading={loading}
                     isMatched={isMatched}
                     answerCallback={answerCallback}
@@ -265,7 +264,6 @@ interface CreateMnemonicUIProps {
 }
 
 interface VerifyMnemonicUIProps {
-    words: string[]
     answerCallback: (index: number, word: string) => void
     verifyAnswerCallback: (callback?: () => void) => void
     onRefreshWords: () => void

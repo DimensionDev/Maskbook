@@ -20,7 +20,7 @@ import {
 import { ChainBoundary, EmptyStatus, LoadingStatus, TokenIcon } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
 
-const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
+const useStyles = makeStyles<void | { listItemBackground?: string; listItemBackgroundIcon?: string }>()(
     (theme, props) => ({
         statusBox: {
             height: '100%',
@@ -207,10 +207,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
         chainId,
     })
-    const amount =
-        spender.amount ? spender.amount
-        : spender.rawAmount ? leftShift(spender.rawAmount, token?.decimals)
-        : undefined
+    const amount = spender.amount || (spender.rawAmount ? leftShift(spender.rawAmount, token?.decimals) : undefined)
 
     return (
         <div className={classes.listItemWrapper}>

@@ -24,7 +24,8 @@ export function setupReactShadowRootEnvironment(
 ) {
     if (portalContainer) return portalContainer
     // TODO: make sure globalContainer is the last DOM in the body?
-    globalContainer = document.body.appendChild(document.createElement('div'))
+    globalContainer = document.createElement('div')
+    document.body.append(globalContainer)
     portalContainer = globalContainer.attachShadow(init)
 
     // Note: This React Root does not expect to have any direct DOM children.

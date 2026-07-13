@@ -53,7 +53,7 @@ function TwitterDecoderText(raw: string): Option<string> {
     if (!raw) return None
     if (!raw.includes('%20') || !raw.includes('%40')) return None
     const payloadLink = parseURLs(raw)
-        .map((x) => x.replace(/\u2026$/u, ''))
+        .map((x) => x.replace(/\u{2026}$/u, ''))
         .filter((x) => x.endsWith('%40'))[0]
     if (!URL.canParse(payloadLink)) return None
     const { search, pathname } = new URL(payloadLink)

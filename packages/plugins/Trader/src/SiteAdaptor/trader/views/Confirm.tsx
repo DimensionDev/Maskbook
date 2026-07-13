@@ -313,7 +313,7 @@ export const Confirm = memo(function Confirm() {
                         variant: 'success',
                     })
                 }
-            } catch (error) {
+            } catch {
                 showSnackbar(t`Swap`, {
                     message: <Trans>Wait too long for the confirmation.</Trans>,
                     variant: 'error',

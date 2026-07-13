@@ -74,8 +74,9 @@ export abstract class NameServiceState implements Web3NameServiceState {
     async safeReverse(address: string, domainOnly?: boolean) {
         try {
             return await this.reverse(address, domainOnly)
-        } catch {}
-        return
+        } catch {
+            return undefined
+        }
     }
 
     abstract createResolvers(domainOnly?: boolean): NameServiceAPI.Provider[]

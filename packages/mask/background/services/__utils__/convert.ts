@@ -43,7 +43,7 @@ export function toPersonaInformation(personas: PersonaRecord[], t: FullPersonaDB
         })
 
         if (persona.linkedProfiles.size) {
-            const profiles = await queryProfilesDB({ identifiers: [...persona.linkedProfiles.keys()] }, t)
+            const profiles = await queryProfilesDB({ identifiers: persona.linkedProfiles.keys().toArray() }, t)
             // we must not await toProfileInformation cause it is tx of another db.
             dbQueryPass2.push(
                 toProfileInformation(profiles).mustNotAwaitThisWithInATransaction.then((x) => void map.push(...x)),

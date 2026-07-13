@@ -177,7 +177,6 @@ interface PersonaHomeUIProps {
     onConnect: (networkIdentifier: EnhanceableSite) => void
     onAccountClick: (account: ProfileAccount) => void
     bindingWallets?: BindingProof[]
-    hasPaymentPassword?: boolean
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(

@@ -10,9 +10,6 @@ import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typ
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectFungibleTokenModal } from '@masknet/shared'
 
-interface HubContentProps {
-    onClose?: () => void
-}
 
 const useStyles = makeStyles()({
     container: {
@@ -20,7 +17,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export function HubContent(props: HubContentProps) {
+export function HubContent() {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()

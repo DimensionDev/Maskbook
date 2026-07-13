@@ -20,14 +20,15 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
 
         try {
             switch (context.method) {
-                case EthereumMethodType.eth_sendTransaction:
+                case EthereumMethodType.eth_sendTransaction: {
                     const tx = context.result as string
                     if (!tx || !context.config) return
                     const account = context.config.from ?? context.account
                     const chainId = context.config.chainId ?? context.chainId
                     await Transaction?.addTransaction?.(chainId, account, tx, { ...context.config, draftedAt })
                     break
-                case EthereumMethodType.eth_getTransactionReceipt:
+                }
+                case EthereumMethodType.eth_getTransactionReceipt: {
                     const receipt = context.result as TransactionReceipt | null
                     const status = getTransactionStatusType(receipt)
                     if (!receipt?.transactionHash || status === TransactionStatusType.NOT_DEPEND) return
@@ -44,7 +45,8 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                         })
                     BlockNumberNotifier?.emitter.emit('update', context.chainId)
                     break
-                case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                }
+                case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
                     if (!context.config || typeof context.result !== 'string') return
                     const [hash] = context.request.params as [string, Transaction]
                     await Transaction?.replaceTransaction?.(
@@ -55,6 +57,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                         context.config,
                     )
                     break
+                }
             }
         } catch {
             // to record tx in the database, allow to fail silently

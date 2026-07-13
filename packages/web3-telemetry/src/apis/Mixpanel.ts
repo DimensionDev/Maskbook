@@ -186,11 +186,11 @@ export class MixpanelEventAPI {
         )
 
         const json:
+            | 0
             | {
                   error?: string
                   status: string
-              }
-            | 0 = await response.json()
+              } = await response.json()
 
         if (json === 0) throw new Error('No data objects in the body are invalid.')
         if (typeof json === 'object' && json.error) throw new Error(json.error)

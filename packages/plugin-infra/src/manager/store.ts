@@ -17,7 +17,7 @@ export const registeredPlugins: Subscription<Array<[string, Plugin.DeferredDefin
     onNewPluginRegistered(() => (value = undefined))
     return {
         getCurrentValue() {
-            return (value ??= [...__registered.entries()])
+            return (value ??= __registered.entries().toArray())
         },
         subscribe(callback) {
             return onNewPluginRegistered(callback)

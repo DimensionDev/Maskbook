@@ -63,5 +63,6 @@ export const pasteTextToCompositionMinds: SiteAdaptorUI.AutomationCapabilities.N
 }
 
 function SimulateTextareaInput(id: string) {
+    // eslint-disable-next-line unicorn/prefer-query-selector
     document.getElementById(id)?.dispatchEvent(new Event('input', { bubbles: true }))
 }

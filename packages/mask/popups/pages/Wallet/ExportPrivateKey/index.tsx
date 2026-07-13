@@ -104,7 +104,7 @@ export const Component = memo(function ExportPrivateKey() {
         TabType.JsonFile,
     )
 
-    useTitle(wallet?.name ? wallet.name : '')
+    useTitle(wallet?.name || '')
 
     return (
         <TabContext value={currentTab}>

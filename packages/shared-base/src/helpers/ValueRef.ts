@@ -46,7 +46,7 @@ export class ValueRefWithReady<T> extends ValueRef<T> {
         return super.value
     }
     override set value(value: T) {
-        if (this.ready === false) {
+        if (!this.ready) {
             this.nowReady!()
             Object.assign(this, { ready: true, nowReady: undefined })
         }

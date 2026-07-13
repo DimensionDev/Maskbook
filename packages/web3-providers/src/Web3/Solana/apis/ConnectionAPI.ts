@@ -135,10 +135,7 @@ export class SolanaConnectionAPI
         const { data: assets } = await SolanaFungible.getAssets(options.account, {
             chainId: options.chainId,
         })
-        const records = assets.reduce<Record<string, string>>(
-            (map, asset) => ({ ...map, [asset.address]: asset.balance }),
-            {},
-        )
+        const records = Object.fromEntries(assets.map((asset) => [asset.address, asset.balance]))
         const nativeTokenAddress = getNativeTokenAddress(options.chainId)
         if (listOfAddress.includes(nativeTokenAddress)) {
             records[nativeTokenAddress] = await this.getNativeTokenBalance(options)

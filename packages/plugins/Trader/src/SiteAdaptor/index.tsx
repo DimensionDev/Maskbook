@@ -36,7 +36,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 return (
                     <Web3ContextProvider network={pluginID} chainId={chainId}>
                         <TrendingViewProvider
-                            isDSearch={!isProfilePage}
                             isProfilePage={!!isProfilePage}
                             isTokenTagPopper={false}
                             isPreciseSearch={EVMUtils.isValidAddress(keyword)}>

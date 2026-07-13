@@ -4,11 +4,11 @@ import type { NetworkPluginID, SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { SelectProvider } from './SelectProvider.js'
 
-export type SelectProviderModalOpenProps = {
+export type SelectProviderModalOpenProps = void | {
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
     pluginID?: NetworkPluginID
-} | void
+}
 
 export type SelectProviderModalCloseProps = boolean
 

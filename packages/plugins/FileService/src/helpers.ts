@@ -80,18 +80,20 @@ export function downloadFile(file: FileInfo) {
     openWindow(file.key ? `${link}#${file.key}` : link)
 }
 
-async function digestFile(file: File) {
+async function digestFile(file: File): Promise<string[]> {
     const buffer = await file.arrayBuffer()
     const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
-    const hashHex = Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0'))
-    return hashHex
+    const hashHex = new Uint8Array(hashBuffer).values().map((b) => b.toString(16).padStart(2, '0'))
+    return hashHex.toArray()
 }
 
-async function digestMessage(message: string) {
+async function digestMessage(message: string): Promise<string> {
     const buffer = new TextEncoder().encode(message)
     const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
-    const hashHex = Array.from(new Uint8Array(hashBuffer))
+    const hashHex = new Uint8Array(hashBuffer)
+        .values()
         .map((b) => b.toString(16).padStart(2, '0'))
+        .toArray()
         .join('')
     return hashHex
 }

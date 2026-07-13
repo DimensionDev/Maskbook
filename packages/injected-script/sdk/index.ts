@@ -66,10 +66,10 @@ export function pasteText(text: string) {
     sendEvent('paste', text)
 }
 export function pasteImage(image: Uint8Array) {
-    sendEvent('pasteImage', Array.from(image))
+    sendEvent('pasteImage', [...image])
 }
 export function pasteInstagram(image: Uint8Array) {
-    sendEvent('instagramUpload', Array.from(image))
+    sendEvent('instagramUpload', [...image])
 }
 export function inputText(text: string) {
     sendEvent('input', text)
@@ -80,7 +80,7 @@ export function hookInputUploadOnce(
     image: Uint8Array,
     triggerOnActiveElementNow = false,
 ) {
-    sendEvent('hookInputUploadOnce', format, fileName, Array.from(image), triggerOnActiveElementNow)
+    sendEvent('hookInputUploadOnce', format, fileName, [...image], triggerOnActiveElementNow)
 }
 
 if (typeof location === 'object' && location.protocol.includes('extension')) {
@@ -120,8 +120,9 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
         case 'instagramUpload':
         case 'hookInputUploadOnce':
             break
-        default:
+        default: {
             const neverEvent: never = r[0]
             console.log('[@masknet/injected-script]', neverEvent, 'not handled')
+        }
     }
 })

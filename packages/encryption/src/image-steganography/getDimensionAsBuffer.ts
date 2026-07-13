@@ -23,8 +23,6 @@ function getDimensionAsPNG(buf: ArrayBuffer) {
 
 /**
  * Get dimension of a JPEG image
- *
- * @see http://vip.sugovica.hu/Sardi/kepnezo/JPEG%20File%20Layout%20and%20Format.htm
  */
 function getDimensionAsJPEG(buf: ArrayBuffer) {
     const dataView = new DataView(buf)

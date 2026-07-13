@@ -74,20 +74,17 @@ export const TextModifier = memo<TextModifierProps>(function TextModifier({ fall
 
     const segments = useMemo(() => {
         let leftOffset = 0
-        let rightOffset = 0
         let offset = 0
-        let address = ''
-        let padding = '' // leading padding
         const segments: Segment[] = []
         const list = [...addresses]
         while (list.length) {
-            address = list[0]
+            const address = list[0]
             const index = fullText.indexOf(list[0], leftOffset)
             if (index === -1) continue
 
-            padding = address.startsWith(' ') ? ' ' : ''
+            const padding = address.startsWith(' ') ? ' ' : '' // leading padding
             leftOffset = index + padding.length
-            rightOffset = index + address.length
+            const rightOffset = index + address.length
             segments.push(
                 { type: 'text', value: fullText.slice(offset, leftOffset) },
                 { type: 'address', value: fullText.slice(leftOffset, rightOffset) },

@@ -161,13 +161,8 @@ export class __DataTransferItem extends $unsafe.NewObject implements DataTransfe
     constructor(item: string | File, type: string) {
         super()
         this.#type = $.StringToLowerCase(type)
-        if (typeof item === 'string') {
-            this.#kind = 'string'
-            this.#data = item
-        } else {
-            this.#kind = 'file'
-            this.#data = item
-        }
+        this.#kind = typeof item === 'string' ? 'string' : 'file';
+        this.#data = item
         $.setPrototypeOf(this, $.DataTransferItemPrototype)
     }
     #data: string | File

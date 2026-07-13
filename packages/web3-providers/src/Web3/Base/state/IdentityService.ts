@@ -58,7 +58,7 @@ export abstract class IdentityServiceState<ChainId> implements Web3SocialIdentit
             SocialAddressType.RSS3,
             SocialAddressType.SOL,
         ]
-        return Object.entries(accountGroups).map<SocialAccount<ChainId>>(([, accounts]) => {
+        return Object.values(accountGroups).map<SocialAccount<ChainId>>((accounts) => {
             const domainLabels = compact(domainAddressTypes.map((x) => accounts.find((y) => y.type === x)?.label))
             const theFirstAccount = accounts[0]
             return {

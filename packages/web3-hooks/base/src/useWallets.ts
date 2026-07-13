@@ -1,11 +1,11 @@
-import { EMPTY_LIST, type Wallet } from '@masknet/shared-base'
+import type { Wallet } from '@masknet/shared-base'
 import { MaskWalletProvider } from '@masknet/web3-providers'
 import { useMemo } from 'react'
 import { usePersistSubscription } from '@masknet/shared-base-ui'
 
 export function useWallets() {
     // We got stored Mask wallets only.
-    const wallets = usePersistSubscription('@@mask-wallets', MaskWalletProvider.subscription.wallets ?? EMPTY_LIST)
+    const wallets = usePersistSubscription('@@mask-wallets', MaskWalletProvider.subscription.wallets)
 
     return useMemo(() => {
         return wallets
@@ -26,8 +26,8 @@ export function useWallets() {
                 } else if (timestampB - timestampA > 10000) {
                     return -1
                 }
-                const numA = a.name.split('Wallet ')[1]
-                const numB = b.name.split('Wallet ')[1]
+                const numA = a.name.split('Wallet ', 2)[1]
+                const numB = b.name.split('Wallet ', 2)[1]
                 try {
                     if (!numA && numB && !Number.isNaN(numB)) return 1
                     if (!Number.isNaN(numA) && !Number.isNaN(numB)) {

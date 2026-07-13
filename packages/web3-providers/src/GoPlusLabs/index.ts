@@ -206,7 +206,7 @@ export class GoPlusLabs {
         const security = await GoPlusLabs.getAddressSecurity(chainId, address)
         if (!security) return false
         const values: string[] = Object.values(security)
-        return values.some((x) => x === '1')
+        return values.includes('1')
     }
 
     static async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {

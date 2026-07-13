@@ -33,8 +33,7 @@ function getNickname(nickname?: string) {
         const ele = child as HTMLDivElement
         if (ele.tagName === 'IMG') {
             _nickname += ele.getAttribute('alt') ?? ''
-        }
-        if (ele.tagName === 'SPAN') {
+        } else if (ele.tagName === 'SPAN') {
             _nickname += ele.textContent?.trim()
         }
     }

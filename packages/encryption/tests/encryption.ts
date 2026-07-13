@@ -367,6 +367,7 @@ const testKey = {
 async function reject(): Promise<any> {
     throw new Error('should not be called')
 }
+// eslint-disable-next-line require-yield
 async function* rejectGenerator() {
     throw new Error('should not be called')
 }

@@ -116,7 +116,7 @@ export function CompositionDialogUI(props: CompositionProps) {
         [],
     )
 
-    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
+    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Infinity)
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
         setSending(true)

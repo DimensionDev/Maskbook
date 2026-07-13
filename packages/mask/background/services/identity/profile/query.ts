@@ -27,11 +27,11 @@ export async function hasLocalKey(identifier: ProfileIdentifier) {
 export async function queryOwnedProfilesInformation(network?: string): Promise<ProfileInformation[]> {
     let profiles: ProfileRecord[]
     await createPersonaDBReadonlyAccess(async (t) => {
-        const personas = (await queryPersonasDB({ hasPrivateKey: true }, t)).sort((a, b) =>
-            a.updatedAt > b.updatedAt ? 1 : -1,
+        const personas = (await queryPersonasDB({ hasPrivateKey: true }, t)).sort(
+            (a, b) => Number(a.updatedAt) - Number(b.updatedAt),
         )
-        const ids = Array.from(new Set(personas.flatMap((x) => [...x.linkedProfiles.keys()])))
-        profiles = await queryProfilesDB({ identifiers: ids, network }, t)
+        const ids = new Set(personas.flatMap((x) => x.linkedProfiles.keys().toArray()))
+        profiles = await queryProfilesDB({ identifiers: [...ids], network }, t)
     })
     return toProfileInformation(profiles!.filter((x) => x.identifier.network === network))
         .mustNotAwaitThisWithInATransaction

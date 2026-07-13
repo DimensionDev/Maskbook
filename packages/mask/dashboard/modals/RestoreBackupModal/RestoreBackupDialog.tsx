@@ -220,9 +220,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                     }}
                     error={!!backupPasswordError}
                     helperText={
-                        backupPasswordError ? backupPasswordError : (
-                            <Trans>Please enter cloud backup password to download file.</Trans>
-                        )
+                        backupPasswordError ?? <Trans>Please enter cloud backup password to download file.</Trans>
                     }
                 />
             </DialogContent>

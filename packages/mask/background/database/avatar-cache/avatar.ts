@@ -64,7 +64,7 @@ export const queryAvatarLastUpdateTime: (identifier: PersonaIdentifier) => Promi
 export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: ArrayBuffer | string): Promise<void> {
     try {
         if (typeof avatar === 'string') {
-            if (avatar.startsWith('https') === false) return
+            if (!avatar.startsWith('https')) return
             const isOutdated = await isAvatarOutdatedDB(
                 createTransaction(await createAvatarDBAccess(), 'readonly')('metadata'),
                 identifier,

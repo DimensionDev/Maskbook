@@ -16,8 +16,8 @@ export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
 
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const relationQuery = useQuery({
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['relation-records', rawPublicKey],
         queryFn: async () => {
             if (!rawPublicKey) return EMPTY_LIST
@@ -34,6 +34,7 @@ export function useFriendsPaged() {
         networkMode: 'always',
     })
     const records = relationQuery.data || EMPTY_LIST
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const friendsQuery = useInfiniteQuery({
         queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
         enabled: !relationQuery.isPending,

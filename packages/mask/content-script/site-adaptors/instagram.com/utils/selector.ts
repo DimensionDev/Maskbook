@@ -65,7 +65,7 @@ export function searchInstagramProfileEditButton() {
 
 export function searchInstagramPostAvatarSelector() {
     return new LiveSelector<HTMLImageElement, false>().querySelectorAll<HTMLImageElement>(
-        '[role="button"] > a > img[crossorigin="anonymous"]',
+        ':scope [role="button"] > a > img[crossorigin="anonymous"]',
     )
 }
 

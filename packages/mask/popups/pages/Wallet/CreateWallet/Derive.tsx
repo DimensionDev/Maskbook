@@ -113,7 +113,9 @@ export const Component = memo(function DeriveWallet() {
                 providerType: ProviderType.MaskWallet,
                 account: address,
             })
-        } catch {}
+        } catch {
+            // ignore
+        }
         setIsDeriving(false)
     }, [mnemonicId, queryClient])
 

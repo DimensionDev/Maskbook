@@ -45,7 +45,7 @@ function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
 }
 
 function getBase(fileName: string) {
-    return fileName.split('.')[0]
+    return fileName.split('.', 1)[0]
 }
 function getVariant(fileName: string) {
     const variants = fileName.split('.').slice(1)
@@ -77,7 +77,7 @@ async function generateIcons() {
         dtsMap: new SourceMapGenerator({ file: 'icon-generated-as-url.d.ts' }),
     }
 
-    const relativePrefix = iconRoot.toString().length
+    const relativePrefix = iconRoot.href.length
     /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true })
 
@@ -111,7 +111,7 @@ async function generateIcons() {
             variants[base] ??= []
 
             // cross platform, use URL to calculate relative path
-            const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
+            const importPath = './' + new URL(path, ROOT_PATH).href.slice(relativePrefix)
             const identifier = importPath.includes('countries') ? `countries_${snakeCase(name)}` : snakeCase(name)
 
             const url = `new URL(${JSON.stringify(importPath)}, import.meta.url).href`
@@ -161,11 +161,11 @@ async function generateIcons() {
         if (notSquare) args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
         asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${args.join(', ')})`)
 
-        const variantNames = [...new Set(variant.flatMap((x) => x.args[0]))].map((x) => JSON.stringify(x))
+        const variantNames = new Set(variant.flatMap((x) => x.args[0])).values().map((x) => JSON.stringify(x))
 
         const jsdoc = [] as string[]
         if (variant.some((x) => x.args[3])) jsdoc.push('🎨 This icon supports custom color.')
-        else jsdoc.push('🖼\uFE0F This icon brings its own colors.')
+        else jsdoc.push('🖼\u{FE0F} This icon brings its own colors.')
 
         jsdoc.push(
             //
@@ -180,7 +180,7 @@ async function generateIcons() {
         attachJSDoc(jsdoc, asJSX.dts)
         asJSX.dts.push(
             `export const ${Ident}: ComponentType<${notSquare ? 'GeneratedIconNonSquareProps' : 'GeneratedIconProps'}<${
-                variantNames.join(' | ') || 'never'
+                variantNames.toArray().join(' | ') || 'never'
             }>>`,
         )
         asJSX.dtsMap.addMapping({

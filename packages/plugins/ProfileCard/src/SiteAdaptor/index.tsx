@@ -47,13 +47,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 if (!identity?.identifier?.userId) return null
                 const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity.identifier.network as EnhanceableSite]
                 if (!rss3Key) return null
-                return (
-                    <AvatarBadge
-                        userId={identity.identifier.userId}
-                        identity={identity}
-                        socialAccounts={socialAccounts}
-                    />
-                )
+                return <AvatarBadge userId={identity.identifier.userId} socialAccounts={socialAccounts} />
             },
         },
         Utils: {

@@ -40,6 +40,7 @@ export function searchFacebookAvatarSelector() {
 }
 
 export function searchFaceBookPostAvatarSelector() {
+    // eslint-disable-next-line unicorn/prefer-scoped-selector
     return new LiveSelector<SVGElement, false>().querySelectorAll<SVGElement>(
         '[type="nested/pressable"] > a > div > svg, ul div[role="article"] a > div > svg[role="none"]',
     )
@@ -58,7 +59,7 @@ export function searchFacebookProfileSettingButtonSelector() {
 export function searchFacebookProfileCoverSelector() {
     return querySelector('[role="button"] [role="img"]')
         .closest(10)
-        .querySelector('input[type="file"] ~ div')
+        .querySelector(':scope input[type="file"] ~ div')
         .closest<E>(6)
         .querySelector('div')
 }
@@ -71,7 +72,7 @@ export function searchFacebookEditProfileSelector() {
 
 export function searchFacebookSaveAvatarButtonSelector() {
     return new LiveSelector()
-        .querySelector('[role="dialog"] [role="slider"]')
+        .querySelector(':scope [role="dialog"] [role="slider"]')
         .closest(7)
         .querySelectorAll('div')
         .map((x) => x.parentElement?.parentElement)
@@ -98,9 +99,9 @@ export function toolboxInSpecialSidebarSelector() {
 export function toolboxInSidebarSelectorWithNoLeftRailStart() {
     return querySelector<E, false>('[role="banner"]')
         .closest(1)
-        .querySelector('div + div > div > div > div > div > div > div > div > ul')
+        .querySelector(':scope div + div > div > div > div > div > div > div > div > ul')
         .closest(1)
-        .querySelector('div:nth-child(2) > ul > li:nth-child(2)')
+        .querySelector(':scope div:nth-child(2) > ul > li:nth-child(2)')
 }
 
 // for getting normal tab style

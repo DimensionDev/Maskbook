@@ -125,7 +125,7 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
 
     const deriveResult = new Map<ECKeyIdentifier, AESCryptoKey>()
     const result = await Promise.allSettled(
-        [...sameCurvePrivateKeys].map(async ([id, key]) => {
+        sameCurvePrivateKeys.entries().map(async ([id, key]) => {
             const privateKey = await crypto.subtle.importKey(
                 'jwk',
                 key,

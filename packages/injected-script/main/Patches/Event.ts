@@ -128,8 +128,8 @@ export class __Event extends $unsafe.NewObject implements Event {
             // Legacy TODO: If activationTarget is non-null ...
             for (let i = event.#path.length - 1; i >= 0; i -= 1) {
                 const struct = event.#path[i]
-                if (struct.shadowAdjustedTarget !== null) event.#eventPhase = EVENT_PHASE_AT_TARGET
-                else event.#eventPhase = EVENT_PHASE_CAPTURING_PHASE
+                event.#eventPhase =
+                    struct.shadowAdjustedTarget !== null ? EVENT_PHASE_AT_TARGET : EVENT_PHASE_CAPTURING_PHASE
                 Invoke(struct, event, 'capturing', legacyOutputDidListenersThrowFlag)
             }
             for (const struct of event.#path) {
@@ -222,9 +222,9 @@ export class __Event extends $unsafe.NewObject implements Event {
             if (listener.removed) continue
             if (listener.type !== event.#type) continue
             found = true
-            if (phase === 'capturing' && listener.capture === false) continue
-            if (phase === 'bubbling' && listener.capture === true) continue
-            if (listener.once === true) {
+            if (phase === 'capturing' && !listener.capture) continue
+            if (phase === 'bubbling' && listener.capture) continue
+            if (listener.once) {
                 $.removeEventListener(event.#currentTarget!, listener.type, listener.callback!, listener.capture)
                 const list = CapturedListeners.get(event.#currentTarget!)
                 list && RemoveListener(listener, list)
@@ -281,11 +281,9 @@ export class __Event extends $unsafe.NewObject implements Event {
         touchTargets: PotentialEventTarget[],
         slotInClosedTree: boolean,
     ) {
-        let invocationTargetInShadowTree = false
-        if (isNode(invocationTarget) && isShadowRoot($.Node_getRootNode(invocationTarget)))
-            invocationTargetInShadowTree = true
-        let rootOfClosedTree = false
-        if (isShadowRoot(invocationTarget) && $.ShadowRoot_mode(invocationTarget) === 'closed') rootOfClosedTree = true
+        const invocationTargetInShadowTree =
+            isNode(invocationTarget) && isShadowRoot($.Node_getRootNode(invocationTarget))
+        const rootOfClosedTree = isShadowRoot(invocationTarget) && $.ShadowRoot_mode(invocationTarget) === 'closed'
         event.#path.push({
             __proto__: null,
             invocationTarget,
@@ -408,7 +406,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         const currentTarget = event.#currentTarget
         const __unsafe__composedPath__: EventTarget[] = $unsafe.structuredCloneFromSafe([])
         if (path.length === 0) return __unsafe__composedPath__
-        $.ArrayPush(__unsafe__composedPath__, currentTarget ? currentTarget : null)
+        $.ArrayPush(__unsafe__composedPath__, currentTarget ?? null)
         let currentTargetIndex = 0
         let currentTargetHiddenSubtreeLevel = 0
         let index = path.length - 1
@@ -460,7 +458,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         return $.apply($.EventPrototypeDesc.cancelBubble.get!, this, [])
     }
     set cancelBubble(value) {
-        if (value !== true) return
+        if (!value) return
         const event = $unsafe.unwrapXRayVision(this)
         if (#stopPropagation in event) event.#stopPropagation = value
         else $.apply($.EventPrototypeDesc.cancelBubble.set!, this, [value])
@@ -473,7 +471,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         event.#stopImmediatePropagation = true
     }
     #SetCancelFlag() {
-        if (!(this.#cancelable && !this.#inPassiveListener)) return
+        if (!this.#cancelable || this.#inPassiveListener) return
         this.#canceled = true
     }
     get cancelable(): boolean {
@@ -487,7 +485,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         return $.apply($.EventPrototypeDesc.returnValue.get!, this, [])
     }
     set returnValue(value) {
-        if (value !== false) return
+        if (value) return
         const event = $unsafe.unwrapXRayVision(this)
         if (#canceled in event) event.#canceled = !value
         else $.apply($.EventPrototypeDesc.returnValue.set!, this, [value])

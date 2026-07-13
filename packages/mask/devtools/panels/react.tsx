@@ -140,7 +140,7 @@ export async function startReactDevTools(signal: AbortSignal) {
     }
     // eslint-disable-next-line unicorn/consistent-function-scoping
     function viewElementSourceFunction(source: any, symbolicalSource: any) {
-        const { sourceURL, line, column } = symbolicalSource ? symbolicalSource : source
+        const { sourceURL, line, column } = symbolicalSource || source
 
         ;(browser.devtools.panels as any).openResource(
             browser.runtime.getURL(sourceURL.replaceAll('/./', '/')),
@@ -165,7 +165,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         }
     }
     components ??= await createPanel('\u{1F332} Components')
-    profiler ??= await createPanel('\u26A1 Profile')
+    profiler ??= await createPanel('\u{26A1} Profile')
 
     let needsToSyncElementSelection = false
 
@@ -222,7 +222,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         const container = document.createElement('main')
 
         const root = createRoot(container)
-        document.body.appendChild(container)
+        document.body.append(container)
         uninstallLast?.()
         componentsWindow && removeDisabled(componentsWindow)
         profilerWindow && removeDisabled(profilerWindow)
@@ -263,7 +263,7 @@ export async function startReactDevTools(signal: AbortSignal) {
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
             })
-            window.document.body.appendChild(refresh)
+            window.document.body.append(refresh)
         }
     }
 
@@ -292,17 +292,17 @@ function getMountPoint(window: Window, signal: AbortSignal): HTMLElement
 function getMountPoint(window: Window | undefined, signal: AbortSignal): HTMLElement | undefined
 function getMountPoint(window: Window | undefined, signal: AbortSignal) {
     if (!window) return undefined
-    const dom = window.document.getElementById('container')
+    const dom = window.document.querySelector('#container')
     if (dom) return dom
 
     const dom2 = window.document.createElement('main')
     dom2.id = 'container'
     dom2.style.height = '100vh'
-    window.document.body.appendChild(dom2)
+    window.document.body.append(dom2)
     window.document.body.style.margin = '0'
 
     const style = window.document.createElement('style')
-    window.document.head.appendChild(style)
+    window.document.head.append(style)
     registerOnStyleChange((newText) => (style.textContent = newText), signal)
 
     return dom2
@@ -328,11 +328,15 @@ function setLocalStorage(key: string, value: string) {
     try {
         // eslint-disable-next-line no-restricted-globals
         localStorage.setItem(key, value)
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
 function removeLocalStorage(key: string) {
     try {
         // eslint-disable-next-line no-restricted-globals
         localStorage.removeItem(key)
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
