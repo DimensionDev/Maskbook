@@ -28,7 +28,6 @@ export function getEnhanceableSiteType() {
     const target = location.host
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
         if (regexp.test(target)) return type as EnhanceableSite
-        continue
     }
     return
 }
@@ -38,7 +37,6 @@ export function getExtensionSiteType() {
     const target = location.pathname
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
         if (regexp.test(target)) return type as ExtensionSite
-        continue
     }
     return
 }
@@ -69,8 +67,8 @@ export function isExtensionSiteType() {
  */
 export function isEthereumInjected(name = 'ethereum') {
     if (typeof window === 'undefined') return false
-     
-    return typeof Reflect.get(window, name) !== 'undefined'
+
+    return Reflect.get(window, name) !== undefined
 }
 
 /**

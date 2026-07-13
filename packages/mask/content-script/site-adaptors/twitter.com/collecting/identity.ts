@@ -157,7 +157,7 @@ export const IdentityProviderTwitter: SiteAdaptorUI.CollectingCapabilities.Ident
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveLastRecognizedIdentityInner(this.recognized, cancel)
+        resolveLastRecognizedIdentityInner(IdentityProviderTwitter.recognized, cancel)
     },
 }
 
@@ -165,6 +165,10 @@ export const CurrentVisitingIdentityProviderTwitter: SiteAdaptorUI.CollectingCap
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderTwitter.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(
+            CurrentVisitingIdentityProviderTwitter.recognized,
+            IdentityProviderTwitter.recognized,
+            cancel,
+        )
     },
 }

@@ -270,7 +270,7 @@ export function getEmbedUrls(content: string, embedUrls: string[]) {
             .toArray(),
     )
     const oembedUrls = fixUrls([...matchedUrls, ...embedUrls])
-    return oembedUrls.filter((x) => !BLOCKED_URLS.some((y) => x.includes(y)))
+    return oembedUrls.filter((x) => BLOCKED_URLS.every((y) => !x.includes(y)))
 }
 export function fixUrlProtocol(url: string) {
     if (/^https?:\/\//u.test(url)) {

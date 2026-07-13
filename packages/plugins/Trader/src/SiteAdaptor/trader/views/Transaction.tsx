@@ -297,11 +297,7 @@ export const Transaction = memo(function Transaction() {
         if (!isPending || !toChainId || !toTxHash || !toToken) return
         const receipt = await waitForTransaction({ chainId: toChainId, hash: toTxHash, confirmationCount: 1 })
 
-        if (!isTransactionReceiptSuccess(receipt)) {
-            showSnackbar(t`Bridge`, {
-                message: <Trans>Failed to bridge</Trans>,
-            })
-        } else {
+        if (isTransactionReceiptSuccess(receipt)) {
             const received = await getReceived({ hash: toTxHash, account, chainId: toChainId })
 
             if (received && !unmountedRef.current) {
@@ -324,6 +320,10 @@ export const Transaction = memo(function Transaction() {
                     variant: 'success',
                 })
             }
+        } else {
+            showSnackbar(t`Bridge`, {
+                message: <Trans>Failed to bridge</Trans>,
+            })
         }
 
         removePendingParam()

@@ -48,7 +48,7 @@ export abstract class MessageState<Request extends object, Response extends obje
     private async createRequest(
         message: TransferableMessage<Request, Response>,
     ): Promise<ReasonableMessage<Request, Response>> {
-        const ID = crypto.randomUUID()
+        const ID: string = crypto.randomUUID()
         const now = new Date()
         const message_ = {
             ...message,
@@ -112,7 +112,7 @@ export abstract class MessageState<Request extends object, Response extends obje
     async rejectRequests({ keepChainUnrelated, keepNonceUnrelated }: DenyRequestOptions): Promise<void> {
         const messages = produce(this.storage.value, (draft: typeof this.storage.value) => {
             for (const key in draft) {
-                if (!(draft[key].state === MessageStateType.NOT_DEPEND)) continue
+                if (draft[key].state !== MessageStateType.NOT_DEPEND) continue
                 if (keepChainUnrelated && this.isChainUnrelated(draft[key].request)) continue
                 if (keepNonceUnrelated && this.isNonceUnrelated(draft[key].request)) continue
                 draft[key].state = MessageStateType.DENIED

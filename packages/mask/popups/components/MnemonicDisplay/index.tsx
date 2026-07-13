@@ -84,7 +84,7 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
     return (
         <Box>
             <Box className={classes.root}>
-                {!display ?
+                {display ? null : (
                     <Box className={classes.mask} onClick={toggle}>
                         <Icons.EyeOff size={24} />
                         <Typography className={classes.tips}>
@@ -93,7 +93,7 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                             </Trans>
                         </Typography>
                     </Box>
-                :   null}
+                )}
                 <Box component="ul" className={classes.words}>
                     {mnemonic.map((x) => (
                         <Box key={x} component="li" className={classes.word}>

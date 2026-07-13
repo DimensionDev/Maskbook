@@ -17,7 +17,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(':scope [role=
 export const PostProviderFacebook: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
-        collectPostsFacebookInner(this.posts, signal)
+        collectPostsFacebookInner(PostProviderFacebook.posts, signal)
     },
 }
 function collectPostsFacebookInner(

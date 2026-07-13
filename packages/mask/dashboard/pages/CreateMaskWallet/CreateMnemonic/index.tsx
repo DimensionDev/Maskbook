@@ -362,7 +362,7 @@ const PuzzleOption = memo<PuzzleOption>(function PuzzleOption({ puzzleWord, puzz
                     <div
                         className={cx(
                             classes.iconWrapper,
-                            word !== puzzleAnswer[puzzleWord.index] ? classes.emptyCheckbox : '',
+                            word === puzzleAnswer[puzzleWord.index] ? '' : classes.emptyCheckbox,
                         )}>
                         {word === puzzleAnswer[puzzleWord.index] ?
                             <Icons.Checkbox size={18} className={classes.checkIcon} />

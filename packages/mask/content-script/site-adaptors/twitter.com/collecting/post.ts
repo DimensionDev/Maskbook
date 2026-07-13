@@ -141,7 +141,7 @@ function registerPostCollectorInner(
 export const PostProviderTwitter: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(cancel) {
-        registerPostCollectorInner(this.posts, cancel)
+        registerPostCollectorInner(PostProviderTwitter.posts, cancel)
     },
 }
 

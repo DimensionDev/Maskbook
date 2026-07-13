@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-top-level-side-effects */
 import { $, $safe, $unsafe, isDocument, isNode, isShadowRoot, isWindow } from '../intrinsic.js'
 import { PatchDescriptor, PatchDescriptor_NonNull } from '../utils.js'
 import { __DataTransfer, __DataTransferItemList } from './DataTransfer.js'
@@ -62,7 +63,7 @@ export class __Event extends $unsafe.NewObject implements Event {
 
         event.#dispatch = true
         // legacy target override flag is only used by HTML and only when target is a Window object.
-        const targetOverride = !legacyTargetOverride ? target : $.Window_document(target as typeof window)
+        const targetOverride = legacyTargetOverride ? $.Window_document(target as typeof window) : target
         let activationTarget = null
         let relatedTarget: EventTarget | null = ReTarget(event.#relatedTarget, target)
         if (target !== relatedTarget || target === event.#relatedTarget) {
@@ -129,14 +130,15 @@ export class __Event extends $unsafe.NewObject implements Event {
             for (let i = event.#path.length - 1; i >= 0; i -= 1) {
                 const struct = event.#path[i]
                 event.#eventPhase =
-                    struct.shadowAdjustedTarget !== null ? EVENT_PHASE_AT_TARGET : EVENT_PHASE_CAPTURING_PHASE
+                    struct.shadowAdjustedTarget === null ? EVENT_PHASE_CAPTURING_PHASE : EVENT_PHASE_AT_TARGET
                 Invoke(struct, event, 'capturing', legacyOutputDidListenersThrowFlag)
             }
             for (const struct of event.#path) {
-                if (struct.shadowAdjustedTarget !== null) event.#eventPhase = EVENT_PHASE_AT_TARGET
-                else {
+                if (struct.shadowAdjustedTarget === null) {
                     if (!event.#bubbles) continue
                     event.#eventPhase = EVENT_PHASE_BUBBLING_PHASE
+                } else {
+                    event.#eventPhase = EVENT_PHASE_AT_TARGET
                 }
                 Invoke(struct, event, 'bubbling', legacyOutputDidListenersThrowFlag)
             }
@@ -154,10 +156,10 @@ export class __Event extends $unsafe.NewObject implements Event {
             event.#touchTargetList = $safe.Array_of()
         }
         if (activationTarget !== null) {
-            if (!event.#canceled) {
-                activationBehavior?.get(activationTarget)?.(event)
-            } else {
+            if (event.#canceled) {
                 // Legacy TODO: if activationTarget has legacy-canceled-activation behavior, ...
+            } else {
+                activationBehavior?.get(activationTarget)?.(event)
             }
         }
         return !event.#canceled
@@ -328,6 +330,7 @@ export class __Event extends $unsafe.NewObject implements Event {
                 enumerable: true,
                 configurable: false,
                 get: $unsafe.expose(function isTrusted(this: __Event) {
+                    // eslint-disable-next-line unicorn/no-this-outside-of-class
                     return $unsafe.unwrapXRayVision(this).#isTrusted
                 }),
                 set: undefined,

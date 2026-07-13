@@ -190,15 +190,13 @@ export async function updatePostDB(
     const nextRecipients: LatestPostDBRecord['recipients'] = postToDB(
         mode === 'override' ? nextRecord : currentRecord,
     ).recipients
-    if (mode === 'append') {
-        if (updateRecord.recipients) {
-            if (typeof updateRecord.recipients === 'object' && typeof nextRecipients === 'object') {
-                for (const [id, date] of updateRecord.recipients) {
-                    nextRecipients.set(id.toText(), { reason: [{ at: date, type: 'direct' }] })
-                }
-            } else {
-                nextRecord.recipients = 'everyone'
+    if (mode === 'append' && updateRecord.recipients) {
+        if (typeof updateRecord.recipients === 'object' && typeof nextRecipients === 'object') {
+            for (const [id, date] of updateRecord.recipients) {
+                nextRecipients.set(id.toText(), { reason: [{ at: date, type: 'direct' }] })
             }
+        } else {
+            nextRecord.recipients = 'everyone'
         }
     }
     const nextRecordInDBType = postToDB(nextRecord)

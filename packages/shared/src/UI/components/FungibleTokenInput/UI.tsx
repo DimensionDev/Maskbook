@@ -155,7 +155,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 endAdornment={
                     <Box className={classes.control} justifyContent={disableBalance ? 'flex-end' : undefined}>
                         <Typography className={classes.label} display="flex" alignItems="center" component="div">
-                            {!disableBalance ?
+                            {disableBalance ? null : (
                                 <>
                                     {isNative ?
                                         <Trans>Available Balance</Trans>
@@ -172,12 +172,12 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                         :   '--'}
                                     </Typography>
                                 </>
-                            :   null}
-                            {!disableMax ?
+                            )}
+                            {disableMax ? null : (
                                 <Chip className={classes.maxChip} label="MAX" size="small" onClick={onMaxClick} />
-                            :   null}
+                            )}
                         </Typography>
-                        {!disableToken ?
+                        {disableToken ? null : (
                             <Box display="flex" alignItems="center" columnGap="12px">
                                 {token ?
                                     <Chip
@@ -208,7 +208,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                     </Box>
                                 }
                             </Box>
-                        :   null}
+                        )}
                     </Box>
                 }
                 {...props}

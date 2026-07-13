@@ -39,11 +39,11 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
                     .concat(opt.postMentionedLinksProvider?.getCurrentValue() || EMPTY_LIST)
                     .map(isFacebook ? resolveFacebookLink : (x: string) => x)
                 if (difference(text, links.value).length === 0) return
-                links.value = !text.length ? EMPTY_LIST : text
+                links.value = text.length ? text : EMPTY_LIST
             }
             cancel.push(opt.rawMessage.subscribe(evaluate))
             const f = opt.postMentionedLinksProvider?.subscribe(evaluate)
-            f && cancel.push(f)
+            if (f) cancel.push(f)
             return createSubscriptionFromValueRef(links)
         })()
         // #endregion

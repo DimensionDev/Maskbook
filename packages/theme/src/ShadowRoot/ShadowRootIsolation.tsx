@@ -36,7 +36,7 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
         shadow.append(container.current!)
     }, [dom])
 
-    if (!dom?.shadowRoot) return <span {...props} ref={(x) => (x !== dom ? setDOM(x) : undefined)} />
+    if (!dom?.shadowRoot) return <span {...props} ref={(x) => (x === dom ? undefined : setDOM(x))} />
 
     return (
         <span {...props}>

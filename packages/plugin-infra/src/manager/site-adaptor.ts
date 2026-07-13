@@ -40,8 +40,8 @@ export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | bool
     return useValueRef(
         minimalModeEqualsTo === 'any' ? ActivatedPluginsSiteAdaptorAny
         : minimalModeEqualsTo ? ActivatedPluginsSiteAdaptorTrue
-        : !minimalModeEqualsTo ? ActivatedPluginsSiteAdaptorFalse
-        : unreachable(minimalModeEqualsTo),
+        : minimalModeEqualsTo ? unreachable(minimalModeEqualsTo)
+        : ActivatedPluginsSiteAdaptorFalse,
     )
 }
 

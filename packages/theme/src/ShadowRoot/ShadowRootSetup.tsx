@@ -53,8 +53,11 @@ export const ref = {
         let dom: Element | ShadowRoot
         if (location.protocol.includes('extension')) dom = document.body
         else if (globalThis.location.hostname === 'localhost') return document.body
-        else if (!portalContainer) throw new TypeError('Please call setupPortalShadowRoot first')
-        else dom = portalContainer
+        else if (portalContainer) {
+            dom = portalContainer
+        } else {
+            throw new TypeError('Please call setupPortalShadowRoot first')
+        }
 
         Object.defineProperty(ref, 'mountingPoint', { value: dom })
         return dom

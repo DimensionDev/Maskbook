@@ -18,7 +18,7 @@ export const PrivySetup = memo(function PrivySetup() {
     const existedWallets = usePersistSubscription('@@mask-wallets', MaskWalletProvider.subscription.wallets)
     const { providerType } = useChainContext()
     useAsync(async () => {
-        const newWallets = wallets.filter((x) => !existedWallets.some((y) => isSameAddress(y.address, x.address)))
+        const newWallets = wallets.filter((x) => existedWallets.every((y) => !isSameAddress(y.address, x.address)))
         if (!newWallets.length) return
         CrossIsolationMessages.events.walletsUpdated.sendToAll()
         if (providerType !== ProviderType.MaskWallet) return

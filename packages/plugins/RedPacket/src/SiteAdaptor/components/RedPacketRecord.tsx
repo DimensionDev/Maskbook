@@ -273,7 +273,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                         badgeSize={16}
                         chainId={chainId}
                         address={token?.address ?? createSuccessResult?.token_address}
-                        logoURL={token_logo !== 'missing.png' ? token_logo : undefined}
+                        logoURL={token_logo === 'missing.png' ? undefined : token_logo}
                         symbol={token_symbol}
                         name={token_symbol}
                         disableBadge={pluginID === NetworkPluginID.PLUGIN_SOLANA}
@@ -283,7 +283,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                             {formatTokenAmount(amount || 0, token_decimal, false)} {tokenSymbol ?? token_symbol ?? '--'}
                         </Typography>
                         <Typography className={classes.progress} component="div">
-                            {!onlyView ?
+                            {onlyView ? null : (
                                 <Trans>
                                     Claimed:{' '}
                                     <b>
@@ -297,7 +297,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                                         <span className={classes.symbol}>{tokenSymbol}</span>
                                     </TextOverflowTooltip>
                                 </Trans>
-                            :   null}
+                            )}
                             {showDetailLink ?
                                 <Typography
                                     component="b"

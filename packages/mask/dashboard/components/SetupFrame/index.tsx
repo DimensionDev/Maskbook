@@ -57,7 +57,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpli
                 </Box>
             </Box>
             <Box className={classes.sidebar} position="relative">
-                {!hiddenSpline ?
+                {hiddenSpline ? null : (
                     <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: '#d2deff' }}>
                         <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
                             <Typography
@@ -77,7 +77,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpli
                             <Spline scene={Welcome} onLoad={() => setLoading(false)} />
                         </Suspense>
                     </div>
-                :   null}
+                )}
                 {loading && !hiddenSpline ?
                     <Box position="absolute" top="calc(50% - 18px)" left="calc(50% - 18px)">
                         <LoadingBase size={36} />

@@ -18,7 +18,6 @@ interface AdditionalContentProps {
     headerActions?: React.ReactNode
     progress?: boolean | CircularProgressProps
     /** this component does not accept children */
-     
     children?: never
     /** Can handle typed message or normal string */
     message?: TypedMessage | string
@@ -36,9 +35,11 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     const stop = useCallback((ev: React.MouseEvent<HTMLDivElement>) => ev.stopPropagation(), [])
     const { progress, title, message } = props
     const ProgressJSX =
-        !progress ? null
-        : progress === true ? <CircularProgress size={20} color="primary" variant="indeterminate" />
-        : <CircularProgress size={20} color="primary" {...progress} />
+        progress ?
+            progress === true ?
+                <CircularProgress size={20} color="primary" variant="indeterminate" />
+            :   <CircularProgress size={20} color="primary" {...progress} />
+        :   null
     const RightIconJSX = ((icon) => {
         const props = { fontSize: 'small', className: classes.rightIcon } as const
         if (icon === AdditionalIcon.check) return <CheckIcon htmlColor={colors.green[500]} {...props} />
@@ -65,7 +66,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     )
     const TypedMessage = useMemo(() => {
         if (typeof message === 'string') return makeTypedMessageText(message)
-        if (typeof message === 'undefined') return makeTypedMessageText('')
+        if (message === undefined) return makeTypedMessageText('')
         return message
     }, [message])
     return (

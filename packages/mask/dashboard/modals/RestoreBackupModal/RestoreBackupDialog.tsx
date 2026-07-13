@@ -182,9 +182,8 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                             fontSize={12}
                             fontWeight={700}
                             lineHeight="16px">
-                            {progress !== 100 ?
-                                <Trans>Downloading</Trans>
-                            :   <>
+                            {progress === 100 ?
+                                <>
                                     <Typography
                                         component="span"
                                         fontSize={12}
@@ -201,7 +200,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                                         {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
                                     </Typography>
                                 </>
-                            }
+                            :   <Trans>Downloading</Trans>}
                         </Typography>
                     </Box>
                     <Icons.BaseClose size={24} />

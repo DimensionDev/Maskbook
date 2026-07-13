@@ -1,7 +1,5 @@
 /* cspell:disable */
 
-import { ARWEAVE_GATEWAY, HEY_IMAGE_KIT_URL, HEY_IPFS_GW_URL, IPFS_GATEWAY } from './constant.js'
-
 /**
  * Parses the input URL string and returns a URL object.
  * If the input URL is invalid, it tries prepending "https://" and parses again.
@@ -1614,24 +1612,9 @@ export function isTopLevelDomain(url: URL | string) {
     const u = typeof url === 'string' ? parseUrl(url) : url
     const domain = u?.hostname.split('.').pop()?.toLowerCase()
 
-    if (domain === 'eth') {
-        if (u?.pathname !== '/') {
-            return true
-        }
+    if (domain === 'eth' && u?.pathname !== '/') {
+        return true
     }
 
     return !!domain && TLD_DOMAIN.has(`.${domain}`)
-}
-
-export function sanitizeDStorageUrl(hash?: string, gateway?: string) {
-    if (!hash) return ''
-
-    if (hash.includes(HEY_IPFS_GW_URL)) {
-        return `${HEY_IMAGE_KIT_URL}/fallback/tr:w-1500,h-500,q-80/${hash}`
-    }
-    return hash
-        .replaceAll(/^Qm[1-9A-Za-z]{44}/gmu, `${gateway ?? IPFS_GATEWAY}${hash}`)
-        .replace('ipfs://ipfs/', gateway ?? IPFS_GATEWAY)
-        .replace('ipfs://', gateway ?? IPFS_GATEWAY)
-        .replace('ar://', ARWEAVE_GATEWAY)
 }

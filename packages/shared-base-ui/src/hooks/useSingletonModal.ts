@@ -24,17 +24,17 @@ export function useSingletonModal<OpenProps, CloseProps>(
                 return openRef.current
             },
             open(props) {
-                optionsRef.current?.onOpen?.(props, this)
+                optionsRef.current?.onOpen?.(props, dispatchRef.current!)
                 dispatchOpen(props)
                 setOpen(true)
             },
             close(props) {
-                optionsRef.current?.onClose?.(props, this)
+                optionsRef.current?.onClose?.(props, dispatchRef.current!)
                 dispatchClose(props)
                 setOpen(false)
             },
             abort(error) {
-                optionsRef.current?.onAbort?.(error, this)
+                optionsRef.current?.onAbort?.(error, dispatchRef.current!)
                 dispatchAbort(error)
                 setOpen(false)
             },

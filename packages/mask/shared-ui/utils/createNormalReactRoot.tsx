@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { DisableShadowRootContext } from '@masknet/theme'
 
 function cleanup() {
-    if (!(process.env.NODE_ENV === 'development')) return
+    if (process.env.NODE_ENV !== 'development') return
     // Make the document cleaner
     setTimeout(() => document.querySelectorAll('script').forEach((x) => x.remove()), 200)
 }

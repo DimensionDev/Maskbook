@@ -10,9 +10,7 @@ async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for await (const x of t.objectStore('relations')) {
             const profileIdentifier = ProfileIdentifier.from(x.value.profile)
-            if (profileIdentifier.isSome()) {
-                if (anotherList.has(profileIdentifier.value)) x.delete()
-            }
+            if (profileIdentifier.isSome() && anotherList.has(profileIdentifier.value)) x.delete()
         }
     })
 }

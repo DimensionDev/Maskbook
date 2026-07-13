@@ -163,7 +163,7 @@ export class ConnectionAPI
                 return this.Request.request<string>(
                     {
                         method: EthereumMethodType.personal_sign,
-                        params: [message, options.account, ''].filter((x) => typeof x !== 'undefined'),
+                        params: [message, options.account, ''].filter((x) => x !== undefined),
                     },
                     options,
                 )

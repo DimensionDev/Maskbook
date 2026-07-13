@@ -104,7 +104,7 @@ export function toFixed(value: BigNumber.Value | undefined): string
 export function toFixed(value: BigNumber.Value | undefined, decimalPlaces: number): string
 export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
     const n = new BigNumber(value)
-    return !isUndefined(decimalPlaces) ? n.toFixed(decimalPlaces) : n.toFixed()
+    return isUndefined(decimalPlaces) ? n.toFixed() : n.toFixed(decimalPlaces)
 }
 
 /** Trim ending zeros of decimals */

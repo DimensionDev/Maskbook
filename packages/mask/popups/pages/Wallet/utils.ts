@@ -38,7 +38,7 @@ export async function modifyTransaction(
     const newConfig = {
         ...candidate,
         ...oldGasSettings,
-        ...mapKeys(gasSettings, (value) => (typeof value === 'undefined' ? value : toHex(value))),
+        ...mapKeys(gasSettings, (value) => (value === undefined ? value : toHex(value))),
     }
     if (replaceType === ReplaceType.CANCEL) {
         await EVMWeb3.cancelTransaction(transaction.id, newConfig, {

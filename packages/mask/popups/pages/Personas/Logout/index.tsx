@@ -161,13 +161,13 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
                 </Button>
                 <ActionButton
                     variant="contained"
-                    color={!backupPassword ? 'primary' : 'error'}
+                    color={backupPassword ? 'error' : 'primary'}
                     fullWidth
                     onClick={onConfirm}
                     disabled={disabled}>
-                    {!backupPassword ?
-                        <Trans>Backup</Trans>
-                    :   <Trans>Log out</Trans>}
+                    {backupPassword ?
+                        <Trans>Log out</Trans>
+                    :   <Trans>Backup</Trans>}
                 </ActionButton>
             </BottomController>
         </Box>

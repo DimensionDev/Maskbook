@@ -15,9 +15,7 @@ export async function activateSiteAdaptorUI(): Promise<void> {
     }
 }
 export function defineSiteAdaptorUI(UI: SiteAdaptorUI.DeferredDefinition) {
-    if (UI.notReadyForProduction) {
-        if (env.channel === 'stable' && process.env.NODE_ENV === 'production') return UI
-    }
+    if (UI.notReadyForProduction && env.channel === 'stable' && process.env.NODE_ENV === 'production') return UI
     definedSiteAdaptorsUILocal.set(UI.networkIdentifier, UI)
     return UI
 }

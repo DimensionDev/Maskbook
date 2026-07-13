@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-this-outside-of-class */
+/* eslint-disable unicorn/no-uncalled-method */
 import { create, getOwnPropertyDescriptors, getPrototypeOf, setPrototypeOf, takeThisF } from './intrinsic_content.js'
 
 const { Map: _Map, Set: _Set, WeakMap: _WeakMap } = globalThis

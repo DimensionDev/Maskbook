@@ -167,6 +167,7 @@ function sortStackByHierarchy(hierarchy: Hierarchy, stack: readonly string[]): r
     const children = hierarchy[last]
     if (!children?.size) return stack
     for (const child of children) {
+        // eslint-disable-next-line unicorn/no-useless-recursion
         if (stack.includes(child)) return sortStackByHierarchy(hierarchy, [last].concat(stack.slice(0, -1)))
     }
     return stack

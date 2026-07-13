@@ -8,15 +8,15 @@ export namespace FiatCurrencyRateBaseAPI {
         rates: Record<string, number>
     }
 }
-export class FiatCurrencyRate {
-    static async getRate(type?: CurrencyType): Promise<number> {
+export const FiatCurrencyRate = {
+    async getRate(type?: CurrencyType): Promise<number> {
         if (!type || type === CurrencyType.USD) return 1
         const result = await fetchJSON<FiatCurrencyRateBaseAPI.Result>(BASE_URL)
         return result.rates[type.toUpperCase()]
-    }
+    },
 
-    static async getRates() {
+    async getRates() {
         const result = await fetchJSON<FiatCurrencyRateBaseAPI.Result>(BASE_URL)
         return result.rates
-    }
+    },
 }

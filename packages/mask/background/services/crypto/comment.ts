@@ -49,7 +49,7 @@ function extractCommentPayload(text: string): [iv: undefined | Uint8Array<ArrayB
     const version2Header = text.indexOf('\u{1F3B6}3/4|')
     const version1Header = text.indexOf('\u{1F3B6}2/4|')
     if (version2Header === -1 && version1Header === -1) return null
-    const untilEnd = text.slice(version2Header !== -1 ? version2Header : version1Header).split(':||')
+    const untilEnd = text.slice(version2Header === -1 ? version1Header : version2Header).split(':||')
     if (untilEnd.length === 0) return null
     if (version1Header !== -1) return [undefined, untilEnd[0].slice('\u{1F3B6}2/4|'.length)]
     const fields = untilEnd[0].split('|')

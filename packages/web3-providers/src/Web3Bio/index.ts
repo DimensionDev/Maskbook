@@ -12,31 +12,31 @@ type Response<T> =
           error: string
       }
 
-export class Web3Bio {
-    static fetchFromWeb3Bio<T>(request: Request | RequestInfo, init?: RequestInit) {
+export const Web3Bio = {
+    fetchFromWeb3Bio<T>(request: Request | RequestInfo, init?: RequestInit) {
         return fetchCachedJSON<T>(request, {
             ...init,
             headers: {
                 'X-API-KEY': `Bearer ${WEB3_BIO_JWT}`,
             },
         })
-    }
+    },
 
-    static async getProfilesByTwitterId(handle: string) {
+    async getProfilesByTwitterId(handle: string) {
         const url = urlcat(WEB3_BIO_HOST, `/profile/twitter,${handle.toLowerCase()}`)
-        const profiles = await this.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
+        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
         return Array.isArray(profiles) ? profiles : []
-    }
+    },
 
     /** Get profiles by address or domain */
-    static async getProfilesBy(domainOrAddress: string) {
+    async getProfilesBy(domainOrAddress: string) {
         const url = urlcat(WEB3_BIO_HOST, '/profile/:id', { id: domainOrAddress })
-        const profiles = await this.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
+        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
         return Array.isArray(profiles) ? profiles : []
-    }
+    },
 
-    static async getAllLens(twitterId: string) {
-        const profiles = await this.getProfilesByTwitterId(twitterId)
+    async getAllLens(twitterId: string) {
+        const profiles = await Web3Bio.getProfilesByTwitterId(twitterId)
         return profiles.filter((x) => x.platform === NextIDPlatform.LENS)
-    }
+    },
 }

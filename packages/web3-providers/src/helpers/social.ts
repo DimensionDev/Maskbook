@@ -82,7 +82,7 @@ export function getResourceType(urlString: string) {
 const frameDomains = [FRAME_SERVER_URL, 'https://polls-canary.firefly.social', 'https://polls.mask.social']
 
 export function isValidPollFrameUrl(url: string): boolean {
-    if (!frameDomains.some((domain) => isSameOriginUrl(url, domain))) return false
+    if (frameDomains.every((domain) => !isSameOriginUrl(url, domain))) return false
     const parsed = parseUrl(url)
     if (!parsed) return false
 

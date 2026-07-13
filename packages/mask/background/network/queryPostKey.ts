@@ -36,7 +36,7 @@ export async function GUN_queryPostKey_version40(
         if (!x) return false
 
         const { encryptedKey, salt: encryptedKeyIV } = x
-        return typeof encryptedKey === 'string' && typeof encryptedKeyIV === 'string';
+        return typeof encryptedKey === 'string' && typeof encryptedKeyIV === 'string'
     }
 }
 

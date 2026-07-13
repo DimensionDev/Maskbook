@@ -41,14 +41,11 @@ export function WalletSignRequest(props: InteractionItemProps) {
             return
         }
         const params = structuredClone(request.params)
-        if (request.method === EthereumMethodType.eth_signTypedData_v4) {
-            if (typeof params[1] === 'object') params[1] = JSON.stringify(params[1])
-        }
-        if (request.method === EthereumMethodType.eth_sendTransaction) {
-            if (params[0].type === '0x0') {
-                delete params[0].type
-                delete params[0].gasPrice
-            }
+        if (request.method === EthereumMethodType.eth_signTypedData_v4 && typeof params[1] === 'object')
+            params[1] = JSON.stringify(params[1])
+        if (request.method === EthereumMethodType.eth_sendTransaction && params[0].type === '0x0') {
+            delete params[0].type
+            delete params[0].gasPrice
         }
 
         const response = await Message!.approveAndSendRequest(id, {

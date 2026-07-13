@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-top-level-side-effects */
 import { $, $safe, $unsafe } from '../intrinsic.js'
 import { PatchDescriptor_NonNull } from '../utils.js'
 
@@ -161,7 +162,7 @@ export class __DataTransferItem extends $unsafe.NewObject implements DataTransfe
     constructor(item: string | File, type: string) {
         super()
         this.#type = $.StringToLowerCase(type)
-        this.#kind = typeof item === 'string' ? 'string' : 'file';
+        this.#kind = typeof item === 'string' ? 'string' : 'file'
         this.#data = item
         $.setPrototypeOf(this, $.DataTransferItemPrototype)
     }

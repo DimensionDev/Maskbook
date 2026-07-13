@@ -126,7 +126,7 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
     flex: 1,
     maxWidth: '100%',
     paddingRight: isOpen ? defaultTabSize : 0,
-    gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
+    gap: maskVariant === 'base' ? 0 : theme.spacing(1),
     borderRadius: 0,
     background:
         !isOpen && isOverflow ?

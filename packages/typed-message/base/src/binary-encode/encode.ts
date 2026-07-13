@@ -16,6 +16,7 @@ export function encodeTypedMessageToDocument(tm: SerializableTypedMessages): Uin
 }
 function encodeTypedMessage(tm: SerializableTypedMessages): any[] {
     if (!tm.serializable) {
+        // eslint-disable-next-line unicorn/no-useless-recursion
         if (tm.alt) return encodeTypedMessage(tm.alt)
         throw new TypeError(`${HEAD}TypedMessage ${tm.type} does not support serialization.`)
     }
@@ -36,7 +37,7 @@ function encodeMeta(tm: TypedMessage) {
     const record: Record<string, any> = { __proto__: null }
     for (const [key, val] of tm.meta) {
         if (typeof key !== 'string') continue
-        if (typeof val === 'undefined') continue
+        if (val === undefined) continue
         try {
             record[key] = collectValue(val)
         } catch (err) {

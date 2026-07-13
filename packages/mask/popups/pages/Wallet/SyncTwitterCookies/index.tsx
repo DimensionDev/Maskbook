@@ -396,9 +396,11 @@ export const Component = memo(function SyncTwitterCookies() {
             })
 
             // Handle expired/cancelled states
-            if (newStatus === DesktopSyncChannelStatus.Expired || newStatus === DesktopSyncChannelStatus.Cancel) {
-                if (session) setInvalidMap((x) => ({ ...x, [session]: true }))
-            }
+            if (
+                (newStatus === DesktopSyncChannelStatus.Expired || newStatus === DesktopSyncChannelStatus.Cancel) &&
+                session
+            )
+                setInvalidMap((x) => ({ ...x, [session]: true }))
         } catch (error_) {
             enqueueSnackbar((error_ as Error).message || t`Network error. Please try again later.`, {
                 variant: 'error',

@@ -15,10 +15,8 @@ export function applyDotEnv(flags: BuildFlags) {
 
     flags.sourceMapPreference ??= parseBooleanOrString(parsed.sourceMap)
     if (parsed.manifest) {
-        if (parsed.manifest !== '3') {
-            if (!Object.values(ManifestFile).includes(parsed.manifest as ManifestFile)) {
-                throw new TypeError(`Invalid manifest version "${parsed.manifest}" specified in the env file`)
-            }
+        if (parsed.manifest !== '3' && !Object.values(ManifestFile).includes(parsed.manifest as ManifestFile)) {
+            throw new TypeError(`Invalid manifest version "${parsed.manifest}" specified in the env file`)
         }
         flags.manifestFile ??= parseManifest(parsed.manifest as ManifestFile | '3')
     }
@@ -26,10 +24,8 @@ export function applyDotEnv(flags: BuildFlags) {
     flags.devtools ??= parseBoolean(parsed.devtools)
     flags.devtoolsEditorURI ??= parsed.devtoolsEditorURI
     const compiler = parseBooleanOrString(parsed.reactCompiler)
-    if (typeof compiler === 'string') {
-        if (compiler !== 'infer' && compiler !== 'annotation' && compiler !== 'all')
-            throw new TypeError(`Invalid reactCompiler value "${compiler}" in env file`)
-    }
+    if (typeof compiler === 'string' && compiler !== 'infer' && compiler !== 'annotation' && compiler !== 'all')
+        throw new TypeError(`Invalid reactCompiler value "${compiler}" in env file`)
     flags.reactCompiler ??= compiler
     flags.lavamoat ??= parseBoolean(parsed.lavamoat)
     flags.csp ??= parseBoolean(parsed.csp)

@@ -13,7 +13,7 @@ export function usernameValidator(name: string) {
             return false
         }
     }
-    return !(name.length < 4)
+    return name.length >= 4
 }
 
 export async function getUserIdentity(screenName: string): Promise<SocialIdentity | undefined> {

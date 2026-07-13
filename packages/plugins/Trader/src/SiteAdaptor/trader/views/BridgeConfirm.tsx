@@ -332,11 +332,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             }
             queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
             const receipt = await Web3.getTransactionReceipt(hash)
-            if (!isTransactionReceiptSuccess(receipt)) {
-                showSnackbar(t`Bridge`, {
-                    message: <Trans>Failed to bridge</Trans>,
-                })
-            } else {
+            if (isTransactionReceiptSuccess(receipt)) {
                 showSnackbar(t`Bridge`, {
                     message: (
                         <MuiLink
@@ -355,6 +351,10 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     ),
                     variant: 'default',
                     processing: true,
+                })
+            } else {
+                showSnackbar(t`Bridge`, {
+                    message: <Trans>Failed to bridge</Trans>,
                 })
             }
             await addTransaction(account, {

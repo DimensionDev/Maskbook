@@ -55,7 +55,14 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                                     break
                                 default: {
                                     const payloadEditor = PayloadEditor.fromPayload(context.request)
-                                    if (!payloadEditor.readonly) {
+                                    if (payloadEditor.readonly) {
+                                        context.write(
+                                            await this.Request.request(context.requestArguments, {
+                                                account: options.account,
+                                                chainId: options.chainId,
+                                            }),
+                                        )
+                                    } else {
                                         assertTransactionChainId(
                                             payloadEditor.signableTransaction,
                                             EVMWalletProviders[
@@ -72,13 +79,6 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
 
                                         // send request and set result in the context
                                         context.write((await web3Provider.request(context.requestArguments)) as T)
-                                    } else {
-                                        context.write(
-                                            await this.Request.request(context.requestArguments, {
-                                                account: options.account,
-                                                chainId: options.chainId,
-                                            }),
-                                        )
                                     }
 
                                     break

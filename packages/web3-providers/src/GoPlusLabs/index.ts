@@ -81,8 +81,8 @@ class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
     }
 }
 
-export class GoPlusLabs {
-    static async getTokenSecurity(chainId: ChainId, addresses: string[]) {
+export const GoPlusLabs = {
+    async getTokenSecurity(chainId: ChainId, addresses: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -99,9 +99,9 @@ export class GoPlusLabs {
 
         if (response.code !== 1) return
         return createTokenSecurity(response.result, chainId)
-    }
+    },
 
-    static async getAddressSecurity(
+    async getAddressSecurity(
         chainId: ChainId | 'solana' | 'tron',
         address: string,
     ): Promise<SecurityAPI.AddressSecurity | undefined> {
@@ -119,16 +119,16 @@ export class GoPlusLabs {
 
         if (response.code !== 1) return
         return response.result
-    }
+    },
 
-    static async checkIfAddressIsScam(chainId: ChainId | 'solana' | 'tron', address: string): Promise<boolean> {
-        const security = await this.getAddressSecurity(chainId, address)
+    async checkIfAddressIsScam(chainId: ChainId | 'solana' | 'tron', address: string): Promise<boolean> {
+        const security = await GoPlusLabs.getAddressSecurity(chainId, address)
         if (!security) return false
         const values: string[] = Object.values(security)
         return values.includes('1')
-    }
+    },
 
-    static async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
+    async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
         const { code, result } = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -137,15 +137,15 @@ export class GoPlusLabs {
 
         if (code !== 1) return []
         return result.map((x) => ({ chainId: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
-    }
-    static async checkIsPhishingSite(url: string): Promise<boolean> {
+    },
+    async checkIsPhishingSite(url: string): Promise<boolean> {
         const path = urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/phishing_site', {
             url,
         })
         const res = await fetchJSON<PhishingSiteResponse>(path)
         if (res.code !== 1) return false
         return +res.result.phishing_site === 1
-    }
+    },
 }
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 

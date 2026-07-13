@@ -52,8 +52,7 @@ function parseText(
                 :   <Text children={text} style={style} key={`${index} of ${i}`} />,
             )
         }
-        if (frag.category === 'normal' && !/^https?:\/\//giu.test(frag.content))
-            frag.content = 'http://' + frag.content
+        if (frag.category === 'normal' && !/^https?:\/\//giu.test(frag.content)) frag.content = 'http://' + frag.content
         return (
             <RenderLinkFragment
                 key={string}

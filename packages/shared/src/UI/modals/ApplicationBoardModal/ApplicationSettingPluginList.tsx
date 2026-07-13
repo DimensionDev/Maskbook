@@ -66,7 +66,10 @@ const useStyles = makeStyles<{
             width: 36,
             height: 36,
         },
-        ...(iconFilterColor && { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }),
+        ...(iconFilterColor && {
+            filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`,
+            backdropFilter: 'blur(16px)',
+        }),
     },
     unlisted: {
         fontSize: 18,

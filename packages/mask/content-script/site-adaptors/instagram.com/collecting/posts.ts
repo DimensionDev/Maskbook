@@ -15,7 +15,7 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
 export const PostProviderInstagram: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
-        collectPostsInstagramInner(this.posts, signal)
+        collectPostsInstagramInner(PostProviderInstagram.posts, signal)
     },
 }
 function collectPostsInstagramInner(

@@ -134,7 +134,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 justifyContent: 'center',
                                 alignItems: 'flex-end',
                             }}>
-                            {!disableBalance ?
+                            {disableBalance ? null : (
                                 <Typography
                                     className={classes.balance}
                                     color="textSecondary"
@@ -150,7 +150,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                         />
                                     </Trans>
                                 </Typography>
-                            :   null}
+                            )}
                             <Box
                                 sx={{
                                     display: 'flex',
@@ -193,7 +193,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 alignItems: 'flex-end',
                                 marginTop: 2,
                             }}>
-                            {!disableBalance ?
+                            {disableBalance ? null : (
                                 <Typography
                                     className={classes.balance}
                                     color="textSecondary"
@@ -201,7 +201,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     component="span">
                                     -
                                 </Typography>
-                            :   null}
+                            )}
                             <SelectTokenChip token={token} {...props.SelectTokenChip} />
                         </Box>,
                 ...props.InputProps,

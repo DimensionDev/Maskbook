@@ -83,7 +83,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
- 
 const emptyRender = () => <></>
 export const Prior1559GasSetting = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {

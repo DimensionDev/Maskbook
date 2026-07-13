@@ -157,12 +157,10 @@ export async function startReactDevTools(signal: AbortSignal) {
     DevtoolsMessage.activateBackend.sendByBroadcast(id)
 
     // If this is the first open, we wait for devtools message to show UI.
-    if (!components && runInContentScript) {
-        if (!(await devtoolsEval(true)`globalThis[Symbol.for('mask_init_patch')]`)) {
-            await new Promise((resolve) => {
-                DevtoolsMessage[`_${id}`].on(resolve, { once: true, signal })
-            })
-        }
+    if (!components && runInContentScript && !(await devtoolsEval(true)`globalThis[Symbol.for('mask_init_patch')]`)) {
+        await new Promise((resolve) => {
+            DevtoolsMessage[`_${id}`].on(resolve, { once: true, signal })
+        })
     }
     components ??= await createPanel('\u{1F332} Components')
     profiler ??= await createPanel('\u{26A1} Profile')

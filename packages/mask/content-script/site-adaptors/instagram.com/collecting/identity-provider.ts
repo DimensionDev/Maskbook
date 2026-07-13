@@ -49,7 +49,7 @@ function resolveLastRecognizedIdentityInner(
 
 export const IdentityProviderInstagram: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
-        resolveLastRecognizedIdentityInner(this.recognized, signal)
+        resolveLastRecognizedIdentityInner(IdentityProviderInstagram.recognized, signal)
     },
     recognized: creator.EmptyIdentityResolveProviderState(),
 }

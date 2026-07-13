@@ -30,8 +30,6 @@ export async function pasteTextToCompositionFacebook(
         '.notranslate[aria-label]',
     )
 
-    activatedCustom.filter((x) => x.parentElement?.parentElement?.parentElement?.parentElement?.hasAttribute('style'))
-
     const element = activated.evaluate()[0] ?? activatedCustom.evaluate()[0]
     try {
         element.focus()

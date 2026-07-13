@@ -51,13 +51,13 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
             case 'bool':
                 return (
                     <Tooltip title={fieldType}>
-                        {typeof fieldData !== 'boolean' ?
-                            <Alert className={classes.error} severity="error">
-                                Not a {fieldType}.
-                            </Alert>
-                        :   <Typography component="span" className={classes.value}>
+                        {typeof fieldData === 'boolean' ?
+                            <Typography component="span" className={classes.value}>
                                 {String(fieldData)}
                             </Typography>
+                        :   <Alert className={classes.error} severity="error">
+                                Not a {fieldType}.
+                            </Alert>
                         }
                     </Tooltip>
                 )
@@ -83,22 +83,19 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
             case 'string':
                 return (
                     <Tooltip title={fieldType}>
-                        {typeof fieldData !== 'string' ?
-                            <Alert className={classes.error} severity="error">
-                                Not a {fieldType}.
-                            </Alert>
-                        :   <Typography component="span" className={classes.value}>
+                        {typeof fieldData === 'string' ?
+                            <Typography component="span" className={classes.value}>
                                 {fieldData}
                             </Typography>
+                        :   <Alert className={classes.error} severity="error">
+                                Not a {fieldType}.
+                            </Alert>
                         }
                     </Tooltip>
                 )
             case 'address':
-                return typeof fieldData !== 'string' ?
-                        <Alert className={classes.error} severity="error">
-                            Not a {fieldType}.
-                        </Alert>
-                    :   <Tooltip title={String(fieldData)}>
+                return typeof fieldData === 'string' ?
+                        <Tooltip title={String(fieldData)}>
                             <Link
                                 className={classes.value}
                                 href={utils.explorerResolver.addressLink(ChainId.Mainnet, fieldData)}
@@ -108,6 +105,9 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
                                 <CopyButton size={14} text={fieldData} />
                             </Link>
                         </Tooltip>
+                    :   <Alert className={classes.error} severity="error">
+                            Not a {fieldType}.
+                        </Alert>
         }
         if (/\[(\d+)?\]$/u.test(fieldType)) {
             const type = fieldType.replace(/\[(\d+)?\]$/u, '')

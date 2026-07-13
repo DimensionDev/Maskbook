@@ -128,7 +128,7 @@ const methods: Methods = {
     async eth_sendTransaction(options) {
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, options.from)))
+        if (wallets.every((addr) => !isSameAddress(addr, options.from)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -141,7 +141,7 @@ const methods: Methods = {
     async eth_signTypedData_v4(requestedAddress, typedData) {
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+        if (wallets.every((addr) => !isSameAddress(addr, requestedAddress)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -316,7 +316,7 @@ const methods: Methods = {
         // check challenge is 0x hex
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+        if (wallets.every((addr) => !isSameAddress(addr, requestedAddress)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -355,8 +355,11 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
 
         let paramsArr: unknown[]
         if (!params) paramsArr = []
-        else if (!Array.isArray(params)) paramsArr = [params]
-        else paramsArr = params
+        else if (Array.isArray(params)) {
+            paramsArr = params
+        } else {
+            paramsArr = [params]
+        }
 
         // validate parameters
         const paramsSchema = methodValidate[method].args

@@ -142,7 +142,7 @@ async function hideTwitterActivatedContent() {
     const style = window.getComputedStyle(eleTab)
     // hide the activated indicator
     const tabList = searchProfileTabListSelector().evaluate()
-    tabList.map((tab) => {
+    tabList.forEach((tab) => {
         const tabLabel = tab.querySelector<HTMLDivElement>(':scope div > div > span')
         if (tabLabel) tabLabel.style.color = style.color
 
@@ -176,7 +176,7 @@ function resetTwitterActivatedContent() {
     if (!eleTab) return
 
     const tabList = searchProfileTabListSelector().evaluate()
-    tabList.map((tab) => {
+    tabList.forEach((tab) => {
         const tabLabel = tab.querySelector<HTMLDivElement>(':scope div > div > span')
         if (tabLabel) tabLabel.style.color = ''
         const indicator = tab.querySelector<HTMLDivElement>(':scope div > div > div')
@@ -389,7 +389,7 @@ function InjectProfileTab() {
         nextArrow?.addEventListener('click', onNextClick, { signal })
         nextArrow?.addEventListener('mouseenter', onEnterNextArrow, { signal })
         nextArrow?.addEventListener('mouseleave', onLeaveNextArrow, { signal })
-        tabList.map((v) => {
+        tabList.forEach((v) => {
             v.closest('div')?.addEventListener('mouseenter', onMouseEnter, { signal })
             v.closest('div')?.addEventListener('mouseleave', onMouseLeave, { signal })
         })

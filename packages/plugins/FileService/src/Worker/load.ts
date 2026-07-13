@@ -65,9 +65,9 @@ class LoadAgent implements ProviderAgent {
         const response = await fetch(LANDING_PAGE)
         const text = await response.text()
         const replaced = text
-            .replace('Arweave', LoadAgent.providerName)
-            .replace('Over Arweave', `Over ${LoadAgent.providerName}`)
-            .replace('__METADATA__', encodedMetadata)
+            .replace('Arweave', () => LoadAgent.providerName)
+            .replace('Over Arweave', () => `Over ${LoadAgent.providerName}`)
+            .replace('__METADATA__', () => encodedMetadata)
 
         const data = encodeText(replaced)
         const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)

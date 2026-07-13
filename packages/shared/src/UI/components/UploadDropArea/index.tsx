@@ -71,15 +71,7 @@ interface Props extends HTMLProps<HTMLDivElement>, withClasses<'button'> {
 }
 
 export const UploadDropArea = memo(function UploadDropArea(props: Props) {
-    const {
-        maxFileSize = Infinity,
-        omitSizeLimit,
-        className,
-        accept,
-        subtitle,
-        onSelectFile,
-        ...rest
-    } = props
+    const { maxFileSize = Infinity, omitSizeLimit, className, accept, subtitle, onSelectFile, ...rest } = props
     const { classes, cx } = useStyles(undefined, { props })
     const { showSnackbar } = useCustomSnackbar()
     const handleFiles = (files: File[] | FileList | null) => {

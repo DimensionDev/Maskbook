@@ -25,26 +25,24 @@ import type {
 } from './types.js'
 /** request okx official API, and normalize the code */
 function fetchFromOKX<T extends { code: number }>(input: RequestInfo | URL, init?: RequestInit) {
-    if (process.env.NODE_ENV === 'development') {
-        if (typeof input === 'string' && input.includes('0x00000')) {
-            console.warn('Do you forget to convert to okx native address?', input)
-        }
+    if (process.env.NODE_ENV === 'development' && typeof input === 'string' && input.includes('0x00000')) {
+        console.warn('Do you forget to convert to okx native address?', input)
     }
     return fetchJSON<T>(input, init).then(normalizeCode)
 }
 
-export class OKX {
+export const OKX = {
     /**
      * @docs https://www.okx.com/web3/build/docs/waas/dex-get-aggregator-supported-chains
      */
-    static async getSupportedChains() {
+    async getSupportedChains() {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/supported/chain')
         const res = await fetchFromOKX<SupportedChainResponse>(url)
         if (res.code === 0) return res.data
         throw new Error('Failed to get supported chains')
-    }
+    },
 
-    static async baseGetTokens(chainId: ChainId, apiRoute: string) {
+    async baseGetTokens(chainId: ChainId, apiRoute: string) {
         if (!chainId) return null
         const url = urlcat(OKX_HOST, apiRoute, {
             chainId,
@@ -77,13 +75,13 @@ export class OKX {
                     } satisfies FungibleToken<ChainId, SchemaType>
                 })
         )
-    }
+    },
 
-    static async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | null> {
-        return this.baseGetTokens(chainId, '/api/v5/dex/aggregator/all-tokens')
-    }
+    async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | null> {
+        return OKX.baseGetTokens(chainId, '/api/v5/dex/aggregator/all-tokens')
+    },
 
-    static async getLiquidity(chainId: string) {
+    async getLiquidity(chainId: string) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/get-liquidity', {
             chainId,
         })
@@ -100,16 +98,16 @@ export class OKX {
             ...res,
             data: res.data.map((dex) => ({ ...dex, logo: dexLogoMap.get(dex.id) })),
         }
-    }
+    },
 
-    static async getApproveTx(options: ApproveTransactionOptions) {
+    async getApproveTx(options: ApproveTransactionOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', options)
         const res = await fetchFromOKX<ApproveTransactionResponse>(url)
         if (res.code === 0) return res.data[0]
         throw new Error('Failed to get approve transaction')
-    }
+    },
 
-    static async getQuotes(options: GetQuotesOptions) {
+    async getQuotes(options: GetQuotesOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/quote', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
@@ -131,28 +129,28 @@ export class OKX {
             })
         }
         return res
-    }
+    },
 
     /**
      * Perform a token swap.
      * @param  options - The swap options.
      * @returns The response from the swap API.
      */
-    static async getSwap(options: SwapOptions): Promise<SwapResponse> {
+    async getSwap(options: SwapOptions): Promise<SwapResponse> {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/swap', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
             toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
         })
         return fetchFromOKX<SwapResponse>(url)
-    }
+    },
 
     /** Get token price in favor of swap quote API */
-    static async getTokenPrice(address: string, chainId: string) {
+    async getTokenPrice(address: string, chainId: string) {
         const intChainId = +chainId
         const tokens = await queryClient.fetchQuery({
             queryKey: ['okx-tokens', intChainId],
-            queryFn: () => this.baseGetTokens(intChainId, '/api/v5/dex/aggregator/all-tokens'),
+            queryFn: () => OKX.baseGetTokens(intChainId, '/api/v5/dex/aggregator/all-tokens'),
         })
         if (!tokens?.length) return
         const isNativeToken = isNativeTokenAddress(fromOkxNativeAddress(address))
@@ -172,14 +170,14 @@ export class OKX {
         }
         const quoteRes = await queryClient.fetchQuery({
             queryKey: ['okx-swap', 'get-quotes', options],
-            queryFn: () => this.getQuotes(options),
+            queryFn: () => OKX.getQuotes(options),
         })
         if (quoteRes.code !== 0 || !quoteRes.data.length) return
         const quote = quoteRes.data[0]
         return quote.toToken.tokenUnitPrice
-    }
+    },
 
-    static async getBridgeQuote(options: GetBridgeQuoteOptions) {
+    async getBridgeQuote(options: GetBridgeQuoteOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/quote', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
@@ -188,8 +186,8 @@ export class OKX {
         const res = await fetchFromOKX<GetBridgeQuoteResponse>(url)
         if (res.code !== 0) throw new Error('Failed to get bridge quote')
         const [fromTokenPrice = '0', toTokenPrice = '0'] = await Promise.all([
-            this.getTokenPrice(options.fromTokenAddress, options.fromChainId),
-            this.getTokenPrice(options.toTokenAddress, options.toChainId),
+            OKX.getTokenPrice(options.fromTokenAddress, options.fromChainId),
+            OKX.getTokenPrice(options.toTokenAddress, options.toChainId),
         ])
         // Patch data
         res.data.forEach((quote) => {
@@ -210,9 +208,9 @@ export class OKX {
             })
         })
         return res
-    }
+    },
 
-    static async getBridgeSupportedChains(chainId?: number) {
+    async getBridgeSupportedChains(chainId?: number) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/chain', {
             chainId,
         })
@@ -224,9 +222,9 @@ export class OKX {
             return res.data
         }
         throw new Error('Failed to get supported chains')
-    }
+    },
 
-    static async bridge(options: BridgeOptions) {
+    async bridge(options: BridgeOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/build-tx', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
@@ -234,9 +232,9 @@ export class OKX {
         })
         const res = await fetchFromOKX<GetBridgeResponse>(url)
         return res
-    }
+    },
 
-    static async getBridgeStatus(options: GetBridgeStatusOptions) {
+    async getBridgeStatus(options: GetBridgeStatusOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/status', options)
         const res = await fetchFromOKX<GetBridgeStatusResponse>(url)
         if (res.code !== 0) throw new Error('Failed to get bridge status')
@@ -249,9 +247,9 @@ export class OKX {
             return res.data[0]
         }
         return
-    }
+    },
 
-    static async getUserTokenBalances(chainId: ChainId | ChainId[], account: string) {
+    async getUserTokenBalances(chainId: ChainId | ChainId[], account: string) {
         const url = urlcat(OKX_HOST, '/api/v5/wallet/asset/all-token-balances-by-address', {
             chains: chainId,
             address: account,
@@ -259,5 +257,5 @@ export class OKX {
         const res = await fetchFromOKX<GetAllTokenBalancesByAddressResponse>(url)
         if (res.code !== 0) throw new Error('Failed to get user token balances')
         return res.data[0].tokenAssets
-    }
+    },
 }

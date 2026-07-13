@@ -12,7 +12,7 @@ export const IdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.Iden
     hasDeprecatedPlaceholderName: true,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(signal) {
-        resolveLastRecognizedIdentityFacebookInner(this.recognized, signal)
+        resolveLastRecognizedIdentityFacebookInner(IdentityProviderFacebook.recognized, signal)
     },
 }
 
@@ -91,7 +91,11 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderFacebook.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(
+            CurrentVisitingIdentityProviderFacebook.recognized,
+            IdentityProviderFacebook.recognized,
+            cancel,
+        )
     },
 }
 

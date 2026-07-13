@@ -113,7 +113,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             style={{
                                 backgroundColor:
                                     DefineMapping[
-                                        riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
+                                        riskyFactors === 0 ? SecurityMessageLevel.Medium : SecurityMessageLevel.High
                                     ].bgColor,
                                 padding: '16px 12px 16px 18px',
                                 borderRadius: '12px',
@@ -121,19 +121,19 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                 justifyContent: 'center',
                             }}>
                             {DefineMapping[
-                                riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
+                                riskyFactors === 0 ? SecurityMessageLevel.Medium : SecurityMessageLevel.High
                             ].icon(24)}
                             <Typography
                                 sx={{ fontSize: '16px', fontWeight: 500, marginLeft: '8px' }}
                                 color={
                                     DefineMapping[
-                                        riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
+                                        riskyFactors === 0 ? SecurityMessageLevel.Medium : SecurityMessageLevel.High
                                     ].titleColor
                                 }>
                                 {' '}
-                                {riskyFactors !== 0 ?
-                                    <Trans>High Risk</Trans>
-                                :   <Trans>Medium Risk</Trans>}
+                                {riskyFactors === 0 ?
+                                    <Trans>Medium Risk</Trans>
+                                :   <Trans>High Risk</Trans>}
                             </Typography>
                         </div>
                     </Stack>

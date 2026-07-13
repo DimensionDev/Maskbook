@@ -23,31 +23,31 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
     })
 }
 
-export class FireflyRedPacket {
-    static async createTheme(options: FireflyRedPacketAPI.CreateThemeOptions) {
+export const FireflyRedPacket = {
+    async createTheme(options: FireflyRedPacketAPI.CreateThemeOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createTheme')
         const res = await fetchFireflyJSON<FireflyRedPacketAPI.CreateThemeResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),
         })
         return res.data.tid
-    }
-    static async parse(options: FireflyRedPacketAPI.ParseOptions) {
+    },
+    async parse(options: FireflyRedPacketAPI.ParseOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v2/misc/redpacket/parse')
         const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ParseResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),
         })
         return data
-    }
+    },
 
-    static async getTheme(options: FireflyRedPacketAPI.ThemeOptions) {
+    async getTheme(options: FireflyRedPacketAPI.ThemeOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', options)
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
         return data
-    }
+    },
 
-    static async createPublicKey(
+    async createPublicKey(
         themeId: string,
         shareFrom: string,
         strategies: FireflyRedPacketAPI.StrategyPayload[],
@@ -63,9 +63,9 @@ export class FireflyRedPacket {
             }),
         })
         return data.publicKey
-    }
+    },
 
-    static async createClaimSignature(
+    async createClaimSignature(
         options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions,
     ): Promise<HexString | undefined> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claim')
@@ -74,9 +74,9 @@ export class FireflyRedPacket {
             body: JSON.stringify(options),
         })
         return data?.signedMessage
-    }
+    },
 
-    static async getHistory<
+    async getHistory<
         T extends FireflyRedPacketAPI.ActionType,
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
@@ -94,9 +94,9 @@ export class FireflyRedPacket {
             createIndicator(indicator),
             data.cursor ? createNextIndicator(indicator, data.cursor.toString()) : undefined,
         )
-    }
+    },
 
-    static async getClaimHistory(
+    async getClaimHistory(
         redpacket_id: string,
         chainId?: number,
         indicator?: PageIndicator,
@@ -109,13 +109,13 @@ export class FireflyRedPacket {
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistoryResponse>(url)
         return { ...data, chain_id: Number(data.chain_id) } as FireflyRedPacketAPI.RedPacketClaimListInfo
-    }
+    },
 
-    static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {
+    async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v2/redpacket/checkClaimStrategyStatus')
         return fetchFireflyJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),
         })
-    }
+    },
 }

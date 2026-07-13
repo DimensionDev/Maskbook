@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-this-outside-of-class */
 import { $ } from './intrinsic.js'
 import { PatchDescriptor } from './utils.js'
 

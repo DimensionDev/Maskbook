@@ -148,6 +148,8 @@ export function useAutoPasteFailedDialog() {
             setData(data)
             setOpen(true)
         },
-        open ? <AutoPasteFailedDialog key="auto-paste-failed-dialog" onClose={() => setOpen(false)} data={data} /> : null,
+        open ?
+            <AutoPasteFailedDialog key="auto-paste-failed-dialog" onClose={() => setOpen(false)} data={data} />
+        :   null,
     ] as const
 }

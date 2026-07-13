@@ -141,25 +141,24 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
             :   formattedTitle
         showSingletonSnackbar(title, {
             ...resolveSnackbarConfig(progress.status),
-            ...{
-                message: (
-                    <Link
-                        sx={{ wordBreak: 'break-word' }}
-                        className={classes.link}
-                        color="inherit"
-                        href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
-                        tabIndex={-1}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        {format(
-                            progress.status === TransactionStatusType.SUCCEED ?
-                                (computed.snackbar?.successfulDescription ?? computed.description)
-                            :   computed.description,
-                        )}{' '}
-                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                    </Link>
-                ),
-            },
+
+            message: (
+                <Link
+                    sx={{ wordBreak: 'break-word' }}
+                    className={classes.link}
+                    color="inherit"
+                    href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
+                    tabIndex={-1}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    {format(
+                        progress.status === TransactionStatusType.SUCCEED ?
+                            (computed.snackbar?.successfulDescription ?? computed.description)
+                        :   computed.description,
+                    )}{' '}
+                    <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                </Link>
+            ),
         })
     }, [progress, format])
 

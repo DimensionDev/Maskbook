@@ -151,9 +151,9 @@ export function TransactionRequest(props: InteractionItemProps) {
             params = compact(
                 request.request.arguments.params.map((x) =>
                     x === 'latest' ?
-                        chainId !== ChainId.Celo ?
-                            x
-                        :   undefined
+                        chainId === ChainId.Celo ?
+                            undefined
+                        :   x
                     :   {
                             ...x,
                             data: result,
@@ -268,7 +268,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             </Box>
         :   null
     const ViewFullTransactionDetailsButton =
-        !FullTransactionDetails ? null : (
+        FullTransactionDetails ?
             <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
                 <Button variant="text" onClick={() => setExpand(!expand)}>
                     <Typography className={classes.text}>
@@ -277,7 +277,7 @@ export function TransactionRequest(props: InteractionItemProps) {
                     <Icons.ArrowDrop size={16} className={cx(classes.arrowIcon, expand ? classes.expand : undefined)} />
                 </Button>
             </Box>
-        )
+        :   null
 
     const main =
         isUnlockERC20 ?

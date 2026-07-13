@@ -44,7 +44,7 @@ export class ERC721Descriptor extends BaseDescriptor {
                         'inputs'
                     >
 
-                    const action = !parameters.approved ? 'Revoke' : 'Unlock'
+                    const action = parameters.approved ? 'Unlock' : 'Revoke'
                     const symbol = (await this.getContractSymbol(context.chainId, context.to)) || ''
 
                     return {
@@ -53,9 +53,9 @@ export class ERC721Descriptor extends BaseDescriptor {
                         description: { key: '{action} {symbol} NFT contract.', action, symbol },
                         snackbar: {
                             successfulDescription:
-                                !parameters.approved ?
-                                    { key: '{action} {symbol} approval successfully.', action, symbol }
-                                :   { key: '{action} {symbol} NFT contract successfully.', action, symbol },
+                                parameters.approved ?
+                                    { key: '{action} {symbol} NFT contract successfully.', action, symbol }
+                                :   { key: '{action} {symbol} approval successfully.', action, symbol },
                             failedDescription: {
                                 key: 'Failed to {action} NFT contract.',
                                 action: action.toLowerCase(),

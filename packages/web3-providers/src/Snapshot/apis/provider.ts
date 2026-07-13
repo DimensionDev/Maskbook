@@ -11,11 +11,8 @@ async function fetchFromGraphql<T>(query: string) {
     return data
 }
 
-export class Snapshot {
-    static async getProposalListBySpace(
-        spaceId: string,
-        strategyName?: string,
-    ): Promise<SnapshotBaseAPI.SnapshotProposal[]> {
+export const Snapshot = {
+    async getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotBaseAPI.SnapshotProposal[]> {
         const queryProposal = `
             query {
                 proposals (
@@ -75,9 +72,9 @@ export class Snapshot {
                 choicesWithScore,
             }
         })
-    }
+    },
 
-    static async getSpace(spaceId: string) {
+    async getSpace(spaceId: string) {
         const querySpace = `
             query {
                 space(id: "${spaceId}") {
@@ -91,11 +88,11 @@ export class Snapshot {
         const { space } = await fetchFromGraphql<{ space: SnapshotBaseAPI.SnapshotSpace }>(querySpace)
 
         return space
-    }
+    },
 
-    static async getCurrentAccountVote(proposalId: string, totalVotes: number, account: string) {
+    async getCurrentAccountVote(proposalId: string, totalVotes: number, account: string) {
         const allSettled = await Promise.allSettled(
-            Array.from(new Array(Math.ceil(totalVotes / 1000)), async (x, i) => {
+            Array.from(Array.from({ length: Math.ceil(totalVotes / 1000) }), async (x, i) => {
                 const queryCurrentAccountVote = `
                     query {
                         votes (
@@ -124,9 +121,9 @@ export class Snapshot {
             .filter(Boolean) as Array<{ choice: number }>
 
         return result.length ? result[0] : undefined
-    }
+    },
 
-    static async getFollowingSpaceIdList(account: string) {
+    async getFollowingSpaceIdList(account: string) {
         if (!account) return []
 
         const query = `
@@ -147,5 +144,5 @@ export class Snapshot {
         const { follows } = await fetchFromGraphql<{ follows: Array<{ space: { id: string } }> }>(query)
 
         return follows.map((x) => x.space.id)
-    }
+    },
 }

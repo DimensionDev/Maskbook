@@ -218,7 +218,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 maxWidth="sm"
                 onClose={(event, reason) => {
                     if (reason === 'backdropClick' && disableBackdropClick) return
-                    !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
+                    props.isOnBack ? onClose?.() : closeBothCompositionDialog()
                 }}
                 BackdropProps={{
                     transitionDuration: 0,
@@ -238,7 +238,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 disableTouchRipple
                                 classes={{ root: cx(dialogCloseButton, titleTabs ? dialogCloseButtonWithTabs : '') }}
                                 aria-label={t`Dismiss`}
-                                onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
+                                onClick={props.isOnBack ? onClose : closeBothCompositionDialog}>
                                 <DialogDismissIcon
                                     style={
                                         (

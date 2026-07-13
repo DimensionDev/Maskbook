@@ -226,11 +226,11 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                         <Typography className={classes.secondaryText}>
                             <Trans>Contract</Trans>
                         </Typography>
-                        {!spender.logo ?
-                            null
-                        : typeof spender.logo === 'string' ?
-                            <img src={spender.logo} className={classes.spenderLogoIcon} />
-                        :   <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>}
+                        {spender.logo ?
+                            typeof spender.logo === 'string' ?
+                                <img src={spender.logo} className={classes.spenderLogoIcon} />
+                            :   <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
+                        :   null}
                         <Typography className={classes.primaryText}>
                             {spender.name || EVMUtils.formatAddress(spender.address, 4)}
                         </Typography>

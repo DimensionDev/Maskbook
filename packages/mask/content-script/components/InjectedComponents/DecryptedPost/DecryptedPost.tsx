@@ -176,7 +176,7 @@ export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
 
     if (
         !deconstructedPayload &&
-        !progress.some((x) => x.progress.type === 'success') &&
+        progress.every((x) => x.progress.type !== 'success') &&
         progress.every((x) => x.progress.internal)
     )
         return null

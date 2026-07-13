@@ -19,6 +19,6 @@ export async function parse39(payload: string): PayloadParserResult {
     if (!payload.startsWith(v_39)) return new CheckedError(PayloadException.UnknownVersion, null).toErr()
 
     const v_40 = '\u{1F3BC}2/4'
-    const result = await parse40(payload.replace(v_39, v_40))
+    const result = await parse40(payload.replace(v_39, () => v_40))
     return result.map((x) => ({ ...x, version: -39 }))
 }

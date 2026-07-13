@@ -23,7 +23,7 @@ export const structuredCloneFromSafeReal: <T extends object>(value: T) => T =
         }
     :   globalThis.structuredClone || globalThis.Object
 export const unwrapXRayVision: <const T extends object>(value: T) => T =
-    typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper.unwrap.bind(XPCNativeWrapper) : window.Object
+    typeof XPCNativeWrapper === 'undefined' ? window.Object : XPCNativeWrapper.unwrap.bind(XPCNativeWrapper)
 // eslint-disable-next-line unicorn/new-for-builtins
 const empty: NullPrototype = unwrapXRayVision(structuredCloneFromSafe({ __proto__: null }))
 window.Object.freeze(empty)
@@ -40,6 +40,7 @@ export const {
     TypeError,
     Proxy,
 } = window
+// eslint-disable-next-line unicorn/no-uncalled-method
 export const Array_values = takeThisF(window.Array.prototype.values)<readonly unknown[]>
 export const reportError = takeThisF(window.reportError)<Window> || noop
 

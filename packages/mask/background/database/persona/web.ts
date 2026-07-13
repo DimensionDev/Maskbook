@@ -269,11 +269,10 @@ export async function queryPersonasWithPrivateKey(
     t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecordWithPrivateKey[]> {
     t ||= createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
-    const records: PersonaRecord[] = [
-        ...(await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))).map(
-            personaRecordOutDB,
-        ),
-    ]
+    const records: PersonaRecord[] = (
+        await t.objectStore('personas').index('hasPrivateKey').getAll(IDBKeyRange.only('yes'))
+    ).map(personaRecordOutDB)
+
     return records as PersonaRecordWithPrivateKey[]
 }
 
@@ -687,9 +686,7 @@ function profileToDB(x: ProfileRecord): ProfileRecordDB {
     }
 }
 function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
-    if (x.linkedPersona) {
-        if (x.linkedPersona.type !== 'ec_key') throw new Error('Unknown type of linkedPersona')
-    }
+    if (x.linkedPersona && x.linkedPersona.type !== 'ec_key') throw new Error('Unknown type of linkedPersona')
     return {
         ...x,
         identifier: ProfileIdentifier.from(x.identifier).expect(

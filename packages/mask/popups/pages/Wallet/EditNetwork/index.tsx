@@ -124,7 +124,7 @@ export const Component = memo(function EditNetwork() {
         return createSchema(
             _,
             async (name) => {
-                return !networks.some((network) => network.name === name && network.ID !== id)
+                return networks.every((network) => network.name !== name || network.ID === id)
             },
             networks,
             id,
@@ -321,7 +321,7 @@ export const Component = memo(function EditNetwork() {
                     <Typography className={classes.error}>{errors.explorer.message}</Typography>
                 :   null}
             </form>
-            {!isBuiltIn ?
+            {isBuiltIn ? null : (
                 <div className={classes.footer}>
                     <ActionButton fullWidth variant="outlined" onClick={() => navigate(-1)}>
                         <Trans>Cancel</Trans>
@@ -330,7 +330,7 @@ export const Component = memo(function EditNetwork() {
                         <Trans>Confirm</Trans>
                     </ActionButton>
                 </div>
-            :   null}
+            )}
         </main>
     )
 })

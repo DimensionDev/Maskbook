@@ -1,4 +1,14 @@
-const unstoppableDomains = new Set(['.crypto', '.nft', '.x', '.wallet', '.bitcoin', '.dao', '.888', '.zil', '.blockchain'])
+const unstoppableDomains = new Set([
+    '.crypto',
+    '.nft',
+    '.x',
+    '.wallet',
+    '.bitcoin',
+    '.dao',
+    '.888',
+    '.zil',
+    '.blockchain',
+])
 export function getDomainSystem(domain?: string) {
     if (!domain) return 'unknown'
     if (domain.endsWith('.lens') || domain === 'lensprotocol' || domain === '@lensprotocol') return 'lens'

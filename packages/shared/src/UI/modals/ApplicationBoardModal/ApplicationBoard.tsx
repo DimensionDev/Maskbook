@@ -144,7 +144,9 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     )
     const recommendFeatureAppList = applicationList
         .filter((x) => x.entry.recommendFeature)
-        .toSorted((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
+        .toSorted(
+            (a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
+        )
 
     const unlistedEntries = useUnlistedEntries()
     const listedAppList = applicationList.filter(

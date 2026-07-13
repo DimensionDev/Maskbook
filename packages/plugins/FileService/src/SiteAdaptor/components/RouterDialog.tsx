@@ -12,7 +12,7 @@ export function RouterDialog(props: InjectedDialogProps) {
         matchPath(RoutePaths.UploadFile, pathname) ? <Trans>Upload File</Trans> : <Trans>Web3 File Service</Trans>
 
     useLayoutEffect(() => {
-        if (!(pathname === RoutePaths.Exit)) return
+        if (pathname !== RoutePaths.Exit) return
         props.onClose?.()
     }, [pathname === RoutePaths.Exit, props.onClose])
 

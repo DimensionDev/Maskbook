@@ -190,7 +190,7 @@ const ONE_HOUR = 60 * ONE_MIN
 const ONE_DAY = 24 * ONE_HOUR
 export const ONE_WEEK = 7 * ONE_DAY
 
-const plural = (num: number, unit: string) => `${num} ${unit}${num !== 1 ? 's' : ''}`
+const plural = (num: number, unit: string) => `${num} ${unit}${num === 1 ? '' : 's'}`
 
 /**
  * A datetime formatter follows RSS3's

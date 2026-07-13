@@ -15,10 +15,8 @@ class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, Schema
         endBlock: number,
     ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined> {
         if (!senderAddress || !contractAddress || !endBlock || !methodId) {
-            if (process.env.NODE_ENV === 'development') {
-                if (!startBlock || !endBlock) {
-                    console.error('Start block or end block is empty or 0', { startBlock, endBlock })
-                }
+            if (process.env.NODE_ENV === 'development' && (!startBlock || !endBlock)) {
+                console.error('Start block or end block is empty or 0', { startBlock, endBlock })
             }
             return
         }

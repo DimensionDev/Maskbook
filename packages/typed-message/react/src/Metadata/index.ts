@@ -50,13 +50,14 @@ export function readTypedMessageMetadataUntyped<T>(
     if (!meta.has(key)) return Err.EMPTY
     if (metadataSchemaStore.has(key) && !jsonSchema) jsonSchema = metadataSchemaStore.get(key)!
     const data = meta.get(key)! as T
-    if (!jsonSchema) console.warn('You should add a JSON Schema to verify the metadata in the TypedMessage')
-    else {
+    if (jsonSchema) {
         const match = isDataMatchJSONSchema(data, jsonSchema)
         if (match.isErr()) {
             console.warn('The problematic metadata is dropped', data, 'errors:', match.error)
             return Err.EMPTY
         }
+    } else {
+        console.warn('You should add a JSON Schema to verify the metadata in the TypedMessage')
     }
     return Ok(data)
 }

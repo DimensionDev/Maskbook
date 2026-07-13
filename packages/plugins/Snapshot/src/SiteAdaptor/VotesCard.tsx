@@ -110,7 +110,7 @@ function Content() {
                                 v.choices
                                     .flatMap((choice, index) => [
                                         index === 0 ? '' : ', ',
-                                        !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
+                                        isAverageWeight ? '' : formatPercentage(choice.weight / v.totalWeight!) + ' ',
                                         choice.name,
                                     ])
                                     .join('')

@@ -144,36 +144,28 @@ function _parseEIP4361Message(message: string): ParsedEIP4361Message | EIP4361Me
             step === S.expect_optional_request_id ||
             step === S.expect_optional_resources
         ) {
-            if (step === S.expect_optional_expiration_time) {
-                if (line.startsWith('Expiration Time: ')) {
-                    const date = new Date(line.slice('Expiration Time: '.length))
-                    if (date.toString() === 'Invalid Date') return EIP4361MessageState.Invalid
-                    expiration_time = date
-                    step = S.expect_optional_not_before
-                    continue
-                }
+            if (step === S.expect_optional_expiration_time && line.startsWith('Expiration Time: ')) {
+                const date = new Date(line.slice('Expiration Time: '.length))
+                if (date.toString() === 'Invalid Date') return EIP4361MessageState.Invalid
+                expiration_time = date
+                step = S.expect_optional_not_before
+                continue
             }
-            if (step <= S.expect_optional_not_before) {
-                if (line.startsWith('Not Before: ')) {
-                    const date = new Date(line.slice('Not Before: '.length))
-                    if (date.toString() === 'Invalid Date') return EIP4361MessageState.Invalid
-                    not_before = date
-                    step = S.expect_optional_request_id
-                    continue
-                }
+            if (step <= S.expect_optional_not_before && line.startsWith('Not Before: ')) {
+                const date = new Date(line.slice('Not Before: '.length))
+                if (date.toString() === 'Invalid Date') return EIP4361MessageState.Invalid
+                not_before = date
+                step = S.expect_optional_request_id
+                continue
             }
-            if (step <= S.expect_optional_request_id) {
-                if (line.startsWith('Request ID: ')) {
-                    request_id = line.slice('Request ID: '.length)
-                    step = S.expect_optional_resources
-                    continue
-                }
+            if (step <= S.expect_optional_request_id && line.startsWith('Request ID: ')) {
+                request_id = line.slice('Request ID: '.length)
+                step = S.expect_optional_resources
+                continue
             }
-            if (step <= S.expect_optional_resources) {
-                if (line === 'Resources:') {
-                    step = S.expect_resources_rest
-                    continue
-                }
+            if (step <= S.expect_optional_resources && line === 'Resources:') {
+                step = S.expect_resources_rest
+                continue
             }
             return EIP4361MessageState.Invalid
         } else if (step === S.expect_resources_rest) {

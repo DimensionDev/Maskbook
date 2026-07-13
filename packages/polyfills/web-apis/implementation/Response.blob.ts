@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-this-outside-of-class */
 try {
     // See: https://bugs.chromium.org/p/chromium/issues/detail?id=1355770
     Response.prototype.blob = async function (this: Response) {

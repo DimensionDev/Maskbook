@@ -10,7 +10,6 @@ import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typ
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectFungibleTokenModal } from '@masknet/shared'
 
-
 const useStyles = makeStyles()({
     container: {
         overflow: 'auto',

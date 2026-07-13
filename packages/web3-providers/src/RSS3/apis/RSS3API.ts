@@ -27,15 +27,15 @@ const fetchFromRSS3 = <T>(url: string) => {
 }
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
-export class RSS3 {
+export const RSS3 = {
     /** get .csb handle info */
-    static async getNameInfo(handle: string) {
+    async getNameInfo(handle: string) {
         if (!handle) return
         const url = urlcat('https://pregod.rss3.dev/v1/ns/:id', { id: handle })
         return fetchFromRSS3<RSS3BaseAPI.NameInfo>(url)
-    }
+    },
 
-    static async getAllNotes(
+    async getAllNotes(
         address: string,
         options: Partial<Record<string, string[] | string>> = {},
         { indicator, size = 100 }: BaseHubOptions<ChainId> = {},
@@ -66,9 +66,9 @@ export class RSS3 {
             createIndicator(indicator),
             meta?.cursor ? createNextIndicator(indicator, meta.cursor) : undefined,
         )
-    }
+    },
 
-    static async getNameService(handle: string) {
+    async getNameService(handle: string) {
         const url = urlcat(RSS3_ENDPOINT, '/ns/:handle', {
             handle,
         })
@@ -81,5 +81,5 @@ export class RSS3 {
             address: response.address,
             chainId: NameServiceToChainMap[suffix],
         }
-    }
+    },
 }

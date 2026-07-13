@@ -243,10 +243,10 @@ export const Component = memo(function SettingsPage() {
                         <ListItem
                             className={classes.listItem}
                             onClick={() => {
-                                if (!user.backupPassword) {
-                                    modalNavigate(PopupModalRoutes.SetBackupPassword)
-                                } else {
+                                if (user.backupPassword) {
                                     handleOpenDashboard(DashboardRoutes.BackupCloud)
+                                } else {
+                                    modalNavigate(PopupModalRoutes.SetBackupPassword)
                                 }
                             }}>
                             <ListItemText
@@ -259,10 +259,10 @@ export const Component = memo(function SettingsPage() {
                         <ListItem
                             className={classes.listItem}
                             onClick={() => {
-                                if (!user.backupPassword) {
-                                    modalNavigate(PopupModalRoutes.SetBackupPassword)
-                                } else {
+                                if (user.backupPassword) {
                                     handleOpenDashboard(DashboardRoutes.BackupLocal)
+                                } else {
+                                    modalNavigate(PopupModalRoutes.SetBackupPassword)
                                 }
                             }}>
                             <ListItemText

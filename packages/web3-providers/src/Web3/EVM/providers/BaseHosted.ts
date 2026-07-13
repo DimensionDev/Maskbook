@@ -124,8 +124,8 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
 
     async updateWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
-        const result = wallets.filter(
-            (x) => !this.walletStorage.wallets.value.some((y) => isSameAddress(x.address, y.address)),
+        const result = wallets.filter((x) =>
+            this.walletStorage.wallets.value.every((y) => !isSameAddress(x.address, y.address)),
         )
         await this.walletStorage.wallets.setValue(
             uniqWith([...this.walletStorage.wallets.value, ...result], (a, b) => isSameAddress(a.address, b.address)),
@@ -135,7 +135,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
     async removeWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         await this.walletStorage.wallets.setValue(
-            this.walletStorage.wallets.value.filter((x) => !wallets.some((y) => isSameAddress(x.address, y.address))),
+            this.walletStorage.wallets.value.filter((x) => wallets.every((y) => !isSameAddress(x.address, y.address))),
         )
     }
 

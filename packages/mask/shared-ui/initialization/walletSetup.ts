@@ -11,7 +11,7 @@ await initWallet({
         openWalletConnectDialog: async (uri: string) => {
             if (Sniffings.is_popup_page) {
                 const { promise, resolve, reject } = Promise.withResolvers<boolean>()
-                const callback = ({ open }: { open: boolean }) => (!open ? resolve(true) : undefined)
+                const callback = ({ open }: { open: boolean }) => (open ? undefined : resolve(true))
 
                 delay(5000).then(() => reject(new Error('timeout')))
                 CrossIsolationMessages.events.popupWalletConnectEvent.on(callback)

@@ -61,7 +61,7 @@ export async function hasSecret() {
  */
 export async function hasSafeSecret() {
     const secret = await getSecret()
-    return !!secret && (typeof secret.isUnsafe === 'undefined' || !secret.isUnsafe)
+    return !!secret && (secret.isUnsafe === undefined || !secret.isUnsafe)
 }
 
 /**

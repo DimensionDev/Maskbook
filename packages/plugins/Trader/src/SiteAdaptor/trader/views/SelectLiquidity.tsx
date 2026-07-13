@@ -158,11 +158,8 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                     <div className={classes.statusBox}>
                         <LoadingStatus />
                     </div>
-                : !liquidityGroups.length ?
-                    <div className={classes.statusBox}>
-                        <EmptyStatus />
-                    </div>
-                :   liquidityGroups.map(([name, list]) => {
+                : liquidityGroups.length ?
+                    liquidityGroups.map(([name, list]) => {
                         return (
                             <div className={classes.group} key={name}>
                                 <Typography className={classes.groupName}>{name}</Typography>
@@ -205,6 +202,9 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                             </div>
                         )
                     })
+                :   <div className={classes.statusBox}>
+                        <EmptyStatus />
+                    </div>
                 }
             </div>
             <div className={classes.footer}>

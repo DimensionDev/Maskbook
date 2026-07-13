@@ -24,8 +24,8 @@ function formatClaimEvent(value: ClaimEventOutput | undefined): ClaimEvent | und
     }
 }
 
-export class Airdrop {
-    static async getActivity(chainId: ChainId, address?: string) {
+export const Airdrop = {
+    async getActivity(chainId: ChainId, address?: string) {
         const { CLAIMERS, CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
         if (!CLAIMERS || !CONTRACT_ADDRESS) return
 
@@ -72,9 +72,9 @@ export class Airdrop {
             isClaimed,
             eventIndex: currentEventIndex,
         }
-    }
+    },
 
-    static async getPoolInfo(chainId: ChainId, eventIndex: string) {
+    async getPoolInfo(chainId: ChainId, eventIndex: string) {
         const { CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
         if (!CONTRACT_ADDRESS) return
 
@@ -86,5 +86,5 @@ export class Airdrop {
             { chainId },
         )
         return formatClaimEvent(claimEvent)
-    }
+    },
 }

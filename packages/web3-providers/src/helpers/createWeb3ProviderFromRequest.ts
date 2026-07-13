@@ -21,7 +21,7 @@ export function createWeb3ProviderFromRequest(
         request,
 
         send(payload, callback: (error: Error | null, response?: JsonRpcResponse) => void) {
-            return this.sendAsync(payload, callback)
+            return provider.sendAsync(payload, callback)
         },
         // some pkg (eth-rpc) needs this method
         sendAsync: async (

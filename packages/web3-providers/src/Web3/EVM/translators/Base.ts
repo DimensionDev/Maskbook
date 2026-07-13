@@ -15,15 +15,16 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
         try {
             // add gas margin
             if (config.gas) {
-                if (context.providerType !== ProviderType.MaskWallet) {
+                if (context.providerType === ProviderType.MaskWallet) {
+                    config.gas = toHex(config.gas)
+                } else {
                     const gas = toHex(
-                        BigNumber.max(toHex(config.gas), context.chainId === ChainId.Optimism ? 25_000 : 21_000).toFixed(
-                            0,
-                        ),
+                        BigNumber.max(
+                            toHex(config.gas),
+                            context.chainId === ChainId.Optimism ? 25_000 : 21_000,
+                        ).toFixed(0),
                     )
                     config.gas = gas
-                } else {
-                    config.gas = toHex(config.gas)
                 }
             }
 

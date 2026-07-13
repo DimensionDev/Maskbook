@@ -205,7 +205,7 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                             startAdornment: <Icons.Search size={18} />,
                             endAdornment: input ? <Icons.Close size={18} onClick={() => setInput('')} /> : null,
                             onKeyDown: (event) => {
-                                if (!(event.code === 'Enter')) return
+                                if (event.code !== 'Enter') return
                                 setKeyword(event.currentTarget.value)
                             },
                             onBlur: (event) => {

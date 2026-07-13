@@ -124,9 +124,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                     onClick={readonlyMode || disableSwitchAccount ? undefined : (onClick ?? openSelectProviderDialog)}
                     onPendingClick={readonlyMode || disableSwitchAccount ? undefined : () => WalletStatusModal.open()}
                 />
-                {!readonlyMode ?
-                    <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
-                :   null}
+                {readonlyMode ? null : <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>}
             </Box>
         )
     },

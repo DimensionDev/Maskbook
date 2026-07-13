@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-top-level-side-effects */
 import {
     composeTransformers,
     FlattenTypedMessage,
@@ -40,10 +41,12 @@ const matcher = /^https?:\/\/mask(\.io|book\.com)/iu
 const textPayloadChar = /([\w+/=|:])/iu
 const emoji = '\u{1F3BC}'
 TypedMessageTransformers.addTransformer(function visitor(message, context) {
-    if (isTypedMessageAnchor(message)) {
-        if (message.href && (matcher.test(message.href) || matcher.test(message.content))) {
-            return makeTypedMessageAnchor('normal', 'https://mask.io', 'Mask')
-        }
+    if (
+        isTypedMessageAnchor(message) &&
+        message.href &&
+        (matcher.test(message.href) || matcher.test(message.content))
+    ) {
+        return makeTypedMessageAnchor('normal', 'https://mask.io', 'Mask')
     }
 
     if (fbStyleTextPayloadReplace && isTypedMessageText(message) && message.content.includes(emoji)) {

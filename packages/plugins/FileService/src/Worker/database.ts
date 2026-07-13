@@ -19,7 +19,7 @@ async function migrationV1() {
         for (const file of migrateFileInfoV1(x.value)) {
             await Database.add({
                 ...file,
-                createdAt: typeof file.createdAt !== 'number' ? new Date(file.createdAt).getTime() : file.createdAt,
+                createdAt: typeof file.createdAt === 'number' ? file.createdAt : new Date(file.createdAt).getTime(),
             })
         }
         await x.delete()

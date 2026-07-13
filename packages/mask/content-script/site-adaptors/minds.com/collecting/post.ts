@@ -22,7 +22,7 @@ import Services from '#services'
 export const PostProviderMinds: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
-        collectPostsMindsInner(this.posts, signal)
+        collectPostsMindsInner(PostProviderMinds.posts, signal)
     },
 }
 

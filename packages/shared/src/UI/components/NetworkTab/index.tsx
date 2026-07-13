@@ -37,7 +37,7 @@ export const NetworkTab = memo(function NetworkTab({
 
     const isValidChainId = useMemo(() => chains.includes(chainId), [chains, chainId])
     const [tab, _a, _b, setTab] = useTabs(
-        !isValidChainId ? networkIds[0] : (chainId?.toString() ?? networkIds[0]),
+        isValidChainId ? (chainId?.toString() ?? networkIds[0]) : networkIds[0],
         ...networkIds,
     )
 

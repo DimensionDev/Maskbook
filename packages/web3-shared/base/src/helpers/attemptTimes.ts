@@ -8,5 +8,9 @@ export async function attemptTimes<T>(
     times = 3,
 ) {
     if (times <= 1 || times > 59) times = 3
-    return attemptUntil(new Array(times).fill(func), fallback, predicator)
+    return attemptUntil(
+        Array.from({ length: times }, () => func),
+        fallback,
+        predicator,
+    )
 }

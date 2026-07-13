@@ -20,7 +20,7 @@ function svg2jsx(code: string) {
     return code
         .trim()
         .replaceAll(/(\w+-\w+)=('|").*?\2/gu, (p: string, m1: string) => {
-            return p.replace(m1, camelCase(m1))
+            return p.replace(m1, () => camelCase(m1))
         })
         .replaceAll('xlink:href', 'xlinkHref')
         .replaceAll(/\bstyle=('|")(.+?)\1/gu, (_p: string, _m1: string, style: string) => {

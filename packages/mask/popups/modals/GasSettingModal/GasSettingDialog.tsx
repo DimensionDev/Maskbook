@@ -212,14 +212,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     useRenderPhraseCallbackOnDepsChange(() => {
         if (!open || !gasOptions || config.gasPrice || (config.maxFeePerGas && config.maxPriorityFeePerGas)) return
         // Set default value
-        if (!isSupport1559) {
-            const result =
-                replaceType && config.gasPrice ?
-                    formatWeiToGwei(config.gasPrice).plus(5)
-                :   formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
-
-            setGasPrice(result.toFixed(2))
-        } else {
+        if (isSupport1559) {
             const maxPriorityFeePerGas =
                 replaceType && config.maxPriorityFeePerGas ?
                     formatWeiToGwei(config.maxPriorityFeePerGas).plus(5)
@@ -232,6 +225,13 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
             setMaxPriorityFeePerGas(maxPriorityFeePerGas.toFixed(2))
             setMaxFeePerGas(maxFeePerGas.toFixed(2))
+        } else {
+            const result =
+                replaceType && config.gasPrice ?
+                    formatWeiToGwei(config.gasPrice).plus(5)
+                :   formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
+
+            setGasPrice(result.toFixed(2))
         }
     }, [open, isSupport1559, gasOptions, replaceType, config])
 

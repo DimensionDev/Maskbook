@@ -129,8 +129,11 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
         const handleClick = async () => {
             if (!isConnected) {
                 await connect(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
-                if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
-                else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
+                if (finishTarget) {
+                    Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
+                } else {
+                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
+                }
             }
 
             CrossIsolationMessages.events.personaBindFinished.sendToAll({ pluginID: finishTarget })

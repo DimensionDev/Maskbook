@@ -79,7 +79,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     return async () => {
         if (indexedDB.databases) {
             const oldDBs = await indexedDB.databases()
-            const hasNoOldVersion = !oldDBs.some((db) => db.name === dbName)
+            const hasNoOldVersion = oldDBs.every((db) => db.name !== dbName)
             const hasSameLatestVersion = oldDBs.some((db) => db.name === dbName && db.version === latestVersion)
             if (hasNoOldVersion || hasSameLatestVersion) {
                 return opener(latestVersion)

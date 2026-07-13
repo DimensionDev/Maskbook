@@ -192,7 +192,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     {tokenId ?
                         <Typography>Token #{tokenId}</Typography>
                     :   null}
-                    {!tokenId ?
+                    {tokenId ? null : (
                         <>
                             <TokenIcon
                                 address={(tokenAddress || nativeToken?.address) ?? ''}
@@ -210,7 +210,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                                 })
                             :   null}
                         </>
-                    :   null}
+                    )}
                 </Typography>
                 {!isGreaterThan(tokenValueUSD, pow10(9)) && !tokenId ?
                     <Typography className={classes.value}>
