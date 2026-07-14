@@ -23,11 +23,11 @@ export interface BaseUtils<ChainId, SchemaType, NetworkType> {
 
     isValidAddress(address: string): boolean
 
-    formatAddress(address: string, size?: number  ): string
+    formatAddress(address: string, size?: number): string
 
-    formatTokenId(id?: string  , size?: number  ): string
+    formatTokenId(id?: string, size?: number): string
 
-    formatDomainName(domain?: string | null  , size?: number  ): string
+    formatDomainName(domain?: string | null, size?: number): string
 
     formatSchemaType(schema: SchemaType): string
 }

@@ -116,7 +116,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         })
     }
 
-    async removeWallet(address: string, password?: string  ) {
+    async removeWallet(address: string, password?: string) {
         await this.walletStorage.wallets.setValue(
             this.walletStorage.wallets.value.filter((x) => !isSameAddress(x.address, address)),
         )

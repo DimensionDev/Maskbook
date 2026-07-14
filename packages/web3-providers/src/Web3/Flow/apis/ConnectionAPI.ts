@@ -96,7 +96,7 @@ export class FlowConnectionAPI
         return blockHeader.height
     }
 
-    async getTransaction(id: string, initial?: FlowConnectionOptions  ): Promise<TransactionDetailed | null> {
+    async getTransaction(id: string, initial?: FlowConnectionOptions): Promise<TransactionDetailed | null> {
         const web3 = this.getWeb3(initial)
         return web3.getTransaction(id)
     }

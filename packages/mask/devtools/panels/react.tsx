@@ -312,7 +312,7 @@ function setEditorPreference() {
         setLocalStorage(editorURL, JSON.stringify(preset))
     }
 }
-function getLocalStorage<T = string>(key: string, defaultValue?: T  ): T | undefined {
+function getLocalStorage<T = string>(key: string, defaultValue?: T): T | undefined {
     try {
         // eslint-disable-next-line no-restricted-globals
         const item = localStorage.getItem(key)

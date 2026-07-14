@@ -27,7 +27,7 @@ export interface ReactRootShadowed {
  */
 export function attachReactTreeToMountedRoot_noHost(
     wrapJSX?: WrapJSX,
-): (shadow: ShadowRoot, options?: AttachInShadowRootOptions  ) => ReactRootShadowed {
+): (shadow: ShadowRoot, options?: AttachInShadowRootOptions) => ReactRootShadowed {
     return attachReactTreeToMountedRoot.bind(null, wrapJSX)
 }
 

@@ -19,7 +19,7 @@ const inMemoryPassword = {
         }
     },
 }
- 
+
 browser.storage.session?.get([key, atKey]).then(async (result) => {
     if (Date.now() - result[atKey] > (await database.getAutoLockerDuration())) {
         browser.storage.session.clear()

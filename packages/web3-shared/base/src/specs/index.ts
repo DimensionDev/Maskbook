@@ -600,7 +600,7 @@ export type FormattedTransactionDescription =
     | { key: 'Unlock {symbol}.'; symbol: string }
     | { key: 'Unlock {symbol} NFT contract.'; symbol: string }
     // Airdrop
-     
+
     // RedPacket
     | 'Claim your Lucky Drop.'
     | 'Create your Lucky Drop.'
@@ -644,7 +644,7 @@ export type FormattedTransactionSnackbarSuccessDescription =
           key: "You didn't approve {symbol}. Please do not set spending cap to 0 and try it again."
           symbol: string
       }
-     
+
     // Airdrop
     | { key: '{token} were claimed'; token: string }
     // Gitcoin

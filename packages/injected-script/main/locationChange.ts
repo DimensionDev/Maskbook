@@ -9,7 +9,7 @@ PatchDescriptor(
     $.HistoryPrototype,
 )
 // Learn more about this hack from https://stackoverflow.com/a/52809105/1986338
-function pushState(this: History, data: any, unused: string, url?: string | URL | null  ) {
+function pushState(this: History, data: any, unused: string, url?: string | URL | null) {
     const val = $.apply($.pushState, this, arguments)
     $.dispatchEvent(window, new $.Event('locationchange'))
     if (currentLocationHref !== window.location.href) {
@@ -18,7 +18,7 @@ function pushState(this: History, data: any, unused: string, url?: string | URL 
     }
     return val
 }
-function replaceState(this: History, data: any, unused: string, url?: string | URL | null  ) {
+function replaceState(this: History, data: any, unused: string, url?: string | URL | null) {
     const val = $.apply($.replaceState, this, arguments)
     // cspell:ignore replacestate
     $.dispatchEvent(window, new $.Event('replacestate'))

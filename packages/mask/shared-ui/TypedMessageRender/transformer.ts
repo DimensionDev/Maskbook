@@ -1,4 +1,3 @@
- 
 import {
     composeTransformers,
     FlattenTypedMessage,

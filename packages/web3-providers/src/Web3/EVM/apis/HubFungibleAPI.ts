@@ -52,7 +52,7 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
         )
     }
 
-    override getFungibleToken(address: string, initial?: BaseHubOptions<ChainId>  ) {
+    override getFungibleToken(address: string, initial?: BaseHubOptions<ChainId>) {
         const networks = evm.state?.Network?.networks?.getCurrentValue()
         const currentNetwork =
             initial?.chainId ?

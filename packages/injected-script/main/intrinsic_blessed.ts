@@ -108,7 +108,7 @@ export function Map<K, V>(): Map<K, V> {
 export function WeakMap<K extends object, V>(): WeakMap<K, V> {
     return setPrototypeOf(new _WeakMap(), WeakMapPrototype)
 }
-export function Set<T>(iterable?: Iterable<T> | null  ): Set<T> {
+export function Set<T>(iterable?: Iterable<T> | null): Set<T> {
     return setPrototypeOf(new _Set(iterable), SetPrototype)
 }
 export function Array_of<T extends readonly unknown[]>(...args: T): T {

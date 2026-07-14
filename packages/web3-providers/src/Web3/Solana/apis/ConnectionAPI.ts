@@ -51,12 +51,12 @@ export class SolanaConnectionAPI
     private Transfer
     private ConnectionOptions
 
-    getAccount(initial?: SolanaConnectionOptions  ): Promise<string> {
+    getAccount(initial?: SolanaConnectionOptions): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.account)
     }
 
-    getChainId(initial?: SolanaConnectionOptions  ): Promise<ChainId> {
+    getChainId(initial?: SolanaConnectionOptions): Promise<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.chainId)
     }

@@ -7,7 +7,7 @@ export type Fetcher<T = Response> = (input: RequestInfo | URL, init?: RequestIni
 export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetchers: Fetcher[] = []): Promise<Response> {
     const fetcher = fetchers.reduceRight<Fetcher>(
         (ff, f) => (r, i) => f(r, i, ff),
-        (input: RequestInfo | URL, init?: RequestInit  ) => {
+        (input: RequestInfo | URL, init?: RequestInit) => {
             return originalFetch(input, {
                 signal: AbortSignal.timeout(3 * 60 * 1000 /* 3 mins */),
                 ...init,

@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'development') {
     // @ts-expect-error conditionally import
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { injectIntoGlobalHook } = require('react-refresh/runtime')
-     
+
     injectIntoGlobalHook(globalThis)
 }
 

@@ -26,7 +26,7 @@ function addEventListener(
     this: EventTarget,
     type: string,
     callback: EventListenerOrEventListenerObject | null,
-    options?: boolean | AddEventListenerOptions  ,
+    options?: boolean | AddEventListenerOptions,
 ) {
     const original = $.EventTargetPrototypeDesc.addEventListener.value!
     if (
@@ -105,7 +105,7 @@ function removeEventListener(
     this: EventTarget,
     type: string,
     callback: EventListenerOrEventListenerObject | null,
-    options?: boolean | EventListenerOptions  ,
+    options?: boolean | EventListenerOptions,
 ) {
     const original = $.EventTargetPrototypeDesc.removeEventListener.value!
     if (!CapturingEvents.has(type)) return $.apply(original, this, arguments)
@@ -145,7 +145,7 @@ export function RemoveListener(listener: EventListenerDescriptor, listenerList: 
 function normalizeAddEventListenerArgs(
     type: string,
     callback: EventListenerOrEventListenerObject | null,
-    options?: boolean | AddEventListenerOptions  ,
+    options?: boolean | AddEventListenerOptions,
 ): EventListenerDescriptor {
     // https://dom.spec.whatwg.org/#event-flatten-more
     const capture = $.Boolean(typeof options === 'boolean' ? options : (options?.capture ?? false))

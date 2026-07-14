@@ -119,7 +119,8 @@ const site: Plugin.SiteAdaptor.Definition = {
                             {...EntryComponentProps}
                             icon={icon}
                             onClick={() => {
-                                if (EntryComponentProps.onClick) EntryComponentProps.onClick(() => openDialog('timeline'))
+                                if (EntryComponentProps.onClick)
+                                    EntryComponentProps.onClick(() => openDialog('timeline'))
                                 else openDialog()
                                 Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckOpen)
                             }}

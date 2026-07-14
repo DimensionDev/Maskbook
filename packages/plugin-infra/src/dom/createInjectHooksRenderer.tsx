@@ -16,7 +16,7 @@ type Raw<T> = Plugin.InjectUIRaw<T>
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => readonly PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-    PluginWrapperComponent?: ComponentType<PluginWrapperComponentProps<PluginDefinition>>  ,
+    PluginWrapperComponent?: ComponentType<PluginWrapperComponentProps<PluginDefinition>>,
     rootElement?: 'div' | 'span' | (() => HTMLDivElement | HTMLSpanElement),
 ) {
     function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {

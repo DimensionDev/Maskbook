@@ -82,7 +82,7 @@ export class __DataTransfer extends $unsafe.NewObject implements DataTransfer {
         return object.#types
     }
     // #endregion
-    clearData(format?: string  ): void {
+    clearData(format?: string): void {
         const object = $unsafe.unwrapXRayVision(this)
         if (!(#items in object)) return $.apply($.DataTransferPrototypeDesc.clearData.value!, this, arguments)
         return
