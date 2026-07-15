@@ -1,5 +1,15 @@
 # @masknet/typed-message-react
 
+## 0.3.0
+
+### Minor Changes
+
+- 956a04a: Require React.use now
+
+### Patch Changes
+
+- 5032eb5: upgrade z-schema to 12
+
 ## 0.2.3
 
 ### Patch Changes
