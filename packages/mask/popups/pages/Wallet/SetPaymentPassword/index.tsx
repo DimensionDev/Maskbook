@@ -276,6 +276,8 @@ export const Component = memo(function SetPaymentPassword() {
                                     {errorMsg}
                                 </Typography>
                             :   null}
+                            {/* Hidden default submit button so pressing Enter in either field submits the form. */}
+                            <button type="submit" hidden />
                         </form>
                         <Typography
                             color={theme.palette.maskColor.third}
