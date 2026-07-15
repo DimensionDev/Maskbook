@@ -79,12 +79,12 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     schema: SchemaType
 }
 
-export interface NonFungibleTokenRarity<ChainId> {
+export interface NonFungibleTokenRarity {
     provider: SourceType
     rank?: number
     score?: number
     total?: number
-    traits?: Record<string, { value: string; percentage: number }>
+    traits?: { [property: string]: { value: string; percentage: number } }
 }
 
 export interface NonFungibleTokenTrait {
@@ -258,7 +258,7 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     // EIP3091
     explorerUrl: {
         url: string
-        parameters?: Record<string, string | number | boolean>
+        parameters?: { [property: string]: string | number | boolean }
     }
     features?: string[]
     // Indicate a built-in chain or customized one.
@@ -399,7 +399,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     /** estimated price */
     price?: Price
     /** rarity */
-    rarity?: Record<SourceType, NonFungibleTokenRarity<ChainId>>
+    rarity?: { [key in SourceType]: NonFungibleTokenRarity }
     /** traits of the digital asset */
     traits?: NonFungibleTokenTrait[]
     /** token on auction */
@@ -714,7 +714,7 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
         /** name */
         name?: string
         /** actual parameters */
-        parameters?: Record<string, unknown>
+        parameters?: { [property: string]: unknown }
     }>
     /** nested children contexts */
     children?: Array<TransactionContext<ChainId, Parameter>>
@@ -782,7 +782,7 @@ export interface RecentTransaction<ChainId, Transaction> {
     /** status type */
     status: TransactionStatusType
     /** all available tx candidates */
-    candidates: Record<string, Transaction>
+    candidates: { [address: string]: Transaction }
     /** record drafted at */
     draftedAt: Date
     /** record created at */
@@ -924,15 +924,12 @@ export interface TokenState<ChainId, SchemaType> {
         address: string,
         token?: NonFungibleToken<ChainId, SchemaType>,
     ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-    nonFungibleCollectionMap?: Subscription<
-        Record<
-            string,
-            Array<{
-                contract: NonFungibleTokenContract<ChainId, SchemaType>
-                tokenIds: string[]
-            }>
-        >
-    >
+    nonFungibleCollectionMap?: Subscription<{
+        [property: string]: Array<{
+            contract: NonFungibleTokenContract<ChainId, SchemaType>
+            tokenIds: string[]
+        }>
+    }>
     addNonFungibleTokens?(
         owner: string,
         contract: NonFungibleTokenContract<ChainId, SchemaType>,

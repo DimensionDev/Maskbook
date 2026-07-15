@@ -2,7 +2,7 @@ import { Box, Alert, Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 
-async function getCookies(keys: string[]): Promise<Record<string, string | undefined>> {
+async function getCookies(keys: string[]): Promise<{ [property: string]: string | undefined }> {
     const results = await Promise.allSettled(
         keys.map((key) =>
             browser.cookies.get({ name: key, url: 'https://x.com/' }).then((x) => ({ key, value: x?.value })),

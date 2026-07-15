@@ -42,7 +42,7 @@ export async function deriveLocalKeyFromECDHKey(
 // coinType = ether
 const path = "m/44'/60'/0'/0/0"
 
-type MnemonicGenerationInformation = {
+interface MnemonicGenerationInformation {
     key: JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>
     password: string
     mnemonicRecord: NonNullable<PersonaRecord['mnemonic']>

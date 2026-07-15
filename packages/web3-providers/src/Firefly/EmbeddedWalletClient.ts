@@ -24,9 +24,9 @@ async function fireflyRequest<T>(path: string, init: RequestInit = {}): Promise<
     const accessToken = getAccessToken()
     if (!accessToken) throw new Error('Not signed in to Firefly.')
 
-    const headers: Record<string, string> = {
+    const headers: { [headerName: string]: string } = {
         Authorization: `Bearer ${accessToken}`,
-        ...(init.headers as Record<string, string> | undefined),
+        ...(init.headers as { [property: string]: string } | undefined),
     }
     if (init.body && !headers['Content-Type'] && !headers['content-type']) {
         headers['Content-Type'] = 'application/json'

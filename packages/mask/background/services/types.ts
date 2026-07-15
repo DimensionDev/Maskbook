@@ -23,6 +23,6 @@ export interface Services {
     SiteAdaptor: SiteAdaptorService
     Wallet: WalletService
 }
-export type GeneratorServices = {
+export interface GeneratorServices {
     decrypt: typeof decryptWithDecoding
 }

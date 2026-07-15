@@ -15,11 +15,13 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
         return undefined
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style -- this is the abstract class default implementation, will be overridden by the subclass. class fields cannot be overridden.
     get connected() {
         return false
     }
 
     // No need to wait by default
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style -- this is the abstract class default implementation, will be overridden by the subclass. class fields cannot be overridden.
     get ready() {
         return true
     }

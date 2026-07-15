@@ -3,7 +3,7 @@ export interface CoinInfo {
     block_time_in_minutes: number
     categories: string[]
     contract_address: string
-    description: Record<string, string>
+    description: { [property: string]: string }
     developer_score: number
     id: string
     image: {
@@ -26,13 +26,13 @@ export interface CoinInfo {
         twitter_screen_name: string
     }
     liquidity_score: string
-    localization: Record<string, string>
+    localization: { [locale: string]: string }
     market_cap_rank: number
     market_data: {
-        current_price: Record<string, number>
-        high_24h: Record<string, number>
-        low_24h: Record<string, number>
-        market_cap: Record<string, number>
+        current_price: { [currency: string]: number }
+        high_24h: { [currency: string]: number }
+        low_24h: { [currency: string]: number }
+        market_cap: { [currency: string]: number }
         market_cap_rank: number
 
         price_change_percentage_1h_in_currency: number
@@ -46,9 +46,9 @@ export interface CoinInfo {
         price_change_percentage_200d_in_currency: number
 
         total_supply: number
-        total_volume: Record<string, number>
+        total_volume: { [currency: string]: number }
     }
-    platforms: Record<string, string>
+    platforms: { [platform: string]: string }
     name: string
     symbol: string
     tickers: Array<{

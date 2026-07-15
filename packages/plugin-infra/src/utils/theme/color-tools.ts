@@ -13,7 +13,7 @@ export function toRGB(channels: RGB | undefined) {
 }
 
 export function fromRGB(rgb: string): RGB | undefined {
-    const matched = rgb.match(/rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/u)
+    const matched = /rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/u.exec(rgb)
     if (matched) {
         const [_, r, g, b] = matched
         return [Number.parseInt(r, 10), Number.parseInt(g, 10), Number.parseInt(b, 10)]
@@ -26,7 +26,7 @@ export function shade(channels: RGB, percentage: number): RGB {
 }
 
 function fromRGBAtoRGB(color: string): string {
-    const matched = color.match(/^rgba\((\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d*(?:\.\d+)?)\)$/u)
+    const matched = /^rgba\((\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d*(?:\.\d+)?)\)$/u.exec(color)
     if (matched) {
         const [_, r, g, b, a] = matched
         const rgba: RGBA = [
@@ -43,7 +43,7 @@ function fromRGBAtoRGB(color: string): string {
 }
 
 function isRGBA(color: string) {
-    return color.match(/^rgba\((\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d*(?:\.\d+)?)\)$/u)
+    return /^rgba\((\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d*(?:\.\d+)?)\)$/u.exec(color)
 }
 
 export function getBackgroundColor(element: HTMLElement | HTMLBodyElement | undefined) {

@@ -35,7 +35,7 @@ function svg2jsx(code: string) {
 function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
     if (typeof data === 'string') {
         // from `viewBox="0 0 2124 660"`, we match `2124 / 660` out.
-        const match = data.match(/viewBox="0 0 (\d+) (\d+)"/u)
+        const match = /viewBox="0 0 (\d+) (\d+)"/u.exec(data)
         if (match) {
             return [Number.parseFloat(match[1]), Number.parseFloat(match[2])]
         }
@@ -81,13 +81,12 @@ async function generateIcons() {
     /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true })
 
-    const variants: Record<
-        string,
-        Array<{
+    const variants: {
+        [property: string]: Array<{
             args: [currentVariant: string[], url: string, jsx: string | null, isColorful?: boolean]
             assetPath: string
         }>
-    > = Object.create(null)
+    } = Object.create(null)
 
     const sourceMap = new Map<string, string | null>()
     await Promise.all(

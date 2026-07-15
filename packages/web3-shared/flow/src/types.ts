@@ -47,7 +47,9 @@ export enum TransactionStatusCode {
     EXPIRED = 5,
 }
 
-export type Web3Provider = Record<string, never>
+export interface Web3Provider {
+    [property: string]: never
+}
 export type Signature = string
 export type GasOption = never
 export type Block = BlockObject
@@ -72,7 +74,7 @@ export type Web3State = Web3StateShared<
     TransactionParameter
 >
 
-export type Web3Definition = {
+export interface Web3Definition {
     ChainId: ChainId
     AddressType: AddressType
     SchemaType: SchemaType

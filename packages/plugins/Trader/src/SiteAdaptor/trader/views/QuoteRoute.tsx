@@ -127,7 +127,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
         const compareList: OKXSwapQuote['quoteCompareList'] = [
             {
                 amountOut: formatAmount(quote.toTokenAmount, -quote.toToken.decimals),
-                dexLogo: dexes.find((x) => x.name === firstSubRouterDex)?.logo as string,
+                dexLogo: dexes.find((x) => x.name === firstSubRouterDex)?.logo || '',
                 dexName: firstSubRouterDex,
                 tradeFee: '0',
             },

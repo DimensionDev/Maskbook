@@ -9,7 +9,7 @@ export interface FireflyResponse<T> {
 }
 
 export namespace FireflyConfigAPI {
-    export type Result<T> = {
+    export interface Result<T> {
         code: number
         reason: string
         message: string
@@ -390,7 +390,7 @@ export namespace FireflyRedPacketAPI {
     }
     export type ParseResponse = FireflyResponse<ParseResult>
 
-    export type CheckClaimStrategyStatusOptions = {
+    export interface CheckClaimStrategyStatusOptions {
         rpid: string
         profile: {
             needLensAndFarcasterHandle?: boolean
@@ -464,7 +464,7 @@ export namespace FireflyRedPacketAPI {
 
     export type ThemeByIdResponse = FireflyResponse<ThemeGroupSettings>
 
-    export type CreateThemeOptions = {
+    export interface CreateThemeOptions {
         font_color: string
         /** image url */
         image: string
@@ -529,7 +529,7 @@ export namespace FireflyTwitterAPI {
         __typename: 'User'
         id: string
         rest_id: string
-        affiliates_highlighted_label: Record<string, unknown>
+        affiliates_highlighted_label: { [property: string]: unknown }
         has_graduated_access: boolean
         is_blue_verified: boolean
         profile_image_shape: string
@@ -550,7 +550,7 @@ export namespace FireflyTwitterAPI {
         }
         smart_blocked_by: boolean
         smart_blocking: boolean
-        legacy_extended_profile: Record<string, unknown>
+        legacy_extended_profile: { [property: string]: unknown }
         is_profile_translatable: boolean
         has_hidden_subscriptions_on_profile: boolean
         verification_info: {
@@ -561,7 +561,7 @@ export namespace FireflyTwitterAPI {
             highlighted_tweets: string
         }
         user_seed_tweet_count: number
-        business_account: Record<string, unknown>
+        business_account: { [property: string]: unknown }
         creator_subscriptions_count: number
     }
 

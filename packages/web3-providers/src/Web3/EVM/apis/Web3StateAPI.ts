@@ -40,10 +40,9 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         value: Object.fromEntries(ChainIdList.map((x) => [x, {}])) as TransactionStorage<ChainId, TransactionType>,
     }).storage
     const { value: nameService } = InMemoryStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_NameServiceV2`, {
-        value: Object.fromEntries(getEnumAsArray(NameServiceID).map((x) => [x.value, {}])) as Record<
-            NameServiceID,
-            Record<string, string>
-        >,
+        value: Object.fromEntries(getEnumAsArray(NameServiceID).map((x) => [x.value, {}])) as {
+            [key in NameServiceID]: { [property: string]: string }
+        },
     }).storage
     const { value: riskWarning } = InMemoryStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_RiskWarning`, {
         value: {},

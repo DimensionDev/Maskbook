@@ -8,7 +8,7 @@ interface Token {
     chainId: ChainId
 }
 
-type CheckSecurityDialogEvent = {
+interface CheckSecurityDialogEvent {
     open: boolean
 }
 

@@ -46,7 +46,7 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
         </>
     )
 
-    function renderField(fieldData: unknown, fieldType: string, schema: Record<string, Item>): ReactNode {
+    function renderField(fieldData: unknown, fieldType: string, schema: { [property: string]: Item }): ReactNode {
         switch (fieldType) {
             case 'bool':
                 return (

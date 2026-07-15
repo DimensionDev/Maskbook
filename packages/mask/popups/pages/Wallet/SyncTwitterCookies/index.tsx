@@ -250,8 +250,8 @@ export const Component = memo(function SyncTwitterCookies() {
     // State for sync flow
     const [cryptoKey, setCryptoKey] = useState(generateCryptoKey)
     const [channelStatus, setChannelStatus] = useState<DesktopSyncChannelStatus | null>(null)
-    const [invalidMap, setInvalidMap] = useState<Record<string, boolean>>({})
-    const [statusStackMap, setStatusStackMap] = useState<Record<string, DesktopSyncChannelStatus[]>>({})
+    const [invalidMap, setInvalidMap] = useState<{ [property: string]: boolean }>({})
+    const [statusStackMap, setStatusStackMap] = useState<{ [property: string]: DesktopSyncChannelStatus[] }>({})
 
     // Reset all states when regenerating QR code
     const resetStates = useCallback(() => {

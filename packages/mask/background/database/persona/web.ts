@@ -142,7 +142,7 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     },
     'maskbook-persona',
 )
-type V1To2 = {
+interface V1To2 {
     version: 2
     data: Map<string, AESJsonWebKey>
 }

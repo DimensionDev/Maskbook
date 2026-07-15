@@ -24,6 +24,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
         return undefined
     }
 
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style -- this is the abstract class default implementation, will be overridden by the subclass. class fields cannot be overridden.
     get connected() {
         return false
     }
@@ -33,6 +34,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
      * Please make sure that the provider SDK or global environment is ready.
      * No need to wait by default
      */
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style -- this is the abstract class default implementation, will be overridden by the subclass. class fields cannot be overridden.
     get ready() {
         return true
     }

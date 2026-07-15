@@ -13,7 +13,7 @@ import {
 export const Twitter = {
     getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
-        const match = new URL(avatarURL).pathname.match(/^\/profile_images\/(\d+)/u)
+        const match = /^\/profile_images\/(\d+)/u.exec(new URL(avatarURL).pathname)
         return match ? match[1] : ''
     },
 

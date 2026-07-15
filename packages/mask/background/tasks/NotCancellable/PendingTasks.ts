@@ -17,7 +17,7 @@ function checkMessages(messages: Array<ReasonableMessage<Request, Response>>) {
 
 async function watchTasks() {
     const { storage } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_Message`, {
-        messages: {} as Record<string, ReasonableMessage<Request, Response>>,
+        messages: {} as { [property: string]: ReasonableMessage<Request, Response> },
     })
     await storage.messages.initializedPromise
     checkMessages(Object.values(storage.messages.value))

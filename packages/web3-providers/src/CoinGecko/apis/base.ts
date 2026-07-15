@@ -59,7 +59,7 @@ export async function getTokenPrice(platform_id: string, address: string, curren
 }
 
 async function getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
-    return fetchFromCoinGecko<Record<string, Price>>(
+    return fetchFromCoinGecko<{ [property: string]: Price }>(
         urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform_id', {
             platform_id,
             contract_addresses: contractAddresses.join(','),
@@ -70,7 +70,7 @@ async function getTokenPrices(platform_id: string, contractAddresses: string[], 
 }
 
 export async function getTokenPriceByCoinId(coin_id: string, currency = CurrencyType.USD) {
-    const price = await fetchFromCoinGecko<Record<string, Record<CurrencyType, number>>>(
+    const price = await fetchFromCoinGecko<{ [property: string]: { [key in CurrencyType]: number } }>(
         urlcat(COINGECKO_URL_BASE, '/simple/price', { ids: coin_id, vs_currencies: currency }),
         undefined,
     )

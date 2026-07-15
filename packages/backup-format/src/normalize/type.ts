@@ -21,7 +21,7 @@ export namespace NormalizedBackup {
         posts: Map<PostIVIdentifier, PostBackup>
         wallets: WalletBackup[]
         settings: SettingsBackup
-        plugins: Record<string, unknown>
+        plugins: { [pluginId: string]: unknown }
     }
     export interface Meta {
         /** Backup file version */

@@ -57,7 +57,7 @@ export interface CompositionDialogEvent {
     readonly open: boolean
     readonly content?: SerializableTypedMessages
     readonly options?: {
-        initialMeta?: Record<string, unknown>
+        initialMeta?: { [property: string]: unknown }
         target?: EncryptionTargetType
         startupPlugin?: string
         startupPluginProps?: any
@@ -130,7 +130,7 @@ interface SettingsUpdateEvent {
     value: any
 }
 
-type FireflySocialProfile = {
+interface FireflySocialProfile {
     profileId: string
     displayName: string
     handle: string

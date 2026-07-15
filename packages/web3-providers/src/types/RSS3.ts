@@ -293,7 +293,7 @@ export namespace RSS3BaseAPI {
         | ProposeMetadata
         | VoteMetadata
 
-    export type MetadataMap = {
+    export interface MetadataMap {
         [Tag.Transaction]: {
             [Type.Transfer]: TransactionMetadata
             [Type.Mint]: MintMetadata

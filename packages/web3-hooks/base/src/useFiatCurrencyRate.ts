@@ -10,7 +10,7 @@ export function useFiatCurrencyRate() {
 
     return useQuery({
         queryKey: ['@@fiat-currency-rates'],
-        queryFn: async (): Promise<Record<string, number>> => {
+        queryFn: async (): Promise<{ [property: string]: number }> => {
             const allRates = await FiatCurrencyRate.getRates()
             // Pick what we need only to reduce memory cost.
             return pick(allRates, Object.keys(CurrencyType))

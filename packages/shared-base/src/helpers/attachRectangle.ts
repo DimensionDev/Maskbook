@@ -1,4 +1,4 @@
-type Dimension = {
+interface Dimension {
     height: number
     width: number
 }

@@ -66,7 +66,8 @@ function normalizeFunctionArg(arg: unknown, parameter: AbiParameter | undefined)
     if (isTupleParameter(parameter)) {
         if (typeof arg !== 'object' || !arg) return arg
         return parameter.components.map((component, index) => {
-            const value = Array.isArray(arg) ? arg[index] : (arg as Record<string, unknown>)[component.name ?? index]
+            const value =
+                Array.isArray(arg) ? arg[index] : (arg as { [property: string]: unknown })[component.name ?? index]
             return normalizeFunctionArg(value, component)
         })
     }

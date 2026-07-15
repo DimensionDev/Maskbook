@@ -2,8 +2,8 @@ import { useCallback, useMemo, useState } from 'react'
 import { createContainer } from '@masknet/shared-base-ui'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 
-function useMap(initialState?: Record<string, string>) {
-    const [updatedMap, setUpdatedMap] = useState<Record<string, string>>(EMPTY_OBJECT)
+function useMap(initialState?: { [property: string]: string }) {
+    const [updatedMap, setUpdatedMap] = useState<{ [property: string]: string }>(EMPTY_OBJECT)
 
     const setPair = useCallback((address: string, domain: string) => {
         setUpdatedMap((map) => {

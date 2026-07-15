@@ -4,7 +4,7 @@ export interface EFPProfileResponse {
     address?: string
     ens?: {
         name?: string | null
-        records?: Record<string, string | undefined> | null
+        records?: { [recordName: string]: string | undefined } | null
     } | null
     followers_count?: number | string
     following_count?: number | string

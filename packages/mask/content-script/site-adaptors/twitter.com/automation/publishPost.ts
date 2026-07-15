@@ -23,7 +23,7 @@ export async function publishPostTwitter(
         }
 
     if (options?.reason === 'reply') {
-        const replyTweetId = location.href.match(/\/status\/(\d+)/u)?.[1]
+        const replyTweetId = /\/status\/(\d+)/u.exec(location.href)?.[1]
 
         if (replyTweetId) {
             variables.reply = {

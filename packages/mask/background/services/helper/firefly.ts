@@ -26,7 +26,7 @@ export interface TwitterOAuthData {
 export async function loginFireflyViaTwitter() {
     const data = await browser.storage.local.get('firefly_x_oauth')
     if (!data?.firefly_x_oauth) throw new Error('X OAuth token not found')
-    const oauth: Record<string, string> = data.firefly_x_oauth
+    const oauth: { [property: string]: string } = data.firefly_x_oauth
 
     const res = await fetch('https://firefly.social/api/twitter/auth', {
         method: 'POST',

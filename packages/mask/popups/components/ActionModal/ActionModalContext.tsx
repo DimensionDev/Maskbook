@@ -45,7 +45,7 @@ export function useModalNavigate() {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
     const openModal = useCallback(
-        (path: PopupModalRoutes, params?: Record<string, any>) => {
+        (path: PopupModalRoutes, params?: { [property: string]: any }) => {
             searchParams.set('modal', urlcat(path, params || {}))
             // useLocation().pathname is pathname of modal Routes (maybe since a certain version)
             // So we use pathname in hash instead

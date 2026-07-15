@@ -90,5 +90,5 @@ export interface ENSRecord {
     registrant_time: string
     expiration_time: string
     token_id: string
-    text_records: Record<string, string>
+    text_records: { [recordName: string]: string }
 }

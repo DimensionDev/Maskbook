@@ -4,7 +4,7 @@ import { useCurrentLinkedPersona } from '@masknet/shared'
 import type { Friend } from './useFriends.js'
 import type { FriendNetwork } from '../pages/Friends/common.js'
 
-export type NextIDPersonaBindingsWithIdentifier = {
+export interface NextIDPersonaBindingsWithIdentifier {
     proofs: Array<{
         platform: FriendNetwork
         identity: string

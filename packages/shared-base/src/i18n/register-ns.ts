@@ -1,6 +1,8 @@
 import type { I18n, Messages } from '@lingui/core'
 
-type LinguiI18NResource = Record<string, { messages: Messages }>
+interface LinguiI18NResource {
+    [property: string]: { messages: Messages }
+}
 function addI18NBundle(lingui: I18n, langs: LinguiI18NResource[] | LinguiI18NResource) {
     try {
         // not enable hmr for MV3

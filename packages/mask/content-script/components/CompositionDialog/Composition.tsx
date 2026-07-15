@@ -72,7 +72,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     )
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
-    const [initialMeta, setInitialMeta] = useState<Record<string, unknown>>(EMPTY_OBJECT)
+    const [initialMeta, setInitialMeta] = useState<{ [property: string]: unknown }>(EMPTY_OBJECT)
 
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)

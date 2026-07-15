@@ -237,8 +237,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                             )}
                                         </EmptyStatus>
                                     :   results.map((item, index) => {
-                                            const pubkey = item.linkedPersona?.publicKeyAsHex as string
-                                            const selected = selectedPubkeyList.includes(pubkey)
+                                            const pubkey = item.linkedPersona?.publicKeyAsHex
+                                            const selected = selectedPubkeyList.includes(pubkey!)
                                             return (
                                                 <ProfileInList
                                                     key={index}

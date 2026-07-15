@@ -4,7 +4,7 @@ import type { Address, ContractFunctionReturnType } from 'viem'
 import { EVMContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
-type ClaimEvent = {
+interface ClaimEvent {
     token: string
     startTime: string
     endTime: string
@@ -30,7 +30,7 @@ export const Airdrop = {
         if (!CLAIMERS || !CONTRACT_ADDRESS) return
 
         const airdropContract = EVMContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS)
-        const data = await fetchJSON<Record<string, string>>(`https://cors-next.r2d2.to/?${CLAIMERS}`, {
+        const data = await fetchJSON<{ [property: string]: string }>(`https://cors-next.r2d2.to/?${CLAIMERS}`, {
             headers: {
                 'Content-Type': 'application/json',
             },

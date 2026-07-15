@@ -4,7 +4,7 @@
  * Note that this is only a type helper and is not the actual IDL. The original
  * IDL can be found at `target/idl/redpacket.json`.
  */
-export type Redpacket = {
+export interface Redpacket {
     address: 'yoAKw22kCCCStCP5uJ9mkMa8NGjYdtnGgNDxBrv8kfe'
     metadata: {
         name: 'redpacket'

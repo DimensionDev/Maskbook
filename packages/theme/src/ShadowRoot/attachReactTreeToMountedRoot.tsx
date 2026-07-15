@@ -89,7 +89,7 @@ function attachReactTreeToMountedRoot(
     }
 }
 let observer: IntersectionObserver
-const callbacks = new WeakMap<Element, Record<string, () => void>>()
+const callbacks = new WeakMap<Element, { [property: string]: () => void }>()
 function observe(element: Element, key: string, callback: () => void, signal: AbortSignal) {
     if (signal.aborted) return
     observer ||= new IntersectionObserver(

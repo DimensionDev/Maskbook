@@ -5,13 +5,13 @@ import tinyColor from 'tinycolor2'
 
 // Fragment are in the form of "1, 2, 3"
 // which is used for rgba(var(--x), alpha)
-function getRGBFragment(x: Record<string, string>, key: string) {
+function getRGBFragment(x: { [property: string]: string }, key: string) {
     const { r, g, b } = tinyColor(x[key]).toRgb()
     return [r, g, b].join(', ')
 }
 export function CSSVariableInjectorCSS(scheme: PaletteMode) {
-    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
-    const result: Record<string, string> = {}
+    const ns: { [property: string]: string } = scheme === 'light' ? LightColor : DarkColor
+    const result: { [property: string]: string } = {}
     for (const [key, value] of Object.entries(ns)) {
         // --mask-name: val;
         result[`--mask-${kebabCase(key)}`] = value
@@ -30,7 +30,7 @@ export function CSSVariableInjectorCSS(scheme: PaletteMode) {
 }
 
 export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
-    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
+    const ns: { [property: string]: string } = scheme === 'light' ? LightColor : DarkColor
     if (node === document.body) {
         const id = '#mask-style-var'
         if (!document.querySelector(id)) {

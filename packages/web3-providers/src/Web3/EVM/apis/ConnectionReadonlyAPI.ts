@@ -260,7 +260,7 @@ export class EVMConnectionReadonlyAPI
     async getFungibleTokensBalance(
         listOfAddress: string[],
         initial?: EVMConnectionOptions,
-    ): Promise<Record<string, string>> {
+    ): Promise<{ [property: string]: string }> {
         if (!listOfAddress.length) return {}
 
         const options = this.ConnectionOptions.fill(initial)

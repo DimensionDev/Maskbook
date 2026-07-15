@@ -68,7 +68,7 @@ export class FlowConnectionAPI
     getFungibleTokensBalance(
         listOfAddress: string[],
         initial?: FlowConnectionOptions,
-    ): Promise<Record<string, string>> {
+    ): Promise<{ [property: string]: string }> {
         throw new Error('Method not implemented.')
     }
 

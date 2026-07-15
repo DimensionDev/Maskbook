@@ -17,7 +17,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
     constructor(
         private context: WalletAPI.MessageIOContext,
-        storage: StorageItem<Record<string, ReasonableMessage<MessageRequest, MessageResponse>>>,
+        storage: StorageItem<{ [property: string]: ReasonableMessage<MessageRequest, MessageResponse> }>,
     ) {
         super(storage)
     }

@@ -23,7 +23,9 @@ import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../rpc.j
 interface UploadState {
     progress: number
 }
-type UploadStateMap = Record<string, UploadState>
+interface UploadStateMap {
+    [property: string]: UploadState
+}
 interface FileManagementContextOptions {
     files: FileInfo[]
     recentFiles: FileInfo[]

@@ -21,7 +21,7 @@ export type MultipleAbiEventsToMappedObject<abi extends Abi> = {
 
 export function decodeEvents<abi extends Abi>(allAbis: abi, logs: Log[]): MultipleAbiEventsToMappedObject<abi> {
     const events: {
-        [eventName: string]:
+        [property: string]:
             | (Log & {
                   event: string
                   raw: {

@@ -18,13 +18,13 @@ export function RouterDialog({
         props.onClose?.()
     }, [pathname === RoutePaths.Exit, props.onClose])
 
-    const titleMap: Record<string, ReactNode> = {
+    const titleMap: { [property: string]: ReactNode } = {
         [RoutePaths.ConfirmTokenRedPacket]: <Trans>Confirm the Lucky Drop</Trans>,
         [RoutePaths.History]: <Trans>History</Trans>,
         [RoutePaths.HistoryDetail]: <Trans>Claim Details</Trans>,
         [RoutePaths.CustomCover]: <Trans>Add a Custom Cover</Trans>,
     }
-    const titleTailMap: Record<string, ReactNode> = {
+    const titleTailMap: { [property: string]: ReactNode } = {
         [RoutePaths.CreateTokenRedPacket]: (
             <Icons.History
                 onClick={() => navigate({ pathname: RoutePaths.History, search: `tab=${HistoryTabs.Sent}` })}

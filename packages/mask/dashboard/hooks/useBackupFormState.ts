@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { UserContext } from '../../shared-ui/index.js'
 import { passwordRegexp } from '../utils/regexp.js'
 
-export type BackupFormInputs = {
+export interface BackupFormInputs {
     backupPassword: string
     paymentPassword?: string
 }

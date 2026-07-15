@@ -1,6 +1,6 @@
 import type { Proposal } from './types.js'
 
-type VoteTypes = {
+interface VoteTypes {
     Vote: [
         { name: 'from'; type: string },
         { name: 'space'; type: string },
@@ -118,7 +118,7 @@ export function getSnapshotVoteTypes(type: string, proposalId: string, privacy: 
 export function getScores(proposal: Proposal) {
     const scores = []
     for (let i = 0; i < proposal.choices.length; i += 1) {
-        const score: Record<string, number> = {}
+        const score: { [property: string]: number } = {}
         for (const vote of proposal.votes) {
             if (vote.vp_by_strategy[i] > 0) score[vote.voter.toLowerCase()] = vote.vp_by_strategy[i]
         }

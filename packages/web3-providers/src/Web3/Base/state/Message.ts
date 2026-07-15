@@ -14,7 +14,7 @@ export abstract class MessageState<Request extends object, Response extends obje
 {
     public messages: Subscription<Array<ReasonableMessage<Request, Response>>>
 
-    constructor(private storage: StorageItem<Record<string, ReasonableMessage<Request, Response>>>) {
+    constructor(private storage: StorageItem<{ [property: string]: ReasonableMessage<Request, Response> }>) {
         if (!storage.initialized) throw new Error('Storage not initialized')
         this.messages = mapSubscription(this.storage.subscription, (storage) => {
             return Object.values(storage)

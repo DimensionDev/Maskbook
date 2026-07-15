@@ -9,14 +9,16 @@ export enum SecurityMessageLevel {
     Safe = 'Safe',
 }
 
-type DefineMapping = {
-    [key in SecurityMessageLevel]: {
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+type DefineMapping = Record<
+    SecurityMessageLevel,
+    {
         i18nKey: MessageDescriptor
         bgColor: string
         titleColor: string
         icon(size?: number): ReactNode
     }
-}
+>
 
 export const DefineMapping: DefineMapping = {
     [SecurityMessageLevel.High]: {

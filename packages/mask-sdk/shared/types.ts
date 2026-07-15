@@ -13,6 +13,7 @@ export interface EIP2255RequestedPermission {
     parentCapability: string
     date?: number
 }
+
 export interface EIP2255PermissionRequest {
     [methodName: string]: {
         [caveatName: string]: unknown

@@ -15,7 +15,7 @@ export interface RawVote {
      * There're two sorts of vote,
      * for multiple choice vote, each choice can be assigned to a different weight.
      */
-    choice: number | number[] | { [choiceIndex: number]: number }
+    choice: number | number[] | { [key: number]: number }
     created: number
     id: string
     ipfs: string

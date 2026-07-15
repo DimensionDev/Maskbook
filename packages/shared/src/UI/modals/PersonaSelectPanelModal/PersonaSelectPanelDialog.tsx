@@ -4,7 +4,7 @@ import { PersonaSelectPanel, type PositionOption } from '../../components/Person
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { Trans } from '@lingui/react/macro'
 
-type PositionStyle = {
+interface PositionStyle {
     top?: number
     right?: number
     position?: 'absolute'

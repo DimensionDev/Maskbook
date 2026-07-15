@@ -23,7 +23,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function isGroup() {
-    const matched = location.href.match(/\/groups/u)
+    const matched = /\/groups/u.exec(location.href)
     if (!matched) return false
     return matched[0]
 }

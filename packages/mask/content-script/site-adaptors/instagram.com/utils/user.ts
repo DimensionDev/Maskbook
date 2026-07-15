@@ -43,7 +43,7 @@ const INSTAGRAM_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/u
 export function getAvatarId(avatarURL: string) {
     if (!avatarURL) return ''
     const _url = new URL(avatarURL)
-    const match = _url.pathname.match(INSTAGRAM_AVATAR_ID_MATCH)
+    const match = INSTAGRAM_AVATAR_ID_MATCH.exec(_url.pathname)
     if (!match) return ''
     return match[1]
 }

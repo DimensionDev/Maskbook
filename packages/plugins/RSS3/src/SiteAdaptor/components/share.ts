@@ -132,7 +132,7 @@ export const getPlatformIcon = (platform?: RSS3BaseAPI.Network | RSS3BaseAPI.Pla
     return platformIconMap[platform.toLowerCase() as Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>]
 }
 
-export const hostIconMap: Record<string, IconComponent> = {
+export const hostIconMap: { [property: string]: IconComponent } = {
     'etherscan.io': Icons.EtherScan,
     'opensea.io': Icons.OpenSea,
     'polygonscan.com': Icons.PolygonScan,
@@ -148,7 +148,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'momoka.lens.xyz': Icons.Momoka,
 }
 
-export const hostNameMap: Record<string, string> = {
+export const hostNameMap: { [property: string]: string } = {
     'etherscan.io': 'Etherscan',
     'opensea.io': 'Opensea',
     'polygonscan.com': 'Polygonscan',

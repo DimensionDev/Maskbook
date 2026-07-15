@@ -112,7 +112,7 @@ export interface CompositionProps extends RefAttributes<CompositionRef> {
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
-    initialMeta?: Record<string, unknown>
+    initialMeta?: { [property: string]: unknown }
     personaAction?: React.ReactNode
 }
 export interface EncryptTargetE2EFromProfileIdentifier {

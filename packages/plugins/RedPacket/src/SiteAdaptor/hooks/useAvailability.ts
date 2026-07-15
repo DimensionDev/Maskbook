@@ -7,7 +7,7 @@ import { useRedPacketContract } from './useRedPacketContract.js'
 import { useQuery } from '@tanstack/react-query'
 import type { Hex } from 'viem'
 
-export type RedPacketAvailability = {
+export interface RedPacketAvailability {
     token_address: string
     balance: string
     total: string

@@ -85,7 +85,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-type GetItemOptions<T extends NetworkPluginID> = {
+interface GetItemOptions<T extends NetworkPluginID> {
     getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native'
     isSelected: (address: string, chainId: Web3Helper.ChainIdAll) => boolean
     mode: TokenListMode

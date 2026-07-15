@@ -21,7 +21,6 @@ const deferPackages = [
     '@blocto/fcl',
     '@metamask/eth-sig-util',
     '@masknet/gun-utils',
-    'web3-eth',
     'twitter-text',
     '@solana/web3.js',
     // add package names here.
@@ -59,6 +58,7 @@ const disabledRules = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-namespace': 'off', // namespace T {}, they won't support type only namespace
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/prefer-nullish-coalescing': 'off', // we use a lot of || to check falsy string "" in web3 related code. nullish coalescing will break those code.
     'lingui/no-expression-in-message': 'off',
     'unicorn/no-array-reduce': 'off',
     'unicorn/no-await-expression-member': 'off',
@@ -193,7 +193,6 @@ const avoidMistakeRules = {
     // 'unicorn/require-post-message-target-origin': 'warn', // postMessage(data, 'origin')
 
     // Confusing code
-    '@typescript-eslint/no-confusing-non-null-assertion': 'error', // a! == b
     'no-bitwise': 'error', // need mark out
     'no-div-regex': 'error', // RegEx
     'no-label-var': 'warn', // name collision
@@ -292,7 +291,6 @@ const codeStyleRules = {
     // '@eslint-react/no-unused-props': 'warn',
     // '@masknet/array-no-unneeded-flat-map': 'warn', // bans Array#flatMap((x) => x)
     // '@typescript-eslint/no-empty-interface': 'warn', // interface T extends Q {}
-    // '@typescript-eslint/no-inferrable-types': 'warn', // let x: number = 1
     // '@typescript-eslint/no-useless-empty-export': 'warn', // export {}
     // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
     // Note: this rule seems like does not have the correct type checking behavior. before typescript-eslint has project reference support, don't use it.
@@ -312,14 +310,9 @@ const codeStyleRules = {
     '@masknet/browser-prefer-location-assign': 'warn',
     '@masknet/jsx-no-class-component': 'error',
     '@masknet/prefer-fetch': 'error',
-    '@typescript-eslint/prefer-for-of': 'warn',
-    '@typescript-eslint/prefer-includes': 'warn',
-    '@typescript-eslint/prefer-optional-chain': 'warn',
-    '@typescript-eslint/prefer-string-starts-ends-with': 'warn',
     // '@masknet/array-prefer-from': 'warn',
     // '@masknet/no-unsafe-date': 'error', // use date-fns or Temporal instead
     // '@masknet/type-no-number-constructor': 'warn',
-    // '@typescript-eslint/prefer-nullish-coalescing': 'warn',
 
     // Better debug
     'symbol-description': 'warn', // Symbol(desc)
@@ -331,6 +324,7 @@ const codeStyleRules = {
     // '@typescript-eslint/prefer-readonly': 'error',
 
     // More readable code
+    '@typescript-eslint/consistent-indexed-object-style': ['warn', 'index-signature'], // index signature includes key's name, e.g. { [what_it_should_be: string]: T } than Record<string, T>
     'object-shorthand': 'warn',
     'prefer-numeric-literals': 'warn', // 0b111110111 === 503
     'prefer-regex-literals': 'warn', // RegEx
@@ -346,15 +340,10 @@ const codeStyleRules = {
         'warn',
         { assertionStyle: 'as' /* objectLiteralTypeAssertions: 'never' */ },
     ], // prefer a as T than <T>a, and bans it on object literal
-    '@typescript-eslint/dot-notation': 'warn', // prefer a.b than a['b']
     'unicorn/relative-url-style': ['warn', 'always'], // prefer relative url starts with ./
     // '@masknet/jsx-no-template-literal': 'warn',
     // '@masknet/no-redundant-variable': 'warn',
     // '@masknet/no-single-return': 'warn',
-    // '@typescript-eslint/consistent-generic-constructors': 'warn', // prefer const map = new Map<string, number>() than generics on the left
-    // '@typescript-eslint/consistent-type-definitions': 'warn', // prefer interface, also has better performance when type checking
-    // '@typescript-eslint/non-nullable-type-assertion-style': 'warn', // prefer a! than a as T
-    // '@typescript-eslint/prefer-function-type': 'warn',
     // '@typescript-eslint/sort-type-constituents': 'warn',
     yoda: 'warn',
 
@@ -560,6 +549,7 @@ export default defineConfig(
             lingui.configs['flat/recommended'],
             ...tanstackReactQuery.configs['flat/recommended-strict'],
             tseslint.configs.strictTypeChecked,
+            tseslint.configs.stylisticTypeChecked,
         ],
         rules: {
             ...disabledRules,

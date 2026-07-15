@@ -52,7 +52,7 @@ export declare namespace PayloadParseResult {
         readonly type: 'E2E'
         readonly ownersAESKeyEncrypted: RequiredField<Uint8Array<ArrayBuffer>>
         readonly iv: RequiredField<Uint8Array<ArrayBuffer>>
-        readonly ephemeralPublicKey: Record<string, RequiredField<EC_Key, CryptoException>>
+        readonly ephemeralPublicKey: { [keyId: string]: RequiredField<EC_Key, CryptoException> }
     }
 }
 /** Well formed payload that can be encoded into the latest version */

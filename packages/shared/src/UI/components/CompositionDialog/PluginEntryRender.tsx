@@ -126,7 +126,7 @@ function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
 }
 
 function useSetPluginEntryRenderRef(ref: Ref<PluginEntryRenderRef> | undefined) {
-    const pluginRefs = useRef<Record<string, PluginRef | undefined | null>>({})
+    const pluginRefs = useRef<{ [property: string]: PluginRef | undefined | null }>({})
     const refItem: PluginEntryRenderRef = useMemo(
         () => ({
             openPlugin: function openPlugin(id: string, props: any = {}, tryTimes = 4) {

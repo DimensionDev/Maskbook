@@ -62,7 +62,7 @@ export interface PersonaRecord {
     privateKey?: EC_Private_JsonWebKey
     localKey?: AESJsonWebKey
     nickname?: string
-    linkedProfiles: Record<string, LinkedProfileDetails>
+    linkedProfiles: { [property: string]: LinkedProfileDetails }
     createdAt: number
     updatedAt: number
     hasLogout?: boolean

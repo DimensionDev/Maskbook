@@ -332,7 +332,7 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         if (lowerKeyword.replace(/([#$])?([\s\w+.])+/u, '').length > 0 || !/(\w)+/u.test(lowerKeyword.at(-1)!))
             return EMPTY_LIST
         // #MASK or $MASK or MASK
-        const [_, name = ''] = lowerKeyword.match(/(\w+)/u) ?? []
+        const [_, name = ''] = /(\w+)/u.exec(lowerKeyword) ?? []
 
         // token:MASK
         const { word, field } = this.parseKeyword(lowerKeyword)

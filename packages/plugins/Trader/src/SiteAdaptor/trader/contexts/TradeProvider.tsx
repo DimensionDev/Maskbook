@@ -92,7 +92,7 @@ function useModeState<T>(mode: TradeMode, defaultValue?: T): [T | undefined, Dis
 
 const SwapContext = createContext<Options>(null!)
 SwapContext.displayName = 'SwapContext'
-const otherChainIdMap: Record<number, ChainId> = {
+const otherChainIdMap: { [key: number]: ChainId } = {
     [ChainId.BSC]: ChainId.Mainnet,
     [ChainId.Mainnet]: ChainId.BSC,
 }

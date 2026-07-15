@@ -294,7 +294,7 @@ function CopyElementWithNewProps<T>(
     return (
         Children.map(children, (child: any) => {
             const allKeys = new Set([...Object.keys(extraClasses as any), ...Object.keys(child?.props?.classes ?? {})])
-            const result: Record<string, string> = {}
+            const result: { [property: string]: string } = {}
 
             for (const key of allKeys) {
                 result[key] = cx((extraClasses as any)[key], child?.props?.classes?.[key])

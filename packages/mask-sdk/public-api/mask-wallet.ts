@@ -210,6 +210,7 @@ export declare namespace Ethereum.RPC {
         parentCapability: string
         date?: number
     }
+
     export interface EIP2255PermissionRequest {
         [methodName: string]: {
             [caveatName: string]: any

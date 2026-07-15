@@ -19,21 +19,20 @@ import {
 } from '@masknet/web3-shared-base'
 
 export interface TokenStorage<ChainId extends number, SchemaType> {
-    fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
-    nonFungibleTokenList: Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>
-    fungibleTokenBlockedBy: Record<string, string[]>
+    fungibleTokenList: { [property: string]: Array<FungibleToken<ChainId, SchemaType>> }
+    nonFungibleTokenList: { [property: string]: Array<NonFungibleToken<ChainId, SchemaType>> }
+    fungibleTokenBlockedBy: { [property: string]: string[] }
     /** For non-fungible token, we store `${chainId}.${address}.${tokenId}` as token id */
-    nonFungibleTokenBlockedBy: Record<string, string[]>
-    credibleFungibleTokenList: Partial<Record<ChainId, Array<FungibleToken<ChainId, SchemaType>>>>
-    credibleNonFungibleTokenList: Partial<Record<ChainId, Array<NonFungibleToken<ChainId, SchemaType>>>>
+    nonFungibleTokenBlockedBy: { [property: string]: string[] }
+    credibleFungibleTokenList: { [key in ChainId]?: Array<FungibleToken<ChainId, SchemaType>> }
+    credibleNonFungibleTokenList: { [key in ChainId]?: Array<NonFungibleToken<ChainId, SchemaType>> }
     /** account as key */
-    nonFungibleCollectionMap: Record<
-        string,
-        Array<{
+    nonFungibleCollectionMap: {
+        [property: string]: Array<{
             contract: NonFungibleTokenContract<ChainId, SchemaType>
             tokenIds: string[]
         }>
-    >
+    }
 }
 
 export abstract class TokenState<ChainId extends number, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
@@ -43,15 +42,12 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
     public blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
     public credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-    public nonFungibleCollectionMap: Subscription<
-        Record<
-            string,
-            Array<{
-                contract: NonFungibleTokenContract<ChainId, SchemaType>
-                tokenIds: string[]
-            }>
-        >
-    >
+    public nonFungibleCollectionMap: Subscription<{
+        [property: string]: Array<{
+            contract: NonFungibleTokenContract<ChainId, SchemaType>
+            tokenIds: string[]
+        }>
+    }>
 
     constructor(
         protected storage: StorageObject<TokenStorage<ChainId, SchemaType>>,
@@ -143,7 +139,7 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         if (!token.id) throw new Error('Token id is required')
 
         const key = account.toLowerCase()
-        const tokens: Record<string, Array<Token<ChainId, SchemaType>>> = (
+        const tokens: { [tokenId: string]: Array<Token<ChainId, SchemaType>> } = (
             token.type === TokenType.Fungible ?
                 this.storage.fungibleTokenList
             :   this.storage.nonFungibleTokenList).value
@@ -159,11 +155,11 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
 
         if (token.type === TokenType.Fungible) {
             await this.storage.fungibleTokenList.setValue(
-                updatedValue as Record<string, Array<FungibleToken<ChainId, SchemaType>>>,
+                updatedValue as { [property: string]: Array<FungibleToken<ChainId, SchemaType>> },
             )
         } else {
             await this.storage.nonFungibleTokenList.setValue(
-                updatedValue as Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>,
+                updatedValue as { [property: string]: Array<NonFungibleToken<ChainId, SchemaType>> },
             )
         }
     }
@@ -213,7 +209,7 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         contract: NonFungibleTokenContract<ChainId, SchemaType>,
         tokenIds: string[],
     ) {
-        type StorageCollection = {
+        interface StorageCollection {
             contract: NonFungibleTokenContract<ChainId, SchemaType>
             tokenIds: string[]
         }
@@ -254,7 +250,7 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         contract: NonFungibleTokenContract<ChainId, SchemaType>,
         tokenIds: string[],
     ) {
-        type StorageCollection = {
+        interface StorageCollection {
             contract: NonFungibleTokenContract<ChainId, SchemaType>
             tokenIds: string[]
         }

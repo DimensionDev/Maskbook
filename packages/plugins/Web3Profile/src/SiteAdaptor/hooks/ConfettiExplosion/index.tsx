@@ -22,10 +22,10 @@ export function useConfettiExplosion() {
         const confetti: Confetto[] = []
         const sequins: Sequin[] = []
 
-        let buttonOffsetWidth: number = 0
-        let buttonOffsetHeight: number = 0
-        let canvasWidth: number = 0
-        let canvasHeight: number = 0
+        let buttonOffsetWidth = 0
+        let buttonOffsetHeight = 0
+        let canvasWidth = 0
+        let canvasHeight = 0
         let globalCtx: CanvasRenderingContext2D | undefined
         let requestId: number | undefined
         const renderConfetti = () => {

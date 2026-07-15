@@ -19,7 +19,7 @@ const SupportedChainList = [
     'HECO',
 ]
 
-const unIntegrationChainLogos: Record<number, string> = {
+const unIntegrationChainLogos: { [key: number]: string } = {
     128: new URL('../../assets/chain-heco.png', import.meta.url).href,
     66: new URL('../../assets/chain-okex.png', import.meta.url).href,
     25: new URL('../../assets/chain-cronos.png', import.meta.url).href,

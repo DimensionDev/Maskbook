@@ -171,9 +171,9 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                         <Trans>No friends are stored locally, please try search one.</Trans>
                                     </EmptyStatus>
                                 :   profiles.map((item) => {
-                                        const pubkey = item.linkedPersona?.publicKeyAsHex as string
-                                        const selected = selectedPubkeyList.includes(pubkey)
-                                        const disabled = frozenPubkeyList.includes(pubkey)
+                                        const pubkey = item.linkedPersona?.publicKeyAsHex
+                                        const selected = selectedPubkeyList.includes(pubkey!)
+                                        const disabled = frozenPubkeyList.includes(pubkey!)
                                         return (
                                             <ProfileInList
                                                 key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}

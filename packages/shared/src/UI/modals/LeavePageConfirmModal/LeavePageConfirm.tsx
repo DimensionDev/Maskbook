@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 
-type PositionStyle = {
+interface PositionStyle {
     top?: number
     right?: number
     position?: 'absolute'

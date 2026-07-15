@@ -1,7 +1,7 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 /** https://www.okx.com/web3/build/docs/waas/okx-waas-standard */
-type OKXResponse<T> = {
+interface OKXResponse<T> {
     /**
      * the server returns string, but we will convert to number after request
      * to align to OKX private api
@@ -143,7 +143,7 @@ export interface OKXSwapQuote {
 
 export type GetQuotesResponse = OKXResponse<OKXSwapQuote[]>
 
-export type SwapOptions = {
+export interface SwapOptions {
     /** Chain ID */
     chainId: string
     /** The input amount of a token to be sold */
@@ -292,7 +292,7 @@ export interface GetBridgeQuoteOptions {
 }
 
 /** Represents bridge information */
-type Router = {
+interface Router {
     /** Bridge ID (e.g., 211) */
     bridgeId: number
     /** Name of bridge (e.g., cBridge) */
@@ -315,7 +315,7 @@ export interface SubRouter {
 }
 
 /** Represents a DEX router with sub-routers */
-type DexRouter = {
+interface DexRouter {
     /** One of the main paths for the token swap */
     router: string
     /** The percentage of assets handled by the protocol */
@@ -325,7 +325,7 @@ type DexRouter = {
 }
 
 /** Represents an item in the router list */
-export type RouterListItem = {
+export interface RouterListItem {
     /** The recommended gas limit for calling the contract */
     estimateGasFee: string
     /** time in seconds (It's wrongly wrote as estimatedTime) */
@@ -440,7 +440,7 @@ export interface BridgeOptions {
 }
 
 /** Represents bridge information */
-type BridgeRouter = {
+interface BridgeRouter {
     /** Bridge ID (e.g., 211) */
     bridgeId: number
     /** Name of bridge (e.g., cBridge) */
@@ -454,7 +454,7 @@ type BridgeRouter = {
 }
 
 /** Represents on-chain transaction data */
-type Transaction = {
+interface Transaction {
     /** InputData on chain */
     data: string
     /** User's wallet address (e.g., 0x6f9ffea7370310cd0f890dfde5e0e061059dcfd9) */

@@ -77,7 +77,7 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
                             parameters: abiArrayToMappedObject(
                                 x.inputs,
                                 decodeAbiParameters(x.inputs, (functionParameters ?? '') as `0x${string}`),
-                            ) as Record<string, unknown>,
+                            ) as { [property: string]: unknown },
                         })),
                     }
                 } catch {

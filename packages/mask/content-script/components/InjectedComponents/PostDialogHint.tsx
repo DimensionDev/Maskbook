@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ICON_MAP: Record<string, JSX.Element> = {
+const ICON_MAP: { [property: string]: JSX.Element } = {
     minds: <Icons.MaskInMinds size={18} />,
     default: (
         <Icons.SharpMask

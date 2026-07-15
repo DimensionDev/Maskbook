@@ -26,7 +26,7 @@ interface ProfileLinkActionProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.ProfileLinkFeed
 }
 
-const suffixMap: Record<string, string> = {
+const suffixMap: { [property: string]: string } = {
     Crossbell: '.csb',
     Lens: '.lens',
     ENS: '.eth',

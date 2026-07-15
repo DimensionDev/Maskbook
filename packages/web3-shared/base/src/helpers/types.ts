@@ -10,4 +10,6 @@ export type Constant<T = Primitive | Primitive[]> = {
     [key in 'Mainnet']?: T
 }
 
-export type Constants<T = Primitive | Primitive[]> = Record<string, Constant<T>>
+export interface Constants<T = Primitive | Primitive[]> {
+    [property: string]: Constant<T>
+}

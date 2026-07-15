@@ -66,8 +66,8 @@ export abstract class Identifier {
  * ec_key:secp256k1/CompressedPoint
  */
 export class ECKeyIdentifier extends Identifier {
-    static #k256: Record<string, ECKeyIdentifier> = Object.create(null)
-    static #keyAsHex: Record<string, string> = Object.create(null)
+    static #k256: { [k256: string]: ECKeyIdentifier } = Object.create(null)
+    static #keyAsHex: { [hex: string]: string } = Object.create(null)
     static override from(input: string | null | undefined): Option<ECKeyIdentifier> {
         if (!input) return None
         input = String(input)
@@ -151,7 +151,7 @@ export type PersonaIdentifier = ECKeyIdentifier
 export const PersonaIdentifier = [ECKeyIdentifier]
 
 export class PostIVIdentifier extends Identifier {
-    static #cache: Record<string, Record<string, PostIVIdentifier>> = Object.create(null)
+    static #cache: { [network: string]: { [postIV: string]: PostIVIdentifier } } = Object.create(null)
     static override from(input: string | null | undefined): Option<PostIVIdentifier> {
         if (!input) return None
         input = String(input)
@@ -206,7 +206,7 @@ export class PostIVIdentifier extends Identifier {
  * e.g. a comment.
  */
 export class PostIdentifier extends Identifier {
-    static #cache = new WeakMap<ProfileIdentifier, Record<string, PostIdentifier>>()
+    static #cache = new WeakMap<ProfileIdentifier, { [postID: string]: PostIdentifier }>()
     static override from(input: string | null | undefined): Option<PostIdentifier> {
         if (!input) return None
         input = String(input)
@@ -255,7 +255,7 @@ export class PostIdentifier extends Identifier {
  * Refers to a profile on a network.
  */
 export class ProfileIdentifier extends Identifier {
-    static #cache: Record<string, Record<string, ProfileIdentifier>> = Object.create(null)
+    static #cache: { [network: string]: { [userID: string]: ProfileIdentifier } } = Object.create(null)
     static override from(input: string | null | undefined): Option<ProfileIdentifier> {
         input = String(input)
         if (input === 'person:localhost/$unknown') return None

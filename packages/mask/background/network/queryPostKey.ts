@@ -27,15 +27,15 @@ export async function GUN_queryPostKey_version40(
         postKeyIV: new Uint8Array(decodeArrayBuffer(result.salt)),
     }
 
-    type DataOnGun = {
+    interface DataOnGun {
         encryptedKey: string
         salt: string
     }
-    function isValidData(x: typeof result): x is DataOnGun {
+    function isValidData(x: unknown): x is DataOnGun {
         if (typeof x !== 'object') return false
         if (!x) return false
 
-        const { encryptedKey, salt: encryptedKeyIV } = x
+        const { encryptedKey, salt: encryptedKeyIV } = x as DataOnGun
         return typeof encryptedKey === 'string' && typeof encryptedKeyIV === 'string'
     }
 }
@@ -129,7 +129,7 @@ namespace Version38Or39 {
         }
     }
 
-    type DataOnGun = {
+    interface DataOnGun {
         encryptedKey: string
         salt: string
     }
@@ -292,7 +292,7 @@ namespace Version37 {
     }
 
     // we need to make it short, but looks like gun does not support storing Uint8Array?
-    type DataOnGun = {
+    interface DataOnGun {
         /** encrypted key */
         e: string
         /** ephemeral public key chain */

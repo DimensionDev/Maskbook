@@ -129,7 +129,7 @@ export class SolanaConnectionAPI
     async getFungibleTokensBalance(
         listOfAddress: string[],
         initial?: SolanaConnectionOptions,
-    ): Promise<Record<string, string>> {
+    ): Promise<{ [property: string]: string }> {
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) return EMPTY_OBJECT
         const { data: assets } = await SolanaFungible.getAssets(options.account, {

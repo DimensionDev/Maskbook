@@ -53,7 +53,7 @@ export function createManager<
                     return
                 },
             },
-        ) as Partial<Record<string, ValueRefWithReady<boolean>>>,
+        ) as Partial<{ [property: string]: ValueRefWithReady<boolean> }>,
         events,
     }
 

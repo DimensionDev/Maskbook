@@ -24,7 +24,7 @@ export interface BaseConnection<
     getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: Options): Promise<string>
 
     /** Get fungible token balance. */
-    getFungibleTokensBalance(listOfAddress: string[], initial?: Options): Promise<Record<string, string>>
+    getFungibleTokensBalance(listOfAddress: string[], initial?: Options): Promise<{ [property: string]: string }>
 
     /** Get gas price */
     getGasPrice(initial?: Options): Promise<string>

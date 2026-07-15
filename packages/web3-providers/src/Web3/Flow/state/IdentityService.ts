@@ -4,7 +4,7 @@ import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddress
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 
 function getFlowAddress(bio: string) {
-    const addressMatched = bio.match(/\b0x\w{16}\b/u) ?? null
+    const addressMatched = /\b0x\w{16}\b/u.exec(bio) ?? null
     const address = addressMatched?.[0]
     if (address && isValidAddress(address)) return address
     return

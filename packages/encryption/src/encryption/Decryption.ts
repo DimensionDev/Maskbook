@@ -177,13 +177,13 @@ async function* v38To40StaticECDH(
     }
     return yield* decryptByECDH(version, io, postKey, ecdh, importAESKeyFromJWKFromTextEncoder, iv, encrypted, report)
 }
-type StaticV38OrOlderECDH = {
+interface StaticV38OrOlderECDH {
     type: 'static-v38-or-older'
     derive: (
         postKeyIV: Uint8Array<ArrayBuffer>,
     ) => Promise<Array<readonly [key: AESCryptoKey, iv: Uint8Array<ArrayBuffer>]>>
 }
-type EphemeralECDH = {
+interface EphemeralECDH {
     type: 'ephemeral'
     // it's optional argument because the ephemeralPublicKey maybe inlined in the post payload.
     derive: (ephemeralPublicKey?: EC_Public_CryptoKey) => Promise<AESCryptoKey[]>

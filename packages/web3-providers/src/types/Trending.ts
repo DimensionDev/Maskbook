@@ -165,7 +165,7 @@ export namespace TrendingAPI {
 
     export type HistoricalInterval = '1d' | '2h' | '1h' | '15m' | '5m'
 
-    export type PriceStats = {
+    export interface PriceStats {
         market_caps: Stat[]
         prices: Stat[]
         total_volumes: Stat[]

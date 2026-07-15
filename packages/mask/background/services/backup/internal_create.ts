@@ -139,7 +139,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
     }
 
     async function backupPlugins() {
-        const plugins = Object.create(null) as Record<string, unknown>
+        const plugins = Object.create(null) as { [property: string]: unknown }
         const allPlugins = Iterator.from(activatedPluginsWorker)
 
         async function backup(plugin: Plugin.Worker.Definition): Promise<void> {

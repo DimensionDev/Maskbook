@@ -28,7 +28,7 @@ export interface RedPacketSettings {
     token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
-export type ParamsObjType = {
+export interface ParamsObjType {
     publicKey: string
     shares: number
     isRandom: boolean

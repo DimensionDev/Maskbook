@@ -35,7 +35,7 @@ function primitiveToString(value: unknown): string {
 
 /** Builds the backend `EvmTransaction` from an EIP-1193 `eth_sendTransaction`-style param. */
 function buildEvmTransaction(params: unknown): EvmTransaction {
-    const raw = (Array.isArray(params) ? params[0] : params) as Record<string, unknown> & {
+    const raw = (Array.isArray(params) ? params[0] : params) as { [property: string]: unknown } & {
         from?: string
         to?: string
     }

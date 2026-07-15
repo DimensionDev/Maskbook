@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
  * Add name service
  */
 export function useTipAccountsCompletion(accounts: Array<SocialAccount<Web3Helper.ChainIdAll>>) {
-    const [map, setMap] = useState<Record<string, string>>({})
+    const [map, setMap] = useState<{ [property: string]: string }>({})
 
     const { NameService } = useWeb3State()
     useEffect(() => {

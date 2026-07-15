@@ -3,25 +3,22 @@ import { useTheme, type Theme } from '@mui/material'
 
 const { makeStyles: baseMakeStyles } = createMakeStyles({ useTheme })
 
-type MakeStylesOptions = {
-    name?: string | Record<string, unknown>
+interface MakeStylesOptions {
+    name?: string | { [property: string]: unknown }
     uniqId?: string
 }
 
-type StyleRules = Record<string, CSSObject | { [key: string]: unknown }>
+interface StyleRules { [property: string]: CSSObject | { [property: string]: unknown } }
 //                                           ^ conceal the complaint like `position: string` not satisfy `position: CSSProperties['position']`
 
-type NestedSelectorClasses<RuleNameSubsetReferencedInNestedSelectors extends string> = Record<
-    RuleNameSubsetReferencedInNestedSelectors,
-    string
->
+type NestedSelectorClasses<RuleNameSubsetReferencedInNestedSelectors extends string> = { [key in RuleNameSubsetReferencedInNestedSelectors]: string }
 
-type StyleOverrides = {
-    classes?: { [key in string]?: string | undefined }
+interface StyleOverrides {
+    classes?: Partial<{ [property: string]: string | undefined }>
 }
 
-type EmptyStyleOverrides = {
-    classes?: Record<never, never>
+interface EmptyStyleOverrides {
+    classes?: { [key in never]: never }
 }
 
 type StyleClassNames<Styles extends StyleRules> = {
@@ -32,10 +29,10 @@ type ExtraClassKeys<Overrides extends StyleOverrides> =
     Overrides extends { classes?: infer Classes } ? Extract<keyof NonNullable<Classes>, string> : never
 
 type OverrideClassNames<ExtraKeys extends string, BaseKeys extends PropertyKey> =
-    string extends ExtraKeys ? Record<string, string>
-    : { [Key in Exclude<ExtraKeys, BaseKeys>]: string }
+    string extends ExtraKeys ? { [property: string]: string }
+    : { [key in Exclude<ExtraKeys, BaseKeys>]: string }
 
-type MakeStylesResult<Styles extends StyleRules, Overrides extends StyleOverrides> = {
+interface MakeStylesResult<Styles extends StyleRules, Overrides extends StyleOverrides> {
     classes: StyleClassNames<Styles> & OverrideClassNames<ExtraClassKeys<Overrides>, keyof Styles>
     theme: Theme
     css: Css
@@ -54,7 +51,7 @@ export interface UseStyles<Params, Styles extends StyleRules> {
         params: Params,
         styleOverrides: {
             props: Overrides
-            ownerState?: Record<string, unknown>
+            ownerState?: { [property: string]: unknown }
         },
     ): MakeStylesResult<Styles, Overrides>
 }

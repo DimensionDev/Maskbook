@@ -29,7 +29,7 @@ interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | '
     iconType?: string
 }
 
-const ICON_MAP: Record<string, JSX.Element> = {
+const ICON_MAP: { [property: string]: JSX.Element } = {
     minds: <Icons.MaskInMinds size={18} />,
     default: <Icons.SharpMask size={17} color={MaskColors.light.maskColor.publicTwitter} />,
 }

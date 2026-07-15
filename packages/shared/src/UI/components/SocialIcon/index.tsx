@@ -6,7 +6,7 @@ const socialIconMap = {
     'x.com': Icons.Twitter,
     'github.com': Icons.GitHub,
     default: Icons.Globe,
-} satisfies Record<string, ComponentType<GeneratedIconProps>>
+} satisfies { [property: string]: ComponentType<GeneratedIconProps> }
 
 interface Props extends HTMLProps<HTMLDivElement> {
     /** Social url */

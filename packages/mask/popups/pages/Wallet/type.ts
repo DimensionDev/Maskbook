@@ -25,7 +25,7 @@ export enum WalletAssetTabs {
     Activity = 'Activity',
 }
 
-export type GasSetting = {
+export interface GasSetting {
     gasLimit?: string | undefined
     gasPrice?: string
     maxPriorityFeePerGas?: string
@@ -33,7 +33,7 @@ export type GasSetting = {
     paymentToken?: string
 }
 
-export type TransactionDetail = {
+export interface TransactionDetail {
     gasOptionType?: GasOptionType
     payload: JsonRpcRequest
     computedPayload: Partial<Transaction>

@@ -21,7 +21,9 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
     constructor(
         private pluginID: NetworkPluginID,
         private networkIDStorage: StorageItem<string>,
-        private networksStorage: StorageItem<Record<string, ReasonableNetwork<ChainId, SchemaType, NetworkType>>>,
+        private networksStorage: StorageItem<{
+            [property: string]: ReasonableNetwork<ChainId, SchemaType, NetworkType>
+        }>,
     ) {
         if (!networkIDStorage.initialized || !networksStorage.initialized) throw new Error('Storage not initialized')
         this.networkID = this.networkIDStorage.subscription

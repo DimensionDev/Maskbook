@@ -9,12 +9,12 @@ import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 export interface FeedDetailsModalOpenProps
     extends Omit<PropsWithChildren<InjectedDialogProps>, 'open'>,
         Pick<FeedCardProps, 'feed' | 'actionIndex'> {
-    scopedDomainsMap: Record<string, string>
+    scopedDomainsMap: { [domain: string]: string }
 }
 
 export function FeedDetailsModal({ ref }: SingletonModalProps<FeedDetailsModalOpenProps>) {
     const [dialogProps, setDialogProps] = useState<Omit<FeedDetailsModalOpenProps, 'scopedDomainsMap'>>()
-    const [scopedDomainsMap, setScopedDomainsMap] = useState<Record<string, string>>({})
+    const [scopedDomainsMap, setScopedDomainsMap] = useState<{ [property: string]: string }>({})
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen({ scopedDomainsMap, ...props }) {
             setDialogProps(props)

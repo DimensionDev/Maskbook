@@ -443,7 +443,7 @@ export type Web3State = Web3StateShared<
     TransactionParameter
 >
 
-export type Web3Definition = {
+export interface Web3Definition {
     ChainId: ChainId
     AddressType: AddressType
     SchemaType: SchemaType

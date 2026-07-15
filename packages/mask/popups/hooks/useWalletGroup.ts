@@ -24,9 +24,7 @@ export function useWalletGroup() {
             groups: groupBy(
                 wallets.filter((x) => !!x.mnemonicId),
                 (x) => x.mnemonicId,
-            ) as {
-                [index: string]: Wallet[]
-            },
+            ) as { [property: string]: Wallet[] },
             imported,
         }
     }, [wallets])

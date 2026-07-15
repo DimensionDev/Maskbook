@@ -26,7 +26,7 @@ export namespace TokenListAPI {
     }
 
     export interface TokenObject<ChainId> {
-        tokens: Record<string, Token<ChainId>>
+        tokens: { [tokenId: string]: Token<ChainId> }
     }
 
     export interface Provider<ChainId, SchemaType> {

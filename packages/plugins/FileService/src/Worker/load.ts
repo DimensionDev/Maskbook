@@ -26,12 +26,11 @@ class LoadAgent implements ProviderAgent {
         })) as Uint8Array<ArrayBuffer>
 
         const effectiveType = isEmpty(options.type) ? 'application/octet-stream' : options.type
-        const effectiveName = options.name || 'unnamed_file'
-        const payloadTxID = await this.makePayload(encoded, effectiveType, effectiveName)
+        const payloadTxID = await this.#makePayload(encoded, effectiveType)
         return payloadTxID
     }
 
-    async *upload(id: string) {
+    async *upload(_id: string) {
         try {
             // Since we're using optimistic upload, we can yield progress immediately
             // The actual upload to Load Network happens in the background
@@ -70,11 +69,11 @@ class LoadAgent implements ProviderAgent {
             .replace('__METADATA__', () => encodedMetadata)
 
         const data = encodeText(replaced)
-        const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)
+        const landingPageTxId = await this.#makePayload(data, 'text/html')
         return landingPageTxId
     }
 
-    async makePayload(data: Uint8Array<ArrayBuffer>, type: string, fileName: string = 'file.dat') {
+    async #makePayload(data: Uint8Array<ArrayBuffer>, type: string) {
         this.init()
 
         const blob = new Blob([data], { type })

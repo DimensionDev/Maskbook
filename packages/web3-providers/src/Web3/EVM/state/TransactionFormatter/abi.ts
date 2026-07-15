@@ -17,7 +17,7 @@ import { LensHubAbi } from '@masknet/web3-contracts/types/LensHub.js'
 import { AirdropV2Abi } from '@masknet/web3-contracts/types/AirdropV2.js'
 
 class ABI {
-    private abis: Map<string, AbiFunction[]> = new Map()
+    private abis = new Map<string, AbiFunction[]>()
 
     constructor() {
         this.construct(BulkCheckoutAbi) // donate gitcoin grants

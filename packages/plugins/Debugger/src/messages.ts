@@ -1,7 +1,7 @@
 import { getPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants.js'
 
-type DialogUpdated = {
+interface DialogUpdated {
     open: boolean
 }
 

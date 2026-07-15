@@ -83,7 +83,7 @@ export function injectBadgesOnConversation(signal: AbortSignal) {
         if (!spans) return
         const userId = spans.values().reduce((id, node) => {
             if (id) return id
-            if (node.textContent?.match(/@\w/u)) {
+            if (/@\w/u.test(node.textContent)) {
                 return node.textContent.trim().slice(1)
             }
             return ''

@@ -38,17 +38,17 @@ import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput }
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
-    const colorMap: Record<string, string> = {
+    const colorMap: { [property: string]: string } = {
         send: theme.palette.maskColor.warn,
         receive: theme.palette.maskColor.success,
         default: theme.palette.maskColor.primary,
     }
-    const backgroundColorMap: Record<string, string> = {
+    const backgroundColorMap: { [property: string]: string } = {
         send: alpha(theme.palette.maskColor.warn, 0.1),
         receive: alpha(theme.palette.maskColor.success, 0.1),
         default: alpha(theme.palette.maskColor.primary, 0.1),
     }
-    const boxShadowMap: Record<string, string> = {
+    const boxShadowMap: { [property: string]: string } = {
         send: alpha(theme.palette.maskColor.warn, 0.2),
         receive: alpha(theme.palette.maskColor.success, 0.2),
         default: alpha(theme.palette.maskColor.primary, 0.2),
@@ -174,7 +174,7 @@ interface TransactionIconProps {
 const TransactionIcon = memo(function TransactionIcon({ cateType }: TransactionIconProps) {
     const { classes, theme } = useStyles({ cateType })
     const mapType = cateType || 'default'
-    const IconMap: Record<string, JSX.Element> = {
+    const IconMap: { [property: string]: JSX.Element } = {
         send: <Icons.BaseUpload color={theme.palette.maskColor.warn} size={20} />,
         receive: <Icons.Download color={theme.palette.maskColor.success} size={20} />,
         default: <Icons.Cached color={theme.palette.maskColor.primary} size={20} />,
@@ -193,7 +193,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
     const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
 
-    const blockNumber = transaction && 'blockNumber' in transaction ? (transaction.blockNumber as number) : undefined
+    const blockNumber = transaction?.blockNumber
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { data: tx, isPending: loadingTx } = useQuery({
         // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
@@ -220,8 +220,8 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input ?? txInput)
     const status = transaction.status ?? (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const fromAddress = (transaction.from || tx?.from_address) as string
-    const toAddress = (receiverAddress || transaction.to || tx?.to_address) as string
+    const fromAddress = (transaction.from || tx?.from_address)!
+    const toAddress = (receiverAddress || transaction.to || tx?.to_address)!
     const loadingToAddress =
         transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
     const isOut = isSameAddress(fromAddress, account)

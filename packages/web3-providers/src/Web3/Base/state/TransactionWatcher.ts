@@ -71,7 +71,7 @@ class Checker<ChainId extends PropertyKey, Transaction> {
 export abstract class TransactionWatcherState<ChainId extends PropertyKey, Transaction>
     implements Web3TransactionWatcherState<ChainId, Transaction>
 {
-    public emitter: Emitter<WatchEvents<ChainId, Transaction>> = new Emitter()
+    public emitter = new Emitter<WatchEvents<ChainId, Transaction>>()
 
     constructor(
         protected subscriptions: {

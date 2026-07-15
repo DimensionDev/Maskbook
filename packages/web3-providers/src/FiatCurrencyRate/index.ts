@@ -4,8 +4,8 @@ import { fetchJSON } from '../entry-helpers.js'
 const BASE_URL = 'https://nftapi.firefly.land/exchange-rates?base=USD'
 
 export namespace FiatCurrencyRateBaseAPI {
-    export type Result = {
-        rates: Record<string, number>
+    export interface Result {
+        rates: { [currency: string]: number }
     }
 }
 export const FiatCurrencyRate = {

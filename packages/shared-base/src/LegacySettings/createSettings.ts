@@ -57,7 +57,7 @@ export function createGlobalSettings<T>(key: string, value: T, comparer?: ValueC
 
 /** @deprecated */
 export function createBulkSettings<T>(settingsKey: string, defaultValue: T, comparer?: ValueComparer<T>) {
-    const item: Record<string, ValueRefWithReady<T>> = { __proto__: null! }
+    const item: { [property: string]: ValueRefWithReady<T> } = { __proto__: null! }
     MaskMessages.events.legacySettings_bulkDiscoverNS.on((ns) => {
         if (ns.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return
         setup(ns)

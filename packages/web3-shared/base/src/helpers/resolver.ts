@@ -197,7 +197,7 @@ export function trimQuery(url: string) {
 }
 
 export function resolveIPFS_CID(str: string) {
-    return str.match(MATCH_IPFS_CID_RE)?.[1]
+    return MATCH_IPFS_CID_RE.exec(str)?.[1]
 }
 
 export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefined {
@@ -211,7 +211,7 @@ export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefine
     // a ipfs.io host
     if (cidOrURL.startsWith(IPFS_GATEWAY_HOST)) {
         // base64 data string
-        const [_, data] = cidOrURL.match(MATCH_IPFS_DATA_RE) ?? []
+        const [_, data] = MATCH_IPFS_DATA_RE.exec(cidOrURL) ?? []
         if (data) return decodeURIComponent(data)
 
         // plain
@@ -241,7 +241,7 @@ export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefine
             }
         }
 
-        const pathname = cidOrURL.match(MATCH_IPFS_CID_AND_PATHNAME_RE)?.[0]
+        const pathname = MATCH_IPFS_CID_AND_PATHNAME_RE.exec(cidOrURL)?.[0]
         if (pathname) return trimQuery(`${IPFS_GATEWAY_HOST}/ipfs/${pathname}`)
     }
 

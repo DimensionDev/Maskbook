@@ -9,7 +9,7 @@ import type { TransactionDescriptorFormatResult } from '../types.js'
 import { BaseDescriptor } from './Base.js'
 import type { BulkCheckoutAbi } from '@masknet/web3-contracts/types/BulkCheckout.js'
 
-type ParameterTuple = {
+interface ParameterTuple {
     0: string
     1: string
     2: string

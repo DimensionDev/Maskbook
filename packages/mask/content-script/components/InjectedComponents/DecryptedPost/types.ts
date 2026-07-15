@@ -1,12 +1,12 @@
 import type { TypedMessage } from '@masknet/typed-message'
 
-export type SuccessDecryption = {
+export interface SuccessDecryption {
     type: 'success'
     iv: string
     content: TypedMessage
     internal: boolean
 }
-export type FailureDecryption = {
+export interface FailureDecryption {
     error: string
     type: 'error'
     internal: boolean

@@ -379,7 +379,7 @@ interface BackupJSONFileVersion2 {
         derivationPath?: string
     }>
     grantedHostPermissions: string[]
-    plugin?: Record<string, unknown>
+    plugin?: { [propertyName: string]: unknown }
 }
 
 interface LinkedProfileDetails {

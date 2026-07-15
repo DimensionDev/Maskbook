@@ -87,10 +87,11 @@ export const GoPlusLabs = {
             code: 0 | 1
             // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
             message: 'OK' | string
-            result: Record<
-                string,
-                SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
-            >
+            result: {
+                [property: string]: SecurityAPI.ContractSecurity &
+                    SecurityAPI.TokenSecurity &
+                    SecurityAPI.TradingSecurity
+            }
         }>(
             urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/token_security/:id', {
                 id: chainId,
@@ -153,7 +154,9 @@ export const GoPlusLabs = {
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 
 function createTokenSecurity(
-    response: Record<string, SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity>,
+    response: {
+        [property: string]: SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
+    },
     chainId?: ChainId,
 ) {
     if (isEmpty(response) || !isValidChainId(chainId)) return

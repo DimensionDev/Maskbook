@@ -21,14 +21,14 @@ export declare namespace PostDB_HistoryTypes {
         foundAt: Date
         postCryptoKey?: CryptoKey
         // Type of "recipients" has changed.
-        recipients: Record<string, Version3RecipientDetail>
+        recipients: { [property: string]: Version3RecipientDetail }
     }
     export type Version3_RecipientReason = (
         | { type: 'auto-share' }
         | { type: 'direct' }
         | { type: 'group'; /** @deprecated */ group: unknown }
     ) & { at: Date }
-    export type Version3RecipientDetail = {
+    export interface Version3RecipientDetail {
         /** Why they're able to receive this message? */
         reason: Version3_RecipientReason[]
     }

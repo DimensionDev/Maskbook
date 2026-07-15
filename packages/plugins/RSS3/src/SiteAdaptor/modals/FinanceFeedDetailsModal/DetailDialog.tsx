@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface FeedDetailsDialogProps
     extends PropsWithChildren<InjectedDialogProps>,
         Pick<FinanceFeedProps, 'transaction'> {
-    scopedDomainsMap: Record<string, string>
+    scopedDomainsMap: { [domain: string]: string }
 }
 
 export function FinanceFeedDetailsDialog({ transaction, onClose, scopedDomainsMap, ...rest }: FeedDetailsDialogProps) {

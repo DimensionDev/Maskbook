@@ -267,9 +267,7 @@ interface VerifyMnemonicUIProps {
     answerCallback: (index: number, word: string) => void
     verifyAnswerCallback: (callback?: () => void) => void
     onRefreshWords: () => void
-    puzzleAnswer: {
-        [key: number]: string
-    }
+    puzzleAnswer: { [key: number]: string }
     puzzleWordList: PuzzleWord[]
     loading: boolean
     isMatched: boolean | undefined
@@ -279,9 +277,7 @@ interface VerifyMnemonicUIProps {
 
 interface PuzzleOption {
     puzzleWord: PuzzleWord
-    puzzleAnswer: {
-        [key: number]: string
-    }
+    puzzleAnswer: { [key: number]: string }
     answerCallback: (index: number, word: string) => void
 }
 

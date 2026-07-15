@@ -17,7 +17,7 @@ const SAFE_PATHNAMES_ON_TWITTER = new Set([
 
 export default function getSearchedKeywordAtTwitter(): string {
     const params = new URLSearchParams(location.search)
-    const hashTagMatched = location.pathname.match(/\/hashtag\/([\dA-Za-z]+)/u)
+    const hashTagMatched = /\/hashtag\/([\dA-Za-z]+)/u.exec(location.pathname)
     const isTabAvailable = ['top'].includes(params.get('f') ?? '')
     if (location.pathname === '/search' && (!params.get('f') || isTabAvailable)) return params.get('q') ?? ''
     else if (hashTagMatched) return '#' + hashTagMatched[1]

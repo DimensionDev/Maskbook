@@ -2,7 +2,7 @@ import { $, $safe, $unsafe } from '../intrinsic.js'
 import { handlePromise, sendEvent } from '../utils.js'
 import type { InternalEvents } from '../../shared/index.js'
 
-const hasListened: Record<string, boolean> = { __proto__: null! }
+const hasListened: { [property: string]: boolean } = { __proto__: null! }
 const __unsafe__window = $unsafe.unwrapXRayVision(window)
 
 interface Ref extends NullPrototype {

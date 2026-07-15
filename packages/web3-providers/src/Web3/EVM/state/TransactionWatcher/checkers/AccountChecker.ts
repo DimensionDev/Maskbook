@@ -5,7 +5,7 @@ import type { ExplorerAPI } from '../../../../../entry-types.js'
 import { toHex } from '@masknet/shared-base'
 
 class TTL<T> {
-    private cache: Record<string, { value: T; ttl: number; at: number }> = {}
+    private cache: { [cacheKey: string]: { value: T; ttl: number; at: number } } = {}
 
     get(key: string): T | undefined {
         if (!this.cache[key]) return

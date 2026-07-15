@@ -70,7 +70,7 @@ export function GasSection(props: GasSectionProps) {
     const baseFeePerGas = gasOptions?.[GasOptionType.FAST].baseFeePerGas ?? '0'
     const priorityFee =
         isZero(maxPriorityFeePerGasByUser) ?
-            ((transaction as Transaction)?.maxPriorityFeePerGas as string)
+            (transaction as Transaction)?.maxPriorityFeePerGas
         :   formatGweiToWei(maxPriorityFeePerGasByUser)
 
     const gasPrice = (transactionOptions as Transaction | undefined)?.gasPrice

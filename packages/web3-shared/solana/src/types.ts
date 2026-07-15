@@ -76,7 +76,7 @@ export interface Payload {
     params?: unknown
 }
 
-export type Web3Provider = {
+export interface Web3Provider {
     publicKey: PublicKey
     on(name: string, callback: () => void): void
     request(payload: Payload): Promise<unknown>
@@ -108,7 +108,7 @@ export type Web3State = Web3StateShared<
     TransactionParameter
 >
 
-export type Web3Definition = {
+export interface Web3Definition {
     ChainId: ChainId
     AddressType: AddressType
     SchemaType: SchemaType

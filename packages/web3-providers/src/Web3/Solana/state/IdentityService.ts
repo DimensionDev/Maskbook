@@ -7,14 +7,14 @@ import { SolanaDomain } from '../apis/DomainAPI.js'
 const SOL_RE = /\S{1,256}\.sol\b/iu
 
 function getSolanaAddress(bio: string) {
-    const addressMatched = bio.match(/\b\w{32,44}\b/u)
+    const addressMatched = /\b\w{32,44}\b/u.exec(bio)
     const address = addressMatched?.[0]
     if (address && !address.startsWith('0x') && isValidAddress(address)) return address
     return
 }
 
 function getSolanaDomain(nickname: string, bio: string) {
-    const [matched] = nickname.match(SOL_RE) ?? bio.match(SOL_RE) ?? []
+    const [matched] = SOL_RE.exec(nickname) ?? SOL_RE.exec(bio) ?? []
     return matched
 }
 

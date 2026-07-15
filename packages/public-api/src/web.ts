@@ -12,7 +12,7 @@ export interface WalletInfo {
 }
 
 export interface ProfileState {
-    [key: string]: 'pending' | 'confirmed'
+    [property: string]: 'pending' | 'confirmed'
 }
 
 export interface BackupOptions {
@@ -60,10 +60,10 @@ export enum SupportedLanguages {
 }
 
 export interface PriceRecord {
-    [currency: string]: number
+    [property: string]: number
 }
 
 /** Base on response of coingecko's token price API */
 export interface CryptoPrice {
-    [token: string]: PriceRecord
+    [property: string]: PriceRecord
 }

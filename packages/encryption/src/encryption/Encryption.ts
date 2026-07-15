@@ -71,7 +71,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
         e2e: ecdhResult,
     }
 }
-type Context = {
+interface Context {
     postIV: Uint8Array<ArrayBuffer>
     postKeyEncoded: Promise<Uint8Array<ArrayBuffer>>
     authorPublic: Option<EC_Key<EC_Public_CryptoKey>>
@@ -90,15 +90,15 @@ export async function encodePostKey(
                 // An implementation MUST NOT depend on the order of keys in a JsonWebKey.
                 // preferred order (used to snapshot our tests):
                 const ord = new Set(['key_ops', 'ext', 'kty', 'k', 'alg'])
-                const replica_object: Record<string, unknown> = {}
-                const rest: Record<string, unknown> = {}
+                const replica_object: { [property: string]: unknown } = {}
+                const rest: { [property: string]: unknown } = {}
                 ord.forEach((k) => {
                     if (!(k in x)) return
-                    replica_object[k] = (x as Record<string, unknown>)[k]
+                    replica_object[k] = (x as { [property: string]: unknown })[k]
                 })
                 Object.keys(x).forEach((k) => {
                     if (ord.has(k)) return
-                    rest[k] = (x as Record<string, unknown>)[k]
+                    rest[k] = (x as { [property: string]: unknown })[k]
                 })
                 return JSON.stringify({ ...replica_object, ...rest })
             })

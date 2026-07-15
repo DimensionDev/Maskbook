@@ -51,9 +51,7 @@ export function createFungibleToken(
 export function createFungibleAsset(
     token: FungibleToken<ChainId, SchemaType>,
     balance: string,
-    price?: {
-        [key in CurrencyType]?: string
-    },
+    price?: { [key in CurrencyType]?: string },
 ): FungibleAsset<ChainId, SchemaType> {
     return {
         ...token,

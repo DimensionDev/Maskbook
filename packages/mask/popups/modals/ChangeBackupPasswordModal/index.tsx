@@ -10,7 +10,7 @@ import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
 import { Trans, useLingui } from '@lingui/react/macro'
-type FormInputs = {
+interface FormInputs {
     oldPassword: string
     newPassword: string
     repeatPassword: string

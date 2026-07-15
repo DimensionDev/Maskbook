@@ -1,7 +1,7 @@
 import { Flags } from '@masknet/flags'
 import { getCookie } from '@masknet/shared-base'
 
-export function getHeaders(overrides?: Record<string, string>) {
+export function getHeaders(overrides?: { [property: string]: string }) {
     return {
         authorization: `Bearer ${Flags.twitter_token}`,
         'x-csrf-token': getCookie('ct0'),

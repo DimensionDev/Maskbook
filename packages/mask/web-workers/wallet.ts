@@ -1,11 +1,11 @@
 import './prepare.js'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 // How to interact with this worker:
-export type Input = {
+export interface Input {
     id: number
     data: api.IMWRequest
 }
-export type Output = {
+export interface Output {
     id: number
     response: api.MWResponse
 }

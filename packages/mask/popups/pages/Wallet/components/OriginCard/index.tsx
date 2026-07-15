@@ -45,7 +45,7 @@ interface OriginCardProps {
     origin: string
 }
 
-const domainIconMap: Record<string, GeneratedIcon> = {
+const domainIconMap: { [domain: string]: GeneratedIcon } = {
     'x.com': Icons.TwitterXRound,
     'facebook.com': Icons.FacebookRound,
     'minds.com': Icons.MindsRound,
@@ -53,7 +53,7 @@ const domainIconMap: Record<string, GeneratedIcon> = {
     'opensea.io': Icons.OpenSeaColored,
 }
 
-const domainNameMap: Record<string, string> = {
+const domainNameMap: { [domain: string]: string } = {
     'x.com': 'X',
     'facebook.com': 'Facebook',
     'minds.com': 'Minds',

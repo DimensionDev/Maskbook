@@ -74,8 +74,8 @@ class OAuth {
             .replaceAll('(', '%28')
             .replaceAll(')', '%29')
     }
-    percentEncodeData(data: Record<string, any>) {
-        const result: Record<string, any> = {}
+    percentEncodeData(data: { [property: string]: any }) {
+        const result: { [property: string]: any } = {}
 
         for (const key in data) {
             let value = data[key]
@@ -154,7 +154,7 @@ async function getRequestToken(client: OAuth) {
         throw new Error('Request failed: ' + body)
     }
 }
-function toBody(rec: Record<string, any>) {
+function toBody(rec: { [property: string]: any }) {
     const x = new URLSearchParams()
     for (const key in rec) {
         const value = rec[key]

@@ -1,7 +1,7 @@
 import { openDB, type DBSchema } from 'idb'
 import { createDBAccess } from '../utils/openDB.js'
 
-type InStore = {
+interface InStore {
     plugin_id: string
     value: unknown
 }

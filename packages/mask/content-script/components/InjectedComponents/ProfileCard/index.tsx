@@ -185,7 +185,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    const scopedDomainsMap: Record<string, string> = useMemo(() => {
+    const scopedDomainsMap: { [domain: string]: string } = useMemo(() => {
         return socialAccounts.reduce((map, account) => {
             if (!account.label) return map
             return {

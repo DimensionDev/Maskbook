@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { ChainIdEnum, Constants, Primitive } from './types.js'
 
-function replaceAll(input: string, values: Record<string, string>) {
+function replaceAll(input: string, values: { [property: string]: string }) {
     if (!input.includes('${')) return input
     return input.replaceAll(/\$\{([^}]+)\}/gu, (match, p1) => values[p1] ?? match)
 }
@@ -9,7 +9,7 @@ function replaceAll(input: string, values: Record<string, string>) {
 export function transformAll<ChainId extends number, T extends Constants>(
     chainIdEnum: ChainIdEnum<ChainId>,
     constants: T,
-    environment: Record<string, string> = {},
+    environment: { [variableName: string]: string } = {},
 ) {
     type Entries = Readonly<{
         [key in keyof T]?: T[key]['Mainnet']
@@ -39,7 +39,7 @@ export function transformAll<ChainId extends number, T extends Constants>(
 export function transform<ChainId extends number, T extends Constants>(
     chainIdEnum: ChainIdEnum<ChainId>,
     constants: T,
-    environment: Record<string, string> = {},
+    environment: { [variableName: string]: string } = {},
 ) {
     type Entries = {
         [key in keyof T]?: T[key]['Mainnet']

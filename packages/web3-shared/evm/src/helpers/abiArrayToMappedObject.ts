@@ -16,7 +16,7 @@ export function abiArrayToMappedObject<inputAbi extends readonly AbiParameter[]>
     inputAbi: inputAbi,
     data: readonly unknown[],
 ): AbiParametersToPrimitiveTypesObjectMapped<inputAbi> {
-    const result: Record<string, any> = {}
+    const result: { [property: string]: any } = {}
     inputAbi.forEach((param, index) => {
         result[index] = data[index]
         if (param.name) {

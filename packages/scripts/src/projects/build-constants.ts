@@ -7,7 +7,7 @@ import { task } from '../utils/task.ts'
 type Primitive = string | number | boolean
 
 interface ConstantsConfig {
-    [key: string]: Record<string, Primitive | Primitive[]>
+    [property: string]: { [property: string]: Primitive | Primitive[] }
 }
 
 // Function to read the constants from a file
@@ -37,7 +37,7 @@ function getDefaultPrimitiveValue(value: Primitive | Primitive[]): Primitive | P
 
 // Function to filter out non-blank pairs from the constants
 function filterNonBlankPairs(
-    values: Record<string, Primitive | Primitive[]>,
+    values: { [property: string]: Primitive | Primitive[] },
     names: string[],
 ): Array<[string, Primitive | Primitive[]]> {
     return Object.entries(values).filter(([key, value]) => value !== '' || !names.includes(key) || key === 'Mainnet')
@@ -74,7 +74,7 @@ function compressAction(constants: ConstantsConfig, names: string[]): ConstantsC
 function completeAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
     const updatedConstants: ConstantsConfig = {}
     for (const [name, values] of Object.entries(constants)) {
-        const updatedValues: Record<string, Primitive | Primitive[]> = {}
+        const updatedValues: { [property: string]: Primitive | Primitive[] } = {}
 
         for (const key of names) {
             updatedValues[key] = key in values ? values[key] : getDefaultPrimitiveValue(values[Object.keys(values)[0]])

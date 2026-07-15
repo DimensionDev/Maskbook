@@ -9,7 +9,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
     const inject = injectPostInspectorDefault({
         injectionPoint(postInfo) {
             if (postInfo.rootElement.realCurrent!.dataset.testid === 'tweetPhoto') {
-                const root = postInfo.rootElement.realCurrent!.closest('div[aria-labelledby]') as HTMLDivElement
+                const root = postInfo.rootElement.realCurrent!.closest('div[aria-labelledby]')! as HTMLDivElement
                 return getOrAttachShadowRoot(root)
             }
             return postInfo.rootElement.afterShadow

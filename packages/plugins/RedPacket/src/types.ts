@@ -8,11 +8,11 @@ export enum RequirementType {
     Comment = 'Comment',
 }
 
-export type FireflyRedpacketSettings = {
+export interface FireflyRedpacketSettings {
     requirements: RequirementType[]
 }
 
-export type FireflySocialProfile = {
+export interface FireflySocialProfile {
     profileId: string
     displayName: string
     handle: string

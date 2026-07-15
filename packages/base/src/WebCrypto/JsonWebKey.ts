@@ -1,4 +1,4 @@
-export type JsonWebKeyPair<Pub extends JsonWebKey & Nominal<unknown>, Priv extends JsonWebKey & Nominal<unknown>> = {
+export interface JsonWebKeyPair<Pub extends JsonWebKey & Nominal<unknown>, Priv extends JsonWebKey & Nominal<unknown>> {
     publicKey: Pub
     privateKey: Priv
 }

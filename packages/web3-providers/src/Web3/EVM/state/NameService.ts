@@ -6,7 +6,7 @@ import defer * as SpaceID from '../../../SpaceID/index.js'
 import type { NameServiceAPI } from '../../../entry-types.js'
 
 export class EVMNameService extends NameServiceState {
-    constructor(storage: StorageItem<Record<NameServiceID, Record<string, string>>>) {
+    constructor(storage: StorageItem<{ [nameServiceId in NameServiceID]: { [property: string]: string } }>) {
         super(storage, (x) => isValidAddress(x) && !isZeroAddress(x), formatEthereumAddress)
     }
 

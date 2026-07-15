@@ -7,7 +7,7 @@ import type { OkxTransaction } from '../types/trader.js'
 
 export interface StorageOptions {
     /** isolated by wallet */
-    transactions: Record<string, OkxTransaction[]>
+    transactions: { [property: string]: OkxTransaction[] }
 }
 let storage: ScopedStorage<StorageOptions>
 

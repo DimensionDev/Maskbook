@@ -73,7 +73,7 @@ export interface CompositionRef {
 }
 export function CompositionDialogUI(props: CompositionProps) {
     const { classes } = useStyles()
-    const [initialMeta, setInitialMeta] = useState<Record<string, unknown>>(EMPTY_OBJECT)
+    const [initialMeta, setInitialMeta] = useState<{ [property: string]: unknown }>(EMPTY_OBJECT)
     const [currentPostSize, __updatePostSize] = useState(0)
 
     const Editor = useRef<TypedMessageEditorRef | null>(null)

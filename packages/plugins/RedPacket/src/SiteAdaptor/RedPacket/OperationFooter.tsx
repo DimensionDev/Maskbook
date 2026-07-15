@@ -109,7 +109,7 @@ export function OperationFooter({
         <Box {...rest} className={cx(classes.footer, rest.className)}>
             <ChainBoundary
                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
+                expectedChainId={chainId ?? ChainId.Mainnet}
                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 <WalletConnectedBoundary
                     noGasText={t`Insufficient Balance`}

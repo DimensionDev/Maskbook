@@ -164,9 +164,7 @@ export interface HistoryRecord {
         spot_trade: DictItem
     }
     history_list: HistoryItem[]
-    project_dict: {
-        [key in string]: ProjectItem
-    }
+    project_dict: { [projectId: string]: ProjectItem }
     token_dict: {
         // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
         [key in string | 'eth']: TokenItem

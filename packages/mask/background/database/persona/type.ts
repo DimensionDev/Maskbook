@@ -55,7 +55,7 @@ export type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'
     linkedPersona?: PersonaIdentifierStoredInDB
 }
 /** @internal */
-type PersonaIdentifierStoredInDB = {
+interface PersonaIdentifierStoredInDB {
     compressedPoint?: string
     encodedCompressedKey?: string
     type: 'ec_key'

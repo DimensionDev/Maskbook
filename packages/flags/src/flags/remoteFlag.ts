@@ -49,7 +49,7 @@ function isOutdated(cacheTime: number) {
 }
 function tryParse(x: string) {
     try {
-        return FlagPatchSpec.parse(JSON.parse(x)) as Record<string, any>
+        return FlagPatchSpec.parse(JSON.parse(x)) as { [property: string]: any }
     } catch {
         return null
     }

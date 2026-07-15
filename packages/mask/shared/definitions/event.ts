@@ -11,7 +11,7 @@ export const EventMap: Record<EnhanceableSite, EventID> = {
     [EnhanceableSite.Firefly]: EventID.Debug,
 }
 
-export const DisconnectEventMap: Record<string, EventID> = {
+export const DisconnectEventMap: { [property: string]: EventID } = {
     [EnhanceableSite.Twitter]: EventID.EntryPopupSocialAccountDisconnectTwitter,
     [EnhanceableSite.Facebook]: EventID.EntryPopupSocialAccountDisconnectFb,
     [EnhanceableSite.Minds]: EventID.EntryPopupSocialAccountDisconnectMinds,

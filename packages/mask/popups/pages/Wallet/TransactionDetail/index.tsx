@@ -280,7 +280,7 @@ export const Component = memo(function TransactionDetail() {
                         className={classes.fieldValue}
                         component="div"
                         loading={!transaction.from && loadingTx}>
-                        <ReversedAddress address={(transaction.from || tx?.from_address) as string} />
+                        <ReversedAddress address={(transaction.from || tx?.from_address)!} />
                     </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
@@ -288,7 +288,7 @@ export const Component = memo(function TransactionDetail() {
                         <Trans>To</Trans>
                     </Typography>
                     <ProgressiveText className={classes.fieldValue} component="div" loading={loadingToAddress}>
-                        <ReversedAddress address={toAddress as string} />
+                        <ReversedAddress address={toAddress!} />
                     </ProgressiveText>
                 </Box>
                 <Typography variant="h2" className={classes.sectionName}>

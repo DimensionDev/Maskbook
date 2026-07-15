@@ -1,7 +1,7 @@
 import { type GeneratedIcon, Icons } from '@masknet/icons'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-export const SuffixToChainIconMap: Record<string, GeneratedIcon> = {
+export const SuffixToChainIconMap: { [property: string]: GeneratedIcon } = {
     eth: Icons.ENS,
     bnb: Icons.SpaceId,
     csb: Icons.Crossbell,
@@ -18,7 +18,7 @@ export const SuffixToChainIconMap: Record<string, GeneratedIcon> = {
     lens: Icons.Lens,
 }
 
-export const SuffixToChainIdMap: Record<string, ChainId> = {
+export const SuffixToChainIdMap: { [property: string]: ChainId } = {
     eth: ChainId.Mainnet,
     bnb: ChainId.BSC,
     csb: ChainId.Mainnet,

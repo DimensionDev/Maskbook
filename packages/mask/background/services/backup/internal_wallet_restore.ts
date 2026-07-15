@@ -41,7 +41,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     for (const wallet of backup) {
         try {
             const wallets = await getWallets()
-            const matchedDefaultNameFormat = wallet.name.match(/Wallet (\d+)/u)
+            const matchedDefaultNameFormat = /Wallet (\d+)/u.exec(wallet.name)
             const digitIndex = matchedDefaultNameFormat?.[1]
             let name = wallet.name
             if (!name) {

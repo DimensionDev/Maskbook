@@ -5,7 +5,7 @@ import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json' with { type: 'jso
 import Lido from '@masknet/web3-constants/evm/lido.json' with { type: 'json' }
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json' with { type: 'json' }
 
-const collect = <T extends Record<string, Record<string, string | number>>>(
+const collect = <T extends { [property: string]: { [property: string]: string | number } }>(
     data: T,
     fields: Array<keyof T>,
 ): string[] => {
@@ -16,7 +16,7 @@ const collect = <T extends Record<string, Record<string, string | number>>>(
     return collected.map((addr) => addr.toLowerCase())
 }
 
-const domainAddressMap: Record<string, string[]> = {
+const domainAddressMap: { [property: string]: string[] } = {
     'aave.com': collect(Aave, ['AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS']),
     'www.artblocks.io': collect(ArtBlocks, ['GEN_ART_721_MINTER']),
     'gitcoin.co': collect(Gitcoin as Pick<typeof Gitcoin, 'GITCOIN_ETH_ADDRESS' | 'BULK_CHECKOUT_ADDRESS'>, [

@@ -159,7 +159,7 @@ export function useDialogStacking() {
     return useContext(DialogStackingContext)
 }
 
-type Hierarchy = {
+interface Hierarchy {
     readonly [parent: string]: undefined | ReadonlySet<string>
 }
 function sortStackByHierarchy(hierarchy: Hierarchy, stack: readonly string[]): readonly string[] {

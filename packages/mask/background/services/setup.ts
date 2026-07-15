@@ -12,7 +12,7 @@ import { decryptWithDecoding } from './crypto/decryption.js'
 assertEnvironment(Environment.ManifestBackground)
 
 const debugMode = process.env.NODE_ENV === 'development'
-const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
+const message = new WebExtensionMessage<{ [property: string]: any }>({ domain: '$' })
 const hmr = new EventTarget()
 
 const DebugService = Object.create(null)

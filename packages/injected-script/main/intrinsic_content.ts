@@ -8,15 +8,11 @@ export const takeThisF: <Args extends readonly unknown[], This, Return>(
 const takeThis: <Args extends readonly unknown[], This, Return>(
     f: (this: This, ...args: Args) => Return,
 ) => (self: This, ...args: Args) => Return = takeThisF
-export const bind: {
-    // bind 1 arg
-    // <This, Return, Arg1, RestArg extends readonly unknown[]>(f: (this: This, arg1: Arg1, ...args: RestArg) => Return, thisArg: This, arg1: Arg1): (...args: RestArg) => Return
-    <Args extends readonly unknown[], This, Return>(
-        f: (this: This, ...args: Args) => Return,
-        thisArg: This,
-        ...args: Args
-    ): () => Return
-} = takeThis(Function.prototype.bind) as any
+export const bind: <Args extends readonly unknown[], This, Return>(
+    f: (this: This, ...args: Args) => Return,
+    thisArg: This,
+    ...args: Args
+) => () => Return = takeThis(Function.prototype.bind) as any
 
 // #region ECMAScript intrinsic
 // ECMAScript

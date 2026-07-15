@@ -3,7 +3,7 @@ interface FileMetadata {
     description?: string
     parents?: string[]
     mimeType?: string
-    [key: string]: any
+    [property: string]: any
 }
 
 export interface DriveFile {
@@ -38,9 +38,9 @@ type Callback = (isLogin: boolean) => void
 export class GoogleDriveClient {
     private getToken: (interactive?: boolean) => Promise<string | undefined>
     private clearToken: () => Promise<void>
-    private baseUrl: string = 'https://www.googleapis.com/drive/v3'
-    private uploadUrl: string = 'https://www.googleapis.com/upload/drive/v3'
-    private backupFolderName: string = 'Mask network backup'
+    private baseUrl = 'https://www.googleapis.com/drive/v3'
+    private uploadUrl = 'https://www.googleapis.com/upload/drive/v3'
+    private backupFolderName = 'Mask network backup'
     private callbacks: Callback[] = []
 
     constructor(getToken: () => Promise<string | undefined>, clearToken: () => Promise<void>) {
@@ -98,7 +98,7 @@ export class GoogleDriveClient {
             const queryParams = new URLSearchParams({
                 fields: 'files(id,name,mimeType,createdTime,modifiedTime,size)',
                 ...params,
-            } as Record<string, string>)
+            } as { [property: string]: string })
 
             const response = await this.request(`${this.baseUrl}/files?${queryParams}`, {
                 headers: {

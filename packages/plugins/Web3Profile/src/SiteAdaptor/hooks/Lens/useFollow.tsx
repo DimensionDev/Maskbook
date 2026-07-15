@@ -7,7 +7,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useRef, useState } from 'react'
 
-export type FollowOptions = {
+export interface FollowOptions {
     accountAddress?: EvmAddress
     onSuccess?: (width: number, height: number) => void
     onFailed?: () => void

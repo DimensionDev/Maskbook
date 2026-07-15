@@ -1,16 +1,14 @@
 export interface LensStorageType {
-    accessToken?: Record<
-        string,
-        {
+    accessToken?: {
+        [property: string]: {
             token: string
             expireDate: Date
         }
-    >
-    refreshToken?: Record<
-        string,
-        {
+    }
+    refreshToken?: {
+        [property: string]: {
             token: string
             expireDate: Date
         }
-    >
+    }
 }

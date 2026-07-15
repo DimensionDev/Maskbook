@@ -9,7 +9,10 @@ import {
 import urlcat from 'urlcat'
 import type { DomainAPI } from '../types/Domain.js'
 
-type Response<T> = { success: boolean; data: T }
+interface Response<T> {
+    success: boolean
+    data: T
+}
 
 const FIREFLY_WORKER_HOST = 'https://firefly.r2d2.to'
 class FireflyDomainAPI implements DomainAPI.Provider<ChainId> {

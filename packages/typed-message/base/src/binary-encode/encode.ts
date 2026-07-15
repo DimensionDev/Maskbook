@@ -34,7 +34,7 @@ function encodeTypedMessageTuple(tm: TypedMessageTupleSerializable): any[] {
 
 function encodeMeta(tm: TypedMessage) {
     if (!tm.meta) return null
-    const record: Record<string, any> = { __proto__: null }
+    const record: { [property: string]: any } = { __proto__: null }
     for (const [key, val] of tm.meta) {
         if (typeof key !== 'string') continue
         if (val === undefined) continue
@@ -71,7 +71,7 @@ function collectValue(val: any): any {
             throw new TypeError(`${HEAD}unsupported value with a non trivial prototype.`)
         }
 
-        const result: Record<string, any> = {}
+        const result: { [property: string]: any } = {}
         for (const [key, value] of Object.entries(val)) {
             result[key] = collectValue(value)
         }

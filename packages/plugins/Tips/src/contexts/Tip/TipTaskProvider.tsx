@@ -42,7 +42,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
     const [amount, setAmount] = useState('')
     const { data: nativeTokenDetailed = null } = useNativeToken(targetPluginID, { chainId: targetChainId })
 
-    const [tokenMap, setTokenMap] = useState<Record<string, TipContextOptions['token']>>({})
+    const [tokenMap, setTokenMap] = useState<{ [property: string]: TipContextOptions['token'] }>({})
     const key = `${targetPluginID}:${targetChainId}`
     const setToken: TipContextOptions['setToken'] = useCallback(
         (val) => {

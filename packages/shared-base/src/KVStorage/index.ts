@@ -76,7 +76,7 @@ export const PersistentStorages = {
         /** @deprecated use lastLensAccount instead */
         latestLensProfile: string
         /** lens account address, distinct by wallet address */
-        lastLensAccountMap: Record<string, string>
+        lastLensAccountMap: { [property: string]: string }
         backupConfig: BackupConfig
         firefly_account: FireflyAccount
     }>('settings@v1', {

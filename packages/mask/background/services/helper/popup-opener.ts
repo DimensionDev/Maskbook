@@ -68,7 +68,7 @@ async function openOrUpdatePopupWindow(route: PopupRoutes, params: ParamMap) {
     )
 }
 
-const noWalletUnlockNeeded: Set<PopupRoutes> = new Set([
+const noWalletUnlockNeeded = new Set<PopupRoutes>([
     PopupRoutes.PersonaSignRequest,
     PopupRoutes.Personas,
     PopupRoutes.WalletUnlock,

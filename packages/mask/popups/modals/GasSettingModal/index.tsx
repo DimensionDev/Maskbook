@@ -7,7 +7,7 @@ import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { BottomDrawer } from '../../components/index.js'
 import { Trans } from '@lingui/react/macro'
 
-export type GasSettingModalOpenProps = {
+export interface GasSettingModalOpenProps {
     chainId: ChainId
     config: GasSetting
     nonce?: string | number

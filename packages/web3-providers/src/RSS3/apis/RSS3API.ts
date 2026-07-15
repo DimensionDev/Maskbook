@@ -37,7 +37,7 @@ export const RSS3 = {
 
     async getAllNotes(
         address: string,
-        options: Partial<Record<string, string[] | string>> = {},
+        options: Partial<{ [property: string]: string[] | string }> = {},
         { indicator, size = 100 }: BaseHubOptions<ChainId> = {},
     ) {
         if (!address) return createPageable([], createIndicator(indicator))

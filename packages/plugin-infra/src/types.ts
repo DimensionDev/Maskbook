@@ -982,7 +982,7 @@ export namespace Plugin.GeneralUI {
                 metadata: TypedMessage['meta']
             }
         // #endregion
-        export type RenderActions<T> = {
+        export interface RenderActions<T> {
             /**
              * This action make the render into the edit state.
              * It should report the result via onEditComplete() props.
@@ -1027,7 +1027,7 @@ export namespace Plugin {
      * - InjectUIReact: Optimized for React component.
      * - InjectUIRaw: The fallback choice if a React component doesn't apply here.
      */
-    export type InjectUI<Props = Record<string, never>> = InjectUIRaw<Props> | InjectUIReact<Props>
+    export type InjectUI<Props = { [property: string]: never }> = InjectUIRaw<Props> | InjectUIReact<Props>
     /**
      *
      * @example
@@ -1040,7 +1040,7 @@ export namespace Plugin {
      * }
      * ```
      */
-    export type InjectUIRaw<Props> = {
+    export interface InjectUIRaw<Props> {
         type: 'raw'
         /**
          * The raw version of the inject UI.
@@ -1053,7 +1053,7 @@ export namespace Plugin {
     export type InjectUIReact<Props> = React.ComponentType<Props>
 }
 
-export type IndexableTaggedUnion = {
+export interface IndexableTaggedUnion {
     type: string | number
     id: string | number
 }
