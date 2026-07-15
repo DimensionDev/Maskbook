@@ -88,7 +88,6 @@ interface TrendingViewProps {
     currentResult?: Web3Helper.TokenResultAll
     identity?: SocialIdentity | null
     setActive?: (x: boolean) => void
-    address?: string
     onUpdate?: () => void
 }
 
@@ -179,7 +178,7 @@ export function TrendingView(props: TrendingViewProps) {
     const tabs = useMemo(() => {
         return [ContentTab.Market, ContentTab.Price, ContentTab.Exchange]
     }, [])
-    const [currentTab, , , setTab] = useTabs<ContentTab>(tabs[0], ...tabs)
+    const [currentTab, _a, _b, setTab] = useTabs<ContentTab>(tabs[0], ...tabs)
     useLayoutEffect(() => {
         setTab(tabs[0])
     }, [result, tabs[0]])

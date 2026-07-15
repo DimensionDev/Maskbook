@@ -52,7 +52,7 @@ interface TipDialogProps {
 }
 
 const site = getSiteType()
-export function TipDialog({ open = false, onClose }: TipDialogProps) {
+export function TipDialog({ open, onClose }: TipDialogProps) {
     const { _ } = useLingui()
     const { classes } = useStyles()
 
@@ -66,8 +66,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         recipientAddress,
         recipientUserId,
         sendTip,
-        validation: [isValid, validateMessage],
+        validation,
     } = useTip()
+    const [isValid, validateMessage] = validation
     const { pluginID } = useNetworkContext()
     const { data: recipientEns } = useReverseAddress(pluginID, recipientAddress)
     const { chainId } = useChainContext()

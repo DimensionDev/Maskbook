@@ -51,7 +51,9 @@ export function Slider({ children, className, onUpdate, count, ...rest }: Props)
     useLayoutEffect(() => {
         if (!containerRef.current) return
         const offsetWidth = containerRef.current.offsetWidth
+        // eslint-disable-next-line @eslint-react/set-state-in-effect -- The rendered container width is an external layout measurement.
         setWidth(offsetWidth)
+        // eslint-disable-next-line @eslint-react/set-state-in-effect -- The transform must be recomputed from the external layout measurement.
         setStyle({
             width: offsetWidth * count,
             transform: `translate(${-offsetWidth * index}px, 0)`,

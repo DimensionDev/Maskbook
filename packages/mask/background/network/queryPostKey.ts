@@ -36,8 +36,7 @@ export async function GUN_queryPostKey_version40(
         if (!x) return false
 
         const { encryptedKey, salt: encryptedKeyIV } = x
-        if (typeof encryptedKey !== 'string' || typeof encryptedKeyIV !== 'string') return false
-        return true
+        return typeof encryptedKey === 'string' && typeof encryptedKeyIV === 'string'
     }
 }
 
@@ -67,8 +66,7 @@ namespace Version38Or39 {
             )
                 .filter(isNonNull)
                 .filter(isObject)
-                .map(Object.keys)
-                .flat()
+                .flatMap(Object.keys)
                 .filter((x) => x !== '_'),
         )
         // ? In this step we get all keys in this category (gun2[postHash][keyHash])
@@ -203,7 +201,7 @@ async function GUN_SEA_work(data: Uint8Array<ArrayBuffer> | string, salt: Uint8A
     if (typeof data === 'string') data = new TextEncoder().encode(data)
     if (typeof salt === 'string') salt = new TextEncoder().encode(salt)
     const key = await crypto.subtle.importKey('raw', data, { name: 'PBKDF2' }, false, ['deriveBits'])
-    const params: Pbkdf2Params = { name: 'PBKDF2', iterations: 100000, salt, hash: { name: 'SHA-256' } }
+    const params: Pbkdf2Params = { name: 'PBKDF2', iterations: 100_000, salt, hash: { name: 'SHA-256' } }
     const derived = await crypto.subtle.deriveBits(params, key, 512)
     // eslint-disable-next-line unicorn/prefer-code-point
     return btoa(String.fromCharCode(...new Uint8Array(derived)))

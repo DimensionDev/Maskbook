@@ -32,13 +32,19 @@ function normalizeError(error: unknown): ErrorBoundaryError {
         // remove webpack-internal:///
         stack = stack.replaceAll(/webpack-internal:\/{3}/gu, '')
         stack = stack.replaceAll('chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap', '')
-    } catch {}
+    } catch {
+        // ignore
+    }
     try {
         type = String((error as any).name) || '<type not available>'
-    } catch {}
+    } catch {
+        // ignore
+    }
     try {
         message = String((error as any).message) || '<message not available>'
-    } catch {}
+    } catch {
+        // ignore
+    }
     return { stack, type, message }
 }
 

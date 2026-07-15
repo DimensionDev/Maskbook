@@ -40,7 +40,7 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
     const { classes } = useStyles()
 
     // You might see a collectible action on a note minting feed
-    const action = feed.actions.filter((x) => x.tag === Tag.Social)[0]
+    const action = feed.actions.find((x) => x.tag === Tag.Social)!
     const type = action.type
 
     const owner = useAddressLabel(

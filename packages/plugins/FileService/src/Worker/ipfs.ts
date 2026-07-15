@@ -56,9 +56,9 @@ class IPFSAgent implements ProviderAgent {
         const response = await fetch(LANDING_PAGE)
         const text = await response.text()
         const replaced = text
-            .replace('Arweave', IPFSAgent.providerName)
-            .replace('Over Arweave', `Over ${IPFSAgent.providerName}`)
-            .replace('__METADATA__', encodedMetadata)
+            .replace('Arweave', () => IPFSAgent.providerName)
+            .replace('Over Arweave', () => `Over ${IPFSAgent.providerName}`)
+            .replace('__METADATA__', () => encodedMetadata)
         const data = encodeText(replaced)
         return this.makePayload(data)
     }

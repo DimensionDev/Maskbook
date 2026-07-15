@@ -91,7 +91,7 @@ class TokenAmount extends BN {
      * Convert to Buffer representation
      */
     override toBuffer(): Buffer {
-        const a = super.toArray().reverse()
+        const a = super.toArray().toReversed()
         const b = Buffer.from(a)
         if (b.length === 8) {
             return b
@@ -115,8 +115,10 @@ class TokenAmount extends BN {
         }
 
         return new BN(
-            [...buffer]
-                .reverse()
+            buffer
+                .values()
+                .toArray()
+                .toReversed()
                 .map((i) => `00${i.toString(16)}`.slice(-2))
                 .join(''),
             16,

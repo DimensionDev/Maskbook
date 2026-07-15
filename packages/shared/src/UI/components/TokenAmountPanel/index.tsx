@@ -85,8 +85,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
-            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`, 'u'),
-            RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`, 'u'), // d.ddd...d
+            RE_MATCH_FRACTION_AMOUNT: new RegExp(String.raw`^\.\d{0,${token?.decimals}}$`, 'u'),
+            RE_MATCH_WHOLE_AMOUNT: new RegExp(String.raw`^\d*\.?\d{0,${token?.decimals}}$`, 'u'), // d.ddd...d
         }),
         [token?.decimals],
     )
@@ -134,7 +134,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 justifyContent: 'center',
                                 alignItems: 'flex-end',
                             }}>
-                            {!disableBalance ?
+                            {disableBalance ? null : (
                                 <Typography
                                     className={classes.balance}
                                     color="textSecondary"
@@ -150,7 +150,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                         />
                                     </Trans>
                                 </Typography>
-                            :   null}
+                            )}
                             <Box
                                 sx={{
                                     display: 'flex',
@@ -193,7 +193,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 alignItems: 'flex-end',
                                 marginTop: 2,
                             }}>
-                            {!disableBalance ?
+                            {disableBalance ? null : (
                                 <Typography
                                     className={classes.balance}
                                     color="textSecondary"
@@ -201,7 +201,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     component="span">
                                     -
                                 </Typography>
-                            :   null}
+                            )}
                             <SelectTokenChip token={token} {...props.SelectTokenChip} />
                         </Box>,
                 ...props.InputProps,

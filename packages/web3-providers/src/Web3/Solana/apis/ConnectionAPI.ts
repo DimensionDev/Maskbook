@@ -51,12 +51,12 @@ export class SolanaConnectionAPI
     private Transfer
     private ConnectionOptions
 
-    getAccount(initial?: SolanaConnectionOptions | undefined): Promise<string> {
+    getAccount(initial?: SolanaConnectionOptions): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.account)
     }
 
-    getChainId(initial?: SolanaConnectionOptions | undefined): Promise<ChainId> {
+    getChainId(initial?: SolanaConnectionOptions): Promise<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.chainId)
     }
@@ -135,10 +135,7 @@ export class SolanaConnectionAPI
         const { data: assets } = await SolanaFungible.getAssets(options.account, {
             chainId: options.chainId,
         })
-        const records = assets.reduce<Record<string, string>>(
-            (map, asset) => ({ ...map, [asset.address]: asset.balance }),
-            {},
-        )
+        const records = Object.fromEntries(assets.map((asset) => [asset.address, asset.balance]))
         const nativeTokenAddress = getNativeTokenAddress(options.chainId)
         if (listOfAddress.includes(nativeTokenAddress)) {
             records[nativeTokenAddress] = await this.getNativeTokenBalance(options)
@@ -146,7 +143,7 @@ export class SolanaConnectionAPI
         // In the token picker UI, if balance of a token is undefined, then it
         // will keep loading. We set it 0 to walk around that, since fetching is done.
         listOfAddress.forEach((address) => {
-            records[address] = records[address] ?? '0'
+            records[address] ??= '0'
         })
         return records
     }
@@ -167,7 +164,7 @@ export class SolanaConnectionAPI
         return this.Web3.getConnection(initial).getTransaction(id)
     }
 
-    async getTransactionReceipt(): Promise<TransactionReceipt | null> {
+    async getTransactionReceipt(): Promise<null> {
         return null
     }
 

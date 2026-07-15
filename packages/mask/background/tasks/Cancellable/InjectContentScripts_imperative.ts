@@ -5,7 +5,7 @@ import { Sniffings } from '@masknet/shared-base'
 import { matchesAnySiteAdaptor } from '../../../shared/site-adaptors/definitions.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (typeof browser.scripting?.registerContentScripts === 'undefined') InjectContentScript(signal)
+if (browser.scripting?.registerContentScripts === undefined) InjectContentScript(signal)
 
 async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): Promise<void> {
     if (!arg.url.startsWith('http')) return

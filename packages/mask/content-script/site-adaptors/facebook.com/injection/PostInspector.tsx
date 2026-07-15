@@ -18,9 +18,9 @@ function zipPostLinkPreview(node: DOMProxy) {
     const parentEle = node.current.parentElement
     if (!parentEle) return
     const img =
-        parentEle.querySelector('a[href*="maskbook.io"] img') ??
-        parentEle.querySelector('a[href*="mask.io"] img') ??
-        parentEle.querySelector('a[href*="maskbook.com"] img')
+        parentEle.querySelector(':scope a[href*="maskbook.io"] img') ??
+        parentEle.querySelector(':scope a[href*="mask.io"] img') ??
+        parentEle.querySelector(':scope a[href*="maskbook.com"] img')
     const parent = img?.closest('span')
     if (img && parent) {
         parent.style.display = 'none'
@@ -30,9 +30,9 @@ function zipEncryptedPostContent(node: DOMProxy) {
     if (node.destroyed) return
     const parent = node.current.parentElement
     // It's image based encryption, skip zip post.
-    if (!node.current.innerText.includes('\uD83C\uDFBC')) return
+    if (!node.current.textContent.includes('\u{1F3BC}')) return
     // Style modification for repost
-    if (!node.current.className.includes('userContent') && node.current.innerText.length > 0) {
+    if (!node.current.className.includes('userContent') && node.current.textContent.length > 0) {
         node.after.setAttribute(
             'style',
             `border: 1px solid #ebedf0;
@@ -57,10 +57,10 @@ padding: 0 10px;`,
 export function clickSeeMore(node: HTMLElement | undefined | null) {
     if (!node) return
     const more = node.querySelector<HTMLDivElement | HTMLSpanElement>(
-        '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
+        ':scope [role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
     )
 
-    if (more && node.querySelector('img[alt="\uD83C\uDFBC"]')) {
+    if (more && node.querySelector('img[alt="\u{1F3BC}"]')) {
         const trap = (e: Event) => {
             e.preventDefault()
         }

@@ -6,7 +6,7 @@ export function getHeaders(overrides?: Record<string, string>) {
         authorization: `Bearer ${Flags.twitter_token}`,
         'x-csrf-token': getCookie('ct0'),
         'x-twitter-auth-type': 'OAuth2Session',
-        'x-twitter-client-language': navigator.language ? navigator.language : 'en',
+        'x-twitter-client-language': navigator.language || 'en',
         ...overrides,
     }
 }

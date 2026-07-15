@@ -18,10 +18,10 @@ export class MetaMaskLike implements Middleware<ConnectionContext> {
             case EthereumMethodType.personal_sign:
                 context.requestArguments = {
                     ...context.requestArguments,
-                    params: [...context.requestArguments.params.slice(0, 2), ''],
+                    params: context.requestArguments.params.slice(0, 2).concat(''),
                 }
                 break
-            case EthereumMethodType.eth_sendTransaction:
+            case EthereumMethodType.eth_sendTransaction: {
                 const currentChainId = await this.Web3.getChainId()
                 if (currentChainId !== context.chainId) {
                     await this.Web3.connect({
@@ -29,6 +29,7 @@ export class MetaMaskLike implements Middleware<ConnectionContext> {
                     })
                 }
                 break
+            }
             default:
                 break
         }

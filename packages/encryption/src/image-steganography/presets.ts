@@ -45,7 +45,7 @@ const Preset2021: Preset = {
     description: 'the preset we used for payload V38 with v1 algorithm',
     width: 1200,
     height: 681,
-    mask: new URL('../../assets/mask-v2.png', import.meta.url).toString(),
+    mask: new URL('../../assets/mask-v2.png', import.meta.url).href,
     options: libV1AlgrDefaults,
 }
 
@@ -86,7 +86,7 @@ const dimensionPreset: readonly Preset[] = [
         description: 'legacy post',
         width: 1024,
         height: 1240,
-        mask: new URL('../../assets/mask-v1.png', import.meta.url).toString(),
+        mask: new URL('../../assets/mask-v1.png', import.meta.url).href,
         options: libV1AlgrDefaults,
     },
     {
@@ -94,7 +94,7 @@ const dimensionPreset: readonly Preset[] = [
         description: 'legacy post',
         width: 1200,
         height: 680,
-        mask: new URL('../../assets/mask-transparent.png', import.meta.url).toString(),
+        mask: new URL('../../assets/mask-transparent.png', import.meta.url).href,
         options: {
             ...libV1AlgrDefaults,
             cropEdgePixels: true,
@@ -105,7 +105,7 @@ const dimensionPreset: readonly Preset[] = [
         description: 'used in event election 2020',
         width: 1000,
         height: 558,
-        mask: new URL('../../assets/mask-transparent.png', import.meta.url).toString(),
+        mask: new URL('../../assets/mask-transparent.png', import.meta.url).href,
         options: libV1AlgrDefaults,
     },
     {
@@ -113,7 +113,7 @@ const dimensionPreset: readonly Preset[] = [
         description: 'old NFT',
         width: 1000,
         height: 560,
-        mask: new URL('../../assets/mask-v4.png', import.meta.url).toString(),
+        mask: new URL('../../assets/mask-v4.png', import.meta.url).href,
         options: libV1AlgrDefaults,
     },
 ]

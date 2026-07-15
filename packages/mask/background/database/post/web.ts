@@ -82,10 +82,9 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     const store = transaction.objectStore('post')
                     for await (const cursor of store) {
                         const v3Record: PostDB_HistoryTypes.Version3PostRecord = cursor.value as any
-                        const newType: PostDB_HistoryTypes.Version4PostRecord['recipients'] = new Map()
-                        for (const [key, value] of Object.entries(v3Record.recipients)) {
-                            newType.set(key, value)
-                        }
+                        const newType: PostDB_HistoryTypes.Version4PostRecord['recipients'] = new Map(
+                            Object.entries(v3Record.recipients),
+                        )
                         const v4Record: PostDB_HistoryTypes.Version4PostRecord = {
                             ...v3Record,
                             recipients: newType,
@@ -188,17 +187,16 @@ export async function updatePostDB(
     }
     const currentRecord = (await queryPostDB(updateRecord.identifier, t)) || emptyRecord
     const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
-    const nextRecipients: LatestPostDBRecord['recipients'] =
-        mode === 'override' ? postToDB(nextRecord).recipients : postToDB(currentRecord).recipients
-    if (mode === 'append') {
-        if (updateRecord.recipients) {
-            if (typeof updateRecord.recipients === 'object' && typeof nextRecipients === 'object') {
-                for (const [id, date] of updateRecord.recipients) {
-                    nextRecipients.set(id.toText(), { reason: [{ at: date, type: 'direct' }] })
-                }
-            } else {
-                nextRecord.recipients = 'everyone'
+    const nextRecipients: LatestPostDBRecord['recipients'] = postToDB(
+        mode === 'override' ? nextRecord : currentRecord,
+    ).recipients
+    if (mode === 'append' && updateRecord.recipients) {
+        if (typeof updateRecord.recipients === 'object' && typeof nextRecipients === 'object') {
+            for (const [id, date] of updateRecord.recipients) {
+                nextRecipients.set(id.toText(), { reason: [{ at: date, type: 'direct' }] })
             }
+        } else {
+            nextRecord.recipients = 'everyone'
         }
     }
     const nextRecordInDBType = postToDB(nextRecord)

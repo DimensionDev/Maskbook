@@ -35,8 +35,8 @@ export class EVMToken extends TokenState<ChainId, SchemaType> {
         const storedTokensMap = this.storage.credibleFungibleTokenList.value
         const storedTokens = storedTokensMap[chainId]
         if (storedTokens) return storedTokens
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         return queryClient.fetchQuery({
-            // eslint-disable-next-line @tanstack/query/exhaustive-deps
             queryKey: ['evm', 'get-fungible-token-list', chainId],
             queryFn: async () => {
                 const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId)

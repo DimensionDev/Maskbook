@@ -35,7 +35,7 @@ class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
                 number: blockNumber + index,
                 baseFeePerGas: nth(result.baseFeePerGas, index) ?? 0n,
                 gasUsedRatio: nth(result.gasUsedRatio, index) || 0,
-                priorityFeePerGas: nth(result.reward, index) ?? Array.from<bigint>({ length: 3 }).fill(0n),
+                priorityFeePerGas: nth(result.reward, index) ?? [0n, 0n, 0n],
             })
             index += 1
         }
@@ -124,8 +124,9 @@ class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
     }
 
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        if (EVMChainResolver.isFeatureSupported(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
-        else return this.getGasOptionsForPriorEIP1559(chainId)
+        return EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ?
+                this.getGasOptionsForEIP1559(chainId)
+            :   this.getGasOptionsForPriorEIP1559(chainId)
     }
 }
 export const GasOptions = new GasOptionAPI()

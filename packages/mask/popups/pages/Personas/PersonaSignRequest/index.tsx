@@ -28,7 +28,7 @@ export const Component = memo(function PersonaSignRequest() {
         const selectedPersona = personas.find((x) => x.identifier.toText() === identifierInURL) ?? personas[0]
 
         if (!messageInURL || !requestIDInURL || !selectedPersona) {
-            Promise.resolve().then(() => navigate(PopupRoutes.Wallet, { replace: true }))
+            Promise.try(() => navigate(PopupRoutes.Wallet, { replace: true }))
         } else {
             setSelected(selectedPersona)
             setMessage(messageInURL)

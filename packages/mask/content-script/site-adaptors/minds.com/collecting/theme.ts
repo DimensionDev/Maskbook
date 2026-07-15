@@ -35,6 +35,6 @@ function resolveThemeSettingsInner(
 export const ThemeSettingsProviderMinds: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
     async start(cancel) {
-        resolveThemeSettingsInner(this.recognized, cancel)
+        resolveThemeSettingsInner(ThemeSettingsProviderMinds.recognized, cancel)
     },
 }

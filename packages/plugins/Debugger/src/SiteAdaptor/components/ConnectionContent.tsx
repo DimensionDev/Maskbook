@@ -208,7 +208,7 @@ export function ConnectionContent() {
             await EVMWeb3.switchChain?.(chainId)
         } catch (error: unknown) {
             // eslint-disable-next-line no-alert
-            if (error instanceof Error) alert(error.message)
+            if (Error.isError(error)) alert(error.message)
         } finally {
             if ((await EVMWeb3.getChainId()) === chainId) {
                 // eslint-disable-next-line no-alert
@@ -228,7 +228,7 @@ export function ConnectionContent() {
             })
         } catch (error: unknown) {
             // eslint-disable-next-line no-alert
-            if (error instanceof Error) alert(error.message)
+            if (Error.isError(error)) alert(error.message)
         }
     }, [])
 
@@ -239,7 +239,7 @@ export function ConnectionContent() {
             })
         } catch (error: unknown) {
             // eslint-disable-next-line no-alert
-            if (error instanceof Error) alert(error.message)
+            if (Error.isError(error)) alert(error.message)
         }
     }, [])
 

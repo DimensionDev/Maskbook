@@ -204,7 +204,7 @@ export class AAVEProtocol implements SavingsProtocol {
                 },
             )
             return new BigNumber(gasEstimate || 0)
-        } catch (error) {
+        } catch {
             return ZERO
         }
     }

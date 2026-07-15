@@ -6,6 +6,7 @@ import { UserContext } from '../../shared-ui/index.js'
 export function useGoogleDriveFiles(client: GoogleDriveClient) {
     const { user } = UserContext.useContainer()
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const query = useInfiniteQuery({
         enabled: !!user.googleAccount,
         queryKey: ['google-drive', 'files', user.googleAccount],
@@ -18,7 +19,7 @@ export function useGoogleDriveFiles(client: GoogleDriveClient) {
         },
         getNextPageParam: () => '',
         select(data) {
-            return compact(data.pages.flatMap((x) => x))
+            return compact(data.pages.flat())
         },
     })
     return query

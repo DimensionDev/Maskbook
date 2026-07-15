@@ -77,9 +77,6 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                 const metadata = action.metadata
                 const asset = metadata ? `${formatValue(metadata)} ${metadata.symbol}` : ''
                 const isFromOwner = isSameAddress(owner.address, action.from)
-                // Always treat as send action
-                const from = isFromOwner ? action.from! : action.to!
-                const to = isFromOwner ? action.to! : action.from!
 
                 if (action.tag === Tag.Transaction && action.type === Type.Approval) {
                     return (
@@ -96,7 +93,10 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                     )
                 }
 
-                const type = action ? action.type : feed.type
+                // Always treat as send action
+                const from = isFromOwner ? action.from! : action.to!
+                const to = isFromOwner ? action.to! : action.from!
+                const type = (action || feed).type
                 const context = contextMap[type] || 'send'
                 const value = formatValue(metadata)
                 const symbol = metadata!.symbol

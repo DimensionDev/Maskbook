@@ -160,7 +160,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const { classes: mdClasses } = useMarkdownStyles()
 
     // You might see a collectible action on a note minting feed
-    const action = feed.actions.filter((x) => x.tag === Tag.Social)[0]
+    const action = feed.actions.find((x) => x.tag === Tag.Social)!
     const metadata = 'target' in action.metadata! ? action.metadata.target : action.metadata
 
     const type = action.type
@@ -169,7 +169,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const firstURL = action.related_urls?.[0]
     const transformUri = useCallback(
         (uri: string) => {
-            if (action.platform === 'Planet' && firstURL && !uri.match(/^https?:\/\//u))
+            if (action.platform === 'Planet' && firstURL && !/^https?:\/\//u.test(uri))
                 return `https://thumbor.rss3.dev/unsafe/${firstURL}/${uri}`
             return resolveIPFS_URL(uri)!
         },

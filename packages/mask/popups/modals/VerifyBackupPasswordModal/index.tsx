@@ -44,10 +44,11 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                     value={password}
                     error={!passwordMatched}
                     helperText={
-                        !passwordValid ? <Trans>Please enter backup password to export persona private key.</Trans>
-                        : !passwordMatched ?
-                            <Trans>Incorrect backup password.</Trans>
-                        :   null
+                        passwordValid ?
+                            passwordMatched ?
+                                null
+                            :   <Trans>Incorrect backup password.</Trans>
+                        :   <Trans>Please enter backup password to export persona private key.</Trans>
                     }
                 />
             </Box>

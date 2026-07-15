@@ -28,9 +28,9 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
         data: personaInfo,
         isFetching: checkingConnected,
         refetch,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
     } = useQuery({
         enabled: !!persona?.publicKeyAsHex,
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['query-persona-info', persona?.publicKeyAsHex],
         queryFn: persona ? async () => Services.Identity.queryPersona(persona) : skipToken,
     })
@@ -51,7 +51,7 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
         let reloaded = false
         const handler = () => {
             // twitter will redirect to home page after login
-            if (!(!reloaded && location.pathname === '/home')) return
+            if (reloaded || location.pathname !== '/home') return
             reloaded = true
             location.reload()
         }
@@ -63,11 +63,7 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
     const step = useMemo(() => {
         if (!setupGuide.status) {
             // Should show pin extension when not set
-            if (!lastPinExtensionSetting) {
-                return SetupGuideStep.PinExtension
-            } else {
-                return SetupGuideStep.Close
-            }
+            return lastPinExtensionSetting ? SetupGuideStep.Close : SetupGuideStep.PinExtension
         }
         const nextStep = isFirstConnection ? SetupGuideStep.CheckConnection : SetupGuideStep.CheckConnection
         if (checkingConnected || loadingCurrentUserId) return nextStep

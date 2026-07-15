@@ -14,7 +14,7 @@ export const createWalletDBAccess = createDBAccess(() => {
             }
             function v8_v9() {
                 const pluginStore = 'PluginStore'
-                db.objectStoreNames.contains(pluginStore as any) && db.deleteObjectStore(pluginStore as any)
+                if (db.objectStoreNames.contains(pluginStore as any)) db.deleteObjectStore(pluginStore as any)
                 db.createObjectStore('UnconfirmedRequestChunk', {
                     keyPath: path<keyof UnconfirmedRequestChunkRecordInDatabase>('record_id'),
                 })

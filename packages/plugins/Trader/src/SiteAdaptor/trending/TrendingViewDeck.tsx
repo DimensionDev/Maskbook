@@ -230,7 +230,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const collectionList = useTokenMenuCollectionList(resultList, result)
 
-    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity, undefined, undefined)
+    const { data: socialAccounts } = useSocialAccountsBySettings(identity, undefined, undefined)
 
     const openRss3Profile = useCallback((_address: string) => {
         CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })

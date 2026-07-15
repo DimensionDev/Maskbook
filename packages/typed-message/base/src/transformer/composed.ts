@@ -22,7 +22,7 @@ export function composeTransformers(): ComposedTransformers {
 
     let composedTransformer: Transformer | undefined
     function composed(message: TypedMessage, context: TransformationContext) {
-        return [...transformers].sort((a, b) => b[1] - a[1]).reduce((p, [c]) => c(p, context), message)
+        return [...transformers].toSorted((a, b) => b[1] - a[1]).reduce((p, [c]) => c(p, context), message)
     }
 
     const subscription = {

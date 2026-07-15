@@ -56,7 +56,7 @@ export function useDirtyDetectionDependency(status: boolean, pending: boolean, d
 
     useEffect(() => {
         setDependencies((deps) => {
-            if (!deps.some((dep) => dep.id === dependencyId)) {
+            if (deps.every((dep) => dep.id !== dependencyId)) {
                 return [...deps, { id: dependencyId, status, pending }]
             }
             const dep = deps.find((dep) => dep.id === dependencyId)

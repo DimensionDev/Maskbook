@@ -145,7 +145,7 @@ function hasAddresses(message: TypedMessage): boolean {
             EXIST_EVM_ADDRESS_RE.test(content) ||
             EXIST_SOLANA_ADDRESS_RE.test(content) ||
             EXIST_TORN_ADDRESS_RE.test(content)
-        result = result || hasAddresses
+        result ||= hasAddresses
     }
     visitor(message)
     forEachTypedMessageChild(message, visitor)

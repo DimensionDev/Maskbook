@@ -106,15 +106,13 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
             if (snackbarKeyRef.current !== undefined)
-                Sniffings.is_popup_page ?
-                    closePopupSnackbar(snackbarKeyRef.current)
-                :   closeSnackbar(snackbarKeyRef.current)
+                if (Sniffings.is_popup_page) closePopupSnackbar(snackbarKeyRef.current)
+                else closeSnackbar(snackbarKeyRef.current)
             snackbarKeyRef.current =
                 Sniffings.is_popup_page ? showPopupSnackbar(title, options) : showSnackbar(title, options)
             return () => {
-                Sniffings.is_popup_page ?
-                    closePopupSnackbar(snackbarKeyRef.current)
-                :   closeSnackbar(snackbarKeyRef.current)
+                if (Sniffings.is_popup_page) closePopupSnackbar(snackbarKeyRef.current)
+                else closeSnackbar(snackbarKeyRef.current)
             }
         },
         [showSnackbar, closeSnackbar, showPopupSnackbar, closePopupSnackbar],
@@ -141,25 +139,24 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
             :   formattedTitle
         showSingletonSnackbar(title, {
             ...resolveSnackbarConfig(progress.status),
-            ...{
-                message: (
-                    <Link
-                        sx={{ wordBreak: 'break-word' }}
-                        className={classes.link}
-                        color="inherit"
-                        href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
-                        tabIndex={-1}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        {format(
-                            progress.status === TransactionStatusType.SUCCEED ?
-                                (computed.snackbar?.successfulDescription ?? computed.description)
-                            :   computed.description,
-                        )}{' '}
-                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                    </Link>
-                ),
-            },
+
+            message: (
+                <Link
+                    sx={{ wordBreak: 'break-word' }}
+                    className={classes.link}
+                    color="inherit"
+                    href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
+                    tabIndex={-1}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    {format(
+                        progress.status === TransactionStatusType.SUCCEED ?
+                            (computed.snackbar?.successfulDescription ?? computed.description)
+                        :   computed.description,
+                    )}{' '}
+                    <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                </Link>
+            ),
         })
     }, [progress, format])
 
@@ -175,10 +172,9 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
         }
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
         const title = format(computed?.title)
+        if (!title) return
         const message =
             errorInfo.error.isRecognized ? errorInfo.error.message : format(computed?.snackbar?.failedDescription)
-
-        if (!title) return
 
         if (
             title === 'Claim your Airdrop' &&

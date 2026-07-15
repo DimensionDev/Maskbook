@@ -28,8 +28,8 @@ export class CheckedError<T> extends Error {
     ): (...args: P) => Result<T, CheckedError<E>> | Promise<Result<T, CheckedError<E>>> {
         return (...args: P) => {
             const r = f(...args)
-            if ('then' in r) return r.then((r) => r.mapErr(CheckedError.mapErr(o)))
-            return r.mapErr(CheckedError.mapErr(o))
+            if ('then' in r) return r.then((r) => r.mapErr(this.mapErr(o)))
+            return r.mapErr(this.mapErr(o))
         }
     }
     toErr() {

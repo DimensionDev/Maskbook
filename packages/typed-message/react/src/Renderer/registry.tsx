@@ -40,7 +40,7 @@ export function createTypedMessageRenderRegistry() {
         }
     }
     function getTypedMessageRender<T extends TypedMessage>(type: T['type']): RenderConfig<T> | undefined {
-        return Array.from(registry.get(type)?.values() || []).sort((a, b) => b.priority - a.priority)[0]
+        return Array.from(registry.get(type)?.values() || []).toSorted((a, b) => b.priority - a.priority)[0]
     }
     const subscription = {
         // generate a new function to make sure old !== new

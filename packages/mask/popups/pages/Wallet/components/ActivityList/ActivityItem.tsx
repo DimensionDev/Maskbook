@@ -342,7 +342,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     const recipient = useMemo(() => {
         if (domain) return <Trans>to {formatDomainName(domain)}</Trans>
         if (toAddress) return <Trans>to {formatEthereumAddress(toAddress, 4)}</Trans>
-        return undefined
+        return
     }, [domain])
 
     return (

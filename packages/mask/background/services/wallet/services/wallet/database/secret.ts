@@ -12,7 +12,7 @@ function deriveAES(key: CryptoKey, iv: ArrayBuffer) {
         {
             name: 'PBKDF2',
             salt: iv,
-            iterations: 100000,
+            iterations: 100_000,
             hash: 'SHA-256',
         },
         key,
@@ -61,7 +61,7 @@ export async function hasSecret() {
  */
 export async function hasSafeSecret() {
     const secret = await getSecret()
-    return !!secret && (typeof secret.isUnsafe === 'undefined' || secret.isUnsafe === false)
+    return !!secret && (secret.isUnsafe === undefined || !secret.isUnsafe)
 }
 
 /**

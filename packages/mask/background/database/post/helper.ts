@@ -10,7 +10,9 @@ export async function savePostKeyToDB(
     const jwk = await CryptoKeyToJsonWebKey(key)
     await withPostDBTransaction(async (t) => {
         const post = await queryPostDB(id, t)
-        if (!post) {
+        if (post) {
+            await updatePostDB({ ...post, postCryptoKey: jwk }, 'override', t)
+        } else {
             await createPostDB(
                 {
                     identifier: id,
@@ -20,8 +22,6 @@ export async function savePostKeyToDB(
                 },
                 t,
             )
-        } else {
-            await updatePostDB({ ...post, postCryptoKey: jwk }, 'override', t)
         }
     })
 }

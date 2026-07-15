@@ -81,9 +81,8 @@ const definition: Plugin.SiteAdaptor.Definition = {
                             icon={icon}
                             iconFilterColor={iconFilterColor}
                             onClick={() => {
-                                EntryComponentProps.onClick ?
-                                    EntryComponentProps.onClick?.(clickHandler)
-                                :   clickHandler()
+                                if (EntryComponentProps.onClick) EntryComponentProps.onClick(clickHandler)
+                                else clickHandler()
                                 Telemetry.captureEvent(EventType.Access, EventID.EntryAppFileOpen)
                             }}
                         />

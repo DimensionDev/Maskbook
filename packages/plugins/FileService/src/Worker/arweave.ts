@@ -50,7 +50,7 @@ class ArweaveAgent implements ProviderAgent {
             createdAt: new Date().toISOString(),
         })
         const text = await fetchText(LANDING_PAGE)
-        const replaced = text.replace('__METADATA__', encodedMetadata)
+        const replaced = text.replace('__METADATA__', () => encodedMetadata)
         const data = encodeText(replaced)
         const transaction = await this.makePayload(data, 'text/html')
         await this.instance.transactions.post(transaction)

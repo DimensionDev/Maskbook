@@ -13,14 +13,12 @@ export interface AESJsonWebKey extends JsonWebKey, Nominal<'AES'> {}
 export function isAESJsonWebKey(x: unknown): x is AESJsonWebKey {
     if (typeof x !== 'object' || x === null) return false
     const { alg, k, key_ops, kty } = x as JsonWebKey
-    if (!alg || !k || !Array.isArray(key_ops) || kty !== 'oct') return false
-    return true
+    return !(!alg || !k) && Array.isArray(key_ops) && kty === 'oct'
 }
 export function isEC_JsonWebKey(o: unknown): o is EC_JsonWebKey {
     if (typeof o !== 'object' || o === null) return false
     const { crv, key_ops, kty, x, y } = o as JsonWebKey
-    if (!crv || !Array.isArray(key_ops) || !kty || !x || !y) return false
-    return true
+    return !(!crv || !Array.isArray(key_ops) || !kty || !x || !y)
 }
 export function isEC_Public_JsonWebKey(o: unknown): o is EC_Public_JsonWebKey {
     if (!isEC_JsonWebKey(o)) return false
@@ -30,6 +28,7 @@ export function isEC_Private_JsonWebKey(o: unknown): o is EC_Private_JsonWebKey 
     if (!isEC_JsonWebKey(o)) return false
     return !!o.d
 }
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 declare class Nominal<T> {
     /** Ghost property, don't use it! */
     private __brand: T

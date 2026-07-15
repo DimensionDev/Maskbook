@@ -15,7 +15,8 @@ export function encodeTypedMessageToDocument(tm: SerializableTypedMessages): Uin
     return encode(doc) as Uint8Array<ArrayBuffer>
 }
 function encodeTypedMessage(tm: SerializableTypedMessages): any[] {
-    if (tm.serializable === false) {
+    if (!tm.serializable) {
+        // eslint-disable-next-line unicorn/no-useless-recursion
         if (tm.alt) return encodeTypedMessage(tm.alt)
         throw new TypeError(`${HEAD}TypedMessage ${tm.type} does not support serialization.`)
     }
@@ -36,7 +37,7 @@ function encodeMeta(tm: TypedMessage) {
     const record: Record<string, any> = { __proto__: null }
     for (const [key, val] of tm.meta) {
         if (typeof key !== 'string') continue
-        if (typeof val === 'undefined') continue
+        if (val === undefined) continue
         try {
             record[key] = collectValue(val)
         } catch (err) {
@@ -47,11 +48,11 @@ function encodeMeta(tm: TypedMessage) {
 }
 function collectValue(val: any): any {
     try {
-        const type = typeof val
         if (val === undefined) {
             console.warn(`${HEAD}undefined converted to null.`)
             return null
         }
+        const type = typeof val
         if (type === 'number' || val === null || type === 'boolean' || type === 'string') return val
 
         if (type === 'bigint' || type === 'function' || type === 'symbol') {
@@ -71,9 +72,8 @@ function collectValue(val: any): any {
         }
 
         const result: Record<string, any> = {}
-        for (const key of Object.keys(val)) {
-            const v = val[key]
-            result[key] = collectValue(v)
+        for (const [key, value] of Object.entries(val)) {
+            result[key] = collectValue(value)
         }
         return result
     } catch (err) {

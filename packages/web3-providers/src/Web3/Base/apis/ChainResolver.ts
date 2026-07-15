@@ -66,7 +66,7 @@ export class ChainResolver<ChainId, SchemaType, NetworkType> {
         const descriptor = this.getDescriptor(chainId)
         if (!descriptor) return false
         const { type, network } = descriptor
-        return type === NetworkType.Solana ? network === 'mainnet-beta' : network === 'mainnet'
+        return network === (type === NetworkType.Solana ? 'mainnet-beta' : 'mainnet')
     }
     isFeatureSupported(chainId: ChainId, feature: string) {
         return !!this.getDescriptor(chainId)?.features?.includes(feature)

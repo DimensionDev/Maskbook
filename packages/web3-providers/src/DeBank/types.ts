@@ -167,6 +167,7 @@ export interface HistoryRecord {
         [key in string]: ProjectItem
     }
     token_dict: {
+        // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
         [key in string | 'eth']: TokenItem
     }
 }

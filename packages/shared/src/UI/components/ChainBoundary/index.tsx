@@ -79,8 +79,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         switchText,
         forceShowingWrongNetworkButton = false,
         disableConnectWallet = false,
-        predicate = (actualPluginID, actualChainId) =>
-            actualPluginID === expectedPluginID && actualChainId === expectedChainId,
+        predicate,
     } = props
     const { classes } = useStyles(undefined, { props })
 
@@ -105,7 +104,10 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const expectedChainAllowed = expectedUtils.chainResolver.isValidChainId(expectedChainId, expectedAllowTestnet)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
-    const isMatched = predicate(actualPluginID, actualChainId)
+    const isMatched = (
+        predicate ||
+        ((actualPluginID, actualChainId) => actualPluginID === expectedPluginID && actualChainId === expectedChainId)
+    )(actualPluginID, actualChainId)
 
     const connectWalletLabel =
         actualNetworkPluginID ?
@@ -120,7 +122,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
             return 'complete'
         } catch (error) {
-            if (error instanceof Error) {
+            if (Error.isError(error)) {
                 if (error.message === 'Chain currently not supported' || error.message === 'Invalid Request') {
                     showSnackbar(<Trans>Switch Network</Trans>, {
                         processing: false,
@@ -162,7 +164,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     if (!chainIdValid && !expectedChainAllowed && forceShowingWrongNetworkButton)
         return renderBox(
-            !props.hiddenConnectButton ?
+            props.hiddenConnectButton ? null : (
                 <ActionButton
                     fullWidth
                     startIcon={<Icons.Wallet size={18} />}
@@ -170,13 +172,13 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     {...props.ActionButtonPromiseProps}>
                     <Trans>Wrong Network</Trans>
                 </ActionButton>
-            :   null,
+            ),
         )
 
     // No wallet connected
     if (!account && !disableConnectWallet)
         return renderBox(
-            !props.hiddenConnectButton ?
+            props.hiddenConnectButton ? null : (
                 <ActionButton
                     className={classes.connectWallet}
                     fullWidth
@@ -185,7 +187,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     {...props.ActionButtonPromiseProps}>
                     {connectWalletLabel}
                 </ActionButton>
-            :   null,
+            ),
         )
 
     // Network mismatch

@@ -36,7 +36,7 @@ interface PluginEntryRenderProps extends RefAttributes<PluginEntryRenderRef> {
 export const PluginEntryRender = memo((props: PluginEntryRenderProps) => {
     const [trackPluginRef] = useSetPluginEntryRenderRef(props.ref)
     const pluginField = usePluginTransField()
-    const plugins = [...useActivatedPluginsSiteAdaptor('any')].sort((plugin) => {
+    const plugins = useActivatedPluginsSiteAdaptor('any').toSorted((plugin) => {
         // TODO: support priority order
         if (plugin.ID === PluginID.RedPacket) return -1
         return 1
@@ -45,9 +45,9 @@ export const PluginEntryRender = memo((props: PluginEntryRenderProps) => {
     const result = plugins.map((plugin) =>
         Result.wrap(() => {
             const entry = plugin.CompositionDialogEntry
+            if (!entry) return null
             const unstable = plugin.enableRequirement.target !== 'stable'
             const ID = plugin.ID
-            if (!entry) return null
             const extra: ExtraPluginProps = { unstable, id: ID, readonly: props.readonly }
             if (lackPermission?.has(ID)) {
                 return (

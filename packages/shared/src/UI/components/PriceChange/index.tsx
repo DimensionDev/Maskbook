@@ -24,7 +24,6 @@ export interface PriceChangeProps extends BoxProps {
 
 export const PriceChange = memo(function PriceChange({ change, loading, ...rest }: PriceChangeProps) {
     const { classes, theme, cx } = useStyles()
-    const colors = theme.palette.maskColor
     if (loading)
         return (
             <Box {...rest} className={cx(classes.container, rest.className)}>
@@ -32,6 +31,7 @@ export const PriceChange = memo(function PriceChange({ change, loading, ...rest 
             </Box>
         )
 
+    const colors = theme.palette.maskColor
     const color = change > 0 ? colors.success : colors.danger
 
     return (

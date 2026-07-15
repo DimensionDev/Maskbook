@@ -26,8 +26,8 @@ export function RedPacketInjection() {
     return (
         <CompositionTypeContext value={compositionType}>
             {pluginID === NetworkPluginID.PLUGIN_SOLANA ?
-                <SolRedPacketMainDialog open={open} onClose={handleClose} />
-            :   <RedPacketMainDialog open={open} onClose={handleClose} />}
+                <SolRedPacketMainDialog onClose={handleClose} />
+            :   <RedPacketMainDialog onClose={handleClose} />}
         </CompositionTypeContext>
     )
 }

@@ -15,11 +15,11 @@ const packages = [
 export async function changesetRelease() {
     const tsgo = awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm exec tsgo -b ./tsconfig.npm.json`)
     const buildTask: Array<Promise<any>> = packages.map((path) =>
-        readFile(new URL('./package.json', path), 'utf-8')
+        readFile(new URL('./package.json', path), 'utf8')
             .then(JSON.parse)
             .then((json) => {
                 if (json.scripts?.build) return shell.cwd(ROOT_PATH)`pnpm -C ${fileURLToPath(path)} run build`
-                return undefined
+                return
             }),
     )
     await Promise.all(buildTask.concat(tsgo))

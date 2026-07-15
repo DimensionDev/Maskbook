@@ -42,7 +42,7 @@ export const Component = memo(function FriendsDetail() {
                           }>
                         | undefined,
                 ) => {
-                    if (!oldData) return undefined
+                    if (!oldData) return
                     return {
                         ...oldData,
 

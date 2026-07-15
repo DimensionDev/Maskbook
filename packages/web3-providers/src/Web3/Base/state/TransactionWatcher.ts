@@ -47,7 +47,7 @@ class Checker<ChainId extends PropertyKey, Transaction> {
                         await this.options.onNotify(chainId, id, transaction, status)
                         break
                     }
-                } catch (error) {
+                } catch {
                     console.warn('Failed to check transaction status.')
                 }
             }

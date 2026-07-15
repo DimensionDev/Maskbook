@@ -42,7 +42,7 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
     }>(
         urlcat(COINGECKO_URL_BASE, `/coins/${coinId}/market_chart`, {
             vs_currency: currencyId,
-            days: days === Days.MAX ? 11430 : days,
+            days: days === Days.MAX ? 11_430 : days,
         }),
         {
             cache: 'default',

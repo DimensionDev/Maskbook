@@ -7,9 +7,11 @@ export function useProposal(id: string) {
         queryFn: () => PluginSnapshotRPC.fetchProposal(id),
         select(proposal) {
             proposal.status =
-                !proposal.isStart ? 'Pending'
-                : proposal.isEnd ? 'Closed'
-                : 'Active'
+                proposal.isStart ?
+                    proposal.isEnd ?
+                        'Closed'
+                    :   'Active'
+                :   'Pending'
             return proposal
         },
     }).data

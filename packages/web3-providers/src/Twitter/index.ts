@@ -5,25 +5,23 @@ import {
     getComputedUserSettings,
     getDefaultUserSettings,
     getSettings,
-    getUserByScreenName,
     getUserSettings,
-    staleUserByScreenName,
     updateProfileImage,
     uploadMedia,
 } from './apis/index.js'
 
-export class Twitter {
-    static getAvatarId(avatarURL?: string) {
+export const Twitter = {
+    getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
         const match = new URL(avatarURL).pathname.match(/^\/profile_images\/(\d+)/u)
         return match ? match[1] : ''
-    }
+    },
 
-    static getSettings() {
+    getSettings() {
         return getSettings()
-    }
+    },
 
-    static async getUserSettings() {
+    async getUserSettings() {
         const defaults = getDefaultUserSettings()
         const computed = getComputedUserSettings()
 
@@ -41,33 +39,18 @@ export class Twitter {
                 ...computed,
             }
         }
-    }
+    },
 
-    static async uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResponse> {
+    async uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResponse> {
         return uploadMedia(image)
-    }
+    },
 
-    static async updateProfileImage(
-        screenName: string,
-        media_id_str: string,
-    ): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
+    async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
         return updateProfileImage(screenName, media_id_str)
-    }
+    },
 
-    /**
-     * @deprecated User FireflyTwitter instead
-     */
-    static async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-        if (!screenName) return null
-        return getUserByScreenName(screenName)
-    }
-
-    static async staleUserByScreenName(screenName: string): Promise<void> {
-        await staleUserByScreenName(screenName)
-    }
-
-    static async createTweet(tweet: TwitterBaseAPI.Tweet) {
+    async createTweet(tweet: TwitterBaseAPI.Tweet) {
         const response = await createTweet(tweet)
         return response.rest_id
-    }
+    },
 }

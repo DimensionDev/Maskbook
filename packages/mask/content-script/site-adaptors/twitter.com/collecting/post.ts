@@ -122,7 +122,7 @@ function registerPostCollectorInner(
             const tweetNode = getTweetNode(node)
             const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) {
-                return `keccak256:${keccak256(toHex(node.innerText))}`
+                return `keccak256:${keccak256(toHex(node.textContent))}`
             }
             const parentTweetId = parentTweetNode ? getPostId(parentTweetNode) : ''
             const tweetId = getPostId(tweetNode)
@@ -141,7 +141,7 @@ function registerPostCollectorInner(
 export const PostProviderTwitter: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(cancel) {
-        registerPostCollectorInner(this.posts, cancel)
+        registerPostCollectorInner(PostProviderTwitter.posts, cancel)
     },
 }
 
@@ -193,7 +193,7 @@ function collectPostInfo(
 
     // decode stenographic image
     // don't add await on this
-    const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
+    const images = untilElementAvailable(postsImageSelector(tweetNode), 10_000)
         .then(() => postImagesParser(tweetNode))
         .then((images) => {
             for (const image of images) {
@@ -217,7 +217,10 @@ function collectLinks(
 ) {
     if (!tweetNode) return
     if (cancel?.aborted) return
-    const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
+    const links = tweetNode
+        .querySelectorAll('a')
+        .values()
+        .filter((x) => x.rel)
     const seen = new Set([
         'https://help.twitter.com/using-twitter/how-to-tweet#source-labels',
         'https://help.x.com/en/using-x/how-to-post#source-labels',

@@ -287,7 +287,7 @@ export function CreateSolRedPacket() {
                     The minimum amount for each share is {formatBalance(1, token.decimals)} {token.symbol}
                 </Trans>
             )
-        return undefined
+        return
     })()
 
     const gasValidationMessage = (() => {
@@ -326,9 +326,9 @@ export function CreateSolRedPacket() {
                             <RadioIndicator checked={!isRandom} size={20} />
                         </div>
                         <Typography
-                            color={!isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                            color={isRandom ? theme.palette.maskColor.second : theme.palette.maskColor.main}
                             fontSize={16}
-                            fontWeight={!isRandom ? 700 : 400}>
+                            fontWeight={isRandom ? 400 : 700}>
                             <Trans>Equal Amount</Trans>
                         </Typography>
                     </label>
@@ -377,6 +377,7 @@ export function CreateSolRedPacket() {
                     </Box>
                     <FungibleTokenInput
                         className={classes.input}
+                        // eslint-disable-next-line unicorn/prefer-minimal-ternary
                         label={isRandom ? _(msg`Total amount`) : _(msg`Amount Each`)}
                         token={token}
                         placeholder="0"
@@ -393,7 +394,7 @@ export function CreateSolRedPacket() {
                         maxAmountShares={isRandom || !shares ? 1 : shares}
                     />
                 </div>
-                {!isZero(defaultGasFee) ?
+                {isZero(defaultGasFee) ? null : (
                     <Box className={classes.field} component="div" style={{ justifyContent: 'space-between' }}>
                         <Typography className={classes.label}>
                             <Trans>Gas Fee</Trans>
@@ -411,7 +412,7 @@ export function CreateSolRedPacket() {
                             </Typography>
                         </Box>
                     </Box>
-                :   null}
+                )}
                 <Box className={classes.field}>
                     <Typography className={classes.label}>
                         <Trans>Choose a Cover</Trans>

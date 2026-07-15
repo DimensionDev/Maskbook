@@ -22,10 +22,6 @@ export function useHandleSolanaCreateOrSelect({ senderName, onClose }: Options) 
             claimRequirements?: FireflyRedPacketAPI.StrategyPayload[],
             publicKey?: string,
         ) => {
-            if (senderName) {
-                payload.sender.name === senderName
-            }
-
             openComposition(SolanaRedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
                 payloadImage,
                 claimRequirements,

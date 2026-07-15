@@ -56,7 +56,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         [onChange],
     )
 
-    const [menu, openMenu] = useGasOptionsMenu(gasLimit, !disable ? handleChange : noop)
+    const [menu, openMenu] = useGasOptionsMenu(gasLimit, disable ? noop : handleChange)
 
     const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -134,7 +134,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     formatter={formatCurrency}
                 />
             </Typography>
-            {!disable ?
+            {disable ? null : (
                 <Button
                     variant="text"
                     sx={{
@@ -152,7 +152,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     </Typography>
                     <Icons.Candle size={12} />
                 </Button>
-            :   null}
+            )}
             {menu}
         </Box>
     )

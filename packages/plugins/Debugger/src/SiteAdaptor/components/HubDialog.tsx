@@ -12,7 +12,7 @@ export function HubDialog() {
         <InjectedDialog title="Hub" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
                 <EVMWeb3ContextProvider chainId={ChainId.Mainnet}>
-                    <HubContent onClose={closeDialog} />
+                    <HubContent />
                 </EVMWeb3ContextProvider>
             </DialogContent>
         </InjectedDialog>

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-this-outside-of-class */
 import { $, $safe } from '../intrinsic.js'
 import { PatchDescriptor, PatchDescriptor_NonNull, contentFileFromBufferSource } from '../utils.js'
 import { __FileList } from './DataTransfer.js'

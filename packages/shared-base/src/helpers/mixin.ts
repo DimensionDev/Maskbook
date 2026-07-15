@@ -16,9 +16,9 @@ export function mixin<R>(...mixinTargets: any[]): R {
             {},
             {
                 get(_, key) {
-                    if (key === '__proto__') return undefined
+                    if (key === '__proto__') return
                     const mixinTarget = mixinTargets.find((x) => key in x)
-                    if (!mixinTarget) return undefined
+                    if (!mixinTarget) return
                     const mixinItem = mixinTarget[key]
                     if (typeof mixinItem === 'function')
                         // Note: not use .bind here because it will override the arguments for bound function.

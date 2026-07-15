@@ -45,7 +45,7 @@ export async function getWallets() {
     const wallets = await getWalletRecords()
 
     return wallets
-        .sort((a, z) => {
+        .toSorted((a, z) => {
             if (a.updatedAt > z.updatedAt) return -1
             if (a.updatedAt < z.updatedAt) return 1
             if (a.createdAt > z.createdAt) return -1

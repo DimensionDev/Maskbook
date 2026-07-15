@@ -23,9 +23,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                     if (symbol === keyword || symbol.replaceAll(/\s/gu, '') === keyword) return true
 
                     const name = data.name
-                    if (name === keyword) return true
-
-                    return false
+                    return name === keyword
                 },
             },
             {
@@ -74,8 +72,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                             if (x.type !== SearchResultType.FungibleToken) return
                             return {
                                 ...x,
-                                __symbol: x.symbol?.replace(/\s/gu, ''),
-                                __name: x.name?.replace(/\s/gu, ''),
+                                __symbol: x.symbol?.replaceAll(/\s/gu, ''),
+                                __name: x.name?.replaceAll(/\s/gu, ''),
                             }
                         }),
                     )

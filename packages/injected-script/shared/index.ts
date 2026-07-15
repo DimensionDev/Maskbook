@@ -87,6 +87,7 @@ export function decodeEvent(data: unknown): EventItemBeforeSerialization {
         return value
     })
     // Do not throw new Error cause it requires a global lookup.
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     if (!isEventItemBeforeSerialization(result)) throw null
     return result
 }

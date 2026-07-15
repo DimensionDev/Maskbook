@@ -103,10 +103,10 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         (chainId: Web3Helper.ChainIdAll | undefined) => {
             setParams(
                 (p) => {
-                    if (!chainId) {
-                        p.delete(PENDING_CHAIN_ID)
-                    } else {
+                    if (chainId) {
                         p.set(PENDING_CHAIN_ID, chainId.toString())
+                    } else {
+                        p.delete(PENDING_CHAIN_ID)
                     }
                     return p.toString()
                 },

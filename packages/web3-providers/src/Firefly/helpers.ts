@@ -121,8 +121,7 @@ function formatContent(cast: FireflyFarcasterAPI.Cast): Social.Post['metadata'][
     const attachments = embedUrls.filter((x) => {
         if (!x.url) return false
         const type = resolveEmbedMediaType(x.url, x.type)
-        if (!type) return false
-        return true
+        return !!type
     })
 
     if (attachments.length) {
@@ -263,12 +262,18 @@ const emailRegExp = new RegExp(EMAIL_REGEX, 'gu')
 const BLOCKED_URLS = ['imagedelivery.net']
 
 export function getEmbedUrls(content: string, embedUrls: string[]) {
-    const matchedUrls = fixUrls([...content.replaceAll(emailRegExp, '').matchAll(URL_REGEX)].map((x) => x[0]))
+    const matchedUrls = fixUrls(
+        content
+            .replaceAll(emailRegExp, '')
+            .matchAll(URL_REGEX)
+            .map((x) => x[0])
+            .toArray(),
+    )
     const oembedUrls = fixUrls([...matchedUrls, ...embedUrls])
-    return oembedUrls.filter((x) => !BLOCKED_URLS.some((y) => x.includes(y)))
+    return oembedUrls.filter((x) => BLOCKED_URLS.every((y) => !x.includes(y)))
 }
 export function fixUrlProtocol(url: string) {
-    if (url.match(/^https?:\/\//u)) {
+    if (/^https?:\/\//u.test(url)) {
         return url
     }
     return `https://${url}`

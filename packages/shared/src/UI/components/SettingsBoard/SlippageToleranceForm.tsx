@@ -60,7 +60,7 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
 
     useEffect(() => {
         onChange?.({
-            customSlippageTolerance: !error ? tolerance.toString() : '0',
+            customSlippageTolerance: error ? '0' : tolerance.toString(),
         })
     }, [tolerance, error])
 

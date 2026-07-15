@@ -24,7 +24,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             padding: '16px',
             lineHeight: 0,
             // padding bottom space for assets tabs
-            paddingBottom: !disabled ? 34 : 16,
+            paddingBottom: disabled ? 16 : 34,
             background:
                 isDark ?
                     theme.palette.maskColor.modalTitleBg
@@ -183,13 +183,13 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     {networkName}
                                 </Typography>
                             </TextOverflowTooltip>
-                            {!disabled ?
+                            {disabled ? null : (
                                 <Icons.ArrowDrop
                                     size={20}
                                     className={classes.arrow}
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
-                            :   null}
+                            )}
                         </Box>
                         {isPending ? null : (
                             <ProgressiveText className={classes.connected} loading={isPending} skeletonWidth={50}>
@@ -221,9 +221,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            {!disableCopy ?
+                            {disableCopy ? null : (
                                 <CopyButton text={wallet.address} className={classes.icon} size={12} />
-                            :   null}
+                            )}
                             {addressLink ?
                                 <Link
                                     className={classes.icon}
@@ -250,17 +250,15 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                             }}
                         />
                     :   null}
-                    {!disabled ?
-                        <Icons.ArrowDrop className={classes.arrow} />
-                    :   null}
+                    {disabled ? null : <Icons.ArrowDrop className={classes.arrow} />}
                 </div>
             </div>
-            {!disabled ?
+            {disabled ? null : (
                 <>
                     <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
                     <ActionGroup chainId={chainId} mt={2} />
                 </>
-            :   null}
+            )}
         </Box>
     )
 })

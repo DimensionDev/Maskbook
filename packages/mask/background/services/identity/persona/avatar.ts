@@ -18,7 +18,7 @@ export async function getPersonaAvatar(
 }
 
 export async function getPersonaAvatarLastUpdateTime(identifier?: PersonaIdentifier | null) {
-    if (!identifier) return undefined
+    if (!identifier) return
     return queryAvatarLastUpdateTime(identifier)
 }
 

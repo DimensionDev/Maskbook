@@ -133,9 +133,9 @@ export const Component = memo(function AddDeriveWallet() {
 
     const tableData = useMemo(() => {
         return walletChunks.map((derivedWallet) => {
-            const added = !!wallets.find(currySameAddress(derivedWallet.address))
+            const added = wallets.some(currySameAddress(derivedWallet.address))
             const pathIndex = derivedWallet.index
-            const selected = pathIndexes.find((item) => item === pathIndex) !== undefined
+            const selected = pathIndexes.includes(pathIndex)
             return {
                 added,
                 selected,

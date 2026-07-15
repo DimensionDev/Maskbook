@@ -79,7 +79,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend,
                           }>
                         | undefined,
                 ) => {
-                    if (!oldData) return undefined
+                    if (!oldData) return
                     return {
                         ...oldData,
                         pages:

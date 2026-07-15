@@ -7,7 +7,7 @@ import type { Ethereum } from '../public-api/mask-wallet.js'
 class EthereumEventEmitter extends EventTarget implements Ethereum.MaskEthereumEventEmitter {
     #mapping = new WeakMap()
     #getMappedFunction(listener: unknown) {
-        if (typeof listener !== 'function') return undefined
+        if (typeof listener !== 'function') return
         if (!this.#mapping.has(listener)) {
             const mapped = (event: CustomEvent<unknown>) => {
                 listener(event.detail)
@@ -32,7 +32,7 @@ class EthereumEventEmitter extends EventTarget implements Ethereum.MaskEthereumE
 }
 class MaskProvider extends EthereumEventEmitter implements Ethereum.ProviderObject {
     async request(param: any): Promise<any> {
-        const stack = new Error().stack?.replace(/^Error\n/u, '')
+        const stack = new Error('_').stack?.replace(/^Error\n/u, '')
         const result = await contentScript.eth_request(param)
         if (result.e) {
             result.e.stack = `MaskEthereumProviderRpcError: ${result.e.message}\n${stack}`

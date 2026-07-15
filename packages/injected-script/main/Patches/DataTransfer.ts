@@ -1,3 +1,5 @@
+/* eslint-disable prefer-rest-params */
+
 import { $, $safe, $unsafe } from '../intrinsic.js'
 import { PatchDescriptor_NonNull } from '../utils.js'
 
@@ -80,7 +82,7 @@ export class __DataTransfer extends $unsafe.NewObject implements DataTransfer {
         return object.#types
     }
     // #endregion
-    clearData(format?: string | undefined): void {
+    clearData(format?: string): void {
         const object = $unsafe.unwrapXRayVision(this)
         if (!(#items in object)) return $.apply($.DataTransferPrototypeDesc.clearData.value!, this, arguments)
         return
@@ -161,13 +163,8 @@ export class __DataTransferItem extends $unsafe.NewObject implements DataTransfe
     constructor(item: string | File, type: string) {
         super()
         this.#type = $.StringToLowerCase(type)
-        if (typeof item === 'string') {
-            this.#kind = 'string'
-            this.#data = item
-        } else {
-            this.#kind = 'file'
-            this.#data = item
-        }
+        this.#kind = typeof item === 'string' ? 'string' : 'file'
+        this.#data = item
         $.setPrototypeOf(this, $.DataTransferItemPrototype)
     }
     #data: string | File

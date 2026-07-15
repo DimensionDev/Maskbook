@@ -21,14 +21,14 @@ function toLensAccount(profile: Web3BioProfile): FireflyConfigAPI.LensAccount {
     }
 }
 
-export class FireflyConfig {
-    static async getLensByTwitterId(twitterHandle?: string): Promise<FireflyConfigAPI.LensAccount[]> {
+export const FireflyConfig = {
+    async getLensByTwitterId(twitterHandle?: string): Promise<FireflyConfigAPI.LensAccount[]> {
         if (!twitterHandle) return EMPTY_LIST
         const profiles = await Web3Bio.getAllLens(twitterHandle)
         return profiles.map(toLensAccount)
-    }
+    },
 
-    static async getVerifiedHandles(address: string) {
+    async getVerifiedHandles(address: string) {
         const response = await fetchJSON<FireflyConfigAPI.VerifyTwitterResult>(
             urlcat(TWITTER_HANDLER_VERIFY_URL, '/v1/relation/handles', {
                 wallet: address.toLowerCase(),
@@ -37,20 +37,20 @@ export class FireflyConfig {
         )
         if ('error' in response) return []
         return response.data
-    }
+    },
 
     /**
      * @see https://www.notion.so/mask/v2-wallet-profile-f1cc2b3cd9dc49119cf493ae8a59dde9?pvs=4
      */
-    static async getUnionProfile(
+    async getUnionProfile(
         profileOptions: FireflyConfigAPI.UnionProfileOptions,
     ): Promise<FireflyConfigAPI.UnionProfile> {
         const url = urlcat(FIREFLY_BASE_URL, 'v2/wallet/profile', profileOptions)
         const response = await fetchJSON<FireflyConfigAPI.UnionProfileResponse>(url)
         return response.data
-    }
+    },
 
-    static async uploadToS3(file: File) {
+    async uploadToS3(file: File) {
         const url = urlcat(FIREFLY_BASE_URL, '/v2/farcaster-hub/uploadMediaToken')
         const res = await fetchJSON<FireflyConfigAPI.UploadMediaTokenResponse>(url)
         const mediaToken = res.data
@@ -80,5 +80,5 @@ export class FireflyConfig {
         await task.done()
 
         return `https://${mediaToken.cdnHost}/${params.Key}`
-    }
+    },
 }

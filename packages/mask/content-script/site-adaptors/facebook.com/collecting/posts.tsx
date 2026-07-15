@@ -12,12 +12,12 @@ import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/util
 import { collectNodeText } from '../../../utils/index.js'
 import { startWatch } from '../../../utils/startWatch.js'
 
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('[role=article] [id]  span[dir="auto"]')
+const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(':scope [role=article] [id]  span[dir="auto"]')
 
 export const PostProviderFacebook: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
-        collectPostsFacebookInner(this.posts, signal)
+        collectPostsFacebookInner(PostProviderFacebook.posts, signal)
     },
 }
 function collectPostsFacebookInner(
@@ -46,13 +46,13 @@ function collectPostsFacebookInner(
             // ? inject after comments
             const commentsSelector = root
                 .clone()
-                .querySelectorAll('[role=article] [id] span[dir="auto"]')
+                .querySelectorAll(':scope [role=article] [id] span[dir="auto"]')
                 .closest<HTMLElement>(3)
 
             // ? inject comment text field
             const commentBoxSelector = root
                 .clone()
-                .querySelectorAll<HTMLFormElement>('[role="article"] [role="presentation"]:not(img)')
+                .querySelectorAll<HTMLFormElement>(':scope [role="article"] [role="presentation"]:not(img)')
                 .map((x) => x.parentElement)
 
             const { subscriptions, ...info } = createRefsForCreatePostContext()
@@ -82,7 +82,7 @@ function collectPostsFacebookInner(
                             '\n' +
                                 (href.includes('l.facebook.com') ?
                                     new URL(href).searchParams.get('u')
-                                :   node.innerText),
+                                :   node.textContent),
                         )
                     },
                 })
@@ -97,12 +97,10 @@ function collectPostsFacebookInner(
 
             function collectLinks() {
                 if (metadata.destroyed) return
-                const linkElements = metadata.current.querySelectorAll<HTMLLinkElement>('[role=article] [id] a')
-                const links = [...Array.from(linkElements).filter((x) => x.href)]
-
+                const linkElements = metadata.current.querySelectorAll<HTMLLinkElement>(':scope [role=article] [id] a')
                 const seen = new Set<string>()
-                for (const x of links) {
-                    if (seen.has(x.href)) continue
+                for (const x of linkElements) {
+                    if (seen.has(x.href) || !x.href) continue
                     seen.add(x.href)
                     info.postMetadataMentionedLinks.set(x, x.href)
                 }
@@ -128,14 +126,14 @@ function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
     if (node.destroyed) return
     const dom = [(node.current.closest('[role="article"]') ?? node.current.parentElement)!.querySelectorAll('a')[1]]
     // side effect: save to service
-    return getProfileIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
+    return getProfileIdentifierAtFacebook(dom, allowCollectInfo)
 }
 
 function getPostID(node: DOMProxy, root: HTMLElement): null | string {
     if (node.destroyed) return null
     // In single url
     // cspell:disable-next-line
-    if (location.href.match(/plugins.+(perma.+story_fbid%3D|posts%2F)?/u)) {
+    if (/plugins.+(perma.+story_fbid%3D|posts%2F)?/u.test(location.href)) {
         const url = new URL(location.href)
         return url.searchParams.get('id')
     } else {
@@ -147,7 +145,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
                     (postTimeNode1
                         .getAttribute('href')
                         ?.match(/story_fbid=(\d+)/gu)?.[0]
-                        .split('=')[1] ?? null)
+                        .split('=', 2)[1] ?? null)
                 :   null
 
             if (postIdMode1) return postIdMode1
@@ -158,7 +156,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
                     (postTimeNode2
                         .getAttribute('href')
                         ?.match(/posts\/(\w+)/gu)?.[0]
-                        .split('/')[1] ?? null)
+                        .split('/', 2)[1] ?? null)
                 :   null
             if (postIdMode2 && /^-?\w+$/u.test(postIdMode2)) return postIdMode2
         } catch {
@@ -167,9 +165,12 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
 
         const parent = node.current.parentElement
         if (!parent) return null
-        const idNode = Array.from(parent.querySelectorAll('[id]'))
+        const idNode = parent
+            .querySelectorAll('[id]')
+            .values()
             .map((x) => x.id.split(';'))
             .filter((x) => x.length > 1)
+            .toArray()
         if (!idNode.length) return null
         return idNode[0][2]
     }

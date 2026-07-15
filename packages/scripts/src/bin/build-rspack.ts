@@ -8,7 +8,7 @@ import { extensionArgsParser } from './args.ts'
 
 await promisify(codegen)()
 // \\-- is used for debug
-if (process.argv[2] === '--' || process.argv[2] === '\\--') {
+if (process.argv[2] === '--' || process.argv[2] === String.raw`\--`) {
     const child = spawn(process.argv[3], process.argv.slice(4), {
         stdio: 'inherit',
         shell: true,

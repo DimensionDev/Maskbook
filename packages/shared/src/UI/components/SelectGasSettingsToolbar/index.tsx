@@ -200,7 +200,7 @@ export function SelectGasSettingsToolbarUI({
 
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
-            .reverse()
+            .toReversed()
             .filter(([type]) => type !== GasOptionType.CUSTOM)
             .map(([type, { suggestedMaxFeePerGas, estimatedBaseFee }]) => {
                 const gas = formatGas(isZero(suggestedMaxFeePerGas) ? estimatedBaseFee : suggestedMaxFeePerGas)

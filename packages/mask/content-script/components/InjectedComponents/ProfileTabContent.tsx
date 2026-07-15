@@ -43,7 +43,7 @@ import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useComponentWillReceiveUpdate } from 'foxact/use-component-will-receive-update'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import {
     useCurrentVisitingIdentity,
@@ -158,7 +158,7 @@ function Content(props: ProfileTabContentProps) {
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
-        data: socialAccounts = EMPTY_LIST,
+        data: socialAccounts,
         isPending: loadingSocialAccounts,
         error: loadSocialAccounts,
         refetch: retrySocialAccounts,
@@ -185,7 +185,7 @@ function Content(props: ProfileTabContentProps) {
                 .filter((x) => {
                     return x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 })
-                .sort((a, z) => a.priority - z.priority)
+                .toSorted((a, z) => a.priority - z.priority)
         })
 
         return displayProfileTabs.map((x) => ({
@@ -217,7 +217,7 @@ function Content(props: ProfileTabContentProps) {
         onChange(undefined, first(tabs)?.id)
     })
 
-    useUpdateEffect(() => {
+    useComponentWillReceiveUpdate(() => {
         onChange(undefined, first(tabs)?.id)
         setSelectedAddress(undefined)
     }, [currentVisitingUserId])
@@ -250,15 +250,15 @@ function Content(props: ProfileTabContentProps) {
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
-            data.type && setProfileTabType(data.type)
+            if (data.type) setProfileTabType(data.type)
         })
     }, [currentVisitingUserId])
 
     useEffect(() => {
         const listener = () => setMenuOpen(false)
-        window.addEventListener('scroll', listener, false)
+        window.addEventListener('scroll', listener, { capture: false })
         // <ClickAwayListener /> not work, when it is out of shadow root.
-        window.addEventListener('click', listener, false)
+        window.addEventListener('click', listener, { capture: false })
 
         return () => {
             window.removeEventListener('scroll', listener, false)

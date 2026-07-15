@@ -258,11 +258,11 @@ export function TokenRedPacketConfirm() {
                     <Typography className={classes.fieldName}>
                         <Trans>Claim Conditions</Trans>
                     </Typography>
-                    {!needHoldingTokens ?
+                    {needHoldingTokens ? null : (
                         <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
                             <Trans>Available to Everyone</Trans>
                         </Typography>
-                    :   null}
+                    )}
                 </div>
                 <div className={classes.conditions}>
                     {needHoldingTokens ?

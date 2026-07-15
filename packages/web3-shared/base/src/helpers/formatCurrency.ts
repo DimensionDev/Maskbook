@@ -25,9 +25,9 @@ const BOUNDARIES = {
 }
 
 const DIGITAL_CURRENCY_SYMBOLS = {
-    BTC: '\u20BF',
-    ETH: '\u039E',
-    SOL: '\u25CE',
+    BTC: '\u{20BF}',
+    ETH: '\u{39E}',
+    SOL: '\u{25CE}',
     BNB: 'BNB',
     POLYGON: 'MATIC',
     WETH: 'WETH',
@@ -43,7 +43,7 @@ type Keys = UpperCaseKeys | Lowercase<UpperCaseKeys>
 const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbol: string, isDigitalCurrency: boolean) => {
     if (!isDigitalCurrency) return parts
     const [currencyPart, ...rest] = parts
-    if (symbol) return [...rest, { ...currencyPart, value: symbol }]
+    if (symbol) return rest.concat({ ...currencyPart, value: symbol })
     return parts
 }
 
@@ -128,7 +128,7 @@ export function formatCurrency(
         isDigitalCurrency,
     )
 
-    let result: string = ''
+    let result: string
 
     if (
         bn.lt(
@@ -197,7 +197,7 @@ export function formatCurrency(
                 switch (type) {
                     case 'currency':
                         return formatCurrencySymbol(symbol ?? value, i === 0)
-                    case 'fraction':
+                    case 'fraction': {
                         const dec = decimalValue
                             .toFormat(
                                 customDecimalConfig?.decimalExp ??
@@ -207,6 +207,7 @@ export function formatCurrency(
                         return onlyRemainTwoOrZeroDecimal ?
                                 dec.replace(/(\d\d)(0+)$/u, '$1')
                             :   dec.replace(/(0+)$/u, '')
+                    }
                     case 'integer':
                         // When there is a carry
                         if (bn.gt('0.99') && onlyRemainTwoOrZeroDecimal) return '1'

@@ -26,8 +26,8 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
         const result = links
             .filter(Boolean)
             .map((x) => ({ nickname: x!.ariaLabel || x!.textContent?.trim(), id: getUserID(x!.href), dom: x }))
-            .filter((x) => x.id)
-        const { dom, id, nickname } = result[0] || {}
+            .find((x) => x.id)
+        const { dom, id, nickname } = result || {}
         const identifier = ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(null)
         if (identifier) {
             const currentProfile = getCurrentIdentifier()
@@ -41,7 +41,9 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
                         Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
-            } catch {}
+            } catch {
+                // ignore
+            }
             try {
                 const image = dom!.querySelector('img')!
                 avatar = image.src
@@ -51,7 +53,9 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
                         Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
-            } catch {}
+            } catch {
+                // ignore
+            }
             try {
                 const image = dom!.querySelector('image')!
                 avatar = image.getAttribute('xlink:href')
@@ -61,7 +65,9 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
                         Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
-            } catch {}
+            } catch {
+                // ignore
+            }
             return {
                 identifier,
                 avatar: avatar ?? undefined,
@@ -86,7 +92,7 @@ export function getUserID(x: string) {
         const search = new URLSearchParams(url.search)
         return search.get('id')
     }
-    const val = url.pathname.replace(/^\//u, '').replace(/\/$/u, '').split('/')[0]
+    const val = url.pathname.replace(/^\//u, '').replace(/\/$/u, '').split('/', 1)[0]
     if (val === 'me') return null
     return val
 }

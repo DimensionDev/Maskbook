@@ -9,7 +9,7 @@ function __create__(url: string) {
         const editor = ErrorEditor.from(null, response)
         if (editor.presence) throw editor.error
         if ('result' in response) return response.result
-        return undefined
+        return
     })
 }
 

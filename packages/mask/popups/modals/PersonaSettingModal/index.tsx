@@ -117,9 +117,9 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                     className={classes.arrow}
                     onClick={() => {
                         modalNavigate(
-                            !user.backupPassword ?
-                                PopupModalRoutes.SetBackupPassword
-                            :   PopupModalRoutes.verifyBackupPassword,
+                            user.backupPassword ?
+                                PopupModalRoutes.verifyBackupPassword
+                            :   PopupModalRoutes.SetBackupPassword,
                             { to: PopupRoutes.ExportPrivateKey },
                         )
                     }}

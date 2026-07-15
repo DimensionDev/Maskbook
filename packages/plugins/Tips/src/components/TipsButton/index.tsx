@@ -61,7 +61,7 @@ export function TipsButton(props: Props) {
 
     const accountsByIdentity = useTipsAccounts(identity)
     const accounts = useMemo(() => {
-        return [...receivingAccounts, ...accountsByIdentity].sort((a, z) => {
+        return [...receivingAccounts, ...accountsByIdentity].toSorted((a, z) => {
             if (a.pluginID === z.pluginID) return 0
             return a.pluginID === pluginID ? -1 : 1
         })

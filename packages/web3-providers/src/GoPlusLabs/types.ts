@@ -1,4 +1,4 @@
-import type { JSX, ReactNode } from 'react'
+import type { JSX } from 'react'
 import type { SecurityAPI } from '../entry-types.js'
 import type { MessageDescriptor } from '@lingui/core'
 
@@ -32,26 +32,6 @@ export interface GoPlusTokenSpender {
     tokenInfo: {
         address: string
         symbol: string
-        name: string
-    }
-}
-
-export interface GoPlusNFTInfo {
-    chain_id: string
-    nft_name: string
-    nft_symbol: string
-    nft_address: string
-    approved_list: GoPlusSpender[]
-}
-
-export interface NFTSpenderInfo {
-    isMaskDapp: boolean
-    address: string
-    amount: string
-    name: string
-    logo: ReactNode | undefined
-    contract: {
-        address: string
         name: string
     }
 }

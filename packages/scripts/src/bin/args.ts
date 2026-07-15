@@ -57,7 +57,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         .hide('version')
         .strict().argv
 
-    if (opts instanceof Promise) throw new TypeError()
+    if (opts instanceof Promise) throw new TypeError('yargs parsing returned a Promise, expected synchronous parsing')
     const extensionOpts: BuildFlagsExtended = {
         manifestFile: opts.manifest ? parseManifest(opts.manifest) : undefined,
         mode,

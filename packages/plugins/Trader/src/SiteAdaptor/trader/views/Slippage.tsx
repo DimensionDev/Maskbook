@@ -124,7 +124,7 @@ export const Slippage = memo(function Slippage() {
                     </Typography>
                 </div>
                 <div
-                    className={cx(classes.box, !pendingIsAutoSlippage ? classes.active : null)}
+                    className={cx(classes.box, pendingIsAutoSlippage ? null : classes.active)}
                     onClick={async () => {
                         setPendingIsAutoSlippage(false)
                         inputRef.current?.focus()

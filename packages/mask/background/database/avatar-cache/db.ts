@@ -75,7 +75,7 @@ function scheduleAvatarMetaUpdate(id: IdentifierWithAvatar, meta: Partial<Avatar
     pendingUpdate.set(id, meta)
 
     if (pendingUpdateTimer) return
-    const timeout = browser.runtime.getManifest().version === '2' ? 60 * 1000 : 10 * 1000
+    const timeout = (browser.runtime.getManifest().version === '2' ? 60 : 10) * 1000
     // eslint-disable-next-line no-restricted-globals
     pendingUpdateTimer = setTimeout(async () => {
         try {
@@ -106,11 +106,10 @@ export async function queryAvatarOutdatedDB(
 ) {
     const outdated: IdentifierWithAvatar[] = []
     for await (const { value } of t.objectStore('metadata')) {
-        if (deadline > value[attribute]) {
-            const id = Identifier.from(value.identifier)
-            if (id.isNone()) continue
-            if (id.value instanceof ProfileIdentifier || id.value instanceof ECKeyIdentifier) outdated.push(id.value)
-        }
+        if (deadline <= value[attribute]) continue
+        const id = Identifier.from(value.identifier)
+        if (id.isNone()) continue
+        if (id.value instanceof ProfileIdentifier || id.value instanceof ECKeyIdentifier) outdated.push(id.value)
     }
     return outdated
 }

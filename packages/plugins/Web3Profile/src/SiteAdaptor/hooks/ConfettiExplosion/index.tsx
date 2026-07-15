@@ -96,11 +96,11 @@ export function useConfettiExplosion() {
                 // remove confetti and sequins that fall off the screen
                 // must be done in separate loops to avoid noticeable flickering
                 confetti.forEach((confetto, index) => {
-                    if (!(confetto.position.y >= canvasHeight)) return
+                    if (confetto.position.y < canvasHeight) return
                     confetti.splice(index, 1)
                 })
                 sequins.forEach((sequin, index) => {
-                    if (!(sequin.position.y >= canvasHeight)) return
+                    if (sequin.position.y < canvasHeight) return
                     sequins.splice(index, 1)
                 })
             }
@@ -156,11 +156,12 @@ export function useConfettiExplosion() {
             canvas.height = window.innerHeight
         }
 
-        window.addEventListener('resize', resize)
+        const o = new ResizeObserver(resize)
+        o.observe(document.body)
         renderConfetti()
         return () => {
+            o.disconnect()
             if (getRequestId()) window.cancelAnimationFrame(getRequestId()!)
-            window.removeEventListener('resize', resize)
         }
     }, [])
 

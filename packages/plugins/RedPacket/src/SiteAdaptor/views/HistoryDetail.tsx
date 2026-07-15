@@ -89,13 +89,8 @@ export function HistoryDetail() {
                 <div className={cx(classes.interactions, classes.status)}>
                     <LoadingStatus />
                 </div>
-            : !claims.length ?
-                <div className={cx(classes.interactions, classes.status)}>
-                    <EmptyStatus>
-                        <Trans>It remains unclaimed.</Trans>
-                    </EmptyStatus>
-                </div>
-            :   <div className={classes.interactions}>
+            : claims.length ?
+                <div className={classes.interactions}>
                     {claims.map((x) => {
                         return (
                             <ClaimRecord
@@ -105,6 +100,11 @@ export function HistoryDetail() {
                             />
                         )
                     })}
+                </div>
+            :   <div className={cx(classes.interactions, classes.status)}>
+                    <EmptyStatus>
+                        <Trans>It remains unclaimed.</Trans>
+                    </EmptyStatus>
                 </div>
             }
         </div>

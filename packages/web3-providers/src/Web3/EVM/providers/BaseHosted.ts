@@ -38,7 +38,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         return true
     }
     protected isSupportedChainId(chainId: number) {
-        return chainId > 0 && Number.isInteger(chainId)
+        return chainId > 0 && Number.isSafeInteger(chainId)
     }
     protected getDefaultAccount() {
         return ''
@@ -85,7 +85,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
     }
 
     async updateWallet(address: string, updates: Partial<UpdatableWallet>) {
-        const wallet = this.walletStorage.wallets.value.find((x) => isSameAddress(x.address, address))
+        const wallet = this.walletStorage.wallets.value.some((x) => isSameAddress(x.address, address))
         if (!wallet) throw new Error('Failed to find wallet.')
 
         const now = new Date()
@@ -116,7 +116,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         })
     }
 
-    async removeWallet(address: string, password?: string | undefined) {
+    async removeWallet(address: string, password?: string) {
         await this.walletStorage.wallets.setValue(
             this.walletStorage.wallets.value.filter((x) => !isSameAddress(x.address, address)),
         )
@@ -124,8 +124,8 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
 
     async updateWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
-        const result = wallets.filter(
-            (x) => !this.walletStorage.wallets.value.find((y) => isSameAddress(x.address, y.address)),
+        const result = wallets.filter((x) =>
+            this.walletStorage.wallets.value.every((y) => !isSameAddress(x.address, y.address)),
         )
         await this.walletStorage.wallets.setValue(
             uniqWith([...this.walletStorage.wallets.value, ...result], (a, b) => isSameAddress(a.address, b.address)),
@@ -135,7 +135,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
     async removeWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         await this.walletStorage.wallets.setValue(
-            this.walletStorage.wallets.value.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
+            this.walletStorage.wallets.value.filter((x) => wallets.every((y) => !isSameAddress(x.address, y.address))),
         )
     }
 

@@ -30,7 +30,7 @@ export async function appendShareTarget(
         },
         {
             async deriveAESKey(pub) {
-                const result = Array.from((await deriveAESByECDH(pub, postBy)).values())
+                const result = (await deriveAESByECDH(pub, postBy)).values().toArray()
                 if (result.length === 0) throw new Error('No key found')
                 return result[0]
             },

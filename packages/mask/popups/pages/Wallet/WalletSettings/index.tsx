@@ -51,7 +51,7 @@ export const Component = memo(function WalletSettings() {
         if (!wallet?.mnemonicId) return EMPTY_LIST
         return allWallets
             .filter((x) => x.mnemonicId === wallet.mnemonicId)
-            .sort((a, z) => {
+            .toSorted((a, z) => {
                 const msA = a.createdAt.getTime()
                 const msZ = z.createdAt.getTime()
                 if (msA !== msZ) return msA - msZ

@@ -30,9 +30,9 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={() => {
-                                    EntryComponentProps.onClick ?
+                                    if (EntryComponentProps.onClick)
                                         EntryComponentProps.onClick(clickHandler, NetworkPluginID.PLUGIN_EVM)
-                                    :   clickHandler()
+                                    else clickHandler()
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryAppApprovalOpen)
                                 }}
                             />

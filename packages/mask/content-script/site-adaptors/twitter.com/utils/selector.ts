@@ -25,7 +25,7 @@ export function nextTabListSelector() {
 export function searchProfileTabPageSelector() {
     return searchProfileTabListLastChildSelector()
         .closest(6)
-        .querySelector<E>('section > div[aria-label]:not([role="progressbar"])')
+        .querySelector<E>(':scope section > div[aria-label]:not([role="progressbar"])')
 }
 
 export function searchProfileTabLoseConnectionPageSelector() {
@@ -121,7 +121,7 @@ export function postEditorInTimelineSelector() {
 }
 
 export function isReplyPageSelector() {
-    return !!location.pathname.match(/^\/\w+\/status\/\d+$/u)
+    return !!/^\/\w+\/status\/\d+$/u.test(location.pathname)
 }
 export function postEditorDraftContentSelector() {
     if (location.pathname === '/compose/post') {
@@ -152,7 +152,7 @@ export function bioPageUserNickNameSelector() {
 }
 
 export function bioPageUserIDSelector(selector: () => LiveSelector<HTMLSpanElement, true>) {
-    return selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
+    return selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.textContent?.replace('@', ''))
 }
 
 export function floatingBioCardSelector() {
@@ -222,7 +222,7 @@ const avatar = /"profile_image_url_https":"(.*?)"/u
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
  */
 function p(regex: RegExp, index: number) {
-    return base.clone().map((x) => regexMatch(x.innerText, regex, index))
+    return base.clone().map((x) => regexMatch(x.textContent, regex, index))
 }
 export function selfInfoSelectors() {
     return {
@@ -281,7 +281,7 @@ export function searchProfileSaveSelector() {
 
 // #region avatar selector
 export function searchTwitterAvatarLinkSelector() {
-    return querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
+    return querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector(':scope div a')
 }
 
 export function searchTwitterAvatarSelector() {

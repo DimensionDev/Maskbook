@@ -91,7 +91,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
                             :   <Trans>Completed</Trans>}
                         </Typography>
                     </FileFrame>
-                    {!readingFile ?
+                    {readingFile ? null : (
                         <Box mt={4}>
                             <PasswordField
                                 fullWidth
@@ -106,7 +106,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
                                 autoFocus
                             />
                         </Box>
-                    :   null}
+                    )}
                 </>
             :   null}
         </Box>

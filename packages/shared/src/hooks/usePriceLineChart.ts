@@ -22,7 +22,7 @@ export function usePriceLineChart(
     const colors = theme.palette.maskColor
     const startValue = first(data)?.value ?? 0
     const endValue = last(data)?.value ?? 0
-    const defaultColor = endValue - startValue < 0 ? colors.danger : colors.success
+    const defaultColor = endValue < startValue ? colors.danger : colors.success
 
     const { color = defaultColor, sign = CurrencyType.USD } = opts
 
@@ -30,6 +30,6 @@ export function usePriceLineChart(
         color,
         tickFormat: `${sign},.2s`,
         formatTooltip: (value) =>
-            sign.match(/^[A-Za-z]{3,5}$/u) ? formatCurrency(value, sign) : `${sign} ${value.toPrecision(6)}`,
+            /^[A-Za-z]{3,5}$/u.test(sign) ? formatCurrency(value, sign) : `${sign} ${value.toPrecision(6)}`,
     })
 }

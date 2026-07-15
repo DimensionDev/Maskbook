@@ -126,18 +126,22 @@ export function PluginGuide({
 
             if (cr) {
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
+                // eslint-disable-next-line @eslint-react/set-state-in-effect -- This state mirrors the current DOM layout and is refreshed on resize.
                 setBottomAvailable(bottomAvailable)
-                if (!cr.width) {
-                    setClientRect({ ...cr.toJSON(), top: 30, left: 'calc(100vw - 300px)' })
-                } else {
+                if (cr.width) {
+                    // eslint-disable-next-line @eslint-react/set-state-in-effect -- This state mirrors the current DOM layout and is refreshed on resize.
                     setClientRect(cr)
+                } else {
+                    // eslint-disable-next-line @eslint-react/set-state-in-effect -- This fallback rect is derived from a zero-width DOM measurement.
+                    setClientRect({ ...cr.toJSON(), top: 30, left: 'calc(100vw - 300px)' })
                 }
             }
         }
         updateClientRect()
 
-        window.addEventListener('resize', updateClientRect)
-        return () => window.removeEventListener('resize', updateClientRect)
+        const o = new ResizeObserver(updateClientRect)
+        o.observe(document.body)
+        return () => o.disconnect()
     }, [childrenRef, finished])
 
     return (

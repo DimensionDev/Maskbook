@@ -2,7 +2,7 @@ import { injectPostReplacer } from '../../../site-adaptor-infra/defaults/inject/
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 
 function resolveContentNode(node: HTMLElement) {
-    return node.querySelector<HTMLDivElement>('[role=article] div[dir="auto"] > [id] > div > div > span')
+    return node.querySelector<HTMLDivElement>(':scope [role=article] div[dir="auto"] > [id] > div > div > span')
 }
 
 export function injectPostReplacerAtFacebook(signal: AbortSignal, current: PostInfo) {

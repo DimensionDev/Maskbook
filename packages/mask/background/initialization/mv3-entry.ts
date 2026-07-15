@@ -1,2 +1,3 @@
 import './entry.js'
-Error.stackTraceLimit = Number.POSITIVE_INFINITY
+// eslint-disable-next-line unicorn/no-nonstandard-builtin-properties
+Error.stackTraceLimit = Infinity

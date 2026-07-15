@@ -7,5 +7,5 @@ export async function cleanAvatarDB(anotherList: Set<IdentifierWithAvatar>) {
     for (const each of outdated) {
         anotherList.add(each)
     }
-    await deleteAvatarsDB(t, Array.from(anotherList.keys()))
+    await deleteAvatarsDB(t, [...anotherList])
 }

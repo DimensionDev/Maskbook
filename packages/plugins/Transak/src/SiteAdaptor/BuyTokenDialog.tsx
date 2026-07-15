@@ -88,7 +88,7 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                                 Transak is temporarily unavailable. Please try again later.
                             </Typography>
                         </Stack>
-                        // eslint-disable-next-line react/dom/no-missing-iframe-sandbox
+                        // eslint-disable-next-line @eslint-react/dom-no-missing-iframe-sandbox
                     :   <iframe className={classes.frame} src={widgetUrl} allow="camera;microphone;payment" />}
                 </DialogContent>
             </InjectedDialog>

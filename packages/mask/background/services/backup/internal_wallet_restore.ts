@@ -24,18 +24,17 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     if (backup.some((x) => !!x.mnemonic.isSome())) {
         const mnemonicWallets = backup.filter((x) => !!x.mnemonic.isSome())
         for (const wallet of mnemonicWallets) {
-            if (wallet.mnemonic.isSome()) {
-                const accounts = await getDerivableAccounts(wallet.mnemonic.value.words, 0, 10)
-                const mnemonicId = await createMnemonicId(wallet.mnemonic.value.words)
-                if (!mnemonicId) continue
+            if (!wallet.mnemonic.isSome()) continue
+            const accounts = await getDerivableAccounts(wallet.mnemonic.value.words, 0, 10)
+            const mnemonicId = await createMnemonicId(wallet.mnemonic.value.words)
+            if (!mnemonicId) continue
 
-                accounts.forEach((x) => {
-                    mnemonicWalletMap.set(formatEthereumAddress(x.address), {
-                        mnemonicId,
-                        derivationPath: x.derivationPath,
-                    })
+            accounts.forEach((x) => {
+                mnemonicWalletMap.set(formatEthereumAddress(x.address), {
+                    mnemonicId,
+                    derivationPath: x.derivationPath,
                 })
-            }
+            })
         }
     }
 
@@ -71,7 +70,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                 await recoverWalletFromMnemonicWords(
                     name,
                     wallet.mnemonic.value.words,
-                    index !== -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.value.path,
+                    index === -1 ? wallet.mnemonic.value.path : `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}`,
                 )
             }
         } catch (error) {

@@ -15,11 +15,11 @@ export const Component = memo(function InteractionPage() {
     const currentRequest = messages.at(messageIndex)
 
     const [pendingAction, setPendingAction] = useState<undefined | Promise<void>>()
-    pendingAction && use(pendingAction)
+    if (pendingAction) use(pendingAction)
 
     {
         const [prevLength, setPrev] = useState(messages.length)
-        prevLength !== messages.length && setPrev(messages.length)
+        if (prevLength !== messages.length) setPrev(messages.length)
         if (messages.length) {
             if (messageIndex < 0) setMessageIndex(0)
             // if a new message comes in, switch to that message.

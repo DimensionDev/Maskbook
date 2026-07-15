@@ -128,7 +128,7 @@ const methods: Methods = {
     async eth_sendTransaction(options) {
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, options.from)))
+        if (wallets.every((addr) => !isSameAddress(addr, options.from)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -141,7 +141,7 @@ const methods: Methods = {
     async eth_signTypedData_v4(requestedAddress, typedData) {
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+        if (wallets.every((addr) => !isSameAddress(addr, requestedAddress)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -255,7 +255,7 @@ const methods: Methods = {
                 verifySymbol(readRequired(providers.EVMContractReadonly.readContract(contract, 'symbol'))),
                 providers.EVMContractReadonly.readContract(contract, 'decimals').then(
                     (realDecimal) => {
-                        const realDecimals = Number.parseInt(String(realDecimal), 10)
+                        const realDecimals = Math.trunc(Number(realDecimal))
                         if (decimals && realDecimals !== decimals)
                             throw err.wallet_watchAsset.the_decimals_in_the_request_request_do_not_match_the_decimals_in_the_contract_decimals(
                                 { decimals: String(realDecimal), request: decimals + '' },
@@ -316,7 +316,7 @@ const methods: Methods = {
         // check challenge is 0x hex
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+        if (wallets.every((addr) => !isSameAddress(addr, requestedAddress)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -355,8 +355,11 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
 
         let paramsArr: unknown[]
         if (!params) paramsArr = []
-        else if (!Array.isArray(params)) paramsArr = [params]
-        else paramsArr = params
+        else if (Array.isArray(params)) {
+            paramsArr = params
+        } else {
+            paramsArr = [params]
+        }
 
         // validate parameters
         const paramsSchema = methodValidate[method].args

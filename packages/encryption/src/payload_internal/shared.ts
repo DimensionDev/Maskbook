@@ -35,15 +35,15 @@ export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.P
     if (id === '' || id === null || id === undefined) return OptionalResult.None
     if (typeof id !== 'string') return new CheckedError(PayloadException.InvalidPayload, 'Invalid user id').toErr()
 
-    let net = ''
+    let net: string
     if (network === EncryptPayloadNetwork.Facebook) net = 'facebook.com'
     else if (network === EncryptPayloadNetwork.Twitter) net = 'twitter.com'
     else if (network === EncryptPayloadNetwork.Instagram) net = 'instagram.com'
     else if (network === EncryptPayloadNetwork.Minds) net = 'minds.com'
     else if (typeof network === 'string') net = network
-    else if (typeof network !== 'number')
-        return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
-    else return new CheckedError(PayloadException.UnknownEnumMember, 'unknown network').toErr()
+    else if (typeof network === 'number')
+        return new CheckedError(PayloadException.UnknownEnumMember, 'unknown network').toErr()
+    else return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
 
     if (net.includes('/')) return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
 

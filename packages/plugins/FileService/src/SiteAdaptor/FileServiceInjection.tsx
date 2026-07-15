@@ -24,7 +24,6 @@ export const FileServiceInjection = memo(function FileServiceInjection() {
     if (!open) return null
     return (
         <FileServiceDialog
-            open
             onClose={() => setOpen(false)}
             compositionType={compositionType}
             selectMode={selectMode}

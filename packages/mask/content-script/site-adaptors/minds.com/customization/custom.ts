@@ -21,7 +21,7 @@ export function useThemeMindsVariant(baseTheme: Theme) {
             }
             theme.shape.borderRadius = 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1220, xl: 1920 }
-            theme.components = theme.components || {}
+            theme.components ||= {}
             theme.components.MuiTypography = {
                 styleOverrides: {
                     root: {

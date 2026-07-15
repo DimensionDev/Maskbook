@@ -114,13 +114,14 @@ export class ConnectionContext {
                     params: [this._requestArguments.params[0], config],
                 }
                 break
-            case EthereumMethodType.eth_sendTransaction:
-                const params = this.providerType !== ProviderType.Clover ? config : omit(config, 'chainId')
+            case EthereumMethodType.eth_sendTransaction: {
+                const params = this.providerType === ProviderType.Clover ? omit(config, 'chainId') : config
                 this._requestArguments = {
                     method: this.method,
                     params: [params],
                 }
                 break
+            }
             default:
                 break
         }

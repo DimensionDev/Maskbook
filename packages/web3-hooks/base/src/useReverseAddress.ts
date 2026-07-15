@@ -3,13 +3,13 @@ import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { getActivatedPluginWeb3State } from '@masknet/web3-providers'
 import { useQueries, useQuery } from '@tanstack/react-query'
 
-export function useReverseAddress<T extends NetworkPluginID>(
-    expectedPluginID?: T,
+export function useReverseAddress(
+    expectedPluginID?: NetworkPluginID,
     address?: string,
     domainOnly?: boolean,
     preferredType?: NameServiceID,
 ) {
-    const { pluginID } = useNetworkContext<T>(expectedPluginID)
+    const { pluginID } = useNetworkContext(expectedPluginID)
     return useQuery({
         queryKey: ['reverse', address, pluginID, domainOnly, preferredType],
         queryFn: async () => {
@@ -20,8 +20,8 @@ export function useReverseAddress<T extends NetworkPluginID>(
     })
 }
 
-export function useReverseAddresses<T extends NetworkPluginID>(
-    addresses: Array<{ address: string; pluginID: T }>,
+export function useReverseAddresses(
+    addresses: Array<{ address: string; pluginID: NetworkPluginID }>,
     domainOnly?: boolean,
     preferredType?: NameServiceID,
 ) {

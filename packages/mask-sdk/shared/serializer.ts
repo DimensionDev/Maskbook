@@ -39,7 +39,11 @@ const [U8ArrayEncode, U8ArrayDecode] = createClassSerializer<Uint8Array, number[
 )
 const [MapEncode, MapDecode] = createClassSerializer(
     Map,
-    (e) => [...e.entries()].map((value) => [replacer('', value[0]), replacer('', value[1])]),
+    (e) =>
+        e
+            .entries()
+            .map((value) => [replacer('', value[0]), replacer('', value[1])])
+            .toArray(),
     (e) => new Map(e.map(([k, v]) => [reviver('', k), reviver('', v)])),
 )
 const [MaskEthereumProviderRpcErrorEncode, MaskEthereumProviderRpcErrorDecode] = createClassSerializer(
@@ -63,7 +67,7 @@ function createClassSerializer<T, Q>(
         },
         (v: { $type: string; value: Q }) => {
             if (v.$type === clz.name) return decode(v.value)
-            return undefined
+            return
         },
     ] as const
 }

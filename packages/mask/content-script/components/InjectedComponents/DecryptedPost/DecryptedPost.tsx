@@ -176,7 +176,7 @@ export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
 
     if (
         !deconstructedPayload &&
-        !progress.some((x) => x.progress.type === 'success') &&
+        progress.every((x) => x.progress.type !== 'success') &&
         progress.every((x) => x.progress.internal)
     )
         return null
@@ -250,6 +250,7 @@ async function makeProgress(
             if (progress.event === DecryptIntermediateProgressKind.TryDecryptByE2E) reportProgress('e2e', '')
             else safeUnreachable(progress.event)
         } else if (progress.type === DecryptProgressKind.Error) {
+            // ignore
         } else safeUnreachable(progress)
     }
 }

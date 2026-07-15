@@ -10,15 +10,18 @@ export function usePersistSubscription<T>(
     subscription: Subscription<T>,
     predicate?: (data: T) => boolean,
 ): T {
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const { data, refetch } = useQuery({
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: [persistKey],
         networkMode: 'always',
         queryFn: () => {
-            const value = subscription.getCurrentValue()
-            if (predicate && !predicate(value)) return null
-            return value
+            return subscription.getCurrentValue()
         },
+        select: (data) =>
+            data && predicate ?
+                predicate(data) ? data
+                :   null
+            :   data,
         placeholderData: () => subscription.getCurrentValue() as any,
     })
     useEffect(() => {

@@ -25,7 +25,7 @@ export function useMnemonicWordsPuzzle() {
         () =>
             shuffle(range(TOTAL_SIZE))
                 .slice(0, PUZZLE_SIZE)
-                .sort((a, b) => a - b),
+                .toSorted((a, b) => a - b),
         [words],
     )
 

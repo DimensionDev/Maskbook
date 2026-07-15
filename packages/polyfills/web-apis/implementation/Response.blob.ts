@@ -1,8 +1,11 @@
+/* eslint-disable unicorn/no-this-outside-of-class */
 try {
     // See: https://bugs.chromium.org/p/chromium/issues/detail?id=1355770
     Response.prototype.blob = async function (this: Response) {
         return new Blob([await this.arrayBuffer()], {
-            type: this.headers.get('Content-Type')?.split(';')[0],
+            type: this.headers.get('Content-Type')?.split(';', 1)[0],
         })
     }
-} catch {}
+} catch {
+    // ignore
+}

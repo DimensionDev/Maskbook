@@ -36,31 +36,27 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        ...(loading ?
-            {
-                '&:before': {
-                    content: "''",
-                    boxSizing: 'border-box',
-                    position: 'absolute',
-                    top: -5,
-                    left: -5,
-                    width: 56,
-                    height: 56,
-                    borderRadius: '50%',
-                    border: `2px solid ${theme.palette.maskColor.main}`,
-                    borderTopColor: theme.palette.maskColor.second,
-                    animation: 'spinner 2s linear infinite',
-                },
-            }
-        :   {}),
-
-        ...(timeout ?
-            {
-                border: `2px solid ${theme.palette.maskColor.danger}`,
+        ...(loading && {
+            '&:before': {
+                content: "''",
+                boxSizing: 'border-box',
+                position: 'absolute',
+                top: -5,
+                left: -5,
+                width: 56,
+                height: 56,
                 borderRadius: '50%',
-                padding: 10,
-            }
-        :   {}),
+                border: `2px solid ${theme.palette.maskColor.main}`,
+                borderTopColor: theme.palette.maskColor.second,
+                animation: 'spinner 2s linear infinite',
+            },
+        }),
+
+        ...(timeout && {
+            border: `2px solid ${theme.palette.maskColor.danger}`,
+            borderRadius: '50%',
+            padding: 10,
+        }),
     },
 }))
 
@@ -117,7 +113,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 replace: true,
             })
         } catch (error) {
-            if (error instanceof Error) {
+            if (Error.isError(error)) {
                 if (error.message === 'timeout') throw error
                 if (error.message.includes('reject') || error.message.includes('cancel')) {
                     showSnackbar(<Trans>Connecting operation cancelled in third-party wallet.</Trans>, {
@@ -163,7 +159,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                         <Trans>Retry</Trans>
                     </Button>
                 :   null}
-                {!providerExist ?
+                {providerExist ? null : (
                     <>
                         <Typography fontSize={14} lineHeight="18px" my={1.25}>
                             <Trans>Please install your metamask wallet and set up your first wallet.</Trans>
@@ -172,7 +168,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                             <Trans>Choose another wallet</Trans>
                         </Button>
                     </>
-                :   null}
+                )}
             </Box>
         </ActionModal>
     )

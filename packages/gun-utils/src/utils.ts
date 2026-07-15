@@ -13,7 +13,7 @@ function getGunNodeFromPath(path: string[]) {
  * ```
  */
 export function getGunData(...path: string[]) {
-    return new Promise<{ [x: string]: unknown } | string | number | undefined>((resolve) => {
+    return new Promise<string | number | { [x: string]: unknown } | undefined>((resolve) => {
         getGunNodeFromPath(path).once(resolve)
     })
 }

@@ -12,7 +12,7 @@ export const IdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.Iden
     hasDeprecatedPlaceholderName: true,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(signal) {
-        resolveLastRecognizedIdentityFacebookInner(this.recognized, signal)
+        resolveLastRecognizedIdentityFacebookInner(IdentityProviderFacebook.recognized, signal)
     },
 }
 
@@ -53,7 +53,7 @@ function resolveCurrentVisitingIdentityInner(
         const bio = getBioDescription()
         const handle = getFacebookId()
         const ownerHandle = ownerRef.value.identifier?.userId
-        const isOwner = !!(handle && ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
+        const isOwner = handle ? handle.toLowerCase() === ownerHandle?.toLowerCase() : false
         const homepage = getPersonalHomepage()
         const avatar = getAvatar()
 
@@ -91,7 +91,11 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderFacebook.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(
+            CurrentVisitingIdentityProviderFacebook.recognized,
+            IdentityProviderFacebook.recognized,
+            cancel,
+        )
     },
 }
 
@@ -99,7 +103,7 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
 const myUsernameLiveSelector = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
         // cspell:disable-next-line
-        '[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
+        ':scope [data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
     )
 
-    .filter((x) => x.innerText)
+    .filter((x) => x.textContent)

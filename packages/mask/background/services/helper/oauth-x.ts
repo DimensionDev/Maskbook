@@ -44,7 +44,7 @@ class OAuth {
             // this means that this key has multiple values
             if (value && Array.isArray(value)) {
                 // sort the array first
-                value.sort((a, b) => (String(a) > String(b) ? 1 : -1))
+                value.toSorted((a, b) => (String(a) > String(b) ? 1 : -1))
 
                 let valString = ''
                 value.forEach(function (item, i) {
@@ -120,7 +120,7 @@ class OAuth {
         return result
     }
     sortObject(data: object) {
-        return Object.entries(data).sort(([keyA], [keyB]) => (keyA > keyB ? 1 : -1))
+        return Object.entries(data).toSorted(([keyA], [keyB]) => (keyA > keyB ? 1 : -1))
     }
 }
 
@@ -151,7 +151,7 @@ async function getRequestToken(client: OAuth) {
     if (response.ok) {
         return new URLSearchParams(body)
     } else {
-        throw body
+        throw new Error('Request failed: ' + body)
     }
 }
 function toBody(rec: Record<string, any>) {
@@ -177,7 +177,7 @@ async function getAccessToken(client: OAuth, options: { oauth_verifier: string; 
     if (response.ok) {
         return new URLSearchParams(body)
     } else {
-        throw body
+        throw new Error('Request failed: ' + body)
     }
 }
 

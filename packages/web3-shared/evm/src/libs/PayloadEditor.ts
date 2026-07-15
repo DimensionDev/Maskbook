@@ -40,9 +40,10 @@ export class PayloadEditor {
                 return String(params?.[1])
             case EthereumMethodType.eth_signTypedData_v4:
                 return String(first(params))
-            default:
+            default: {
                 const config = this.config
                 return config.from
+            }
         }
     }
 
@@ -57,9 +58,10 @@ export class PayloadEditor {
     get chainDescriptor() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.wallet_addEthereumChain:
+            case EthereumMethodType.wallet_addEthereumChain: {
                 const [descriptor] = params as [EIP3085Descriptor]
                 return descriptor
+            }
             default:
                 return null
         }
@@ -97,9 +99,10 @@ export class PayloadEditor {
     get wallet() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.MASK_ADD_WALLET:
+            case EthereumMethodType.MASK_ADD_WALLET: {
                 const [wallet] = params as [Wallet]
                 return wallet
+            }
             default:
                 return
         }
@@ -162,7 +165,7 @@ export class PayloadEditor {
         return this.payload
     }
 
-    static from<T>(id: number, method: EthereumMethodType, params: T[] = [], options?: Options) {
+    static from(id: number, method: EthereumMethodType, params: unknown[] = [], options?: Options) {
         return new PayloadEditor(
             createJsonRpcRequest(id, {
                 method,
@@ -172,8 +175,8 @@ export class PayloadEditor {
         )
     }
 
-    static fromMethod<T>(method: EthereumMethodType, params: T[] = [], options?: Options) {
-        return PayloadEditor.from(0, method, params, options)
+    static fromMethod(method: EthereumMethodType, params: unknown[] = [], options?: Options) {
+        return this.from(0, method, params, options)
     }
 
     static fromPayload(payload: JsonRpcRequest, options?: Options) {
@@ -187,7 +190,7 @@ function toBigInt(hex: string | number | undefined) {
         if (isHex(hex)) return hexToBigInt(hex)
         return BigInt(hex)
     }
-    return undefined
+    return
 }
 
 function toNumber(hex: string | number | undefined) {
@@ -196,5 +199,5 @@ function toNumber(hex: string | number | undefined) {
         if (isHex(hex)) return Number(hexToNumber(hex))
         return Number(hex)
     }
-    return undefined
+    return
 }

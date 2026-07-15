@@ -30,7 +30,7 @@ export function useRecipientValidate(recipientAddress: string): {
         if (!isEvm) return [true]
         if (addressType === AddressType.Contract)
             return [false, _(msg`The receiving address is a contract address. Please check again.`)]
-        const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 0
+        const isMaliciousAddress = security && Object.values(security).includes('1')
         if (isMaliciousAddress) return [false, _(msg`The receiving address may be a malicious address.`)]
         return [true]
     }, [isEvm, addressType, security, _])

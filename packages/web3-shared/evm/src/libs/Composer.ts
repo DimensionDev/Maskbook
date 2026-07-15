@@ -16,9 +16,7 @@ export class Composer<T> {
             const dispatch = (i: number): Promise<void> => {
                 if (i <= index) return Promise.reject(new Error('next() called multiple times'))
                 index = i
-                let fn
-                if (i >= this.items.length) fn = next
-                else fn = this.items[i].fn.bind(this.items[i])
+                const fn = i >= this.items.length ? next : this.items[i].fn.bind(this.items[i])
                 if (!fn) return Promise.resolve()
                 try {
                     return Promise.resolve(fn(context, dispatch.bind(null, i + 1)))

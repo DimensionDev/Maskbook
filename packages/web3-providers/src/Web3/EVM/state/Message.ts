@@ -58,7 +58,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         if (method !== EthereumMethodType.eth_sendTransaction) return request
 
         // recheck the nonce and update it if needed before sending with the transaction
-        if (config.from && typeof config.nonce !== 'undefined') {
+        if (config.from && config.nonce !== undefined) {
             const nonce = await EVMWeb3Readonly.getTransactionNonce(config.from, {
                 chainId,
             })
@@ -81,10 +81,10 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         } else {
             // TODO: make this for Mask Wallet only
             const hasPassword = await this.context.hasPaymentPassword()
-            const route = !hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ContractInteraction
+            const route = hasPassword ? PopupRoutes.ContractInteraction : PopupRoutes.SetPaymentPassword
 
             const fromState =
-                route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
+                route === PopupRoutes.ContractInteraction ? EMPTY_OBJECT : { from: PopupRoutes.ContractInteraction }
 
             if (Sniffings.is_popup_page) {
                 await this.context.openPopupWindow(route, fromState as any)

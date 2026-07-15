@@ -90,7 +90,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                 ]
             })
         },
-        staleTime: 3600_000,
+        staleTime: 3_600_000,
     })
 
     const { value: detailedAaveTokens = EMPTY_LIST, loading: loadingAAveDetails } = useFungibleTokens(

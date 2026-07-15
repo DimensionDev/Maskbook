@@ -48,6 +48,6 @@ export const IdentityProviderMinds: SiteAdaptorUI.CollectingCapabilities.Identit
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveLastRecognizedIdentityInner(this.recognized, cancel)
+        resolveLastRecognizedIdentityInner(IdentityProviderMinds.recognized, cancel)
     },
 }

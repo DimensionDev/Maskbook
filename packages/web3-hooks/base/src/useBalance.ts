@@ -22,6 +22,7 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(
     } as ConnectionOptions<T>)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const result = useQuery({
         enabled: !!account && !!Web3 && enabled,
         queryKey: ['balance', pluginID, chainId, account, options],

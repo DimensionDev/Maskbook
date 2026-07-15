@@ -22,15 +22,13 @@ export async function pasteTextToCompositionFacebook(
 
     const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
         // cspell:disable-next-line
-        'div[role=presentation] .notranslate[role=textbox]',
+        ':scope div[role=presentation] .notranslate[role=textbox]',
     )
 
     // Select element with fb customize background image.
     const activatedCustom = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
         '.notranslate[aria-label]',
     )
-
-    activatedCustom.filter((x) => x.parentElement?.parentElement?.parentElement?.parentElement?.hasAttribute('style'))
 
     const element = activated.evaluate()[0] ?? activatedCustom.evaluate()[0]
     try {
@@ -52,7 +50,7 @@ export async function pasteTextToCompositionFacebook(
         else pasteText(text)
         await delay(200)
         // Prevent Custom Paste failed, this will cause service not available to user.
-        if (!element.innerText.includes(text) || ('value' in element && !element.value.includes(text)))
+        if (!element.textContent.includes(text) || ('value' in element && !element.value.includes(text)))
             copyFailed('Not detected')
     } catch (error) {
         copyFailed(error)

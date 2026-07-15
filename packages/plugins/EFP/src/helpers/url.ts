@@ -33,7 +33,7 @@ export function parseEFPProfileLink(link: string): EFPProfileLink | null {
     if (RESERVED_PATH_SET.has(user.toLowerCase())) return null
     if (!isSupportedUser(user)) return null
 
-    const searchParams = Array.from(url.searchParams.entries())
+    const searchParams = url.searchParams.entries().toArray()
     const topEight = searchParams.length === 1 && searchParams[0][0] === 'topEight' && searchParams[0][1] === 'true'
     if (url.search && !topEight) return null
 

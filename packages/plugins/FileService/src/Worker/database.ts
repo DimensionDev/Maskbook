@@ -19,7 +19,7 @@ async function migrationV1() {
         for (const file of migrateFileInfoV1(x.value)) {
             await Database.add({
                 ...file,
-                createdAt: typeof file.createdAt !== 'number' ? new Date(file.createdAt).getTime() : file.createdAt,
+                createdAt: typeof file.createdAt === 'number' ? file.createdAt : new Date(file.createdAt).getTime(),
             })
         }
         await x.delete()
@@ -33,7 +33,7 @@ export async function getAllFiles() {
     for await (const { value } of Database.iterate('file')) {
         files.push(value)
     }
-    return files.sort((a, b) => compareDesc(new Date(a.createdAt), new Date(b.createdAt)))
+    return files.toSorted((a, b) => compareDesc(new Date(a.createdAt), new Date(b.createdAt)))
 }
 
 export async function setFileInfo(info: FileInfo) {

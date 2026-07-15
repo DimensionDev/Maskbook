@@ -70,7 +70,7 @@ export function TokenValue({ className, token, amount, ...rest }: Props) {
                     />
                 </div>
                 {priceUSD ?
-                    <Typography className={classes.price}>{`\u2248 ${priceUSD ?? '0'}`}</Typography>
+                    <Typography className={classes.price}>{`\u{2248} ${priceUSD ?? '0'}`}</Typography>
                 :   null}
             </div>
         :   null

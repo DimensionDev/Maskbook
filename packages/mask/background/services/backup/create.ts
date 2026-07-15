@@ -26,6 +26,10 @@ export async function createBackupFile(options: BackupOptions): Promise<{
         maskVersion: env.VERSION,
     })
     const file = generateBackupRAW(backup)
-    const personaNickNames = [...backup.personas.values()].map((p) => p.nickname.unwrapOr('')).filter(Boolean)
+    const personaNickNames = backup.personas
+        .values()
+        .map((p) => p.nickname.unwrapOr(''))
+        .filter(Boolean)
+        .toArray()
     return { file, personaNickNames }
 }

@@ -11,7 +11,9 @@ function avatarSelector() {
     return querySelectorAll<HTMLElement>(
         '[data-testid=SpaceDockExpanded] [data-testid^=UserAvatar-Container-],[data-testid=sheetDialog] [data-testid^=UserAvatar-Container-]',
     ).map((node) => {
-        const span = node.parentElement?.parentElement?.nextElementSibling?.querySelector('div > span + span > span')
+        const span = node.parentElement?.parentElement?.nextElementSibling?.querySelector(
+            ':scope div > span + span > span',
+        )
         return span
     })
 }

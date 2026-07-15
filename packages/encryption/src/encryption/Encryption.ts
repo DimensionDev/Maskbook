@@ -89,7 +89,7 @@ export async function encodePostKey(
             .then((x) => {
                 // An implementation MUST NOT depend on the order of keys in a JsonWebKey.
                 // preferred order (used to snapshot our tests):
-                const ord = ['key_ops', 'ext', 'kty', 'k', 'alg']
+                const ord = new Set(['key_ops', 'ext', 'kty', 'k', 'alg'])
                 const replica_object: Record<string, unknown> = {}
                 const rest: Record<string, unknown> = {}
                 ord.forEach((k) => {
@@ -97,7 +97,7 @@ export async function encodePostKey(
                     replica_object[k] = (x as Record<string, unknown>)[k]
                 })
                 Object.keys(x).forEach((k) => {
-                    if (ord.includes(k)) return
+                    if (ord.has(k)) return
                     rest[k] = (x as Record<string, unknown>)[k]
                 })
                 return JSON.stringify({ ...replica_object, ...rest })
@@ -116,7 +116,7 @@ async function e2e_v37(
     const { ephemeralKeys, getEphemeralKey } = createEphemeralKeysMap(io)
     const ecdhResult = v37_addReceiver(true, { ...context, getEphemeralKey }, target, io)
 
-    const ownersAESKeyEncrypted = Promise.resolve().then(async () => {
+    const ownersAESKeyEncrypted = Promise.try(async () => {
         const [, ephemeralPrivateKey] = await getEphemeralKey(authorPublic.value.algr)
 
         // we get rid of localKey in v38

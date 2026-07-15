@@ -15,7 +15,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { checked }) => ({
         marginRight: 6,
         marginBottom: 6,
         cursor: 'pointer',
-        ...(checked ? { color: theme.palette.text.buttonText, backgroundColor: theme.palette.text.primary } : {}),
+        ...(checked && { color: theme.palette.text.buttonText, backgroundColor: theme.palette.text.primary }),
         '&:hover': {
             color: theme.palette.text.primary,
             '& > svg': {
@@ -25,7 +25,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { checked }) => ({
     },
     icon: {
         backgroundColor: 'transparent !important',
-        ...(checked ? { color: `${theme.palette.text.buttonText} !important` } : {}),
+        ...(checked && { color: `${theme.palette.text.buttonText} !important` }),
     },
     label: {
         display: 'flex',

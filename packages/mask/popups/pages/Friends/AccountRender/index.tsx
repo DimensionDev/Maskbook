@@ -35,7 +35,7 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
         case NextIDPlatform.LENS:
         case NextIDPlatform.Unstoppable:
         case NextIDPlatform.Farcaster:
-        case NextIDPlatform.Keybase:
+        case NextIDPlatform.Keybase: {
             const _userID =
                 profile.platform === NextIDPlatform.ENS || profile.platform === NextIDPlatform.Keybase ?
                     profile.name
@@ -43,6 +43,7 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
             return detail ?
                     <DetailAccount userId={_userID} displayName={profile.name} platform={profile.platform} />
                 :   <Account userId={_userID} displayName={profile.name} platform={profile.platform} />
+        }
         case NextIDPlatform.CyberConnect:
         case NextIDPlatform.Bit:
         case NextIDPlatform.SYBIL:

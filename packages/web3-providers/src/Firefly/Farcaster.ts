@@ -7,8 +7,8 @@ import urlcat from 'urlcat'
 import { FIREFLY_BASE_URL } from './constants.js'
 import { formatFarcasterPostFromFirefly, resolveFireflyResponseData } from './helpers.js'
 
-export class FireflyFarcaster {
-    static async getPostsByProfileId(fids: string | string[] | number | number[], indicator?: PageIndicator) {
+export const FireflyFarcaster = {
+    async getPostsByProfileId(fids: string | string[] | number | number[], indicator?: PageIndicator) {
         const url = urlcat(FIREFLY_BASE_URL, '/v2/user/timeline/farcaster/casts')
         const response = await fetchJSON<FireflyFarcasterAPI.CastsResponse>(url, {
             method: 'POST',
@@ -29,5 +29,5 @@ export class FireflyFarcaster {
             createIndicator(indicator),
             cursor ? createNextIndicator(indicator, cursor) : undefined,
         )
-    }
+    },
 }

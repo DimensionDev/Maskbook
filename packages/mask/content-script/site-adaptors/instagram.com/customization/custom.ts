@@ -10,7 +10,7 @@ export function useThemeInstagramVariant(baseTheme: Theme) {
         setAutoFreeze(false)
 
         const InstagramTheme = produce(baseTheme, (theme) => {
-            theme.components = theme.components || {}
+            theme.components ||= {}
             theme.components.MuiTypography = {
                 styleOverrides: {
                     root: {

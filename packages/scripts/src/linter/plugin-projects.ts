@@ -13,7 +13,7 @@ export async function fixPluginsTSConfig() {
         default: { readConfigFile, formatDiagnostic },
     } = await import('typescript')
 
-    const { config, error } = readConfigFile(fileURLToPath(file), (path) => readFileSync(path, 'utf-8'))
+    const { config, error } = readConfigFile(fileURLToPath(file), (path) => readFileSync(path, 'utf8'))
     if (error) {
         console.error(
             formatDiagnostic(error, {
@@ -33,17 +33,18 @@ export async function fixPluginsTSConfig() {
                 .map(async (folder) => {
                     const pkg = join(folder.parentPath, folder.name)
                     const root = join(pkg, 'tsconfig.json')
-                    const src = join(pkg, 'src', 'tsconfig.json')
                     if (await exists(root)) return './' + folder.name + '/tsconfig.json'
+                    const src = join(pkg, 'src', 'tsconfig.json')
                     if (await exists(src)) return './' + folder.name + '/src/tsconfig.json'
                     return null!
                 }),
         )
     )
         .filter(Boolean)
-        .sort()
+        // eslint-disable-next-line unicorn/require-array-sort-compare
+        .toSorted()
         .map((path) => ({ path }))
-    return writeFile(file, await prettier(JSON.stringify(config), 'json', 2), 'utf-8')
+    return writeFile(file, await prettier(JSON.stringify(config), 'json', 2), 'utf8')
 }
 
 task(fixPluginsTSConfig, 'fix-plugins-tsconfig', 'Fix plugins/tsconfig.json')

@@ -54,6 +54,6 @@ export const CurrentVisitingIdentityProviderInstagram: SiteAdaptorUI.CollectingC
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(CurrentVisitingIdentityProviderInstagram.recognized, cancel)
     },
 }

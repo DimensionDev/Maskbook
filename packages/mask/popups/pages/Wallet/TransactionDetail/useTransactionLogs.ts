@@ -19,6 +19,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Transaction } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = transactionState?.chainId
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const { data: txes } = useQuery({
         enabled: transactionState && !('candidates' in transactionState),
         // Could already be cached through ActivityList page.

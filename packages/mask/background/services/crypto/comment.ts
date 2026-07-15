@@ -37,7 +37,7 @@ async function getCommentKey(postIV: Uint8Array<ArrayBuffer>, postContent: strin
         'deriveKey',
     ])
     return (await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: postIV, iterations: 100000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: postIV, iterations: 100_000, hash: 'SHA-256' },
         pbkdf,
         { name: 'AES-GCM', length: 256 },
         true,
@@ -49,7 +49,7 @@ function extractCommentPayload(text: string): [iv: undefined | Uint8Array<ArrayB
     const version2Header = text.indexOf('\u{1F3B6}3/4|')
     const version1Header = text.indexOf('\u{1F3B6}2/4|')
     if (version2Header === -1 && version1Header === -1) return null
-    const untilEnd = text.slice(version2Header !== -1 ? version2Header : version1Header).split(':||')
+    const untilEnd = text.slice(version2Header === -1 ? version1Header : version2Header).split(':||')
     if (untilEnd.length === 0) return null
     if (version1Header !== -1) return [undefined, untilEnd[0].slice('\u{1F3B6}2/4|'.length)]
     const fields = untilEnd[0].split('|')

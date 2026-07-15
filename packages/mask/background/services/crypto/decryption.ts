@@ -138,7 +138,9 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             storeAuthorPublicKey(id, authorHint, parse.unwrap().authorPublicKey.unwrap().unwrap()).catch(noop)
             hasStoredAuthorPublicKey.add(id)
         }
-    } catch {}
+    } catch {
+        // ignore
+    }
     // #endregion
 
     const progress = decrypt(
@@ -162,7 +164,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             hasLocalKeyOf,
             decryptByLocalKey,
             async deriveAESKey(pub) {
-                return Array.from((await deriveAESByECDH(pub)).values())
+                return (await deriveAESByECDH(pub)).values().toArray()
             },
             queryAuthorPublicKey(author, signal) {
                 // TODO: This should try to fetch publicKey from external sources

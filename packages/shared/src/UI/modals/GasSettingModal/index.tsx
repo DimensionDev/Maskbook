@@ -5,14 +5,14 @@ import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { GasSetting } from './GasSettingModal.js'
 
-export type GasSettingModalOpenOrCloseProps = {
+export type GasSettingModalOpenOrCloseProps = void | {
     gasOption?: GasOptionType
     gasLimit?: number
     minGasLimit?: number
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
-} | void
+}
 
 export function GasSettingModal({
     ref,

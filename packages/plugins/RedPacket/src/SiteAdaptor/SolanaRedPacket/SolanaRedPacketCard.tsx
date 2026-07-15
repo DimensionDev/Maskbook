@@ -128,7 +128,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                     msg`You claimed ${formatBalance(claimRecord.amount.toString(), token?.decimals, { significant: 2 })} $${token?.symbol || ''}.`,
                 ),
                 title: _(msg`Lucky Drop`),
-                share: (text) => share?.(text, source ? source : undefined),
+                share: (text) => share?.(text, source || undefined),
             })
             queryClient.invalidateQueries({
                 queryKey: ['redpacket', 'history'],

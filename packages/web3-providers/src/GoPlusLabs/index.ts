@@ -3,15 +3,9 @@ import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, getGoPlusLabsConstants, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { type FungibleTokenSpender, isSameAddress, type NonFungibleContractSpender } from '@masknet/web3-shared-base'
+import { type FungibleTokenSpender, isSameAddress } from '@masknet/web3-shared-base'
 import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
-import {
-    type GoPlusNFTInfo,
-    type GoPlusTokenInfo,
-    type GoPlusTokenSpender,
-    type NFTSpenderInfo,
-    SecurityMessageLevel,
-} from './types.js'
+import { type GoPlusTokenInfo, type GoPlusTokenSpender, SecurityMessageLevel } from './types.js'
 import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
@@ -30,63 +24,6 @@ interface SupportedChainResponse {
 class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
     async getSupportChainIds() {
         return [ChainId.Mainnet, ChainId.BSC]
-    }
-    async getNonFungibleTokenSpenders(chainId: ChainId, addresses: string) {
-        const supportedChainIds = await this.getSupportChainIds()
-        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
-
-        const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-        const response = await fetchJSON<{
-            result: GoPlusNFTInfo[]
-        }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft721_approval_security/:chainId', { chainId, addresses }))
-
-        const nft1155Response = await fetchJSON<{
-            result: GoPlusNFTInfo[]
-        }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft1155_approval_security/:chainId', { chainId, addresses }))
-
-        if (!response.result.length && !nft1155Response.result.length) return EMPTY_LIST
-
-        return [...response.result, ...nft1155Response.result]
-            .reduce<NFTSpenderInfo[]>((acc, cur) => {
-                return acc.concat(
-                    cur.approved_list.map((rawSpender) => {
-                        const maskDappContractInfo = maskDappContractInfoList.find((y) =>
-                            isSameAddress(y.address, rawSpender.approved_contract),
-                        )
-
-                        if (maskDappContractInfo) {
-                            return {
-                                isMaskDapp: true,
-                                address: rawSpender.approved_contract,
-                                amount: '1',
-                                name: maskDappContractInfo.name,
-                                logo: maskDappContractInfo.logo,
-                                contract: {
-                                    address: cur.nft_address,
-                                    name: cur.nft_name,
-                                },
-                            }
-                        }
-
-                        return {
-                            isMaskDapp: false,
-                            address: rawSpender.approved_contract,
-                            amount: '1',
-                            name: rawSpender.address_info.tag,
-                            logo: undefined,
-                            contract: {
-                                address: cur.nft_address,
-                                name: cur.nft_name,
-                            },
-                        }
-                    }),
-                )
-            }, [])
-            .sort((a, b) => {
-                if (a.isMaskDapp && !b.isMaskDapp) return -1
-                if (!a.isMaskDapp && b.isMaskDapp) return 1
-                return Number(b.amount) - Number(a.amount)
-            }) as Array<NonFungibleContractSpender<ChainId, SchemaType>>
     }
 
     async getFungibleTokenSpenders(chainId: ChainId, addresses: string) {
@@ -136,7 +73,7 @@ class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
                     }),
                 )
             }, [])
-            .sort((a, b) => {
+            .toSorted((a, b) => {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return 0
@@ -144,10 +81,11 @@ class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
     }
 }
 
-export class GoPlusLabs {
-    static async getTokenSecurity(chainId: ChainId, addresses: string[]) {
+export const GoPlusLabs = {
+    async getTokenSecurity(chainId: ChainId, addresses: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
+            // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
             message: 'OK' | string
             result: Record<
                 string,
@@ -162,33 +100,16 @@ export class GoPlusLabs {
 
         if (response.code !== 1) return
         return createTokenSecurity(response.result, chainId)
-    }
+    },
 
-    static async getSolTokenSecurity(address: string) {
-        const response = await fetchJSON<{
-            code: 0 | 1
-            message: 'OK' | string
-            result: Record<
-                string,
-                SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
-            >
-        }>(
-            urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/token_security/:id', {
-                contract_addresses: address,
-            }),
-        )
-
-        if (response.code !== 1) return
-        return createTokenSecurity(response.result)
-    }
-
-    static async getAddressSecurity(
+    async getAddressSecurity(
         chainId: ChainId | 'solana' | 'tron',
         address: string,
     ): Promise<SecurityAPI.AddressSecurity | undefined> {
         if (chainId !== 'solana' && chainId !== 'tron' && !isValidChainId(chainId)) return
         const response = await fetchJSON<{
             code: 0 | 1
+            // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
             message: 'OK' | string
             result: SecurityAPI.AddressSecurity
         }>(
@@ -200,33 +121,34 @@ export class GoPlusLabs {
 
         if (response.code !== 1) return
         return response.result
-    }
+    },
 
-    static async checkIfAddressIsScam(chainId: ChainId | 'solana' | 'tron', address: string): Promise<boolean> {
+    async checkIfAddressIsScam(chainId: ChainId | 'solana' | 'tron', address: string): Promise<boolean> {
         const security = await GoPlusLabs.getAddressSecurity(chainId, address)
         if (!security) return false
         const values: string[] = Object.values(security)
-        return values.some((x) => x === '1')
-    }
+        return values.includes('1')
+    },
 
-    static async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
+    async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
         const { code, result } = await fetchJSON<{
             code: 0 | 1
+            // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
             message: 'OK' | string
             result: SupportedChainResponse[]
         }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/supported_chains'))
 
         if (code !== 1) return []
         return result.map((x) => ({ chainId: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
-    }
-    static async checkIsPhishingSite(url: string): Promise<boolean> {
+    },
+    async checkIsPhishingSite(url: string): Promise<boolean> {
         const path = urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/phishing_site', {
             url,
         })
         const res = await fetchJSON<PhishingSiteResponse>(path)
         if (res.code !== 1) return false
         return +res.result.phishing_site === 1
-    }
+    },
 }
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 
@@ -262,7 +184,7 @@ function isHighRisk(tokenSecurity?: SecurityAPI.TokenSecurityType) {
                     x.level !== SecurityMessageLevel.Safe &&
                     !x.shouldHide(tokenSecurity) &&
                     x.level === SecurityMessageLevel.High,
-            ).sort((a, z) => {
+            ).toSorted((a, z) => {
                 if (a.level === SecurityMessageLevel.High) return -1
                 if (z.level === SecurityMessageLevel.High) return 1
                 return 0
@@ -275,7 +197,7 @@ function getMessageList(tokenSecurity: SecurityAPI.TokenSecurityType) {
         :   SecurityMessages.filter(
                 (x) =>
                     x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
-            ).sort((a, z) => {
+            ).toSorted((a, z) => {
                 if (a.level === SecurityMessageLevel.High) return -1
                 if (z.level === SecurityMessageLevel.High) return 1
                 return 0

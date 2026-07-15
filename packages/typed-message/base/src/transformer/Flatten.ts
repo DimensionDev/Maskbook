@@ -17,6 +17,7 @@ import { isEqual } from 'lodash-es'
 
 export function FlattenTypedMessage(message: TypedMessage, context: TransformationContext): TypedMessage {
     if (isTypedMessagePromise(message) && 'value' in message.promise)
+        // eslint-disable-next-line unicorn/no-useless-recursion
         return FlattenTypedMessage(message.promise.value, context)
     if (isTypedMessageTuple(message)) {
         const next = message.items

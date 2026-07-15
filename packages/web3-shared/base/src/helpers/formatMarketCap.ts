@@ -7,22 +7,22 @@ const boundaryValues = [
         shiftedBy: 0,
     },
     {
-        maxValue: 1000000,
+        maxValue: 1_000_000,
         symbol: 'k',
         shiftedBy: -3,
     },
     {
-        maxValue: 1000000000,
+        maxValue: 1_000_000_000,
         symbol: 'M',
         shiftedBy: -6,
     },
     {
-        maxValue: 1000000000000,
+        maxValue: 1_000_000_000_000,
         symbol: 'B',
         shiftedBy: -9,
     },
     {
-        maxValue: 1000000000000000,
+        maxValue: 1_000_000_000_000_000,
         symbol: 'T',
         shiftedBy: -12,
     },

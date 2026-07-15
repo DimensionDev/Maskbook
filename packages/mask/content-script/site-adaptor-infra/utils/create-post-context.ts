@@ -39,12 +39,11 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
                     .concat(opt.postMentionedLinksProvider?.getCurrentValue() || EMPTY_LIST)
                     .map(isFacebook ? resolveFacebookLink : (x: string) => x)
                 if (difference(text, links.value).length === 0) return
-                if (!text.length) links.value = EMPTY_LIST
-                else links.value = text
+                links.value = text.length ? text : EMPTY_LIST
             }
             cancel.push(opt.rawMessage.subscribe(evaluate))
             const f = opt.postMentionedLinksProvider?.subscribe(evaluate)
-            f && cancel.push(f)
+            if (f) cancel.push(f)
             return createSubscriptionFromValueRef(links)
         })()
         // #endregion
@@ -115,7 +114,7 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
                     const msg =
                         extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('') +
                         '\n' +
-                        [...linksSubscribe.getCurrentValue()].join('\n')
+                        linksSubscribe.getCurrentValue().join('\n')
                     hasMaskPayload.value = actions.hasPayloadLike(msg)
                 }
                 evaluate()

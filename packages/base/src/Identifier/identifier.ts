@@ -31,7 +31,7 @@ export abstract class Identifier {
             return ProfileIdentifier.of(network, userID)
         } else if (input.startsWith('post:')) {
             const [postID, ...rest] = input.slice('post:'.length).split('/')
-            const inner = Identifier.from(rest.join('/'))
+            const inner = this.from(rest.join('/'))
             if (inner.isNone()) return None
             if (inner.value instanceof ProfileIdentifier) return Some(new PostIdentifier(inner.value, postID))
             return None
@@ -71,7 +71,7 @@ export class ECKeyIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<ECKeyIdentifier> {
         if (!input) return None
         input = String(input)
-        if (input.startsWith('ec_key:')) return Identifier.from(input) as Option<ECKeyIdentifier>
+        if (input.startsWith('ec_key:')) return super.from(input) as Option<ECKeyIdentifier>
         return None
     }
     static fromHexPublicKeyK256(hex: string | null | undefined): Option<ECKeyIdentifier> {
@@ -92,7 +92,7 @@ export class ECKeyIdentifier extends Identifier {
         if ((key.algorithm as EcKeyAlgorithm).namedCurve !== 'K-256') return Err('curve is not K-256')
         const jwk = await Result.wrapAsync(() => crypto.subtle.exportKey('jwk', key))
         if (jwk.isErr()) return jwk
-        return ECKeyIdentifier.fromJsonWebKey(jwk.value as EC_JsonWebKey)
+        return this.fromJsonWebKey(jwk.value as EC_JsonWebKey)
     }
     async toJsonWebKey(usage: 'sign_and_verify' | 'derive'): Promise<EC_Public_JsonWebKey> {
         const key = await decompressK256Key(this.rawPublicKey)
@@ -155,7 +155,7 @@ export class PostIVIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<PostIVIdentifier> {
         if (!input) return None
         input = String(input)
-        if (input.startsWith('post_iv:')) return Identifier.from(input) as Option<PostIVIdentifier>
+        if (input.startsWith('post_iv:')) return super.from(input) as Option<PostIVIdentifier>
         return None
     }
     declare readonly network: string
@@ -210,7 +210,7 @@ export class PostIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<PostIdentifier> {
         if (!input) return None
         input = String(input)
-        if (input.startsWith('post:')) return Identifier.from(input) as Option<PostIdentifier>
+        if (input.startsWith('post:')) return super.from(input) as Option<PostIdentifier>
         return None
     }
     declare readonly identifier: ProfileIdentifier
@@ -259,7 +259,7 @@ export class ProfileIdentifier extends Identifier {
     static override from(input: string | null | undefined): Option<ProfileIdentifier> {
         input = String(input)
         if (input === 'person:localhost/$unknown') return None
-        if (input.startsWith('person:')) return Identifier.from(input) as Option<ProfileIdentifier>
+        if (input.startsWith('person:')) return super.from(input) as Option<ProfileIdentifier>
         return None
     }
     static of(network: string | undefined | null, userID: string | undefined | null): Option<ProfileIdentifier> {

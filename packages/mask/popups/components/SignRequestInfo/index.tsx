@@ -100,14 +100,14 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
                         )}>
                         {origin}
                     </Typography>
-                    {!origin.startsWith('https://') ?
+                    {origin.startsWith('https://') ? null : (
                         <Alert className={classes.dangerField} open>
                             <Trans>
                                 Your connection to this site is not encrypted which can be modified by a hostile third
                                 party, we strongly suggest you reject this request.
                             </Trans>
                         </Alert>
-                    :   null}
+                    )}
                 </Box>
             :   null}
             {EIP4361Message}

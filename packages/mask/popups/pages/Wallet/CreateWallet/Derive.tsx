@@ -70,10 +70,10 @@ const useStyles = makeStyles()((theme) => ({
 
 async function pollResult(address: string) {
     const subscription = MaskWalletProvider.subscription.wallets
-    if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
+    if (subscription.getCurrentValue().some((x) => isSameAddress(x.address, address))) return
     const { promise, resolve } = Promise.withResolvers()
     const unsubscribe = subscription.subscribe(() => {
-        if (!subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
+        if (subscription.getCurrentValue().every((x) => !isSameAddress(x.address, address))) return
         resolve(true)
     })
     return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
@@ -113,7 +113,9 @@ export const Component = memo(function DeriveWallet() {
                 providerType: ProviderType.MaskWallet,
                 account: address,
             })
-        } catch {}
+        } catch {
+            // ignore
+        }
         setIsDeriving(false)
     }, [mnemonicId, queryClient])
 

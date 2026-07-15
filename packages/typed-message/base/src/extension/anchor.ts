@@ -20,7 +20,7 @@ export function makeTypedMessageAnchor(
     href: TypedMessageAnchor['href'],
     content: TypedMessageAnchor['content'],
     postImage?: TypedMessageImage,
-    meta?: Meta | undefined,
+    meta?: Meta,
 ): TypedMessageAnchor {
     return {
         type: 'x-anchor',

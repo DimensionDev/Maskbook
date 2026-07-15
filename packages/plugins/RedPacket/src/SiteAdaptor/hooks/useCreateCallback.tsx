@@ -59,7 +59,7 @@ interface CreateParams {
     gas: string | undefined
     params: MethodParameters
     paramsObj: ParamsObjType
-    gasError: Error | null
+    gasError: boolean
 }
 
 export function getCreateRedPacketParameters(paramsObj: ParamsObjType): MethodParameters {
@@ -122,7 +122,7 @@ function useCreateParamsCallback(
 
         const params = getCreateRedPacketParameters(paramsObj)
 
-        let gasError: Error | null = null
+        let gasError = false
         const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
 
         const gas = await EVMContract.estimateContractGas(
@@ -134,8 +134,8 @@ function useCreateParamsCallback(
                 from: account,
                 value,
             },
-        ).catch((error: Error) => {
-            gasError = error
+        ).catch(() => {
+            gasError = true
         })
 
         return { gas: gas ? toFixed(gas) : undefined, params, paramsObj, gasError }
@@ -181,7 +181,7 @@ export function useCreateCallback(
 
         try {
             checkParams(paramsObj)
-        } catch (error) {
+        } catch {
             return
         }
 

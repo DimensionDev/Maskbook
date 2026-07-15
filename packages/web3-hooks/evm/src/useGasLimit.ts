@@ -22,6 +22,7 @@ export function useGasLimit(
         providerURL: network?.rpcUrl,
     }
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         queryKey: ['gas-limit', chainId, schemaType, account, recipient, tokenId, amount, contractAddress],
         queryFn: async () => {
@@ -30,7 +31,7 @@ export function useGasLimit(
             if ((schemaType === SchemaType.ERC721 && !tokenId) || !contractAddress) return 0
 
             switch (schemaType) {
-                case SchemaType.Native:
+                case SchemaType.Native: {
                     const gas = await EVMWeb3.estimateTransaction?.(
                         {
                             from: account,
@@ -41,6 +42,7 @@ export function useGasLimit(
                         options,
                     )
                     return Number.parseInt(gas ?? '0', 16)
+                }
                 case SchemaType.ERC20:
                     return (
                         (await EVMContract.estimateContractGas(

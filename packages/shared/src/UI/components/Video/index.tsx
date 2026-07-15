@@ -29,7 +29,7 @@ export function Video(props: VideoProps) {
     }, [value])
 
     if (component !== 'video') return null
-    if (loading || loading) {
+    if (loading) {
         return <Skeleton variant="rectangular" {...SkeletonProps} />
     }
     return (

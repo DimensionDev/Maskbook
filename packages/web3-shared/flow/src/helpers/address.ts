@@ -11,7 +11,7 @@ export function formatAddress(address: string, size = 0) {
         return `${partial.slice(0, Math.max(0, 2 + size))}...${partial.slice(-size)}`
     }
     if (isValidAccountAddress(address)) return format(address)
-    if (isValidContractAddress(address)) return format(`0x${address.split(/\./gu)[1]}`)
+    if (isValidContractAddress(address)) return format(`0x${address.split(/\./gu, 2)[1]}`)
     return address
 }
 

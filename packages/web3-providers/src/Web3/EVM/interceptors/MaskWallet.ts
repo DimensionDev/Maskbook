@@ -83,7 +83,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     if (wallets.some((x) => !isValidAddress(x.address))) throw new Error('Not a valid wallet address.')
                     await this.walletProvider.removeWallets(wallets)
                     context.write()
-                } catch (error) {
+                } catch {
                     context.abort(context)
                 }
                 break
@@ -91,7 +91,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     await this.walletProvider.resetAllWallets()
                     context.write()
-                } catch (error) {
+                } catch {
                     context.abort(context)
                 }
                 break

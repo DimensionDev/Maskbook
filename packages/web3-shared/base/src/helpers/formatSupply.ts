@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { formatCurrency } from './formatCurrency.js'
 
 const boundaryValues = {
-    mid: 10000000000,
+    mid: 10_000_000_000,
 }
 
 /**

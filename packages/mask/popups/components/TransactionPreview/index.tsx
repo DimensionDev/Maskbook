@@ -86,7 +86,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         if (!type) return {}
 
         switch (type) {
-            case TransactionDescriptorType.INTERACTION:
+            case TransactionDescriptorType.INTERACTION: {
                 const parameters = transaction.formattedTransaction?.context?.methods?.find((x) =>
                     ['transfer', 'transferFrom', 'safeTransferFrom'].includes(x.name ?? ''),
                 )?.parameters as
@@ -104,6 +104,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     tokenAddress: transaction.formattedTransaction?.tokenInAddress,
                     amount: transaction.formattedTransaction?.tokenInAmount ?? transaction.computedPayload.value,
                 }
+            }
             case TransactionDescriptorType.TRANSFER:
                 return {
                     title: <Trans>Send</Trans>,
@@ -191,7 +192,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     {tokenId ?
                         <Typography>Token #{tokenId}</Typography>
                     :   null}
-                    {!tokenId ?
+                    {tokenId ? null : (
                         <>
                             <TokenIcon
                                 address={(tokenAddress || nativeToken?.address) ?? ''}
@@ -209,7 +210,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                                 })
                             :   null}
                         </>
-                    :   null}
+                    )}
                 </Typography>
                 {!isGreaterThan(tokenValueUSD, pow10(9)) && !tokenId ?
                     <Typography className={classes.value}>

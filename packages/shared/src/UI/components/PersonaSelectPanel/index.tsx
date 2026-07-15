@@ -6,7 +6,6 @@ import { attachProfile, openDashboard, setCurrentPersonaIdentifier } from '@mask
 import {
     CrossIsolationMessages,
     DashboardRoutes,
-    EMPTY_LIST,
     isSamePersona,
     isSameProfile,
     type PersonaIdentifier,
@@ -74,7 +73,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     const [selectedPersona, setSelectedPersona] = useState<PersonaItem>()
 
     const currentProfileIdentify = useLastRecognizedIdentity()
-    const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
+    const { personas, isPending, error, refetch } = useConnectedPersonas()
 
     useRenderPhraseCallbackOnDepsChange(() => {
         if (!currentPersonaIdentifier) {
@@ -116,7 +115,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     const isConnected = useMemo(() => {
         if (!selectedPersona || !currentProfileIdentify) return false
         // Selected persona does not link the current site
-        const linked = selectedPersona.persona.linkedProfiles.find((x) =>
+        const linked = selectedPersona.persona.linkedProfiles.some((x) =>
             isSameProfile(x, currentProfileIdentify.identifier),
         )
         if (!linked) return false
@@ -129,8 +128,11 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
         const handleClick = async () => {
             if (!isConnected) {
                 await connect(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
-                if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
-                else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
+                if (finishTarget) {
+                    Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
+                } else {
+                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
+                }
             }
 
             CrossIsolationMessages.events.personaBindFinished.sendToAll({ pluginID: finishTarget })

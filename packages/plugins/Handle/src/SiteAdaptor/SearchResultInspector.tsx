@@ -124,7 +124,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                         :   null}
                     </div>
                     <div className={classes.accounts}>
-                        {totalBalance !== undefined ?
+                        {totalBalance === undefined ? null : (
                             <div className={classes.walletValue}>
                                 <Trans>
                                     <Typography className={classes.label}>USD Value</Typography>
@@ -137,7 +137,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                                     </Typography>
                                 </Trans>
                             </div>
-                        :   null}
+                        )}
                         <SocialAccountList web3bioProfiles={web3bioProfiles} />
                     </div>
                 </section>

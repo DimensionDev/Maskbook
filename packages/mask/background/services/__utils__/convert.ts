@@ -12,15 +12,12 @@ import {
 export function toProfileInformation(profiles: ProfileRecord[]) {
     return {
         mustNotAwaitThisWithInATransaction: (async () => {
-            const result: ProfileInformation[] = []
-            for (const profile of profiles) {
-                result.push({
-                    identifier: profile.identifier,
-                    nickname: profile.nickname,
-                    linkedPersona: profile.linkedPersona,
-                    createAt: profile.createdAt,
-                })
-            }
+            const result: ProfileInformation[] = Array.from(profiles, (profile) => ({
+                identifier: profile.identifier,
+                nickname: profile.nickname,
+                linkedPersona: profile.linkedPersona,
+                createAt: profile.createdAt,
+            }))
 
             const avatars = await queryAvatarsDataURL(result.map((x) => x.identifier))
             result.forEach((x) => avatars.has(x.identifier) && (x.avatar = avatars.get(x.identifier)))
@@ -43,7 +40,7 @@ export function toPersonaInformation(personas: PersonaRecord[], t: FullPersonaDB
         })
 
         if (persona.linkedProfiles.size) {
-            const profiles = await queryProfilesDB({ identifiers: [...persona.linkedProfiles.keys()] }, t)
+            const profiles = await queryProfilesDB({ identifiers: persona.linkedProfiles.keys().toArray() }, t)
             // we must not await toProfileInformation cause it is tx of another db.
             dbQueryPass2.push(
                 toProfileInformation(profiles).mustNotAwaitThisWithInATransaction.then((x) => void map.push(...x)),

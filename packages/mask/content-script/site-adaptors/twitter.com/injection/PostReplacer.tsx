@@ -23,7 +23,7 @@ function detectPotentialScam(postInfo: PostInfo) {
 export async function injectPostReplacerAtTwitter(signal: AbortSignal, current: PostInfo) {
     const rootNode = current.rootNode
     if (!rootNode) return
-    const isPromotionPost = !!rootNode.querySelector('svg path[d$="996V8h7v7z"]')
+    const isPromotionPost = !!rootNode.querySelector(':scope svg path[d$="996V8h7v7z"]')
     if (isPromotionPost) return
 
     const hasPotentialScam = detectPotentialScam(current)
@@ -33,28 +33,28 @@ export async function injectPostReplacerAtTwitter(signal: AbortSignal, current: 
 
         const hasVideo = !!rootNode.closest('[data-testid="tweet"]')?.querySelector('video')
         if (hasVideo) return
-        const hasEmbedImage = !!rootNode.querySelector('[data-testid="tweetText"] [data-testid="tweetPhoto"]')
+        const hasEmbedImage = !!rootNode.querySelector(':scope [data-testid="tweetText"] [data-testid="tweetPhoto"]')
         if (hasEmbedImage) return
 
-        const tags = Array.from(
-            rootNode.querySelectorAll<HTMLAnchorElement>(
-                [
-                    'a[role="link"][href*="cashtag_click"]',
-                    'a[role="link"][href*="hashtag_click"]',
-                    // in communities post <a href="/i/communities/1722516678070972815/hashtag/BTC" />
-                    'a[role="link"][href*="/i/communities/"][href*="/hashtag/"]',
-                ].join(','),
-            ) ?? [],
+        const tags = rootNode.querySelectorAll<HTMLAnchorElement>(
+            [
+                'a[role="link"][href*="cashtag_click"]',
+                'a[role="link"][href*="hashtag_click"]',
+                // in communities post <a href="/i/communities/1722516678070972815/hashtag/BTC" />
+                'a[role="link"][href*="/i/communities/"][href*="/hashtag/"]',
+            ].join(','),
         )
-        const mentions = Array.from(
-            rootNode.querySelectorAll<HTMLAnchorElement>(
+        const mentions = rootNode
+            .querySelectorAll<HTMLAnchorElement>(
                 [
                     'a[href^="/"]:not([role="link"][href*="mention_click"])',
                     'a[href^="/"]:not([role="link"][href*="/i/communities/"][href*="/mention/"])',
                     'a[href^="/"]:not([role="link"][href*="/i/communities/"][href*="/hashtag/"])',
                 ].join(','),
-            ) ?? [],
-        ).filter((x) => x.textContent?.startsWith('@'))
+            )
+            .values()
+            .filter((x) => x.textContent?.startsWith('@'))
+            .toArray()
         if (!tags.length && !mentions.length) return
     }
 

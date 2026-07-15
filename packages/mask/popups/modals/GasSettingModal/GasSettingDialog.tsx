@@ -89,14 +89,14 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: token } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
-        config.paymentToken ? config.paymentToken : nativeTokenAddress,
+        config.paymentToken || nativeTokenAddress,
         undefined,
         { chainId },
     )
 
     const { data: tokenPrice } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
-        config.paymentToken ? config.paymentToken : nativeTokenAddress,
+        config.paymentToken || nativeTokenAddress,
     )
 
     const [minGas, defaultGas, maxGas] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -212,14 +212,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     useRenderPhraseCallbackOnDepsChange(() => {
         if (!open || !gasOptions || config.gasPrice || (config.maxFeePerGas && config.maxPriorityFeePerGas)) return
         // Set default value
-        if (!isSupport1559) {
-            const result =
-                replaceType && config.gasPrice ?
-                    formatWeiToGwei(config.gasPrice).plus(5)
-                :   formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
-
-            setGasPrice(result.toFixed(2))
-        } else {
+        if (isSupport1559) {
             const maxPriorityFeePerGas =
                 replaceType && config.maxPriorityFeePerGas ?
                     formatWeiToGwei(config.maxPriorityFeePerGas).plus(5)
@@ -232,6 +225,13 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
             setMaxPriorityFeePerGas(maxPriorityFeePerGas.toFixed(2))
             setMaxFeePerGas(maxFeePerGas.toFixed(2))
+        } else {
+            const result =
+                replaceType && config.gasPrice ?
+                    formatWeiToGwei(config.gasPrice).plus(5)
+                :   formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
+
+            setGasPrice(result.toFixed(2))
         }
     }, [open, isSupport1559, gasOptions, replaceType, config])
 

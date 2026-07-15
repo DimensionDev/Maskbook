@@ -100,7 +100,7 @@ const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
 export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: CoinMetadataTableProps) {
     const { classes } = useStyles()
 
-    // eslint-disable-next-line react/no-missing-key
+    // eslint-disable-next-line @eslint-react/no-missing-key
     const metadataLinks = [[<Trans>Website</Trans>, trending?.coin.home_urls]] as const
 
     const contracts = trending?.contracts?.filter((x) => x.chainId) ?? [

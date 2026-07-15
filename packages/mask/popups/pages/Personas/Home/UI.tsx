@@ -177,7 +177,6 @@ interface PersonaHomeUIProps {
     onConnect: (networkIdentifier: EnhanceableSite) => void
     onAccountClick: (account: ProfileAccount) => void
     bindingWallets?: BindingProof[]
-    hasPaymentPassword?: boolean
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
@@ -204,8 +203,53 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
 
         return (
             <div className={classes.container}>
-                {!isEmpty ?
-                    <TabContext value={currentTab}>
+                {isEmpty ?
+                    <Box className={classes.container} data-hide-scrollbar>
+                        <Box className={classes.emptyHeader}>
+                            <Icons.MaskSquare width={160} height={46} />
+                        </Box>
+                        <Box className={classes.content}>
+                            <Box className={classes.titleWrapper}>
+                                <Typography className={classes.title}>
+                                    <Trans>Welcome to Mask Network</Trans>
+                                </Typography>
+                                <Typography className={classes.placeholderDescription}>
+                                    <Trans>Use Persona to encrypt and decrypt social media posts & messages.</Trans>
+                                </Typography>
+                            </Box>
+                            <Box className={classes.addPersonaWrapper} onClick={onCreatePersona}>
+                                <div className={cx(classes.iconWrapper, classes.personaIcon)}>
+                                    <Icons.AddUser size={20} color={theme.palette.maskColor.white} />
+                                </div>
+                                <div>
+                                    <Typography className={classes.subTitle}>
+                                        <Trans>Create Persona</Trans>
+                                    </Typography>
+                                    <Typography className={classes.description}>
+                                        <Trans>Generate a new persona</Trans>
+                                    </Typography>
+                                </div>
+                            </Box>
+
+                            <Box className={classes.addPersonaWrapper} onClick={onRestore}>
+                                <div className={cx(classes.iconWrapper, classes.mnemonicIcon)}>
+                                    <Icons.PopupRestore size={20} color={theme.palette.maskColor.white} />
+                                </div>
+                                <div>
+                                    <Typography className={classes.subTitle}>
+                                        <Trans>Restore or Login</Trans>
+                                    </Typography>
+                                    <Typography className={classes.description}>
+                                        <Trans>
+                                            Support Identity code, private key, local backups or cloud backups to access
+                                            your personal data.
+                                        </Trans>
+                                    </Typography>
+                                </div>
+                            </Box>
+                        </Box>
+                    </Box>
+                :   <TabContext value={currentTab}>
                         <Box sx={{ background: theme.palette.maskColor.modalTitleBg }}>
                             <Box className={classes.header}>
                                 <Icons.MaskSquare className={classes.logo} />
@@ -269,51 +313,6 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             :   <SelectProvider />}
                         </TabPanel>
                     </TabContext>
-                :   <Box className={classes.container} data-hide-scrollbar>
-                        <Box className={classes.emptyHeader}>
-                            <Icons.MaskSquare width={160} height={46} />
-                        </Box>
-                        <Box className={classes.content}>
-                            <Box className={classes.titleWrapper}>
-                                <Typography className={classes.title}>
-                                    <Trans>Welcome to Mask Network</Trans>
-                                </Typography>
-                                <Typography className={classes.placeholderDescription}>
-                                    <Trans>Use Persona to encrypt and decrypt social media posts & messages.</Trans>
-                                </Typography>
-                            </Box>
-                            <Box className={classes.addPersonaWrapper} onClick={onCreatePersona}>
-                                <div className={cx(classes.iconWrapper, classes.personaIcon)}>
-                                    <Icons.AddUser size={20} color={theme.palette.maskColor.white} />
-                                </div>
-                                <div>
-                                    <Typography className={classes.subTitle}>
-                                        <Trans>Create Persona</Trans>
-                                    </Typography>
-                                    <Typography className={classes.description}>
-                                        <Trans>Generate a new persona</Trans>
-                                    </Typography>
-                                </div>
-                            </Box>
-
-                            <Box className={classes.addPersonaWrapper} onClick={onRestore}>
-                                <div className={cx(classes.iconWrapper, classes.mnemonicIcon)}>
-                                    <Icons.PopupRestore size={20} color={theme.palette.maskColor.white} />
-                                </div>
-                                <div>
-                                    <Typography className={classes.subTitle}>
-                                        <Trans>Restore or Login</Trans>
-                                    </Typography>
-                                    <Typography className={classes.description}>
-                                        <Trans>
-                                            Support Identity code, private key, local backups or cloud backups to access
-                                            your personal data.
-                                        </Trans>
-                                    </Typography>
-                                </div>
-                            </Box>
-                        </Box>
-                    </Box>
                 }
             </div>
         )

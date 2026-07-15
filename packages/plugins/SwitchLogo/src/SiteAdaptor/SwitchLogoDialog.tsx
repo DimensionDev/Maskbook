@@ -96,8 +96,7 @@ export const SwitchLogoDialog = memo(() => {
     const openApplicationBoardDialog = useOpenApplicationSettings()
     const disabled = useMemo(() => {
         if (defaultLogoType === SwitchLogoType.None) return false
-        if (defaultLogoType === logoType) return true
-        return false
+        return defaultLogoType === logoType
     }, [defaultLogoType, logoType])
 
     if (!open) return

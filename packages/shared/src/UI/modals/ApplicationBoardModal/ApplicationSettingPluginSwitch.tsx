@@ -85,7 +85,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
         return plugins
             .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginID: ID })))
             .filter((x) => x.entry.category === 'dapp' && !x.entry.hiddenInList)
-            .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
+            .toSorted((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
     }, [plugins])
 
     const targetPluginRef = useRef<HTMLLIElement | null>(undefined)
@@ -98,7 +98,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
 
     const onSwitch = useCallback(
         async (id: string, checked: boolean) => {
-            if (id === PluginID.GoPlusSecurity && checked === false) {
+            if (id === PluginID.GoPlusSecurity && !checked) {
                 CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
             } else {
                 await setPluginMinimalModeEnabled?.(id, !checked)
@@ -113,7 +113,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                 checked={!pluginsInMinimalMode.map((x) => x.ID).includes(PluginID.Handle)}
                 onSwitch={(event) => onSwitch(PluginID.Handle, event.target.checked)}
                 setRef={(element: HTMLLIElement | null) => {
-                    if (!(DSearch_KEY === focusPluginID)) return
+                    if (DSearch_KEY !== focusPluginID) return
                     targetPluginRef.current = element
                 }}
             />
@@ -121,7 +121,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                 <ListItem
                     key={x.entry.ApplicationEntryID}
                     ref={(ele) => {
-                        if (!(x.pluginID === focusPluginID)) return
+                        if (x.pluginID !== focusPluginID) return
                         targetPluginRef.current = ele
                     }}
                     className={classes.listItem}>

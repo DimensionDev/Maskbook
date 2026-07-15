@@ -53,7 +53,7 @@ const PopupShell = memo(function PopupShell() {
     }, [navigate])
 
     useEffect(() => {
-        document.getElementById('app-spinner')?.remove()
+        document.querySelector('#app-spinner')?.remove()
     }, [])
 
     return (
@@ -107,7 +107,7 @@ export default function Popups() {
 
     useIdleTimer({
         onAction: () => Services.Wallet.setAutoLockTimer(),
-        throttle: 10000,
+        throttle: 10_000,
     })
 
     return jsxCompose(

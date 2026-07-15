@@ -55,7 +55,7 @@ function isValidDomain(domain?: string): boolean {
 }
 
 const handleRe = new RegExp(
-    `\\.(${[
+    String.raw`\.(${[
         'avax',
         'csb',
         'bit',
@@ -207,16 +207,14 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
             .filter((x) => {
                 return isSameAddress(address, x.address) && x.type === SearchResultType.FungibleToken
             })
-            .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+            .toSorted((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+        if (specificTokensFiltered.length > 0) return [specificTokensFiltered[0]]
 
         const normalTokensFiltered = normalTokens
             .filter((x) => {
                 return isSameAddress(address, x.address) && x.type === SearchResultType.FungibleToken
             })
-            .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
-
-        if (specificTokensFiltered.length > 0) return [specificTokensFiltered[0]]
-
+            .toSorted((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
         if (normalTokensFiltered.length > 0) return [normalTokensFiltered[0]]
 
         const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address)
@@ -263,18 +261,18 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                     const filtered = tokens.filter((x) => (types ? types.includes(x.type) : true))
                     if (rule.type === 'exact') {
                         const item = filtered.find((x) => rule.filter?.(x, name, filtered))
-                        if (item) result = [...result, { ...item, keyword: name }]
+                        if (item) result.push({ ...item, keyword: name })
                     }
                     if (rule.type === 'fuzzy' && rule.fullSearch) {
                         const items = rule
                             .fullSearch<FungibleTokenResult<ChainId, SchemaType>>(name, filtered)
                             .map((x) => ({ ...x, keyword: name }))
-                        if (items.length) result = [...result, ...items]
+                        if (items.length) result.push(...items)
                     }
                 }
             }
         }
-        return result.sort((a, b) => {
+        return result.toSorted((a, b) => {
             if (
                 a.rank &&
                 a.rank <= 200 &&

@@ -46,6 +46,7 @@ export const Icon = memo<IconProps>(function Icon(props) {
                 ...rest.imgProps,
             }}
             sx={{
+                // eslint-disable-next-line @typescript-eslint/no-misused-spread
                 ...rest.sx,
                 backgroundImage: showImage ? undefined : `url("${defaultBackgroundImage}")`,
                 backgroundColor: showImage ? (color ?? theme.palette.common.white) : undefined,

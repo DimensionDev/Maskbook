@@ -27,7 +27,7 @@ export function ProfileTab(props: ProfileTabProps) {
 
     const onClick = useCallback(() => {
         // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
-        Sniffings.is_twitter_page && location.assign('#' + type)
+        if (Sniffings.is_twitter_page) location.assign('#' + type)
         switchToTab()
     }, [switchToTab, type])
 

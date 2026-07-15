@@ -13,7 +13,7 @@ export function useTokenMenuCollectionList(
             (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
         )
 
-        const SourceTypeList = collectionList.map((x) => x.source)
+        const SourceTypeList = new Set(collectionList.map((x) => x.source))
 
         return collectionList.filter((x) => {
             if (
@@ -25,7 +25,7 @@ export function useTokenMenuCollectionList(
                 return false
             }
 
-            if (!currentCollection && SourceTypeList.includes(SourceType.CoinGecko)) {
+            if (!currentCollection && SourceTypeList.has(SourceType.CoinGecko)) {
                 return false
             }
 

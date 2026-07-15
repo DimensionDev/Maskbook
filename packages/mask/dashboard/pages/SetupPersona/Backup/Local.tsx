@@ -26,14 +26,9 @@ export const Component = memo(function LocalBackup() {
         hasPassword,
         backupWallets,
         setBackupWallets,
-        formState: {
-            setError,
-            control,
-            handleSubmit,
-            clearErrors,
-            formState: { errors, isDirty, isValid },
-        },
+        formState: { setError, control, handleSubmit, clearErrors, formState },
     } = useBackupFormState()
+    const { errors, isDirty, isValid } = formState
     const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
 
     const [{ loading: downloadLoading }, handleFormSubmit] = useAsyncFn(

@@ -40,7 +40,7 @@ function fetchingTwitterResource(target: URL) {
 
 function fetchingInsResource(target: URL) {
     // cspell:disable-next-line
-    if (isHostName(location, 'instagram.com') && target.origin.match(/(fbcdn\.net|cdninstagram\.com)$/u)) return true
+    if (isHostName(location, 'instagram.com') && /(fbcdn\.net|cdninstagram\.com)$/u.test(target.origin)) return true
     return target.host === 'api.lens.xyz'
 }
 
@@ -67,4 +67,5 @@ function isHostName(url: URL | Location, domain: string) {
     return url.hostname === domain || url.hostname.endsWith('.' + domain)
 }
 
+// eslint-disable-next-line unicorn/no-global-object-property-assignment
 globalThis.fetch = contentFetch

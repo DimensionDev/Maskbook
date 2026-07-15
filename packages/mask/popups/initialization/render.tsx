@@ -15,9 +15,10 @@ if (navigator.userAgent.includes('Firefox')) {
         document.body.style.maxWidth = '350px'
 
         window.addEventListener(
+            // eslint-disable-next-line unicorn/prefer-observer-apis -- once: true, therefore no perf issue
             'resize',
             () => {
-                if (!(window.innerWidth !== 400)) return
+                if (window.innerWidth === 400) return
                 document.body.style.maxWidth = 'unset'
             },
             { once: true },

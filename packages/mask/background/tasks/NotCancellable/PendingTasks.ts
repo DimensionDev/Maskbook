@@ -4,7 +4,7 @@ import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-b
 function checkMessages(messages: Array<ReasonableMessage<Request, Response>>) {
     const pendingTasks = messages
         .filter((x) => x.state === MessageStateType.NOT_DEPEND)
-        .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
+        .toSorted((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
     const length = Math.min(pendingTasks.length, 99)
     const action = browser.action || browser.browserAction
     action.setBadgeBackgroundColor({

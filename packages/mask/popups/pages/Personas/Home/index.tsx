@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared-base'
 import { PersonaHomeUI } from './UI.js'
 import Services from '#services'
-import { useSupportSocialNetworks, useHasPassword } from '../../../hooks/index.js'
+import { useSupportSocialNetworks } from '../../../hooks/index.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 
 export const Component = memo(function PersonaHome() {
@@ -18,7 +18,6 @@ export const Component = memo(function PersonaHome() {
     const { avatar, currentPersona, setSelectedAccount, personas, accounts } = PersonaContext.useContainer()
 
     const { data: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
-    const { hasPassword } = useHasPassword()
 
     const onCreatePersona = useCallback(() => {
         browser.tabs.create({
@@ -69,7 +68,6 @@ export const Component = memo(function PersonaHome() {
             onRestore={onRestore}
             onConnect={handleConnect}
             onAccountClick={handleAccountClick}
-            hasPaymentPassword={hasPassword}
         />
     )
 })

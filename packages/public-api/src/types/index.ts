@@ -46,6 +46,7 @@ export interface EC_Public_JsonWebKey extends JsonWebKey, Nominal<'EC public'> {
 export interface EC_Private_JsonWebKey extends JsonWebKey, Nominal<'EC private'> {}
 export interface AESJsonWebKey extends JsonWebKey, Nominal<'AES'> {}
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 declare class Nominal<T> {
     /** Ghost property, don't use it! */
     private __brand: T

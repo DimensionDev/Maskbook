@@ -8,8 +8,8 @@ export function useSiteThemeMode(theme: Theme) {
 
     return (
         isDark ?
-            !isDarker ? 'dim'
-            :   'dark'
+            isDarker ? 'dark'
+            :   'dim'
         :   'light'
     )
 }

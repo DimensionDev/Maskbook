@@ -123,7 +123,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
     const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
     useEffect(() => {
         const closeMenu = () => setWalletMenuOpen(false)
-        window.addEventListener('scroll', closeMenu, false)
+        window.addEventListener('scroll', closeMenu, { capture: false })
         return () => {
             window.removeEventListener('scroll', closeMenu, false)
         }

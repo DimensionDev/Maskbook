@@ -3,7 +3,7 @@ import { getRpProgram } from './getRpProgram.js'
 import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { Cluster } from '@solana/web3.js'
 
-export async function refundNativeToken(id: string, creator: SolanaWeb3.PublicKey, cluster?: Cluster | undefined) {
+export async function refundNativeToken(id: string, creator: SolanaWeb3.PublicKey, cluster?: Cluster) {
     const program = await getRpProgram(cluster)
     return program.methods
         .withdrawWithNativeToken()

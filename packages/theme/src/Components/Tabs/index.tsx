@@ -126,7 +126,7 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
     flex: 1,
     maxWidth: '100%',
     paddingRight: isOpen ? defaultTabSize : 0,
-    gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
+    gap: maskVariant === 'base' ? 0 : theme.spacing(1),
     borderRadius: 0,
     background:
         !isOpen && isOverflow ?
@@ -202,6 +202,7 @@ export function MaskTabList(props: MaskTabListProps) {
             if (child === null) return null
             throw new TypeError(`Invalided child at ${index}, got ${typeof child}`)
         }
+        if (child.type !== Tab) return child
         const childProps: any = child.props
         const extra = {
             'aria-controls': getPanelId(context, childProps.value),
@@ -217,8 +218,6 @@ export function MaskTabList(props: MaskTabListProps) {
             },
             disabled: childProps.disabled,
         }
-
-        if (child.type !== Tab) return child
 
         if (variant === 'flexible') {
             Object.assign(extra, {
@@ -240,7 +239,7 @@ export function MaskTabList(props: MaskTabListProps) {
     // #region hide tab should up to first when chick
     const flexibleTabs = useMemo(() => {
         if (variant !== 'flexible') return null
-        return children?.sort((a, b) => {
+        return children?.toSorted((a, b) => {
             if (a.props.value === firstId) return -1
             if (b.props.value === firstId) return 1
             return 0

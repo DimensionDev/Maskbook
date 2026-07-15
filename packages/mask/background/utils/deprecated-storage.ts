@@ -90,7 +90,7 @@ export async function __deprecated__getStorage<T>(key: string): Promise<Option<T
  * @deprecated
  * @internal
  */
-export async function __deprecated__setStorage<T>(key: string, value: T): Promise<void> {
+export async function __deprecated__setStorage(key: string, value: unknown): Promise<void> {
     if (typeof browser === 'undefined') return
     if (!browser.storage) return
     return storage.setStorage(key, value)

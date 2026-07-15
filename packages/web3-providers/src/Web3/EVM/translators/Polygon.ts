@@ -16,6 +16,7 @@ export class PolygonTranslator extends BaseTranslator {
         const config = {
             ...context.config,
             // keep the legacy gasPrice
+            // eslint-disable-next-line unicorn/consistent-conditional-object-spread
             ...(PayloadEditor.fromPayload(context.request) ?
                 {}
             :   {

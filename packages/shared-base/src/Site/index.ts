@@ -27,8 +27,7 @@ export const ExtensionSiteList = getEnumAsArray(ExtensionSite).map((x) => x.valu
 export function getEnhanceableSiteType() {
     const target = location.host
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
-        if (target.match(regexp)) return type as EnhanceableSite
-        continue
+        if (regexp.test(target)) return type as EnhanceableSite
     }
     return
 }
@@ -37,8 +36,7 @@ export function getExtensionSiteType() {
     if (!location.protocol.includes('extension')) return
     const target = location.pathname
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
-        if (target.match(regexp)) return type as ExtensionSite
-        continue
+        if (regexp.test(target)) return type as ExtensionSite
     }
     return
 }
@@ -69,7 +67,8 @@ export function isExtensionSiteType() {
  */
 export function isEthereumInjected(name = 'ethereum') {
     if (typeof window === 'undefined') return false
-    return typeof Reflect.get(window, name) !== 'undefined'
+
+    return Reflect.get(window, name) !== undefined
 }
 
 /**

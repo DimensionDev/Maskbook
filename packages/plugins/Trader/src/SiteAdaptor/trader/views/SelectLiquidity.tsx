@@ -120,7 +120,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
     const liquidityGroups = useMemo(() => {
         const items = keyword ? fuse.search(keyword).map((r) => r.item) : liquidityList
         const groups = groupBy(items, (x) => {
-            return x.name.match(/^\d/u) ? '0-9' : x.name.charAt(0).toUpperCase()
+            return /^\d/u.test(x.name) ? '0-9' : x.name.charAt(0).toUpperCase()
         })
         return sortBy(Object.entries(groups), (x) => x[0])
     }, [liquidityList, fuse, keyword])
@@ -158,11 +158,8 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                     <div className={classes.statusBox}>
                         <LoadingStatus />
                     </div>
-                : !liquidityGroups.length ?
-                    <div className={classes.statusBox}>
-                        <EmptyStatus />
-                    </div>
-                :   liquidityGroups.map(([name, list]) => {
+                : liquidityGroups.length ?
+                    liquidityGroups.map(([name, list]) => {
                         return (
                             <div className={classes.group} key={name}>
                                 <Typography className={classes.groupName}>{name}</Typography>
@@ -205,6 +202,9 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                             </div>
                         )
                     })
+                :   <div className={classes.statusBox}>
+                        <EmptyStatus />
+                    </div>
                 }
             </div>
             <div className={classes.footer}>

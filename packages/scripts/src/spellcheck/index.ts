@@ -18,7 +18,7 @@ function sort(values?: string[]) {
     if (!values) return
     values = values.map((value) => value.toLowerCase())
     values = [...new Set(values)]
-    values.sort((a, b) => a.localeCompare(b, 'en-US', { numeric: true }))
+    values.toSorted((a, b) => a.localeCompare(b, 'en-US', { numeric: true }))
     return values
 }
 
@@ -29,11 +29,11 @@ function sortConfigure(configure: Configure) {
 }
 
 export async function reorderSpellcheck() {
-    const configure: RootConfigure = JSON.parse(await readFile(CONFIGURE_PATH, 'utf-8'))
+    const configure: RootConfigure = JSON.parse(await readFile(CONFIGURE_PATH, 'utf8'))
     sortConfigure(configure)
     configure.overrides?.forEach(sortConfigure)
     const formatted = await prettier(JSON.stringify(configure, null, 2), 'json')
-    await writeFile(CONFIGURE_PATH, formatted, 'utf-8')
+    await writeFile(CONFIGURE_PATH, formatted, 'utf8')
 }
 
 task(reorderSpellcheck, 'reorder-spellcheck', 'Run Spellcheck reorder words.')
