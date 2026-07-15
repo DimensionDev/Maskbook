@@ -1353,5 +1353,33 @@
                 "url": "https://zora.superscan.network/"
             }
         ]
+    },
+    {
+        "chainId": 4663,
+        "type": "Robinhood",
+        "name": "Robinhood",
+        "color": "rgb(0, 200, 5)",
+        "network": "mainnet",
+        "fullName": "Robinhood",
+        "shortName": "robinhood",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 4663,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
+        "infoURL": "https://robinhood.com/",
+        "explorers": [
+            {
+                "name": "Blockscout",
+                "url": "https://robinhoodchain.blockscout.com",
+                "standard": "EIP3091"
+            }
+        ]
     }
 ]

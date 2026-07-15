@@ -156,6 +156,8 @@ export function chainIdToChain(chainId: ChainId) {
             return chains.bitTorrent
         case ChainId.Zora:
             return chains.zora
+        case ChainId.Robinhood:
+            return createChainFromDescriptor(chainId)
         case ChainId.Invalid:
             return
     }

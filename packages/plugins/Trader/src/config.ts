@@ -18,6 +18,7 @@ export const TRADER_WEB3_CONFIG = {
             ChainId.Scroll,
             ChainId.Aurora,
             ChainId.Metis,
+            ChainId.Robinhood,
         ],
     },
     [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

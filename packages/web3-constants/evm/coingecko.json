@@ -14,7 +14,8 @@
         "Astar": "astar",
         "Boba": "boba",
         "Metis": "metis-andromeda",
-        "Scroll": "scroll"
+        "Scroll": "scroll",
+        "Robinhood": "robinhood"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -39,6 +40,7 @@
         "BitTorrent": "bittorrent",
         "Boba": "boba-network",
         "XLayer": "okb",
-        "Sei": "sei-network"
+        "Sei": "sei-network",
+        "Robinhood": "ethereum"
     }
 }

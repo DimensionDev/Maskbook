@@ -158,6 +158,9 @@ export enum ChainId {
 
     Zora = 7_777_777,
 
+    // Robinhood
+    Robinhood = 4663,
+
     // For any chains not supported yet.
     Invalid = 0,
 }
@@ -318,6 +321,7 @@ export enum NetworkType {
     Moonbeam = 'Moonbeam',
     XLayer = 'XLayer',
     Zora = 'Zora',
+    Robinhood = 'Robinhood',
     CustomNetwork = 'CustomNetwork',
 }
 

@@ -31,6 +31,7 @@ export type DebankChains =
     | 'fuse'
     | 'heco'
     | 'hmy'
+    | 'hood'
     | 'iotx'
     | 'kava'
     | 'kcc'

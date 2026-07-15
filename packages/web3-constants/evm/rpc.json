@@ -59,7 +59,10 @@
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "Sei": ["https://evm-rpc.sei-apis.com"],
         "XLayer": ["https://rpc.xlayer.tech"],
-        "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
+        "XLayer_Testnet": ["https://testrpc.xlayer.tech"],
+        "Robinhood": [
+            "https://radial-cosmopolitan-isle.robinhood-mainnet.quiknode.pro/e324cbebecb85c3fd6fb9340a714e2cd0097037e/"
+        ]
     },
     "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
@@ -91,7 +94,10 @@
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "Sei": ["https://evm-rpc.sei-apis.com"],
         "XLayer": ["https://rpc.xlayer.tech"],
-        "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
+        "XLayer_Testnet": ["https://testrpc.xlayer.tech"],
+        "Robinhood": [
+            "https://radial-cosmopolitan-isle.robinhood-mainnet.quiknode.pro/e324cbebecb85c3fd6fb9340a714e2cd0097037e/"
+        ]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3],
@@ -123,6 +129,7 @@
         "Metis": [0, 0, 0, 0, 0],
         "Sei": [0, 0, 0, 0, 0],
         "XLayer": [0, 0, 0, 0, 0],
-        "XLayer_Testnet": [0, 0, 0, 0, 0]
+        "XLayer_Testnet": [0, 0, 0, 0, 0],
+        "Robinhood": [0, 0, 0, 0, 0]
     }
 }
