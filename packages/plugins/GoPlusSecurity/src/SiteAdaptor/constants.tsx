@@ -9,7 +9,6 @@ export enum SecurityMessageLevel {
     Safe = 'Safe',
 }
 
- 
 type DefineMapping = Record<
     SecurityMessageLevel,
     {

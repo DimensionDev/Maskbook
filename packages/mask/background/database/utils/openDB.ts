@@ -164,8 +164,7 @@ export type IDBPSafeTransaction<
     readonly mode: IDBTransactionMode
     readonly __writable__?: Mode extends 'readwrite' ? true : boolean
     readonly __stores__?: {
-        [storeName: string]:
-        TxStores extends ReadonlyArray<infer ValueOfUsedStoreName> ?
+        [storeName: string]: TxStores extends ReadonlyArray<infer ValueOfUsedStoreName> ?
             ValueOfUsedStoreName extends string | number | symbol ?
                 ValueOfUsedStoreName
             :   never
