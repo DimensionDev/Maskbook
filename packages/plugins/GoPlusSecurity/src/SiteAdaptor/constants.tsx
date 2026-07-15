@@ -9,7 +9,7 @@ export enum SecurityMessageLevel {
     Safe = 'Safe',
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+ 
 type DefineMapping = Record<
     SecurityMessageLevel,
     {

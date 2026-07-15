@@ -31,5 +31,6 @@ export function isEC_Private_JsonWebKey(o: unknown): o is EC_Private_JsonWebKey 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 declare class Nominal<T> {
     /** Ghost property, don't use it! */
-    private __brand: T
+    // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
+    #__brand: T
 }

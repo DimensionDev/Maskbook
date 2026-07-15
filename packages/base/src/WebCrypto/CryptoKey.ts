@@ -8,5 +8,6 @@ export interface AESCryptoKey extends CryptoKey, Nominal<'AES'> {}
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 declare class Nominal<T> {
     /** Ghost property, don't use it! */
-    private __brand: T
+    // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
+    #__brand: T
 }

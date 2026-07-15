@@ -119,7 +119,7 @@ export enum EncryptPayloadNetwork {
  * The latest version is -37.
  */
 export type SupportedPayloadVersions = -37 | -38 | -39 | -40
-const map: Record<EncryptPayloadNetwork, string> = {
+const map: { [key in EncryptPayloadNetwork]: string } = {
     [EncryptPayloadNetwork.Unknown]: 'localhost',
     [EncryptPayloadNetwork.Facebook]: 'facebook.com',
     [EncryptPayloadNetwork.Minds]: 'minds.com',

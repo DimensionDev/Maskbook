@@ -163,14 +163,14 @@ export type IDBPSafeTransaction<
     readonly objectStoreNames: TypedDOMStringList<StoreNames<DBTypes> & string>
     readonly mode: IDBTransactionMode
     readonly __writable__?: Mode extends 'readwrite' ? true : boolean
-    readonly __stores__?: Record<
+    readonly __stores__?: {
+        [storeName: string]:
         TxStores extends ReadonlyArray<infer ValueOfUsedStoreName> ?
             ValueOfUsedStoreName extends string | number | symbol ?
                 ValueOfUsedStoreName
             :   never
-        :   never,
-        never
-    >
+        :   never
+    }
     objectStore<StoreName extends TxStores[number]>(
         name: StoreName,
     ): IDBPSafeObjectStore<DBTypes, StoreName[], StoreName, Mode extends 'readonly' ? boolean : true>

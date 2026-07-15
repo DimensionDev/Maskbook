@@ -35,7 +35,6 @@ const deferPackages = [
 const disabledRules = {
     // Not compatible
     // with TypeScript
-    'no-unused-vars': 'off',
     'unicorn/no-optional-chaining-on-undeclared-variable': 'off',
     // TypeScript can do the check
     'unicorn/no-array-callback-reference': 'off',
@@ -55,9 +54,11 @@ const disabledRules = {
 
     // too strict
     '@typescript-eslint/no-deprecated': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-namespace': 'off', // namespace T {}, they won't support type only namespace
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off', // we use a lot of || to check falsy string "" in web3 related code. nullish coalescing will break those code.
     'lingui/no-expression-in-message': 'off',
     'unicorn/no-array-reduce': 'off',
@@ -97,7 +98,6 @@ const disabledRules = {
     '@typescript-eslint/no-unsafe-enum-comparison': 'off',
     '@typescript-eslint/no-unsafe-member-access': 'off',
     '@typescript-eslint/no-unsafe-return': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/prefer-promise-reject-errors': 'off',
     '@typescript-eslint/require-await': 'off',
     '@typescript-eslint/restrict-plus-operands': 'off',
@@ -283,6 +283,8 @@ const codeStyleRules = {
     '@masknet/string-no-simple-template-literal': 'warn', // prefer simple string
     '@masknet/string-no-unneeded-to-string': 'warn', // useless .toString()
     '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
+    'no-unused-private-class-members': 'off',
+    '@typescript-eslint/no-unused-private-class-members': 'warn',
     'no-extra-bind': 'warn', // unused bind on a function that does not uses this
     'no-extra-label': 'warn', // break/continue is ok without label
     'no-unneeded-ternary': 'warn', // expr ? true : false
@@ -290,8 +292,7 @@ const codeStyleRules = {
     'no-useless-concat': 'warn', // "a" + "b"
     // '@eslint-react/no-unused-props': 'warn',
     // '@masknet/array-no-unneeded-flat-map': 'warn', // bans Array#flatMap((x) => x)
-    // '@typescript-eslint/no-empty-interface': 'warn', // interface T extends Q {}
-    // '@typescript-eslint/no-useless-empty-export': 'warn', // export {}
+    '@typescript-eslint/no-useless-empty-export': 'warn', // export {}
     // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
     // Note: this rule seems like does not have the correct type checking behavior. before typescript-eslint has project reference support, don't use it.
 
@@ -319,17 +320,13 @@ const codeStyleRules = {
     'unicorn/catch-error-name': ['warn', { ignore: ['^err$'] }], // catch (err)
     // '@eslint-react/no-missing-component-display-name': 'warn',
 
-    // API design
-    // '@typescript-eslint/prefer-readonly-parameter-types': 'error',
-    // '@typescript-eslint/prefer-readonly': 'error',
-
     // More readable code
-    '@typescript-eslint/consistent-indexed-object-style': ['warn', 'index-signature'], // index signature includes key's name, e.g. { [what_it_should_be: string]: T } than Record<string, T>
+    // '@typescript-eslint/consistent-indexed-object-style': ['warn', 'index-signature'], // index signature includes key's name, e.g. { [what_it_should_be: string]: T } than Record<string, T>
+    '@typescript-eslint/consistent-indexed-object-style': 'off', // index signature includes key's name, e.g. { [what_it_should_be: string]: T } than Record<string, T>
     'object-shorthand': 'warn',
     'prefer-numeric-literals': 'warn', // 0b111110111 === 503
     'prefer-regex-literals': 'warn', // RegEx
     'spaced-comment': ['warn', 'always', { line: { markers: ['/'] } }],
-    // 'max-lines': ['warn', { max: 400 }],
     // 'no-else-return': 'warn',
     // 'unicorn/comment-content': 'warn', // comment content should use corret spelling
 
@@ -344,7 +341,6 @@ const codeStyleRules = {
     // '@masknet/jsx-no-template-literal': 'warn',
     // '@masknet/no-redundant-variable': 'warn',
     // '@masknet/no-single-return': 'warn',
-    // '@typescript-eslint/sort-type-constituents': 'warn',
     yoda: 'warn',
 
     // Naming convention
@@ -359,7 +355,6 @@ const codeStyleRules = {
     'no-multi-assign': 'warn', // a = b = c
     'no-promise-executor-return': 'error', // new Promise(() => result)
     'no-return-assign': 'warn', // return x = expr
-    // '@typescript-eslint/promise-function-async': 'warn', // avoid Zalgo
     // 'no-param-reassign': 'warn',
     /// Async functions / Promise bad practice
 

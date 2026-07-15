@@ -70,7 +70,7 @@ export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) 
 }
 
 export async function getAllInjectSwitchSettings() {
-    const result = {} as Record<EnhanceableSite, boolean>
+    const result = {} as { [site: string]: boolean }
     forIn(EnhanceableSite, (value) => {
         result[value] = InjectSwitchSettings[value].value
     })

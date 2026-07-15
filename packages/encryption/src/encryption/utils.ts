@@ -27,7 +27,7 @@ export function fillIV(io: Pick<EncryptIO, 'getRandomValues'>): Uint8Array<Array
 
 async function generateEC_KeyPair(io: Pick<EncryptIO, 'getRandomECKey'>, kind: EC_KeyCurve) {
     if (io.getRandomECKey) return io.getRandomECKey(kind)
-    const namedCurve: Record<EC_KeyCurve, string> = {
+    const namedCurve: { [key in EC_KeyCurve]: string } = {
         [EC_KeyCurve.secp256p1]: 'P-256',
         [EC_KeyCurve.secp256k1]: 'K-256',
     }

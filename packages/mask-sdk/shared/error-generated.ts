@@ -87,7 +87,7 @@ export const err = {
     invalid_request(options: MaskEthereumProviderRpcErrorOptions = {}) {
         return new MaskEthereumProviderRpcError(-32_600, "Invalid request", options)
     },
-    the_method_method_does_not_exist_is_not_available({ method }: Record<"method", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
+    the_method_method_does_not_exist_is_not_available({ method }: { method: string },options: MaskEthereumProviderRpcErrorOptions = {}) {
         return new MaskEthereumProviderRpcError(-32_601, `The method "${method}" does not exist / is not available.`, options)
     },
     the_method_eth_subscribe_is_only_available_on_the_mainnet(options: MaskEthereumProviderRpcErrorOptions = {}) {
@@ -103,7 +103,7 @@ export const err = {
         a_permission_request_must_contain_at_least_1_permission(options: MaskEthereumProviderRpcErrorOptions = {}) {
             return new MaskEthereumProviderRpcError(-32_602, "A permission request must contain at least 1 permission.", options)
         },
-        permission_request_contains_unsupported_permission_permission({ permission }: Record<"permission", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
+        permission_request_contains_unsupported_permission_permission({ permission }: { permission: string },options: MaskEthereumProviderRpcErrorOptions = {}) {
             return new MaskEthereumProviderRpcError(-32_602, `Permission request contains unsupported permission ${permission}.`, options)
         },
     },
@@ -114,10 +114,10 @@ export const err = {
         decimals_are_required_but_were_not_found_in_either_the_request_or_contract(options: MaskEthereumProviderRpcErrorOptions = {}) {
             return new MaskEthereumProviderRpcError(-32_602, "Decimals are required, but were not found in either the request or contract", options)
         },
-        the_decimals_in_the_request_request_do_not_match_the_decimals_in_the_contract_decimals({ request, decimals }: Record<"request" | "decimals", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
+        the_decimals_in_the_request_request_do_not_match_the_decimals_in_the_contract_decimals({ request, decimals }: { request: string, decimals: string },options: MaskEthereumProviderRpcErrorOptions = {}) {
             return new MaskEthereumProviderRpcError(-32_602, `The decimals in the request (${request}) do not match the decimals in the contract (${decimals})`, options)
         },
-        the_symbol_in_the_request_request_does_not_match_the_symbol_in_the_contract_symbol({ request, symbol }: Record<"request" | "symbol", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
+        the_symbol_in_the_request_request_does_not_match_the_symbol_in_the_contract_symbol({ request, symbol }: { request: string, symbol: string },options: MaskEthereumProviderRpcErrorOptions = {}) {
             return new MaskEthereumProviderRpcError(-32_602, `The symbol in the request (${request}) does not match the symbol in the contract (${symbol})`, options)
         },
         the_token_address_seems_invalid(options: MaskEthereumProviderRpcErrorOptions = {}) {

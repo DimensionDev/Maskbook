@@ -274,10 +274,10 @@ export declare namespace Ethereum.RPC {
 
 // Mask specific part
 export declare namespace Ethereum {
-    export interface ProviderObject extends EIP1193Provider, ExperimentalProvider, EthereumEventEmitter {}
+    export interface ProviderObject extends EIP1193Provider, EthereumEventEmitter {}
 
     /** Extra APIs that only can be used with Mask Network is defined here. */
-    export type ExperimentalProvider = Record<never, never>
+    // export interface ExperimentalProvider { }
     export interface EthereumEventMap {
         message: CustomEvent<ProviderMessage | EthSubscription>
         // connect: CustomEvent<ProviderConnectInfo>

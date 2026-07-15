@@ -49,6 +49,7 @@ export interface AESJsonWebKey extends JsonWebKey, Nominal<'AES'> {}
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 declare class Nominal<T> {
     /** Ghost property, don't use it! */
+    // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
     private __brand: T
 }
 

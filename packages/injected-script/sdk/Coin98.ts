@@ -9,7 +9,7 @@ export enum Coin98ProviderType {
 
 export class Coin98Provider extends InjectedWalletBridge {
     constructor(protected type: Coin98ProviderType) {
-        const pathnameMap: Record<Coin98ProviderType, string> = {
+        const pathnameMap: { [key in Coin98ProviderType]: string } = {
             [Coin98ProviderType.EVM]: 'coin98.provider',
             [Coin98ProviderType.Near]: 'coin98.near',
             [Coin98ProviderType.Solana]: 'coin98.sol',

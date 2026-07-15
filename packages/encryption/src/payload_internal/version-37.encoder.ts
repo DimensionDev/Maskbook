@@ -14,7 +14,7 @@ const enum Index {
     data = 6,
 }
 export async function encode37(payload: PayloadWellFormed.Payload) {
-    type KeyMaterials = Partial<Record<EC_KeyCurve, Uint8Array>>
+    type KeyMaterials = { [key in EC_KeyCurve]?: Uint8Array }
     type AcceptableArray = Array<number | string | Uint8Array | null | Array<KeyMaterials | number | Uint8Array>>
 
     const payload_arr: AcceptableArray = [0]
@@ -38,7 +38,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
     }
     if (payload.encryption.type === 'E2E') {
         const { ephemeralPublicKey, iv, ownersAESKeyEncrypted } = payload.encryption
-        const keyMaterials: Partial<Record<EC_KeyCurve, Uint8Array>> = {}
+        const keyMaterials: KeyMaterials = {}
         const subArr: Array<KeyMaterials | number | Uint8Array> = [1, ownersAESKeyEncrypted, iv, keyMaterials]
         for (const [alg, key] of ephemeralPublicKey) {
             const k = await exportCryptoKeyToRaw(key)
