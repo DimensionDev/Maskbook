@@ -2,10 +2,10 @@ const { fetch: originalFetch } = globalThis
 
 export enum Expiration {
     ONE_SECOND = 1000,
-    TEN_SECONDS = 10000,
-    ONE_MINUTE = 60000,
-    THIRTY_MINUTES = 1800000,
-    ONE_HOUR = 3600000,
+    TEN_SECONDS = 10_000,
+    ONE_MINUTE = 60_000,
+    THIRTY_MINUTES = 1_800_000,
+    ONE_HOUR = 3_600_000,
 }
 
 const CACHE = new Map<

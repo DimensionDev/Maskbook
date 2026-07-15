@@ -12,7 +12,7 @@ export function WidgetDialog() {
         <InjectedDialog title="Widgets" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
                 <EVMWeb3ContextProvider chainId={ChainId.Mainnet}>
-                    <WidgetContent onClose={closeDialog} />
+                    <WidgetContent />
                 </EVMWeb3ContextProvider>
             </DialogContent>
         </InjectedDialog>

@@ -36,10 +36,9 @@ export function isRoutePathname(pathname: string, routePathname: `/${string}`, e
     }
 
     // Check if the parts in routePathname are in the same sequence as in pathname
-    for (let i = 0; i < routePathnameParts.length; i += 1) {
-        const part = routePathnameParts[i]
+    for (const [i, part] of routePathnameParts.entries()) {
         if (part.startsWith(':') && !!pathnameParts[i]) continue
-        if (routePathnameParts[i] !== pathnameParts[i]) {
+        if (part !== pathnameParts[i]) {
             return false
         }
     }
@@ -83,7 +82,7 @@ export function getResourceType(urlString: string) {
 const frameDomains = [FRAME_SERVER_URL, 'https://polls-canary.firefly.social', 'https://polls.mask.social']
 
 export function isValidPollFrameUrl(url: string): boolean {
-    if (!frameDomains.some((domain) => isSameOriginUrl(url, domain))) return false
+    if (frameDomains.every((domain) => !isSameOriginUrl(url, domain))) return false
     const parsed = parseUrl(url)
     if (!parsed) return false
 

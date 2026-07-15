@@ -26,7 +26,7 @@ interface DesktopMnemonicConfirmProps {
 }
 
 function parserPastingAllMnemonic(text: string) {
-    const result = [...text.matchAll(/([a-z])+/gu)]
+    const result = text.matchAll(/([a-z])+/gu).toArray()
     return result.length === 12 ? result : null
 }
 

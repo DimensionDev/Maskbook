@@ -18,7 +18,7 @@ const Decrypted = createInjectHooksRenderer(
 export function DecryptedUIPluginRendererWithSuggestion(props: MetadataRenderProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata)
     const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
-    const suggest = useMemo(() => Array.from(new Set(a.concat(b))), [a, b])
+    const suggest = useMemo(() => [...new Set(a.concat(b))], [a, b])
 
     return (
         <>

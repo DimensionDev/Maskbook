@@ -41,14 +41,11 @@ export function WalletSignRequest(props: InteractionItemProps) {
             return
         }
         const params = structuredClone(request.params)
-        if (request.method === EthereumMethodType.eth_signTypedData_v4) {
-            if (typeof params[1] === 'object') params[1] = JSON.stringify(params[1])
-        }
-        if (request.method === EthereumMethodType.eth_sendTransaction) {
-            if (params[0].type === '0x0') {
-                delete params[0].type
-                delete params[0].gasPrice
-            }
+        if (request.method === EthereumMethodType.eth_signTypedData_v4 && typeof params[1] === 'object')
+            params[1] = JSON.stringify(params[1])
+        if (request.method === EthereumMethodType.eth_sendTransaction && params[0].type === '0x0') {
+            delete params[0].type
+            delete params[0].gasPrice
         }
 
         const response = await Message!.approveAndSendRequest(id, {
@@ -97,10 +94,11 @@ export function WalletSignRequest(props: InteractionItemProps) {
 
     useEffect(() => {
         if (typeof message !== 'object') return
-        if (origin && !origin.startsWith('https:')) setIsDanger(true)
-        else if (message.invalidFields.filter((x) => x !== 'chainId' && x !== 'version').length || !message.parsed)
-            setIsDanger(true)
-        else setIsDanger(false)
+        const isDanger =
+            (origin && !origin.startsWith('https:')) ||
+            message.invalidFields.filter((x) => x !== 'chainId' && x !== 'version').length ||
+            !message.parsed
+        setIsDanger(!!isDanger)
     }, [message])
 
     return <SignRequestInfo message={message} rawMessage={rawMessage} origin={origin} />
@@ -109,6 +107,11 @@ export function WalletSignRequest(props: InteractionItemProps) {
 function tryParseStringMessage(message: string) {
     if (!message.startsWith('0x')) return message
     return new TextDecoder().decode(
-        new Uint8Array([...message.slice(2).matchAll(/([\da-f]{2})/giu)].map((i) => Number.parseInt(i[0], 16))),
+        new Uint8Array(
+            message
+                .slice(2)
+                .matchAll(/([\da-f]{2})/giu)
+                .map((i) => Number.parseInt(i[0], 16)),
+        ),
     )
 }

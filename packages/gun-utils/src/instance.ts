@@ -56,6 +56,6 @@ function createGun() {
         radisk: true,
         WebSocket,
     })
-    _.opt({ retry: Number.POSITIVE_INFINITY })
+    _.opt({ retry: Infinity })
     return _
 }

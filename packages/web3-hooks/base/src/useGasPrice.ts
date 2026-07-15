@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 export function useGasPrice<T extends NetworkPluginID = NetworkPluginID>(pluginID: T, options: ConnectionOptions<T>) {
     const Web3 = useWeb3Connection(pluginID, options)
     const gasOption = useGasOption(pluginID, GasOptionType.NORMAL, options)
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const gasPrice = useQuery({
         queryKey: ['get-gas-price', pluginID, options],
         queryFn: async () => {

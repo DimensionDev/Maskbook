@@ -48,7 +48,7 @@ function join(command: TemplateStringsArray | string[], ...rest: string[]) {
     let text = ''
     for (const [i, t] of command.entries()) {
         text += t
-        i in rest && (text += rest[i])
+        if (i in rest) text += rest[i]
     }
     return text
 }

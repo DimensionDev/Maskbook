@@ -78,7 +78,7 @@ function createScope(
         },
     })
     function get(key: string | symbol) {
-        if (typeof key === 'symbol') return undefined
+        if (typeof key === 'symbol') return
         const value = createState(signal, backend, message, currentScope, key, defaultValues[key])
         Object.defineProperty(storage_inner, key, { enumerable: true, value })
         return value
@@ -88,7 +88,7 @@ function createScope(
         for (const [key, value] of Object.entries(defaultValues)) {
             if (value === removed) continue
             // trigger the auto sync
-            storage[key].initialized
+            void storage[key].initialized
         }
     })
 
@@ -135,6 +135,7 @@ function createState(
     const subscription: Subscription<any> = {
         getCurrentValue: () => {
             // TODO: suspense
+            // eslint-disable-next-line @typescript-eslint/only-throw-error
             if (!initialized) throw initializedPromise
             return state
         },

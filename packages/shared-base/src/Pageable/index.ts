@@ -53,7 +53,7 @@ export function createPageable<Item, Indicator = PageIndicator>(
     nextIndicator?: Indicator,
 ) {
     // with next page
-    if (typeof nextIndicator !== 'undefined') {
+    if (nextIndicator !== undefined) {
         return {
             __type__: $Pageable,
             data,

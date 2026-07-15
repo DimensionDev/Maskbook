@@ -3,12 +3,12 @@ import type { JsonRpcResponse, RecognizableError } from '@masknet/web3-shared-ba
 
 // https://www.jsonrpc.org/specification#error_object
 export enum JSON_RPC_ERROR_CODE {
-    INVALID_REQUEST = -32600,
-    METHOD_NOT_FOUND = 32601,
-    INVALID_PARAMS = -32602,
-    INTERNAL_ERROR = -32603,
-    SERVER_ERROR_RANGE_START = -32000,
-    SERVER_ERROR_RANGE_END = -32099,
+    INVALID_REQUEST = -32_600,
+    METHOD_NOT_FOUND = 32_601,
+    INVALID_PARAMS = -32_602,
+    INTERNAL_ERROR = -32_603,
+    SERVER_ERROR_RANGE_START = -32_000,
+    SERVER_ERROR_RANGE_END = -32_099,
 }
 
 /**
@@ -24,7 +24,7 @@ export class ErrorEditor {
     private get internalError(): Error {
         {
             const rpcError = this.unknownError
-            if (rpcError instanceof Error && rpcError.message) return rpcError
+            if (Error.isError(rpcError) && rpcError.message) return rpcError
             if (rpcError && typeof (rpcError as Error).message === 'string')
                 return new Error((rpcError as Error).message)
             if (rpcError && typeof rpcError === 'string') return new Error(rpcError)
@@ -32,7 +32,7 @@ export class ErrorEditor {
 
         if (this.response && 'error' in this.response) {
             const responseError = this.response?.error
-            if (responseError instanceof Error) return responseError
+            if (Error.isError(responseError)) return responseError
             if (responseError && typeof responseError.message === 'string') return new Error(responseError.message)
             if (responseError && typeof responseError === 'string') return new Error(responseError)
         }
@@ -65,7 +65,7 @@ export class ErrorEditor {
             if (message.includes('transaction underpriced')) return 'Transaction underpriced.'
             if (
                 message.includes('The NFT is bounded to your soul, you cannot transfer it!') ||
-                message.match(/Please go to .* for mint/u)
+                /Please go to .* for mint/u.test(message)
             ) {
                 return 'This NFT can not be transferred.'
             }
@@ -77,7 +77,7 @@ export class ErrorEditor {
             ) {
                 return 'Transaction was failed due to an internal JSON-RPC server error.'
             }
-            return undefined
+            return
         })()
 
         if (RecognizableErrorMessage) {

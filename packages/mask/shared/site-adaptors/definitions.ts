@@ -33,7 +33,5 @@ function matches(url: string, pattern: string) {
     return false
 }
 export function matchesAnySiteAdaptor(url: string) {
-    return Array.from(definedSiteAdaptors.values()).some((x) =>
-        x.declarativePermissions.origins.some((x) => matches(url, x)),
-    )
+    return definedSiteAdaptors.values().some((x) => x.declarativePermissions.origins.some((x) => matches(url, x)))
 }

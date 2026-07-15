@@ -3,6 +3,7 @@ import { Sniffings } from '@masknet/shared-base'
 import { FireflyRedPacketAPI as F } from '@masknet/web3-providers/types'
 
 export function usePlatformType() {
+    // eslint-disable-next-line unicorn/no-declarations-before-early-exit -- this is a hook
     const source = usePostInfoDetails.source?.()
     if (Sniffings.is_twitter_page) return F.PlatformType.twitter
     if (!source) return

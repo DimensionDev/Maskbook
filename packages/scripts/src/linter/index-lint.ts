@@ -12,7 +12,7 @@ export async function lintIndex() {
     const hasSideEffect: string[] = []
     await Promise.all(
         filePaths.map(async (file) => {
-            const content = await readFile(file, 'utf-8')
+            const content = await readFile(file, 'utf8')
             if (!isOk(content)) hasSideEffect.push(file)
         }),
     )

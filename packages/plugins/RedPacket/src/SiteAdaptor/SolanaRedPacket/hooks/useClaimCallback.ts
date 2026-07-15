@@ -36,9 +36,9 @@ export function useClaimCallback(payload: SolanaRedPacketJSONPayload = {} as Sol
             const program = await getRpProgram(cluster)
             const claimer = web3.Keypair.fromSecretKey(Uint8Array.from(Buffer.from(password, 'hex')))
             const receiver = program.provider.publicKey
-            const redPacket = new web3.PublicKey(accountId)
             if (!receiver) return
 
+            const redPacket = new web3.PublicKey(accountId)
             const message = Buffer.concat([redPacket.toBytes(), receiver.toBytes()])
             const claimerSignature = sign.detached(message, claimer.secretKey)
             const ed25519Instruction = web3.Ed25519Program.createInstructionWithPublicKey({

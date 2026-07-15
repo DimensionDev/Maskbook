@@ -23,7 +23,7 @@ export function injectBadgesOnPost(signal: AbortSignal) {
         // <user-id> has tabindex=-1, <timestamp> has a child time element
         if (link?.hasAttribute('tabindex') || link?.querySelector('time')) return
         const href = link?.getAttribute('href')
-        const userId = href?.split('/')[1]
+        const userId = href?.split('/', 2)[1]
         if (!userId) return
         attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
             <PostBadgesSlot userId={userId} />,

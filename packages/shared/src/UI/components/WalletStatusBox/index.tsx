@@ -47,13 +47,13 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
         paddingTop: 2,
         lineHeight: '18px',
     },

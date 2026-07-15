@@ -15,10 +15,10 @@ import { CheckedError } from '@masknet/base'
 // ? Version 40:🎼2/4|ownersAESKeyEncrypted|iv|encryptedText:||
 // ? Version 39:🎼3/4|ownersAESKeyEncrypted|iv|encryptedText:||
 export async function parse39(payload: string): PayloadParserResult {
-    const v_40 = '\u{1F3BC}2/4'
     const v_39 = '\u{1F3BC}3/4'
     if (!payload.startsWith(v_39)) return new CheckedError(PayloadException.UnknownVersion, null).toErr()
 
-    const result = await parse40(payload.replace(v_39, v_40))
+    const v_40 = '\u{1F3BC}2/4'
+    const result = await parse40(payload.replace(v_39, () => v_40))
     return result.map((x) => ({ ...x, version: -39 }))
 }

@@ -9,11 +9,13 @@ Object.assign(globalThis, {
 initialize(globalThis as typeof window)
 if (process.env.NODE_ENV === 'development') {
     // @ts-expect-error conditionally import
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { injectIntoGlobalHook } = require('react-refresh/runtime')
+
     injectIntoGlobalHook(globalThis)
 }
 
-let bridge: Bridge<any, any> | undefined = undefined
+let bridge: Bridge<any, any> | undefined
 DevtoolsMessage.activateBackend.on((id) => {
     if (bridge) return
     const localID = String(Reflect.get(globalThis, GLOBAL_ID_KEY))

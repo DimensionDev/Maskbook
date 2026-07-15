@@ -129,18 +129,18 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
                 <Box display="flex" height="32px" alignItems="flex-end">
                     <WalletBalance className={classes.balance} skeletonWidth={60} account={wallet.address} />
                 </Box>
-                {!hiddenArrow ?
+                {hiddenArrow ? null : (
                     <Icons.ArrowDownRound
                         onClick={() => setExpand(!expand)}
                         size={20}
                         className={cx(classes.arrowIcon, expand ? classes.expand : undefined)}
                     />
-                :   null}
+                )}
             </Box>
             {expand ?
                 <>
                     <Box className={classes.privateKey}>
-                        {!display ?
+                        {display ? null : (
                             <Box className={classes.mask} onClick={toggle}>
                                 <Icons.EyeOff size={24} />
                                 <Typography className={classes.tips}>
@@ -149,7 +149,7 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
                                     </Trans>
                                 </Typography>
                             </Box>
-                        :   null}
+                        )}
                         <Typography className={classes.text}>{privateKey}</Typography>
                         <Icons.EyeColor onClick={toggle} size={20} className={classes.view} />
                     </Box>

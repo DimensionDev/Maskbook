@@ -121,19 +121,12 @@ export const TokenPicker = memo(function TokenPicker({
     const { data: balances } = useUserTokenBalances(chainId, account, isFromOkx)
     const okxAssets = useMemo(() => {
         if (!okxTokens?.length) return EMPTY_LIST
-        if (!balances) {
-            const balanceMap = new Map(standardAssets.map((x) => [x.address.toLowerCase(), x.balance]))
-            // To reduce queries, get balance from standardAssets and patch okxTokens with it
-            return okxTokens.map((x) => {
-                const balance = balanceMap.get(x.address.toLowerCase())
-                return !balance || balance === '0' ? x : { ...x, balance }
-            }) as typeof okxTokens
-        } else {
+        if (balances) {
             const assets = okxTokens.map((x) => {
                 const balance = balances.get(x.address.toLowerCase())
-                return !balance ? x : { ...x, balance: rightShift(balance.balance, x.decimals).toFixed(0) }
+                return balance ? { ...x, balance: rightShift(balance.balance, x.decimals).toFixed(0) } : x
             }) as Array<Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>> // typeof okxTokens
-            return assets.sort((a, z) => {
+            return assets.toSorted((a, z) => {
                 // native token
                 const isNativeTokenA = isSameAddress(a.address, getNativeTokenAddress(a.chainId))
                 if (isNativeTokenA) return -1
@@ -163,6 +156,13 @@ export const TokenPicker = memo(function TokenPicker({
 
                 return 0
             })
+        } else {
+            const balanceMap = new Map(standardAssets.map((x) => [x.address.toLowerCase(), x.balance]))
+            // To reduce queries, get balance from standardAssets and patch okxTokens with it
+            return okxTokens.map((x) => {
+                const balance = balanceMap.get(x.address.toLowerCase())
+                return !balance || balance === '0' ? x : { ...x, balance }
+            }) as typeof okxTokens
         }
     }, [okxTokens, standardAssets, balances])
     const assets = assetSource === AssetSource.Okx ? okxAssets : standardAssets
@@ -203,7 +203,7 @@ export const TokenPicker = memo(function TokenPicker({
 
     return (
         <Box className={cx(classes.picker, className)} {...rest}>
-            {!lockChainId ?
+            {lockChainId ? null : (
                 <SelectNetworkSidebar
                     className={classes.sidebar}
                     networks={filteredNetworks}
@@ -211,7 +211,7 @@ export const TokenPicker = memo(function TokenPicker({
                     chainId={sidebarChainId}
                     onChainChange={handleChainChange}
                 />
-            :   null}
+            )}
             <div className={classes.content}>
                 <MaskTextField
                     value={keyword}

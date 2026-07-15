@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-array-fill-with-reference-type -- false positive */
 import { EMPTY_LIST, type Pageable, createPageable, createIndicator } from '@masknet/shared-base'
 import { attemptUntil, type Transaction as Web3Transaction } from '@masknet/web3-shared-base'
 import { ChainId, type GasOption, type SchemaType } from '@masknet/web3-shared-evm'
@@ -28,7 +29,7 @@ export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> 
             if (chainId === ChainId.Aurora) return await GasOptions.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.AstarGas.getGasOptions()
             return await DeBank.DeBankGasOption.getGasOptions(options.chainId)
-        } catch (error) {
+        } catch {
             return GasOptions.getGasOptions(options.chainId)
         }
     }

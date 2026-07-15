@@ -51,7 +51,7 @@ export function createSchema(
             let rpcChainId: number
             try {
                 rpcChainId = await fetchChainId(schema.rpc)
-            } catch (err) {
+            } catch {
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['rpc'],

@@ -120,8 +120,8 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                 <EmptyStatus />
             </Box>
         )
-    const fastestItem = sortBy(bridgeQuote.routerList, (router) => -router.estimateTime)[0]
-    const maxAmountItem = sortBy(bridgeQuote.routerList, (router) => -router.minimumReceived)[0]
+    const fastestItem = sortBy(bridgeQuote.routerList, (router) => -Number(router.estimateTime))[0]
+    const maxAmountItem = sortBy(bridgeQuote.routerList, (router) => -Number(router.minimumReceived))[0]
 
     return (
         <div className={classes.container}>

@@ -19,17 +19,17 @@ export function useSocialAddressesAll(
 
     const userId = identity?.identifier?.userId
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         enabled: !!identity && userId !== '$unknown',
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['all-social-addresses', userId, identity, includes],
         queryFn: async () => {
             const allSettled = await Promise.allSettled<AddressList>(
-                [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity!) ?? []),
+                [EVM_IdentityService, SolanaIdentityService].map(async (x) => x?.lookup(identity!) ?? []),
             )
 
             const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
+            const sorted = sorter && listOfAddress.length ? listOfAddress.toSorted(sorter) : listOfAddress
             return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
         },
     })

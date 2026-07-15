@@ -5,8 +5,6 @@ import {
     PageSize,
     PublicClient,
     type AccountAvailable,
-    type AccountStats,
-    type AccountStatsRequest,
     type ChallengeRequest,
     type EvmAddress,
     type SessionClient,
@@ -28,13 +26,9 @@ import {
     type PageIndicator,
 } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import type { LensV3BaseAPI } from '@masknet/web3-providers/types'
 import { isZero } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { gql } from 'graphql-request'
 import { sortBy, uniqBy } from 'lodash-es'
-import { fetchJSON } from '../helpers/fetchJSON.js'
-import { LENS_ROOT_API } from './constants.js'
 import { fragments } from './fragments/index.js'
 import { formatLensPost, getAccountAvatar } from './helpers.js'
 import type { FollowPair } from './types.js'
@@ -103,31 +97,6 @@ export class LensV3 {
         return lensUnfollow(this.sessionClient, { account })
     }
 
-    static async refresh(refreshToken: string) {
-        if (!refreshToken) return
-        const { data } = await fetchJSON<{ data: { refresh: LensV3BaseAPI.Authenticate } }>(LENS_ROOT_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query: /* GraphQL */ `
-                    mutation Refresh($refreshToken: String!) {
-                        refresh(request: { refreshToken: $refreshToken }) {
-                            accessToken
-                            refreshToken
-                        }
-                    }
-                `,
-                variables: {
-                    refreshToken,
-                },
-            }),
-        })
-
-        return data.refresh
-    }
-
     async getAccountByHandle(/** handle */ handle: string) {
         const localName = handle.replace(/\.lens$/u, '')
         const res = await fetchAccount(this.client, {
@@ -142,11 +111,6 @@ export class LensV3 {
             usernames: handles.map((handle) => ({ localName: handle.replace(/\.lens$/u, '') })),
         })
         return res.unwrapOr(null)
-    }
-    async getAccountByAddress(address: EvmAddress) {
-        return fetchAccount(this.client, {
-            address,
-        })
     }
 
     async getAvailableAccounts(address?: EvmAddress) {
@@ -164,43 +128,6 @@ export class LensV3 {
         return list as AccountAvailable[]
     }
 
-    static async getAccountStats(accountStatsRequest: AccountStatsRequest) {
-        const result = await fetchJSON<{ data: { accountStats: AccountStats } }>(LENS_ROOT_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query: gql`
-                    query FullAccount($accountStatsRequest: AccountStatsRequest!) {
-                        accountStats(request: $accountStatsRequest) {
-                            graphFollowStats {
-                                followers
-                                following
-                            }
-                        }
-                    }
-                `,
-                variables: {
-                    accountStatsRequest,
-                },
-            }),
-        })
-
-        return result.data.accountStats
-    }
-
-    static getAccountWithStatsById(profileId: string) {
-        LensV3.getAccountStats({
-            account: evmAddress(profileId),
-        })
-    }
-
-    static getAccountWithStatsByHandle(handle: string) {
-        LensV3.getAccountStats({
-            username: { localName: handle },
-        })
-    }
     static getAccountAvatar = getAccountAvatar
 
     async getPostsByAccounts(accounts: string | string[], indicator?: PageIndicator) {

@@ -199,10 +199,7 @@ class SolanaFungibleTokenAPI
             this.getAsset(address, { chainId }).then((x) => [x]),
             this.getSplTokenList(chainId, address),
         ])
-        const assets = allSettled
-            .map((x) => (x.status === 'fulfilled' ? x.value : null))
-            .flat()
-            .filter(Boolean)
+        const assets = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean)
 
         return createPageable(assets as Array<FungibleAsset<ChainId, SchemaType>>, createIndicator(indicator))
     }

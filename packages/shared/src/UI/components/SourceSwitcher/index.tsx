@@ -53,7 +53,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                         ),
                         value: x,
                     }))}
-                    selectedIndex={typeof result.source !== 'undefined' ? sourceTypes.indexOf(result.source) : -1}
+                    selectedIndex={result.source === undefined ? -1 : sourceTypes.indexOf(result.source)}
                     onChange={setResult}
                     classes={{ title: classes.selectedOption, icon: classes.arrowDropIcon }}
                 />

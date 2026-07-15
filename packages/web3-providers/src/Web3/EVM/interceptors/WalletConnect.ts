@@ -8,7 +8,7 @@ export class WalletConnect implements Middleware<ConnectionContext> {
             case EthereumMethodType.personal_sign:
                 context.requestArguments = {
                     ...context.requestArguments,
-                    params: [...context.requestArguments.params.slice(0, 2), ''],
+                    params: context.requestArguments.params.slice(0, 2).concat(''),
                 }
                 break
             default:

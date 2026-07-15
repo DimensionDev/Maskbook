@@ -32,7 +32,7 @@ export function parseLink(text: string): ParseLinkResult[] {
         }
         start = x.end
     }
-    result.push({ type: 'text', content: text.slice(start, text.length) })
+    result.push({ type: 'text', content: text.slice(start) })
     return result.filter((x) => x.content).flatMap((x) => (x.type === 'text' ? parseTag(x.content) : x))
 }
 

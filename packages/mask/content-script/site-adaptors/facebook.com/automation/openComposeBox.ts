@@ -37,7 +37,9 @@ function nativeComposeDialogIndicatorSelector() {
 }
 
 function nativeComposeDialogCloseButtonSelector() {
-    return new LiveSelector().querySelector<HTMLDivElement>('[role="dialog"] form[method="post"] [role="button"]')
+    return new LiveSelector().querySelector<HTMLDivElement>(
+        ':scope [role="dialog"] form[method="post"] [role="button"]',
+    )
 }
 
 export async function taskOpenComposeBoxFacebook(

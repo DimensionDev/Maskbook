@@ -3,36 +3,6 @@ import type { Subscription } from 'use-subscription'
 import { None, type Option, Some } from 'ts-results-es'
 import type { ValueRef } from '@masknet/shared-base'
 
-export async function getSubscriptionCurrentValue<T>(
-    getSubscription: () => Subscription<T> | undefined,
-    retries = 3,
-): Promise<T | undefined> {
-    const getValue = () => {
-        return getSubscription()?.getCurrentValue()
-    }
-
-    const createReader = async () => {
-        try {
-            return getValue()
-        } catch (error: unknown) {
-            if (!(error instanceof Promise)) return
-            await error
-            return getValue()
-        }
-    }
-
-    const createReaders = Array.from<() => Promise<T | undefined>>({ length: retries }).fill(() => createReader())
-
-    for (const createReader of createReaders) {
-        try {
-            return await createReader()
-        } catch {
-            continue
-        }
-    }
-    return
-}
-
 export function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,
@@ -74,6 +44,7 @@ export function createSubscriptionFromAsyncSuspense<T>(
     return {
         getCurrentValue: () => {
             // TODO: suspense
+            // eslint-disable-next-line @typescript-eslint/only-throw-error
             if (value.isNone()) throw promise
             return value.value
         },
@@ -100,7 +71,9 @@ function getEventTarget() {
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)
-        return () => event.removeEventListener(EVENT, f)
+        return () => {
+            event.removeEventListener(EVENT, f)
+        }
     }
     return { trigger, subscribe }
 }
@@ -131,7 +104,11 @@ export function mergeSubscription<T extends Array<Subscription<unknown>>>(
         },
         subscribe: (callback: () => void) => {
             const removeListeners = subscriptions.map((x) => x.subscribe(callback))
-            return () => removeListeners.forEach((x) => x())
+            return () => {
+                removeListeners.forEach((x) => {
+                    x()
+                })
+            }
         },
     }
 }

@@ -1,7 +1,6 @@
 import { NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { OKX } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -23,7 +22,6 @@ const useStyles = makeStyles()(() => ({
 export interface CoinIconProps extends BoxProps {
     chainId?: ChainId
     address?: string
-    token?: Web3Helper.FungibleTokenAll
     tokenIconSize?: number
     chainIconSize?: number
     disableBadge?: boolean

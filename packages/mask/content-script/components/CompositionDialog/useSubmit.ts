@@ -34,10 +34,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
             const encrypted = encodeByNetwork(activatedSiteAdaptorUI!.encryptPayloadNetwork, encode, rawEncrypted)
 
-            const decoratedText =
-                encode === 'image' ?
-                    decorateEncryptedText('', _, content.meta)
-                :   decorateEncryptedText(encrypted, _, content.meta)
+            const decoratedText = decorateEncryptedText(encode === 'image' ? '' : encrypted, _, content.meta)
 
             const wrapperText = encode === 'image' ? 'https://mask.io/' : encrypted
             const defaultText: string =

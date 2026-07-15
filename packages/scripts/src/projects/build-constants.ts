@@ -12,13 +12,13 @@ interface ConstantsConfig {
 
 // Function to read the constants from a file
 async function readConstantsFile(filePath: string): Promise<ConstantsConfig> {
-    const data = await fs.readFile(filePath, 'utf-8')
+    const data = await fs.readFile(filePath, 'utf8')
     return JSON.parse(data)
 }
 
 // Function to write constants to a file
 async function writeConstantsFile(filePath: string, constants: ConstantsConfig): Promise<void> {
-    await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
+    await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf8')
 }
 
 // Function to get the default value for a given value type
@@ -63,8 +63,7 @@ async function processConstants(
 // Action to compress constants
 function compressAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
     const updatedConstants: ConstantsConfig = {}
-    for (const name of Object.keys(constants)) {
-        const values = constants[name]
+    for (const [name, values] of Object.entries(constants)) {
         const nonBlankPairs = filterNonBlankPairs(values, names)
         updatedConstants[name] = Object.fromEntries(nonBlankPairs)
     }
@@ -74,21 +73,16 @@ function compressAction(constants: ConstantsConfig, names: string[]): ConstantsC
 // Action to complete constants
 function completeAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
     const updatedConstants: ConstantsConfig = {}
-    for (const name of Object.keys(constants)) {
-        const values = constants[name]
+    for (const [name, values] of Object.entries(constants)) {
         const updatedValues: Record<string, Primitive | Primitive[]> = {}
 
         for (const key of names) {
-            if (key in values) {
-                updatedValues[key] = values[key]
-            } else {
-                updatedValues[key] = getDefaultPrimitiveValue(values[Object.keys(values)[0]])
-            }
+            updatedValues[key] = key in values ? values[key] : getDefaultPrimitiveValue(values[Object.keys(values)[0]])
         }
 
-        for (const key of Object.keys(values)) {
+        for (const [key, value] of Object.entries(values)) {
             if (!names.includes(key)) {
-                updatedValues[key] = values[key]
+                updatedValues[key] = value
             }
         }
 
@@ -131,18 +125,18 @@ const FLOW_KEYS = ['Mainnet', 'Testnet']
 
 // Main function to parse command line arguments and perform actions
 export async function buildConstants() {
-    const args = process.argv.slice(2)
+    const args = new Set(process.argv.slice(2))
     const evm = join(import.meta.dirname, '../../../web3-constants/evm/')
     const solana = join(import.meta.dirname, '../../../web3-constants/solana')
     const flow = join(import.meta.dirname, '../../../web3-constants/flow')
 
-    if (args.includes('--compress')) {
+    if (args.has('--compress')) {
         await processConstants(evm, EVM_KEYS, compressAction)
         await processConstants(solana, SOLANA_KEYS, compressAction)
         await processConstants(flow, FLOW_KEYS, compressAction)
     }
 
-    if (args.includes('--complete')) {
+    if (args.has('--complete')) {
         await processConstants(evm, EVM_KEYS, completeAction)
         await processConstants(solana, SOLANA_KEYS, completeAction)
         await processConstants(flow, FLOW_KEYS, completeAction)

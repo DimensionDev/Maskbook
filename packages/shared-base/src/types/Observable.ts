@@ -2,6 +2,7 @@ import { Emitter, ALL_EVENTS } from '@servie/events'
 import { EMPTY_LIST } from '../constants.js'
 
 function tick(callback: () => void) {
+    // eslint-disable-next-line unicorn/prefer-promise-try -- callback should not run synchronously
     Promise.resolve().then(callback)
 }
 
@@ -30,7 +31,7 @@ export class ObservableMap<K, V> extends Map<K, V> {
     event = new Emitter<{ delete: [K]; set: [K, V]; clear: []; [ALL_EVENTS]: [] }>()
     private _asValues: V[] | undefined
     get asValues() {
-        return (this._asValues ??= this.size ? [...this.values()] : EMPTY_LIST)
+        return (this._asValues ??= this.size ? this.values().toArray() : EMPTY_LIST)
     }
     override clear() {
         super.clear()
@@ -58,7 +59,7 @@ export class ObservableSet<T> extends Set<T> {
     event = new Emitter<{ delete: [T]; add: [T[]]; clear: []; [ALL_EVENTS]: [] }>()
     private _asValues: T[] | undefined
     get asValues() {
-        return (this._asValues ??= this.size ? [...this.values()] : EMPTY_LIST)
+        return (this._asValues ??= this.size ? this.values().toArray() : EMPTY_LIST)
     }
     override clear() {
         super.clear()

@@ -6,8 +6,8 @@ import { type GasConfig, isNativeTokenAddress, GasEditor } from '@masknet/web3-s
 import { useGasLimit } from './useGasLimit.js'
 import { useTip } from '../../contexts/index.js'
 
-const ETH_GAS_LIMIT = 21000
-const ERC20_GAS_LIMIT = 50000
+const ETH_GAS_LIMIT = 21_000
+const ERC20_GAS_LIMIT = 50_000
 
 export function GasSettingsBar() {
     const wallet = useWallet()

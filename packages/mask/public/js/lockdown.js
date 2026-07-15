@@ -20,7 +20,9 @@ if (
             unhandledRejectionTrapping: 'none',
             legacyRegeneratorRuntimeTaming: 'unsafe-ignore',
         })
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
 
 undefined

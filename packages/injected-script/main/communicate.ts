@@ -48,8 +48,9 @@ document.addEventListener(CustomEventId, (e) => {
         case 'web3BridgeExecute':
             return __unsafe__call(...args)
 
-        default:
+        default: {
             const neverEvent: never = type
             $.console_error('[@masknet/injected-script]', neverEvent, 'not handled')
+        }
     }
 })

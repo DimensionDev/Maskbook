@@ -107,7 +107,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
             pair: (() => {
                 if (!ticker.base_name || !ticker.target_name) return null
                 const formatted = formatEthereumAddress(ticker.base_name, 2)
-                const basename = formatted !== ticker.base_name ? ticker.base_name : ''
+                const basename = formatted === ticker.base_name ? '' : ticker.base_name
                 const targetName = formatEthereumAddress(ticker.target_name, 2)
 
                 return (
@@ -128,7 +128,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
                                 href={ticker.trade_url}>
                                 <Typography
                                     component="span"
-                                    title={formatted !== ticker.base_name ? ticker.base_name : ''}>
+                                    title={formatted === ticker.base_name ? '' : ticker.base_name}>
                                     {formatted}
                                 </Typography>
                                 <span>/</span>

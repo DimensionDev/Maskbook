@@ -11,13 +11,12 @@ import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TRANSACTIONS_BY_CONTRACT_METHOD_ENDPOINT, MAX_SIZE_PER_PAGE } from '../constants.js'
 import type { Tx } from '../types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import type { RedPacketBaseAPI } from '../../entry-types.js'
 
-export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
+export const ChainbaseRedPacketAPI = {
     /**
      * @see https://docs.chainbase.com/platform/supported-networks/supported-networks
      */
-    static isSupportedChain(chainId: ChainId) {
+    isSupportedChain(chainId: ChainId) {
         const supported = [
             ChainId.Mainnet,
             ChainId.Polygon,
@@ -33,8 +32,8 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
             )
         }
         return supported
-    }
-    static async getHistoryTransactions(
+    },
+    async getHistoryTransactions(
         chainId: ChainId,
         senderAddress: string,
         contractAddress: string,
@@ -64,7 +63,7 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
         if (!txes?.length) return
 
         return txes
-            .sort((a, b) => new Date(b.block_timestamp).getTime() - new Date(a.block_timestamp).getTime())
+            .toSorted((a, b) => new Date(b.block_timestamp).getTime() - new Date(a.block_timestamp).getTime())
             .map((x) => {
                 return {
                     input: x.input,
@@ -75,6 +74,6 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
                     blockNumber: Number(x.block_number),
                 } as Transaction<ChainId, SchemaType>
             })
-    }
+    },
 }
-export const ChainbaseRedPacket = new ChainbaseRedPacketAPI()
+export const ChainbaseRedPacket = ChainbaseRedPacketAPI

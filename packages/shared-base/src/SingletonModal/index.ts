@@ -86,7 +86,7 @@ export class SingletonModal<
      * @param props
      */
     open(props: OpenProps) {
-        if (typeof this.dispatchOpen === 'undefined') console.warn("[SingletonModal]: The modal hasn't registered yet.")
+        if (this.dispatchOpen === undefined) console.warn("[SingletonModal]: The modal hasn't registered yet.")
         this.dispatchOpen?.(props)
     }
 
@@ -115,16 +115,6 @@ export class SingletonModal<
             this.onClose = (props) => resolve(props)
             this.onAbort = (error) => reject(error)
         })
-    }
-
-    __unsafe_overwrite_methods__(methods: {
-        open?: (props: OpenProps) => void
-        close?: (props: CloseProps) => void
-        abort?: (error: Error) => void
-    }) {
-        this.open = typeof methods.open === 'function' ? methods.open : this.open
-        this.close = typeof methods.close === 'function' ? methods.close : this.close
-        this.abort = typeof methods.abort === 'function' ? methods.abort : this.abort
     }
 }
 

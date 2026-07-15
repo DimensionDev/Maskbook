@@ -253,7 +253,7 @@ export function CreateTokenRedPacket() {
                     The minimum amount for each share is {formatBalance(1, token.decimals)} {token.symbol}
                 </Trans>
             )
-        return undefined
+        return
     })()
 
     const gasValidationMessage = (() => {
@@ -289,9 +289,9 @@ export function CreateTokenRedPacket() {
                             <RadioIndicator checked={!isRandom} size={20} />
                         </div>
                         <Typography
-                            color={!isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                            color={isRandom ? theme.palette.maskColor.second : theme.palette.maskColor.main}
                             fontSize={16}
-                            fontWeight={!isRandom ? 700 : 400}>
+                            fontWeight={isRandom ? 400 : 700}>
                             <Trans>Equal Amount</Trans>
                         </Typography>
                     </label>

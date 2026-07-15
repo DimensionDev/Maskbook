@@ -40,7 +40,7 @@ interface LumaRawEvent {
     }>
 }
 function fixEvent(event: Event): ParsedEvent {
-    const rawEvent = event.raw_data ? (event.raw_data as LumaRawEvent) : null
+    const rawEvent = event.raw_data as LumaRawEvent | null
     if (!rawEvent) return fixEventDate(event)
     const host = rawEvent.hosts[0]
 
@@ -60,8 +60,8 @@ function fixEvent(event: Event): ParsedEvent {
 }
 
 const SIZE = 50
-export class Calendar {
-    static async getNewsList(startDate: number, endDate?: number, indicator?: PageIndicator) {
+export const Calendar = {
+    async getNewsList(startDate: number, endDate?: number, indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(
             urlcat(BASE_URL, 'crypto_event_list', {
                 provider_type: 'coincarp',
@@ -79,8 +79,8 @@ export class Calendar {
             indicator,
             next && next !== '0' ? createNextIndicator(indicator, next) : undefined,
         )
-    }
-    static async getEventList(start_date: number, end_date: number, indicator?: PageIndicator) {
+    },
+    async getEventList(start_date: number, end_date: number, indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(
             urlcat(BASE_URL, 'crypto_event_list', {
                 provider_type: 'luma',
@@ -99,8 +99,8 @@ export class Calendar {
             indicator,
             next && next !== '0' ? createNextIndicator(indicator, next) : undefined,
         )
-    }
-    static async getAvailableDates(type: EventProvider, start_date: number, end_date: number) {
+    },
+    async getAvailableDates(type: EventProvider, start_date: number, end_date: number) {
         const res = await fetchCachedJSON<EventDatesResponse>(
             urlcat(BASE_URL, 'crypto_event_date_list', {
                 provider_type: type,
@@ -109,5 +109,5 @@ export class Calendar {
             }),
         )
         return (res.data || []).map((x) => x * 1000)
-    }
+    },
 }

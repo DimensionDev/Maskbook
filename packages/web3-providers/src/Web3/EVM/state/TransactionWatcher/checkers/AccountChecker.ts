@@ -42,7 +42,7 @@ class AccountCheckerAPI implements TransactionChecker<ChainId, Transaction> {
     }
 
     private async fetchLatestTransactions(chainId: ChainId, account: string) {
-        const key = `${chainId}_${account.toLowerCase}`
+        const key = `${chainId}_${account.toLowerCase()}`
         const hit = this.ttl.get(key)
         if (hit) return hit
 

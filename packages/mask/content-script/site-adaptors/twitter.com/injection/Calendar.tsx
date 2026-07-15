@@ -16,13 +16,13 @@ function sidebarSearchSelector() {
 function sidebarExplorePageSelector() {
     return querySelector<HTMLElement>('[data-testid="settingsAppBar"]')
         .closest(12)
-        .querySelector('[data-testid="sidebarColumn"] [tabindex="0"] > div')
+        .querySelector(':scope [data-testid="sidebarColumn"] [tabindex="0"] > div')
 }
 
 function sidebarSearchPageSelector() {
     return querySelector<HTMLElement>('[data-testid="searchBoxOverflowButton"]')
         .closest(11)
-        .querySelector('[data-testid="sidebarColumn"] [tabindex="0"] > div > div')
+        .querySelector(':scope [data-testid="sidebarColumn"] [tabindex="0"] > div > div')
 }
 export function injectCalendar(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(sidebarSearchSelector())

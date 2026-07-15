@@ -36,7 +36,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 return (
                     <Web3ContextProvider network={pluginID} chainId={chainId}>
                         <TrendingViewProvider
-                            isDSearch={!isProfilePage}
                             isProfilePage={!!isProfilePage}
                             isTokenTagPopper={false}
                             isPreciseSearch={EVMUtils.isValidAddress(keyword)}>
@@ -83,9 +82,8 @@ const site: Plugin.SiteAdaptor.Definition = {
                                     icon={icon}
                                     iconFilterColor={iconFilterColor}
                                     onClick={() => {
-                                        EntryComponentProps.onClick ?
-                                            EntryComponentProps.onClick(openDialog)
-                                        :   openDialog()
+                                        if (EntryComponentProps.onClick) EntryComponentProps.onClick(openDialog)
+                                        else openDialog()
                                         Telemetry.captureEvent(EventType.Access, EventID.EntryAppSwapOpen)
                                     }}
                                 />

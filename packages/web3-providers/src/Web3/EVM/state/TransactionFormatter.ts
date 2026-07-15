@@ -99,7 +99,9 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
             let code = ''
             try {
                 code = await EVMWeb3Readonly.getCode(to, { chainId })
-            } catch {}
+            } catch {
+                // ignore
+            }
 
             // send ether tx
             if (isEmptyHex(code)) {

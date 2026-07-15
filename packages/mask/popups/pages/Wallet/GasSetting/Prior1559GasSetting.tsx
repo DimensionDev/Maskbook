@@ -208,6 +208,7 @@ export const Prior1559GasSetting = memo(() => {
             }
             setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice).toString())
         } else {
+            // eslint-disable-next-line @eslint-react/set-state-in-effect -- Select the default gas option only when an incoming transaction omits a gas price.
             setOption(1)
         }
     }, [value, setValue, chainId])
@@ -218,7 +219,7 @@ export const Prior1559GasSetting = memo(() => {
     }, [minGasLimit, gas, setValue])
 
     useEffect(() => {
-        if (!(selected !== null && options)) return
+        if (selected === null || !options) return
         setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
     }, [selected, setValue, options])
 
@@ -226,6 +227,7 @@ export const Prior1559GasSetting = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             if (!value) return
             const config = value.payload.params!.map((param) => ({
+                // eslint-disable-next-line unicorn/new-for-builtins
                 ...Object(param),
                 gas: toHex(data.gasLimit),
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toFixed(0)),
@@ -242,7 +244,7 @@ export const Prior1559GasSetting = memo(() => {
     const onSubmit = handleSubmit((data) => handleConfirm(data))
 
     useUpdateEffect(() => {
-        if (!(!value && !getValueLoading)) return
+        if (value || getValueLoading) return
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value, getValueLoading])
 
@@ -264,7 +266,7 @@ export const Prior1559GasSetting = memo(() => {
                                 <FormattedCurrency
                                     value={formatWeiToEther(gasPrice)
                                         .times(nativeTokenPrice)
-                                        .times(minGasLimit || 21000)}
+                                        .times(minGasLimit || 21_000)}
                                     formatter={formatCurrency}
                                 />
                             </Typography>

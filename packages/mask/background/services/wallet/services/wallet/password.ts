@@ -8,14 +8,18 @@ const atKey = 'at'
 const inMemoryPassword = {
     ' value': '',
     get value() {
-        return this[' value']
+        return inMemoryPassword[' value']
     },
     set value(value) {
-        this[' value'] = value
-        if (!value) browser.storage.session?.clear()
-        else browser.storage.session?.set({ [key]: value, [atKey]: Date.now() })
+        inMemoryPassword[' value'] = value
+        if (value) {
+            browser.storage.session?.set({ [key]: value, [atKey]: Date.now() })
+        } else {
+            browser.storage.session?.clear()
+        }
     },
 }
+
 browser.storage.session?.get([key, atKey]).then(async (result) => {
     if (Date.now() - result[atKey] > (await database.getAutoLockerDuration())) {
         browser.storage.session.clear()

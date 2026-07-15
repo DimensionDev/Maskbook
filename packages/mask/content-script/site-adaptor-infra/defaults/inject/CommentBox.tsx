@@ -50,7 +50,9 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         ).useForeach((node, key, meta) => {
             try {
                 mountPointCallback?.(meta)
-            } catch {}
+            } catch {
+                // ignore
+            }
             const root = attachReactTreeWithContainer(meta.afterShadow, { signal })
             root.render(
                 <PostInfoContext value={current}>

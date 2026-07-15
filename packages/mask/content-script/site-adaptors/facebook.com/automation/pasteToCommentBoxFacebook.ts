@@ -10,11 +10,11 @@ export async function pasteToCommentBoxFacebook(encryptedComment: string, curren
     }
     const root = dom || current.rootNode
     if (!root) return fail()
-    const input = root.querySelector<HTMLElement>('[contenteditable] > *')
+    const input = root.querySelector<HTMLElement>(':scope [contenteditable] > *')
     if (!input) return fail()
     selectElementContents(input)
     input.focus()
     pasteText(encryptedComment)
     await delay(200)
-    if (!root.innerText.includes(encryptedComment)) return fail()
+    if (!root.textContent.includes(encryptedComment)) return fail()
 }

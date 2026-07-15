@@ -15,5 +15,5 @@ export async function pasteToCommentBoxMinds(encryptedComment: string, current: 
     selectElementContents(input)
     pasteText(encryptedComment)
     await delay(200)
-    if (!root.innerText.includes(encryptedComment)) return fail()
+    if (!root.textContent.includes(encryptedComment)) return fail()
 }

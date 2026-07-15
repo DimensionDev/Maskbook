@@ -16,9 +16,9 @@ export function useCreateRedPacketReceipt(txHashOrAccountId: string, chainId: Ch
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const Web3 = useWeb3Connection(pluginID)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         enabled,
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['redpacket', 'creation-success-params', chainId, txHashOrAccountId],
         queryFn: async (): Promise<AbiEventToPrimitiveType<HappyRedPacketV4Abi, 'CreationSuccess'> | null> => {
             if (!txHashOrAccountId || !Web3) return null
@@ -39,7 +39,7 @@ export function useCreateRedPacketReceipt(txHashOrAccountId: string, chainId: Ch
                 id: txHashOrAccountId as `0x${string}`,
                 creation_time: BigInt(result.createTime.toString()),
                 creator: result.creator.toBase58() as `0x${string}`,
-                duration: 86400n,
+                duration: 86_400n,
                 ifrandom: result.ifSpiltRandom,
                 message: result.message,
                 name: result.name,

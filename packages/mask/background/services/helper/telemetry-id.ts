@@ -19,7 +19,9 @@ export async function setTelemetryID(sendNotification = true): Promise<string> {
         .slice(0, 40)
     try {
         await browser.storage.local.set({ telemetry_id: id })
-    } catch {}
+    } catch {
+        // ignore
+    }
 
     if (sendNotification) base.MaskMessages.events.telemetryIDReset.sendToAll(id)
 

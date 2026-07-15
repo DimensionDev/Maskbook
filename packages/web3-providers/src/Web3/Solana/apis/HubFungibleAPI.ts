@@ -30,7 +30,7 @@ export class SolanaHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
         )
     }
 
-    override getFungibleToken(address: string, initial?: SolanaHubOptions | undefined) {
+    override getFungibleToken(address: string, initial?: SolanaHubOptions) {
         return attemptUntil(
             [
                 () => solana.state?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),

@@ -5,7 +5,7 @@ export function useBackupPreviewInfo() {
     return useQuery({
         queryKey: ['backup', 'preview-info'],
         queryFn: () => Services.Backup.generateBackupPreviewInfo(),
-        refetchInterval: 60_0000,
+        refetchInterval: 600_000,
         refetchOnWindowFocus: true,
     })
 }

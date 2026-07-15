@@ -28,7 +28,7 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
 
         this.networks = mapSubscription(this.networksStorage.subscription, (storage) => {
             // Newest to oldest
-            const customizedNetworks = Object.values(storage).sort(
+            const customizedNetworks = Object.values(storage).toSorted(
                 (a, z) => z.createdAt.getTime() - a.createdAt.getTime(),
             )
             const registeredChains = getRegisteredWeb3Chains(this.pluginID)
@@ -69,7 +69,7 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
         const valid = await this.validateNetwork(network)
         if (!valid) throw new Error('Not a valid network.')
 
-        const ID = crypto.randomUUID()
+        const ID: string = crypto.randomUUID()
         const now = new Date()
 
         await this.networksStorage.setValue({

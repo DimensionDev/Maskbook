@@ -13,8 +13,6 @@ import { Flags } from '@masknet/flags'
  *
  * This will be reported only when the current page is https://x.com/ and no matches is found.
  */
-export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, options: WatchOptions): T
-export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, options: AbortSignal): T
 export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(
     watcher: T,
     options: AbortSignal | WatchOptions,

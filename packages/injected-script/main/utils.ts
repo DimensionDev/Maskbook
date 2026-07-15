@@ -19,7 +19,9 @@ export function PatchDescriptor(patchedProps: PropertyDescriptorMap & NullProtot
         if ($.hasOwn(desc, 'set') && desc.set) desc.set = $unsafe.expose(desc.set!, oldDesc.set!)
         try {
             $.defineProperty(__unsafe__targetPrototype, key, desc)
-        } catch {}
+        } catch {
+            // ignore
+        }
     }
 }
 

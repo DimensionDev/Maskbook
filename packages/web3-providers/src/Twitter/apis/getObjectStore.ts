@@ -7,7 +7,7 @@ const DB_VERSION = 2
 async function getDatabase() {
     if (!Sniffings.is_firefox) {
         const databases = await indexedDB.databases()
-        if (!databases.some((x) => x.name === DB_NAME && x.version === DB_VERSION)) return
+        if (databases.every((x) => !(x.name === DB_NAME && x.version === DB_VERSION))) return
     }
 
     return new Promise<IDBDatabase>((resolve, reject) => {

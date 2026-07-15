@@ -55,7 +55,7 @@ export async function decryptByLocalKey(
     if (authorHint) {
         await createPersonaDBReadonlyAccess(async (tx) => {
             const key = await getLocalKeyOf(authorHint, tx)
-            key && candidateKeys.push(key)
+            if (key) candidateKeys.push(key)
         })
         // TODO: We may push every local key we owned to the candidate list so we can also decrypt when authorHint is null, but that might be a performance pitfall when localKey field is not indexed.
     }
@@ -125,7 +125,7 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
 
     const deriveResult = new Map<ECKeyIdentifier, AESCryptoKey>()
     const result = await Promise.allSettled(
-        [...sameCurvePrivateKeys].map(async ([id, key]) => {
+        sameCurvePrivateKeys.entries().map(async ([id, key]) => {
             const privateKey = await crypto.subtle.importKey(
                 'jwk',
                 key,

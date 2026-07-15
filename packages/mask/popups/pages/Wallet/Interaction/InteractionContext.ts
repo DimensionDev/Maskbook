@@ -15,7 +15,7 @@ export const { Provider: InteractionWalletContext, useContainer: useInteractionW
         function useInteractionWallet(currentInteractingWallet: string | undefined) {
             useRenderPhraseCallbackOnDepsChange(() => {
                 if (!isValidAddress(currentInteractingWallet)) return
-                Promise.resolve().then(() => setInteractionWallet(currentInteractingWallet))
+                Promise.try(() => setInteractionWallet(currentInteractingWallet))
             }, [currentInteractingWallet])
         }
 

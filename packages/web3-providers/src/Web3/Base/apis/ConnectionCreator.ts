@@ -28,17 +28,16 @@ export function createConnectionCreator<
         Web3Helper.Definition[T]['TransactionDetailed'],
         Web3Helper.Definition[T]['TransactionSignature']
     >,
-    ConnectionOptions extends ConnectionOptionsProvider<
+>(
+    _pluginID: T,
+    creator: (initial?: InitialOptions) => Connection,
+    isValidChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => boolean,
+    ConnectionOptions: ConnectionOptionsProvider<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['NetworkType'],
         Web3Helper.Definition[T]['Transaction']
     >,
->(
-    _pluginID: T,
-    creator: (initial?: InitialOptions) => Connection,
-    isValidChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => boolean,
-    ConnectionOptions: ConnectionOptions,
 ) {
     const createCached = memoize(
         creator,

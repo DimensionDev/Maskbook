@@ -58,11 +58,7 @@ export class ConnectionAPI
         )
     }
 
-    override async removeWallet(
-        address: string,
-        password?: string | undefined,
-        initial?: EVMConnectionOptions,
-    ): Promise<void> {
+    override async removeWallet(address: string, password?: string, initial?: EVMConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REMOVE_WALLET,
@@ -88,11 +84,10 @@ export class ConnectionAPI
         amount: string,
         initial?: EVMConnectionOptions,
     ): Promise<string> {
-        const options = this.ConnectionOptions.fill(initial)
-
         // Native
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
+        const options = this.ConnectionOptions.fill(initial)
         // ERC20
         const contract = this.Contract.getERC20Contract(address)
         const tx = this.Contract.createTransactionRequest(
@@ -105,7 +100,7 @@ export class ConnectionAPI
             },
         )
         if (!tx) throw new Error('Failed to create contract transaction.')
-        tx.gas ??= await this.estimateTransaction(tx, 50000, options)
+        tx.gas ??= await this.estimateTransaction(tx, 50_000, options)
         return this.sendTransaction(tx, options)
     }
 
@@ -129,7 +124,7 @@ export class ConnectionAPI
             return this.sendTransaction(
                 {
                     ...tx,
-                    gas: await this.estimateTransaction(tx, 50000, options),
+                    gas: await this.estimateTransaction(tx, 50_000, options),
                 },
                 options,
             )
@@ -147,7 +142,7 @@ export class ConnectionAPI
             },
         )
         if (!tx) throw new Error('Failed to create contract transaction.')
-        tx.gas ??= await this.estimateTransaction(tx, 50000, options)
+        tx.gas ??= await this.estimateTransaction(tx, 50_000, options)
         return this.sendTransaction(tx, options)
     }
 
@@ -164,7 +159,7 @@ export class ConnectionAPI
                 return this.Request.request<string>(
                     {
                         method: EthereumMethodType.personal_sign,
-                        params: [message, options.account, ''].filter((x) => typeof x !== 'undefined'),
+                        params: [message, options.account, ''].filter((x) => x !== undefined),
                     },
                     options,
                 )

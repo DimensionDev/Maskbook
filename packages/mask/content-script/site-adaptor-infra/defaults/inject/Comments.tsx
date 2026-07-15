@@ -33,7 +33,7 @@ export function injectPostCommentsDefault<T extends string>(
         const commentWatcher = new MutationObserverWatcher(selector, document.body).useForeach(
             (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
-                const needZipF = needZip || (() => undefined)
+                const needZipF = needZip || (() => {})
                 const root = attachReactTreeWithContainer(meta.afterShadow, { signal })
                 root.render(
                     <PostInfoContext value={current}>

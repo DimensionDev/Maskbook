@@ -113,9 +113,7 @@ export const Component = memo(function CreateWalletForm() {
     return (
         <div className={classes.container}>
             <Typography className={cx(classes.second, classes.bold)}>
-                {!isReset ?
-                    <Trans>Step 1/3</Trans>
-                :   null}
+                {isReset ? null : <Trans>Step 1/3</Trans>}
             </Typography>
             <Typography className={cx(classes.title, classes.bold)}>
                 <Trans>Set Your Payment Password</Trans>
@@ -134,7 +132,7 @@ export const Component = memo(function CreateWalletForm() {
                                 className={classes.input}
                                 placeholder={_(msg`At least 6 characters`)}
                                 error={!isValid && !!errors.password?.message}
-                                helperText={!isValid ? errors.password?.message : ''}
+                                helperText={isValid ? '' : errors.password?.message}
                             />
                         )}
                         name="password"
@@ -145,7 +143,7 @@ export const Component = memo(function CreateWalletForm() {
                                 {...field}
                                 className={classes.input}
                                 error={!isValid && !!errors.confirm?.message}
-                                helperText={!isValid ? errors.confirm?.message : ''}
+                                helperText={isValid ? '' : errors.confirm?.message}
                                 placeholder={_(msg`Confirm Payment Password`)}
                             />
                         )}

@@ -185,13 +185,13 @@ export const Component = memo(function CloudBackupPreview() {
                     </Box>
                 }
             </Box>
-            {!previewInfo.downloadLink ?
+            {previewInfo.downloadLink ? null : (
                 <OutletPortal>
                     <ActionButton onClick={handleBackupClick}>
                         <Trans>Back</Trans>
                     </ActionButton>
                 </OutletPortal>
-            :   null}
+            )}
         </>
     )
 })

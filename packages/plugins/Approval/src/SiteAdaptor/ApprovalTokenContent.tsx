@@ -20,7 +20,7 @@ import {
 import { ChainBoundary, EmptyStatus, LoadingStatus, TokenIcon } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
 
-const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
+const useStyles = makeStyles<void | { listItemBackground?: string; listItemBackgroundIcon?: string }>()(
     (theme, props) => ({
         statusBox: {
             height: '100%',
@@ -207,10 +207,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
         chainId,
     })
-    const amount =
-        spender.amount ? spender.amount
-        : spender.rawAmount ? leftShift(spender.rawAmount, token?.decimals)
-        : undefined
+    const amount = spender.amount || (spender.rawAmount ? leftShift(spender.rawAmount, token?.decimals) : undefined)
 
     return (
         <div className={classes.listItemWrapper}>
@@ -229,11 +226,11 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                         <Typography className={classes.secondaryText}>
                             <Trans>Contract</Trans>
                         </Typography>
-                        {!spender.logo ?
-                            null
-                        : typeof spender.logo === 'string' ?
-                            <img src={spender.logo} className={classes.spenderLogoIcon} />
-                        :   <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>}
+                        {spender.logo ?
+                            typeof spender.logo === 'string' ?
+                                <img src={spender.logo} className={classes.spenderLogoIcon} />
+                            :   <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
+                        :   null}
                         <Typography className={classes.primaryText}>
                             {spender.name || EVMUtils.formatAddress(spender.address, 4)}
                         </Typography>

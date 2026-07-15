@@ -77,6 +77,6 @@ async function resolveThemeSettingsInner(
 export const ThemeSettingsProviderTwitter: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
     async start(cancel) {
-        await resolveThemeSettingsInner(this.recognized, cancel)
+        await resolveThemeSettingsInner(ThemeSettingsProviderTwitter.recognized, cancel)
     },
 }

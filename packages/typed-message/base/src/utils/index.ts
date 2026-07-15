@@ -10,7 +10,7 @@ export * from './extract.js'
 
 export function isNonSerializableTypedMessageWithAlt(x: TypedMessage): x is NonSerializableWithAltTypedMessage {
     const y = x as NonSerializableWithAltTypedMessage
-    if (y.serializable !== false) return false
+    if (y.serializable) return false
     if (!y.alt) return false
     return isSerializableTypedMessage(y.alt)
 }

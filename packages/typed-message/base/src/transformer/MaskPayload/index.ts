@@ -53,14 +53,14 @@ export function createMaskPayloadTransform(options: MaskPayloadTransformOptions)
 
         // Note: there maybe more than 1 payload in the message. Make sure both of them are handled.
         if (isTypedMessageAnchor(message)) {
-            if (message.content.match(linkPayload)) return options.transformText(message.content, context)
-            if (message.href.match(linkPayload)) return options.transformText(message.href, context)
+            if (linkPayload.test(message.content)) return options.transformText(message.content, context)
+            if (linkPayload.test(message.href)) return options.transformText(message.href, context)
         } else if (isTypedMessageImage(message)) {
             return options.transformImage(message, context)
         } else if (isTypedMessageText(message)) {
             // TODO: there maybe more than 1 payload to parse.
             // Not detect link form here. Only detect raw form (used on FB) in this branch.
-            if (message.content.match(textPayload)) {
+            if (textPayload.test(message.content)) {
                 return options.transformText(message.content, context)
             }
         } else if (isTypedMessageTuple(message)) {

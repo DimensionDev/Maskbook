@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PinExtension({ onDone, onClose }: PinExtensionProps) {
-    const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
+    const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).href
     const { classes } = useStyles()
 
     return (

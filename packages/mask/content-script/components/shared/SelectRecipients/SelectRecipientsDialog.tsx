@@ -123,7 +123,6 @@ const useStyles = makeStyles()((theme) => ({
 interface SelectRecipientsDialogUIProps {
     open: boolean
     items: Profile[]
-    selected: Profile[]
     disabled: boolean
     submitDisabled: boolean
     loading?: boolean

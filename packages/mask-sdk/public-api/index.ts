@@ -25,6 +25,7 @@ export declare namespace Mask {
      * @remarks Since API=0
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     export const persona: undefined | Persona
     /**
      * @see https://eips.ethereum.org/EIPS/eip-1193

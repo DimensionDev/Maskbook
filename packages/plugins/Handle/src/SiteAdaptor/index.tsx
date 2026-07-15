@@ -12,13 +12,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     SearchResultInspector: {
         ID: PluginID.Handle,
         UI: {
-            Content: ({ resultList }) => (
-                <SearchResultInspector
-                    keyword={resultList[0].keyword}
-                    keywordType={resultList[0].type}
-                    result={resultList[0] as EOAResult<ChainId>}
-                />
-            ),
+            Content: ({ resultList }) => <SearchResultInspector result={resultList[0] as EOAResult<ChainId>} />,
         },
         Utils: {
             shouldDisplay(result) {

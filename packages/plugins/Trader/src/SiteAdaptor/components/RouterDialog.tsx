@@ -8,7 +8,7 @@ export function RouterDialog(props: InjectedDialogProps) {
     const navigate = useNavigate()
 
     useLayoutEffect(() => {
-        if (!(pathname === RoutePaths.Exit)) return
+        if (pathname !== RoutePaths.Exit) return
         props.onClose?.()
     }, [pathname === RoutePaths.Exit, props.onClose])
 

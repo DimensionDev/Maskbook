@@ -367,6 +367,7 @@ const testKey = {
 async function reject(): Promise<any> {
     throw new Error('should not be called')
 }
+// eslint-disable-next-line require-yield
 async function* rejectGenerator() {
     throw new Error('should not be called')
 }
@@ -382,12 +383,16 @@ async function returnTestKey() {
 }
 
 function complexMessage() {
-    const meta = new Map<string, any>()
-    meta.set('io.plugin.something', {
-        num: 2345,
-        str: '123',
-        nul: null,
-        dict: { a: [1, 2], b: true, c: false },
-    })
+    const meta = new Map<string, any>([
+        [
+            'io.plugin.something',
+            {
+                num: 2345,
+                str: '123',
+                nul: null,
+                dict: { a: [1, 2], b: true, c: false },
+            },
+        ],
+    ])
     return makeTypedMessageTupleSerializable([makeTypedMessageText('hi'), makeTypedMessageText('text 2')], meta)
 }

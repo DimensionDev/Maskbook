@@ -22,7 +22,7 @@ export async function sdk_eth_accounts(origin: string): Promise<string[]> {
     if (await isLocked()) return []
     const wallets = await sdk_getGrantedWallets(origin)
     const currentAccount = (await initStorage()).account.value
-    return wallets.sort((a, b) =>
+    return wallets.toSorted((a, b) =>
         isSameAddress(a, currentAccount) ? -1
         : isSameAddress(b, currentAccount) ? 1
         : 0,

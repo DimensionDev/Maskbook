@@ -71,19 +71,11 @@ interface Props extends HTMLProps<HTMLDivElement>, withClasses<'button'> {
 }
 
 export const UploadDropArea = memo(function UploadDropArea(props: Props) {
-    const {
-        maxFileSize = Number.POSITIVE_INFINITY,
-        omitSizeLimit,
-        className,
-        accept,
-        subtitle,
-        onSelectFile,
-        ...rest
-    } = props
+    const { maxFileSize = Infinity, omitSizeLimit, className, accept, subtitle, onSelectFile, ...rest } = props
     const { classes, cx } = useStyles(undefined, { props })
     const { showSnackbar } = useCustomSnackbar()
     const handleFiles = (files: File[] | FileList | null) => {
-        if (!files || files.length !== 1) {
+        if (files?.length !== 1) {
             showMessage(101)
         } else if (!omitSizeLimit && files[0].size > maxFileSize) {
             showMessage(102)
@@ -91,7 +83,7 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
             onSelectFile(files[0])
         }
     }
-    const fileSize = maxFileSize === Number.POSITIVE_INFINITY ? t`unlimited` : formatFileSize(maxFileSize)
+    const fileSize = maxFileSize === Infinity ? t`unlimited` : formatFileSize(maxFileSize)
     const handleFilesRef = useRef<(file: File[] | FileList | null) => void>(undefined)
     handleFilesRef.current = handleFiles
 
@@ -103,7 +95,7 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
         input.addEventListener('input', function onInput(event) {
             handleFilesRef.current?.((event.currentTarget as any).files as FileList)
             input.removeEventListener('input', onInput)
-            document.body.removeChild(input)
+            input.remove()
         })
         input.click()
         document.body.append(input)

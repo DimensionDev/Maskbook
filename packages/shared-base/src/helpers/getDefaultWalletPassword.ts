@@ -1,3 +1,3 @@
 export function getDefaultWalletPassword() {
-    return 'MASK NETWORK'.split('').reverse().join('')
+    return 'MASK NETWORK'.split('').toReversed().join('')
 }

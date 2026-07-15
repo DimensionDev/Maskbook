@@ -28,10 +28,13 @@ export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: unknown[]): Map
             continue
         }
 
-        if (hasProfileIdentifier && id.value instanceof A) result.set(id.value, value)
-        else if (hasECKeyIdentifier && id.value instanceof B) result.set(id.value, value)
-        else if (hasPostIdentifier && id.value instanceof C) result.set(id.value, value)
-        else if (hasPostIVIdentifier && id.value instanceof D) result.set(id.value, value)
+        if (
+            (hasProfileIdentifier && id.value instanceof A) ||
+            (hasECKeyIdentifier && id.value instanceof B) ||
+            (hasPostIdentifier && id.value instanceof C) ||
+            (hasPostIVIdentifier && id.value instanceof D)
+        )
+            result.set(id.value, value)
         else droppedValues.set(key, value)
     }
 

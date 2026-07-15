@@ -26,6 +26,18 @@ msgstr ""
 msgid "(the name is set by the web site)"
 msgstr ""
 
+#. placeholder {0}: value.length
+#: packages/plugins/ScamWarning/src/SiteAdaptor/components/PreviewCard.tsx
+msgid "{0, plural, one {\"This domain is currently on\n"
+"                            the Mask Network warning list which may include malicious entries, phishing or scams.\"} other {\"These domains are currently on\n"
+"                            the Mask Network warning list which may include malicious entries, phishing or scams.\"}}"
+msgstr ""
+
+#. placeholder {0}: websiteCountNum || 0
+#: packages/mask/popups/pages/Settings/index.tsx
+msgid "{0, plural, one {{websiteCount} website} other {{websiteCount} websites}}"
+msgstr ""
+
 #. placeholder {0}: millisecondsToHours(value)
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0, plural, one {# Hour} other {# Hours}}"
@@ -43,8 +55,8 @@ msgstr ""
 
 #. placeholder {0}: value.length
 #: packages/plugins/ScamWarning/src/SiteAdaptor/components/PreviewCard.tsx
-msgid "{0, plural, one {This domain is} other {These domains are}} currently on the Mask Network warning list which may include malicious entries, phishing or scams."
-msgstr ""
+#~ msgid "{0, plural, one {This domain is} other {These domains are}} currently on the Mask Network warning list which may include malicious entries, phishing or scams."
+#~ msgstr ""
 
 #. placeholder {0}: metadata?.action || ''
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedActions/ProfileAction.tsx
@@ -454,8 +466,8 @@ msgstr ""
 
 #. placeholder {0}: websiteCount || 0
 #: packages/mask/popups/pages/Settings/index.tsx
-msgid "<0>{websiteCount}</0> {0, plural, one {Website} other {Websites}}"
-msgstr ""
+#~ msgid "<0>{websiteCount}</0> {0, plural, one {Website} other {Websites}}"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "<0>@{currentUserId}</0> connected already."
@@ -1600,7 +1612,6 @@ msgid "Confirm Swap"
 msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/RiskWarningDialog.tsx
-#: packages/plugins/GoPlusSecurity/src/UI/TokenSecurityBoundary.tsx
 msgid "Confirm swap risk"
 msgstr ""
 
@@ -3447,7 +3458,7 @@ msgstr ""
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
-#. placeholder {0}: isDeposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol
+#. placeholder {0}: (isDeposit ? protocol.bareToken : protocol.stakeToken).symbol
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
 msgid "Insufficient ${0} balance"
 msgstr ""

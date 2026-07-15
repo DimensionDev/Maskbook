@@ -27,7 +27,7 @@ export function useResults(identifier: ProposalIdentifier, proposal: Proposal) {
         })),
         percentage: totalPower === 0 ? 0 : (p / totalPower) * 100,
     }))
-    return { results: results.sort((a, b) => b.power - a.power), totalPower }
+    return { results: results.toSorted((a, b) => b.power - a.power), totalPower }
 }
 
 function voteForChoice(votes: VoteItem[], i: number) {

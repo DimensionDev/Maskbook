@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-type-literal-last */
 import type { ReactNode } from 'react'
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
@@ -434,17 +435,6 @@ export interface FungibleTokenSpender<ChainId, SchemaType> {
     rawAmount?: number
 }
 
-/**
- * Authorization about a non-fungible contract.
- */
-export interface NonFungibleContractSpender<ChainId, SchemaType> {
-    amount: string
-    contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
-    address: string
-    name: string | undefined
-    logo: ReactNode | undefined
-}
-
 export interface Result<ChainId> {
     pluginID: NetworkPluginID
     chainId: ChainId
@@ -610,7 +600,7 @@ export type FormattedTransactionDescription =
     | { key: 'Unlock {symbol}.'; symbol: string }
     | { key: 'Unlock {symbol} NFT contract.'; symbol: string }
     // Airdrop
-    | 'Transaction submitted.'
+
     // RedPacket
     | 'Claim your Lucky Drop.'
     | 'Create your Lucky Drop.'
@@ -654,7 +644,7 @@ export type FormattedTransactionSnackbarSuccessDescription =
           key: "You didn't approve {symbol}. Please do not set spending cap to 0 and try it again."
           symbol: string
       }
-    | { key: '{token} sent.'; token: string }
+
     // Airdrop
     | { key: '{token} were claimed'; token: string }
     // Gitcoin

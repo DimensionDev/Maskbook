@@ -77,12 +77,11 @@ function TrendingViewWrapper({
     if (!resultList?.length || loadingResultList) return null
 
     return (
-        <TrendingViewProvider isDSearch={false} isProfilePage={false} isTokenTagPopper isPreciseSearch={false}>
+        <TrendingViewProvider isProfilePage={false} isTokenTagPopper isPreciseSearch={false}>
             <TrendingView
                 currentResult={currentResult}
                 resultList={resultList}
                 onUpdate={reposition}
-                address={address}
                 identity={identity}
                 setActive={setActive}
             />

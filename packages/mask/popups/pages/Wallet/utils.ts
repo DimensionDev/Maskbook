@@ -38,7 +38,7 @@ export async function modifyTransaction(
     const newConfig = {
         ...candidate,
         ...oldGasSettings,
-        ...mapKeys(gasSettings, (value) => (typeof value === 'undefined' ? value : toHex(value))),
+        ...mapKeys(gasSettings, (value) => (value === undefined ? value : toHex(value))),
     }
     if (replaceType === ReplaceType.CANCEL) {
         await EVMWeb3.cancelTransaction(transaction.id, newConfig, {
@@ -65,6 +65,7 @@ export function parseReceiverFromERC20TransferInput(input?: string | null) {
 
 // The Debank transaction history api does not return the input data and approved token info,
 //  so can not do the decoding within its scope.
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export function parseAmountFromERC20ApproveInput(input?: string | null): 'Infinite' | string | undefined {
     if (!input) return
     try {

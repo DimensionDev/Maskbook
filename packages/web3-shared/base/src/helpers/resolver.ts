@@ -153,13 +153,12 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
 }
 
 // https://stackoverflow.com/a/67176726
-const MATCH_IPFS_CID_RAW =
-    'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
+const MATCH_IPFS_CID_RAW = String.raw`Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\dA-F]{50,}`
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:[\w,/;]+)$/u
 const MATCH_IPFS_CID_RE = new RegExp(`(${MATCH_IPFS_CID_RAW})`, 'u')
 const MATCH_IPFS_CID_STRICT_RE = new RegExp(`^(?:${MATCH_IPFS_CID_RAW})$`, 'u')
 const MATCH_IPFS_CID_AT_STARTS_RE = new RegExp(`^https://(?:${MATCH_IPFS_CID_RAW})`, 'u')
-const MATCH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`, 'u')
+const MATCH_IPFS_CID_AND_PATHNAME_RE = new RegExp(String.raw`(?:${MATCH_IPFS_CID_RAW})\/?.*`, 'u')
 const MATCH_LOCAL_RESOURCE_URL_RE = /^(data|blob:|\w+-extension:\/\/|<svg\s)/u
 const CORS_HOST = 'https://cors-next.r2d2.to'
 const IPFS_GATEWAY_HOST = 'https://ipfs.io'
@@ -228,20 +227,11 @@ export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefine
                 const cid = resolveIPFS_CID(cidOrURL)
 
                 if (cid) {
-                    if (u.pathname === '/') {
-                        return resolveIPFS_URL(
-                            urlcat('https://ipfs.io/ipfs/:cid', {
-                                cid,
-                            }),
-                        )
-                    } else {
-                        return resolveIPFS_URL(
-                            urlcat('https://ipfs.io/ipfs/:cid/:path', {
-                                cid,
-                                path: u.pathname.slice(1),
-                            }),
-                        )
-                    }
+                    const url =
+                        u.pathname === '/' ?
+                            urlcat('https://ipfs.io/ipfs/:cid', { cid })
+                        :   urlcat('https://ipfs.io/ipfs/:cid/:path', { cid, path: u.pathname.slice(1) })
+                    return resolveIPFS_URL(url)
                 }
             } catch (error) {
                 console.log({
@@ -275,7 +265,7 @@ export function resolveCrossOriginURL<T extends string | undefined>(url: T) {
     return `${CORS_HOST}?${encodeURIComponent(url)}`
 }
 
-export function resolveResourceURL<T extends string | undefined>(url: T) {
+export function resolveResourceURL(url: string | undefined) {
     if (!url) return url
     if (isLocaleResource(url)) return resolveLocalURL(url)
     if (isArweaveResource(url)) return resolveArweaveURL(url)

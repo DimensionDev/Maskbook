@@ -20,7 +20,7 @@ function svg2jsx(code: string) {
     return code
         .trim()
         .replaceAll(/(\w+-\w+)=('|").*?\2/gu, (p: string, m1: string) => {
-            return p.replace(m1, camelCase(m1))
+            return p.replace(m1, () => camelCase(m1))
         })
         .replaceAll('xlink:href', 'xlinkHref')
         .replaceAll(/\bstyle=('|")(.+?)\1/gu, (_p: string, _m1: string, style: string) => {
@@ -45,7 +45,7 @@ function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
 }
 
 function getBase(fileName: string) {
-    return fileName.split('.')[0]
+    return fileName.split('.', 1)[0]
 }
 function getVariant(fileName: string) {
     const variants = fileName.split('.').slice(1)
@@ -77,7 +77,7 @@ async function generateIcons() {
         dtsMap: new SourceMapGenerator({ file: 'icon-generated-as-url.d.ts' }),
     }
 
-    const relativePrefix = iconRoot.toString().length
+    const relativePrefix = iconRoot.href.length
     /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true })
 
@@ -102,7 +102,7 @@ async function generateIcons() {
 
     // Process in order of files
     filePaths
-        .sort((a, z) => a.localeCompare(z, 'en-US'))
+        .toSorted((a, z) => a.localeCompare(z, 'en-US'))
         .forEach((path) => {
             const { name } = parsePath(path)
 
@@ -111,7 +111,7 @@ async function generateIcons() {
             variants[base] ??= []
 
             // cross platform, use URL to calculate relative path
-            const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
+            const importPath = './' + new URL(path, ROOT_PATH).href.slice(relativePrefix)
             const identifier = importPath.includes('countries') ? `countries_${snakeCase(name)}` : snakeCase(name)
 
             const url = `new URL(${JSON.stringify(importPath)}, import.meta.url).href`
@@ -138,13 +138,14 @@ async function generateIcons() {
         const Ident = upperFirst(icon.replace(/\.(\w)/u, (_, c: string) => c.toUpperCase()))
         const nameField = JSON.stringify(icon)
         const variantsField = variant
-            .sort((a, b) => a.args[0].length - b.args[0].length)
+            .toSorted((a, b) => a.args[0].length - b.args[0].length)
             .map((x) => x.args)
             .map(([variant, url, jsx, isColorful]) => {
                 return (
                     '{' +
                     [
-                        variant.length === 0 ? null : `c: ${JSON.stringify(variant.sort())}`,
+                        // eslint-disable-next-line unicorn/require-array-sort-compare
+                        variant.length === 0 ? null : `c: ${JSON.stringify(variant.toSorted())}`,
                         variant.length === 0 && jsx ? null : `u: () => ${url}`,
                         jsx ? `j: () => ${jsx}` : null,
                         isColorful ? 's: true' : null,
@@ -161,11 +162,11 @@ async function generateIcons() {
         if (notSquare) args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
         asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${args.join(', ')})`)
 
-        const variantNames = [...new Set(variant.flatMap((x) => x.args[0]))].map((x) => JSON.stringify(x))
+        const variantNames = new Set(variant.flatMap((x) => x.args[0])).values().map((x) => JSON.stringify(x))
 
         const jsdoc = [] as string[]
         if (variant.some((x) => x.args[3])) jsdoc.push('🎨 This icon supports custom color.')
-        else jsdoc.push('🖼\uFE0F This icon brings its own colors.')
+        else jsdoc.push('🖼\u{FE0F} This icon brings its own colors.')
 
         jsdoc.push(
             //
@@ -180,7 +181,7 @@ async function generateIcons() {
         attachJSDoc(jsdoc, asJSX.dts)
         asJSX.dts.push(
             `export const ${Ident}: ComponentType<${notSquare ? 'GeneratedIconNonSquareProps' : 'GeneratedIconProps'}<${
-                variantNames.join(' | ') || 'never'
+                variantNames.toArray().join(' | ') || 'never'
             }>>`,
         )
         asJSX.dtsMap.addMapping({
@@ -216,7 +217,9 @@ async function generateIcons() {
     ])
 }
 function attachJSDoc(jsdoc: readonly string[], lines: string[]) {
-    return `/**\n${jsdoc.map((x) => ' * ' + x + '\n').join('')} */`.split('\n').forEach((x) => lines.push(x))
+    return `/**\n${jsdoc.map((x) => ' * ' + x + '\n').join('')} */`.split('\n').forEach((x) => {
+        lines.push(x)
+    })
 }
 function createLink(x: string) {
     // Cannot render images in JSDoc in VSCode by relative path

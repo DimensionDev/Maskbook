@@ -1,5 +1,5 @@
 import { createContext, useMemo, type PropsWithChildren } from 'react'
-import type { SearchResultType, EOAResult } from '@masknet/web3-shared-base'
+import type { EOAResult } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, type Web3BioProfile } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, type ChainId } from '@masknet/web3-shared-evm'
 import { useSocialAccountListByAddressOrDomain } from '@masknet/web3-hooks-base'
@@ -41,6 +41,4 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
 
 export interface SearchResultInspectorProps {
     result: EOAResult<ChainId>
-    keyword: string
-    keywordType?: SearchResultType
 }

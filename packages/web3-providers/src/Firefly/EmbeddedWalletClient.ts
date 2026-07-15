@@ -65,6 +65,7 @@ class EmbeddedWalletClient {
 
     /** `POST /v1/privy/eth/personal-sign`. */
     async personalSign(message: string, encoding?: SignEncoding): Promise<string> {
+        // eslint-disable-next-line unicorn/text-encoding-identifier-case
         const resolved: SignEncoding = encoding ?? (isHex(message) ? 'hex' : 'utf-8')
         const result = await fireflyRequest<PersonalSignResult>('/v1/privy/eth/personal-sign', {
             method: 'POST',

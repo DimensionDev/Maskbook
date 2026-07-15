@@ -22,7 +22,7 @@ export function useWarnings(formChainId: number, formSymbol?: string) {
         if (!match) return
         if (match.nativeCurrency.symbol !== formSymbol)
             return t`The network with chain ID ${formChainId} may use a different currency symbol (${match.nativeCurrency.symbol}) than the one you have entered. Please check.`
-        return undefined
+        return
     }, [chains, formSymbol, formChainId])
 
     return {

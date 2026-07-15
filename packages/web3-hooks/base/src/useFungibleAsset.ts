@@ -11,6 +11,7 @@ export function useFungibleAsset<S extends 'all' | void = void, T extends Networ
 ) {
     const Hub = useWeb3Hub(pluginID, options)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery<Web3Helper.FungibleAssetScope<S, T> | null>({
         enabled: !!address,
         queryKey: ['fungible-asset', pluginID, address, options],

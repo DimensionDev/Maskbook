@@ -26,7 +26,7 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
 
         try {
             await Services.Identity.renamePersona(currentPersona.identifier, name)
-        } catch (error) {
+        } catch {
             setError(<Trans>The persona name already exists.</Trans>)
             return
         }

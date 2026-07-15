@@ -35,7 +35,9 @@ if (!globalThis[Symbol.for('mask_init_patch')]) {
                 Object.defineProperties(desc.value, desc2)
                 try {
                     desc.value.prototype = value.prototype
-                } catch {}
+                } catch {
+                    // ignore
+                }
             }
         }
         // MV3 service worker
@@ -65,7 +67,9 @@ if (!globalThis[Symbol.for('mask_init_patch')]) {
         }
         console.log('[Mask] applying intrinsic patches', patch)
         Object.defineProperties(window, patch)
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
 
 undefined

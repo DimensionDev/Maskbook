@@ -42,11 +42,11 @@ function ConfirmDrawer({
             <Typography {...messageProps} className={cx(classes.message, messageProps?.className)}>
                 {message}
             </Typography>
-            {!disableConfirmButton ?
+            {disableConfirmButton ? null : (
                 <ActionButton className={classes.button} onClick={onConfirm}>
                     {buttonLabel || <Trans>Confirm</Trans>}
                 </ActionButton>
-            :   null}
+            )}
         </BottomDrawer>
     )
 }

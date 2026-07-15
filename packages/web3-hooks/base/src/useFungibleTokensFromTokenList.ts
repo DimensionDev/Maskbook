@@ -13,7 +13,7 @@ export function useFungibleTokensFromTokenList<T extends NetworkPluginID = Netwo
         chainId,
         ...options,
     } as HubOptions<T>)
-
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         queryKey: ['get-fungible-tokens', 'from-token-list', chainId, options],
         queryFn: async () => {

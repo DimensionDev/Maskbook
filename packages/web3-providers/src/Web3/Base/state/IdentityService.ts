@@ -58,7 +58,7 @@ export abstract class IdentityServiceState<ChainId> implements Web3SocialIdentit
             SocialAddressType.RSS3,
             SocialAddressType.SOL,
         ]
-        return Object.entries(accountGroups).map<SocialAccount<ChainId>>(([, accounts]) => {
+        return Object.values(accountGroups).map<SocialAccount<ChainId>>((accounts) => {
             const domainLabels = compact(domainAddressTypes.map((x) => accounts.find((y) => y.type === x)?.label))
             const theFirstAccount = accounts[0]
             return {
@@ -67,7 +67,7 @@ export abstract class IdentityServiceState<ChainId> implements Web3SocialIdentit
                 label: first(domainLabels) || theFirstAccount.label,
                 // The supportedChainIds support all chains by default. If not set value, should keep it.
                 supportedChainIds:
-                    accounts.find((x) => !x.chainId) ? undefined : uniq(compact(accounts.map((x) => x.chainId))),
+                    accounts.some((x) => !x.chainId) ? undefined : uniq(compact(accounts.map((x) => x.chainId))),
                 supportedAddressTypes: uniq(accounts.map((x) => x.type)),
             }
         })

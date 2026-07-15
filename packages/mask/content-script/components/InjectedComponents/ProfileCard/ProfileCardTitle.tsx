@@ -145,9 +145,9 @@ export function ProfileCardTitle({
                     :   null}
                     {itsMe ?
                         <Web3ProfileSettingButton />
-                    : !tipsDisabled ?
-                        <TipsButton className={classes.tipButton} receiver={identity.identifier} />
-                    :   null}
+                    : tipsDisabled ?
+                        null
+                    :   <TipsButton className={classes.tipButton} receiver={identity.identifier} />}
                 </div>
             </ProfileBar>
         </div>

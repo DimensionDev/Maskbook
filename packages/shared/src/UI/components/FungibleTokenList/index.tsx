@@ -107,21 +107,19 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const filteredFungibleTokens = useMemo(() => {
         const merged = [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens]
-        if (chainId === EvmChainId.Base) {
-            if (!merged.some((x) => x.symbol === 'VIRTUAL')) {
-                merged.push({
-                    id: '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b',
-                    type: TokenType.Fungible,
-                    schema: SchemaType.ERC20,
-                    chainId: 8453,
-                    address: '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b',
-                    name: 'Virtual Protocol',
-                    symbol: 'VIRTUAL',
-                    decimals: 18,
-                    logoURL:
-                        'https://www.okx.com/cdn/web3/currency/token/8453-0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b-97.png/type=default_350_0?v=1732307157464',
-                })
-            }
+        if (chainId === EvmChainId.Base && merged.every((x) => x.symbol !== 'VIRTUAL')) {
+            merged.push({
+                id: '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b',
+                type: TokenType.Fungible,
+                schema: SchemaType.ERC20,
+                chainId: 8453,
+                address: '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b',
+                name: 'Virtual Protocol',
+                symbol: 'VIRTUAL',
+                decimals: 18,
+                logoURL:
+                    'https://www.okx.com/cdn/web3/currency/token/8453-0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b-97.png/type=default_350_0?v=1732307157464',
+            })
         }
         const allFungibleTokens = extendTokens ? uniqBy(merged, (x) => x.address.toLowerCase()) : tokens
 
@@ -159,7 +157,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
         return uniqBy([...(nativeToken ? [nativeToken] : []), ...fungibleTokens, ...trustedFungibleTokens], (x) =>
             x.address.toLowerCase(),
-        ).sort((a, z) => {
+        ).toSorted((a, z) => {
             // trusted token
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
@@ -175,8 +173,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             const isMaskTokenZ = isSameAddress(z.address, Utils.getMaskTokenAddress(z.chainId))
             if (isMaskTokenZ) return 1
 
-            if (z.rank && (!a.rank || a.rank - z.rank > 0)) return 1
-            if (a.rank && (!z.rank || z.rank - a.rank > 0)) return -1
+            if (z.rank && (!a.rank || a.rank - z.rank)) return 1
+            if (a.rank && (!z.rank || z.rank - a.rank)) return -1
 
             // alphabet
             if (a.name !== z.name) return a.name < z.name ? -1 : 1
@@ -203,7 +201,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 // To avoid reduce re-render, merge balance into token, when value is `undefined` to represent loading
                 balance: fungibleTokensBalance[x.address],
             }))
-            .sort((a, z) => {
+            .toSorted((a, z) => {
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
                     if (a.chainId === chainId) return -1
@@ -240,8 +238,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 if (isMaskTokenA) return -1
                 if (isMaskTokenZ) return 1
 
-                if (z.rank && (!a.rank || a.rank - z.rank > 0)) return 1
-                if (a.rank && (!z.rank || z.rank - a.rank > 0)) return -1
+                if (z.rank && (!a.rank || a.rank - z.rank)) return 1
+                if (a.rank && (!z.rank || z.rank - a.rank)) return -1
 
                 // alphabet
                 if (a.name !== z.name) return a.name < z.name ? -1 : 1
@@ -253,14 +251,14 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #region add token by address
     const [keyword, setKeyword] = useState('')
 
-    const { value: addressType } = useAddressType(pluginID, !Utils.isValidAddress(keyword ?? '') ? '' : keyword, {
+    const { value: addressType } = useAddressType(pluginID, Utils.isValidAddress(keyword ?? '') ? keyword : '', {
         chainId,
     })
 
     const isAddressNotContract = addressType !== AddressType.Contract && Utils.isValidAddress(keyword)
 
     const searchError =
-        keyword.match(/^0x.+/iu) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
+        /^0x.+/iu.test(keyword) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
     useEffect(() => {
         onSearchError?.(!!searchError)
     }, [searchError, !searchError])
@@ -271,8 +269,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const isCustomToken = useMemo(() => {
         if (!searchedToken) return false
-        return !sortedFungibleTokensForManage.some(
-            (x) => isSameAddress(x.address, searchedToken.address) && searchedToken.chainId === x.chainId,
+        return sortedFungibleTokensForManage.every(
+            (x) => !(isSameAddress(x.address, searchedToken.address) && searchedToken.chainId === x.chainId),
         )
     }, [sortedFungibleTokensForManage, searchedToken])
 
@@ -317,14 +315,14 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                     return
                 }
                 if (strategy === 'add') await Token?.addToken?.(account, token)
-                if (strategy === 'remove') await Token?.removeToken?.(account, token)
+                else if (strategy === 'remove') await Token?.removeToken?.(account, token)
             },
             trustOrBlockTokenToLocal: async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy: 'trust' | 'block',
             ) => {
                 if (strategy === 'trust') await Token?.trustToken?.(account, token)
-                if (strategy === 'block') await Token?.blockToken?.(account, token)
+                else if (strategy === 'block') await Token?.blockToken?.(account, token)
             },
             isHiddenChainIcon,
             isCustomToken,

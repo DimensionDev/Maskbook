@@ -40,7 +40,7 @@ export function fromNPMTask(
     }
     async function watch() {
         cleanupWhenExit()
-        shell.cwd(baseDir)`pnpm run start`
+        void shell.cwd(baseDir)`pnpm run start`
     }
     watchTask(build, watch, name, description)
     return [build, watch]

@@ -94,7 +94,7 @@ function Content() {
             lazy
             title={
                 <Badge
-                    max={9999999}
+                    max={9_999_999}
                     classes={{ badge: classes.badge }}
                     badgeContent={proposal.voterAmounts}
                     color="primary">
@@ -110,7 +110,7 @@ function Content() {
                                 v.choices
                                     .flatMap((choice, index) => [
                                         index === 0 ? '' : ', ',
-                                        !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
+                                        isAverageWeight ? '' : formatPercentage(choice.weight / v.totalWeight!) + ' ',
                                         choice.name,
                                     ])
                                     .join('')

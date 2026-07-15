@@ -5,8 +5,8 @@ import { DSEARCH_BASE_URL } from '../../DSearch/constants.js'
 import { fetchFromDSearch } from '../../DSearch/helpers.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-export class SnapshotSearch {
-    static async get(): Promise<Array<DAOResult<ChainId.Mainnet>>> {
+export const SnapshotSearch = {
+    async get(): Promise<Array<DAOResult<ChainId.Mainnet>>> {
         const results = await fetchFromDSearch<Array<DAOResult<ChainId.Mainnet>>>(
             urlcat(DSEARCH_BASE_URL, 'dao/spaces.json'),
             {
@@ -26,7 +26,7 @@ export class SnapshotSearch {
         )
 
         return uniqBy(
-            resultsFromSpecificList.concat(filteredResults).sort((a, b) => b.followersCount - a.followersCount),
+            resultsFromSpecificList.concat(filteredResults).toSorted((a, b) => b.followersCount - a.followersCount),
             (x) => x.spaceId + x.twitterHandler,
         ).map((x) => ({
             ...x,
@@ -34,5 +34,5 @@ export class SnapshotSearch {
             keyword: x.twitterHandler,
             avatar: `https://cdn.stamp.fyi/space/${x.spaceId}?s=164`,
         }))
-    }
+    },
 }

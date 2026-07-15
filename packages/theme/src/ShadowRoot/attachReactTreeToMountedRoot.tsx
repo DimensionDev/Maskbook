@@ -27,7 +27,7 @@ export interface ReactRootShadowed {
  */
 export function attachReactTreeToMountedRoot_noHost(
     wrapJSX?: WrapJSX,
-): (shadow: ShadowRoot, options?: AttachInShadowRootOptions | undefined) => ReactRootShadowed {
+): (shadow: ShadowRoot, options?: AttachInShadowRootOptions) => ReactRootShadowed {
     return attachReactTreeToMountedRoot.bind(null, wrapJSX)
 }
 
@@ -47,8 +47,8 @@ function attachReactTreeToMountedRoot(
         }
     }
 
-    const child = typeof tag === 'function' ? tag() : document.createElement(tag)
-    const container = shadow.appendChild(child)
+    const container = typeof tag === 'function' ? tag() : document.createElement(tag)
+    shadow.append(container)
     const instanceKey = `${key}(${Math.random().toString(36).slice(2)})`
     container.classList.add(key)
 

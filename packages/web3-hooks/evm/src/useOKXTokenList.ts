@@ -11,7 +11,7 @@ export function useOKXTokenList(chainId: ChainId | undefined, enabled = true) {
             chainId ?
                 async () => {
                     const list = await OKX.getTokens(chainId)
-                    if (chainId === ChainId.Scroll && list && !list.some((x) => x.symbol === 'SCR')) {
+                    if (chainId === ChainId.Scroll && list?.every((x) => x.symbol !== 'SCR')) {
                         const scrAddr = '0xd29687c813D741E2F938F4aC377128810E217b1b'
                         const SCR_Token: FungibleToken<ChainId, SchemaType> = {
                             id: scrAddr,

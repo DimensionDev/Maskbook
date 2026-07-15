@@ -17,7 +17,7 @@ export const registeredPlugins: Subscription<Array<[string, Plugin.DeferredDefin
     onNewPluginRegistered(() => (value = undefined))
     return {
         getCurrentValue() {
-            return (value ??= [...__registered.entries()])
+            return (value ??= __registered.entries().toArray())
         },
         subscribe(callback) {
             return onNewPluginRegistered(callback)
@@ -38,12 +38,9 @@ export function registerPlugin(def: Plugin.DeferredDefinition) {
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition, currentChannel: BuildInfoFile['channel']) {
     // build variant check
-    if (process.env.NODE_ENV === 'production') {
-        if (currentChannel === 'stable' && def.enableRequirement.target !== 'stable') {
-            return false
-        } else if (currentChannel === 'beta' && def.enableRequirement.target === 'insider') {
-            return false
-        }
-    }
-    return true
+    return !(
+        process.env.NODE_ENV === 'production' &&
+        ((currentChannel === 'stable' && def.enableRequirement.target !== 'stable') ||
+            (currentChannel === 'beta' && def.enableRequirement.target === 'insider'))
+    )
 }

@@ -49,7 +49,7 @@ export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles()
     const theme = useTheme()
-    const [currentTab, , , setTab] = useTabs<ContentTabs>(
+    const [currentTab, _a, _b, setTab] = useTabs<ContentTabs>(
         ContentTabs.All,
         ContentTabs.Active,
         ContentTabs.Core,

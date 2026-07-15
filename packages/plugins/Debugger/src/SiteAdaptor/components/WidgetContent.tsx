@@ -2,11 +2,7 @@ import { Box, Paper, Typography } from '@mui/material'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { PluginTransFieldRender, useActivatedPluginsSiteAdaptor, Widget } from '@masknet/plugin-infra/content-script'
 
-interface WidgetContentProps {
-    onClose?: () => void
-}
-
-export function WidgetContent(props: WidgetContentProps) {
+export function WidgetContent() {
     const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins.filter((x) => x.Widgets)

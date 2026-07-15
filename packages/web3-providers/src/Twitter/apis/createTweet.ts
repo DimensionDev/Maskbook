@@ -54,7 +54,7 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
     // Remove link query
     const parsedTweet = (((Parser as any).default as typeof Parser) || Parser).parseTweet(variables.tweet_text)
     const overLength = parsedTweet.weightedLength > 280
-    const scheduled = typeof variables.execute_at !== 'undefined'
+    const scheduled = variables.execute_at !== undefined
     const operationName =
         scheduled ? 'CreateScheduledTweet'
         : overLength ? 'CreateNoteTweet'
@@ -78,15 +78,13 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
     )
 
     const field = dataFieldMap[operationName]
-    if (process.env.NODE_ENV === 'development') {
-        if (response.errors) {
-            // TODO Fetch main.xxx.js and extract queryIds from Twitter's client code.
-            console.error(
-                "Errors occupied, query id could be outdated. Please check twitter's client code in main.xxx.js",
-                'Response Errors:',
-                response.errors,
-            )
-        }
+    if (process.env.NODE_ENV === 'development' && response.errors) {
+        // TODO Fetch main.xxx.js and extract queryIds from Twitter's client code.
+        console.error(
+            "Errors occupied, query id could be outdated. Please check twitter's client code in main.xxx.js",
+            'Response Errors:',
+            response.errors,
+        )
     }
     return response.data[field].tweet_results.result
 }

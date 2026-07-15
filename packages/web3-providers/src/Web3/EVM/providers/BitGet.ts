@@ -4,7 +4,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
 function getInjectedProvider() {
-    if (isEthereumInjected('bitkeep')) return Reflect.get(window, 'bitkeep')
+    if (isEthereumInjected('bitkeep')) return Reflect.get(globalThis, 'bitkeep')
     if (isInPageEthereumInjected()) return injectedBitGetProvider
     // Not available on extension site.
     return injectedBitGetProvider

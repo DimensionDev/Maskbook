@@ -15,7 +15,7 @@ import type {
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
-    let db: IDBPDatabase<DBSchema> | undefined = undefined
+    let db: IDBPDatabase<DBSchema> | undefined
     function clean() {
         if (db) {
             db.close()
@@ -48,14 +48,14 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
     dbName: string,
 ) {
-    let db: IDBPDatabase<DBSchema> | undefined = undefined
+    let db: IDBPDatabase<DBSchema> | undefined
 
     let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
         assertEnvironment(Environment.ManifestBackground)
         if (db?.version === latestVersion) return db
         let currentVersion = firstVersionThatRequiresAsyncUpgrade
-        let lastVersionData: AsyncUpgradePreparedData | undefined = undefined
+        let lastVersionData: AsyncUpgradePreparedData | undefined
         while (currentVersion < latestVersion) {
             try {
                 db = await opener(currentVersion, lastVersionData)
@@ -79,7 +79,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     return async () => {
         if (indexedDB.databases) {
             const oldDBs = await indexedDB.databases()
-            const hasNoOldVersion = !oldDBs.some((db) => db.name === dbName)
+            const hasNoOldVersion = oldDBs.every((db) => db.name !== dbName)
             const hasSameLatestVersion = oldDBs.some((db) => db.name === dbName && db.version === latestVersion)
             if (hasNoOldVersion || hasSameLatestVersion) {
                 return opener(latestVersion)

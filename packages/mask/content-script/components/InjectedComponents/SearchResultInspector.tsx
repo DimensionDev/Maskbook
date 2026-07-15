@@ -77,7 +77,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         if (type === SearchResultType.FungibleToken)
             timer = setTimeout(() => Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken), 500)
         return () => {
-            timer && clearTimeout(timer)
+            if (!timer) return
+            clearTimeout(timer)
         }
     }, [resultList, profileTabType])
 

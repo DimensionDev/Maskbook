@@ -140,7 +140,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
 
     async function backupPlugins() {
         const plugins = Object.create(null) as Record<string, unknown>
-        const allPlugins = [...activatedPluginsWorker]
+        const allPlugins = Iterator.from(activatedPluginsWorker)
 
         async function backup(plugin: Plugin.Worker.Definition): Promise<void> {
             const backupCreator = plugin.backup?.onBackup
@@ -154,7 +154,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                 plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).value
             }
             if (process.env.NODE_ENV === 'development') return backupPlugin()
-            return backupPlugin().catch((error) =>
+            return backupPlugin().catch((error: unknown) =>
                 console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to backup`, error),
             )
         }

@@ -83,7 +83,7 @@ export class EVMContractReadonlyAPI {
             functionName,
             args: normalizeFunctionArgs(args, contract.abi, functionName),
             account: (initial?.account ?? initial?.from) as Address | undefined,
-            value: typeof initial?.value === 'undefined' ? undefined : toBigInt(initial.value),
+            value: initial?.value === undefined ? undefined : toBigInt(initial.value),
         } as Parameters<typeof client.estimateContractGas>[0])
         return Number(gas)
     }

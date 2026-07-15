@@ -124,7 +124,7 @@ export const Component = memo(function EditNetwork() {
         return createSchema(
             _,
             async (name) => {
-                return !networks.find((network) => network.name === name && network.ID !== id)
+                return networks.every((network) => network.name !== name || network.ID === id)
             },
             networks,
             id,
@@ -153,7 +153,9 @@ export const Component = memo(function EditNetwork() {
                         message: issue.message,
                     })
                 })
-            } catch {}
+            } catch {
+                return false
+            }
             return false
         },
         [setError],
@@ -229,7 +231,7 @@ export const Component = memo(function EditNetwork() {
         const data = getValues()
         const result = await schema.parseAsync(data).then(
             () => true,
-            (err) => checkZodError((err as Error).message),
+            (err: unknown) => checkZodError((err as Error).message),
         )
         setIsChecking(false)
         if (!result) return
@@ -319,7 +321,7 @@ export const Component = memo(function EditNetwork() {
                     <Typography className={classes.error}>{errors.explorer.message}</Typography>
                 :   null}
             </form>
-            {!isBuiltIn ?
+            {isBuiltIn ? null : (
                 <div className={classes.footer}>
                     <ActionButton fullWidth variant="outlined" onClick={() => navigate(-1)}>
                         <Trans>Cancel</Trans>
@@ -328,7 +330,7 @@ export const Component = memo(function EditNetwork() {
                         <Trans>Confirm</Trans>
                     </ActionButton>
                 </div>
-            :   null}
+            )}
         </main>
     )
 })

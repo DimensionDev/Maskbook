@@ -4,11 +4,9 @@ import type { TypedMessage } from '../base.js'
 import { isTypedMessageMaskPayload } from '../extension/index.js'
 
 export function forEachTypedMessageChild(node: TypedMessage, visitor: (x: TypedMessage) => void | 'stop') {
-    let stop: void | 'stop'
     if (isTypedMessageTuple(node)) {
         for (const each of node.items) {
-            stop = visitor(each)
-            if (stop) return
+            if (visitor(each)) return
         }
     } else if (isTypedMessagePromise(node)) {
         // if Promise has a resolved value, we ignore it's alt.

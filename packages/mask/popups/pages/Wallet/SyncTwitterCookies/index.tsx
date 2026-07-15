@@ -19,7 +19,7 @@ import Services from '#services'
 function generateCryptoKey(): string {
     const array = new Uint32Array(1)
     crypto.getRandomValues(array)
-    const number = array[0] % 1000000
+    const number = array[0] % 1_000_000
     return number.toString().padStart(6, '0')
 }
 
@@ -300,7 +300,7 @@ export const Component = memo(function SyncTwitterCookies() {
             }, 2000)
             return () => clearTimeout(timer)
         }
-        return undefined
+        return
     }, [isInvalid, session, resetStates, refetchDesktopLinkInfo])
 
     const [{ loading: isUploading }, uploadCookies] = useAsyncFn(async () => {
@@ -396,9 +396,11 @@ export const Component = memo(function SyncTwitterCookies() {
             })
 
             // Handle expired/cancelled states
-            if (newStatus === DesktopSyncChannelStatus.Expired || newStatus === DesktopSyncChannelStatus.Cancel) {
-                if (session) setInvalidMap((x) => ({ ...x, [session]: true }))
-            }
+            if (
+                (newStatus === DesktopSyncChannelStatus.Expired || newStatus === DesktopSyncChannelStatus.Cancel) &&
+                session
+            )
+                setInvalidMap((x) => ({ ...x, [session]: true }))
         } catch (error_) {
             enqueueSnackbar((error_ as Error).message || t`Network error. Please try again later.`, {
                 variant: 'error',
@@ -450,14 +452,13 @@ export const Component = memo(function SyncTwitterCookies() {
                         <Trans>Use the Firefly app to scan the QR code</Trans>
                     </Typography>
                     <Typography className={classes.statusMessage}>
-                        {errorMessage ?
-                            errorMessage
-                        : channelStatus === DesktopSyncChannelStatus.Scanned ?
-                            <Trans>
-                                You've received a login request from the Firefly app. If you want to sign in, please
-                                confirm.
-                            </Trans>
-                        :   null}
+                        {errorMessage ||
+                            (channelStatus === DesktopSyncChannelStatus.Scanned ?
+                                <Trans>
+                                    You've received a login request from the Firefly app. If you want to sign in, please
+                                    confirm.
+                                </Trans>
+                            :   null)}
                     </Typography>
                 </Box>
             </div>

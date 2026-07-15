@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-incorrect-template-string-interpolation */
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { SNAPSHOT_RELAY_URL, SNAPSHOT_SEQ_URL } from '../constants.js'
 import type { HubProposal, Proposal, RawVote, VoteResult } from '../types.js'

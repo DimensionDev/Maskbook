@@ -143,10 +143,10 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         if (!token.id) throw new Error('Token id is required')
 
         const key = account.toLowerCase()
-        const tokens: Record<string, Array<Token<ChainId, SchemaType>>> =
+        const tokens: Record<string, Array<Token<ChainId, SchemaType>>> = (
             token.type === TokenType.Fungible ?
-                this.storage.fungibleTokenList.value
-            :   this.storage.nonFungibleTokenList.value
+                this.storage.fungibleTokenList
+            :   this.storage.nonFungibleTokenList).value
         const id = token.id.toLowerCase()
 
         const oldList: Array<Token<ChainId, SchemaType>> = tokens[key] ?? []
@@ -173,10 +173,10 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         if (!token.id) throw new Error('Token id is required')
 
         const key = account.toLowerCase()
-        const blocked =
+        const blocked = (
             token.type === TokenType.Fungible ?
-                this.storage.fungibleTokenBlockedBy.value
-            :   this.storage.nonFungibleTokenBlockedBy.value
+                this.storage.fungibleTokenBlockedBy
+            :   this.storage.nonFungibleTokenBlockedBy).value
         const oldList = blocked[key] ?? []
         const id = token.id.toLowerCase()
         const blockedUpdated = {
@@ -241,12 +241,12 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         })
 
         // Also remove from block ids
-        const ids = tokenIds.map((x) => `${contract.chainId}.${contract.address.toLowerCase()}.${x}`)
+        const ids = new Set(tokenIds.map((x) => `${contract.chainId}.${contract.address.toLowerCase()}.${x}`))
         const blockIds = blockedBy.value[key]
         if (!blockIds?.length) return
         await blockedBy.setValue({
             ...blockedBy.value,
-            [key]: blockIds.filter((x) => !ids.includes(x)),
+            [key]: blockIds.filter((x) => !ids.has(x)),
         })
     }
     async removeNonFungibleTokens(
@@ -280,12 +280,12 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         })
 
         // Also remove from block ids
-        const ids = tokenIds.map((x) => `${contract.chainId}.${contract.address.toLowerCase()}.${x}`)
+        const ids = new Set(tokenIds.map((x) => `${contract.chainId}.${contract.address.toLowerCase()}.${x}`))
         const blockIds = blockedBy.value[key]
         if (!blockIds?.length) return
         await blockedBy.setValue({
             ...blockedBy.value,
-            [key]: blockIds.filter((x) => !ids.includes(x)),
+            [key]: blockIds.filter((x) => !ids.has(x)),
         })
     }
 }

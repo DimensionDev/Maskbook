@@ -57,7 +57,7 @@ export abstract class ProviderState<ChainId extends number, ProviderType extends
             [ProviderType, WalletAPI.Provider<ChainId, ProviderType>]
         >
 
-        providers.map(async ([providerType, provider]) => {
+        providers.forEach(async ([providerType, provider]) => {
             try {
                 await provider.readyPromise
                 if (!provider.ready) return

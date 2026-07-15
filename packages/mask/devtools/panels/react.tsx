@@ -18,9 +18,9 @@ const registerOnStyleChange = (() => {
         callback(lastText)
     }
     function updateStyle() {
-        const cssText = Array.from(document.head.querySelectorAll('style'))
-            .map((style) => style.textContent || '')
-            .join('\n')
+        const cssText = Array.from(document.head.querySelectorAll('style'), (style) => style.textContent || '').join(
+            '\n',
+        )
         if (cssText === lastText) return
         lastText = cssText
         StyleChange.dispatchEvent(new Event('style'))
@@ -59,7 +59,7 @@ function syncSavedPreferences(runInContentScript: boolean) {
         __REACT_DEVTOOLS_BROWSER_THEME__: browser.devtools.panels.themeName === 'dark' ? 'dark' : 'light',
     }
     const data = JSON.stringify(obj)
-    devtoolsEval(runInContentScript)`
+    void devtoolsEval(runInContentScript)`
         Object.assign(window, ${data});
         undefined;
     `
@@ -82,14 +82,14 @@ export async function startReactDevTools(signal: AbortSignal) {
     const bridge = createBridge(null!, wall)
     bridge.addListener('reloadAppForProfiling', () => {
         setLocalStorage('React::DevTools::supportsProfiling', 'true')
-        __eval`
+        void __eval`
             sessionStorage.setItem('React::DevTools::reloadAndProfile', 'true')
             sessionStorage.setItem('React::DevTools::recordChangeDescriptions', 'true')
             window.location.reload();
         `
     })
     bridge.addListener('syncSelectionToNativeElementsPanel', () => {
-        __eval`
+        void __eval`
             if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
                 inspect(__REACT_DEVTOOLS_GLOBAL_HOOK__.$0)
             }
@@ -132,7 +132,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         if (rendererID !== null) {
             bridge.send('viewAttributeSource', { id, path, rendererID })
             setTimeout(() => {
-                __eval`
+                void __eval`
                     window.$attribute && inspect($attribute)
                 `
             }, 100)
@@ -140,7 +140,7 @@ export async function startReactDevTools(signal: AbortSignal) {
     }
     // eslint-disable-next-line unicorn/consistent-function-scoping
     function viewElementSourceFunction(source: any, symbolicalSource: any) {
-        const { sourceURL, line, column } = symbolicalSource ? symbolicalSource : source
+        const { sourceURL, line, column } = symbolicalSource || source
 
         ;(browser.devtools.panels as any).openResource(
             browser.runtime.getURL(sourceURL.replaceAll('/./', '/')),
@@ -157,15 +157,13 @@ export async function startReactDevTools(signal: AbortSignal) {
     DevtoolsMessage.activateBackend.sendByBroadcast(id)
 
     // If this is the first open, we wait for devtools message to show UI.
-    if (!components && runInContentScript) {
-        if (!(await devtoolsEval(true)`globalThis[Symbol.for('mask_init_patch')]`)) {
-            await new Promise((resolve) => {
-                DevtoolsMessage[`_${id}`].on(resolve, { once: true, signal })
-            })
-        }
+    if (!components && runInContentScript && !(await devtoolsEval(true)`globalThis[Symbol.for('mask_init_patch')]`)) {
+        await new Promise((resolve) => {
+            DevtoolsMessage[`_${id}`].on(resolve, { once: true, signal })
+        })
     }
     components ??= await createPanel('\u{1F332} Components')
-    profiler ??= await createPanel('\u26A1 Profile')
+    profiler ??= await createPanel('\u{26A1} Profile')
 
     let needsToSyncElementSelection = false
 
@@ -222,17 +220,17 @@ export async function startReactDevTools(signal: AbortSignal) {
         const container = document.createElement('main')
 
         const root = createRoot(container)
-        document.body.appendChild(container)
+        document.body.append(container)
         uninstallLast?.()
-        componentsWindow && removeDisabled(componentsWindow)
-        profilerWindow && removeDisabled(profilerWindow)
+        if (componentsWindow) removeDisabled(componentsWindow)
+        if (profilerWindow) removeDisabled(profilerWindow)
         root.render(<Host />)
         signal.addEventListener(
             'abort',
 
             () => {
-                componentsWindow && showDisabled(componentsWindow)
-                profilerWindow && showDisabled(profilerWindow)
+                if (componentsWindow) showDisabled(componentsWindow)
+                if (profilerWindow) showDisabled(profilerWindow)
                 uninstallLast = () => {
                     flushSync(() => root.unmount())
                     container.remove()
@@ -263,7 +261,7 @@ export async function startReactDevTools(signal: AbortSignal) {
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
             })
-            window.document.body.appendChild(refresh)
+            window.document.body.append(refresh)
         }
     }
 
@@ -291,18 +289,18 @@ export async function startReactDevTools(signal: AbortSignal) {
 function getMountPoint(window: Window, signal: AbortSignal): HTMLElement
 function getMountPoint(window: Window | undefined, signal: AbortSignal): HTMLElement | undefined
 function getMountPoint(window: Window | undefined, signal: AbortSignal) {
-    if (!window) return undefined
-    const dom = window.document.getElementById('container')
+    if (!window) return
+    const dom = window.document.querySelector('#container')
     if (dom) return dom
 
     const dom2 = window.document.createElement('main')
     dom2.id = 'container'
     dom2.style.height = '100vh'
-    window.document.body.appendChild(dom2)
+    window.document.body.append(dom2)
     window.document.body.style.margin = '0'
 
     const style = window.document.createElement('style')
-    window.document.head.appendChild(style)
+    window.document.head.append(style)
     registerOnStyleChange((newText) => (style.textContent = newText), signal)
 
     return dom2
@@ -314,7 +312,7 @@ function setEditorPreference() {
         setLocalStorage(editorURL, JSON.stringify(preset))
     }
 }
-function getLocalStorage<T = string>(key: string, defaultValue?: T | undefined): T | undefined {
+function getLocalStorage<T = string>(key: string, defaultValue?: T): T | undefined {
     try {
         // eslint-disable-next-line no-restricted-globals
         const item = localStorage.getItem(key)
@@ -328,11 +326,15 @@ function setLocalStorage(key: string, value: string) {
     try {
         // eslint-disable-next-line no-restricted-globals
         localStorage.setItem(key, value)
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
 function removeLocalStorage(key: string) {
     try {
         // eslint-disable-next-line no-restricted-globals
         localStorage.removeItem(key)
-    } catch {}
+    } catch {
+        // ignore
+    }
 }

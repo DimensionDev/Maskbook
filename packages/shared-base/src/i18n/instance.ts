@@ -15,7 +15,7 @@ function detectLanguage(language: string) {
     if (language.startsWith('ko')) return 'ko'
     if (language === 'zh-TW') return 'zh'
     if (language.startsWith('zh')) return 'zh-CN'
-    return undefined
+    return
 }
 export function updateLanguage(next: LanguageOptions) {
     if (next === LanguageOptions.__auto__) {

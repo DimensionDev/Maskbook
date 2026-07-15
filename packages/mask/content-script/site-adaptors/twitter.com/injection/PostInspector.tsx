@@ -31,17 +31,19 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
                 // match (.) (\n) (—§—) (any space) (/*)
                 // Note: In Chinese we can't hide dom because "解密这条推文。\n—§—" is in the same DOM
                 // hide it will break the sentence.
-                if (span.innerText.match(/^\.\n\u2014\u00A7\u2014 +\/\* $/u)) hideDOM(span)
+                if (/^\.\n\u{2014}\u{A7}\u{2014} +\/\* $/u.test(span.textContent)) hideDOM(span)
                 // match (any space) (*/) (any space)
-                if (span.innerText.match(/^ +\*\/ ?$/u)) hideDOM(span)
+                if (/^ +\*\/ ?$/u.test(span.textContent)) hideDOM(span)
             }
             const article = contentContainer.closest('article')
             if (article && payloadContext?.imageDecryptedResults?.length) {
-                const encryptedImages = payloadContext.imageDecryptedResults.map((url) => removeUrlParam(url, 'name'))
+                const encryptedImages = new Set(
+                    payloadContext.imageDecryptedResults.map((url) => removeUrlParam(url, 'name')),
+                )
                 for (const img of article.querySelectorAll('img')) {
                     // ?name=orig is added or modified to during post collection, see ../utils/fetch.ts
                     const originUrl = removeUrlParam(img.src, 'name')
-                    if (!encryptedImages.includes(originUrl)) continue
+                    if (!encryptedImages.has(originUrl)) continue
                     const a = img.closest<HTMLElement>('a[href*="/photo/"][role=link]')
                     if (!a) continue
                     hideDOM(a)
@@ -54,7 +56,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
             }
 
             const parent = content.parentElement?.nextElementSibling as HTMLElement
-            if (parent && matches(parent.innerText)) {
+            if (parent && matches(parent.textContent)) {
                 parent.style.height = '0'
                 parent.style.overflow = 'hidden'
             }

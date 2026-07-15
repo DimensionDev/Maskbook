@@ -86,7 +86,7 @@ export const Component = memo(function Permission() {
     }, [])
 
     const handleAgree = useCallback(async () => {
-        const siteOrigins = [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins)
+        const siteOrigins = definedSiteAdaptors.values().flatMap((x) => x.declarativePermissions.origins)
         const granted = await requestPermissionFromExtensionPage([...siteOrigins, ...XOAuthRequestOrigins])
         if (!granted) return
         navigate(DashboardRoutes.PermissionsOnboarding, { replace: true })

@@ -45,11 +45,8 @@ export function transform<ChainId extends number, T extends Constants>(
         [key in keyof T]?: T[key]['Mainnet']
     }
     const getAllConstants = transformAll(chainIdEnum, constants, environment)
-    return <K extends keyof Entries, F extends Entries[K], R = F extends undefined ? Entries[K] : Required<Entries>[K]>(
-        chainId: ChainId,
-        key: K,
-        fallback?: F,
-    ) => (getAllConstants(chainId)[key] ?? fallback) as R
+    return <K extends keyof Entries, F extends Entries[K]>(chainId: ChainId, key: K, fallback?: F) =>
+        (getAllConstants(chainId)[key] ?? fallback) as F extends undefined ? Entries[K] : Required<Entries>[K]
 }
 
 export function transformAllHook<ChainId extends number, T>(getConstants: (chainId: ChainId) => Partial<T>) {
@@ -58,10 +55,8 @@ export function transformAllHook<ChainId extends number, T>(getConstants: (chain
     }
 }
 
-export function transformHook<ChainId extends number, const T, const K extends keyof T>(
-    getConstant: (chainId: ChainId) => Partial<T>,
-) {
-    return function useConstant<F extends K>(chainId: ChainId = 1 as ChainId, key?: F, fallback?: T[F]) {
+export function transformHook<ChainId extends number, const T>(getConstant: (chainId: ChainId) => Partial<T>) {
+    return function useConstant<F extends keyof T>(chainId: ChainId = 1 as ChainId, key?: F, fallback?: T[F]) {
         return useMemo(() => {
             if (!key) return fallback
             return getConstant(chainId)[key] ?? fallback

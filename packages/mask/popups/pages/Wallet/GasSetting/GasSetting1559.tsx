@@ -240,6 +240,7 @@ export const GasSetting1559 = memo(() => {
             )
             setValue('maxFeePerGas', formatGwei(BigInt(toFixed(value.formatterTransaction._tx.maxFeePerGas))))
         } else {
+            // eslint-disable-next-line @eslint-react/set-state-in-effect -- Select the default gas option only when an incoming transaction omits EIP-1559 fees.
             setOption(1)
         }
     }, [value, setValue])
@@ -267,6 +268,7 @@ export const GasSetting1559 = memo(() => {
             const config = value.payload.params!.map((param) =>
                 param === 'latest' ? param : (
                     {
+                        // eslint-disable-next-line unicorn/new-for-builtins
                         ...Object(param),
                         gas: toHex(data.gasLimit),
                         maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
@@ -291,7 +293,7 @@ export const GasSetting1559 = memo(() => {
 
     // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
-        if (getGasOptionsLoading) return undefined
+        if (getGasOptionsLoading) return
         if (
             isLessThan(
                 formatGweiToWei(maxPriorityFeePerGas),
@@ -309,11 +311,11 @@ export const GasSetting1559 = memo(() => {
             )
         )
             return <Trans>Max priority fee is higher than necessary. You may pay more than needed.</Trans>
-        return undefined
+        return
     }, [maxPriorityFeePerGas, gasOptions, getGasOptionsLoading])
 
     const maxFeeGasHelperText = useMemo(() => {
-        if (getGasOptionsLoading) return undefined
+        if (getGasOptionsLoading) return
         if (isLessThan(formatGweiToWei(maxFeePerGas), gasOptions?.[GasOptionType.SLOW]?.estimatedBaseFee ?? 0))
             return <Trans>Max fee is too low for network conditions.</Trans>
         if (
@@ -323,13 +325,13 @@ export const GasSetting1559 = memo(() => {
             )
         )
             return <Trans>Max fee is higher than necessary</Trans>
-        return undefined
+        return
     }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
     // #endregion
 
     // #region If the payload is consumed it needs to be redirected
     useUpdateEffect(() => {
-        if (!(!value && !getValueLoading)) return
+        if (value || getValueLoading) return
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value, getValueLoading])
     // #endregion

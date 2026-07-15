@@ -92,15 +92,15 @@ export function TransactionRequest(props: InteractionItemProps) {
     {
         const client = useQueryClient()
         const queryKey = ['popup', 'wallet', 'interaction', request.ID, chainId]
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         ;({ data: transaction } = useSuspenseQuery({
-            // eslint-disable-next-line @tanstack/query/exhaustive-deps
             queryKey,
             networkMode: 'always',
             queryFn: async (): Promise<TransactionDetail> => {
                 const payload = createJsonRpcRequest(0, request.request.arguments)
                 const computedPayload = PayloadEditor.fromPayload(payload).config
                 const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
-                // eslint-disable-next-line react/no-missing-context-display-name
+                // eslint-disable-next-line @eslint-react/no-missing-context-display-name
                 const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
 
                 return {
@@ -151,9 +151,9 @@ export function TransactionRequest(props: InteractionItemProps) {
             params = compact(
                 request.request.arguments.params.map((x) =>
                     x === 'latest' ?
-                        chainId !== ChainId.Celo ?
-                            x
-                        :   undefined
+                        chainId === ChainId.Celo ?
+                            undefined
+                        :   x
                     :   {
                             ...x,
                             data: result,
@@ -171,12 +171,11 @@ export function TransactionRequest(props: InteractionItemProps) {
 
                 return {
                     ...x,
-                    ...(gasConfig ?
+                    ...(gasConfig &&
                         mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
                             if (key === 'gasCurrency' || !value) return
                             return toHex(value)
-                        })
-                    :   {}),
+                        })),
                     gasLimit: toHex(gasConfig?.gas ?? x.gas),
                     chainId: toHex(x.chainId),
                     nonce: toHex(x.nonce),
@@ -269,7 +268,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             </Box>
         :   null
     const ViewFullTransactionDetailsButton =
-        !FullTransactionDetails ? null : (
+        FullTransactionDetails ?
             <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
                 <Button variant="text" onClick={() => setExpand(!expand)}>
                     <Typography className={classes.text}>
@@ -278,7 +277,7 @@ export function TransactionRequest(props: InteractionItemProps) {
                     <Icons.ArrowDrop size={16} className={cx(classes.arrowIcon, expand ? classes.expand : undefined)} />
                 </Button>
             </Box>
-        )
+        :   null
 
     const main =
         isUnlockERC20 ?

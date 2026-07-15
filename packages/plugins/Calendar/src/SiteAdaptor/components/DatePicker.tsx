@@ -89,13 +89,12 @@ export interface DatePickerProps {
 export function DatePicker({ date, onChange, open, onToggle, allowedDates, onMonthChange }: DatePickerProps) {
     const { classes } = useStyles()
     const [currentDate, setCurrentDate] = useState(date)
+    if (!open) return null
+
     const monthStart = startOfMonth(currentDate)
     const startingDayOfWeek = monthStart.getDay()
     const daysInMonth = endOfMonth(currentDate).getDate()
     const daysInPrevMonth = endOfMonth(addMonths(currentDate, -1)).getDate()
-
-    if (!open) return null
-
     const handleDateClick = (date: Date) => {
         onChange(date)
         onToggle(false)

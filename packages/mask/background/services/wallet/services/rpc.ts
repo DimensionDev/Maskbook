@@ -16,7 +16,7 @@ async function getUnconfirmedRequests() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('UnconfirmedRequestChunk')
     const chunk = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     if (!chunk) return []
-    return chunk.requests.slice(0, MAX_UNCONFIRMED_REQUESTS_SIZE).sort(requestSorter)
+    return chunk.requests.slice(0, MAX_UNCONFIRMED_REQUESTS_SIZE).toSorted(requestSorter)
 }
 
 export async function topUnconfirmedRequest() {

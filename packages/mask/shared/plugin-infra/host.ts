@@ -8,8 +8,9 @@ import { Flags } from '@masknet/flags'
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T) {
-            if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-            else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+            return type === 'memory' ?
+                    InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                :   PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
         },
     }
 }

@@ -13,37 +13,31 @@ export function applyDotEnv(flags: BuildFlags) {
 
     if (!parsed || flags.mode === 'production') return
 
-    if (flags.mode === 'production') return
-
     flags.sourceMapPreference ??= parseBooleanOrString(parsed.sourceMap)
     if (parsed.manifest) {
-        if (parsed.manifest !== '3') {
-            if (!Object.values(ManifestFile).includes(parsed.manifest as ManifestFile)) {
-                throw new TypeError(`Invalid manifest version "${parsed.manifest}" specified in the env file`)
-            }
+        if (parsed.manifest !== '3' && !Object.values(ManifestFile).includes(parsed.manifest as ManifestFile)) {
+            throw new TypeError(`Invalid manifest version "${parsed.manifest}" specified in the env file`)
         }
-        flags.manifestFile ??= parseManifest(parsed.manifest as ManifestFile | '3')
+        flags.manifestFile ??= parseManifest(parsed.manifest as ManifestFile)
     }
     flags.hmr ??= parseBoolean(parsed.hmr)
     flags.devtools ??= parseBoolean(parsed.devtools)
     flags.devtoolsEditorURI ??= parsed.devtoolsEditorURI
     const compiler = parseBooleanOrString(parsed.reactCompiler)
-    if (typeof compiler === 'string') {
-        if (compiler !== 'infer' && compiler !== 'annotation' && compiler !== 'all')
-            throw new TypeError(`Invalid reactCompiler value "${compiler}" in env file`)
-    }
+    if (typeof compiler === 'string' && compiler !== 'infer' && compiler !== 'annotation' && compiler !== 'all')
+        throw new TypeError(`Invalid reactCompiler value "${compiler}" in env file`)
     flags.reactCompiler ??= compiler
     flags.lavamoat ??= parseBoolean(parsed.lavamoat)
     flags.csp ??= parseBoolean(parsed.csp)
     flags.sourceMapHideFrameworks ??= parseBoolean(parsed.sourceMapHideFrameworks)
 }
-export function parseManifest(manifest: '3' | 3 | undefined | ManifestFile) {
+export function parseManifest(manifest: 3 | undefined | ManifestFile) {
     if (manifest === 3 || manifest === '3') return ManifestFile.ChromiumMV3
     if (typeof manifest === 'string') return manifest
     return ManifestFile.ChromiumMV3
 }
 function parseBoolean(val: string | undefined) {
-    if (val === undefined) return undefined
+    if (val === undefined) return
     else if (val === 'true') return true
     else if (val === 'false') return false
     throw new TypeError(`Unexpected value "${val}" in env file, expected true or false.`)

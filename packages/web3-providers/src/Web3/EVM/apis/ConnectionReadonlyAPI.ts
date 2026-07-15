@@ -84,7 +84,7 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async removeWallet(address: string, password?: string | undefined, initial?: EVMConnectionOptions): Promise<void> {
+    async removeWallet(address: string, password?: string, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
@@ -218,7 +218,7 @@ export class EVMConnectionReadonlyAPI
         )
     }
 
-    createAccount(initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
+    createAccount(initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction>): Account<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         const account = createAccount()
         return {
@@ -341,7 +341,7 @@ export class EVMConnectionReadonlyAPI
             address,
             parseStringOrBytes32(name, toHex(nameBytes32), 'Unknown Token'),
             parseStringOrBytes32(symbol, toHex(symbolBytes32), 'UNKNOWN'),
-            typeof decimals === 'string' ? Number.parseInt(decimals ? decimals : '0', 10) : decimals,
+            typeof decimals === 'string' ? Number.parseInt(decimals || '0', 10) : decimals,
         )
     }
 
@@ -397,7 +397,7 @@ export class EVMConnectionReadonlyAPI
         }
     }
 
-    async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVMConnectionOptions) {
+    async estimateTransaction(transaction: Transaction, fallback = 21_000, initial?: EVMConnectionOptions) {
         try {
             const options = this.ConnectionOptions.fill(initial)
             return await this.Request.request<string>(

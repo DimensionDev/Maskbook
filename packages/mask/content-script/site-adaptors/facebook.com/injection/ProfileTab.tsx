@@ -15,8 +15,8 @@ import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
     const divEle = profileTabUnselectedSelector().evaluate()?.querySelector('div') as Element
-    const spanEle = profileTabUnselectedSelector().evaluate()?.querySelector('div span') as Element
-    const selectedSpanEle = profileTabSelectedSelector().evaluate()?.querySelector('div span') as Element
+    const spanEle = profileTabUnselectedSelector().evaluate()?.querySelector(':scope div span') as Element
+    const selectedSpanEle = profileTabSelectedSelector().evaluate()?.querySelector(':scope div span') as Element
     const divStyle = divEle ? window.getComputedStyle(divEle) : EMPTY_STYLE
     const spanStyle = spanEle ? window.getComputedStyle(spanEle) : EMPTY_STYLE
     const selectedSpanStyle = selectedSpanEle ? window.getComputedStyle(selectedSpanEle) : EMPTY_STYLE
@@ -90,7 +90,7 @@ function styleTab(textColor: string, borderColor: string) {
     if (!ele) return
 
     const textEle = ele.querySelector('span')
-    const borderEle = ele.querySelector('span ~ div:last-child') as HTMLDivElement
+    const borderEle = ele.querySelector(':scope span ~ div:last-child') as HTMLDivElement
     if (!textEle || !borderEle) return
     textEle.style.color = textColor
     borderEle.style.backgroundColor = borderColor
@@ -116,7 +116,7 @@ function ProfileTabAtFacebook() {
     // handle cleared tab will be reactivated after scroll
     useEffect(() => {
         const handler = debounce(() => {
-            if (!(action === 'clear')) return
+            if (action !== 'clear') return
             clear()
         }, 1000)
         window.addEventListener('scroll', handler)

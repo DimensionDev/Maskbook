@@ -57,7 +57,7 @@ export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkTyp
     override async connect(
         providerType: ProviderType,
         chainId: ChainId,
-        address?: string | undefined,
+        address?: string,
         silent?: boolean,
     ): Promise<Account<ChainId>> {
         // Disconnect WalletConnect, prevents its session lasting too long.

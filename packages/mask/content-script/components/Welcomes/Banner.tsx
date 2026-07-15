@@ -71,7 +71,7 @@ export function Banner(props: BannerProps) {
         if (nextStep === 'hidden') return
         if (!networkIdentifier) {
             nextStep?.onClick()
-            nextStep ?? console.warn('You must provide one of networkIdentifier or nextStep.onClick')
+            if (nextStep) console.warn('You must provide one of networkIdentifier or nextStep.onClick')
             return
         }
 

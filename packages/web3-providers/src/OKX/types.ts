@@ -41,29 +41,6 @@ export type GetTokensResponse = OKXResponse<
     }>
 >
 
-export type GetTokenPairsResponse = OKXResponse<
-    Array<{
-        /** API response string, we convert to number */
-        fromChainId: number
-        /** API response string, we convert to number */
-        toChainId: number
-        fromTokenAddress: HexString
-        toTokenAddress: HexString
-        fromTokenSymbol: string
-        toTokenSymbol: string
-    }>
->
-
-export type SupportedBridgesResponse = OKXResponse<
-    Array<{
-        bridgeId: number
-        bridgeName: string
-        requireOtherNativeFee: boolean
-        /** chainId list */
-        supportedChains: number[]
-    }>
->
-
 export type GetLiquidityResponse = OKXResponse<
     Array<{
         /** @example "1" */

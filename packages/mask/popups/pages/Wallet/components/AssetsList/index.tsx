@@ -190,7 +190,7 @@ export const AssetsList = memo(function AssetsList() {
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
     const filteredAssets = assets
     const hasLowValueToken = useMemo(() => {
-        return !!filteredAssets.find((x) => {
+        return filteredAssets.some((x) => {
             if (isNativeTokenAddress(x.address)) return false
             return x.value?.usd ? isLessThan(x.value.usd, 1) : false
         })

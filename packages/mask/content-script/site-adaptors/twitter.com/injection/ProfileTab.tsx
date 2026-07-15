@@ -30,7 +30,7 @@ import {
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div')
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector(':scope div > div')
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const paddingEle = searchProfileTabSelector().evaluate()
     const paddingCss = paddingEle ? window.getComputedStyle(paddingEle) : EMPTY_STYLE
@@ -137,21 +137,21 @@ function tabClickHandler() {
 // tab label when reset tab color
 
 async function hideTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div')
-    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector(':scope div > div')
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
     // hide the activated indicator
     const tabList = searchProfileTabListSelector().evaluate()
-    tabList.map((tab) => {
-        const tabLabel = tab.querySelector<HTMLDivElement>('div > div > span')
+    tabList.forEach((tab) => {
+        const tabLabel = tab.querySelector<HTMLDivElement>(':scope div > div > span')
         if (tabLabel) tabLabel.style.color = style.color
 
-        const indicator = tab.querySelector<HTMLDivElement>('div > div > div')
+        const indicator = tab.querySelector<HTMLDivElement>(':scope div > div > div')
         if (indicator) indicator.style.display = 'none'
         tab.addEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (loseConnectionEle) return
 
     // hide the empty list indicator on the page
@@ -172,19 +172,19 @@ async function hideTwitterActivatedContent() {
 }
 
 function resetTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div')
-    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector(':scope div > div')
     if (!eleTab) return
 
     const tabList = searchProfileTabListSelector().evaluate()
-    tabList.map((tab) => {
-        const tabLabel = tab.querySelector<HTMLDivElement>('div > div > span')
+    tabList.forEach((tab) => {
+        const tabLabel = tab.querySelector<HTMLDivElement>(':scope div > div > span')
         if (tabLabel) tabLabel.style.color = ''
-        const indicator = tab.querySelector<HTMLDivElement>('div > div > div')
+        const indicator = tab.querySelector<HTMLDivElement>(':scope div > div > div')
         if (indicator) indicator.style.display = ''
         tab.removeEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (loseConnectionEle) return
 
     const eleEmpty = searchProfileEmptySelector().evaluate()
@@ -389,7 +389,7 @@ function InjectProfileTab() {
         nextArrow?.addEventListener('click', onNextClick, { signal })
         nextArrow?.addEventListener('mouseenter', onEnterNextArrow, { signal })
         nextArrow?.addEventListener('mouseleave', onLeaveNextArrow, { signal })
-        tabList.map((v) => {
+        tabList.forEach((v) => {
             v.closest('div')?.addEventListener('mouseenter', onMouseEnter, { signal })
             v.closest('div')?.addEventListener('mouseleave', onMouseLeave, { signal })
         })

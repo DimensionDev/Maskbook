@@ -4,6 +4,7 @@ import { startWatch } from '../../../utils/startWatch.js'
 import { Banner } from '../../../components/Welcomes/Banner.js'
 
 const composeBox: LiveSelector<Element> = new LiveSelector()
+    // eslint-disable-next-line unicorn/prefer-scoped-selector
     .querySelectorAll(
         '[role="dialog"] form [role="button"][tabindex="0"], [role="dialog"] form [role="button"][tabindex="-1"]',
     )

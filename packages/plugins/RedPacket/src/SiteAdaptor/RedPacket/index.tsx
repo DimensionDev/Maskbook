@@ -164,7 +164,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
                 msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} $${token?.symbol || ''}.`,
             ),
             title: _(msg`Lucky Drop`),
-            share: (text) => share?.(text, source ? source : undefined),
+            share: (text) => share?.(text, source || undefined),
         })
     }, [redPacketContract, payload.rpid, redpacketChainId, account, claimedShareText, token, _, source])
 

@@ -55,8 +55,9 @@ interface NormalHeaderProps {
 function canNavBack() {
     try {
         return history.length !== 1 || !!new URLSearchParams(location.search).get('goBack')
-    } catch {}
-    return false
+    } catch {
+        return false
+    }
 }
 export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({
     onClose,

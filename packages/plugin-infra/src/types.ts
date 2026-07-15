@@ -872,7 +872,7 @@ export namespace Plugin.Worker {
             | undefined
         >
 
-        has<T extends Data['type']>(type: T, id: Data['id']): Promise<boolean>
+        has(type: Data['type'], id: Data['id']): Promise<boolean>
 
         /**
          * Store a data into the database.
@@ -885,7 +885,7 @@ export namespace Plugin.Worker {
          * @param type "type" field on the object
          * @param id "id" field on the object
          */
-        remove<T extends Data['type']>(type: T, id: Data['id']): Promise<void>
+        remove(type: Data['type'], id: Data['id']): Promise<void>
 
         /**
          * Iterate over the database of given type (readonly!)

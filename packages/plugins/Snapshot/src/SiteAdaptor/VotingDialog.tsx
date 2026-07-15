@@ -151,7 +151,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
             const domain = SNAPSHOT_VOTE_DOMAIN
             showSnackbar(<Trans>Vote</Trans>, {
                 message: <Trans>Confirm this Signature in your wallet.</Trans>,
-                autoHideDuration: 3_000,
+                autoHideDuration: 3000,
             })
             const sig = await EVMWeb3.signMessage(
                 'typedData',
@@ -227,10 +227,10 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={<Trans>Your voting power</Trans>}>
                     <Typography className={classes.value}>
-                        {power !== undefined ? formatCount(power, 2, true) : '--'} {powerSymbol.toUpperCase()}
+                        {power === undefined ? '--' : formatCount(power, 2, true)} {powerSymbol.toUpperCase()}
                     </Typography>
                 </InfoField>
-                {!power ?
+                {power ? null : (
                     <Typography className={classes.tip}>
                         <Trans>
                             Oops, it seems you don't have any voting power at block {formatWithCommas(snapshot)}.{' '}
@@ -243,7 +243,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                             </Link>
                         </Trans>
                     </Typography>
-                :   null}
+                )}
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>
                 <WalletConnectedBoundary offChain classes={{ button: classes.button }} expectedChainId={chainId}>

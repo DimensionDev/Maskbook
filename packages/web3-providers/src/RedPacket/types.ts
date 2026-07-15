@@ -56,6 +56,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     /**
      * For contract_version === 1, payload has no token but token_type
      */
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     token_type?: 0 | number
     /** retrieve after decrypting the redpacket */
     total_remaining?: string

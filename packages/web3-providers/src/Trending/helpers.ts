@@ -20,7 +20,7 @@ export function getCommunityLink(links: string[]): TrendingAPI.CommunityUrls {
 }
 
 export function getCurrency(_chainId: Web3Helper.ChainIdAll, dataProvider: SourceType | undefined) {
-    if (!dataProvider) return undefined
+    if (!dataProvider) return
     const currencies = CURRENCIES_MAP[dataProvider]
     if (!currencies) return
     return CURRENCIES_MAP[dataProvider]?.[0]

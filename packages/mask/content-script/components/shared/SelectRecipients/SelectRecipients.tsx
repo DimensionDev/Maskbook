@@ -10,9 +10,6 @@ import { Trans } from '@lingui/react/macro'
 interface SelectRecipientsUIProps {
     items: LazyRecipients
     selected: Profile[]
-    disabled?: boolean
-    hideSelectAll?: boolean
-    hideSelectNone?: boolean
     open: boolean
     onClose(): void
     onSetSelected(selected: Profile[]): void
@@ -43,7 +40,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             onSearch={setValueToSearch}
             open={open}
             items={uniqBy([...searchedList, ...value], (x) => x.linkedPersona?.publicKeyAsHex)}
-            selected={selected}
             disabled={false}
             submitDisabled={false}
             onSubmit={onClose}

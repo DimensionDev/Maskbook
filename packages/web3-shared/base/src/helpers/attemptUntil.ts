@@ -1,7 +1,7 @@
 import { isUndefined } from 'lodash-es'
 
-export function createPredicate<T, P extends T>(candidates: T[]) {
-    return (candidate?: unknown): candidate is P => !!candidate && candidates.includes(candidate as T)
+export function createPredicate<T>(candidates: T[]) {
+    return (candidate?: unknown): candidate is T => !!candidate && candidates.includes(candidate as T)
 }
 
 export async function attemptUntil<T>(

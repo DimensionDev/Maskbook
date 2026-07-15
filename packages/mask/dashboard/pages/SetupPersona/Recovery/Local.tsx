@@ -81,7 +81,7 @@ export const Component = memo(function RecoveryLocalBackup() {
         }
     }, [])
 
-    const { loading: getSummaryLoading } = useAsync(async () => {
+    const { loading: isSummaryLoading } = useAsync(async () => {
         if (!backupValue) return
 
         const summary = await Services.Backup.generateBackupSummary(backupValue)
@@ -106,7 +106,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             ])
             const decoded = decode(decrypted)
             setBackupValue(JSON.stringify(decoded))
-        } catch (error_) {
+        } catch {
             setError(<Trans>Incorrect Backup Password.</Trans>)
         } finally {
             setReadingFile(false)
@@ -148,7 +148,7 @@ export const Component = memo(function RecoveryLocalBackup() {
         }
     }, [backupValue, onRestore, summary])
 
-    const loading = readingFile || processing || getSummaryLoading
+    const loading = readingFile || processing || isSummaryLoading
     const disabled = useMemo(() => {
         if (loading) return true
         if (restoreStatus === RestoreStatus.Verified) return !summary
@@ -158,9 +158,9 @@ export const Component = memo(function RecoveryLocalBackup() {
 
     return (
         <Box width="100%">
-            {restoreStatus !== RestoreStatus.Verified ?
+            {restoreStatus === RestoreStatus.Verified ? null : (
                 <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin,.json" />
-            :   null}
+            )}
             {file && restoreStatus !== RestoreStatus.Verified ?
                 <FileFrame
                     className={classes.uploadedFile}
@@ -206,9 +206,9 @@ export const Component = memo(function RecoveryLocalBackup() {
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
                     loading={loading}
                     disabled={disabled}>
-                    {restoreStatus !== RestoreStatus.Verified ?
-                        <Trans>Continue</Trans>
-                    :   <Trans>Restore</Trans>}
+                    {restoreStatus === RestoreStatus.Verified ?
+                        <Trans>Restore</Trans>
+                    :   <Trans>Continue</Trans>}
                 </PrimaryButton>
             </OutletPortal>
         </Box>

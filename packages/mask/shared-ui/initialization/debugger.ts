@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-this-outside-of-class */
 import { BigNumber } from 'bignumber.js'
 
 // Run this file multiple times should be safe

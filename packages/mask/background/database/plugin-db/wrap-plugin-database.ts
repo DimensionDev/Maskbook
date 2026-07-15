@@ -22,7 +22,7 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
     plugin_id: string,
     signal?: AbortSignal,
 ): Plugin.Worker.DatabaseStorage<Data> {
-    let livingTransaction: IDBPTransaction<PluginDatabase, ['PluginStore'], 'readwrite'> | undefined = undefined
+    let livingTransaction: IDBPTransaction<PluginDatabase, ['PluginStore'], 'readwrite'> | undefined
     let ended = false
     signal?.addEventListener('abort', () => {
         // give some extra time after the plugin shutdown to store data.
@@ -40,7 +40,7 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
         async get(type, id) {
             const t = await c('r')
             const data = await t.store.get(key({ type, id }))
-            if (!data) return undefined
+            if (!data) return
             return data.value as any
         },
         async has(type, id) {

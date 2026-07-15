@@ -9,13 +9,13 @@ import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/util
 import { instagramShared } from '../shared.js'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    'main[role="main"] article[role="presentation"][tabindex="-1"]',
+    ':scope main[role="main"] article[role="presentation"][tabindex="-1"]',
 )
 
 export const PostProviderInstagram: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
-        collectPostsInstagramInner(this.posts, signal)
+        collectPostsInstagramInner(PostProviderInstagram.posts, signal)
     },
 }
 function collectPostsInstagramInner(
@@ -30,7 +30,8 @@ function collectPostsInstagramInner(
                 comments: undefined,
                 rootElement: metadata,
                 suggestedInjectionPoint:
-                    metadata.realCurrent!.querySelector<HTMLDivElement>('header+div+div') || metadata.realCurrent!,
+                    metadata.realCurrent!.querySelector<HTMLDivElement>(':scope header+div+div') ||
+                    metadata.realCurrent!,
                 ...subscriptions,
             })
 
@@ -63,12 +64,12 @@ function getPostBy(node: DOMProxy): ProfileIdentifier | null {
     const author = node.current.querySelector('a')
     if (!author) return null
     const href = new URL(author.href).pathname
-    if (href.startsWith('/') && href.endsWith('/') && href.slice(1, -1).includes('/') === false) {
+    if (href.startsWith('/') && href.endsWith('/') && !href.slice(1, -1).includes('/')) {
         return ProfileIdentifier.of(instagramBase.networkIdentifier, href.slice(1, -1)).unwrapOr(null)
     }
     return null
 }
 function getPostID(node: DOMProxy): null | string {
     if (node.destroyed) return null
-    return node.current?.querySelector<HTMLAnchorElement>('span a[href^="/"]')?.text || null
+    return node.current?.querySelector<HTMLAnchorElement>(':scope span a[href^="/"]')?.text || null
 }

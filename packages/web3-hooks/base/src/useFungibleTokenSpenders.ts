@@ -17,6 +17,7 @@ export function useFungibleTokenSpenders<T extends NetworkPluginID = NetworkPlug
         chainId,
         ...options,
     } as HubOptions<T>)
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
         queryKey: ['fungible-tokens', 'spenders', chainId, account],
         enabled: true,

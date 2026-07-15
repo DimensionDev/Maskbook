@@ -76,7 +76,7 @@ class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaType> {
             memoize,
             async (urls: string[], chainId = ChainId.Mainnet): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
                 const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
-                    .sort((a, b) => b.weight - a.weight)
+                    .toSorted((a, b) => b.weight - a.weight)
                     .flatMap((x) => x.tokens)
 
                 return uniqBy(tokens, (x) => x.address.toLowerCase()).map((token) => {

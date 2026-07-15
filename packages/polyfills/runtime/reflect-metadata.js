@@ -31,7 +31,9 @@ class Metadata extends id {
         try {
             x.#metadata
             return true
-        } catch {}
+        } catch {
+            // ignore
+        }
         return false
     }
     static get(x) {

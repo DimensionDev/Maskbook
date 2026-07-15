@@ -21,8 +21,6 @@ interface PluginWrapperProps extends React.PropsWithChildren {
     publisher?: JSX.Element
     wrapperProps?: Plugin.SiteAdaptor.PluginWrapperProps
     publisherLink?: string
-    lackHostPermission?: boolean
-    ID: string
 }
 
 const useStyles = makeStyles<{
@@ -180,7 +178,6 @@ export function MaskPostExtraPluginWrapper(props: PluginWrapperComponentProps<Pl
 
     return (
         <MaskPostExtraInfoWrapper
-            ID={props.definition.ID}
             wrapperProps={wrapperProps}
             open={open}
             title={title || t(name)}
@@ -188,7 +185,6 @@ export function MaskPostExtraPluginWrapper(props: PluginWrapperComponentProps<Pl
             publisher={publisher ? <PluginTransFieldRender pluginID={ID} field={publisher.name} /> : undefined}
             publisherLink={publisher?.link}
             children={props.children}
-            lackHostPermission={props.lackHostPermission}
         />
     )
 }

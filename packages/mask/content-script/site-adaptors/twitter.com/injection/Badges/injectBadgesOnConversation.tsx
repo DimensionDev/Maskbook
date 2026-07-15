@@ -79,9 +79,9 @@ export function injectBadgesOnConversation(signal: AbortSignal) {
     watcher.useForeach((node, _, proxy) => {
         const spans = node
             .closest('[data-testid=conversation]')
-            ?.querySelectorAll<HTMLElement>('[tabindex] [dir] span:not([data-testid=tweetText])')
+            ?.querySelectorAll<HTMLElement>(':scope [tabindex] [dir] span:not([data-testid=tweetText])')
         if (!spans) return
-        const userId = [...spans].reduce((id, node) => {
+        const userId = spans.values().reduce((id, node) => {
             if (id) return id
             if (node.textContent?.match(/@\w/u)) {
                 return node.textContent.trim().slice(1)

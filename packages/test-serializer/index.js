@@ -39,13 +39,17 @@ function test(val) {
 function isDOMException(a) {
     try {
         return a.constructor.name === 'DOMException'
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
 function isCryptoKey(a) {
     try {
         if (a.constructor.name === 'CryptoKey') return true
         if (a.algorithm && a.data && a.type) return true
-    } catch {}
+    } catch {
+        // ignore
+    }
 }
 
 export const testSerializer = { serialize, test }

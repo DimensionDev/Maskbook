@@ -8,8 +8,8 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Permit } from '../middleware/Permit.js'
 
 let instance: EVMComposer<ConnectionContext> | undefined
-export class Composer {
-    static compose() {
+export const Composer = {
+    compose() {
         if (instance) return instance
 
         instance = EVMComposer.from<ConnectionContext>(
@@ -21,5 +21,5 @@ export class Composer {
             new TransactionWatcher(),
         )
         return instance
-    }
+    },
 }

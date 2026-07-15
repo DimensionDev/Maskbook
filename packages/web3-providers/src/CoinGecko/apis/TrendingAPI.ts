@@ -29,7 +29,7 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
                     const response = await fetchJSON<{ name: string; id: string; error: string }>(requestPath)
                     return response.error ? undefined : { name: response.name, id: response.id, chainId }
                 } catch {
-                    return undefined
+                    return
                 }
             }),
             undefined,
@@ -109,7 +109,7 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
                         (x) => x.toLowerCase(),
                     ),
                 ),
-                source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
+                source_code_urls: Object.values(info.links.repos_url).flat(),
                 home_urls: info.links.homepage.filter(Boolean),
                 blockchain_urls: uniq(
                     [platform_url, ...info.links.blockchain_site].filter(Boolean).map((url) => url.toLowerCase()),

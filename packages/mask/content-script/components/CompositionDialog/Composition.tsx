@@ -133,7 +133,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     return (
         <InjectedDialog
-            classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
+            classes={{ paper: cx(classes.dialogRoot, open ? '' : classes.hideDialogRoot) }}
             open={open}
             onClose={onClose}
             title={<Trans>Encrypted Post</Trans>}

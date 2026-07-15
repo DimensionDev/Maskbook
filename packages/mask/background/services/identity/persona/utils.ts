@@ -29,7 +29,7 @@ export async function deriveLocalKeyFromECDHKey(
         'deriveKey',
     ])
     const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: encodeText(mnemonicWord), iterations: 100000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: encodeText(mnemonicWord), iterations: 100_000, hash: 'SHA-256' },
         pbkdf2,
         { name: 'AES-GCM', length: 256 },
         true,
@@ -70,7 +70,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     }
 }
 
-export async function validateMnemonic(mnemonic: string, wordList?: string[] | undefined): Promise<boolean> {
+export async function validateMnemonic(mnemonic: string, wordList?: string[]): Promise<boolean> {
     return bip39.validateMnemonic(mnemonic, wordList)
 }
 

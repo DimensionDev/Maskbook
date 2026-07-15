@@ -4,14 +4,12 @@ interface TrendingViewContextProps {
     isTokenTagPopper: boolean
     isProfilePage: boolean
     isPreciseSearch: boolean
-    isDSearch: boolean
 }
 
 export const TrendingViewContext = createContext<TrendingViewContextProps>({
     isTokenTagPopper: true,
     isProfilePage: false,
     isPreciseSearch: false,
-    isDSearch: false,
 })
 TrendingViewContext.displayName = 'TrendingViewContext'
 

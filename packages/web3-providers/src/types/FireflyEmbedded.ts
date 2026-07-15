@@ -12,6 +12,7 @@ export interface FireflyResponse<T> {
     message?: string
 }
 
+// eslint-disable-next-line unicorn/text-encoding-identifier-case
 export type SignEncoding = 'utf-8' | 'hex'
 
 /** EVM transaction payload handed to the Firefly signing backend. */

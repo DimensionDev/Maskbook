@@ -31,7 +31,7 @@ async function createAESFromPassword(password: Uint8Array<ArrayBuffer>) {
     const pbkdf = await crypto.subtle.importKey('raw', password, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: iv, iterations: 10000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: iv, iterations: 10_000, hash: 'SHA-256' },
         pbkdf,
         { name: 'AES-GCM', length: 256 },
         true,
@@ -43,7 +43,7 @@ async function createAESFromPassword(password: Uint8Array<ArrayBuffer>) {
 async function getAESFromPassword(password: Uint8Array<ArrayBuffer>, iv: Uint8Array<ArrayBuffer>) {
     const pbkdf = await crypto.subtle.importKey('raw', password, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
     const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: iv, iterations: 10000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: iv, iterations: 10_000, hash: 'SHA-256' },
         pbkdf,
         { name: 'AES-GCM', length: 256 },
         true,

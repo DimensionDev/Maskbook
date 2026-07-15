@@ -30,7 +30,6 @@ export class R2D2GetterSetter<T> {
             }),
             {
                 method: 'PUT',
-                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },

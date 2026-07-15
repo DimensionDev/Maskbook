@@ -49,7 +49,7 @@ export function useMenuConfig(
     const update = useUpdate()
     const C = useShadowRoot ? ShadowRootMenu : Menu
     return [
-        // eslint-disable-next-line react/no-missing-key
+        // eslint-disable-next-line @eslint-react/no-missing-key
         <C
             {...menuProps}
             classes={{ paper: classes.menu, ...menuProps.classes }}
@@ -64,12 +64,7 @@ export function useMenuConfig(
             ))}
         </C>,
         useCallback((anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => {
-            let element: HTMLElement
-            if (anchorElOrEvent instanceof HTMLElement) {
-                element = anchorElOrEvent
-            } else {
-                element = anchorElOrEvent.currentTarget
-            }
+            const element = anchorElOrEvent instanceof HTMLElement ? anchorElOrEvent : anchorElOrEvent.currentTarget
 
             // when the essential content of currentTarget would be closed over,
             //  we can set the anchorEl with currentTarget's bottom sibling to avoid it.

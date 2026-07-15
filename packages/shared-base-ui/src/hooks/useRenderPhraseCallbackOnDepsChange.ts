@@ -41,9 +41,9 @@ import { useState } from 'react'
 export function useRenderPhraseCallbackOnDepsChange(callback: () => void, deps: unknown[]) {
     const [prev, setPrev] = useState(deps)
     let changed = deps.length !== prev.length
-    for (let i = 0; i < deps.length; i += 1) {
+    for (const [i, dep] of deps.entries()) {
         if (changed) break
-        if (prev[i] !== deps[i]) changed = true
+        if (prev[i] !== dep) changed = true
     }
     if (changed) {
         setPrev(deps)

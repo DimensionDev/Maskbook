@@ -52,7 +52,7 @@ class ABI {
                     (x) => `${x.name}_${x.inputs.map((y) => `${y.type}_${y.name}`)}`,
                 )
                 this.abis.set(signature, all)
-            } catch (error) {
+            } catch {
                 console.log('Failed to encode function signature from below ABI:')
                 console.log(x)
             }

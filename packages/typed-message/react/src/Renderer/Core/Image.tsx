@@ -11,7 +11,7 @@ export const TypedMessageImageRender = memo(function TypedMessageImageRender(pro
     {
         const [oldImage, setOldImage] = useState(image)
         if (oldImage !== image) {
-            blobSrc && URL.revokeObjectURL(blobSrc)
+            if (blobSrc) URL.revokeObjectURL(blobSrc)
             setOldImage(image)
             if (typeof image !== 'string') {
                 const src = URL.createObjectURL(image)
@@ -27,7 +27,7 @@ export const TypedMessageImageRender = memo(function TypedMessageImageRender(pro
     return (
         <>
             <Image
-                style={Object(props.meta?.get(unstable_STYLE_META))}
+                style={new Object(props.meta?.get(unstable_STYLE_META))}
                 src={finalSrc}
                 width={width}
                 height={height}

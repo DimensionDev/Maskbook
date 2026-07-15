@@ -226,9 +226,9 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
         <>
             <Box padding={2}>
                 <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
-                    {typeof tokenPrice !== 'undefined' ?
+                    {tokenPrice === undefined ? null : (
                         <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
-                    :   null}
+                    )}
                 </ProgressiveText>
                 {hideChart ? null : (
                     <>

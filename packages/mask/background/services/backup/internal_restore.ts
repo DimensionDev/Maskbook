@@ -168,13 +168,18 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
     })
 }
 async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
-    const plugins = [...activatedPluginsWorker]
+    const plugins = Iterator.from(activatedPluginsWorker)
     const works = new Set<Promise<void>>()
     for (const [pluginID, item] of Object.entries(backup)) {
         const plugin = plugins.find((x) => x.ID === pluginID)
         // should we warn user here?
         if (!plugin) {
-            if ([...registeredPlugins.getCurrentValue().map((x) => x[0])].includes(pluginID as PluginID))
+            if (
+                registeredPlugins
+                    .getCurrentValue()
+                    .map((x) => x[0])
+                    .includes(pluginID as PluginID)
+            )
                 console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
             else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
             continue

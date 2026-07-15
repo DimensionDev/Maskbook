@@ -43,19 +43,19 @@ export function ImageLoader({ src }: ImageLoaderProps) {
 
     return (
         <div className={classes.container}>
-            {!failed ?
+            {failed ?
                 <img
+                    src={theme.palette.mode === 'light' ? MASK_LIGHT_FALLBACK : MASK_DARK_FALLBACK}
+                    width={60}
+                    height={60}
+                />
+            :   <img
                     src={src}
                     className={classes.poster}
                     onLoad={() => setLoaded(true)}
                     onError={() => {
                         setFailed(true)
                     }}
-                />
-            :   <img
-                    src={theme.palette.mode === 'light' ? MASK_LIGHT_FALLBACK : MASK_DARK_FALLBACK}
-                    width={60}
-                    height={60}
                 />
             }
             {!loaded && !failed ?

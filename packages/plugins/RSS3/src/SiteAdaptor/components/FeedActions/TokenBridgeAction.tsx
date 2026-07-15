@@ -36,7 +36,7 @@ export function TokenBridgeAction({ feed, ...rest }: TokenBridgeActionProps) {
     const { classes } = useStyles()
 
     // You might see some `transfer` type actions as well
-    const action = feed.actions.filter((x) => x.tag === Tag.Transaction && x.type === Type.Bridge)[0]
+    const action = feed.actions.find((x) => x.tag === Tag.Transaction && x.type === Type.Bridge)!
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)

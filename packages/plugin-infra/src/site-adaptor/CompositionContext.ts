@@ -10,7 +10,10 @@ export interface CompositionContext {
 }
 export const CompositionContext = createContext<CompositionContext>({
     type: 'popup',
-    getMetadata: () => undefined,
+    getMetadata: () => {
+        // eslint-disable-next-line unicorn/no-useless-undefined
+        return undefined
+    },
     attachMetadata() {},
     dropMetadata() {},
 })

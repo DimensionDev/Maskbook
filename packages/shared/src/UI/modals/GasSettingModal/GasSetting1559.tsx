@@ -82,7 +82,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-// eslint-disable-next-line react/no-useless-fragment
 const emptyRender = () => <></>
 export const GasSetting1559 = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
@@ -232,7 +231,7 @@ export const GasSetting1559 = memo(
                                     {formatCurrency(
                                         formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                             .times(nativeTokenPrice)
-                                            .times(gasLimit ?? 21000),
+                                            .times(gasLimit ?? 21_000),
                                         'USD',
                                         { onlyRemainTwoOrZeroDecimal: true },
                                     )}

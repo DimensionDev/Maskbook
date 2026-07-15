@@ -22,6 +22,7 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     } as ConnectionOptions<T>)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     const result = useQuery({
         enabled,
         queryKey: ['fungible-token', 'balance', pluginID, account, address, options],

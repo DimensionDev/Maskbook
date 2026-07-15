@@ -172,8 +172,10 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
         else if (redpacketStatus === RedPacketStatus.View && transactionHash)
             openWindow(Utils.explorerResolver.transactionLink(chainId, transactionHash))
         else if (redpacketStatus === RedPacketStatus.Send) await shareCallback()
-        else if (redpacketStatus === RedPacketStatus.Refunding)
-            pluginID === NetworkPluginID.PLUGIN_SOLANA ? await refundSolanaCallback() : await refundCallback()
+        else if (redpacketStatus === RedPacketStatus.Refunding) {
+            if (pluginID === NetworkPluginID.PLUGIN_SOLANA) await refundSolanaCallback()
+            else await refundCallback()
+        }
     }, [
         redpacketStatus,
         shareCallback,

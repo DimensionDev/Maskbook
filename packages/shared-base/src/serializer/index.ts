@@ -46,7 +46,7 @@ function setup() {
     registerEncodableClass(
         'Headers',
         (x) => x instanceof Headers,
-        (h: Headers) => [...h.entries()],
+        (h: Headers) => h.entries().toArray(),
         (e: Array<[string, string]>) => new Headers(e),
     )
 

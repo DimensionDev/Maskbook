@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect, type JSX } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { isNonNull } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     typed: {
@@ -51,7 +50,8 @@ function* onBoardingWriter(className: { typed: string; typing: string }, sentenc
     const previousLines: JSX.Element[] = []
     const currentLine: Array<{ type: 'bold' | 'normal'; text: string }> = [{ type: 'normal', text: '' }]
 
-    for (const sentence of sentences.filter(isNonNull)) {
+    for (const sentence of sentences) {
+        if (!sentence) continue
         const chars = [...segmenter.segment(sentence)]
         let currentLineJSX: JSX.Element | undefined
         for (let index = 0; index < chars.length; index += 1) {

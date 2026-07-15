@@ -82,8 +82,8 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
         <Box className={classes.root}>
             <div className={classes.content}>
                 {Object.entries(options).map(([type, option], i) => {
-                    const type_ = type as GasOptionType
                     if (type === GasOptionType.CUSTOM) return
+                    const type_ = type as GasOptionType
                     return (
                         <React.Fragment key={type}>
                             {i === 0 ? null : <Divider />}

@@ -50,7 +50,7 @@ export interface DecodeImageOptions extends SteganographyIO {
 export async function steganographyDecodeImage(image: Blob | string, options: DecodeImageOptions) {
     const buffer = typeof image === 'string' ? await options.downloadImage(image) : await image.arrayBuffer()
 
-    const dimension = (await getDimensionByDOM(image).catch(() => undefined)) ?? getDimensionAsBuffer(buffer)
+    const dimension = (await getDimensionByDOM(image).catch(() => {})) ?? getDimensionAsBuffer(buffer)
     if (!dimension) return null
 
     const preset = findPreset(dimension)

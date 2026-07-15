@@ -48,9 +48,9 @@ export function createManager<
             {},
             {
                 get(_, pluginID) {
-                    if (typeof pluginID === 'symbol') return undefined
+                    if (typeof pluginID === 'symbol') return
                     if (activated.has(pluginID)) return activated.get(pluginID)!.minimalModeEnabled
-                    return undefined
+                    return
                 },
             },
         ) as Partial<Record<string, ValueRefWithReady<boolean>>>,
@@ -88,7 +88,7 @@ export function createManager<
         signal.addEventListener(
             'abort',
             () => {
-                ;[...activated.keys()].forEach(stopPlugin)
+                activated.keys().forEach(stopPlugin)
                 removeListener1()
                 removeListener2()
                 removeListener3()
@@ -136,7 +136,7 @@ export function createManager<
 
         verifyHostHooks()
         const abort = new AbortController()
-        // eslint-disable-next-line react/no-missing-context-display-name
+        // eslint-disable-next-line @eslint-react/no-missing-context-display-name
         const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
             controller: abort,
@@ -185,7 +185,7 @@ export function createManager<
                 resolved.set(id, (await _).default)
 
                 console.log('[HMR] Plugin', id, 'hot reloaded.')
-                isActivated(id) && setTimeout(() => activatePlugin(id), 200)
+                if (isActivated(id)) setTimeout(() => activatePlugin(id), 200)
                 stopPlugin(id)
             })
         }

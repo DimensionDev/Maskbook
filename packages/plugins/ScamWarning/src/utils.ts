@@ -8,7 +8,7 @@ import {
 } from '@masknet/shared-base'
 
 export function isTronAddress(address: string) {
-    return !!address.match(TRON_ADDRESS_RE)
+    return !!TRON_ADDRESS_RE.test(address)
 }
 
 export function extractAddresses(text: string, exist = false) {

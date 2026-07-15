@@ -91,7 +91,7 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
             <Grid item xs={3} className={classes.tableCell}>
                 <Button
                     color="primary"
-                    disabled={!isDeposit ? isZero(balance) : false}
+                    disabled={isDeposit ? false : isZero(balance)}
                     onClick={() => {
                         if (!isDeposit && protocol.type === ProtocolType.Lido) {
                             onWithdraw?.(protocol)

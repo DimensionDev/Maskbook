@@ -21,9 +21,9 @@ export function useTransactionValue(
     const { gasPrice } = useGasConfig(chainId)
 
     const estimateGasFee =
-        !gas ? undefined
-        : gasPrice && gasPrice !== '0' ? new BigNumber(gasPrice).multipliedBy(gas).multipliedBy(1.5).toFixed()
-        : undefined
+        gas && gasPrice && gasPrice !== '0' ?
+            new BigNumber(gasPrice).multipliedBy(gas).multipliedBy(1.5).toFixed()
+        :   undefined
 
     const transactionValue =
         (

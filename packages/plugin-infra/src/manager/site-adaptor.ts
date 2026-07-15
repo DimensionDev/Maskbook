@@ -29,8 +29,8 @@ const ActivatedPluginsSiteAdaptorFalse = new ValueRefWithReady<Plugin.SiteAdapto
 
     function query(minimalModeEqualsTo: boolean): Plugin.SiteAdaptor.Definition[] {
         const result = [...activated.plugins]
-        if (minimalModeEqualsTo === true) return result.filter((x) => minimalModeSub[x.ID]?.value)
-        else if (minimalModeEqualsTo === false) return result.filter((x) => !minimalModeSub[x.ID]?.value)
+        if (minimalModeEqualsTo) return result.filter((x) => minimalModeSub[x.ID]?.value)
+        else if (!minimalModeEqualsTo) return result.filter((x) => !minimalModeSub[x.ID]?.value)
         return result
     }
 }
@@ -39,9 +39,9 @@ export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | bool
     assertLocation()
     return useValueRef(
         minimalModeEqualsTo === 'any' ? ActivatedPluginsSiteAdaptorAny
-        : minimalModeEqualsTo === true ? ActivatedPluginsSiteAdaptorTrue
-        : minimalModeEqualsTo === false ? ActivatedPluginsSiteAdaptorFalse
-        : unreachable(minimalModeEqualsTo),
+        : minimalModeEqualsTo ? ActivatedPluginsSiteAdaptorTrue
+        : minimalModeEqualsTo ? unreachable(minimalModeEqualsTo)
+        : ActivatedPluginsSiteAdaptorFalse,
     )
 }
 
@@ -93,13 +93,13 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
     const minimalMode = useIsMinimalMode(pluginID)
 
     const result = plugins.find((x) => x.ID === pluginID)
-    if (!result) return undefined
+    if (!result) return
     if (minimalModeEqualsTo === 'any') return result
-    else if (minimalModeEqualsTo === true) {
+    else if (minimalModeEqualsTo) {
         if (minimalMode) return result
-        return undefined
-    } else if (minimalModeEqualsTo === false) {
-        if (minimalMode) return undefined
+        return
+    } else if (!minimalModeEqualsTo) {
+        if (minimalMode) return
         return result
     }
     unreachable(minimalModeEqualsTo)

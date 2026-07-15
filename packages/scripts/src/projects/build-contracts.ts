@@ -12,20 +12,20 @@ export async function buildContracts() {
     const abis = (await fs.readdir(ABIS_PATH))
         .filter((file) => file.endsWith('.json'))
         .map((file) => file.slice(0, -'.json'.length))
-        .sort((a, b) => a.localeCompare(b))
+        .toSorted((a, b) => a.localeCompare(b))
 
     await fs.writeFile(
         join(GENERATED_PATH, 'index.d.ts'),
         `${header()}${abis.map((abiName) => `export type { ${abiName}Abi } from './${abiName}.js'`).join('\n')}\n`,
-        'utf-8',
+        'utf8',
     )
 
     for (const abiName of abis) {
-        const abi = JSON.stringify(JSON.parse(await fs.readFile(join(ABIS_PATH, `${abiName}.json`), 'utf-8')))
+        const abi = JSON.stringify(JSON.parse(await fs.readFile(join(ABIS_PATH, `${abiName}.json`), 'utf8')))
         await fs.writeFile(
             join(GENERATED_PATH, `${abiName}.d.ts`),
             `${header()}// prettier-ignore\nexport type ${abiName}Abi = ${abi}\nexport const ${abiName}Abi: ${abiName}Abi\n`,
-            'utf-8',
+            'utf8',
         )
         await fs.writeFile(
             join(GENERATED_PATH, `${abiName}.js`),

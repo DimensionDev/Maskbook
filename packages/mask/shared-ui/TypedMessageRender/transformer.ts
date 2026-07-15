@@ -40,10 +40,12 @@ const matcher = /^https?:\/\/mask(\.io|book\.com)/iu
 const textPayloadChar = /([\w+/=|:])/iu
 const emoji = '\u{1F3BC}'
 TypedMessageTransformers.addTransformer(function visitor(message, context) {
-    if (isTypedMessageAnchor(message)) {
-        if (message.href && (matcher.test(message.href) || matcher.test(message.content))) {
-            return makeTypedMessageAnchor('normal', 'https://mask.io', 'Mask')
-        }
+    if (
+        isTypedMessageAnchor(message) &&
+        message.href &&
+        (matcher.test(message.href) || matcher.test(message.content))
+    ) {
+        return makeTypedMessageAnchor('normal', 'https://mask.io', 'Mask')
     }
 
     if (fbStyleTextPayloadReplace && isTypedMessageText(message) && message.content.includes(emoji)) {
@@ -57,7 +59,7 @@ TypedMessageTransformers.addTransformer(function visitor(message, context) {
         let index = startFrom
         while (index < message.content.length) {
             const char = message.content[index]
-            if (char === '\uD83C') {
+            if (char === '\u{D83C}') {
                 if (pendingChar.length) {
                     result.push(makeTypedMessageText(pendingChar.join('')))
                     pendingChar.length = 0
@@ -66,7 +68,7 @@ TypedMessageTransformers.addTransformer(function visitor(message, context) {
                 index += 2 // unicode pair
                 // here we at the start of the payload char,
                 // then we should drop rest chars until it no longer matches the RegExp or we met ":||".
-                while (message.content[index].match(textPayloadChar)) {
+                while (textPayloadChar.test(message.content[index])) {
                     index += 1
                     if (
                         message.content[index] === ':' &&

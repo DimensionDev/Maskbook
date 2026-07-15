@@ -7,7 +7,6 @@ import { PopupRoutes, type PersonaInformation } from '@masknet/shared-base'
 import { useContainer } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -74,7 +73,6 @@ export const Component = memo(function Logout() {
 })
 
 interface LogoutUIProps {
-    chainId?: ChainId
     currentPersona?: PersonaInformation
     backupPassword: string
     loading: boolean
@@ -163,13 +161,13 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
                 </Button>
                 <ActionButton
                     variant="contained"
-                    color={!backupPassword ? 'primary' : 'error'}
+                    color={backupPassword ? 'error' : 'primary'}
                     fullWidth
                     onClick={onConfirm}
                     disabled={disabled}>
-                    {!backupPassword ?
-                        <Trans>Backup</Trans>
-                    :   <Trans>Log out</Trans>}
+                    {backupPassword ?
+                        <Trans>Log out</Trans>
+                    :   <Trans>Backup</Trans>}
                 </ActionButton>
             </BottomController>
         </Box>

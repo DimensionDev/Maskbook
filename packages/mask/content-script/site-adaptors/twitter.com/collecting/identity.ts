@@ -26,15 +26,14 @@ function collectSelfInfo() {
 
 function getNickname(nickname?: string) {
     const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
-    let _nickname = ''
     if (!nicknameNode?.childNodes.length) return nickname
+    let _nickname = ''
 
     for (const child of nicknameNode.childNodes) {
         const ele = child as HTMLDivElement
         if (ele.tagName === 'IMG') {
             _nickname += ele.getAttribute('alt') ?? ''
-        }
-        if (ele.tagName === 'SPAN') {
+        } else if (ele.tagName === 'SPAN') {
             _nickname += ele.textContent?.trim()
         }
     }
@@ -103,7 +102,7 @@ function resolveCurrentVisitingIdentityInner(
     const update = async (screenName: string) => {
         const user = await queryClient.fetchQuery({
             retry: 0,
-            staleTime: 3600_000,
+            staleTime: 3_600_000,
             queryKey: ['twitter', 'profile', screenName],
             queryFn: () => FireflyTwitter.getUserInfo(screenName),
         })
@@ -116,7 +115,7 @@ function resolveCurrentVisitingIdentityInner(
         const handle = legacy.screen_name
         const ownerHandle = ownerRef.value.identifier?.userId
         const isOwner = !!ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase()
-        const domAvatar = document.querySelector(`a[href="/${handle}/photo"] img`)
+        const domAvatar = document.querySelector(`a[href="/${CSS.escape(handle)}/photo"] img`)
         // DOM avatar is more accurate, avatar from api could be outdate
         const avatar = domAvatar?.getAttribute('src') || legacy.profile_image_url_https
         const bio = legacy.description
@@ -158,7 +157,7 @@ export const IdentityProviderTwitter: SiteAdaptorUI.CollectingCapabilities.Ident
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveLastRecognizedIdentityInner(this.recognized, cancel)
+        resolveLastRecognizedIdentityInner(IdentityProviderTwitter.recognized, cancel)
     },
 }
 
@@ -166,6 +165,10 @@ export const CurrentVisitingIdentityProviderTwitter: SiteAdaptorUI.CollectingCap
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderTwitter.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(
+            CurrentVisitingIdentityProviderTwitter.recognized,
+            IdentityProviderTwitter.recognized,
+            cancel,
+        )
     },
 }

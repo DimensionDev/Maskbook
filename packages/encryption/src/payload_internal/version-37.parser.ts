@@ -93,15 +93,13 @@ async function parseAES(aes: unknown) {
 function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
     type T = Promise<Result<EC_Key, CheckedError<CryptoException>>>
     return andThenAsync(assertUint8Array(key, name, CryptoException.InvalidCryptoKey), async (pubKey): T => {
-        if (typeof algr === 'number') {
-            if (algr in EC_KeyCurve) {
-                if (algr === EC_KeyCurve.secp256k1) {
-                    pubKey = await decompressK256Raw(pubKey)
-                }
-                const key = await importEC(pubKey, algr)
-                if (key.isErr()) return key
-                return Ok<EC_Key>({ algr, key: key.value })
+        if (typeof algr === 'number' && algr in EC_KeyCurve) {
+            if (algr === EC_KeyCurve.secp256k1) {
+                pubKey = await decompressK256Raw(pubKey)
             }
+            const key = await importEC(pubKey, algr)
+            if (key.isErr()) return key
+            return Ok<EC_Key>({ algr, key: key.value })
         }
         return new CheckedError(CryptoException.UnsupportedAlgorithm, null).toErr()
     })

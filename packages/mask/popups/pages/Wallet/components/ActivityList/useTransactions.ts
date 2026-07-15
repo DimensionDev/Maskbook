@@ -30,6 +30,7 @@ export function useTransactions() {
     // TODO invalidQueries after sending transitions
     const queries = useQueries({
         queries: networks.map((network) => {
+            // eslint-disable-next-line @tanstack/query/exhaustive-deps
             return {
                 enabled: !!account && ((response.data?.length || 0) > 0 || !response.isPending),
                 queryKey: ['transitions', network.chainId, account],
@@ -54,7 +55,7 @@ export function useTransactions() {
     // Some are already in debank history
     const localeTxes = useMemo(() => {
         const now = Date.now()
-        const duration = 1800_000
+        const duration = 1_800_000
         return sortBy(
             allLocaleTxes.filter((tx) => {
                 // show txes from the past half txes

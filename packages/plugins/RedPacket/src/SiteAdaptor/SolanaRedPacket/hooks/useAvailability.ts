@@ -77,7 +77,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
         availability,
         isExpired,
         computed: { canClaim, canRefund, listOfStatus },
-        isEmpty: isEmpty || false,
+        isEmpty,
         isClaimed,
         refresh,
     }

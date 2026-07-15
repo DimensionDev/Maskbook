@@ -88,15 +88,9 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         hasPassword,
         backupWallets,
         setBackupWallets,
-        formState: {
-            clearErrors,
-            setError,
-            control,
-            handleSubmit,
-            resetField,
-            formState: { errors, isDirty, isValid },
-        },
+        formState: { clearErrors, setError, control, handleSubmit, resetField, formState },
     } = useBackupFormState()
+    const { errors, isDirty, isValid } = formState
     const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
     const { showSnackbar } = useCustomSnackbar()
 

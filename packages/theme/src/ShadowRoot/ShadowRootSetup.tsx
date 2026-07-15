@@ -24,7 +24,8 @@ export function setupReactShadowRootEnvironment(
 ) {
     if (portalContainer) return portalContainer
     // TODO: make sure globalContainer is the last DOM in the body?
-    globalContainer = document.body.appendChild(document.createElement('div'))
+    globalContainer = document.createElement('div')
+    document.body.append(globalContainer)
     portalContainer = globalContainer.attachShadow(init)
 
     // Note: This React Root does not expect to have any direct DOM children.
@@ -52,8 +53,11 @@ export const ref = {
         let dom: Element | ShadowRoot
         if (location.protocol.includes('extension')) dom = document.body
         else if (globalThis.location.hostname === 'localhost') return document.body
-        else if (!portalContainer) throw new TypeError('Please call setupPortalShadowRoot first')
-        else dom = portalContainer
+        else if (portalContainer) {
+            dom = portalContainer
+        } else {
+            throw new TypeError('Please call setupPortalShadowRoot first')
+        }
 
         Object.defineProperty(ref, 'mountingPoint', { value: dom })
         return dom

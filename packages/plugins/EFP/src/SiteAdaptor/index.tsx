@@ -72,6 +72,7 @@ function useHideNativeTwitterCard(rootNode: HTMLElement | null, isFocusing: bool
             observer.disconnect()
             for (const [target, prev] of modified) {
                 target.style.display = prev.display
+                // eslint-disable-next-line unicorn/prefer-toggle-attribute -- "" and "true" are both aria-hidden, toggle need more code
                 if (prev.ariaHidden === null) target.removeAttribute('aria-hidden')
                 else target.setAttribute('aria-hidden', prev.ariaHidden)
             }
@@ -104,7 +105,7 @@ function isEFPCard(card: HTMLElement) {
         if (parseEFPProfileLink(anchor.href)) return true
         const text = anchor.textContent?.trim()
         if (text && parseEFPProfileLink(text)) return true
-        const sourceHost = anchor.getAttribute('aria-label')?.trim().split(/\s+/u)[0]?.toLowerCase()
+        const sourceHost = anchor.getAttribute('aria-label')?.trim().split(/\s+/u, 1)[0]?.toLowerCase()
         if (sourceHost && (EFP_HOSTS as readonly string[]).includes(sourceHost)) return true
     }
     return false
@@ -135,8 +136,8 @@ function useEFPCardLink(enabled: boolean): EFPProfileLink | null {
                 if (!isEFPCard(card)) continue
                 for (const anchor of card.querySelectorAll<HTMLAnchorElement>('a[href]')) found.add(anchor.href)
             }
-            const next = [...found].sort()
-            // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
+            const next = [...found].toSorted((a, b) => a.localeCompare(b))
+            // eslint-disable-next-line @eslint-react/set-state-in-effect
             setHrefs((prev) => (prev.length === next.length && prev.every((x, i) => x === next[i]) ? prev : next))
         }
 

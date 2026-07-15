@@ -45,7 +45,7 @@ export async function encryptTo(
         },
         {
             async deriveAESKey(pub) {
-                const result = Array.from((await deriveAESByECDH(pub, whoAmI)).values())
+                const result = (await deriveAESByECDH(pub, whoAmI)).values().toArray()
                 if (result.length === 0) throw new Error('No key found')
                 return result[0]
             },
@@ -64,7 +64,7 @@ export async function encryptTo(
             encryptBy: usingPersona,
             ...collectInterestedMeta(content),
         })
-    })().catch((error) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
+    })().catch((error: unknown) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
 
     if (target.type === 'E2E') {
         if (version === -37) {
@@ -92,17 +92,25 @@ function e2eMapToRecipientDetails(
 /** @internal */
 export function prepareEncryptTarget(
     target: EncryptTargetE2EFromProfileIdentifier,
-): Promise<readonly [key_map: Map<EC_Public_CryptoKey, ProfileIdentifier>, EncryptTargetE2E]>
-export function prepareEncryptTarget(target: EncryptTargetPublic): Promise<readonly [key_map: null, EncryptTargetE2E]>
+): Promise<readonly [key_map: Map<EC_Public_CryptoKey, ProfileIdentifier>, target: EncryptTargetE2E]>
+export function prepareEncryptTarget(
+    target: EncryptTargetPublic,
+): Promise<readonly [key_map: null, target: EncryptTargetE2E]>
 export function prepareEncryptTarget(
     target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier,
 ): Promise<
-    readonly [key_map: Map<EC_Public_CryptoKey, ProfileIdentifier> | null, EncryptTargetPublic | EncryptTargetE2E]
+    readonly [
+        key_map: Map<EC_Public_CryptoKey, ProfileIdentifier> | null,
+        target: EncryptTargetPublic | EncryptTargetE2E,
+    ]
 >
 export async function prepareEncryptTarget(
     target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier,
 ): Promise<
-    readonly [key_map: Map<EC_Public_CryptoKey, ProfileIdentifier> | null, EncryptTargetPublic | EncryptTargetE2E]
+    readonly [
+        key_map: Map<EC_Public_CryptoKey, ProfileIdentifier> | null,
+        target: EncryptTargetPublic | EncryptTargetE2E,
+    ]
 > {
     if (target.type === 'public') return [null, target] as const
     const key_map = new Map<EC_Public_CryptoKey, ProfileIdentifier>()

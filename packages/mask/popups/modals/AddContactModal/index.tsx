@@ -72,7 +72,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 
     const addressError = Boolean(address) && !isValidAddress(address)
     const nameExistError = Boolean(
-        contacts?.find((contact) => contact.name === name) || wallets.find((wallet) => wallet.name === name),
+        contacts?.find((contact) => contact.name === name) || wallets.some((wallet) => wallet.name === name),
     )
     const addressExistError = useMemo(
         () => contacts.some((contact) => isSameAddress(address, contact.address)),
