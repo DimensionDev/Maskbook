@@ -56,15 +56,31 @@ const disabledRules = {
     '@typescript-eslint/no-deprecated': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-floating-promises': 'off', // require promise to be then or catch
+    '@typescript-eslint/no-misused-promises': 'off', // require promise to be then or catch
     '@typescript-eslint/no-namespace': 'off', // namespace T {}, they won't support type only namespace
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-unnecessary-condition': 'off', // not sure if we can trust our typing
+    '@typescript-eslint/no-unnecessary-type-conversion': 'off', // we have some defensive code for untrusted input, not sure if it is safe to remove those
+    '@typescript-eslint/no-unsafe-enum-comparison': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off', // we use a lot of || to check falsy string "" in web3 related code. nullish coalescing will break those code.
+    '@typescript-eslint/prefer-promise-reject-errors': 'off',
+    '@typescript-eslint/triple-slash-reference': 'off', // we need it, maybe
     'lingui/no-expression-in-message': 'off',
     'unicorn/no-array-reduce': 'off',
     'unicorn/no-await-expression-member': 'off',
     'unicorn/no-break-in-nested-loop': 'off',
     'unicorn/no-computed-property-existence-check': 'off',
+    'unicorn/no-top-level-assignment-in-function': 'off',
+    'unicorn/no-top-level-side-effects': 'off',
+
+    // too strict, this require elimination of any
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
 
     // style, readibility and convention
     'unicorn/consistent-class-member-order': 'off',
@@ -83,32 +99,17 @@ const disabledRules = {
     'unicorn/prefer-switch': 'off', // switch is bad
     'unicorn/switch-case-braces': 'off', // we have a rule that warns for decelaration in switch case
 
-    // TODO: review, maybe add them back
+    // TODO: add back
     '@tanstack/query/prefer-query-options': 'off',
-    '@typescript-eslint/no-confusing-void-expression': 'off',
-    '@typescript-eslint/no-floating-promises': 'off',
+    '@typescript-eslint/no-confusing-void-expression': 'off', // reasonable, but too much work
     '@typescript-eslint/no-invalid-void-type': 'off',
-    '@typescript-eslint/no-misused-promises': 'off',
-    '@typescript-eslint/no-unnecessary-condition': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',
-    '@typescript-eslint/no-unnecessary-type-conversion': 'off',
-    '@typescript-eslint/no-unsafe-argument': 'off',
-    '@typescript-eslint/no-unsafe-assignment': 'off',
-    '@typescript-eslint/no-unsafe-call': 'off',
-    '@typescript-eslint/no-unsafe-enum-comparison': 'off',
-    '@typescript-eslint/no-unsafe-member-access': 'off',
-    '@typescript-eslint/no-unsafe-return': 'off',
-    '@typescript-eslint/prefer-promise-reject-errors': 'off',
-    '@typescript-eslint/require-await': 'off',
-    '@typescript-eslint/restrict-plus-operands': 'off',
-    '@typescript-eslint/restrict-template-expressions': 'off',
-    '@typescript-eslint/triple-slash-reference': 'off',
+    '@typescript-eslint/require-await': 'off', // most cases, parameter signature required to
+    '@typescript-eslint/restrict-template-expressions': 'off', // recheck with number allowed in template string
     '@typescript-eslint/unbound-method': 'off',
     'unicorn/consistent-boolean-name': 'off',
     'unicorn/consistent-compound-words': 'off',
     'unicorn/name-replacements': 'off',
-    'unicorn/no-top-level-assignment-in-function': 'off',
-    'unicorn/no-top-level-side-effects': 'off',
     'unicorn/prefer-number-coercion': 'off',
 }
 

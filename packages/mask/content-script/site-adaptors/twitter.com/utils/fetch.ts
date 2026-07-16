@@ -113,7 +113,7 @@ function getVisibleText(node: Node) {
         return ''
     let text = ''
     for (const child of node.childNodes) {
-        text += getVisibleText(child)
+        text += getVisibleText(child) || ''
     }
     return text
 }

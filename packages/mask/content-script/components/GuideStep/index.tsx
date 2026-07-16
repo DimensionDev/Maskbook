@@ -164,17 +164,17 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                 return cr
             })
             if (box1Ref.current) {
-                box1Ref.current.style.top = cr.top + 'px'
-                box1Ref.current.style.left = cr.left + 'px'
+                box1Ref.current.style.top = `${cr.top}px`
+                box1Ref.current.style.left = `${cr.left}px`
             }
             if (box2Ref.current) {
-                box2Ref.current.style.width = cr.width + 'px'
-                box2Ref.current.style.height = cr.height + 'px'
+                box2Ref.current.style.width = `${cr.width}px`
+                box2Ref.current.style.height = `${cr.height}px`
             }
             if (box3Ref.current) {
-                box3Ref.current.style.left = (cr.width < 50 ? -cr.width / 2 : 0) + 'px'
-                box3Ref.current.style.top = bottomAvailable ? cr.height + 16 + 'px' : ''
-                box3Ref.current.style.bottom = bottomAvailable ? '' : cr.height + 16 + 'px'
+                box3Ref.current.style.left = `${cr.width < 50 ? -cr.width / 2 : 0}px`
+                box3Ref.current.style.top = bottomAvailable ? `${cr.height + 16}px` : ''
+                box3Ref.current.style.bottom = bottomAvailable ? '' : `${cr.height + 16}px`
             }
         })
         return () => void (stopped = true)

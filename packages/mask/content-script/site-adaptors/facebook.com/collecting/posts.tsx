@@ -81,7 +81,7 @@ function collectPostsFacebookInner(
                         return Some(
                             '\n' +
                                 (href.includes('l.facebook.com') ?
-                                    new URL(href).searchParams.get('u')
+                                    new URL(href).searchParams.get('u') || ''
                                 :   node.textContent),
                         )
                     },

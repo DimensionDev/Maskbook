@@ -46,7 +46,7 @@ DialogHierarchyContext.displayName = 'DialogHierarchyContext'
  * }
  */
 export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
-    const selfID = useRef('' + Math.random()).current
+    const selfID = useRef(String(Math.random())).current
     const { pop, push, stack, setParent, hasGlobalBackdrop } = useContext(DialogStackingContext)
 
     // children's useEffect will run before parent's useEffect.

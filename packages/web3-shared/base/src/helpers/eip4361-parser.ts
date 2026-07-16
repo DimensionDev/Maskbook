@@ -202,7 +202,7 @@ export const parseEIP4361Message: (message: string, messageOrigin: string | unde
             if (parsed.not_before && parsed.not_before > new Date()) invalidFields.push('not_before')
             return { type: 'eip4361', message, parsed, invalidFields }
         },
-        (a, b) => a + b,
+        (a, b) => a + (b || ''),
     )
 export function isEIP4361DomainMatch(messageOrigin: string, message: ParsedEIP4361Message): boolean {
     if (messageOrigin === message.domain) return true

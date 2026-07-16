@@ -92,7 +92,7 @@ export async function getDesktopSyncLinkInfo(accessToken: string): Promise<Deskt
     })
     if (!response.ok) throw new Error(`Failed to get desktop sync link info: ${response.statusText}`)
     const json = await response.json()
-    if (json.code) throw new Error('Failed to get desktop sync link info, code: ' + json.code)
+    if (json.code) throw new Error('Failed to get desktop sync link info, code: ' + String(json.code))
     return json.data
 }
 

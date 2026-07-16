@@ -48,14 +48,14 @@ class OAuth {
 
                 let valString = ''
                 value.forEach(function (item, i) {
-                    valString += key + '=' + item
+                    valString += key + '=' + String(item)
                     if (i < value.length) {
                         valString += '&'
                     }
                 })
                 data_str += valString
             } else {
-                data_str += key + '=' + value + '&'
+                data_str += key + '=' + String(value) + '&'
             }
         }
 
@@ -183,7 +183,7 @@ async function getAccessToken(client: OAuth, options: { oauth_verifier: string; 
 
 const client = new OAuth(process.env.FIREFLY_X_CLIENT_ID, process.env.FIREFLY_X_CLIENT_SECRET)
 let pendingOAuth: PromiseWithResolvers<{ oauth_verifier: string; oauth_token: string }> | undefined
-export async function requestXOAuthToken() {
+export async function requestXOAuthToken(): Promise<{ user_id: string | null; screen_name: string | null } | null> {
     await requestExtensionPermissionFromContentScript({
         origins: XOAuthRequestOrigins,
     })
@@ -193,6 +193,7 @@ export async function requestXOAuthToken() {
     ])
     const step1 = await getRequestToken(client)
     const step1_oauth_token = step1.get('oauth_token')
+    if (!step1_oauth_token) return null
     pendingOAuth = Promise.withResolvers()
     await browser.tabs.create({
         url: 'https://api.twitter.com/oauth/authenticate?oauth_token=' + step1_oauth_token,

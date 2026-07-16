@@ -107,10 +107,10 @@ export function PluginGuide({
     const { classes, cx } = useStyles()
     const [childrenRef, setChildrenRef] = useState<HTMLElement | null>(null)
 
-    const [clientRect, setClientRect] = useState<any>({})
+    const [clientRect, setClientRect] = useState<Omit<DOMRect, 'toJSON'> | null>(null)
     const [bottomAvailable, setBottomAvailable] = useState(true)
 
-    const targetVisible = !!clientRect.top && !!clientRect.left && !!clientRect.height && clientRect.width
+    const targetVisible = !!clientRect?.top && !!clientRect.left && !!clientRect.height && clientRect.width
     const stepVisible = !finished && currentStep === step && targetVisible
 
     useLayoutEffect(() => {

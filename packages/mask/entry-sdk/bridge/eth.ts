@@ -258,7 +258,7 @@ const methods: Methods = {
                         const realDecimals = Math.trunc(Number(realDecimal))
                         if (decimals && realDecimals !== decimals)
                             throw err.wallet_watchAsset.the_decimals_in_the_request_request_do_not_match_the_decimals_in_the_contract_decimals(
-                                { decimals: String(realDecimal), request: decimals + '' },
+                                { decimals: String(realDecimal), request: String(decimals) },
                             )
                         decimals = realDecimals
                     },
