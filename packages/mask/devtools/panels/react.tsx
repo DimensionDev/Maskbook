@@ -232,6 +232,7 @@ export async function startReactDevTools(signal: AbortSignal) {
                 if (componentsWindow) showDisabled(componentsWindow)
                 if (profilerWindow) showDisabled(profilerWindow)
                 uninstallLast = () => {
+                    // eslint-disable-next-line @eslint-react/dom-no-flush-sync
                     flushSync(() => root.unmount())
                     container.remove()
                 }

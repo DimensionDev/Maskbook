@@ -6,7 +6,7 @@ const KEY = 'dashboard/terms-agreed'
 function useTermsAgreed() {
     assertEnvironment(Environment.ExtensionProtocol)
     // TODO: migrate this code
-    // eslint-disable-next-line no-restricted-globals
+    // eslint-disable-next-line no-restricted-globals, @eslint-react/purity
     const [agreed, setAgreedState] = useState(!!localStorage.getItem(KEY))
 
     const setAgreed = useCallback((val: boolean) => {

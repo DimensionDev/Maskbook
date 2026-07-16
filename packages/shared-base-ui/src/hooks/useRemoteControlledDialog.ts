@@ -39,14 +39,14 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
         [onUpdateByRemote, event, HOOK_ID],
     )
 
-    const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const onUpdateByLocal = useCallback(
         (ev: T) => {
             setOpen(ev.open)
 
-            const timer_ = timer.current
+            const timer_ = timerRef.current
             if (timer_ !== null) clearTimeout(timer_)
-            timer.current = setTimeout(() => {
+            timerRef.current = setTimeout(() => {
                 const payload: T & RemoteControlledDialogEvent = {
                     hookId: HOOK_ID,
                     ...ev,

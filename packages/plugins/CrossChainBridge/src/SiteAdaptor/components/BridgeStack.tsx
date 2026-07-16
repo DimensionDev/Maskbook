@@ -53,7 +53,7 @@ export function BridgeStack() {
 
     return (
         <Stack height="100%" spacing={2}>
-            {useGetCrossChainBridge().map((bridge) => (
+            {crossChainBridge.map((bridge) => (
                 <div className={classes.bridgeItem} key={bridge.ID} onClick={() => openWindow(bridge.link)}>
                     {bridge.icon}
                     <div className={classes.bridgeInfo}>
@@ -75,43 +75,41 @@ export function BridgeStack() {
     )
 }
 
-export function useGetCrossChainBridge() {
-    return [
-        {
-            name: 'CBridge',
-            ID: `${PLUGIN_ID}_cBridge`,
-            intro: <Trans>Powered by Celer Network. Support $MASK!</Trans>,
-            icon: <CBridgeIcon />,
-            isOfficial: false,
-            link: 'https://cbridge.celer.network/#/transfer',
-        },
-        {
-            name: 'Arbitrum One Bridge',
-            ID: `${PLUGIN_ID}_arbitrum_one_bridge`,
-            isOfficial: true,
-            icon: <ArbitrumOneBridgeIcon />,
-            link: 'https://bridge.arbitrum.io/',
-        },
-        {
-            name: 'Orbiter Finance',
-            ID: `${PLUGIN_ID}_orbiter_finance`,
-            isOfficial: true,
-            icon: <OrbiterFinanceIcon />,
-            link: 'https://www.orbiter.finance/',
-        },
-        {
-            name: 'Polygon Bridge',
-            ID: `${PLUGIN_ID}_polygon_bridge`,
-            isOfficial: true,
-            icon: <PolygonBridgeIcon />,
-            link: 'https://wallet.polygon.technology/polygon/bridge/',
-        },
-        {
-            name: 'Rainbow Bridge',
-            ID: `${PLUGIN_ID}_rainbow_bridge`,
-            isOfficial: true,
-            icon: <RainbowBridgeIcon />,
-            link: 'https://rainbowbridge.app/transfer',
-        },
-    ]
-}
+const crossChainBridge = [
+    {
+        name: 'CBridge',
+        ID: `${PLUGIN_ID}_cBridge`,
+        intro: <Trans>Powered by Celer Network. Support $MASK!</Trans>,
+        icon: <CBridgeIcon />,
+        isOfficial: false,
+        link: 'https://cbridge.celer.network/#/transfer',
+    },
+    {
+        name: 'Arbitrum One Bridge',
+        ID: `${PLUGIN_ID}_arbitrum_one_bridge`,
+        isOfficial: true,
+        icon: <ArbitrumOneBridgeIcon />,
+        link: 'https://bridge.arbitrum.io/',
+    },
+    {
+        name: 'Orbiter Finance',
+        ID: `${PLUGIN_ID}_orbiter_finance`,
+        isOfficial: true,
+        icon: <OrbiterFinanceIcon />,
+        link: 'https://www.orbiter.finance/',
+    },
+    {
+        name: 'Polygon Bridge',
+        ID: `${PLUGIN_ID}_polygon_bridge`,
+        isOfficial: true,
+        icon: <PolygonBridgeIcon />,
+        link: 'https://wallet.polygon.technology/polygon/bridge/',
+    },
+    {
+        name: 'Rainbow Bridge',
+        ID: `${PLUGIN_ID}_rainbow_bridge`,
+        isOfficial: true,
+        icon: <RainbowBridgeIcon />,
+        link: 'https://rainbowbridge.app/transfer',
+    },
+]

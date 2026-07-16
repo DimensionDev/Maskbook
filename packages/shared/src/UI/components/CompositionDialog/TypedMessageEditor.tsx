@@ -88,38 +88,38 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
     const { classes, cx } = useStyles()
 
     const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
-    const currentValue = useRef(value)
+    const currentValueRef = useRef(value)
     const [inputRef, setInputRef] = useState<{ focus(): void } | null>(null)
     useEffect(() => {
         if (!props.autoFocus) return
         inputRef?.focus()
     }, [props.autoFocus, inputRef])
 
-    currentValue.current = value
+    currentValueRef.current = value
 
     const setMessage = useCallback((value: SerializableTypedMessages) => {
-        if (isTypedMessageEqual(currentValue.current, value)) return
+        if (isTypedMessageEqual(currentValueRef.current, value)) return
         setValue(value)
-        currentValue.current = value
+        currentValueRef.current = value
         onChange.current?.(value)
     }, [])
     const setAsText = useCallback((val: string | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const text = typeof val === 'string' ? val : val.target.value
-        const newValue = makeTypedMessageText(text, currentValue.current.meta)
+        const newValue = makeTypedMessageText(text, currentValueRef.current.meta)
         setMessage(newValue)
     }, [])
     const deleteMetaID = useCallback((meta: string) => {
-        setMessage(editTypedMessageMeta(currentValue.current, (map) => map.delete(meta)))
+        setMessage(editTypedMessageMeta(currentValueRef.current, (map) => map.delete(meta)))
     }, [])
     const refItem = useMemo((): TypedMessageEditorRef => {
         return {
             get estimatedLength() {
                 // TODO: we should count metadata into the estimated size
-                if (isTypedMessageText(currentValue.current)) return currentValue.current.content.length
+                if (isTypedMessageText(currentValueRef.current)) return currentValueRef.current.content.length
                 return 0
             },
             get value() {
-                return currentValue.current
+                return currentValueRef.current
             },
             set value(val) {
                 setMessage(val)
@@ -127,7 +127,7 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
             focus: () => inputRef?.focus(),
             reset: () => setMessage(emptyMessage),
             attachMetadata(meta, data) {
-                setMessage(editTypedMessageMeta(currentValue.current, (map) => map.set(meta, data)))
+                setMessage(editTypedMessageMeta(currentValueRef.current, (map) => map.set(meta, data)))
             },
             dropMetadata: deleteMetaID,
         }

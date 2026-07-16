@@ -27,11 +27,9 @@ interface BoundaryProps<T> {
 export const Boundary = memo(function <T>({ children }: BoundaryProps<T>) {
     const boundaryRef = useRef<HTMLElement>(null)
     const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
-    return (
-        <BoundaryContext value={contextValue}>
-            {cloneElement(children, { ...children.props, ref: boundaryRef })}
-        </BoundaryContext>
-    )
+    // eslint-disable-next-line @eslint-react/no-clone-element
+    const child = cloneElement(children, { ...children.props, ref: boundaryRef })
+    return <BoundaryContext value={contextValue}>{child}</BoundaryContext>
 })
 
 Boundary.displayName = 'Boundary'

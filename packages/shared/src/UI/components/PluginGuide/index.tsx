@@ -144,9 +144,11 @@ export function PluginGuide({
         return () => o.disconnect()
     }, [childrenRef, finished])
 
+    // eslint-disable-next-line @eslint-react/no-clone-element
+    const child = cloneElement(children, { ref: (ref: any) => setChildrenRef(ref) })
     return (
         <>
-            {cloneElement(children, { ref: (ref: any) => setChildrenRef(ref) })}
+            {child}
             {usePortalShadowRoot((container) => {
                 if (!stepVisible) return null
                 return (

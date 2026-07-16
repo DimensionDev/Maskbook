@@ -4,7 +4,8 @@ import {
     type Plugin,
     PostInfoContext,
     usePluginWrapper,
-    usePostInfoDetails,
+    usePostInfoMentionedLinks,
+    usePostInfoRawMessage,
 } from '@masknet/plugin-infra/content-script'
 import { resolveTCOLink } from '@masknet/plugin-infra/dom/context'
 import { EMPTY_LIST, parseURLs } from '@masknet/shared-base'
@@ -185,8 +186,8 @@ const site: Plugin.SiteAdaptor.Definition = {
         return <Renderer profileLink={profileLink} />
     },
     PostInspector(): JSX.Element | null {
-        const message = usePostInfoDetails.rawMessage()
-        const mentionedLinks = usePostInfoDetails.mentionedLinks()
+        const message = usePostInfoRawMessage()
+        const mentionedLinks = usePostInfoMentionedLinks()
         const profileLink = useMemo(() => {
             // mentionedLinks carries the links Maskbook resolves from t.co redirects. That is how
             // an EFP URL surfaces when X truncates a long address URL with an ellipsis.

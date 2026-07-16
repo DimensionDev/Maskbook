@@ -15,7 +15,6 @@ import { Trans } from '@lingui/react/macro'
 interface PluginWrapperProps extends React.PropsWithChildren {
     open?: boolean
     title: JSX.Element | string
-    width?: number
     content?: ReactNode
     action?: ReactNode
     publisher?: JSX.Element
@@ -156,19 +155,17 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         </div>
     )
 
-    return <Suspense children={inner} />
+    return <Suspense>{inner}</Suspense>
 }
 
 export function MaskPostExtraPluginWrapper(props: PluginWrapperComponentProps<Plugin.SiteAdaptor.Definition>) {
     const { ID, name, publisher, wrapperProps } = props.definition
     const t = usePluginTransField()
-    const [width, setWidth] = useState<undefined | number>(undefined)
     const [open, setOpen] = useState<boolean>(false)
     const [title, setTitle] = useState<string | undefined>(undefined)
 
     const refItem = useMemo((): PluginWrapperMethods => {
         return {
-            setWidth,
             setWrap: setOpen,
             setWrapperName: setTitle,
         }
@@ -181,10 +178,9 @@ export function MaskPostExtraPluginWrapper(props: PluginWrapperComponentProps<Pl
             wrapperProps={wrapperProps}
             open={open}
             title={title || t(name)}
-            width={width}
             publisher={publisher ? <PluginTransFieldRender pluginID={ID} field={publisher.name} /> : undefined}
-            publisherLink={publisher?.link}
-            children={props.children}
-        />
+            publisherLink={publisher?.link}>
+            {props.children}
+        </MaskPostExtraInfoWrapper>
     )
 }

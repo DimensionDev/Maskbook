@@ -14,9 +14,11 @@ export const TextOverflowTooltip = memo(function <T>({ children, as, ...rest }: 
     const [overflow, ref] = useDetectOverflow()
 
     const Tooltip = as ?? MuiTooltip
+    // eslint-disable-next-line @eslint-react/no-clone-element
+    const child = cloneElement(children, { ...children.props, ref })
     return (
         <Tooltip {...rest} title={overflow ? rest.title : ''}>
-            {cloneElement(children, { ...children.props, ref })}
+            {child}
         </Tooltip>
     )
 })

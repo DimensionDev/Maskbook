@@ -86,17 +86,17 @@ export function useCreateFTRedpacketCallback(
             creation_time: Number(CreationSuccess.creation_time * 1000n),
             token: settings.token,
         } as const
-        Object.assign(payload.current, redpacketPayload)
+        Object.assign(payloadRef.current, redpacketPayload)
 
         queryClient.invalidateQueries({
             queryKey: ['redpacket', 'history'],
         })
 
         // output the redpacket as JSON payload
-        onCreated?.(payload.current)
+        onCreated?.(payloadRef.current)
     }, [account, createCallback, settings, onCreated])
 
-    const payload = useRef<RedPacketJSONPayload>({
+    const payloadRef = useRef<RedPacketJSONPayload>({
         network: EVMChainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
 
@@ -107,9 +107,9 @@ export function useCreateFTRedpacketCallback(
             return
         }
         const contractVersion = RED_PACKET_LATEST_VERSION
-        payload.current.contract_address = contractAddress
-        payload.current.contract_version = contractVersion
-        payload.current.network = EVMChainResolver.networkType(chainId)
+        payloadRef.current.contract_address = contractAddress
+        payloadRef.current.contract_version = contractVersion
+        payloadRef.current.network = EVMChainResolver.networkType(chainId)
     }, [chainId, networkType])
 
     return {

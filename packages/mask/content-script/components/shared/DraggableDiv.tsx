@@ -38,9 +38,9 @@ export function DraggableDiv({
                 bounds="parent"
                 cancel="p, h1, input, button, address"
                 handle="nav"
-                {...DraggableProps}
-                children={<div {...props} ref={ref} className={classes.paper} />}
-            />
+                {...DraggableProps}>
+                <div {...props} ref={ref} className={classes.paper} />
+            </Draggable>
         </div>
     )
 }

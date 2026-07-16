@@ -19,10 +19,7 @@ import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 
-export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID>
-    extends withClasses<'label' | 'root'> {
-    pluginID?: T
-    chainId?: Web3Helper.ChainIdAll
+export interface SelectGasSettingsToolbarPropsUI extends withClasses<'label' | 'root'> {
     nativeToken: Web3Helper.FungibleTokenAll
     nativeTokenPrice: number
     gasLimit: number | bigint | null | undefined
@@ -35,6 +32,12 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     /** Will open internal setting dialog instead if not provided */
     onOpenCustomSetting?(): void
     MenuProps?: Partial<MenuProps>
+}
+
+export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID>
+    extends SelectGasSettingsToolbarPropsUI {
+    pluginID?: T
+    chainId?: Web3Helper.ChainIdAll
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -132,7 +135,7 @@ export function SelectGasSettingsToolbarUI({
     onChange,
     onOpenCustomSetting,
     MenuProps,
-}: SelectGasSettingsToolbarProps) {
+}: SelectGasSettingsToolbarPropsUI) {
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
 

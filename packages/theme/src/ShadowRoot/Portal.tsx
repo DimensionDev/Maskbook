@@ -34,10 +34,10 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
     if (disabled) return renderer(undefined)
 
     const sheet = useContext(StyleSheetsContext)
-    const signal = useRef<AbortController | null>(null)
+    const signalRef = useRef<AbortController | null>(null)
     const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
     const container = useRefInit(() => {
-        signal.current = new AbortController()
+        signalRef.current = new AbortController()
         const portal = ref.portalContainer
 
         const root = document.createElement('div')
@@ -45,7 +45,7 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
         const shadow = root.attachShadow(Flags.shadowRootInit)
 
         for (const each of preventEventPropagationList) {
-            shadow.addEventListener(each, stopPropagation, { signal: signal.current.signal })
+            shadow.addEventListener(each, stopPropagation, { signal: signalRef.current.signal })
         }
 
         const container = document.createElement('main')

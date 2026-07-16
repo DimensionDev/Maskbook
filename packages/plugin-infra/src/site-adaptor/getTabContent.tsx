@@ -1,48 +1,43 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { SearchResult } from '@masknet/web3-shared-base'
 import { createInjectHooksRenderer } from '../dom/createInjectHooksRenderer.js'
 import { useActivatedPluginsSiteAdaptor } from '../manager/site-adaptor.js'
+import type { Plugin } from '../types.js'
 
-export function getProfileTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x) => {
-        const tab = x.ProfileTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
+export const ProfileTabContent = createInjectHooksRenderer<
+    Plugin.SiteAdaptor.Definition,
+    Plugin.SiteAdaptor.ProfileTabContentProps
+>(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x, props) => {
+    const tab = x.ProfileTabs?.find((x) => x.ID === props.tabId)
+    return tab?.UI?.TabContent
+})
 
-export function getProfileCardTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x) => {
-        const tab = x.ProfileCardTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
+export const ProfileCardTabContent = createInjectHooksRenderer<
+    Plugin.SiteAdaptor.Definition,
+    Plugin.SiteAdaptor.ProfileTabContentProps
+>(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x, props) => {
+    const tab = x.ProfileCardTabs?.find((x) => x.ID === props.tabId)
+    return tab?.UI?.TabContent
+})
 
-export function getSettingsTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x) => {
-        const tab = x.SettingTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
+export const SearchResultContent = createInjectHooksRenderer<
+    Plugin.SiteAdaptor.Definition,
+    Plugin.SiteAdaptor.SearchResultInspectorContentProps
+>(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x, props) => {
+    const shouldDisplay = x.SearchResultInspector?.Utils?.shouldDisplay?.(props.currentResult) ?? true
+    return shouldDisplay ? x.SearchResultInspector?.UI?.Content : undefined
+})
 
-export function getSearchResultContent(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) {
-    return createInjectHooksRenderer(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x) => {
-        const shouldDisplay = x.SearchResultInspector?.Utils?.shouldDisplay?.(result) ?? true
-        return shouldDisplay ? x.SearchResultInspector?.UI?.Content : undefined
-    })
-}
+export const SearchResultContentForProfileTab = createInjectHooksRenderer<
+    Plugin.SiteAdaptor.Definition,
+    Plugin.SiteAdaptor.SearchResultInspectorContentProps
+>(useActivatedPluginsSiteAdaptor.visibility.useAnyMode, (x, props) => {
+    const shouldDisplay = x.SearchResultInspector?.Utils?.shouldDisplay?.(props.currentResult) ?? true
+    return shouldDisplay ? x.SearchResultInspector?.UI?.Content : undefined
+})
 
-export function getSearchResultContentForProfileTab(
-    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-) {
-    return createInjectHooksRenderer(useActivatedPluginsSiteAdaptor.visibility.useAnyMode, (x) => {
-        const shouldDisplay = x.SearchResultInspector?.Utils?.shouldDisplay?.(result) ?? true
-        return shouldDisplay ? x.SearchResultInspector?.UI?.Content : undefined
-    })
-}
-
-export function getSearchResultTabContent(tabId?: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x) => {
-        const tab = x.SearchResultTabs?.find((x) => x.ID === tabId)
-        return tab?.UI?.TabContent
-    })
-}
+export const SearchResultTabContent = createInjectHooksRenderer<
+    Plugin.SiteAdaptor.Definition,
+    Plugin.SiteAdaptor.SearchResultTabContentProps
+>(useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode, (x, props) => {
+    const tab = x.SearchResultTabs?.find((x) => x.ID === props.tabId)
+    return tab?.UI?.TabContent
+})

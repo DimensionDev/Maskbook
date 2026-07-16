@@ -13,7 +13,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
+import { getSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -74,7 +74,7 @@ type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 
 export function TickersTable({ tickers }: TickersTableProps) {
     const theme = useTheme()
-    const themeMode = useSiteThemeMode(theme)
+    const themeMode = getSiteThemeMode(theme)
     const { isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles({ themeMode, isPopper: isTokenTagPopper })
 

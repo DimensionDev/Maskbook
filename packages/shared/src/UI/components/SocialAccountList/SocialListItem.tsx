@@ -16,7 +16,7 @@ import { useMyLensAccount } from '../../../hooks/index.js'
 import { CopyButton } from '../CopyButton/index.js'
 import { Image } from '../Image/index.js'
 import { SocialTooltip } from './SocialTooltip.js'
-import { resolveNextIDPlatformIcon } from './utils.js'
+import { NextIDPlatformIcon } from './utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -178,8 +178,7 @@ export function SocialAccountListItem({
         },
     })
 
-    const PlatformIcon = resolveNextIDPlatformIcon(platform)
-    const renderIcon = PlatformIcon ? <PlatformIcon size={20} /> : null
+    const renderIcon = <NextIDPlatformIcon platform={platform} size={20} />
 
     const icon =
         profileUrl ?

@@ -40,7 +40,6 @@ export function MaskPostExtraPluginWrapperWithPermission({
 
     const refItem = useMemo((): PluginWrapperMethods => {
         return {
-            setWidth: (width) => wrapperMethodsRef.current?.setWidth(width),
             setWrap: (open) => {
                 setOpen(open)
                 wrapperMethodsRef.current?.setWrap(open)

@@ -138,7 +138,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
 
     const [isSelectRecipientOpen, setSelectRecipientOpen] = useState(false)
     const [Editor, setEditor] = useState<TypedMessageEditorRef | null>(null)
-    const PluginEntry = useRef<PluginEntryRenderRef>(null)
+    const PluginEntryRef = useRef<PluginEntryRenderRef>(null)
 
     const [sending, setSending] = useState(false)
 
@@ -168,7 +168,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
             },
             setEncryptionKind,
             startPlugin: (id, props) => {
-                PluginEntry.current?.openPlugin(id, props)
+                PluginEntryRef.current?.openPlugin(id, props)
             },
             reset,
         }),
@@ -240,7 +240,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                     </Typography>
                     <PluginEntryRender
                         readonly={sending}
-                        ref={PluginEntry}
+                        ref={PluginEntryRef}
                         isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
                     />
                 </div>

@@ -47,7 +47,7 @@ export function createPluginHost<Definition, Context>(
         signal,
         disabled,
         minimalMode,
-        createContext,
+        createPluginContext: createContext,
         permission,
     }
 }

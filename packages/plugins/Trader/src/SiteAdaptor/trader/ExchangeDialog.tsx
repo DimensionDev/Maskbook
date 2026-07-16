@@ -45,13 +45,12 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
-export interface ExchangeDialogProps {
+
+export interface DialogProps {
     onClose: () => void
-    toAddress?: string
-    toChainId?: number
 }
 
-export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
+export const Dialog = memo<DialogProps>(function Dialog({ onClose }) {
     const { classes } = useStyles()
 
     const { pathname } = useLocation()
@@ -127,6 +126,12 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
         </RouterDialog>
     )
 })
+
+export interface ExchangeDialogProps {
+    onClose: () => void
+    toAddress?: string
+    toChainId?: number
+}
 
 export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(props) {
     const initialEntries = useMemo(() => {

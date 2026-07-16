@@ -1,7 +1,9 @@
 import {
     createInjectHooksRenderer,
     useActivatedPluginsSiteAdaptor,
-    usePostInfoDetails,
+    usePostInfoAuthor,
+    usePostInfoHasMaskPayload,
+    usePostInfoPostMetadataImages,
 } from '@masknet/plugin-infra/content-script'
 import { PersistentStorages } from '@masknet/shared-base'
 import { useState, type JSX } from 'react'
@@ -27,9 +29,9 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postBy = usePostInfoDetails.author()
-    const hasEncryptedPost = usePostInfoDetails.hasMaskPayload()
-    const postImages = usePostInfoDetails.postMetadataImages()
+    const postBy = usePostInfoAuthor()
+    const hasEncryptedPost = usePostInfoHasMaskPayload()
+    const postImages = usePostInfoPostMetadataImages()
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     const whoAmI = useCurrentIdentity()
 

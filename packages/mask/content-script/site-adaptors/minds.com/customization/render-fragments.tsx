@@ -6,7 +6,11 @@ import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Compone
 export const MindsRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
         const target = '/' + props.children.slice(1)
-        return <Link fontSize="inherit" href={target} children={props.children} />
+        return (
+            <Link fontSize="inherit" href={target}>
+                {props.children}
+            </Link>
+        )
     }),
     HashLink: memo(function (props) {
         const text = props.children.slice(1)
@@ -17,11 +21,11 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
                 {...events}
                 fontSize="inherit"
                 href={target}
-                children={props.children}
                 onClick={(e) => {
                     e.stopPropagation()
-                }}
-            />
+                }}>
+                {props.children}
+            </Link>
         )
     }),
     CashLink: memo(function (props) {
@@ -33,11 +37,11 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
                 {...events}
                 fontSize="inherit"
                 href={target}
-                children={props.children}
                 onClick={(e) => {
                     e.stopPropagation()
-                }}
-            />
+                }}>
+                {props.children}
+            </Link>
         )
     }),
     Image: () => null,

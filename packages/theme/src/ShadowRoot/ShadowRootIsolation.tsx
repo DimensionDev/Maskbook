@@ -22,10 +22,11 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
     if (disabled) return <span {...props}>{children}</span>
 
     const [dom, setDOM] = useState<RootElement | null>()
-    const container = useRef<RootElement>(undefined)
+    const containerRef = useRef<RootElement>(undefined)
 
-    if (!container.current) {
-        container.current = typeof rootElement === 'function' ? rootElement() : document.createElement(rootElement)
+    if (!containerRef.current) {
+        // eslint-disable-next-line @eslint-react/purity
+        containerRef.current = typeof rootElement === 'function' ? rootElement() : document.createElement(rootElement)
     }
     useLayoutEffect(() => {
         if (!dom) return
@@ -33,7 +34,7 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
 
         // Note: ShadowRootIsolation is expected to use inside other closed ShadowRoot
         const shadow = dom.attachShadow({ ...Flags.shadowRootInit, mode: 'open', delegatesFocus: false })
-        shadow.append(container.current!)
+        shadow.append(containerRef.current!)
     }, [dom])
 
     if (!dom?.shadowRoot) return <span {...props} ref={(x) => (x === dom ? undefined : setDOM(x))} />
@@ -41,7 +42,7 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
     return (
         <span {...props}>
             <ShadowRootStyleProvider preventPropagation={false} shadow={dom.shadowRoot}>
-                {createPortal(children, container.current)}
+                {createPortal(children, containerRef.current)}
             </ShadowRootStyleProvider>
         </span>
     )

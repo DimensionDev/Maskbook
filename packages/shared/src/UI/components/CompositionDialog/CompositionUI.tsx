@@ -76,8 +76,8 @@ export function CompositionDialogUI(props: CompositionProps) {
     const [initialMeta, setInitialMeta] = useState<{ [property: string]: unknown }>(EMPTY_OBJECT)
     const [currentPostSize, __updatePostSize] = useState(0)
 
-    const Editor = useRef<TypedMessageEditorRef | null>(null)
-    const PluginEntry = useRef<PluginEntryRenderRef>(null)
+    const EditorRef = useRef<TypedMessageEditorRef | null>(null)
+    const PluginEntryRef = useRef<PluginEntryRenderRef>(null)
 
     const [sending, setSending] = useState(false)
 
@@ -87,7 +87,7 @@ export function CompositionDialogUI(props: CompositionProps) {
 
     const reset = useCallback(() => {
         startTransition(() => {
-            Editor.current?.reset()
+            EditorRef.current?.reset()
             setSending(false)
         })
         setInitialMeta(EMPTY_OBJECT)
@@ -100,27 +100,27 @@ export function CompositionDialogUI(props: CompositionProps) {
     }, [])
 
     useEffect(() => {
-        if (!initialMeta || !Editor.current) return
+        if (!initialMeta || !EditorRef.current) return
         for (const [meta, data] of Object.entries(initialMeta)) {
-            Editor.current.attachMetadata(meta, data)
+            EditorRef.current.attachMetadata(meta, data)
         }
-    }, [initialMeta, Editor.current])
+    }, [initialMeta, EditorRef.current])
 
     const context = useMemo(
         (): CompositionContext => ({
             type: 'popup',
-            getMetadata: () => Editor.current?.value.meta,
-            attachMetadata: (meta, data) => Editor.current?.attachMetadata(meta, data),
-            dropMetadata: (meta) => Editor.current?.dropMetadata(meta),
+            getMetadata: () => EditorRef.current?.value.meta,
+            attachMetadata: (meta, data) => EditorRef.current?.attachMetadata(meta, data),
+            dropMetadata: (meta) => EditorRef.current?.dropMetadata(meta),
         }),
         [],
     )
 
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Infinity)
     const onSubmit = useCallback(() => {
-        if (!Editor.current) return
+        if (!EditorRef.current) return
         setSending(true)
-        props.onSubmit(Editor.current.value).finally(reset)
+        props.onSubmit(EditorRef.current.value).finally(reset)
     }, [props.onSubmit])
     return (
         <CompositionContext value={context}>
@@ -130,12 +130,12 @@ export function CompositionDialogUI(props: CompositionProps) {
                         autoFocus
                         readonly={sending}
                         ref={(element) => {
-                            Editor.current = element
+                            EditorRef.current = element
                             if (element) updatePostSize(element.estimatedLength)
                         }}
                         onChange={(message) => {
                             startTransition(() => props.onChange?.(message))
-                            updatePostSize(Editor.current?.estimatedLength || 0)
+                            updatePostSize(EditorRef.current?.estimatedLength || 0)
                         }}
                     />
                 </div>
@@ -144,7 +144,7 @@ export function CompositionDialogUI(props: CompositionProps) {
                     <Typography className={classes.optionTitle}>
                         <Trans>Plugins</Trans>
                     </Typography>
-                    <PluginEntryRender readonly={sending} ref={PluginEntry} isOpenFromApplicationBoard={false} />
+                    <PluginEntryRender readonly={sending} ref={PluginEntryRef} isOpenFromApplicationBoard={false} />
                 </div>
             </div>
             <DialogActions className={classes.action}>

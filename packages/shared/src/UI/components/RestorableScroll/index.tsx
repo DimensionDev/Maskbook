@@ -30,5 +30,6 @@ export const RestorableScroll = memo(function RestorableScroll<T>({ scrollKey, t
         }
     }, [scrollKey])
 
+    // eslint-disable-next-line @eslint-react/no-clone-element
     return cloneElement(children, { ...children.props, ref: targetRef ? undefined : containerRef })
 })

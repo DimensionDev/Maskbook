@@ -15,11 +15,13 @@ export function Widget<Name extends keyof Plugin.SiteAdaptor.WidgetRegistry>(
 ) {
     const { name, pluginID, fallback, ...rest } = props
     const plugins = useActivatedPluginsSiteAdaptor(false)
+    // eslint-disable-next-line @eslint-react/static-components
     const WidgetComponent: any = useMemo(() => {
         if (pluginID) return plugins.find((x) => x.ID === pluginID)?.Widgets?.find((y) => y.name === name)?.UI?.Widget
         return null
     }, [plugins])
 
     if (!WidgetComponent) return <>{fallback}</>
+    // eslint-disable-next-line @eslint-react/static-components
     return <WidgetComponent {...rest} />
 }

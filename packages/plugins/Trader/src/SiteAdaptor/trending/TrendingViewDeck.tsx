@@ -180,7 +180,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const [walletMenuOpen, setWalletMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
     const { isTokenTagPopper, isPreciseSearch, isProfilePage } = useContext(TrendingViewContext)
-    const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+    const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
     const theme = useTheme()
     const { classes } = useStyles({ isTokenTagPopper }, { props })
 
@@ -237,16 +237,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [])
 
     useEffect(() => {
-        if (timer.current) clearTimeout(timer.current)
+        if (timerRef.current) clearTimeout(timerRef.current)
 
         if (isTokenTagPopper) {
-            timer.current = setTimeout(() => {
+            timerRef.current = setTimeout(() => {
                 Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverTokenDuration)
             }, 1000)
         }
         return () => {
-            if (timer) clearTimeout(timer.current)
-            timer.current = undefined
+            if (timerRef) clearTimeout(timerRef.current)
+            timerRef.current = undefined
         }
     }, [isTokenTagPopper, isProfilePage])
 

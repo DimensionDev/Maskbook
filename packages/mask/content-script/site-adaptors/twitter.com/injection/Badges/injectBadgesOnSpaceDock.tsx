@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
@@ -68,30 +68,26 @@ function createRootElement() {
     return span
 }
 
+const Component = createInjectHooksRenderer(
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.Badges?.UI?.Content,
+    undefined,
+    createRootElement,
+)
 function SpaceDockBadgesSlot({ userId }: Props) {
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
-    const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(
-            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.Badges?.UI?.Content,
-            undefined,
-            createRootElement,
-        )
-        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
-        if (!identifier) return null
+    const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
+    if (!identifier) return null
 
-        return (
+    return (
+        <span className={cx(classes.slot, disabled ? classes.hide : null)}>
             <Component
                 identity={identifier}
                 slot={Plugin.SiteAdaptor.BadgesSlot.Sidebar}
                 onStatusUpdate={setDisabled}
             />
-        )
-    }, [userId])
-
-    if (!component) return null
-
-    return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
+        </span>
+    )
 }

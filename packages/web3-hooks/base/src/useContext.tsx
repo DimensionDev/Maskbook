@@ -18,6 +18,7 @@ interface NetworkContext<T extends NetworkPluginID = NetworkPluginID> {
 interface ChainContextGetter<T extends NetworkPluginID = NetworkPluginID> {
     account?: string
     chainId?: Web3Helper.Definition[T]['ChainId']
+    // eslint-disable-next-line @eslint-react/no-unused-props
     networkType?: Web3Helper.Definition[T]['NetworkType']
     providerType?: Web3Helper.Definition[T]['ProviderType']
     // If it's controlled, we prefer passed value over state inside
@@ -141,7 +142,7 @@ export function RevokeChainContextProvider({ children }: PropsWithChildren) {
         }),
         [account, chainId, providerType],
     )
-    return <ChainContext.Provider value={value} children={children} />
+    return <ChainContext.Provider value={value}>{children}</ChainContext.Provider>
 }
 
 /**

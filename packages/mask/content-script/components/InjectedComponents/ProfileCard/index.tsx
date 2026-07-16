@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import {
     useActivatedPluginsSiteAdaptor,
     usePluginTransField,
-    getProfileCardTabContent,
+    ProfileCardTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { addressSorter, useSocialAccountsBySettings } from '@masknet/shared'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
@@ -165,16 +165,13 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
     }, [activatedPlugins, translate])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? '', ...tabs.map((tab) => tab.id))
-
-    const component = useMemo(() => {
+    useEffect(() => {
         if (currentTab === `${PluginID.RSS3}_Social`)
             Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverUserSocialSwitchTo)
         if (currentTab === `${PluginID.RSS3}_Activities`)
             Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverUserActivitiesSwitchTo)
         if (currentTab === `${PluginID.RSS3}_Donation`)
             Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverUserDonationsSwitchTo)
-        const Component = getProfileCardTabContent(currentTab)
-        return <Component identity={identity} socialAccount={selectedSocialAccount} />
     }, [currentTab, identity?.publicKey, selectedSocialAccount])
 
     useLocationChange(() => {
@@ -223,7 +220,13 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                             </div>
                         :   null}
                     </div>
-                    <div className={classes.content}>{component}</div>
+                    <div className={classes.content}>
+                        <ProfileCardTabContent
+                            identity={identity}
+                            socialAccount={selectedSocialAccount}
+                            tabId={currentTab}
+                        />
+                    </div>
                     <div className={classes.footer}>
                         <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                         <Typography className={classes.cardName}>

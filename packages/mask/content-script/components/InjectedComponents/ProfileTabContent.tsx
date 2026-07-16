@@ -3,7 +3,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
-    getProfileTabContent,
+    ProfileTabContent as ProfileTabContentComp,
     useActivatedPluginsSiteAdaptor,
     usePluginTransField,
 } from '@masknet/plugin-infra/content-script'
@@ -199,13 +199,6 @@ function Content(props: ProfileTabContentProps) {
     const isOnTwitter = Sniffings.is_twitter_page
 
     const componentTabId = currentTab
-
-    const contentComponent = useMemo(() => {
-        const Component = getProfileTabContent(componentTabId)
-        if (!Component) return null
-
-        return <Component identity={currentSocialIdentity} socialAccount={selectedSocialAccount} />
-    }, [componentTabId, selectedSocialAccount, currentSocialIdentity])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 
@@ -493,8 +486,12 @@ function Content(props: ProfileTabContentProps) {
                 :   null}
             </div>
             <div className={classes.content}>
-                {tabs.length > 0 && contentComponent ?
-                    contentComponent
+                {tabs.length > 0 ?
+                    <ProfileTabContentComp
+                        identity={currentSocialIdentity}
+                        tabId={componentTabId}
+                        socialAccount={selectedSocialAccount}
+                    />
                 :   <EmptyStatus height={260}>
                         <Trans>There's no content associated with this address.</Trans>
                     </EmptyStatus>

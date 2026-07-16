@@ -4,7 +4,7 @@ import { useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
 import Services from '#services'
 import { PersonaNameUI } from './PersonaNameUI.js'
-import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
+import { createPersonaByPrivateKey, createPersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { delay } from '@masknet/kit'
 import { useAsync, useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
@@ -13,8 +13,7 @@ import { Trans } from '@lingui/react/macro'
 export function Component() {
     const navigate = useNavigate()
 
-    const createPersona = useCreatePersonaV2()
-    const createPersonaByPrivateKey = useCreatePersonaByPrivateKey()
+    const createPersona = createPersonaV2
     const { showSnackbar } = useCustomSnackbar()
 
     const state = useLocation().state as {

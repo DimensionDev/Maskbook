@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
@@ -32,27 +32,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const Component = createInjectHooksRenderer(
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.Badges?.UI?.Content,
+)
 function ProfileBadgesSlot() {
     const visitingIdentity = useCurrentVisitingIdentity()
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
-    const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(
-            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.Badges?.UI?.Content,
-        )
+    if (!visitingIdentity.identifier) return null
 
-        return (
+    return (
+        <span className={cx(classes.slot, disabled ? classes.hide : null)}>
             <Component
                 identity={visitingIdentity.identifier}
                 slot={Plugin.SiteAdaptor.BadgesSlot.ProfileName}
                 onStatusUpdate={setDisabled}
             />
-        )
-    }, [visitingIdentity.identifier])
-
-    if (!component || !visitingIdentity.identifier) return null
-
-    return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
+        </span>
+    )
 }

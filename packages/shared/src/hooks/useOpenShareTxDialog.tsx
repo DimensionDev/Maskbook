@@ -41,7 +41,7 @@ interface ShareTransactionOptions {
     onShare?: () => void
 }
 
-type ShareTransactionProps = Omit<ShareTransactionOptions, 'title' | 'onShare'>
+type ShareTransactionProps = Omit<ShareTransactionOptions, 'title' | 'onShare' | 'buttonLabel'>
 
 const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps) => {
     const { classes } = useStyles()

@@ -67,6 +67,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
     const { t } = useLingui()
     const { classes } = useStyles()
     const [amount, setAmount] = useState('0')
+    const [now, setNow] = useState(() => new Date())
 
     const token = protocol.stakeToken
 
@@ -162,14 +163,13 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
                                 <Trans>Waiting time</Trans>
                             </Typography>
                             <Typography className={classes.value}>
-                                <Trans>{add(differenceInDays(new Date(time), new Date()), 1).toString()} days</Trans>
+                                <Trans>{add(differenceInDays(new Date(time), now), 1).toString()} days</Trans>
                             </Typography>
                         </Box>
                         <Typography className={classes.tips}>
                             <Trans>
-                                To use Lido, you need to wait{' '}
-                                {add(differenceInDays(new Date(time), new Date()), 1).toString()} days. Using other swap
-                                aggregators is faster, but the exchange rate is lower than 1:1.
+                                To use Lido, you need to wait {add(differenceInDays(new Date(time), now), 1).toString()}{' '}
+                                days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1.
                             </Trans>
                         </Typography>
                     </>

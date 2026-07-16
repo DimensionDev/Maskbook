@@ -1,10 +1,9 @@
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostInfoSource } from '@masknet/plugin-infra/content-script'
 import { Sniffings } from '@masknet/shared-base'
 import { FireflyRedPacketAPI as F } from '@masknet/web3-providers/types'
 
 export function usePlatformType() {
-    // eslint-disable-next-line unicorn/no-declarations-before-early-exit -- this is a hook
-    const source = usePostInfoDetails.source?.()
+    const source = usePostInfoSource()
     if (Sniffings.is_twitter_page) return F.PlatformType.twitter
     if (!source) return
     return source === 'Lens' ? F.PlatformType.lens : F.PlatformType.farcaster

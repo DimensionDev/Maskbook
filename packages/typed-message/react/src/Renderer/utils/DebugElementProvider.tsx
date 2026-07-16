@@ -1,11 +1,10 @@
 import { createContext } from 'react'
-export const DebugElementProvider = createContext<boolean>(
-    (() => {
-        try {
-            return process.env.NODE_ENV === 'development'
-        } catch {
-            return false
-        }
-    })(),
-)
-DebugElementProvider.displayName = 'DebugElementProvider'
+
+let dev
+try {
+    dev = process.env.NODE_ENV === 'development'
+} catch {
+    dev = false
+}
+export const DebugElementProviderContext = createContext<boolean>(dev)
+DebugElementProviderContext.displayName = 'DebugElementProvider'

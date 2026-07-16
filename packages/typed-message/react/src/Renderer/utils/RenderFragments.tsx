@@ -72,7 +72,9 @@ export declare namespace RenderFragmentsContextType {
         style?: React.CSSProperties
         width?: number
         height?: number
+        // eslint-disable-next-line @eslint-react/no-unused-props
         aspectRatio?: number
+        // eslint-disable-next-line @eslint-react/no-unused-props
         meta?: Meta
     }
 }

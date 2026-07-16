@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { range } from 'lodash-es'
-import { Children, useState, useRef, type CSSProperties, type HTMLProps, useEffect, useLayoutEffect } from 'react'
+import { useState, useRef, type CSSProperties, type HTMLProps, useEffect, useLayoutEffect } from 'react'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {},
@@ -39,9 +39,10 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
 interface Props extends HTMLProps<HTMLDivElement> {
     onUpdate?(index: number): void
     count: number
+    items: React.ReactNode[]
 }
 
-export function Slider({ children, className, onUpdate, count, ...rest }: Props) {
+export function Slider({ className, onUpdate, count, items, ...rest }: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const { classes, cx } = useStyles()
     const [index, setIndex] = useState(0)
@@ -68,7 +69,7 @@ export function Slider({ children, className, onUpdate, count, ...rest }: Props)
         <div className={cx(classes.container, className)} ref={containerRef} {...rest}>
             <div className={classes.slider}>
                 <div className={classes.sliderWrapper} style={style}>
-                    {Children.map(children, (child, index) => (
+                    {items.map((child, index) => (
                         <div key={index} className={classes.slide} style={{ width }}>
                             {child}
                         </div>

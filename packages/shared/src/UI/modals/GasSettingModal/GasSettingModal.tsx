@@ -18,8 +18,12 @@ interface GasSettingProps {
     gasOption?: GasOptionType
     gasLimit?: number
     minGasLimit?: number
+    // TODO: EIP1559
+    // eslint-disable-next-line @eslint-react/no-unused-props
     gasPrice?: BigNumber.Value
+    // eslint-disable-next-line @eslint-react/no-unused-props
     maxFee?: BigNumber.Value
+    // eslint-disable-next-line @eslint-react/no-unused-props
     priorityFee?: BigNumber.Value
     setGasLimit: (minGasLimit: number) => void
     setGasOptionType: (gasOptionType: GasOptionType) => void

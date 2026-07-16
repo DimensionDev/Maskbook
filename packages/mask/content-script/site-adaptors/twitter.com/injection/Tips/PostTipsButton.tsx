@@ -3,7 +3,7 @@ import { Flags } from '@masknet/flags'
 import { Plugin, createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { noop } from 'lodash-es'
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../../utils/startWatch.js'
@@ -78,6 +78,10 @@ interface Props {
     userId: string
 }
 
+const Component = createInjectHooksRenderer(
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.TipsRealm?.UI?.Content,
+)
 const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
     const themeSetting = useThemeSettings()
     const tipStyle = TipButtonStyle[themeSetting.size]
@@ -86,12 +90,10 @@ const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
 
     const [disabled, setDisabled] = useState(true)
 
-    const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(
-            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.TipsRealm?.UI?.Content,
-        )
-        return (
+    if (!identity?.identifier) return null
+
+    return (
+        <span className={disabled ? classes.disabled : undefined}>
             <Component
                 identity={identity?.identifier}
                 buttonSize={tipStyle.buttonSize}
@@ -99,10 +101,6 @@ const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
                 slot={Plugin.SiteAdaptor.TipsSlot.Post}
                 onStatusUpdate={setDisabled}
             />
-        )
-    }, [identity?.identifier, tipStyle.buttonSize, tipStyle.iconSize])
-
-    if (!identity?.identifier) return null
-
-    return <span className={disabled ? classes.disabled : undefined}>{component}</span>
+        </span>
+    )
 })

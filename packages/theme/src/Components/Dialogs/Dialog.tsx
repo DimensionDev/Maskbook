@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/static-components */
 import { Dialog, DialogActions, DialogContent, type DialogProps } from '@mui/material'
 import { memo, type ReactNode, useCallback, useState } from 'react'
 import { usePortalShadowRoot } from '../../ShadowRoot/index.js'
@@ -47,10 +48,13 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
                     // replace onClose with onBack when and only when there is no onBack
                     <MaskDialogTitle
                         onBack={onBack || closeBothCompositionDialog}
-                        onClose={onBack ? closeBothCompositionDialog : undefined}
-                        children={title}
-                    />
-                :   <MaskDialogTitle onBack={onBack} onClose={closeBothCompositionDialog} children={title} />}
+                        onClose={onBack ? closeBothCompositionDialog : undefined}>
+                        {title}
+                    </MaskDialogTitle>
+                :   <MaskDialogTitle onBack={onBack} onClose={closeBothCompositionDialog}>
+                        {title}
+                    </MaskDialogTitle>
+                }
                 {children}
             </Dialog>
         </TrackDialogHierarchy>

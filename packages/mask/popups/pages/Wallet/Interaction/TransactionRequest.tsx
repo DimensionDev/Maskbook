@@ -100,8 +100,11 @@ export function TransactionRequest(props: InteractionItemProps) {
                 const payload = createJsonRpcRequest(0, request.request.arguments)
                 const computedPayload = PayloadEditor.fromPayload(payload).config
                 const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
-                // eslint-disable-next-line @eslint-react/no-missing-context-display-name
-                const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
+
+                const transactionContext = await TransactionFormatter?.createTransactionContext(
+                    chainId,
+                    computedPayload,
+                )
 
                 return {
                     ...request.request.options,

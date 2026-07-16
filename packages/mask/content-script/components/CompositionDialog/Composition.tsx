@@ -81,7 +81,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         setOpen(false)
         setInitialMeta(EMPTY_OBJECT)
 
-        UI.current?.reset()
+        uiRef.current?.reset()
     }, [])
 
     const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =
@@ -99,9 +99,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setReason(reason)
             setIsOpenFromApplicationBoard(!!options?.isOpenFromApplicationBoard)
             setInitialMeta(options?.initialMeta ?? EMPTY_OBJECT)
-            if (content) UI.current?.setMessage(content)
-            if (options?.target) UI.current?.setEncryptionKind(options.target)
-            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin, options.startupPluginProps)
+            if (content) uiRef.current?.setMessage(content)
+            if (options?.target) uiRef.current?.setEncryptionKind(options.target)
+            if (options?.startupPlugin) uiRef.current?.startPlugin(options.startupPlugin, options.startupPluginProps)
         })
     }, [type])
 
@@ -112,15 +112,15 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
 
         return MaskMessages.events.replaceComposition.on((message) => {
-            if (!UI.current) return
-            UI.current.setMessage(message)
+            if (!uiRef.current) return
+            uiRef.current.setMessage(message)
         })
     }, [open])
 
     const hasRedpacket = Object.keys(initialMeta).some((x) => [RedPacketMetaKey, SolanaRedPacketMetaKey].includes(x))
     const onSubmit_ = useSubmit(onClose, reason, hasRedpacket)
 
-    const UI = useRef<CompositionRef>(null)
+    const uiRef = useRef<CompositionRef>(null)
     const networkSupport = activatedSiteAdaptorUI!.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const isE2E_Disabled = (encode: EncryptionMethodType) => {
@@ -141,7 +141,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI
                     type={type}
-                    ref={UI}
+                    ref={uiRef}
                     hasClipboardPermission={hasClipboardPermission}
                     onRequestClipboardPermission={onRequestClipboardPermission}
                     requireClipboardPermission={requireClipboardPermission}

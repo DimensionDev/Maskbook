@@ -36,10 +36,12 @@ const useStyles = makeStyles()((theme) => ({
 function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { onClose, data } = props
     const { classes } = useStyles()
+    // eslint-disable-next-line @eslint-react/purity
     const url = data.image ? URL.createObjectURL(data.image) : undefined
     const { showSnackbar } = useCustomSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
+    // eslint-disable-next-line @eslint-react/purity
     const fileName = `masknetwork-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
 
     return (
@@ -92,6 +94,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <Box textAlign="left">
                         {data.image ?
                             // It must be img
+                            // eslint-disable-next-line @eslint-react/purity
                             <Image src={URL.createObjectURL(data.image)} style={{ width: '100%' }} />
                         :   null}
                         <Box marginBottom={1} />

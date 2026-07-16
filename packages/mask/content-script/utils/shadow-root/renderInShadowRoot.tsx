@@ -49,6 +49,6 @@ export function attachReactTreeWithoutContainer(debugKey: string, jsx: React.Rea
     const shadow = dom.attachShadow({ mode: 'closed', delegatesFocus: true })
 
     attachReactTreeWithContainer(shadow, { signal, key: debugKey }).render(
-        <AttachReactTreeWithoutContainerRedirect children={jsx} debugKey={debugKey} />,
+        <AttachReactTreeWithoutContainerRedirect debugKey={debugKey}>{jsx}</AttachReactTreeWithoutContainerRedirect>,
     )
 }

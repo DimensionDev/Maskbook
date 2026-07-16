@@ -92,7 +92,6 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     chainId?: Web3Helper.Definition[T]['ChainId']
     /** Do not allow to select other chains */
     lockChainId?: boolean
-    keyword?: string
     title?: string
     tokens?: Array<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
     /** ChainIds of allowed chains */

@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/static-components */
 import { memo, useContext, useState } from 'react'
 import { unstable_STYLE_META, type TypedMessageImage } from '@masknet/typed-message'
 import { useMetadataRender } from '../MetadataRender.js'
@@ -11,9 +12,11 @@ export const TypedMessageImageRender = memo(function TypedMessageImageRender(pro
     {
         const [oldImage, setOldImage] = useState(image)
         if (oldImage !== image) {
+            // eslint-disable-next-line @eslint-react/purity
             if (blobSrc) URL.revokeObjectURL(blobSrc)
             setOldImage(image)
             if (typeof image !== 'string') {
+                // eslint-disable-next-line @eslint-react/purity
                 const src = URL.createObjectURL(image)
                 setBlobSrc(src)
             }

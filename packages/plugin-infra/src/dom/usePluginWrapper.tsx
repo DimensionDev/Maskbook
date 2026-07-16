@@ -20,7 +20,6 @@ PluginWrapperMethodsContext.displayName = 'PluginWrapperMethodsContext'
 export interface PluginWrapperMethods {
     setWrap(open: boolean): void
     setWrapperName(name: string | undefined): void
-    setWidth(width: number | undefined): void
 }
 
 export function usePluginWrapper(
@@ -30,13 +29,12 @@ export function usePluginWrapper(
         name?: string
     },
 ) {
-    const { setWidth, setWrap, setWrapperName } = useContext(PluginWrapperMethodsContext)
+    const { setWrap, setWrapperName } = useContext(PluginWrapperMethodsContext)
     const { width, name } = options || {}
 
     useEffect(() => {
         setWrap(open)
         return () => setWrap(open)
     }, [open, setWrap])
-    useEffect(() => setWidth(width), [width, setWidth])
     useEffect(() => setWrapperName(name), [name, setWrapperName])
 }

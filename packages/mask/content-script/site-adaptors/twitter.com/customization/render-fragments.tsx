@@ -10,7 +10,11 @@ export const IMAGE_RENDER_IGNORE = 'IMAGE_RENDER_IGNORE'
 export const TwitterRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
         const target = '/' + props.children.slice(1)
-        return <Link href={target} children={props.children} fontSize="inherit" />
+        return (
+            <Link href={target} fontSize="inherit">
+                {props.children}
+            </Link>
+        )
     }),
     HashLink: memo(function (props) {
         const text = props.children.slice(1)
@@ -28,7 +32,11 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
     }),
     CashLink: memo(function (props) {
         const target = `/search?q=${encodeURIComponent(props.children)}&src=cashtag_click`
-        const link = <Link href={target} children={props.children} fontSize="inherit" />
+        const link = (
+            <Link href={target} fontSize="inherit">
+                {props.children}
+            </Link>
+        )
         const TagModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.TagModifier)?.TagModifier
         if (!TagModifier) return link
         return <TagModifier {...props} href={target} fallback={link} />

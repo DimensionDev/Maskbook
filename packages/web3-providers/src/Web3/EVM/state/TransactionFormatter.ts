@@ -48,7 +48,7 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
         [TransactionDescriptorType.RETRY]: [],
         [TransactionDescriptorType.CANCEL]: [new CancelDescriptor()],
     }
-    override async createContext(
+    override async createTransactionContext(
         chainId: ChainId,
         transaction: Transaction,
         hash?: string,

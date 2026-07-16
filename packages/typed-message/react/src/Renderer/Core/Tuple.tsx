@@ -6,7 +6,8 @@ import { useMetadataRender } from '../MetadataRender.js'
 
 export const TypedMessageTupleRender = memo(function TypedMessageTupleRender(props: TypedMessageTuple) {
     const meta = useMetadataRender(props)
-    if (useMemo(() => hasCircular(props.items), [props.items])) return null
+    const containsCircular = useMemo(() => hasCircular(props.items), [props.items])
+    if (containsCircular) return null
 
     return (
         <span style={new Object(props.meta?.get(unstable_STYLE_META))}>

@@ -61,7 +61,7 @@ export default function Dashboard() {
         <UserContext.Provider />,
         <PersonaContext.Provider initialState={PersonaContextIO} />,
         <ErrorBoundary />,
-        <CustomSnackbarProvider children={null!} />,
+        <CustomSnackbarProvider> </CustomSnackbarProvider>,
         <SharedContextProvider />,
     )(
         cloneElement,

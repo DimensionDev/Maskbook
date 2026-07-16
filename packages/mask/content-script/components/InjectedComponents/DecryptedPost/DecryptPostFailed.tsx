@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { getAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { Trans } from '@lingui/react/macro'
 
 interface DecryptPostFailedProps {
@@ -19,7 +19,7 @@ export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptP
             title={<Trans>Failed to decrypt.</Trans>}
             titleIcon="error"
             message={error.message}
-            headerActions={useAuthorDifferentMessage(author, postedBy, void 0)}
+            headerActions={getAuthorDifferentMessage(author, postedBy, void 0)}
         />
     )
 })

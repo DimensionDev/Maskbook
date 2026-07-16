@@ -1,5 +1,5 @@
 import { i18n } from '@lingui/core'
-import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
+import { getSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { LinguiProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { jsxCompose } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
@@ -23,7 +23,7 @@ export function ContentScriptGlobalProvider(children: React.ReactNode) {
         <SharedContextProvider />,
         <LinguiProviderHMR i18n={i18n} />,
         // eslint-disable-next-line react-compiler/react-compiler
-        <MaskThemeProvider useMaskIconPalette={useSiteThemeMode} useTheme={useMaskSiteAdaptorMixedTheme} />,
+        <MaskThemeProvider useMaskIconPalette={getSiteThemeMode} useTheme={useMaskSiteAdaptorMixedTheme} />,
     )(
         cloneElement,
         process.env.NODE_ENV === 'development' ?

@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostInfoMentionedLinks } from '@masknet/plugin-infra/content-script'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMemo } from 'react'
@@ -41,7 +41,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         return <PreviewCard links={links} />
     },
     PostInspector() {
-        const links = usePostInfoDetails.mentionedLinks()
+        const links = usePostInfoMentionedLinks()
         if (!links) return null
         return <PreviewCard links={links} />
     },

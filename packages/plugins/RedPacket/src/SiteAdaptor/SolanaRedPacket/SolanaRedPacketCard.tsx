@@ -1,7 +1,7 @@
 import { BN, web3 } from '@coral-xyz/anchor'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
-import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePostInfoSource, usePostInfoURL, usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -84,8 +84,8 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     const postLink = usePostLink()
 
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback(payload)
-    const source = usePostInfoDetails.source()
-    const postUrl = usePostInfoDetails.url()
+    const source = usePostInfoSource()
+    const postUrl = usePostInfoURL()
     const link = postLink.toString() || postUrl?.toString()
 
     const claimedShareText = useMemo(() => {

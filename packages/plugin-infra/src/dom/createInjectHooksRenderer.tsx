@@ -15,7 +15,7 @@ type Raw<T> = Plugin.InjectUIRaw<T>
 
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => readonly PluginDefinition[],
-    pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
+    pickInjectorHook: (plugin: PluginDefinition, props: PropsType) => undefined | Inject<PropsType>,
     PluginWrapperComponent?: ComponentType<PluginWrapperComponentProps<PluginDefinition>>,
     rootElement?: 'div' | 'span' | (() => HTMLDivElement | HTMLSpanElement),
 ) {
@@ -37,9 +37,9 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         }
         return element
     }
-    function SinglePluginWithinErrorBoundary({ plugin, props }: { plugin: PluginDefinition; props: object }) {
+    function SinglePluginWithinErrorBoundary({ plugin, props }: { plugin: PluginDefinition; props: PropsType }) {
         const t = usePluginTransField()
-        const ui = pickInjectorHook(plugin)
+        const ui = pickInjectorHook(plugin, props)
         return usePluginWrapperProvider(
             ui ?
                 <ErrorBoundary subject={'Plugin ' + t(plugin.name)}>
@@ -52,11 +52,13 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
     function PluginsInjectionHookRender(props: PropsType) {
         const allPlugins = usePlugins()
         const availablePlugins = getAvailablePlugins<PluginDefinition>(allPlugins)
-        const all = availablePlugins.filter(pickInjectorHook).map((plugin) => (
-            <ShadowRootIsolation key={plugin.ID} data-plugin={plugin.ID} rootElement={rootElement}>
-                <SinglePluginWithinErrorBoundary plugin={plugin} props={props} />
-            </ShadowRootIsolation>
-        ))
+        const all = availablePlugins
+            .filter((plugin) => pickInjectorHook(plugin, props))
+            .map((plugin) => (
+                <ShadowRootIsolation key={plugin.ID} data-plugin={plugin.ID} rootElement={rootElement}>
+                    <SinglePluginWithinErrorBoundary plugin={plugin} props={props} />
+                </ShadowRootIsolation>
+            ))
         return <>{all}</>
     }
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
@@ -77,19 +79,19 @@ function Main(props: { data: object; UI: Inject<any> }) {
 }
 function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     const [ref, setRef] = useState<HTMLDivElement | null>()
-    const propsCallback = useRef<(props: T) => void>(undefined)
-    const cancel = useRef<AbortController>(undefined)
+    const propsCallbackRef = useRef<(props: T) => void>(undefined)
+    const cancelRef = useRef<AbortController>(undefined)
 
     useEffect(() => {
         if (!ref) return
-        cancel.current = new AbortController()
-        const sig = cancel.current
-        propsCallback.current = UI.init(sig.signal, ref)
-        propsCallback.current(data)
+        cancelRef.current = new AbortController()
+        const sig = cancelRef.current
+        propsCallbackRef.current = UI.init(sig.signal, ref)
+        propsCallbackRef.current(data)
         return () => sig.abort()
     }, [ref, UI.init])
     useEffect(() => {
-        propsCallback.current?.(data)
+        propsCallbackRef.current?.(data)
     }, [data])
 
     return <div ref={setRef} />

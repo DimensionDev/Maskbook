@@ -19,7 +19,6 @@ export function SelectFungibleTokenModal({
     const [okxOnly, setOKXOnly] = useState<boolean>()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-    const [keyword, setKeyword] = useState<string>()
     const [whitelist, setWhitelist] = useState<string[]>()
     const [title, setTitle] = useState<string>()
     const [blacklist, setBlacklist] = useState<string[]>()
@@ -37,7 +36,6 @@ export function SelectFungibleTokenModal({
             setOKXOnly(props.okxOnly)
             setPluginID(props.pluginID)
             setChainId(props.chainId)
-            setKeyword(props.keyword)
             setWhitelist(props.whitelist)
             setTitle(props.title)
             setBlacklist(props.blacklist)
@@ -60,7 +58,6 @@ export function SelectFungibleTokenModal({
             lockChainId={lockChainId}
             multiple={multiple}
             maxTokens={maxTokens}
-            keyword={keyword}
             whitelist={whitelist}
             title={title}
             blacklist={blacklist}

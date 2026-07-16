@@ -4,7 +4,7 @@ import { Composer } from './ComposerAPI.js'
 import { evm } from '../../../Manager/registry.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
-import { createContext } from '../helpers/createContext.js'
+import { createConnectionContext } from '../helpers/createContext.js'
 import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
@@ -32,8 +32,8 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
         return <T>(requestArguments: RequestArguments, initial?: EVMConnectionOptions) => {
             return (async () => {
                 const options = this.ConnectionOptions.fill(initial)
-                // eslint-disable-next-line @eslint-react/no-missing-context-display-name
-                const context = createContext(requestArguments, options)
+
+                const context = createConnectionContext(requestArguments, options)
 
                 try {
                     await Composer.compose().dispatch(context, async () => {

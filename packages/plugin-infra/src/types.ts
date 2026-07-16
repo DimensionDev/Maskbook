@@ -432,16 +432,18 @@ export namespace Plugin.SiteAdaptor {
          */
         UI?: {
             /** The brief content above detailed tabs. */
-            Content?: InjectUI<{
-                resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-                currentResult: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-                isProfilePage?: boolean
-                identity?: SocialIdentity | null
-            }>
+            Content?: InjectUI<SearchResultInspectorContentProps>
         }
         Utils?: {
             shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
         }
+    }
+
+    export interface SearchResultInspectorContentProps {
+        resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+        currentResult: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        isProfilePage?: boolean
+        identity?: SocialIdentity | null
     }
 
     export interface SearchResultTab {
@@ -462,13 +464,15 @@ export namespace Plugin.SiteAdaptor {
             /**
              * The injected tab content
              */
-            TabContent: InjectUI<{
-                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            }>
+            TabContent: InjectUI<SearchResultTabContentProps>
         }
         Utils?: {
             shouldDisplay?(result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): boolean
         }
+    }
+    export interface SearchResultTabContentProps {
+        result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        tabId: string
     }
 
     export interface SearchResultContent {
@@ -495,12 +499,7 @@ export namespace Plugin.SiteAdaptor {
             /**
              * The injected avatar decorator component
              */
-            Decorator: InjectUI<{
-                identity?: SocialIdentity | null
-                userId?: string
-                persona?: string
-                socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
-            }>
+            Decorator: InjectUI<AvatarRealmDecoratorProps>
             /**
              * The injected avatar settings button component
              */
@@ -520,6 +519,14 @@ export namespace Plugin.SiteAdaptor {
                 sourceType?: AvatarRealmSourceType,
             ): boolean
         }
+    }
+
+    export interface AvatarRealmDecoratorProps {
+        identity?: SocialIdentity | null
+        userId?: string
+        persona?: string
+        socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
+        sourceType?: AvatarRealmSourceType
     }
 
     export enum TipsSlot {
@@ -682,10 +689,7 @@ export namespace Plugin.SiteAdaptor {
             /**
              * The injected tab content
              */
-            TabContent: InjectUI<{
-                identity?: SocialIdentity | null
-                socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
-            }>
+            TabContent: InjectUI<ProfileTabContentProps>
         }
         Utils?: {
             /**
@@ -704,6 +708,12 @@ export namespace Plugin.SiteAdaptor {
              */
             sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number
         }
+    }
+
+    export interface ProfileTabContentProps {
+        identity?: SocialIdentity | null
+        socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
+        tabId: string
     }
 
     export interface ProfileCover {
@@ -1101,7 +1111,7 @@ export namespace Plugin.__Host {
          */
         disabled: EnabledStatusReporter
 
-        createContext(id: string, definition: Definition, signal: AbortSignal): Context
+        createPluginContext(id: string, definition: Definition, signal: AbortSignal): Context
 
         signal?: AbortSignal
         permission: PermissionReporter

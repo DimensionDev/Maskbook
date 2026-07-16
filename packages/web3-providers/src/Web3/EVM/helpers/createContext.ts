@@ -17,6 +17,6 @@ const initializer = {
     },
 }
 
-export function createContext(requestArguments: RequestArguments, options?: EVMConnectionOptions) {
+export function createConnectionContext(requestArguments: RequestArguments, options?: EVMConnectionOptions) {
     return new ConnectionContext(requestArguments, options, initializer)
 }

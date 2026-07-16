@@ -7,5 +7,6 @@ function compose<T>(...args: [...composer: Array<((arg: T) => T) | null | false>
 
 export function jsxCompose<JSX>(...jsx: JSX[]) {
     return <ReactNode>(cloneElement: (jsx: JSX, props: any, children: ReactNode) => ReactNode, element: ReactNode) =>
+        // eslint-disable-next-line @eslint-react/no-clone-element
         compose(...jsx.map((jsx) => (children: ReactNode) => cloneElement(jsx, undefined, children)), element)
 }

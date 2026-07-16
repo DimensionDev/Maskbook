@@ -1,5 +1,5 @@
 // cspell:disable
-import type { ComponentType } from 'react'
+import { createElement, type ComponentType } from 'react'
 import { format as formatDateTime } from 'date-fns'
 import { Icons } from '@masknet/icons'
 import type { GeneratedIconNonSquareProps } from '@masknet/icons'
@@ -88,7 +88,7 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
     [CardType.UnknownOut]: Icons.UnknownOut,
 }
 
-const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>, IconComponent | null> = {
+const platformIconMap = {
     // Networks
     ethereum: Icons.ETH,
     'binance-smart-chain': Icons.BSC,
@@ -125,72 +125,27 @@ const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platfo
     planet: Icons.Planet,
     'ens registrar': Icons.ENS,
     unknown: null,
-}
+} as const satisfies Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>, IconComponent | null>
 
-export const getPlatformIcon = (platform?: RSS3BaseAPI.Network | RSS3BaseAPI.Platform) => {
+export function PlatformIcon({
+    platform,
+    width,
+    height,
+}: {
+    platform: RSS3BaseAPI.Network | RSS3BaseAPI.Platform
+    width: GeneratedIconNonSquareProps['width']
+    height: GeneratedIconNonSquareProps['height']
+}) {
     if (!platform) return null
-    return platformIconMap[platform.toLowerCase() as Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>]
-}
-
-export const hostIconMap: { [property: string]: IconComponent } = {
-    'etherscan.io': Icons.EtherScan,
-    'opensea.io': Icons.OpenSea,
-    'polygonscan.com': Icons.PolygonScan,
-    'crossbell.io': Icons.Crossbell,
-    'scan.crossbell.io': Icons.Crossbell,
-    'lenster.xyz': Icons.DarkLens,
-    'looksrare.org': Icons.LooksRare,
-    'gitcoin.co': Icons.Gitcoin,
-    'bscscan.com': Icons.BSC,
-    'zkscan.io': Icons.ZkScan,
-    'ipfs.io': Icons.IPFS,
-    'snapshot.org': Icons.Snapshot,
-    'momoka.lens.xyz': Icons.Momoka,
-}
-
-export const hostNameMap: { [property: string]: string } = {
-    'etherscan.io': 'Etherscan',
-    'opensea.io': 'Opensea',
-    'polygonscan.com': 'Polygonscan',
-    'crossbell.io': 'Crossbell',
-    'scan.crossbell.io': 'Crossbell Scan',
-    'lenster.xyz': 'Lenster',
-    'looksrare.org': 'LooksRare',
-    'gitcoin.co': 'Gitcoin',
-    'bscscan.com': 'BscScan',
-    'zkscan.io': 'ZkScan',
-    'ipfs.io': 'IPFS',
-    'snapshot.org': 'Snapshot',
-    'momoka.lens.xyz': 'Momoka',
-}
-
-export function getLastAction<
-    T extends RSS3BaseAPI.Tag,
-    P extends keyof RSS3BaseAPI.MetadataMap[T] = keyof RSS3BaseAPI.MetadataMap[T],
->(feed: RSS3BaseAPI.Web3FeedGeneric<T, P>) {
-    return feed.actions.at(-1)!
-}
-
-/**
- * Get cost from multiple actions.
- * We used to get it from the last action, but it might not always exists in
- * the last action.
- */
-export function getCost(feed: RSS3BaseAPI.CollectibleTradeFeed): RSS3BaseAPI.TransactionMetadata | null {
-    for (const action of feed.actions) {
-        if (action.metadata?.cost) {
-            return action.metadata.cost
-        }
-    }
-    return null
+    const Icon = platformIconMap[platform.toLowerCase() as Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>]
+    if (!Icon) return null
+    return createElement(Icon, { width, height })
 }
 
 const ONE_MIN = 60 * 1000
 const ONE_HOUR = 60 * ONE_MIN
 const ONE_DAY = 24 * ONE_HOUR
 export const ONE_WEEK = 7 * ONE_DAY
-
-const plural = (num: number, unit: string) => `${num} ${unit}${num === 1 ? '' : 's'}`
 
 /**
  * A datetime formatter follows RSS3's
@@ -204,12 +159,12 @@ export function formatTimestamp(timestamp: number): string {
     }
     if (distance > ONE_DAY) {
         const days = Math.floor(distance / ONE_DAY)
-        return plural(days, 'day')
+        return new Intl.NumberFormat(undefined, { style: 'unit', unit: 'day', unitDisplay: 'short' }).format(days)
     }
     if (distance > ONE_HOUR) {
         const hours = Math.floor(distance / ONE_HOUR)
-        return plural(hours, 'hr')
+        return new Intl.NumberFormat(undefined, { style: 'unit', unit: 'hour', unitDisplay: 'short' }).format(hours)
     }
     const mins = Math.floor(distance / ONE_MIN)
-    return plural(mins, 'min')
+    return new Intl.NumberFormat(undefined, { style: 'unit', unit: 'minute', unitDisplay: 'short' }).format(mins)
 }

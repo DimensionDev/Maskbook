@@ -1,7 +1,7 @@
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { Trans } from '@lingui/react/macro'
 
-export function useAuthorDifferentMessage(
+export function getAuthorDifferentMessage(
     author: ProfileIdentifier | null,
     postBy: ProfileIdentifier | null,
     jsx: React.ReactNode,

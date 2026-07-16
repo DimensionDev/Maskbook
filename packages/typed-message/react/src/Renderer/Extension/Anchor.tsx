@@ -6,7 +6,6 @@ export const TypedMessageAnchorRender = memo(function TypedMessageAnchorRender(p
     return (
         <RenderLinkFragment
             category={props.category}
-            children={props.content}
             href={props.href}
             suggestedPostImage={
                 typeof props.postImage?.image === 'string' ?
@@ -19,7 +18,8 @@ export const TypedMessageAnchorRender = memo(function TypedMessageAnchorRender(p
                         alt=""
                     />
                 :   null
-            }
-        />
+            }>
+            {props.content}
+        </RenderLinkFragment>
     )
 })

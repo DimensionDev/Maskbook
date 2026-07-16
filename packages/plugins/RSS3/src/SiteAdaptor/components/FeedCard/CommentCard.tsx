@@ -133,7 +133,9 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                 <div className={classes.quoted}>
                     <Typography className={classes.summary} component="div">
                         <Trans>
-                            <AccountLabel address={target.handle} handle={target.handle} children={target.handle} />{' '}
+                            <AccountLabel address={target.handle} handle={target.handle}>
+                                {target.handle}
+                            </AccountLabel>{' '}
                             publish a post on {action.platform}
                         </Trans>
                     </Typography>

@@ -103,8 +103,7 @@ export type PostInfo = PostContext
 export const PostInfoContext = createContext<PostContext | null>(null)
 PostInfoContext.displayName = 'PostInfoContext'
 
-export const usePostInfoDetails: {
-    // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed
+const usePostInfoDetails: {
     [key in keyof PostInfo]: () => PostInfo[key] extends ValueRef<infer T> ? T
     : PostInfo[key] extends ObservableSet<infer T> ? readonly T[]
     : PostInfo[key] extends ObservableMap<any, infer T> ? readonly T[]
@@ -151,7 +150,13 @@ export const {
     url: usePostInfoURL,
     source: usePostInfoSource,
     site: usePostInfoSite,
+    /** @deprecated */
     postMetadataImages: usePostInfoPostMetadataImages,
+    hasMaskPayload: usePostInfoHasMaskPayload,
+    rootNode: usePostInfoRootNode,
+    version: usePostInfoVersion,
+    publicShared: usePostInfoPublicShared,
+    isAuthorOfPost: usePostInfoIsAuthorOfPost,
 } = usePostInfoDetails
 function isSubscription(x: any): x is Subscription<any> {
     return (

@@ -48,9 +48,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren {
+export interface PluginWalletStatusBarWithoutContextProps<T extends NetworkPluginID> extends PropsWithChildren {
     className?: string
-    actualPluginID?: T
     expectedPluginID?: T
     expectedChainId?: Web3Helper.Definition[T]['ChainId']
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
@@ -62,7 +61,11 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     disablePending?: boolean
 }
 
-const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
+export interface PluginWalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren, PluginWalletStatusBarWithoutContextProps<T> {
+    actualPluginID?: T
+}
+
+const PluginWalletStatusBarWithoutContext = memo<PluginWalletStatusBarWithoutContextProps<NetworkPluginID>>(
     ({
         className,
         onClick,
@@ -132,7 +135,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
 
 PluginWalletStatusBarWithoutContext.displayName = 'PluginWalletStatusBarWithoutContext'
 
-export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>((props) => {
+export const PluginWalletStatusBar = memo<PluginWalletStatusBarProps<NetworkPluginID>>((props) => {
     const children = (
         <RevokeChainContextProvider>
             <PluginWalletStatusBarWithoutContext {...props} />

@@ -1,10 +1,11 @@
+/* eslint-disable @eslint-react/static-components */
 import { useContext } from 'react'
 import type { TypedMessage } from '@masknet/typed-message'
 import { TypedMessageUnknownRender } from './Core/Unknown.js'
 import { RegistryContext } from './utils/RegistryContext.js'
 import { RenderFragmentsContext } from './utils/RenderFragments.js'
 import { useTextResize } from './utils/TextResizerContext.js'
-import { DebugElementProvider } from './utils/DebugElementProvider.js'
+import { DebugElementProviderContext } from './utils/DebugElementProvider.js'
 export interface RenderProps {
     message: TypedMessage
 }
@@ -28,7 +29,7 @@ export function TypedMessageRenderInline(props: RenderProps) {
     const { message } = props
 
     const Registry = useContext(RegistryContext)
-    const isDebug = useContext(DebugElementProvider)
+    const isDebug = useContext(DebugElementProviderContext)
 
     if (message.type === 'empty') return null
 

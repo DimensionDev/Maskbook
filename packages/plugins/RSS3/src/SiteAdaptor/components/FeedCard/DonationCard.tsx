@@ -129,11 +129,14 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
             {...rest}>
             <DonationAction feed={feed} />
             {availableActions.length > 1 ?
-                <Slider count={availableActions.length} className={classes.content} onUpdate={setIndex}>
-                    {availableActions.map((action, index) => (
+                <Slider
+                    count={availableActions.length}
+                    className={classes.content}
+                    onUpdate={setIndex}
+                    items={availableActions.map((action, index) => (
                         <CardBody key={index} metadata={action.metadata!} />
                     ))}
-                </Slider>
+                />
             :   <CardBody className={classes.content} metadata={availableActions[0].metadata!} />}
         </CardFrame>
     )

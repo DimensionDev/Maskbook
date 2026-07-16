@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const PersonaAvatarSetting = memo(function PersonaAvatar() {
     const { t } = useLingui()
-    const editor = useRef<AvatarEditor | null>(null)
+    const editorRef = useRef<AvatarEditor | null>(null)
     const navigate = useNavigate()
     const { classes } = useStyles()
     const queryClient = useQueryClient()
@@ -86,10 +86,10 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const [{ loading: uploadLoading }, handleConfirm] = useAsyncFn(async () => {
         try {
-            if (!editor.current || !file || !currentPersona?.identifier) return
+            if (!editorRef.current || !file || !currentPersona?.identifier) return
 
             await new Promise<void>((resolve, reject) => {
-                editor.current?.getImage().toBlob(async (blob) => {
+                editorRef.current?.getImage().toBlob(async (blob) => {
                     if (blob) {
                         const identifier = await Services.Settings.getCurrentPersonaIdentifier()
                         await Services.Identity.updatePersonaAvatar(identifier, blob)
@@ -119,7 +119,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                 <NormalHeader />
                 <Box p={2}>
                     <AvatarEditor
-                        ref={editor}
+                        ref={editorRef}
                         image={file}
                         border={50}
                         style={{ width: '100%', height: '100%', borderRadius: 8 }}

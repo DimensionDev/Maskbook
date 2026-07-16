@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { DecryptionProgress } from './types.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { getAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { Select } from '@lingui/react/macro'
 interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
@@ -25,7 +25,7 @@ export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: Decr
                 />
             }
             progress
-            headerActions={useAuthorDifferentMessage(author, postedBy, void 0)}
+            headerActions={getAuthorDifferentMessage(author, postedBy, void 0)}
         />
     )
 })

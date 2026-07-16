@@ -33,12 +33,14 @@ const useStyles = makeStyles()({
     },
 })
 
-interface InteractionProps {
+interface PagerProps {
     currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse>
     totalMessages: number
     currentMessageIndex: number
     setMessageIndex(count: number): void
+}
 
+interface InteractionProps extends PagerProps {
     setPendingAction: (pendingAction: undefined | Promise<void>) => void
 }
 
@@ -52,7 +54,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
     const [confirmDisabled, setConfirmDisabled] = useState(false)
     const [dangerDialogOpen, setDangerDialogOpen] = useState(false)
     const [confirmVerb, setConfirmVerb] = useState<ReactNode>(<Trans>Confirm</Trans>)
-    const confirmAction = useRef<(lastRequest: boolean) => Promise<void>>(async () => {})
+    const confirmActionRef = useRef<(lastRequest: boolean) => Promise<void>>(async () => {})
     const hasOrigin = !!currentRequest.origin
 
     const onRequestCountMightChanged = useCallback(() => {
@@ -85,7 +87,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
     const isLastRequest = props.totalMessages === 1
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         try {
-            await confirmAction.current(isLastRequest)
+            await confirmActionRef.current(isLastRequest)
             await onRequestCountMightChanged()
         } catch (error) {
             showSnackbar(
@@ -126,7 +128,30 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
             {confirmVerb}
         </ActionButton>
     )
-    const InteractionComponent = getInteractionComponent(props.currentRequest.request.arguments.method)
+    let InteractionComponent
+
+    switch (props.currentRequest.request.arguments.method) {
+        case EthereumMethodType.wallet_watchAsset:
+            InteractionComponent = WatchTokenRequest
+            break
+        case EthereumMethodType.wallet_requestPermissions:
+            InteractionComponent = PermissionRequest
+            break
+        case EthereumMethodType.wallet_addEthereumChain:
+            InteractionComponent = AddChainRequest
+            break
+        case EthereumMethodType.wallet_switchEthereumChain:
+            InteractionComponent = SwitchChainRequest
+            break
+        case EthereumMethodType.eth_sign:
+        case EthereumMethodType.eth_signTypedData_v4:
+        case EthereumMethodType.personal_sign:
+            InteractionComponent = WalletSignRequest
+            break
+        default:
+            InteractionComponent = TransactionRequest
+            break
+    }
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
@@ -136,7 +161,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
                     currentRequest={currentRequest}
                     setConfirmVerb={setConfirmVerb}
                     setIsDanger={setIsDanger}
-                    setConfirmAction={useCallback((f) => (confirmAction.current = f), [])}
+                    setConfirmAction={useCallback((f) => (confirmActionRef.current = f), [])}
                 />
                 <Pager {...props} />
             </Box>
@@ -159,26 +184,8 @@ export interface InteractionItemProps {
     setConfirmAction(action: (isLastRequest: boolean) => Promise<void>): void
     setConfirmDisabled(disabled: boolean): void
 }
-function getInteractionComponent(type: EthereumMethodType) {
-    switch (type) {
-        case EthereumMethodType.wallet_watchAsset:
-            return WatchTokenRequest
-        case EthereumMethodType.wallet_requestPermissions:
-            return PermissionRequest
-        case EthereumMethodType.wallet_addEthereumChain:
-            return AddChainRequest
-        case EthereumMethodType.wallet_switchEthereumChain:
-            return SwitchChainRequest
-        case EthereumMethodType.eth_sign:
-        case EthereumMethodType.eth_signTypedData_v4:
-        case EthereumMethodType.personal_sign:
-            return WalletSignRequest
-        default:
-            return TransactionRequest
-    }
-}
 
-const Pager = memo(function Pager(props: InteractionProps) {
+const Pager = memo(function Pager(props: PagerProps) {
     const { currentMessageIndex, currentRequest, setMessageIndex, totalMessages } = props
     const { classes } = useStyles()
     const navigate = useNavigate()

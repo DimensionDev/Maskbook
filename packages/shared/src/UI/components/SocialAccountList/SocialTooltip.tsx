@@ -45,6 +45,8 @@ export function SocialTooltip<T extends object>({ children, platform }: SocialTo
         observer.observe(el)
         return () => observer.unobserve(el)
     }, [])
+    // eslint-disable-next-line @eslint-react/no-clone-element
+    const child = cloneElement(children, { ...children.props, ref })
 
     return (
         <ShadowRootTooltip
@@ -53,7 +55,7 @@ export function SocialTooltip<T extends object>({ children, platform }: SocialTo
             arrow
             placement="top"
             title={title}>
-            {cloneElement(children, { ...children.props, ref })}
+            {child}
         </ShadowRootTooltip>
     )
 }

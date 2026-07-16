@@ -1,7 +1,7 @@
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostInfoRootNode } from '@masknet/plugin-infra/content-script'
 
 export function useIsFireflyRedpacket() {
-    const raw = usePostInfoDetails.rootNode()?.textContent
+    const raw = usePostInfoRootNode()?.textContent
 
     return raw?.includes('#FireflyLuckyDrop') || false
 }

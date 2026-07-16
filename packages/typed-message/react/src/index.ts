@@ -4,7 +4,7 @@ export { useMetadataRender, type MetadataRenderProps } from './Renderer/Metadata
 
 // Render behavior
 export { TextResizeContext, type TextResizer } from './Renderer/utils/TextResizerContext.js'
-export { DebugElementProvider } from './Renderer/utils/DebugElementProvider.js'
+export { DebugElementProviderContext as DebugElementProvider } from './Renderer/utils/DebugElementProvider.js'
 
 // Render Registry
 export { type RenderConfig, createTypedMessageRenderRegistry } from './Renderer/registry.js'
@@ -17,9 +17,9 @@ export { RegistryContext } from './Renderer/utils/RegistryContext.js'
 
 // Transformation
 export {
-    TransformerProvider,
+    TransformerProviderContext as TransformerProvider,
     useTransformedValue,
-    TransformationContextProvider,
+    TransformationContextProviderContext as TransformationContextProvider,
 } from './Renderer/utils/TransformContext.js'
 
 // Metadata

@@ -3,10 +3,10 @@ import type { TypedMessage } from '@masknet/typed-message'
 
 /** @internal */
 export const TypedMessageUnknownRender = memo(function TypedMessageUnknownRender(props: TypedMessage) {
-    const warned = useRef(false)
+    const warnedRef = useRef(false)
     useEffect(() => {
-        if (warned.current) return
-        warned.current = true
+        if (warnedRef.current) return
+        warnedRef.current = true
         console.warn(
             '[@masknet/typed-message] Trying to render an unknown TypedMessage (or a known TypedMessage with no renderer) with props',
             props,

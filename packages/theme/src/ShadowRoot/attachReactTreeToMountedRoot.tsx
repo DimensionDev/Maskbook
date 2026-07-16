@@ -59,7 +59,7 @@ function attachReactTreeToMountedRoot(
         if (signal.aborted) return
         shadowEnvironmentMountingRoots.set(
             instanceKey,
-            createPortal(<AttachPointComponent children={jsx} />, container, instanceKey),
+            createPortal(<AttachPointComponent>{jsx}</AttachPointComponent>, container, instanceKey),
         )
     }
 

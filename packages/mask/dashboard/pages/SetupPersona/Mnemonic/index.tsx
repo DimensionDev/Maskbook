@@ -10,7 +10,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import Services from '#services'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
+import { createPersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { Words } from './Words.js'
@@ -89,7 +89,7 @@ export const Component = memo(function SignUpMnemonic() {
     const ref = useRef(null)
 
     const navigate = useNavigate()
-    const createPersona = useCreatePersonaV2()
+    const createPersona = createPersonaV2
 
     const { classes } = useStyles()
     const { state } = useLocation() as {

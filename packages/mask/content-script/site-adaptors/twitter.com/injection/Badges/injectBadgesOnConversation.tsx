@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
@@ -42,32 +42,28 @@ function createRootElement() {
     return span
 }
 
+const Component = createInjectHooksRenderer(
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.Badges?.UI?.Content,
+    undefined,
+    createRootElement,
+)
 const ConversationBadgesSlot = memo(function ConversationBadgesSlot({ userId }: Props) {
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
-    const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(
-            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.Badges?.UI?.Content,
-            undefined,
-            createRootElement,
-        )
-        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrapOr(null)
-        if (!identifier) return null
+    const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrapOr(null)
+    if (!identifier) return null
 
-        return (
+    return (
+        <span className={cx(classes.slot, disabled ? classes.hide : null)}>
             <Component
                 identity={identifier}
                 slot={Plugin.SiteAdaptor.BadgesSlot.Sidebar}
                 onStatusUpdate={setDisabled}
             />
-        )
-    }, [userId])
-
-    if (!component) return null
-
-    return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
+        </span>
+    )
 })
 
 /**

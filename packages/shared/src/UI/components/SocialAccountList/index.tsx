@@ -7,7 +7,7 @@ import { Button, type MenuProps } from '@mui/material'
 import { EMPTY_LIST, NextIDPlatform, type Web3BioProfile } from '@masknet/shared-base'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { SocialAccountListItem } from './SocialListItem.js'
-import { resolveNextIDPlatformIcon } from './utils.js'
+import { NextIDPlatformIcon } from './utils.js'
 import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
@@ -159,7 +159,9 @@ export const SocialAccountList = memo(function SocialAccountList({
 
     const platformIcons = useMemo(() => {
         return uniqBy(mergedProfiles, (x) => x.platform)
-            .map((x) => resolveNextIDPlatformIcon(x.platform))
+            .map((x) => (
+                <NextIDPlatformIcon platform={x.platform} key={x.platform} className={classes.icon} size={20} />
+            ))
             .filter(isNonNull)
             .slice(0, 3)
     }, [mergedProfiles])
@@ -169,9 +171,7 @@ export const SocialAccountList = memo(function SocialAccountList({
     return (
         <div {...rest}>
             <Button variant="text" onClick={openMenu} className={classes.iconStack} disableRipple>
-                {platformIcons.map((Icon, index) => (
-                    <Icon key={Icon.displayName || index} className={classes.icon} size={20} />
-                ))}
+                {platformIcons}
             </Button>
             {menu}
         </div>

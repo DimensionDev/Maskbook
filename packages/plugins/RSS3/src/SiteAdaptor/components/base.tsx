@@ -3,7 +3,7 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import type { HTMLProps, ReactNode } from 'react'
 import { format as formatDateTime } from 'date-fns'
-import { type CardType, formatTimestamp, getPlatformIcon } from './share.js'
+import { type CardType, formatTimestamp, PlatformIcon } from './share.js'
 import { FeedDetailsModal } from '../modals/modals.js'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
@@ -64,8 +64,6 @@ export function CardFrame({
     ...rest
 }: CardFrameProps) {
     const { classes, cx } = useStyles()
-    const PrimaryPlatformIcon = getPlatformIcon(feed.network)
-    const ProviderPlatformIcon = getPlatformIcon(feed.platform)
     const { map } = ScopedDomainsContainer.useContainer()
 
     return (
@@ -83,12 +81,10 @@ export function CardFrame({
             }}
             {...rest}>
             <div className={classes.header}>
-                {PrimaryPlatformIcon && PrimaryPlatformIcon !== ProviderPlatformIcon ?
-                    <PrimaryPlatformIcon height={18} width="auto" />
-                :   null}
-                {ProviderPlatformIcon ?
-                    <ProviderPlatformIcon height={18} width="auto" />
-                :   null}
+                {feed.network.toLowerCase() === feed.platform.toLowerCase() ? null : (
+                    <PlatformIcon platform={feed.network} height={18} width="auto" />
+                )}
+                <PlatformIcon platform={feed.platform} height={18} width="auto" />
                 <ShadowRootTooltip
                     title={formatDateTime(new Date(feed.timestamp * 1000), 'yyyy-MM-dd HH:mm:ss')}
                     placement="right">

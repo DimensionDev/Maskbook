@@ -1006,7 +1006,10 @@ export interface TransactionState<ChainId, Transaction> {
 }
 export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     /** Step 1: Create a transaction formatting context. */
-    createContext: (chainId: ChainId, transaction: Transaction) => Promise<TransactionContext<ChainId, Parameters>>
+    createTransactionContext: (
+        chainId: ChainId,
+        transaction: Transaction,
+    ) => Promise<TransactionContext<ChainId, Parameters>>
     /** Step 2: Create a transaction descriptor */
     createDescriptor: (
         chainId: ChainId,

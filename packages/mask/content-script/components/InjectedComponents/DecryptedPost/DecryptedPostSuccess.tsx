@@ -2,7 +2,13 @@ import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
-import { PostInfoContext, usePostInfoDetails, usePostInfoPostIVIdentifier } from '@masknet/plugin-infra/content-script'
+import {
+    PostInfoContext,
+    usePostInfoAuthor,
+    usePostInfoPostIVIdentifier,
+    usePostInfoPublicShared,
+    usePostInfoVersion,
+} from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, MaskMessages, type ProfileIdentifier, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -15,33 +21,36 @@ import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRe
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { DecryptedUIPluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
-import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { getAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { RecipientsToolTip } from './RecipientsToolTip.js'
 
-interface DecryptPostSuccessProps {
+interface DecryptPostSuccessBaseProps {
     message: TypedMessage
     /** The author in the payload */
     author: ProfileIdentifier | null
     /** The author of the encrypted post */
     postedBy: ProfileIdentifier | null
+}
+interface DecryptPostSuccessProps extends DecryptPostSuccessBaseProps {
     whoAmI: ProfileIdentifier | null
 }
 
 function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is ProfileIdentifier {
-    const version = usePostInfoDetails.version()
-    const sharedPublic = usePostInfoDetails.publicShared()
+    const version = usePostInfoVersion()
+    const sharedPublic = usePostInfoPublicShared()
+    const currentPostBy = usePostInfoAuthor()
+
     if (sharedPublic) return false
     if (version !== -38 && version !== -37) return false
     if (!whoAmI) return false
 
-    const currentPostBy = usePostInfoDetails.author()
     // TODO: this should be read from the payload.
     const authorInPayload = currentPostBy
     const postAuthor = authorInPayload || currentPostBy
     return whoAmI === postAuthor
 }
 const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
-    props: React.PropsWithChildren<DecryptPostSuccessProps>,
+    props: React.PropsWithChildren<DecryptPostSuccessBaseProps>,
 ) {
     const { message, author, postedBy } = props
     const iv = usePostInfoPostIVIdentifier()
@@ -55,7 +64,7 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
         <>
             <AdditionalContent
                 title={<Trans>Decrypted by Mask Network</Trans>}
-                headerActions={useAuthorDifferentMessage(author, postedBy, props.children)}
+                headerActions={getAuthorDifferentMessage(author, postedBy, props.children)}
                 message={message}
             />
             <DecryptedUIPluginRendererWithSuggestion message={message} metadata={message.meta} />

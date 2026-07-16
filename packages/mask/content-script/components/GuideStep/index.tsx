@@ -179,10 +179,12 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         })
         return () => void (stopped = true)
     }, [])
+    // eslint-disable-next-line @eslint-react/no-clone-element
+    const child = cloneElement(children, { ref: childrenRef })
 
     return (
         <>
-            {cloneElement(children, { ref: childrenRef })}
+            {child}
             {usePortalShadowRoot((container) => {
                 if (!stepVisible) return null
                 return (

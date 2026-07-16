@@ -33,7 +33,7 @@ export class Composer<T> {
      * Use a middleware
      * @param middleware
      */
-    public use(middleware: Middleware<T>) {
+    public add(middleware: Middleware<T>) {
         this.items.push(middleware)
     }
 
@@ -48,7 +48,7 @@ export class Composer<T> {
 
     static from<T>(...items: Array<Middleware<T>>) {
         const composer = new Composer<T>()
-        items.forEach((x) => composer.use(x))
+        items.forEach((x) => composer.add(x))
         return composer
     }
 }

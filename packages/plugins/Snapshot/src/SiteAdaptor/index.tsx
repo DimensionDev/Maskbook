@@ -1,4 +1,4 @@
-import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { type Plugin, usePluginWrapper, usePostInfoMentionedLinks } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { useMemo, Suspense, type JSX } from 'react'
 import { Skeleton } from '@mui/material'
@@ -59,7 +59,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector(): JSX.Element | null {
-        const links = usePostInfoDetails.mentionedLinks()
+        const links = usePostInfoMentionedLinks()
 
         const link = links.find(isSnapshotURL)
         if (!link) return null

@@ -1,3 +1,5 @@
+/* eslint-disable @eslint-react/jsx-no-children-prop */
+/* eslint-disable @eslint-react/static-components */
 import { memo, Fragment, createElement, useContext } from 'react'
 import { RenderFragmentsContext, type RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments.js'
 import type { TypedMessageAnchor } from '@masknet/typed-message'
@@ -59,9 +61,9 @@ function parseText(
                 style={style}
                 category={frag.category}
                 href={frag.content}
-                children={frag.content}
-                suggestedPostImage={undefined}
-            />
+                suggestedPostImage={undefined}>
+                {frag.content}
+            </RenderLinkFragment>
         )
     })
     return links

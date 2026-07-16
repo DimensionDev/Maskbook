@@ -136,13 +136,12 @@ export function createManager<
 
         verifyHostHooks()
         const abort = new AbortController()
-        // eslint-disable-next-line @eslint-react/no-missing-context-display-name
         const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
             controller: abort,
             context: {
                 ...getManagedContext(id, abort.signal),
-                ..._host.createContext(id, definition, abort.signal),
+                ..._host.createPluginContext(id, definition, abort.signal),
             } as any,
             minimalModeEnabled: new ValueRefWithReady(),
         }

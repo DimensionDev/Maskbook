@@ -126,11 +126,11 @@ function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
 }
 
 function useSetPluginEntryRenderRef(ref: Ref<PluginEntryRenderRef> | undefined) {
-    const pluginRefs = useRef<{ [property: string]: PluginRef | undefined | null }>({})
+    const pluginRef = useRef<{ [property: string]: PluginRef | undefined | null }>({})
     const refItem: PluginEntryRenderRef = useMemo(
         () => ({
             openPlugin: function openPlugin(id: string, props: any = {}, tryTimes = 4) {
-                const ref = pluginRefs.current[id]
+                const ref = pluginRef.current[id]
                 if (ref) return ref.open(props)
 
                 // If the plugin has not been loaded yet, we wait for at most 2000ms
@@ -142,7 +142,7 @@ function useSetPluginEntryRenderRef(ref: Ref<PluginEntryRenderRef> | undefined) 
     )
     useImperativeHandle(ref, () => refItem, [refItem])
     const trackPluginRef = (pluginID: string) => (ref: PluginRef | null) => {
-        pluginRefs.current = { ...pluginRefs.current, [pluginID]: ref }
+        pluginRef.current = { ...pluginRef.current, [pluginID]: ref }
     }
     return [trackPluginRef]
 }

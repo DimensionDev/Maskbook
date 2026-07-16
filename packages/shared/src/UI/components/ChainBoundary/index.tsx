@@ -8,7 +8,6 @@ import {
     useNetworkContext,
     useChainContext,
     useNetworkDescriptor,
-    useAllowTestnet,
     useChainIdValid,
     RevokeChainContextProvider,
     useWeb3Utils,
@@ -95,7 +94,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     } = useChainContext({ account: expectedAccount })
 
     const expectedUtils = useWeb3Utils(expectedPluginID)
-    const expectedAllowTestnet = useAllowTestnet()
+    const expectedAllowTestnet = process.env.NODE_ENV === 'development'
 
     const chainIdValid = useChainIdValid(actualPluginID)
 

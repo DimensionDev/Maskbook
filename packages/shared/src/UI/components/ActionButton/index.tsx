@@ -77,17 +77,21 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     }, [executor, noUpdateEffect])
 
     if (state === 'wait')
-        return <ActionButton {...b} loading disabled={!waitingOnClick} children={waiting} onClick={cancel} />
+        return (
+            <ActionButton {...b} loading disabled={!waitingOnClick} onClick={cancel}>
+                {waiting}
+            </ActionButton>
+        )
     if (state === 'complete')
         return (
             <ActionButton
                 {...b}
                 disabled={!completeClick}
                 startIcon={completeIcon}
-                children={complete}
                 className={completeClass}
-                onClick={completeClick}
-            />
+                onClick={completeClick}>
+                {complete}
+            </ActionButton>
         )
     if (state === 'fail')
         return (
@@ -95,12 +99,16 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 {...b}
                 disabled={!failClick}
                 startIcon={failIcon}
-                children={failed}
                 className={failedButtonStyle || failClass}
-                onClick={failClick}
-            />
+                onClick={failClick}>
+                {failed}
+            </ActionButton>
         )
-    return <ActionButton {...b} children={init} onClick={run} />
+    return (
+        <ActionButton {...b} onClick={run}>
+            {init}
+        </ActionButton>
+    )
 }
 const useStyles = makeStyles()({
     success: {

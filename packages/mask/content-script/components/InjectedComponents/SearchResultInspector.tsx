@@ -1,7 +1,7 @@
 import {
-    getSearchResultContent,
-    getSearchResultContentForProfileTab,
-    getSearchResultTabContent,
+    SearchResultContent,
+    SearchResultContentForProfileTab,
+    SearchResultTabContent,
     getSearchResultTabs,
     useActivatedPluginsSiteAdaptorNotMinimal,
     useIsMinimalMode,
@@ -85,21 +85,6 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const currentResult = props.currentSearchResult ?? resultList?.[0]
 
     const { classes } = useStyles({ isProfilePage, searchType: currentResult?.type })
-    const contentComponent = useMemo(() => {
-        if (!currentResult || !resultList?.length) return null
-
-        const Component =
-            profileTabType ? getSearchResultContentForProfileTab(currentResult) : getSearchResultContent(currentResult)
-
-        return (
-            <Component
-                resultList={resultList}
-                currentResult={currentResult}
-                isProfilePage={isProfilePage}
-                identity={identity}
-            />
-        )
-    }, [currentResult, resultList, isProfilePage, identity, profileTabType])
 
     const tabs = useMemo(() => {
         if (!currentResult) return EMPTY_LIST
@@ -112,21 +97,22 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         setTab(defaultTab)
     }, [currentResult, defaultTab])
 
-    const tabContentComponent = useMemo(() => {
-        if (!currentResult) return null
-        const Component = getSearchResultTabContent(currentTab)
-        return <Component result={currentResult} />
-    }, [currentTab, resultList])
-
     if (isMinimalMode && !isProfilePage) return null
-    if (!keyword && !currentResult) return null
-    if (!contentComponent) return null
+    if (!currentResult || !keyword || !resultList?.length) return null
+    const Component = profileTabType ? SearchResultContentForProfileTab : SearchResultContent
 
     return (
         <div>
             <ScopedDomainsContainer>
                 <div className={classes.contentWrapper}>
-                    <div>{contentComponent}</div>
+                    <div>
+                        <Component
+                            resultList={resultList}
+                            currentResult={currentResult}
+                            isProfilePage={isProfilePage}
+                            identity={identity}
+                        />
+                    </div>
                     {tabs.length ?
                         <Stack px={2}>
                             <TabContext value={currentTab}>
@@ -139,8 +125,10 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                         </Stack>
                     :   null}
                 </div>
-                {tabContentComponent ?
-                    <div className={classes.tabContent}>{tabContentComponent}</div>
+                {currentResult ?
+                    <div className={classes.tabContent}>
+                        <SearchResultTabContent result={currentResult} tabId={currentTab} />
+                    </div>
                 :   null}
             </ScopedDomainsContainer>
         </div>

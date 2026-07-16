@@ -10,7 +10,14 @@ import { DecryptPostFailed } from './DecryptPostFailed.js'
 import { encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
-import { type PostContext, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
+import {
+    type PostContext,
+    usePostInfoHasMaskPayload,
+    PostInfoContext,
+    usePostInfoAuthor,
+    usePostInfoPostMetadataImages,
+    usePostInfoMentionedLinks,
+} from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results-es'
 import { uniqWith } from 'lodash-es'
 
@@ -74,13 +81,13 @@ function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     return false
 }
 export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
-    const deconstructedPayload = usePostInfoDetails.hasMaskPayload()
-    const currentPostBy = usePostInfoDetails.author()
+    const deconstructedPayload = usePostInfoHasMaskPayload()
+    const currentPostBy = usePostInfoAuthor()
     // TODO: we should read this from the payload.
-    const authorInPayload = usePostInfoDetails.author()
+    const authorInPayload = currentPostBy
     const postBy = authorInPayload || currentPostBy
-    const postMetadataImages = usePostInfoDetails.postMetadataImages()
-    const mentionedLinks = usePostInfoDetails.mentionedLinks()
+    const postMetadataImages = usePostInfoPostMetadataImages()
+    const mentionedLinks = usePostInfoMentionedLinks()
     const postInfo = useContext(PostInfoContext)!
 
     const [progress, dispatch] = useReducer(progressReducer, [])

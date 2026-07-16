@@ -1,3 +1,5 @@
+/* eslint-disable @eslint-react/static-components */
+/* eslint-disable @eslint-react/no-children-map */
 import { Children, cloneElement, useCallback, useRef } from 'react'
 import { omit } from 'lodash-es'
 /* eslint-disable tss-unused-classes/unused-classes */
@@ -147,11 +149,10 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const siteOverwrite = useSiteOverwrite().classes
     const styles = useStyles({ clean }, { props })
     const cx = styles.cx
-    const classes = { ...styles.classes }
+    const classes: { [key: string]: string } = { ...styles.classes }
     if (siteOverwrite) {
         for (const [key, className] of Object.entries(siteOverwrite)) {
-            if (key in classes) Reflect.set(classes, key, cx(Reflect.get(classes, key), String(className)))
-            else Reflect.set(classes, key, String(className))
+            classes[key] = key in classes ? cx(classes[key], className) : className
         }
     }
     const {
@@ -300,6 +301,7 @@ function CopyElementWithNewProps<T>(
                 result[key] = cx((extraClasses as any)[key], child?.props?.classes?.[key])
             }
             return child?.type === Target ?
+                    // eslint-disable-next-line @eslint-react/no-clone-element
                     cloneElement(child, {
                         classes: result,
                     } as DialogContentProps)

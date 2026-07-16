@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { InjectedDialog, ActionButtonPromise, WalletStatusBox } from '@masknet/shared'
-import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { Trans } from '@lingui/react/macro'
 
@@ -59,7 +59,6 @@ const useStyles = makeStyles()((theme) => ({
 
 interface WalletRiskWarningProps {
     account: string
-    pluginID: NetworkPluginID
     open: boolean
     onClose: () => void
 }
@@ -90,33 +89,25 @@ export function WalletRiskWarning({ account, open, onClose }: WalletRiskWarningP
                 <div className={classes.icon}>
                     <Icons.Warning size={90} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 53, 69, 0.2))' }} />
                 </div>
-                <Typography
-                    className={classes.title}
-                    align="center"
-                    variant="h4"
-                    children={<Trans>Risk Warning</Trans>}
-                />
-                <Typography
-                    className={classes.article}
-                    variant="body2"
-                    children={
-                        <Trans>
-                            Dear User,
-                            <br />
-                            <br />
-                            When using any wallet-related plugins in Mask Network, please confirm the following usage
-                            risks:
-                            <br />
-                            <br />
-                            Mask Network provides non-commercial free services. The plug-ins are provided by community
-                            members and other excellent third-party DApp teams. Due to the nature of the decentralized
-                            network and other uncertain risk factors, users are requested to properly protect their
-                            sensitive information such as wallet mnemonic words and private keys. Please be cautious
-                            when interact with any blockchain contract. The risks caused by any third-party DApps
-                            (plug-ins) are borne by the third-party DApps themselves.
-                        </Trans>
-                    }
-                />
+                <Typography className={classes.title} align="center" variant="h4">
+                    <Trans>Risk Warning</Trans>
+                </Typography>
+                <Typography className={classes.article} variant="body2">
+                    <Trans>
+                        Dear User,
+                        <br />
+                        <br />
+                        When using any wallet-related plugins in Mask Network, please confirm the following usage risks:
+                        <br />
+                        <br />
+                        Mask Network provides non-commercial free services. The plug-ins are provided by community
+                        members and other excellent third-party DApp teams. Due to the nature of the decentralized
+                        network and other uncertain risk factors, users are requested to properly protect their
+                        sensitive information such as wallet mnemonic words and private keys. Please be cautious when
+                        interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are
+                        borne by the third-party DApps themselves.
+                    </Trans>
+                </Typography>
                 <Typography className={classes.article}>
                     <Trans>By confirming means that you agree to bear the possible risks above.</Trans>
                 </Typography>

@@ -197,6 +197,7 @@ export function MaskTabList(props: MaskTabListProps) {
     }
     // #endregion
 
+    // eslint-disable-next-line @eslint-react/no-children-map
     const children = Children.map(props.children, (child, index) => {
         if (!isValidElement(child)) {
             if (child === null) return null

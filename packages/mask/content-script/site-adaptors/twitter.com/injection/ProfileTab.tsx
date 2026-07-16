@@ -234,9 +234,9 @@ function ProfileTabForTokenAndPersona() {
                     selected: classes.selected,
                 }}
                 reset={resetTwitterActivatedContent}
-                clear={hideTwitterActivatedContent}
-                children={<div className={classes.line} />}
-            />
+                clear={hideTwitterActivatedContent}>
+                <div className={classes.line} />
+            </ProfileTab>
         )
 }
 
@@ -268,9 +268,9 @@ function ProfileTabForDAO() {
                     selected: classes.selected,
                 }}
                 reset={resetTwitterActivatedContent}
-                clear={hideTwitterActivatedContent}
-                children={<div className={classes.line} />}
-            />
+                clear={hideTwitterActivatedContent}>
+                <div className={classes.line} />
+            </ProfileTab>
 }
 
 export function injectProfileTabAtTwitter(signal: AbortSignal) {

@@ -9,7 +9,7 @@ import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactCompilerPlugin from 'eslint-plugin-react-compiler'
 import ImportPlugin from 'eslint-plugin-import-x'
-import ReactPlugin from '@eslint-react/eslint-plugin'
+import eslintReact from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import tanstackReactQuery from '@tanstack/eslint-plugin-query'
 import lingui from 'eslint-plugin-lingui'
@@ -53,6 +53,8 @@ const disabledRules = {
     'unicorn/prefer-top-level-await': 'off', // top-level await is bad for applications. scripts are ok.
 
     // too strict
+    '@eslint-react/jsx-no-leaked-dollar': 'off', // all use cases in our codebase are not a bug, but a currency amount.
+    '@eslint-react/no-array-index-key': 'off',
     '@typescript-eslint/no-deprecated': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
@@ -100,6 +102,14 @@ const disabledRules = {
     'unicorn/switch-case-braces': 'off', // we have a rule that warns for decelaration in switch case
 
     // TODO: add back
+    '@eslint-react/exhaustive-deps': 'off',
+    '@eslint-react/use-state': [
+        'warn',
+        {
+            enforceSetterName: false,
+            // enforceAssignment: false,
+        },
+    ],
     '@tanstack/query/prefer-query-options': 'off',
     '@typescript-eslint/no-confusing-void-expression': 'off', // reasonable, but too much work
     '@typescript-eslint/no-invalid-void-type': 'off',
@@ -131,13 +141,6 @@ const avoidMistakeRules = {
         },
     ], // disable a rule requires a reason
     /// React bad practice
-    '@eslint-react/no-children-count': 'error',
-    '@eslint-react/no-children-for-each': 'error',
-    // '@eslint-react/no-children-map': 'error',
-    '@eslint-react/no-children-only': 'error',
-    // '@eslint-react/no-children-prop': 'error',
-    '@eslint-react/no-children-to-array': 'error',
-    // '@eslint-react/no-clone-element': 'error',
     'react-compiler/react-compiler': 'error',
     /// TypeScript bad practice
     '@typescript-eslint/no-restricted-types': [
@@ -178,12 +181,6 @@ const avoidMistakeRules = {
     // '@masknet/type-no-force-cast-via-top-type': 'error', // expr as any as T
 
     // Security
-    '@eslint-react/dom-no-dangerously-set-innerhtml-with-children': 'error', // dangerouslySetInnerHTML + children
-    '@eslint-react/dom-no-dangerously-set-innerhtml': 'error', // dangerouslySetInnerHTML
-    '@eslint-react/dom-no-missing-iframe-sandbox': 'error', // <iframe sandbox="..." />
-    '@eslint-react/dom-no-script-url': 'error', // javascript:
-    '@eslint-react/dom-no-unsafe-iframe-sandbox': 'error', // <iframe sandbox="..." />
-    '@eslint-react/dom-no-unsafe-target-blank': 'error',
     '@masknet/browser-no-set-html': 'error', // .innerHTML =
     '@masknet/unicode-no-bidi': 'error',
     '@masknet/unicode-no-invisible': 'error',
@@ -205,26 +202,15 @@ const avoidMistakeRules = {
     radix: 'warn', // parseInt('1', _required_)
     // This rule breaks BigNumber class which has different .toFixed() default value.
     // 'unicorn/require-number-to-fixed-digits-argument': 'warn', // Number#toFixed(_required_)
-    '@eslint-react/dom-no-missing-button-type': 'error', // default type is "submit" which refresh the page
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
     /// Footgun language features
     '@typescript-eslint/prefer-enum-initializers': 'warn', // add a new item in the middle is an API breaking change.
     'no-new-wrappers': 'error', // wrapper objects are bad
     /// Little-known language features
-    '@eslint-react/jsx-no-namespace': 'error', // <svg:rect> react does not support
     'no-constructor-return': 'error', // constructor() { return expr }
 
     // Prevent bugs
-    '@eslint-react/dom-no-void-elements-with-children': 'warn', // <img>children</img>
-    '@eslint-react/jsx-no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
     '@eslint-react/no-leaked-conditional-rendering': 'error', // <div>{0 && <Something />}</div> will render "0"!
-    '@eslint-react/no-nested-component-definitions': 'error', // rerender bugs
-    '@eslint-react/no-nested-lazy-component-declarations': 'error', // rerender bugs
-    '@eslint-react/rules-of-hooks': 'error', // react hooks
-    '@eslint-react/web-api-no-leaked-event-listener': 'warn', // addEventListener in hooks without removeEventListener
-    '@eslint-react/web-api-no-leaked-interval': 'warn', // setInterval in hooks without clearInterval
-    '@eslint-react/web-api-no-leaked-resize-observer': 'warn', // new ResizeObserver in hooks without disconnect
-    '@eslint-react/web-api-no-leaked-timeout': 'warn', // setTimeout in hooks without clearTimeout
     '@masknet/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
     'default-case-last': 'error', // default: should be the last
@@ -255,32 +241,16 @@ const avoidMistakeRules = {
                 "If you're in the background script, sessionStorage is banned. It will cause Manifest V3 to crash. If you're in the chrome-extension:// pages, sessionStorage is discouraged. If you're in the content scripts, we can only use sessionStorage to read websites' data and MUST NOT store our own data.",
         },
     ],
-    // '@eslint-react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} /> this rule has bug?
     // 'require-atomic-updates': 'error', // await/yield race condition
-
-    // Performance
-    '@eslint-react/no-missing-key': 'warn',
-    '@eslint-react/no-unstable-context-value': 'warn',
-    '@eslint-react/no-unstable-default-props': 'warn',
-    '@eslint-react/set-state-in-effect': 'error',
-    '@eslint-react/use-state': [
-        'warn',
-        { enforceAssignment: false, enforceLazyInitialization: true, enforceSetterName: false },
-    ],
 }
 
 /** @type {Partial<import('eslint/config').Config['rules']>} */
 const codeStyleRules = {
     // Deprecated
-    '@eslint-react/no-class-component': 'error',
-    '@eslint-react/no-context-provider': 'error',
-    '@eslint-react/no-forward-ref': 'error',
     'no-alert': 'warn', // alert()
     'no-proto': 'error', // __proto__ accessor
 
     // Useless code
-    '@eslint-react/jsx-no-useless-fragment': ['warn', { allowEmptyFragment: true }],
-    '@eslint-react/no-missing-context-display-name': 'warn',
     '@masknet/string-no-simple-template-literal': 'warn', // prefer simple string
     '@masknet/string-no-unneeded-to-string': 'warn', // useless .toString()
     '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
@@ -319,7 +289,7 @@ const codeStyleRules = {
     // Better debug
     'symbol-description': 'warn', // Symbol(desc)
     'unicorn/catch-error-name': ['warn', { ignore: ['^err$'] }], // catch (err)
-    // '@eslint-react/no-missing-component-display-name': 'warn',
+    '@eslint-react/no-missing-context-display-name': 'warn',
 
     // More readable code
     // '@typescript-eslint/consistent-indexed-object-style': ['warn', 'index-signature'], // index signature includes key's name, e.g. { [what_it_should_be: string]: T } than Record<string, T>
@@ -347,9 +317,6 @@ const codeStyleRules = {
     // Naming convention
     // 'func-name-matching': 'warn',
     // 'new-cap': 'warn',
-    // @eslint-react/naming-convention-context-name
-    // @eslint-react/naming-convention-id-name
-    // @eslint-react/naming-convention-ref-name
 
     // Bad practice
     '@typescript-eslint/default-param-last': 'warn', // (a, b = 1, c)
@@ -488,7 +455,6 @@ const moduleSystemRules = {
 const plugins = {
     js: eslint,
     'tss-unused-classes': UnusedClassesPlugin,
-    '@eslint-react': ReactPlugin,
     import: ImportPlugin,
     unicorn: unicorn,
     '@typescript-eslint': tseslint.plugin,
@@ -546,6 +512,8 @@ export default defineConfig(
             ...tanstackReactQuery.configs['flat/recommended-strict'],
             tseslint.configs.strictTypeChecked,
             tseslint.configs.stylisticTypeChecked,
+            eslintReact.configs['strict-type-checked'],
+            eslintReact.configs['disable-rsc'],
         ],
         rules: {
             ...disabledRules,

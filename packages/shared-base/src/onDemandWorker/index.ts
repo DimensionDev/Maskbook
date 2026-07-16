@@ -43,7 +43,7 @@ export class OnDemandWorker extends EventTarget {
         // console.log(`OnDemandWorker ${this.init[1]?.name}`, ...args)
     }
     protected lastUsed = Date.now()
-    protected use(onReady: () => void) {
+    protected take(onReady: () => void) {
         this.keepAlive()
         if (this.worker) return onReady()
         this.worker = new Worker(...this.__init)
@@ -92,7 +92,7 @@ export class OnDemandWorker extends EventTarget {
     postMessage(message: any, transfer: Transferable[]): void
     postMessage(message: any, options?: StructuredSerializeOptions): void
     postMessage(...args: [any, any]) {
-        this.use(() => this.worker?.postMessage(...args))
+        this.take(() => this.worker?.postMessage(...args))
     }
     set onmessage(_: never) {
         throws()

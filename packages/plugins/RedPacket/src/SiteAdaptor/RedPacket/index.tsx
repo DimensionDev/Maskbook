@@ -2,7 +2,7 @@ import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePostInfoPostID, usePostInfoSource, usePostInfoURL, usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -108,11 +108,11 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     const postLink = usePostLink()
 
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback(account, payload)
-    const source = usePostInfoDetails.source()
-    const postUrl = usePostInfoDetails.url()
+    const source = usePostInfoSource()
+    const postUrl = usePostInfoURL()
     const link = postLink.toString() || postUrl?.toString()
     const isFireflyRedpacket = useIsFireflyRedpacket()
-    const postId = usePostInfoDetails.postID()
+    const postId = usePostInfoPostID()
 
     const network = useNetwork<NetworkPluginID.PLUGIN_EVM>(NetworkPluginID.PLUGIN_EVM, redpacketChainId)
 

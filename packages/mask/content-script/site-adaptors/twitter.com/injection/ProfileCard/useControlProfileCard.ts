@@ -14,7 +14,7 @@ const LEAVE_DURATION = 500
 export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null>): Result {
     const hoverRef = useRef(false)
     const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
-    const skipClick = useRef(false)
+    const skipClickRef = useRef(false)
 
     const [active, setActive] = useState(false)
     const [placement, setPlacement] = useState<PopperPlacementType>('bottom')
@@ -28,8 +28,8 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
         clearTimeout(closeTimerRef.current)
         closeTimerRef.current = setTimeout(() => {
             // Discard the click that would open from external
-            if (byClick && skipClick.current) {
-                skipClick.current = false
+            if (byClick && skipClickRef.current) {
+                skipClickRef.current = false
                 return
             }
             setActive(false)
@@ -71,7 +71,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
                 hideProfileCard()
                 return
             }
-            if (event.external) skipClick.current = true
+            if (event.external) skipClickRef.current = true
             const reachedBottom = event.anchorBounding.bottom + CARD_HEIGHT > window.innerHeight
 
             showProfileCard(reachedBottom ? 'auto' : 'bottom')

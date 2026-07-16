@@ -8,11 +8,10 @@ export abstract class TransactionFormatterState<ChainId, TransactionParameter, T
     implements Web3TransactionFormatterState<ChainId, TransactionParameter, Transaction>
 {
     async formatTransaction(chainId: ChainId, transaction: Transaction, txHash?: string) {
-        // eslint-disable-next-line @eslint-react/no-missing-context-display-name
-        const context = await this.createContext(chainId, transaction, txHash)
+        const context = await this.createTransactionContext(chainId, transaction, txHash)
         return this.createDescriptor(chainId, transaction, context)
     }
-    abstract createContext(
+    abstract createTransactionContext(
         chainId: ChainId,
         transaction: Transaction,
         txHash?: string,

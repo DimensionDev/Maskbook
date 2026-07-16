@@ -135,9 +135,9 @@ function ProfileTabAtFacebook() {
                 selected: classes.selected,
             }}
             reset={reset}
-            clear={clear}
-            children={<div className={classes.line} />}
-        />
+            clear={clear}>
+            <div className={classes.line} />
+        </ProfileTab>
     )
 }
 

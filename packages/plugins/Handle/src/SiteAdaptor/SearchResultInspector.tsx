@@ -146,7 +146,9 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
     )
 })
 
+// eslint-disable-next-line @eslint-react/no-unnecessary-use-prefix
 const useTheme = () => MaskLightTheme
+// eslint-disable-next-line @eslint-react/no-unnecessary-use-prefix
 const useMaskIconPalette = (theme: Theme) => theme.palette.mode
 
 export const SearchResultInspector = memo(function SearchResultInspector(props: SearchResultInspectorProps) {

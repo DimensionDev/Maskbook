@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostInfoPostID } from '@masknet/plugin-infra/content-script'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, type BoxProps } from '@mui/material'
@@ -33,8 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const ClaimOnFirefly = memo(function ClaimOnFirefly({ className, ...rest }: BoxProps) {
     const { classes, cx } = useStyles()
-    // eslint-disable-next-line react-compiler/react-compiler
-    const postId = usePostInfoDetails.postID()
+    const postId = usePostInfoPostID()
 
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>

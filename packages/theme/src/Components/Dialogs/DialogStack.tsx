@@ -46,6 +46,7 @@ DialogHierarchyContext.displayName = 'DialogHierarchyContext'
  * }
  */
 export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
+    // eslint-disable-next-line @eslint-react/purity
     const selfID = useRef(String(Math.random())).current
     const { pop, push, stack, setParent, hasGlobalBackdrop } = useContext(DialogStackingContext)
 
@@ -62,11 +63,11 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
         return () => pop(selfID)
     }, [open])
 
-    const _TrackDialogHierarchy = useRef<useDialogStackActorReturn['TrackDialogHierarchy']>(null!)
-    _TrackDialogHierarchy.current ??= function TrackDialogHierarchy({ children }) {
+    const TrackDialogHierarchyRef = useRef<useDialogStackActorReturn['TrackDialogHierarchy']>(null!)
+    TrackDialogHierarchyRef.current ??= function TrackDialogHierarchy({ children }) {
         return <DialogHierarchyContext value={selfID}>{children}</DialogHierarchyContext>
     }
-    const TrackDialogHierarchy = _TrackDialogHierarchy.current
+    const TrackDialogHierarchy = TrackDialogHierarchyRef.current
 
     const returnVal: useDialogStackActorReturn = {
         shouldReplaceExitWithBack: stack.length > 1,

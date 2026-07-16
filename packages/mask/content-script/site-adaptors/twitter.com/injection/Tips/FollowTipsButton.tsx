@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import { makeStyles } from '@masknet/theme'
@@ -69,6 +69,10 @@ interface Props {
     userId: string
 }
 
+const Component = createInjectHooksRenderer(
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.TipsRealm?.UI?.Content,
+)
 const FollowButtonTipsSlot = memo(function FollowButtonTipsSlot({ userId }: Props) {
     const themeSetting = useThemeSettings()
     const tipStyle = TipButtonStyle[themeSetting.size]
@@ -77,12 +81,10 @@ const FollowButtonTipsSlot = memo(function FollowButtonTipsSlot({ userId }: Prop
 
     const [disabled, setDisabled] = useState(true)
 
-    const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(
-            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.TipsRealm?.UI?.Content,
-        )
-        return (
+    if (!identity?.identifier) return null
+
+    return (
+        <span className={cx(classes.slot, disabled ? classes.disabled : null)}>
             <Component
                 identity={identity?.identifier}
                 buttonSize={tipStyle.buttonSize}
@@ -90,10 +92,6 @@ const FollowButtonTipsSlot = memo(function FollowButtonTipsSlot({ userId }: Prop
                 slot={Plugin.SiteAdaptor.TipsSlot.FollowButton}
                 onStatusUpdate={setDisabled}
             />
-        )
-    }, [identity?.identifier, tipStyle.buttonSize, tipStyle.iconSize])
-
-    if (!identity?.identifier) return null
-
-    return <span className={cx(classes.slot, disabled ? classes.disabled : null)}>{component}</span>
+        </span>
+    )
 })

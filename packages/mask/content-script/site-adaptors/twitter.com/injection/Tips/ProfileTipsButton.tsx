@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
@@ -36,6 +36,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
+const Component = createInjectHooksRenderer(
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.TipsRealm?.UI?.Content,
+)
 function ProfileTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
     const themeSettings = useThemeSettings()
@@ -43,13 +47,10 @@ function ProfileTipsSlot() {
     const { classes, cx } = useStyles({ size: buttonStyle.buttonSize, marginBottom: buttonStyle.marginBottom })
     const [disabled, setDisabled] = useState(true)
 
-    const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(
-            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.TipsRealm?.UI?.Content,
-        )
+    if (!visitingPersona.identifier) return null
 
-        return (
+    return (
+        <span className={cx(classes.slot, disabled ? classes.hide : null)}>
             <Component
                 identity={visitingPersona.identifier}
                 slot={Plugin.SiteAdaptor.TipsSlot.Profile}
@@ -57,10 +58,6 @@ function ProfileTipsSlot() {
                 buttonSize={buttonStyle.buttonSize}
                 onStatusUpdate={setDisabled}
             />
-        )
-    }, [visitingPersona.identifier, buttonStyle.buttonSize, buttonStyle.iconSize])
-
-    if (!component || !visitingPersona.identifier) return null
-
-    return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
+        </span>
+    )
 }

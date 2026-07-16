@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { type Plugin, usePluginWrapper, usePostInfoMentionedLinks } from '@masknet/plugin-infra/content-script'
 import { parseURLs } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
@@ -38,7 +38,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     },
     CompositionDialogMetadataBadgeRender: new Map([[PLUGIN_META_KEY, () => PLUGIN_NAME]]),
     PostInspector() {
-        const links = usePostInfoDetails.mentionedLinks()
+        const links = usePostInfoMentionedLinks()
 
         const link = links.find(isGitcoin)
         const id = link?.match(/0x[\dA-Fa-f]{64}/u)?.[0]
