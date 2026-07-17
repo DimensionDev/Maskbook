@@ -139,7 +139,7 @@ msgstr "{0} 可用"
 msgid "{0} Bridge Network fee"
 msgstr ""
 
-#. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
+#. placeholder {0}: add(differenceInDays(new Date(time), now), 1).toString()
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "{0} days"
 msgstr ""
@@ -375,8 +375,8 @@ msgstr ""
 
 #. placeholder {0}: action.platform
 #: packages/plugins/RSS3/src/SiteAdaptor/components/FeedCard/CommentCard.tsx
-msgid "<0/> publish a post on {0}"
-msgstr ""
+#~ msgid "<0/> publish a post on {0}"
+#~ msgstr ""
 
 #. placeholder {0}: asset.symbol || asset.name
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
@@ -385,6 +385,12 @@ msgstr ""
 
 #: packages/plugins/RSS3/src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/>{txType, select, deploy {deployed} execute {executed} other {}}<1/>"
+msgstr ""
+
+#. placeholder {0}: target.handle
+#. placeholder {1}: action.platform
+#: packages/plugins/RSS3/src/SiteAdaptor/components/FeedCard/CommentCard.tsx
+msgid "<0>{0}</0> publish a post on {1}"
 msgstr ""
 
 #. placeholder {0}: feed.type
@@ -6248,7 +6254,7 @@ msgstr ""
 #~ msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
 #~ msgstr "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。"
 
-#. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
+#. placeholder {0}: add(differenceInDays(new Date(time), now), 1).toString()
 #: packages/plugins/Savings/src/SiteAdaptor/WithdrawForm.tsx
 msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
 msgstr ""

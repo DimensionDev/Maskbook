@@ -61,7 +61,9 @@ export interface PluginWalletStatusBarWithoutContextProps<T extends NetworkPlugi
     disablePending?: boolean
 }
 
-export interface PluginWalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren, PluginWalletStatusBarWithoutContextProps<T> {
+export interface PluginWalletStatusBarProps<T extends NetworkPluginID>
+    extends PropsWithChildren,
+        PluginWalletStatusBarWithoutContextProps<T> {
     actualPluginID?: T
 }
 
