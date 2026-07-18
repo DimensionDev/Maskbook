@@ -66,7 +66,7 @@ export const Component = memo(function LocalBackup() {
     return (
         <form>
             {!loading && previewInfo ?
-                <Box display="flex" flexDirection="column">
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <PersonasBackupPreview info={previewInfo} />
 
                     <Controller
@@ -108,7 +108,7 @@ export const Component = memo(function LocalBackup() {
                         />
                     :   null}
                 </Box>
-            :   <LoadingStatus minHeight={320} />}
+            :   <LoadingStatus sx={{ minHeight: 320 }} />}
             <OutletPortal>
                 <PrimaryButton
                     startIcon={<Icons.Download />}

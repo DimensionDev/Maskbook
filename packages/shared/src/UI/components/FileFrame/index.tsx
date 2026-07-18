@@ -76,7 +76,7 @@ export const FileFrame = memo(function FileFrame({
                     title={showTooltip ? fileName : undefined}
                     disableInteractive
                     arrow
-                    PopperProps={tooltipPopperProps}>
+                    slotProps={{ popper: tooltipPopperProps }}>
                     <Typography className={classes.name} ref={nameRef}>
                         {fileName}
                     </Typography>

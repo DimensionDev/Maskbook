@@ -219,7 +219,7 @@ export const TokenPicker = memo(function TokenPicker({
                     autoFocus
                     fullWidth
                     wrapperProps={{
-                        padding: '2px',
+                        sx: { padding: '2px' },
                     }}
                     InputProps={{
                         style: { height: 40 },
@@ -232,7 +232,7 @@ export const TokenPicker = memo(function TokenPicker({
                     }}
                 />
                 {keyword && !filteredAssets.length ?
-                    <EmptyStatus flexGrow={1} alignItems="center">
+                    <EmptyStatus sx={{ flexGrow: 1, alignItems: 'center' }}>
                         <Trans>No matched tokens</Trans>
                     </EmptyStatus>
                 :   <FixedSizeList

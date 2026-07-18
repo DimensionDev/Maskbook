@@ -170,7 +170,7 @@ export function GasForm(props: GasFormProps) {
                     classes={{
                         icon: classes.alertIcon,
                         message: classes.alertMessage,
-                        standardSuccess: classes.alertStandardSuccess,
+                        colorSuccess: classes.alertStandardSuccess,
                     }}
                     icon={<Icons.Info />}>
                     <Trans>Current base fee is {formatCurrency(formatWeiToGwei(baseFeePerGas), '')} Gwei</Trans>
@@ -178,7 +178,7 @@ export function GasForm(props: GasFormProps) {
             :   null}
             <Grid container direction="row" spacing={2}>
                 {isEIP1559 ? null : (
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <Controller
                             render={({ field }) => (
                                 <MaskTextField
@@ -213,7 +213,7 @@ export function GasForm(props: GasFormProps) {
                         />
                     </Grid>
                 )}
-                <Grid item xs={isEIP1559 ? 12 : 6}>
+                <Grid size={isEIP1559 ? 12 : 6}>
                     <Controller
                         render={({ field }) => (
                             <MaskTextField
@@ -246,7 +246,7 @@ export function GasForm(props: GasFormProps) {
             </Grid>
             {isEIP1559 ?
                 <Grid container direction="row" spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <Controller
                             render={({ field }) => (
                                 <MaskTextField
@@ -284,7 +284,7 @@ export function GasForm(props: GasFormProps) {
                             name="maxPriorityFeePerGas"
                         />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <Controller
                             render={({ field }) => (
                                 <MaskTextField

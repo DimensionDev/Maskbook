@@ -226,7 +226,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                     />
                     <Typography>Select all</Typography>
                 </label>
-                <Box flexGrow={1}>
+                <Box sx={{ flexGrow: 1 }}>
                     <Button
                         fullWidth
                         disabled={!remains.length}

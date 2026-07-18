@@ -5,7 +5,7 @@ import { makeStyles } from '../../UIHelper/index.js'
 
 export interface ActionButtonProps extends ButtonProps {
     width?: number | string
-    loading?: boolean
+    loading?: boolean | null
 }
 
 const useStyles = makeStyles()({
@@ -30,13 +30,15 @@ export function ActionButton<T extends React.ComponentType<any> = React.Componen
             disabled={!!(rest.disabled || loading)}>
             {loading ?
                 <Box
-                    position="absolute"
-                    width="100%"
-                    height="100%"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{ opacity: 1 }}>
+                    sx={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        opacity: 1,
+                    }}>
                     <LoadingBase />
                 </Box>
             :   null}

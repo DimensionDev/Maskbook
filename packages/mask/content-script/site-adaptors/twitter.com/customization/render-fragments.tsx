@@ -11,7 +11,7 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
         const target = '/' + props.children.slice(1)
         return (
-            <Link href={target} fontSize="inherit">
+            <Link href={target} sx={{ fontSize: 'inherit' }}>
                 {props.children}
             </Link>
         )
@@ -20,7 +20,7 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
         const text = props.children.slice(1)
         const target = `/hashtag/${encodeURIComponent(text)}?src=hashtag_click`
         const link = (
-            <Link href={target} fontSize="inherit">
+            <Link href={target} sx={{ fontSize: 'inherit' }}>
                 {props.children}
                 {props.suggestedPostImage}
             </Link>
@@ -33,7 +33,7 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
     CashLink: memo(function (props) {
         const target = `/search?q=${encodeURIComponent(props.children)}&src=cashtag_click`
         const link = (
-            <Link href={target} fontSize="inherit">
+            <Link href={target} sx={{ fontSize: 'inherit' }}>
                 {props.children}
             </Link>
         )
@@ -57,7 +57,7 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
     Link: memo(function LinkFragment(props: RenderFragmentsContextType.LinkProps) {
         const LinkModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.LinkModifier)?.LinkModifier
         const link = (
-            <Link href={props.href} target="_blank" rel="noopener noreferrer" fontSize="inherit">
+            <Link href={props.href} target="_blank" rel="noopener noreferrer" sx={{ fontSize: 'inherit' }}>
                 {props.children}
                 {props.suggestedPostImage}
             </Link>

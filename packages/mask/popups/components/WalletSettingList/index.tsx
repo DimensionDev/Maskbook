@@ -10,9 +10,9 @@ import { Trans } from '@lingui/react/macro'
 export const WalletList = memo(function WalletList() {
     const theme = useTheme()
     return (
-        <Box flex={1} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             <Icons.EmptySimple size={36} />
-            <Typography fontSize={14} color={theme.palette.maskColor.second} mt={1.5} textAlign="center">
+            <Typography color={theme.palette.maskColor.second} sx={{ fontSize: 14, mt: 1.5, textAlign: 'center' }}>
                 <Trans>
                     No associated wallet.{' '}
                     <RouterLink

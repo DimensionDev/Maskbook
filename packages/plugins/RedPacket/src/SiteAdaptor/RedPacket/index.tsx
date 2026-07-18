@@ -210,7 +210,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     }
 
     // the red packet can fetch without account
-    if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
+    if (!availability || !token || isLoadingCover) return <LoadingStatus sx={{ minHeight: 148 }} />
     const unsatisfied = !!account && claimStrategyStatus?.canClaim === false && !isClaimed
 
     const card = (

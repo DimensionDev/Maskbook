@@ -212,7 +212,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     if (picked) handleSelectAsset(picked as Web3Helper.FungibleAssetAll)
                 }}>
                 <TokenIcon size={36} chainId={chainId} address={address} logoURL={selectedAsset?.logoURL} />
-                <Box mr="auto" ml={2}>
+                <Box sx={{ mr: 'auto', ml: 2 }}>
                     <ProgressiveText loading={isPending} skeletonWidth={36}>
                         {token?.symbol}
                     </ProgressiveText>
@@ -224,7 +224,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 </Box>
                 <Icons.ArrowDrop size={24} />
             </Box>
-            <Box mt={2} mx={2}>
+            <Box sx={{ mt: 2, mx: 2 }}>
                 <Input
                     fullWidth
                     disableUnderline
@@ -251,7 +251,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     }}
                 />
             </Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} mx={2}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2, mx: 2 }}>
                 <Typography className={classes.label}>
                     <Trans>Gas Fee</Trans>
                 </Typography>

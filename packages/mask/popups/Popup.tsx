@@ -38,7 +38,7 @@ const personaInitialState = {
 }
 
 const pending = (
-    <Box height="100vh" display="flex">
+    <Box sx={{ height: '100vh', display: 'flex' }}>
         <LoadingPlaceholder />
     </Box>
 )

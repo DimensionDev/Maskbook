@@ -52,7 +52,7 @@ export function BridgeStack() {
     const { classes } = useStyles()
 
     return (
-        <Stack height="100%" spacing={2}>
+        <Stack sx={{ height: '100%' }} spacing={2}>
             {crossChainBridge.map((bridge) => (
                 <div className={classes.bridgeItem} key={bridge.ID} onClick={() => openWindow(bridge.link)}>
                     {bridge.icon}

@@ -236,7 +236,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
                 {!lensAccount && isLoading ?
-                    <Box display="flex" justifyContent="center" alignItems="center" minHeight={342}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 342 }}>
                         <CircularProgress />
                     </Box>
                 :   <Box className={classes.container}>

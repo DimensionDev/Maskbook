@@ -157,7 +157,7 @@ export const Component = memo(function RecoveryLocalBackup() {
     }, [loading, !file, restoreStatus, summary, !password])
 
     return (
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
             {restoreStatus === RestoreStatus.Verified ? null : (
                 <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin,.json" />
             )}
@@ -178,7 +178,7 @@ export const Component = memo(function RecoveryLocalBackup() {
                 </FileFrame>
             :   null}
             {restoreStatus === RestoreStatus.Decrypting ?
-                <Box mt={4}>
+                <Box sx={{ mt: 4 }}>
                     <PasswordField
                         fullWidth
                         placeholder={t`Backup password`}
@@ -196,7 +196,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             : restoreStatus === RestoreStatus.Verified && summary ?
                 <>
                     <AccountStatusBar label={file?.name} actionLabel={<Trans>Reselect</Trans>} onAction={reset} />
-                    <BackupPreview mt={2} info={summary} />
+                    <BackupPreview sx={{ mt: 2 }} info={summary} />
                 </>
             :   null}
             <OutletPortal>

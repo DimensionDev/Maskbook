@@ -160,6 +160,6 @@
     "webpack-target-webextension": "^2.1.3"
   },
   "peerDependencies": {
-    "tss-react": "^4.9.0"
+    "tss-react": "^4.9.21"
   }
 }

@@ -29,20 +29,23 @@ export function ContractSection({
     const chain = useNetworkDescriptor(pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
 
     return (
-        <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent={align}>
+        <Stack direction="row" sx={{ gap: 0.5, display: 'flex', alignItems: 'center', justifyContent: align }}>
             {chain ?
                 <WalletIcon mainIcon={chain.icon} size={14} />
             : iconURL ?
                 <TokenIcon logoURL={iconURL} address={address} name={name} symbol={symbol} size={16} disableBadge />
-            :   <Box width={16} />}
+            :   <Box sx={{ width: 16 }} />}
             <Typography
                 variant="body2"
                 component="a"
-                fontWeight={700}
-                fontSize={fullAddress ? 12 : 14}
                 href={chainId ? Utils.explorerResolver.addressLink(chainId, address) : undefined}
                 target="_blank"
-                sx={{ color: 'text.primary', textDecoration: 'none' }}>
+                sx={{
+                    fontWeight: 700,
+                    fontSize: fullAddress ? 12 : 14,
+                    color: 'text.primary',
+                    textDecoration: 'none',
+                }}>
                 <FormattedAddress
                     address={address}
                     size={fullAddress ? undefined : 4}

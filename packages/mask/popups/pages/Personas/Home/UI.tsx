@@ -259,7 +259,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 />
                             </Box>
                             <Box className={classes.info}>
-                                <Box position="relative" height="60px">
+                                <Box sx={{ position: 'relative', height: '60px' }}>
                                     <PersonaAvatar size={60} avatar={avatar} pubkey={publicKey!} />
                                     <Box
                                         className={classes.edit}
@@ -267,7 +267,8 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                         <Icons.Edit size={12} />
                                     </Box>
                                 </Box>
-                                <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                                <Typography
+                                    sx={{ fontSize: 18, fontWeight: '700', lineHeight: '22px', marginTop: '8px' }}>
                                     {nickname}
                                 </Typography>
                                 {fingerprint && publicKey ?

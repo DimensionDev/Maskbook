@@ -54,7 +54,7 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
     const { classes } = useStyles()
     const name = `@${userId}`
     return (
-        <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
+        <Box sx={{ width: '156px', padding: '4px', display: 'flex', gap: '10px', alignItems: 'center' }}>
             <AccountAvatar
                 avatar={userAvatar}
                 network={site}

@@ -226,7 +226,7 @@ export const SocialFeed = memo<SocialFeedProps>(function SocialFeed({ post, verb
             </div>
             {target ?
                 <div className={classes.quoted}>
-                    <FeedSummary className={classes.summary} post={target} mt={0.5} />
+                    <FeedSummary className={classes.summary} post={target} sx={{ mt: 0.5 }} />
                     <div className={classes.quotedPost}>
                         <div className={classes.line} />
                         <article className={cx(classes.target, verbose ? classes.verbose : null)}>
@@ -256,7 +256,7 @@ export const SocialFeed = memo<SocialFeedProps>(function SocialFeed({ post, verb
                     </div>
                 </div>
             :   null}
-            <FeedSummary post={post} mt={0.5} />
+            <FeedSummary post={post} sx={{ mt: 0.5 }} />
             <div className={classes.body}>
                 {media?.type === 'Image' ?
                     <Image

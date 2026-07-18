@@ -105,13 +105,15 @@ export function TipsRealmContent({
                 title={<Trans>Send authors tips by using Mask Network's Tips function.</Trans>}
                 actionText={<Trans>Close</Trans>}>
                 <Stack
-                    display="flex"
-                    width="38px"
-                    height="38px"
-                    position="relative"
-                    top={0}
-                    alignItems="center"
-                    justifyContent="center">
+                    sx={{
+                        display: 'flex',
+                        width: '38px',
+                        height: '38px',
+                        position: 'relative',
+                        top: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
                     {button}
                 </Stack>
             </PluginGuide>

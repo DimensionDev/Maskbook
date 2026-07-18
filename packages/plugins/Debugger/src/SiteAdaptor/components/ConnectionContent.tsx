@@ -249,7 +249,7 @@ export function ConnectionContent() {
                 <TableBody>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Add Custom Network
                             </Typography>
                         </TableCell>
@@ -263,7 +263,7 @@ export function ConnectionContent() {
                         <>
                             <TableRow>
                                 <TableCell>
-                                    <Typography variant="body2" whiteSpace="nowrap">
+                                    <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                         Use Custom Network
                                     </Typography>
                                 </TableCell>
@@ -275,7 +275,7 @@ export function ConnectionContent() {
                             </TableRow>
                             <TableRow>
                                 <TableCell>
-                                    <Typography variant="body2" whiteSpace="nowrap">
+                                    <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                         Remove Custom Network
                                     </Typography>
                                 </TableCell>
@@ -287,7 +287,7 @@ export function ConnectionContent() {
                             </TableRow>
                             <TableRow>
                                 <TableCell>
-                                    <Typography variant="body2" whiteSpace="nowrap">
+                                    <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                         Rename Custom Network
                                     </Typography>
                                 </TableCell>
@@ -301,7 +301,7 @@ export function ConnectionContent() {
                     :   null}
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Capture Event
                             </Typography>
                         </TableCell>
@@ -313,7 +313,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Capture Exception
                             </Typography>
                         </TableCell>
@@ -325,7 +325,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Estimate
                             </Typography>
                         </TableCell>
@@ -337,7 +337,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Transfer
                             </Typography>
                         </TableCell>
@@ -349,7 +349,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Approve Fungible Token
                             </Typography>
                         </TableCell>
@@ -361,7 +361,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Approve Non-Fungible Token
                             </Typography>
                         </TableCell>
@@ -373,7 +373,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Sign Message
                             </Typography>
                         </TableCell>
@@ -395,7 +395,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Sign Typed Data
                             </Typography>
                         </TableCell>
@@ -417,7 +417,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Sign Transaction
                             </Typography>
                         </TableCell>
@@ -439,7 +439,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Switch Chain
                             </Typography>
                         </TableCell>
@@ -463,7 +463,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Connect Wallet
                             </Typography>
                         </TableCell>
@@ -485,7 +485,7 @@ export function ConnectionContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Disconnect Wallet
                             </Typography>
                         </TableCell>

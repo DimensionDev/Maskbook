@@ -245,7 +245,9 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
             </Box>
             <ListItemText
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 style={{ marginLeft: 15 }}
                 secondary={
                     <ProgressiveText
@@ -291,7 +293,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                             <Trans>Infinite</Trans>
                         :   formatTokenBalance(approveAmount, approveToken.decimals)}
                     </strong>
-                    <TextOverflowTooltip title={approveToken.symbol} PopperProps={popperProps}>
+                    <TextOverflowTooltip title={approveToken.symbol} slotProps={{ popper: popperProps }}>
                         <span className={classes.symbol}>{approveToken.symbol}</span>
                     </TextOverflowTooltip>
                 </Typography>
@@ -303,7 +305,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                         return (
                             <Typography key={i} className={classes.asset} component="div">
                                 <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
-                                <TextOverflowTooltip title={token.symbol} PopperProps={popperProps}>
+                                <TextOverflowTooltip title={token.symbol} slotProps={{ popper: popperProps }}>
                                     <span className={classes.symbol}>{token.symbol}</span>
                                 </TextOverflowTooltip>
                             </Typography>
@@ -359,7 +361,9 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                 />
             </Box>
             <ListItemText
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 style={{ marginLeft: 15 }}
                 secondary={
                     <Box>
@@ -400,7 +404,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                     <Trans>Send</Trans>
                 </Typography>
             </ListItemText>
-            <Box ml="auto">
+            <Box sx={{ ml: 'auto' }}>
                 {candidate.value && nativeToken ?
                     <Typography className={classes.asset}>
                         <strong className={classes.amount}>
@@ -424,12 +428,14 @@ export const ActivityItemSkeleton = memo<ListItemProps>(function ActivityItemSke
                 <Skeleton variant="circular" className={classes.badgeIcon} width={16} height={16} />
             </Box>
             <ListItemText
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 style={{ marginLeft: 15 }}
                 secondary={<Skeleton variant="text" width={100} />}>
                 <Skeleton variant="text" width={90} />
             </ListItemText>
-            <Box ml="auto">
+            <Box sx={{ ml: 'auto' }}>
                 <Skeleton variant="text" width={40} />
             </Box>
         </ListItem>

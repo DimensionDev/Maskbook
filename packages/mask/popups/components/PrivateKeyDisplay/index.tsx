@@ -122,11 +122,11 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
         <Box>
             <Box className={classes.root}>
                 <Icons.MaskBlue size={24} />
-                <Box ml={1} flex={1}>
+                <Box sx={{ ml: 1, flex: 1 }}>
                     <Typography className={classes.name}>{wallet.name}</Typography>
                     <Typography className={classes.address}>{formatEthereumAddress(wallet.address, 4)}</Typography>
                 </Box>
-                <Box display="flex" height="32px" alignItems="flex-end">
+                <Box sx={{ display: 'flex', height: '32px', alignItems: 'flex-end' }}>
                     <WalletBalance className={classes.balance} skeletonWidth={60} account={wallet.address} />
                 </Box>
                 {hiddenArrow ? null : (

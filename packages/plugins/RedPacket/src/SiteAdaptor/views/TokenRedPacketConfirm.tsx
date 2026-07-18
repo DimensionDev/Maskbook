@@ -318,10 +318,12 @@ export function TokenRedPacketConfirm() {
                     <Typography
                         variant="body1"
                         align="left"
-                        marginTop="1px"
-                        marginLeft="8.5px"
                         style={{ lineHeight: '18px' }}
-                        fontSize="14px">
+                        sx={{
+                            marginTop: '1px',
+                            marginLeft: '8.5px',
+                            fontSize: '14px',
+                        }}>
                         <Trans>You can withdraw the remaining balance 24 hours after sending the lucky drop.</Trans>
                     </Typography>
                 </Paper>

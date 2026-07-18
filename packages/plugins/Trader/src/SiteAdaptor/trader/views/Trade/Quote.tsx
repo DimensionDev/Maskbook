@@ -166,10 +166,12 @@ export function Quote({ quote, ...props }: QuoteProps) {
                                 title={isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}>
                                 <Box
                                     component="span"
-                                    maxWidth="200px"
-                                    textOverflow="ellipsis"
-                                    overflow="hidden"
-                                    whiteSpace="nowrap">
+                                    sx={{
+                                        maxWidth: '200px',
+                                        textOverflow: 'ellipsis',
+                                        overflow: 'hidden',
+                                        whiteSpace: 'nowrap',
+                                    }}>
                                     {isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}
                                 </Box>
                             </TextOverflowTooltip>

@@ -178,12 +178,12 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
             </Typography>
             <Box className={classes.tokenInfo}>
                 <TokenIcon address={token?.address ?? ''} chainId={chainId} name={token?.name} size={24} disableBadge />
-                <Box width="262px" mr="18px" ml={1}>
+                <Box sx={{ width: '262px', mr: '18px', ml: 1 }}>
                     <Typography className={classes.name}>{token?.symbol}</Typography>
                     <Typography className={classes.address}>{token?.address}</Typography>
                 </Box>
                 {token?.address ?
-                    <Box display="flex" columnGap={1} alignItems="center">
+                    <Box sx={{ display: 'flex', columnGap: 1, alignItems: 'center' }}>
                         <CopyButton text={token.address} size={16} />
                         <Link
                             href={EVMExplorerResolver.addressLink(chainId, token.address)}
@@ -204,31 +204,35 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         setValue(e.target.value)
                         handleChange(rightShift(e.target.value, token?.decimals).toString())
                     }}
-                    InputProps={{
-                        endAdornment: (
-                            <Button
-                                variant="text"
-                                className={classes.max}
-                                onClick={() => {
-                                    setValue(leftShift(balance, token?.decimals).toString())
-                                    handleChange(balance)
-                                }}>
-                                <Trans>Max</Trans>
-                            </Button>
-                        ),
-                        disableUnderline: true,
-                        className: classes.input,
-                        type: 'number',
-                        inputProps: {
-                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
-                            min: 0,
+                    slotProps={{
+                        input: {
+                            endAdornment: (
+                                <Button
+                                    variant="text"
+                                    className={classes.max}
+                                    onClick={() => {
+                                        setValue(leftShift(balance, token?.decimals).toString())
+                                        handleChange(balance)
+                                    }}>
+                                    <Trans>Max</Trans>
+                                </Button>
+                            ),
+                            disableUnderline: true,
+                            className: classes.input,
+                            type: 'number',
+                            inputProps: {
+                                pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                min: 0,
+                            },
                         },
                     }}
                 />
                 {value ?
                     <Typography
-                        fontSize={12}
-                        fontWeight={700}
+                        sx={{
+                            fontSize: 12,
+                            fontWeight: 700,
+                        }}
                         color={
                             isGreaterThan(value, leftShift(balance, token?.decimals)) ?
                                 theme.palette.maskColor.danger
@@ -260,8 +264,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                     </Typography>
                 :   null}
             </Box>
-
-            <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
+            <Box sx={{ mt: 3.75, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography className={classes.gasFeeTitle}>
                     <Trans>Gas Fee</Trans>
                 </Typography>

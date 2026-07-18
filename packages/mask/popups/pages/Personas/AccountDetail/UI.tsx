@@ -41,8 +41,8 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(function AccountDetail
     const handleBack = useCallback(() => navigate(-1), [])
 
     return (
-        <Box height="100%" pb={9}>
-            <Box pt={2} px={2} display="flex" flexDirection="column" height="100%">
+        <Box sx={{ height: '100%', pb: 9 }}>
+            <Box sx={{ pt: 2, px: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <Box className={classes.account}>
                     <AccountAvatar
                         avatar={account.avatar}

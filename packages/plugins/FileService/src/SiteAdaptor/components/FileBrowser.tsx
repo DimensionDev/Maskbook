@@ -12,7 +12,7 @@ import { useFileManagement } from '../contexts/index.js'
 import { FileList, SelectableFileList } from './FileList.js'
 import { Trans } from '@lingui/react/macro'
 
-const Tabs: typeof MuiTabs = styled(MuiTabs)(({ theme }) => ({
+const Tabs = styled(MuiTabs)(({ theme }) => ({
     display: 'flex',
     gap: theme.spacing(0.5),
     [`& .${tabsClasses.indicator}`]: {
@@ -231,7 +231,7 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                                     aria-label={x.key}
                                     value={x.value}
                                     label={
-                                        <Typography variant="body2" fontWeight={700}>
+                                        <Typography variant="body2" sx={{ fontWeight: 700 }}>
                                             {x.value}
                                         </Typography>
                                     }

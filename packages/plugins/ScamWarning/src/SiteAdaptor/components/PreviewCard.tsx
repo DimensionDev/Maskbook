@@ -36,14 +36,14 @@ export function PreviewCard({ links }: PreviewCardProps) {
 
     return (
         <ThemeProvider theme={MaskDarkTheme}>
-            <Stack p={1.5} pt={0} className={classes.root}>
+            <Stack sx={{ p: 1.5, pt: 0 }} className={classes.root}>
                 <Stack className={classes.card}>
                     {value.map((x) => (
                         <Typography
                             key={x.url}
                             className={classes.title}
                             variant="h6"
-                            fontWeight={700}
+                            sx={{ fontWeight: 700 }}
                             color="textPrimary">
                             {x.url}
                         </Typography>

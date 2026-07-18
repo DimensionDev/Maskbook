@@ -104,7 +104,6 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
-                primaryTypographyProps={{ component: 'div' }}
                 primary={
                     <ShadowRootTooltip
                         title={tooltipTitle}
@@ -122,7 +121,10 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                         </div>
                     </ShadowRootTooltip>
                 }
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    primary: { component: 'div' },
+                    secondary: { component: 'div' },
+                }}
                 secondary={
                     <div className={classes.flex}>
                         <Highlighter

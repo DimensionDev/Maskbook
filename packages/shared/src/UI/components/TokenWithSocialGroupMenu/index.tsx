@@ -131,14 +131,14 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
         <Menu
             disablePortal={disablePortal}
             disableScrollLock={disableScrollLock}
-            PaperProps={{
-                className: classes.menuPaper,
-            }}
-            MenuListProps={{
-                className: classes.addressMenu,
-            }}
             onClose={onClose}
-            {...rest}>
+            {...rest}
+            slotProps={{
+                paper: { className: classes.menuPaper },
+                list: {
+                    className: classes.addressMenu,
+                },
+            }}>
             {groups.map(([type, groupOptions]) => (
                 <div key={type} className={classes.group}>
                     <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>

@@ -204,15 +204,13 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                                 :   'arrow-bottom'
                                             :   '',
                                         )}>
-                                        <Box paddingBottom="16px">
-                                            <Typography fontSize={20}>
+                                        <Box sx={{ paddingBottom: '16px' }}>
+                                            <Typography sx={{ fontSize: 20 }}>
                                                 {step}/{total}
                                             </Typography>
                                         </Box>
                                         <div>
-                                            <Typography fontSize={14} fontWeight={600}>
-                                                {tip}
-                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{tip}</Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
                                             {step === total ?

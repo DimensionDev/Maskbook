@@ -103,7 +103,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
             ))}
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.ConnectSocialAccount)}>
                 <Icons.Connect size={16} />
-                <Typography fontSize={12} fontWeight={700} lineHeight="18px">
+                <Typography sx={{ fontSize: 12, fontWeight: 700, lineHeight: '18px' }}>
                     <Trans>Connect</Trans>
                 </Typography>
             </Box>

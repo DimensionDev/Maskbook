@@ -44,8 +44,8 @@ export function MaskAlert(props: AlertProps) {
                 message: classes.message,
                 icon: classes.icon,
                 action: classes.action,
-                standardWarning: classes.standardWarning,
-                standardError: classes.standardError,
+                colorWarning: classes.standardWarning,
+                colorError: classes.standardError,
                 ...rest.classes,
             }}>
             {children}

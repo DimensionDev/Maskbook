@@ -258,9 +258,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                 )}
                 <Stack className={classes.headline}>
-                    <Stack gap={2} flexGrow={1}>
+                    <Stack sx={{ gap: 2, flexGrow: 1 }}>
                         <Stack>
-                            <Stack component="div" flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
+                            <Stack
+                                component="div"
+                                ref={titleRef}
+                                sx={{ flexDirection: 'row', alignItems: 'center', gap: 0.5 }}>
                                 <Linking LinkProps={{ className: classes.link }} href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
@@ -343,17 +346,19 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     </ThemeProvider>
                                 </Box>
                             </Stack>
-                            <Stack direction="row" justifyContent="space-between" marginTop={2}>
-                                <Stack direction="row" gap={1} alignItems="center">
+                            <Stack direction="row" sx={{ justifyContent: 'space-between', marginTop: 2 }}>
+                                <Stack direction="row" sx={{ gap: 1, alignItems: 'center' }}>
                                     {market ?
                                         <Typography
-                                            fontSize={18}
-                                            fontWeight={500}
-                                            lineHeight="24px"
+                                            sx={{
+                                                fontSize: 18,
+                                                fontWeight: 500,
+                                                lineHeight: '24px',
+                                            }}
                                             color={theme.palette.maskColor.dark}>
                                             {floorPrice ? formatCurrency(floorPrice, 'USD') : '--'}
                                         </Typography>
-                                    :   <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                    :   <Typography sx={{ fontSize: 14, fontWeight: 500, lineHeight: '24px' }}>
                                             <Trans>No Data</Trans>
                                         </Typography>
                                     }

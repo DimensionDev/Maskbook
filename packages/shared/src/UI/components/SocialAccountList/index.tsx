@@ -137,15 +137,15 @@ export const SocialAccountList = memo(function SocialAccountList({
             },
             anchorPosition,
             anchorReference,
-            PaperProps: {
-                className: classes.menuPaper,
-            },
-            MenuListProps: {
-                className: classes.menuList,
-                // Remove space for scrollbar
-                style: {
-                    paddingRight: 0,
-                    width: '100%',
+            slotProps: {
+                paper: { className: classes.menuPaper },
+                list: {
+                    className: classes.menuList,
+                    // Remove space for scrollbar
+                    style: {
+                        paddingRight: 0,
+                        width: '100%',
+                    },
                 },
             },
         },

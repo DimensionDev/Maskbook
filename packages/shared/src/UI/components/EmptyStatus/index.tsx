@@ -26,7 +26,10 @@ interface Props extends BoxProps {
 export const EmptyStatus = memo(function EmptyStatus({ className, children, iconSize = 32, ...rest }: Props) {
     const { classes, cx } = useStyles()
     return (
-        <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
+        <Box
+            className={cx(classes.statusBox, className)}
+            {...rest}
+            sx={[{ p: 2 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             <Icons.EmptySimple size={iconSize} />
             <Typography className={classes.text} component="div">
                 {children ?? <Trans>No Data</Trans>}

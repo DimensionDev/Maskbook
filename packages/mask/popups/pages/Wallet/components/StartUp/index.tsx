@@ -66,14 +66,14 @@ export const WalletStartUp = memo(function WalletStartUp() {
                     </Typography>
                 </Box>
             </WalletSetupHeaderUI>
-            <Box className={classes.content} gap={1.5}>
+            <Box className={classes.content} sx={{ gap: 1.5 }}>
                 <Typography className={classes.placeholderDescription}>
                     <Trans>
                         Supports traditional wallet creation and import, creation of Firefly.social wallets via your X
                         account.
                     </Trans>
                 </Typography>
-                <ImportCreateWallet onChoose={onEnterCreateWallet} flex="column" gap={1.5} />
+                <ImportCreateWallet onChoose={onEnterCreateWallet} sx={{ flex: 'column', gap: 1.5 }} />
             </Box>
         </Box>
     )

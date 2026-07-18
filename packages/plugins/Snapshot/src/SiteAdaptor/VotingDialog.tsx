@@ -83,12 +83,10 @@ const useStyles = makeStyles()((theme) => ({
 
 const messageText = (text: React.ReactNode) => (
     <Box>
-        <Typography fontSize={14} fontWeight={700}>
+        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
             <Trans>Vote</Trans>
         </Typography>
-        <Typography fontSize={14} fontWeight={400}>
-            {text}
-        </Typography>
+        <Typography sx={{ fontSize: 14, fontWeight: 400 }}>{text}</Typography>
     </Box>
 )
 
@@ -210,9 +208,13 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                                     selected.includes(option) ? classes.selectedOption : null,
                                 )}>
                                 <Typography
-                                    fontWeight={700}
-                                    fontSize={16}
-                                    sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    sx={{
+                                        fontWeight: 700,
+                                        fontSize: 16,
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}>
                                     {option}
                                 </Typography>
                             </Button>

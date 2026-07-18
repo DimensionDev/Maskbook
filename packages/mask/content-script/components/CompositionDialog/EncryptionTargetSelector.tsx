@@ -70,7 +70,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 <Typography className={classes.mainTitle}>
                     <Trans>Persona required.</Trans>
                 </Typography>
-                <Box flex={1} />
+                <Box sx={{ flex: 1 }} />
                 <ConnectPersonaBoundary
                     personas={allPersonas}
                     identity={lastRecognized}

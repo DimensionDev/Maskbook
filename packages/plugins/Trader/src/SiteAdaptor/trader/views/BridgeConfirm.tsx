@@ -516,7 +516,7 @@ than estimated, and any unused funds will remain in the original address.`
                         <Link
                             className={cx(classes.rowValue, classes.link)}
                             to={{ pathname: basePath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
-                            <Box display="flex" flexDirection="column">
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${fromNetwork?.nativeCurrency.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
                                 </Typography>
@@ -549,7 +549,7 @@ than estimated, and any unused funds will remain in the original address.`
                                 />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Typography className={classes.rowValue} textAlign="right">
+                        <Typography className={classes.rowValue} sx={{ textAlign: 'right' }}>
                             {toChainNetworkFee ?
                                 <>
                                     {formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)}{' '}
@@ -575,7 +575,7 @@ than estimated, and any unused funds will remain in the original address.`
                                 />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Typography className={classes.rowValue} textAlign="right">
+                        <Typography className={classes.rowValue} sx={{ textAlign: 'right' }}>
                             {router?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'}
                             <br />
                             (${bridgeFeeValue})
@@ -586,10 +586,10 @@ than estimated, and any unused funds will remain in the original address.`
                             <Trans>Wallet</Trans>
                         </Typography>
                         <Typography className={classes.rowValue} component="div">
-                            <Box maxWidth="175px" sx={{ wordBreak: 'break-all', textAlign: 'right' }}>
+                            <Box sx={{ maxWidth: '175px', wordBreak: 'break-all', textAlign: 'right' }}>
                                 {reversedName || formatEthereumAddress(account, 4)}
                             </Box>
-                            <CopyButton text={account} size={16} display="flex" />
+                            <CopyButton text={account} size={16} sx={{ display: 'flex' }} />
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>

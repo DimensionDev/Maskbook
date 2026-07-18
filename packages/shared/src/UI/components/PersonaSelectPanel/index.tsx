@@ -169,23 +169,23 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
 
     if (isPending)
         return (
-            <Stack height="100%" justifyContent="center">
+            <Stack sx={{ height: '100%', justifyContent: 'center' }}>
                 <LoadingStatus iconSize={24} />
             </Stack>
         )
 
     if (error)
         return (
-            <Stack height="100%" justifyContent="center">
+            <Stack sx={{ height: '100%', justifyContent: 'center' }}>
                 <ReloadStatus className={classes.reloadStatus} onRetry={refetch} />
             </Stack>
         )
 
-    if (!personas.length) return <Stack height="100%" justifyContent="space-between" />
+    if (!personas.length) return <Stack sx={{ height: '100%', justifyContent: 'space-between' }} />
 
     return (
-        <Stack height="100%" justifyContent="space-between">
-            <Stack gap={1.5} className={classes.items}>
+        <Stack sx={{ height: '100%', justifyContent: 'space-between' }}>
+            <Stack className={classes.items} sx={{ gap: 1.5 }}>
                 {personas.map((x) => {
                     return (
                         <PersonaItemUI
@@ -215,13 +215,14 @@ function ActionContent(props: ActionContentProps) {
     const { classes } = useStyles(undefined, { props })
     if (!buttonText) return null
     return (
-        <Stack gap={1.5} mt={1.5}>
+        <Stack sx={{ gap: 1.5, mt: 1.5 }}>
             {hint ?
-                <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
+                <Typography
+                    sx={{ color: (t) => t.palette.maskColor.main, fontSize: 14, lineHeight: '18px', height: 36 }}>
                     {hint}
                 </Typography>
             :   null}
-            <Stack direction="row" justifyContent="center">
+            <Stack direction="row" sx={{ justifyContent: 'center' }}>
                 <Button color="primary" className={classes.button} onClick={onClick}>
                     <Icons.Identity size={18} />
                     {buttonText}

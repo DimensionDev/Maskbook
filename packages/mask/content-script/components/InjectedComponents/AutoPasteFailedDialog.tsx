@@ -65,7 +65,12 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     </DialogContentText>
                     {props.data.text ?
                         <>
-                            <TextField multiline fullWidth value={data.text} InputProps={{ readOnly: true }} />
+                            <TextField
+                                multiline
+                                fullWidth
+                                value={data.text}
+                                slotProps={{ input: { readOnly: true } }}
+                            />
                             <Box
                                 sx={{
                                     marginBottom: 1,
@@ -90,14 +95,14 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             </Button>
                         </>
                     :   null}
-                    <Box marginBottom={1} />
-                    <Box textAlign="left">
+                    <Box sx={{ marginBottom: 1 }} />
+                    <Box sx={{ textAlign: 'left' }}>
                         {data.image ?
                             // It must be img
                             // eslint-disable-next-line @eslint-react/purity
                             <Image src={URL.createObjectURL(data.image)} style={{ width: '100%' }} />
                         :   null}
-                        <Box marginBottom={1} />
+                        <Box sx={{ marginBottom: 1 }} />
                         <Button
                             className={classes.button}
                             variant="contained"

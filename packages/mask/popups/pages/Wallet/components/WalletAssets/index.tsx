@@ -104,8 +104,8 @@ export const Component = memo(function WalletAssets() {
 
     return wallet ?
             <WalletAssetsUI onAddToken={handleAdd} />
-        :   <Box pb="72px" display="flex" flexGrow={1} minHeight={0}>
-                <SelectWallet flexGrow={1} embed />
+        :   <Box sx={{ pb: '72px', display: 'flex', flexGrow: 1, minHeight: 0 }}>
+                <SelectWallet sx={{ flexGrow: 1 }} embed />
             </Box>
 })
 

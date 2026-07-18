@@ -26,6 +26,10 @@ overrides:
   '@emotion/react': $@emotion/react
   '@mui/icons-material': $@mui/icons-material
   '@mui/material': $@mui/material
+  '@mui/private-theming': $@mui/private-theming
+  '@mui/styled-engine': $@mui/styled-engine
+  '@mui/system': $@mui/system
+  '@mui/utils': $@mui/utils
   '@swc/core': $@swc/core
   '@splinetool/runtime': 0.9.342
   '@tanstack/react-query': ^5.49.2
@@ -36,6 +40,7 @@ overrides:
   glob-stream: 7.0.0
   react: $react
   react-dom: $react-dom
+  tss-react: 4.9.21
   reflect-metadata: 0.1.13
   # by @scamsniffer/detector
   ts-jest: '-'

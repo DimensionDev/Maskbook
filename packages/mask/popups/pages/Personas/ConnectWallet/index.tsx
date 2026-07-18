@@ -112,12 +112,12 @@ export const Component = memo(function ConnectWalletPage() {
     useTitle(t`Connect Wallet`, handleBack)
 
     return (
-        <Box p={2}>
+        <Box sx={{ p: 2 }}>
             <Box className={classes.provider}>
                 <Box className={classes.accountInfo}>
                     <WalletAvatar address={account} size={30} />
                     <Box>
-                        <Typography fontSize={14} fontWeight={700} lineHeight="18px">
+                        <Typography sx={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>
                             {walletAlias}
                         </Typography>
                         <Typography className={classes.address}>

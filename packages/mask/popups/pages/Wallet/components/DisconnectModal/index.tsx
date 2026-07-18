@@ -102,7 +102,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
             showSnackbar(
-                <Box display="flex" alignItems="center">
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icons.FillSuccess style={{ marginRight: 6 }} />
                     <Trans>Disconnected successfully.</Trans>
                 </Box>,
@@ -122,7 +122,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address!] })
             showSnackbar(
-                <Box display="flex" alignItems="center">
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icons.FillSuccess style={{ marginRight: 6 }} />
                     <Trans>Disconnected successfully.</Trans>
                 </Box>,

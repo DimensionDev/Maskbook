@@ -1,12 +1,12 @@
 import { memo, useState } from 'react'
-import { IconButton, InputAdornment, type TextFieldProps } from '@mui/material'
-import { StyledInput } from '../StyledInput/index.js'
+import { IconButton, InputAdornment } from '@mui/material'
+import { StyledInput, type StyledInputProps } from '../StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 
 export const PasswordField = memo(function PasswordField({
     show = true,
     ...rest
-}: TextFieldProps & { show?: boolean }) {
+}: StyledInputProps & { show?: boolean }) {
     const [showPassword, setShowPassword] = useState(false)
     return (
         <StyledInput

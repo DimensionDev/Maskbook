@@ -51,26 +51,28 @@ export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props
             {puzzleWords.map((word, i) => {
                 const no = i + 1
                 return (
-                    <Grid item xs={3} key={i}>
+                    <Grid key={i} size={3}>
                         <TextField
                             sx={{ width: '100%', userSelect: 'none' }}
                             value={word}
                             autoFocus={i === 0}
                             autoComplete="off"
                             type="password"
-                            InputProps={{
-                                disableUnderline: true,
-                                className: classes.input,
-                                startAdornment: <Typography className={classes.end}>{no}.</Typography>,
-                                endAdornment: (
-                                    <Typography className={classes.end}>
-                                        {/* balance the input, make the cursor center */}
-                                    </Typography>
-                                ),
-                                size: 'small',
-                                inputProps: {
-                                    style: {
-                                        textAlign: 'center',
+                            slotProps={{
+                                input: {
+                                    disableUnderline: true,
+                                    className: classes.input,
+                                    startAdornment: <Typography className={classes.end}>{no}.</Typography>,
+                                    endAdornment: (
+                                        <Typography className={classes.end}>
+                                            {/* balance the input, make the cursor center */}
+                                        </Typography>
+                                    ),
+                                    size: 'small',
+                                    inputProps: {
+                                        style: {
+                                            textAlign: 'center',
+                                        },
                                     },
                                 },
                             }}

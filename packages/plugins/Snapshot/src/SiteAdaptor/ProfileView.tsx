@@ -107,7 +107,7 @@ export function ProfileView(props: ProfileViewProps) {
                     />
                 </ThemeProvider>
                 <TabContext value={currentTab}>
-                    <Stack px={2}>
+                    <Stack sx={{ px: 2 }}>
                         <MaskTabList
                             variant="base"
                             classes={{ root: classes.tabListRoot }}
@@ -122,9 +122,9 @@ export function ProfileView(props: ProfileViewProps) {
             </Stack>
             {loadingProposalList || loadingSpaceMemberList || isPending ?
                 <CardContent className={classes.skeletonContent}>
-                    <Stack height="100%" alignItems="center" justifyContent="center">
+                    <Stack sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         <LoadingBase />
-                        <Typography fontSize="14px" mt={1.5}>
+                        <Typography sx={{ fontSize: '14px', mt: 1.5 }}>
                             <Trans>Loading</Trans>
                         </Typography>
                     </Stack>
@@ -132,9 +132,9 @@ export function ProfileView(props: ProfileViewProps) {
             : filteredProposalList.length > 0 ?
                 <ProfileProposalList proposalList={filteredProposalList} />
             :   <CardContent className={classes.skeletonContent}>
-                    <Stack height="100%" alignItems="center" justifyContent="center">
+                    <Stack sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         <Icons.EmptySimple size={36} />
-                        <Typography fontSize="14px" mt={1.5}>
+                        <Typography sx={{ fontSize: '14px', mt: 1.5 }}>
                             <Trans>Oops, we can't find any results.</Trans>
                         </Typography>
                     </Stack>

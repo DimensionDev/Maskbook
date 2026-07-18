@@ -105,12 +105,12 @@ export function History() {
                     </ThemeProvider>
                 ))}
                 {hasNextPage ?
-                    <ElementAnchor height={30} callback={() => fetchNextPage()}>
+                    <ElementAnchor sx={{ height: 30 }} callback={() => fetchNextPage()}>
                         {isFetching ?
                             <LoadingBase />
                         :   null}
                     </ElementAnchor>
-                :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
+                :   <Typography sx={{ color: (theme) => theme.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                         <Trans>No more data available.</Trans>
                     </Typography>
                 }

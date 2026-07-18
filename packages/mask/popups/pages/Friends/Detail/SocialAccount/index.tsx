@@ -56,11 +56,13 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
             href={twitterDomainMigrate(`https://${site}/${userId}`)}
             className={classes.iconBlack}>
             <Box
-                padding="12px"
-                display="flex"
-                flexDirection="column"
-                gap="10px"
-                alignItems="center"
+                sx={{
+                    padding: '12px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                    alignItems: 'center',
+                }}
                 className={classes.container}>
                 <AccountAvatar avatar={userAvatar} network={site} isValid />
                 <Box className={classes.userId}>{`@${userId}`}</Box>

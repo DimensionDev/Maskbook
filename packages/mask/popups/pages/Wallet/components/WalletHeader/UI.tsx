@@ -176,8 +176,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         <ImageIcon size={30} icon={currentNetwork.iconUrl} name={currentNetwork.name || '?'} />
                     :   <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />}
 
-                    <Box ml={0.5} overflow="auto">
-                        <Box overflow="auto" display="flex">
+                    <Box sx={{ ml: 0.5, overflow: 'auto' }}>
+                        <Box sx={{ overflow: 'auto', display: 'flex' }}>
                             <TextOverflowTooltip title={networkName}>
                                 <Typography className={classes.chainName} component="div">
                                     {networkName}
@@ -215,7 +215,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         onActionClick()
                     }}>
                     <WalletAvatar address={wallet.address} size={30} />
-                    <Box ml={0.5} overflow="hidden">
+                    <Box sx={{ ml: 0.5, overflow: 'hidden' }}>
                         <TextOverflowTooltip title={wallet.name}>
                             <Typography className={classes.nickname}>{walletName}</Typography>
                         </TextOverflowTooltip>
@@ -256,7 +256,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
             {disabled ? null : (
                 <>
                     <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-                    <ActionGroup chainId={chainId} mt={2} />
+                    <ActionGroup chainId={chainId} sx={{ mt: 2 }} />
                 </>
             )}
         </Box>

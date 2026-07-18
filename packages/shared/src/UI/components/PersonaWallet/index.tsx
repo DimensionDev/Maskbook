@@ -42,7 +42,7 @@ export function ManageWallet({ manageWallets, persona, name, address }: ManageWa
             <Box>
                 <Icons.Masks />
             </Box>
-            <Stack justifyContent="center">
+            <Stack sx={{ justifyContent: 'center' }}>
                 <Typography variant="body1" className={classes.nickname}>
                     {persona?.nickname || name}
                 </Typography>

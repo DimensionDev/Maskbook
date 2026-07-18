@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, ProgressiveText } from '@masknet/shared'
-import { NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
+import { type NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
@@ -75,14 +75,13 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const localWallets = useWallets()
     const modalNavigate = useModalNavigate()
-    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <Box className={classes.walletList}>
             {localWallets.map((wallet, index) => {
                 return (
                     <Box className={classes.wallet} key={index}>
-                        <Box display="flex" alignItems="center">
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <WalletAvatar size={24} className={classes.walletIcon} address={wallet.address} />
                             <Typography className={classes.walletInfo} component="div">
                                 <ProgressiveText
@@ -115,7 +114,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
             })}
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.SelectProvider)}>
                 <Icons.Connect size={16} />
-                <Typography fontSize={12} fontWeight={700} lineHeight="16px">
+                <Typography sx={{ fontSize: 12, fontWeight: 700, lineHeight: '16px' }}>
                     <Trans>Connect</Trans>
                 </Typography>
             </Box>

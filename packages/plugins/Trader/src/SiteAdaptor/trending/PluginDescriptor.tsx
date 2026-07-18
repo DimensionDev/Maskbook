@@ -21,17 +21,20 @@ export function PluginDescriptor({ children, isProfilePage, isTokenTagPopper }: 
     const { classes } = useStyles()
 
     return (
-        <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
-            <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
+        <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', gap: 0.5, alignItems: 'center' }}>
                 {isTokenTagPopper ?
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                 : isProfilePage ?
                     <Icons.Web3Profile className={classes.cardIcon} size={24} />
                 :   <Icons.DecentralizedSearch />}
                 <Typography
-                    fontWeight="bolder"
-                    fontSize={16}
-                    color={(theme) => (isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark)}>
+                    sx={{
+                        fontWeight: 'bolder',
+                        fontSize: 16,
+                        color: (theme) =>
+                            isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark,
+                    }}>
                     {isTokenTagPopper ?
                         <Trans>Web3 Profile Card</Trans>
                     : isProfilePage ?

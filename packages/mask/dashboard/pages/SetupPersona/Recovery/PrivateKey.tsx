@@ -75,7 +75,7 @@ export const Component = memo(function RecoveryPrivateKey() {
     )
 
     return (
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
             <Controller
                 control={control}
                 render={({ field }) => (

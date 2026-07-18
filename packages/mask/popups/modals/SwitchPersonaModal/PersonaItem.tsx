@@ -57,7 +57,7 @@ export const PersonaItem = memo<PersonaItemProps>(function PersonaItem({ isSelec
                 classes={{ root: classes.avatar }}
                 size={36}
             />
-            <Box ml={1}>
+            <Box sx={{ ml: 1 }}>
                 <Typography className={classes.name}>{persona.nickname}</Typography>
                 <PersonaPublicKey
                     rawPublicKey={persona.identifier.rawPublicKey}

@@ -135,7 +135,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                     />
                 </Typography>
             }>
-            <Box position="relative">
+            <Box sx={{ position: 'relative' }}>
                 <TokenIcon
                     className={classes.tokenIcon}
                     chainId={asset.chainId}
@@ -155,7 +155,9 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
             </Box>
             <ListItemText
                 className={classes.text}
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 secondary={
                     <>
                         <TextOverflowTooltip title={`${balance.value} ${asset.symbol}`}>
@@ -228,7 +230,7 @@ const AssetsListSkeleton = memo(function AssetsListSkeleton() {
                             <Skeleton width={60} />
                         </Typography>
                     }>
-                    <Box position="relative">
+                    <Box sx={{ position: 'relative' }}>
                         <Skeleton variant="circular" className={classes.tokenIcon} />
                         <Skeleton variant="circular" width={16} height={16} className={classes.badgeIcon} />
                     </Box>

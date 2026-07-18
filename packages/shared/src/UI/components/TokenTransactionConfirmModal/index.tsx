@@ -77,9 +77,9 @@ export function TokenTransactionConfirmModal({
             classes={{
                 paper: classes.confirmDialog,
             }}
-            BackdropProps={{
-                style: {
-                    opacity: 0,
+            slotProps={{
+                backdrop: {
+                    style: { opacity: 0 },
                 },
             }}
             titleBarIconStyle="close"
@@ -99,10 +99,10 @@ export function TokenTransactionConfirmModal({
                             size={90}
                         />
                     :   <Icons.FillSuccess className={classes.icon} size={90} />}
-                    <Typography className={classes.congratulation} mt="19.5px">
+                    <Typography className={classes.congratulation} sx={{ mt: '19.5px' }}>
                         <Trans>Congratulations!</Trans>
                     </Typography>
-                    <Typography className={classes.messageText} mt="41px">
+                    <Typography className={classes.messageText} sx={{ mt: '41px' }}>
                         {messageTextForFT}
                     </Typography>
                 </Box>

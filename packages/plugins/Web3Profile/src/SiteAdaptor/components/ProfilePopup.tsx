@@ -187,7 +187,9 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                             <ListItemText
                                 classes={{ primary: classes.primary, root: classes.listItemText }}
                                 primary={name}
-                                secondaryTypographyProps={{ component: 'div' }}
+                                slotProps={{
+                                    secondary: { component: 'div' },
+                                }}
                                 secondary={
                                     <div className={classes.second}>
                                         <Typography component="div" className={classes.address}>

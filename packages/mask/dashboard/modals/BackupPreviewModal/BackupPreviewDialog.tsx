@@ -166,7 +166,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 </Box>
             )
         return !loading && previewInfo ?
-                <Box display="flex" flexDirection="column">
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <PersonasBackupPreview info={previewInfo} />
 
                     <Controller
@@ -208,14 +208,14 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         />
                     :   null}
                     {isUpload ?
-                        <Typography color={theme.palette.maskColor.danger} fontSize={14} lineHeight="18px">
+                        <Typography color={theme.palette.maskColor.danger} sx={{ fontSize: 14, lineHeight: '18px' }}>
                             <Trans>
                                 This will overwrite the existing cloud backup with the local data, this cannot be undo.
                             </Trans>
                         </Typography>
                     :   null}
                 </Box>
-            :   <LoadingStatus minHeight={320} />
+            :   <LoadingStatus sx={{ minHeight: 320 }} />
     }, [
         uploadLoading,
         classes.container,

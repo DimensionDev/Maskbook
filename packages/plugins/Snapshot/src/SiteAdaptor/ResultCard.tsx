@@ -124,9 +124,7 @@ function Content() {
                             <Box className={classes.listItemHeader}>
                                 <TextOverflowTooltip
                                     as={ShadowRootTooltip}
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     title={<Typography>{result.choice}</Typography>}
                                     placement="top"
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
@@ -136,9 +134,7 @@ function Content() {
                                     </Typography>
                                 </TextOverflowTooltip>
                                 <ShadowRootTooltip
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     title={
                                         <Typography className={classes.ellipsisText}>

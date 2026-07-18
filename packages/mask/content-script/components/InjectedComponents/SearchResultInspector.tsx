@@ -114,7 +114,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                         />
                     </div>
                     {tabs.length ?
-                        <Stack px={2}>
+                        <Stack sx={{ px: 2 }}>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
                                     {tabs.map((tab) => (

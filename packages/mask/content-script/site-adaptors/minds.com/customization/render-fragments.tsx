@@ -7,7 +7,7 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
         const target = '/' + props.children.slice(1)
         return (
-            <Link fontSize="inherit" href={target}>
+            <Link href={target} sx={{ fontSize: 'inherit' }}>
                 {props.children}
             </Link>
         )
@@ -19,7 +19,6 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
         return (
             <Link
                 {...events}
-                fontSize="inherit"
                 href={target}
                 onClick={(e) => {
                     e.stopPropagation()
@@ -35,7 +34,6 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
         return (
             <Link
                 {...events}
-                fontSize="inherit"
                 href={target}
                 onClick={(e) => {
                     e.stopPropagation()

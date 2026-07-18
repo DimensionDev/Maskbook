@@ -97,10 +97,12 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     return (
         <BottomDrawer {...props}>
             <Typography
-                fontWeight={700}
-                textAlign="center"
                 color={theme.palette.maskColor.third}
-                sx={{ marginTop: '12px' }}>
+                sx={{
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    marginTop: '12px',
+                }}>
                 <Trans>Please set up the amount of time before we automatically lock your wallet.</Trans>
             </Typography>
             <Box className={classes.list}>

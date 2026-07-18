@@ -41,7 +41,7 @@ export const Alert = memo<Props>(function Alert({ className, children, open, onC
             {severity === 'warning' ?
                 <Icons.WarningTriangle size={20} />
             :   <Icons.Info size={20} />}
-            <Typography fontSize={14} component="div">
+            <Typography sx={{ fontSize: 14 }} component="div">
                 {children}
             </Typography>
             {onClose ?

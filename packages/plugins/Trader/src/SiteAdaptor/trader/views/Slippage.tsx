@@ -136,7 +136,7 @@ export const Slippage = memo(function Slippage() {
                         </Typography>
                     </Typography>
                     <div className={classes.boxContent}>
-                        <Typography mb={0.5}>
+                        <Typography sx={{ mb: 0.5 }}>
                             The transaction will be executed according to the slippage you set
                         </Typography>
                         <MaskTextField

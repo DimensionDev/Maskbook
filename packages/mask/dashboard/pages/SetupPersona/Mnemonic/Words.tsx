@@ -45,7 +45,7 @@ export const Words = memo<WordsProps>(function Words({ words, ...props }) {
         <Box component="ul" className={classes.container}>
             {words.map((item, index) => (
                 <Box className={classes.wordCard} component="li" key={index}>
-                    <Typography className={classes.text} component="span" fontWeight={700}>
+                    <Typography className={classes.text} component="span" sx={{ fontWeight: 700 }}>
                         {item}
                     </Typography>
                 </Box>

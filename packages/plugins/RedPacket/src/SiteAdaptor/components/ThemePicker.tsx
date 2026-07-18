@@ -55,7 +55,12 @@ export const ThemePicker = memo<BoxProps>(function ThemePicker(props) {
     const { theme: selectedTheme, themes: redpacketThemes, customThemes, setCustomThemes, setTheme } = useRedPacket()
 
     return (
-        <Box display="flex" flexDirection="row" gap={1} ml="auto" {...props}>
+        <Box
+            {...props}
+            sx={[
+                { display: 'flex', flexDirection: 'row', gap: 1, ml: 'auto' },
+                ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+            ]}>
             {redpacketThemes.map((theme) => (
                 <div
                     key={theme.tid}

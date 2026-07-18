@@ -208,8 +208,7 @@ export const Component = memo(function AddDeriveWallet() {
                     <Trans>Select Address</Trans>
                 </Typography>
             </Box>
-
-            <Typography className={classes.second} mt={2} mb={3}>
+            <Typography className={classes.second} sx={{ mt: 2, mb: 3 }}>
                 <Trans>Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}</Trans>
             </Typography>
 
@@ -220,7 +219,7 @@ export const Component = memo(function AddDeriveWallet() {
                     className={classes.paginationButton}
                     disabled={page === 0 || confirmLoading}
                     onClick={() => setPage((prev) => prev - 1)}>
-                    <Typography fontWeight={700}>
+                    <Typography sx={{ fontWeight: 700 }}>
                         <Trans>Previous</Trans>
                     </Typography>
                 </SecondaryButton>
@@ -228,7 +227,7 @@ export const Component = memo(function AddDeriveWallet() {
                     className={classes.paginationButton}
                     disabled={confirmLoading}
                     onClick={() => setPage((prev) => prev + 1)}>
-                    <Typography fontWeight={700}>
+                    <Typography sx={{ fontWeight: 700 }}>
                         <Trans>Next</Trans>
                     </Typography>
                 </SecondaryButton>

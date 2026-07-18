@@ -97,7 +97,9 @@ export function PermissionRequest(props: InteractionItemProps) {
                                     checked={selectedWallet.includes(wallet.address)}
                                     tabIndex={-1}
                                     disableRipple
-                                    inputProps={{ 'aria-labelledby': labelId }}
+                                    slotProps={{
+                                        input: { 'aria-labelledby': labelId },
+                                    }}
                                 />
                                 <WalletListItem address={wallet.address} id={labelId} className={classes.address} />
                             </ListItemButton>
@@ -112,7 +114,9 @@ function WalletListItem(props: { address: string; id: string; className: string 
     const name = useWalletName(props.address)
     return (
         <ListItemText
-            secondaryTypographyProps={{ className: props.className }}
+            slotProps={{
+                secondary: { className: props.className },
+            }}
             id={props.id}
             primary={name}
             secondary={props.address}

@@ -63,7 +63,7 @@ export const FinanceFeed = memo<FinanceFeedProps>(function FinanceFeed({ transac
                     </ShadowRootTooltip>
                 :   null}
             </div>
-            <FeedSummary transaction={transaction} mt={0.5} />
+            <FeedSummary transaction={transaction} sx={{ mt: 0.5 }} />
         </article>
     )
 })

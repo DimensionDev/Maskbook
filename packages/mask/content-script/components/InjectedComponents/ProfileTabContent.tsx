@@ -343,12 +343,14 @@ function Content(props: ProfileTabContentProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                        <Stack sx={{ display: 'inline-flex', gap: 3, justifyContent: 'center', alignItems: 'center' }}>
                             <Typography
-                                fontSize={14}
-                                fontWeight={400}
-                                lineHeight="18px"
-                                color={(t) => t.palette.maskColor.danger}>
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 400,
+                                    lineHeight: '18px',
+                                    color: (t) => t.palette.maskColor.danger,
+                                }}>
                                 <Trans>Load failed</Trans>
                             </Typography>
                             <Button color="primary" className={classes.reload} onClick={handleClick}>
@@ -368,12 +370,20 @@ function Content(props: ProfileTabContentProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                        <Stack
+                            sx={{
+                                display: 'inline-flex',
+                                gap: 3,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
                             <Typography
-                                fontSize={14}
-                                fontWeight={400}
-                                lineHeight="18px"
-                                color={(t) => t.palette.maskColor.publicMain}>
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 400,
+                                    lineHeight: '18px',
+                                    color: (t) => t.palette.maskColor.publicMain,
+                                }}>
                                 <Trans>Can't find a valid user address data source.</Trans>
                             </Typography>
                         </Stack>
@@ -388,7 +398,13 @@ function Content(props: ProfileTabContentProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                        <Stack
+                            sx={{
+                                display: 'inline-flex',
+                                gap: 3,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
                             <WalletSettingsEntry />
                         </Stack>
                     </PluginCardFrameMini>
@@ -440,17 +456,21 @@ function Content(props: ProfileTabContentProps) {
                     <div className={classes.settingItem}>
                         <Trans>
                             <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="5px"
-                                color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                sx={{
+                                    fontSize: '14px',
+                                    fontWeight: 700,
+                                    marginRight: '5px',
+                                    color: (theme) => theme.palette.maskColor.secondaryDark,
+                                }}>
                                 Powered by
                             </Typography>
                             <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="4px"
-                                color={(theme) => theme.palette.maskColor.dark}>
+                                sx={{
+                                    fontSize: '14px',
+                                    fontWeight: 700,
+                                    marginRight: '4px',
+                                    color: (theme) => theme.palette.maskColor.dark,
+                                }}>
                                 Mask Network
                             </Typography>
                         </Trans>
@@ -492,7 +512,7 @@ function Content(props: ProfileTabContentProps) {
                         tabId={componentTabId}
                         socialAccount={selectedSocialAccount}
                     />
-                :   <EmptyStatus height={260}>
+                :   <EmptyStatus sx={{ height: 260 }}>
                         <Trans>There's no content associated with this address.</Trans>
                     </EmptyStatus>
                 }

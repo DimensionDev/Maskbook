@@ -212,7 +212,7 @@ export const GoogleDriveFileTable = memo<GoogleDriveFileTableProps>(function Goo
                 :   <TableBody>
                         <TableRow>
                             <TableCell colSpan={4}>
-                                <EmptyStatus height="300px">
+                                <EmptyStatus sx={{ height: '300px' }}>
                                     <Trans>No backups found</Trans>
                                 </EmptyStatus>
                             </TableCell>

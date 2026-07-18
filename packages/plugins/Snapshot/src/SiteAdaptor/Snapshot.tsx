@@ -121,11 +121,9 @@ export function Snapshot() {
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <TextOverflowTooltip
                                     as={ShadowRootTooltip}
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     title={
-                                        <Typography fontSize={18} fontWeight="bold">
+                                        <Typography sx={{ fontSize: 18, fontWeight: 'bold' }}>
                                             {proposal.space.name}
                                         </Typography>
                                     }
@@ -133,10 +131,10 @@ export function Snapshot() {
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography
-                                        fontSize={18}
-                                        fontWeight="bold"
                                         color={theme.palette.maskColor.publicMain}
                                         sx={{
+                                            fontSize: 18,
+                                            fontWeight: 'bold',
                                             width: 150,
                                             whiteSpace: 'nowrap',
                                             textOverflow: 'ellipsis',
@@ -145,29 +143,25 @@ export function Snapshot() {
                                         {proposal.space.name}
                                     </Typography>
                                 </TextOverflowTooltip>
-                                <Box sx={{ display: 'flex' }} color={theme.palette.maskColor.publicSecond}>
-                                    <Typography fontSize={14} sx={{ paddingRight: 1 }}>
-                                        by
-                                    </Typography>
-                                    <Typography fontSize={14} fontWeight="700">
+                                <Box sx={{ color: theme.palette.maskColor.publicSecond, display: 'flex' }}>
+                                    <Typography sx={{ fontSize: 14, paddingRight: 1 }}>by</Typography>
+                                    <Typography sx={{ fontSize: 14, fontWeight: '700' }}>
                                         {formatSpaceId(proposal.space.id)}
                                     </Typography>
                                 </Box>
                             </Box>
 
                             <ShadowRootTooltip
-                                PopperProps={{
-                                    disablePortal: true,
-                                }}
+                                slotProps={{ popper: { disablePortal: true } }}
                                 title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
                                 placement="top"
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
-                                    fontSize={14}
-                                    fontWeight="700"
                                     color={theme.palette.maskColor.publicSecond}
                                     sx={{
+                                        fontSize: 14,
+                                        fontWeight: '700',
                                         width: 300,
                                         whiteSpace: 'nowrap',
                                         textOverflow: 'ellipsis',

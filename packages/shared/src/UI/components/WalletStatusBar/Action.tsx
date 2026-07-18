@@ -11,7 +11,7 @@ export const Action = memo<ActionProps>(function Action({ children, openSelectWa
     const ref = useRef<HTMLDivElement>(undefined)
 
     return (
-        <Box display="flex" columnGap={16} minWidth={Sniffings.is_popup_page ? 176 : 276} ref={ref}>
+        <Box sx={{ display: 'flex', columnGap: 16, minWidth: Sniffings.is_popup_page ? 176 : 276 }} ref={ref}>
             {children ?? (
                 <Button fullWidth onClick={openSelectWalletDialog}>
                     <Trans>Change</Trans>

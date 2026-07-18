@@ -279,10 +279,16 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             </div>
 
                             {loading ?
-                                <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ textAlign: 'right' }}
+                                    className={classes.tokenValueUSD}>
                                     <LoadingBase width={16} height={16} />
                                 </Typography>
-                            :   <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                            :   <Typography
+                                    variant="body2"
+                                    sx={{ textAlign: 'right' }}
+                                    className={classes.tokenValueUSD}>
                                     &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
                                     {isPositive(estimatedGas) ?
                                         <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>

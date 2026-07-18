@@ -42,7 +42,7 @@ function CheckSecurityConfirmDialog({ open, onClose }: Props) {
             onClose={onClose}
             classes={{ paper: classes.paper, dialogContent: classes.content }}>
             <DialogContent className={classes.content}>
-                <Stack alignItems="center">
+                <Stack sx={{ alignItems: 'center' }}>
                     <Typography style={{ fontSize: '14px', fontWeight: 500 }}>
                         <Trans>Close [Check Security]?</Trans>
                     </Typography>
@@ -61,7 +61,7 @@ function CheckSecurityConfirmDialog({ open, onClose }: Props) {
                         <Trans>We recommend new Web3 users to keep [Check Security] open.</Trans>
                     </Typography>
                 </Stack>
-                <Stack marginTop="36px">
+                <Stack sx={{ marginTop: '36px' }}>
                     <Button
                         className={classes.confirmButton}
                         onClick={() => {

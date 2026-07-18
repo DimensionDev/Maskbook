@@ -418,7 +418,7 @@ export const Component = memo(function SyncTwitterCookies() {
                 <Box className={classes.page}>
                     <Box className={classes.header}>
                         <WalletAvatar address={address} size={48} badgeSize={16} />
-                        <Box display="flex" flexDirection="column">
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography className={classes.name}>{walletName}</Typography>
                             <Typography className={classes.address}>
                                 <FormattedAddress address={address} formatter={formatEthereumAddress} size={4} />

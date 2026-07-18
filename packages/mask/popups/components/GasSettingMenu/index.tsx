@@ -112,8 +112,8 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     }, [gasConfig, gasLimit])
 
     return (
-        <Box display="flex" alignItems="center">
-            <Typography fontWeight={700} fontSize={14} mr={0.5}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ fontWeight: 700, fontSize: 14, mr: 0.5 }}>
                 <FormattedBalance
                     value={totalGas}
                     decimals={token?.decimals}
@@ -147,9 +147,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                         columnGap: 0.5,
                     }}
                     onClick={openMenu}>
-                    <Typography fontWeight={700} lineHeight="18px" fontSize={14}>
-                        {gasOptionName}
-                    </Typography>
+                    <Typography sx={{ fontWeight: 700, lineHeight: '18px', fontSize: 14 }}>{gasOptionName}</Typography>
                     <Icons.Candle size={12} />
                 </Button>
             )}

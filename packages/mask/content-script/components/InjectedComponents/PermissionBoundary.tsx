@@ -62,11 +62,13 @@ export function MaskPostExtraPluginWrapperWithPermission({
                         content={
                             <Typography
                                 color={theme.palette.maskColor.publicMain}
-                                fontSize={14}
-                                marginBottom={3.25}
-                                textAlign="left"
                                 component="div"
-                                px="18px">
+                                sx={{
+                                    fontSize: 14,
+                                    marginBottom: 3.25,
+                                    textAlign: 'left',
+                                    px: '18px',
+                                }}>
                                 <Trans>
                                     Mask Network requires you to authorize the following websites before using it.
                                 </Trans>

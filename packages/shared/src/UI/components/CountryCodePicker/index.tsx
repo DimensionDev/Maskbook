@@ -109,7 +109,9 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                 autoFocus
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={t`Search Area`}
-                InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
+                slotProps={{
+                    input: { disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' },
+                }}
                 sx={{ marginBottom: 0.5 }}
             />
             {regions.length ?

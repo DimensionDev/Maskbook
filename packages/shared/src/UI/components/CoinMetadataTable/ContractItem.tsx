@@ -55,9 +55,9 @@ export function ContractItem({ pluginID, chainId, address, className, ...rest }:
 
     return (
         <MenuItem className={cx(classes.contractItem, className)} {...rest}>
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" sx={{ alignItems: 'center' }}>
                 <ImageIcon icon={networkDescriptor.icon} size={16} />
-                <Typography className={classes.address} ml={1}>
+                <Typography className={classes.address} sx={{ ml: 1 }}>
                     <FormattedAddress address={address} size={4} formatter={Utils.formatAddress} />
                 </Typography>
                 <CopyButton className={classes.icon} text={address} size={16} title="Copy address" scoped={false} />

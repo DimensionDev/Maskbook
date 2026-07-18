@@ -472,7 +472,7 @@ export const Confirm = memo(function Confirm() {
                         <Link
                             className={cx(classes.rowValue, classes.link)}
                             to={{ pathname: basePath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
-                            <Box display="flex" flexDirection="column">
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
                                 </Typography>

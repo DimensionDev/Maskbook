@@ -58,10 +58,12 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
             <Box className={classes.source}>
                 <Stack
                     className={classes.sourceMenu}
-                    display="inline-flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={0.5}>
+                    sx={{
+                        display: 'inline-flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 0.5,
+                    }}>
                     <Typography className={classes.sourceNote}>
                         <Trans>Powered by</Trans>
                     </Typography>

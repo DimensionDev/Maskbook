@@ -98,7 +98,9 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     const handleBack = useCallback(() => navigate(-1), [])
     const theme = useTheme()
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" width="100%" className={classes.container}>
+        <Box
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
+            className={classes.container}>
             <Box className={classes.profileInfo}>
                 <Box className={classes.header}>
                     <button onClick={handleBack} type="submit" className={classes.back}>
@@ -117,16 +119,18 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                             <Avatar src={avatar} style={{ width: 60, height: 60 }} />
                         :   <Icons.MaskBlue size={60} style={{ borderRadius: 99 }} />}
                     </Box>
-                    <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                    <Typography sx={{ fontSize: 18, fontWeight: '700', lineHeight: '22px', marginTop: '8px' }}>
                         {publicKey ? formatPersonaFingerprint(publicKey) : null}
                     </Typography>
                     <Typography
-                        fontSize={12}
                         color={theme.palette.maskColor.second}
-                        lineHeight="16px"
-                        display="flex"
-                        alignItems="center"
-                        columnGap="2px">
+                        sx={{
+                            fontSize: 12,
+                            lineHeight: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '2px',
+                        }}>
                         {formatPersonaFingerprint(nextId, 4)}
                         <CopyButton text={nextId} size={12} className={classes.icon} />
                     </Typography>

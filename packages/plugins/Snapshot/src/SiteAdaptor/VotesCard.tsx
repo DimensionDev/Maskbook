@@ -136,9 +136,7 @@ function Content() {
                                     <Typography className={classes.choice}>{v.choice}</Typography>
                                 : v.choices ?
                                     <ShadowRootTooltip
-                                        PopperProps={{
-                                            disablePortal: false,
-                                        }}
+                                        slotProps={{ popper: { disablePortal: false } }}
                                         title={
                                             <Typography className={classes.shadowRootTooltip}>
                                                 {fullChoiceText}
@@ -152,9 +150,7 @@ function Content() {
                                 :   null}
                                 <TextOverflowTooltip
                                     as={ShadowRootTooltip}
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     title={
                                         <Typography className={classes.shadowRootTooltip}>

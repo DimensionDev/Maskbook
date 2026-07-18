@@ -148,7 +148,15 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                     <Trans>Connecting your {providerType} wallet</Trans>
                 :   <Trans>Not found your {providerType} wallet</Trans>}
             </Typography>
-            <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
+            <Box
+                sx={{
+                    mt: 4,
+                    p: 1.5,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}>
                 {provider?.icon ?
                     <Box className={classes.icon}>
                         <img src={provider.icon} style={{ width: 32, height: 32 }} />
@@ -161,7 +169,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 :   null}
                 {providerExist ? null : (
                     <>
-                        <Typography fontSize={14} lineHeight="18px" my={1.25}>
+                        <Typography sx={{ fontSize: 14, lineHeight: '18px', my: 1.25 }}>
                             <Trans>Please install your metamask wallet and set up your first wallet.</Trans>
                         </Typography>
                         <Button variant="roundedContained" size="small" onClick={handleChooseAnotherWallet}>

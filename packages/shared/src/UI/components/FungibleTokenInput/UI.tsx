@@ -153,8 +153,11 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 fullWidth
                 startAdornment={<Typography className={cx(classes.label, classes.title)}>{label}</Typography>}
                 endAdornment={
-                    <Box className={classes.control} justifyContent={disableBalance ? 'flex-end' : undefined}>
-                        <Typography className={classes.label} display="flex" alignItems="center" component="div">
+                    <Box className={classes.control} sx={{ justifyContent: disableBalance ? 'flex-end' : undefined }}>
+                        <Typography
+                            className={classes.label}
+                            component="div"
+                            sx={{ display: 'flex', alignItems: 'center' }}>
                             {disableBalance ? null : (
                                 <>
                                     {isNative ?
@@ -178,7 +181,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                             )}
                         </Typography>
                         {disableToken ? null : (
-                            <Box display="flex" alignItems="center" columnGap="12px">
+                            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '12px' }}>
                                 {token ?
                                     <Chip
                                         size="small"

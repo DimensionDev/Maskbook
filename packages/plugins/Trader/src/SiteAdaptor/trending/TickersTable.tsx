@@ -92,7 +92,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
         const price = ticker.price ?? ticker.floor_price
         const volume = ticker.volume
         const marketplaceOrExchange = (
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" sx={{ alignItems: 'center' }}>
                 {ticker.logo_url ?
                     <img className={classes.logo} src={ticker.logo_url} />
                 :   null}
@@ -114,15 +114,13 @@ export function TickersTable({ tickers }: TickersTableProps) {
                     <ShadowRootTooltip
                         placement="top-start"
                         disableInteractive
-                        PopperProps={{
-                            disablePortal: true,
-                        }}
+                        slotProps={{ popper: { disablePortal: true } }}
                         disableHoverListener={basename.length + targetName.length < 9}
                         title={`${formatted} / ${formatEthereumAddress(ticker.target_name, 2)}`}
                         arrow>
                         <Box className={classes.pair}>
                             <Link
-                                color={(theme) => theme.palette.maskColor?.primary}
+                                sx={{ color: (theme) => theme.palette.maskColor?.primary }}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 href={ticker.trade_url}>

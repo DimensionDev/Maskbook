@@ -226,8 +226,7 @@ export const Component = memo(function Recovery() {
                     <Trans>Recover your wallet</Trans>
                 </Typography>
             </Box>
-
-            <Typography className={classes.second} mt={2}>
+            <Typography className={classes.second} sx={{ mt: 2 }}>
                 <Trans>
                     Please enter the correct mnemonic words, private key, or upload the correct keystore file.
                 </Trans>

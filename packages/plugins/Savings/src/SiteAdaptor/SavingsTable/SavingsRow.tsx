@@ -61,7 +61,7 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
 
     return (
         <Grid container spacing={0} className={classes.tableRow} ref={ref}>
-            <Grid item xs={4} className={classes.tableCell}>
+            <Grid size={4} className={classes.tableCell}>
                 <div className={classes.logoWrap}>
                     <TokenIcon
                         name={protocol.bareToken.name}
@@ -79,16 +79,16 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
                 </div>
             </Grid>
             {isDeposit ?
-                <Grid item xs={2} className={classes.tableCell}>
+                <Grid size={2} className={classes.tableCell}>
                     <Typography variant="body1">
                         {isFetchingApr && apr === '0.00' ? '--' : `${Number(apr).toFixed(2)}%`}
                     </Typography>
                 </Grid>
             :   null}
-            <Grid item xs={isDeposit ? 3 : 5} className={classes.tableCell}>
+            <Grid size={isDeposit ? 3 : 5} className={classes.tableCell}>
                 <FungibleTokenBalance isDeposit={isDeposit} protocol={protocol} protocolBalance={balance} />
             </Grid>
-            <Grid item xs={3} className={classes.tableCell}>
+            <Grid size={3} className={classes.tableCell}>
                 <Button
                     color="primary"
                     disabled={isDeposit ? false : isZero(balance)}

@@ -139,7 +139,12 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
     const oauthTimeout = error?.message === timeoutMessage
 
     return (
-        <Box display="flex" flexDirection="column" gap={1.5} position="relative" {...props}>
+        <Box
+            {...props}
+            sx={[
+                { display: 'flex', flexDirection: 'column', gap: 1.5, position: 'relative' },
+                ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+            ]}>
             <Box
                 className={classes.addWalletWrapper}
                 onClick={async () => {
@@ -207,16 +212,16 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
             {creatingPrivy || oauthTimeout ?
                 <Box className={classes.mask}>
                     {oauthTimeout ?
-                        <Box display="flex" flexDirection="column" alignItems="center">
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <Icons.Time size={32} color={theme.palette.maskColor.main} />
-                            <Typography color={theme.palette.maskColor.second} fontWeight={400} my={1.5}>
+                            <Typography color={theme.palette.maskColor.second} sx={{ fontWeight: 400, my: 1.5 }}>
                                 <Trans>Your X account authorization has timed out. Please try again.</Trans>
                             </Typography>
                             <ActionButton fullWidth onClick={createPrivyWallet}>
                                 <Trans>Try Again</Trans>
                             </ActionButton>
                         </Box>
-                    :   <LoadingStatus gap={3}>
+                    :   <LoadingStatus sx={{ gap: 3 }}>
                             <Trans>
                                 Creating or retrieving your wallet with Privy. Please confirm on the X authorization
                                 page.

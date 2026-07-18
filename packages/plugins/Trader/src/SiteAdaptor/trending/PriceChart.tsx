@@ -73,8 +73,8 @@ export function PriceChart(props: PriceChartProps) {
             sx={{
                 cursor: stats.length && coin?.platform_url ? 'pointer' : 'default',
             }}>
-            <Stack gap={2}>
-                <Box className={classes.chart} height={DEFAULT_DIMENSION.height}>
+            <Stack sx={{ gap: 2 }}>
+                <Box className={classes.chart} sx={{ height: DEFAULT_DIMENSION.height }}>
                     {loading ?
                         <LoadingStatus iconSize={36} />
                     : stats.length ?

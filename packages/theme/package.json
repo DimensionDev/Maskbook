@@ -17,11 +17,11 @@
     "@masknet/shared-base": "workspace:^",
     "@types/tinycolor2": "^1.4.6",
     "fuse.js": "^7.0.0",
-    "notistack": "2.0.8",
+    "notistack": "3.0.2",
     "react-use": "^17.5.0",
     "react-window": "^1.8.10",
     "tinycolor2": "^1.6.0",
-    "tss-react": "^4.9.10"
+    "tss-react": "^4.9.21"
   },
   "devDependencies": {
     "@types/react-window": "^1.8.8"

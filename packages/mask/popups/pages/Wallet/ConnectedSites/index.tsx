@@ -40,7 +40,7 @@ export const Component = memo(function ConnectedSites() {
 
     if (!origins?.length)
         return (
-            <Box className={classes.container} height="100%" justifyContent="center">
+            <Box className={classes.container} sx={{ height: '100%', justifyContent: 'center' }}>
                 <EmptyStatus>
                     <Trans>No websites connected to this wallet</Trans>
                 </EmptyStatus>

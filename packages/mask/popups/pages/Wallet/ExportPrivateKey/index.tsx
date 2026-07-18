@@ -122,7 +122,7 @@ export const Component = memo(function ExportPrivateKey() {
                         </MaskTabList>
                 }
             />
-            <Box p={2} display="flex" flexDirection="column" rowGap={2} flex={1}>
+            <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', rowGap: 2, flex: 1 }}>
                 {!getMnemonicLoading && mnemonic ?
                     <TabPanel className={classes.panel} value={TabType.Mnemonic}>
                         <Typography sx={{ fontSize: 14, lineHeight: '18px', fontWeight: 700 }}>
@@ -143,12 +143,14 @@ export const Component = memo(function ExportPrivateKey() {
                         <Trans>Click on the down-arrow to see the private key.</Trans>
                     </Typography>
                     <Box
-                        display="flex"
-                        flexDirection="column"
-                        mt={2}
-                        rowGap={2}
-                        maxHeight="450px"
-                        overflow="auto"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mt: 2,
+                            rowGap: 2,
+                            maxHeight: '450px',
+                            overflow: 'auto',
+                        }}
                         data-hide-scrollbar>
                         {(
                             wallet?.mnemonicId &&

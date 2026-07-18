@@ -116,7 +116,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
 
     if (!bridgeQuote?.routerList.length)
         return (
-            <Box className={classes.container} justifyContent="center">
+            <Box className={classes.container} sx={{ justifyContent: 'center' }}>
                 <EmptyStatus />
             </Box>
         )
@@ -160,7 +160,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                         </Typography>
 
                         <div className={classes.infoRow}>
-                            <Typography className={classes.rowName} fontWeight={700}>
+                            <Typography className={classes.rowName} sx={{ fontWeight: 700 }}>
                                 {formatAmount(router.toTokenAmount, -(toToken?.decimals || 0))}{' '}
                                 {toToken?.symbol || '--'}
                             </Typography>

@@ -75,7 +75,15 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     <Trans>Confirm</Trans>
                 </ActionButton>
             }>
-            <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center" rowGap={2} m={0.5}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    rowGap: 2,
+                    m: 0.5,
+                }}>
                 <PasswordField
                     placeholder={t`Password`}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -94,14 +102,14 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     helperText={passwordMatched ? '' : <Trans>Two entered passwords are not the same.</Trans>}
                 />
                 <Box>
-                    <Typography fontSize={12} color={theme.palette.maskColor.second}>
+                    <Typography sx={{ fontSize: 12 }} color={theme.palette.maskColor.second}>
                         <Trans>
                             Backup password must be 8-20 characters, including uppercase, lowercase, special characters
                             and numbers.
                         </Trans>
                     </Typography>
                     {to ?
-                        <Typography mt={2} fontSize={12} color={theme.palette.maskColor.second}>
+                        <Typography sx={{ mt: 2, fontSize: 12 }} color={theme.palette.maskColor.second}>
                             <Trans>Please set up backup password to export private key.</Trans>
                         </Typography>
                     :   null}

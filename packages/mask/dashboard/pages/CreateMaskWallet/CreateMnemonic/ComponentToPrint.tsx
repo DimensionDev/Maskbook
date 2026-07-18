@@ -95,7 +95,7 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
     return (
         <Box className={classes.container} ref={props.ref}>
             <Box className={classes.card}>
-                <Box flex={1}>
+                <Box sx={{ flex: 1 }}>
                     <Typography className={classes.publicKeyTitle}>
                         <Trans>
                             Address:{' '}

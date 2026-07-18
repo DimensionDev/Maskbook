@@ -32,15 +32,17 @@ export function SourceProviderSwitcher({ sources, onSelect, selected }: SourcePr
     }
 
     return (
-        <Stack justifyContent="flex-start" direction="row" gap={1}>
+        <Stack direction="row" sx={{ justifyContent: 'flex-start', gap: 1 }}>
             {_sources.map((x) => {
                 return (
                     <Stack
                         key={x}
-                        display="inline-stack"
-                        sx={{ cursor: 'pointer' }}
                         onClick={() => handleClick(x)}
-                        position="relative">
+                        sx={{
+                            display: 'inline-stack',
+                            position: 'relative',
+                            cursor: 'pointer',
+                        }}>
                         <SourceProviderIcon size={24} provider={x} />
                         {selected === x && (
                             <Stack className={classes.selected}>

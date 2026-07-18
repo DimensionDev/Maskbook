@@ -153,7 +153,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                     as={ShadowRootTooltip}
                     arrow={false}
                     disableInteractive
-                    componentsProps={{
+                    slotProps={{
                         tooltip: {
                             style: {
                                 padding: 6,
@@ -173,10 +173,12 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             </Button>
     return tooltipHint && !disabled ?
             <ShadowRootTooltip
-                PopperProps={{
-                    ...popperProps,
-                    disablePortal: true,
-                    placement: recommendFeature ? 'bottom' : 'top',
+                slotProps={{
+                    popper: {
+                        ...popperProps,
+                        disablePortal: true,
+                        placement: recommendFeature ? 'bottom' : 'top',
+                    },
                 }}
                 classes={{
                     arrow: classes.arrow,

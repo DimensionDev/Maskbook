@@ -183,7 +183,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
     return (
         <TableRow key={address} className={cx(classes.tableRow, classes.tableRowWithHoverEffect)}>
             <TableCell align="left" variant="body" className={classes.cell}>
-                <Typography className={classes.second} minWidth={20}>
+                <Typography className={classes.second} sx={{ minWidth: 20 }}>
                     {pathIndex + 1}
                 </Typography>
                 <Typography className={classes.title}>

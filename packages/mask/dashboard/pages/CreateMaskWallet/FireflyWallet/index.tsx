@@ -199,9 +199,11 @@ export const Component = memo(function CreateWalletForm() {
             </SetupFrameController>
             <Dialog
                 open={open}
-                PaperProps={{
-                    elevation: 0,
-                    className: classes.dialog,
+                slotProps={{
+                    paper: {
+                        elevation: 0,
+                        className: classes.dialog,
+                    },
                 }}>
                 <DialogTitle className={classes.dialogTitle}>
                     <Trans>Mask needs the following permissions</Trans>
@@ -212,7 +214,7 @@ export const Component = memo(function CreateWalletForm() {
                     </Typography>
                     <div className={classes.permissions} data-hide-scrollbar>
                         {XOAuthRequestOrigins.map((origin) => (
-                            <Typography key={origin} lineHeight="18px">
+                            <Typography key={origin} sx={{ lineHeight: '18px' }}>
                                 {origin}
                             </Typography>
                         ))}

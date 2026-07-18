@@ -80,12 +80,7 @@ interface SpaceMenuProps extends Omit<MenuProps, 'onSelect'> {
 export function SpaceMenu({ options, currentOption, onSelect, containerRef, ...rest }: SpaceMenuProps) {
     const { classes } = useStyles()
     return (
-        <ShadowRootMenu
-            anchorEl={containerRef.current}
-            PaperProps={{
-                className: classes.menu,
-            }}
-            {...rest}>
+        <ShadowRootMenu anchorEl={containerRef.current} slotProps={{ paper: { className: classes.menu } }} {...rest}>
             <div key="rss3" className={classes.group}>
                 <Typography className={classes.groupName}>
                     <Trans>Space</Trans>
@@ -98,11 +93,13 @@ export function SpaceMenu({ options, currentOption, onSelect, containerRef, ...r
                             <Avatar className={classes.coinIcon} src={option.avatar} alt={option.spaceId} />
                             <Stack className={classes.itemText}>
                                 <Typography
-                                    fontSize={14}
-                                    fontWeight={700}
-                                    flexGrow={1}
-                                    overflow="hidden"
-                                    textOverflow="ellipsis">
+                                    sx={{
+                                        fontSize: 14,
+                                        fontWeight: 700,
+                                        flexGrow: 1,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}>
                                     <span className={classes.name}>{option.spaceName}</span>
                                 </Typography>
                                 <div className={classes.itemCheckout}>

@@ -184,7 +184,7 @@ export function SearchableList<T extends object>({
                         {...textFieldPropsRest}
                     />
                     {textFieldPropsRest.error ?
-                        <Typography className={classes.error} mt={0.5}>
+                        <Typography className={classes.error} sx={{ mt: 0.5 }}>
                             {textFieldPropsRest.helperText}
                         </Typography>
                     :   null}
@@ -192,22 +192,26 @@ export function SearchableList<T extends object>({
             )}
             {loading ?
                 <Stack
-                    height={windowHeight}
-                    justifyContent="center"
-                    alignItems="center"
-                    width="100%"
-                    alignContent="center"
-                    marginTop="18px"
-                    marginBottom="48px">
+                    sx={{
+                        height: windowHeight,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '100%',
+                        alignContent: 'center',
+                        marginTop: '18px',
+                        marginBottom: '48px',
+                    }}>
                     <LoadingBase />
                 </Stack>
             : readyToRenderData.length === 0 ?
                 <Stack
-                    height={windowHeight}
-                    justifyContent="center"
-                    alignContent="center"
-                    marginTop="18px"
-                    marginBottom="48px">
+                    sx={{
+                        height: windowHeight,
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                        marginTop: '18px',
+                        marginBottom: '48px',
+                    }}>
                     <EmptyResult />
                 </Stack>
             :   <div className={classes.listBox}>

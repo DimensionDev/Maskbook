@@ -106,13 +106,15 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
             {...props}>
             <Box
                 component="form"
-                display="flex"
-                justifyContent="center"
-                flexDirection="column"
-                alignItems="center"
-                rowGap={2}
-                py={1}
-                px={0.25}>
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    rowGap: 2,
+                    py: 1,
+                    px: 0.25,
+                }}>
                 <Controller
                     control={control}
                     render={({ field }) => {
@@ -182,7 +184,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         />
                     )}
                 />
-                <Typography fontSize={12} color={theme.palette.maskColor.second}>
+                <Typography sx={{ fontSize: 12 }} color={theme.palette.maskColor.second}>
                     <Trans>
                         Backup password must be 8-20 characters, including uppercase, lowercase, special characters and
                         numbers.

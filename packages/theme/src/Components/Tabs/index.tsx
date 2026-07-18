@@ -266,7 +266,7 @@ export function MaskTabList(props: MaskTabListProps) {
 
     if (variant === 'flexible') {
         return (
-            <Box position="relative">
+            <Box sx={{ position: 'relative' }}>
                 <ButtonGroupWrap
                     maskVariant={variant}
                     ref={anchorRef}

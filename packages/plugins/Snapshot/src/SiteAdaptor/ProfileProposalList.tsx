@@ -201,7 +201,7 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
                 <Typography className={classes.author}>{domain ?? Utils.formatAddress(proposal.author, 4)}</Typography>
             </div>
             <div>
-                <Typography fontWeight={700} fontSize={12} className={classes.state}>
+                <Typography sx={{ fontWeight: 700, fontSize: 12 }} className={classes.state}>
                     {startCase(proposal.state)}
                 </Typography>
             </div>

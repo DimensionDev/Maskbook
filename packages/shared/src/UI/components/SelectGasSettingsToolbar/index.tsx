@@ -240,12 +240,19 @@ export function SelectGasSettingsToolbarUI({
                 horizontal: 'right',
                 ...MenuProps?.transformOrigin,
             },
-            PaperProps: {
-                ...MenuProps?.PaperProps,
-                style: {
-                    background: theme.palette.maskColor.bottom,
-                    transform: 'translateY(8px)',
-                    ...MenuProps?.PaperProps?.style,
+            slotProps: {
+                ...MenuProps?.slotProps,
+                paper: (ownerState) => {
+                    const paper = MenuProps?.slotProps?.paper
+                    const existing = typeof paper === 'function' ? paper(ownerState) : paper
+                    return {
+                        ...existing,
+                        style: {
+                            ...existing?.style,
+                            background: theme.palette.maskColor.bottom,
+                            transform: 'translateY(8px)',
+                        },
+                    }
                 },
             },
         },

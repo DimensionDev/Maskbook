@@ -70,7 +70,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
     }, [isSubmitting, isDirty, handleSubmit, onSubmit])
 
     return (
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
             <Controller
                 control={control}
                 render={({ field }) => (

@@ -191,9 +191,7 @@ export function PluginGuide({
                                             </div>
                                         )}
                                         <div>
-                                            <Typography fontSize={14} fontWeight={600}>
-                                                {title}
-                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{title}</Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
                                             <Button color="primary" className={classes.button} onClick={onNext}>

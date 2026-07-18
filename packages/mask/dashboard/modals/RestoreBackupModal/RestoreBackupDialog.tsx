@@ -172,30 +172,30 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                 <Typography className={classes.account}>{account}</Typography>
                 <Box className={classes.box}>
                     <Icons.Message size={24} />
-                    <Box flex={1}>
+                    <Box sx={{ flex: 1 }}>
                         <Typography className={classes.fileName}>{fileName}</Typography>
                         <LinearProgress variant="determinate" value={progress} sx={{ my: 0.5 }} />
                         <Typography
                             color={theme.palette.maskColor.third}
-                            display="flex"
-                            gap={0.5}
-                            fontSize={12}
-                            fontWeight={700}
-                            lineHeight="16px">
+                            sx={{ display: 'flex', gap: 0.5, fontSize: 12, fontWeight: 700, lineHeight: '16px' }}>
                             {progress === 100 ?
                                 <>
                                     <Typography
                                         component="span"
-                                        fontSize={12}
-                                        fontWeight={700}
-                                        lineHeight="16px"
+                                        sx={{
+                                            fontSize: 12,
+                                            fontWeight: 700,
+                                            lineHeight: '16px',
+                                        }}
                                         color={theme.palette.maskColor.main}>
                                         {formatFileSize(Number(size))}
                                     </Typography>
                                     <Typography
                                         component="span"
-                                        fontSize={12}
-                                        lineHeight="16px"
+                                        sx={{
+                                            fontSize: 12,
+                                            lineHeight: '16px',
+                                        }}
                                         color={theme.palette.maskColor.third}>
                                         {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
                                     </Typography>

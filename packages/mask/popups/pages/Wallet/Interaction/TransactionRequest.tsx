@@ -235,16 +235,16 @@ export function TransactionRequest(props: InteractionItemProps) {
     )
     const FullTransactionDetails =
         expand ?
-            <Box className={classes.transactionDetail} marginBottom={16}>
+            <Box className={classes.transactionDetail} sx={{ marginBottom: 16 }}>
                 {transaction.formattedTransaction?.popup?.spender && approvedAmount ?
                     <>
-                        <Box display="flex" alignItems="center" columnGap={1.25}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 1.25 }}>
                             <Typography className={classes.itemTitle}>
                                 <Trans>Approve amount</Trans>
                             </Typography>
                             <Typography className={classes.itemValue}>{approvedAmount}</Typography>
                         </Box>
-                        <Box display="flex" alignItems="center" columnGap={1.25}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 1.25 }}>
                             <Trans>
                                 <Typography className={classes.itemTitle}>Granted to </Typography>
                                 <Typography className={classes.itemValue}>
@@ -254,7 +254,7 @@ export function TransactionRequest(props: InteractionItemProps) {
                         </Box>
                     </>
                 :   null}
-                <Box display="flex" columnGap={0.5} alignItems="center">
+                <Box sx={{ display: 'flex', columnGap: 0.5, alignItems: 'center' }}>
                     <Icons.Documents className={classes.document} size={16} />
                     <Typography className={classes.text}>
                         <Trans>Data</Trans>
@@ -272,7 +272,7 @@ export function TransactionRequest(props: InteractionItemProps) {
         :   null
     const ViewFullTransactionDetailsButton =
         FullTransactionDetails ?
-            <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
                 <Button variant="text" onClick={() => setExpand(!expand)}>
                     <Typography className={classes.text}>
                         <Trans>View full transaction details</Trans>

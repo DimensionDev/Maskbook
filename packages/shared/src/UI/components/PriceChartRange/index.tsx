@@ -51,7 +51,11 @@ export function PriceChartRange({
 }: PriceChartDaysControlProps) {
     const { classes, cx } = useStyles({ columns: rangeOptions.length })
     return (
-        <Box className={cx(classes.container, rest.className)} direction="row" gap={2} {...rest}>
+        <Box
+            className={cx(classes.container, rest.className)}
+            direction="row"
+            {...rest}
+            sx={[{ gap: 2 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             {rangeOptions.map((daysOption) => (
                 <Link
                     className={cx(classes.link, days === daysOption ? classes.active : '')}

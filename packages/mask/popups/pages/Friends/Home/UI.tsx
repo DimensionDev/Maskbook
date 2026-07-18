@@ -57,7 +57,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     const { classes, cx } = useStyles()
     return (
         <div className={classes.container}>
-            <Box padding="16px">
+            <Box sx={{ padding: '16px' }}>
                 <Search setSearchValue={setSearchValue} />
             </Box>
             {loading ?

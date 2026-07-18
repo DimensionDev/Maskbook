@@ -107,7 +107,7 @@ export function InformationCard() {
                                 <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
                             :   <EthereumBlockie address={proposal.address} />}
                         </div>
-                        <Typography fontSize={14}>
+                        <Typography sx={{ fontSize: 14 }}>
                             {proposal.space.id ? formatSpaceId(proposal.space.id) : formatLongHex(proposal.address)}
                         </Typography>
                     </Link>
@@ -119,24 +119,24 @@ export function InformationCard() {
                             target="_blank"
                             rel="noopener"
                             href={resolveResourceURL(urlcat(SNAPSHOT_IPFS, proposal.ipfs))}>
-                            <Typography fontSize={14}>#{identifier.id.slice(0, 7)}</Typography>
+                            <Typography sx={{ fontSize: 14 }}>#{identifier.id.slice(0, 7)}</Typography>
                             <Icons.LinkOut size={16} sx={{ paddingLeft: 1 }} />
                         </Link>
                     </InfoField>
                 :   null}
                 <InfoField title={<Trans>Start date</Trans>} classes={{ field: classes.infoColor }}>
-                    <Typography fontSize={14} fontWeight={400}>
+                    <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
                         {formatDateTime(start * 1000, 'MMM dd, yyyy, hh:mm a')}
                     </Typography>
                 </InfoField>
                 <InfoField title={<Trans>End date</Trans>} classes={{ field: classes.infoColor }}>
-                    <Typography fontSize={14} fontWeight={400}>
+                    <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
                         {formatDateTime(end * 1000, 'MMM dd, yyyy, hh:mm a')}
                     </Typography>
                 </InfoField>
                 <InfoField title={<Trans>Snapshot</Trans>} classes={{ field: classes.infoColor }}>
                     <Link className={classes.link} target="_blank" rel="noopener" href={link}>
-                        <Typography fontSize={14}>{formatWithCommas(snapshot)}</Typography>
+                        <Typography sx={{ fontSize: 14 }}>{formatWithCommas(snapshot)}</Typography>
                         <Icons.LinkOut size={16} sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>

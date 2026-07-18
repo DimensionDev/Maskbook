@@ -1,5 +1,5 @@
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
-import { jaJP, koKR, zhTW, zhCN, enUS, type Localization } from '@mui/material/locale/index.js'
+import { jaJP, koKR, zhTW, zhCN, enUS, type Localization } from '@mui/material/locale'
 import { updateLanguage } from '@masknet/shared-base'
 import { startTransition, useEffect } from 'react'
 

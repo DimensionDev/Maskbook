@@ -95,10 +95,10 @@ export const Component = memo(function SignUp() {
             <Typography variant="h1" className={classes.title}>
                 <Trans>Create New Mask Identity</Trans>
             </Typography>
-            <Typography className={classes.second} mt={2}>
+            <Typography className={classes.second} sx={{ mt: 2 }}>
                 <Trans>Create your persona to get started</Trans>
             </Typography>
-            <Typography className={classes.second} mt={3} mb={2}>
+            <Typography className={classes.second} sx={{ mt: 3, mb: 2 }}>
                 <Trans>Persona Name</Trans>
             </Typography>
             <TextField
@@ -109,8 +109,10 @@ export const Component = memo(function SignUp() {
                 autoFocus
                 placeholder={t`Example: Alice`}
                 required
-                InputProps={{ disableUnderline: true, size: 'large' }}
-                inputProps={{ maxLength: 24 }}
+                slotProps={{
+                    input: { disableUnderline: true, size: 'large' },
+                    htmlInput: { maxLength: 24 },
+                }}
                 error={!!error}
                 helperText={error}
             />

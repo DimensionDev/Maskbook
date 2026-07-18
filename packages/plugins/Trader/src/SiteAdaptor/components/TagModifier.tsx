@@ -74,15 +74,14 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
                         setFailed(true)
                     }}
                 />
-
-                <Link fontSize="inherit" href={href}>
+                <Link sx={{ fontSize: 'inherit' }} href={href}>
                     {children}
                 </Link>
             </span>
         )
     }
     return (
-        <Link href={href} fontSize="inherit">
+        <Link href={href} sx={{ fontSize: 'inherit' }}>
             {children}
         </Link>
     )

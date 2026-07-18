@@ -331,7 +331,7 @@ export const Transaction = memo(function Transaction() {
 
     if (!tx)
         return (
-            <Box className={classes.container} alignItems="center" justifyContent="center">
+            <Box className={classes.container} sx={{ alignItems: 'center', justifyContent: 'center' }}>
                 <EmptyStatus />
             </Box>
         )
@@ -476,7 +476,7 @@ export const Transaction = memo(function Transaction() {
                             </div>
                         :   null}
                         {tx.kind === 'bridge' && bridgeStatus?.status === 'PENDING' ?
-                            <Typography className={classes.tip} ml="38px">
+                            <Typography className={classes.tip} sx={{ ml: '38px' }}>
                                 <Trans>
                                     Transferring asset across to the {toNetwork?.fullName} network via the{' '}
                                     {tx.bridgeName}
@@ -522,7 +522,9 @@ export const Transaction = memo(function Transaction() {
                                 address={toToken?.contractAddress || ''}
                             />
                             <div className={classes.tokenValue}>
-                                <Typography className={cx(classes.toToken, classes.value)} alignItems="center">
+                                <Typography
+                                    className={cx(classes.toToken, classes.value)}
+                                    sx={{ alignItems: 'center' }}>
                                     {detailStatus === 'BRIDGE_PENDING' ?
                                         <LoadingBase size={16} />
                                     :   null}
@@ -623,7 +625,7 @@ export const Transaction = memo(function Transaction() {
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {formatEthereumAddress(tx.dexContractAddress, 4)}
-                            <CopyButton text={tx.dexContractAddress} size={16} display="flex" />
+                            <CopyButton text={tx.dexContractAddress} size={16} sx={{ display: 'flex' }} />
                         </Typography>
                     </div>
                 </div>

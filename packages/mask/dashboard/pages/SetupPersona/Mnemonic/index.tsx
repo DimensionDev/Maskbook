@@ -153,11 +153,10 @@ export const Component = memo(function SignUpMnemonic() {
             <Typography variant="h1" className={classes.title}>
                 <Trans>Persona Recovery Phrase</Trans>
             </Typography>
-            <Typography className={classes.second} mt={2}>
+            <Typography className={classes.second} sx={{ mt: 2 }}>
                 <Trans>12-word recovery phrase is used to recover your persona data.</Trans>
             </Typography>
-
-            <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
+            <Stack direction="row" sx={{ justifyContent: 'flex-end', marginBottom: (theme) => theme.spacing(2) }}>
                 <Button className={classes.refresh} variant="text" onClick={refreshCallback}>
                     <Icons.Refresh size={16} />
                     <Trans>Refresh</Trans>

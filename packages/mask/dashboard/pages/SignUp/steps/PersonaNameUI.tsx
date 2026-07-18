@@ -44,11 +44,10 @@ export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
                     <Trans>Set Your Persona Name</Trans>
                 </Typography>
             </Box>
-            <Typography className={classes.second} mt={2}>
+            <Typography className={classes.second} sx={{ mt: 2 }}>
                 <Trans>Set your persona name with maximum length of 24 characters</Trans>
             </Typography>
-
-            <Typography className={classes.second} mt={3} mb={2}>
+            <Typography className={classes.second} sx={{ mt: 3, mb: 2 }}>
                 <Trans>Persona Name</Trans>
             </Typography>
             <TextField
@@ -57,12 +56,13 @@ export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
                 }}
                 required
                 autoFocus
-                InputProps={{ disableUnderline: true }}
-                inputProps={{ maxLength: 24 }}
+                slotProps={{
+                    input: { disableUnderline: true },
+                    htmlInput: { maxLength: 24 },
+                }}
                 error={!!error}
                 helperText={error}
             />
-
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
                     <PrimaryButton

@@ -91,7 +91,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
             await onRequestCountMightChanged()
         } catch (error) {
             showSnackbar(
-                <Typography textAlign="center" width="275px">
+                <Typography sx={{ textAlign: 'center', width: '275px' }}>
                     <Trans>There was a network or RPC provider error, please try again later!</Trans>
                     <br />
                     {String((error as any).message)}
@@ -154,8 +154,16 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
     }
 
     return (
-        <Box flex={1} display="flex" flexDirection="column">
-            <Box p={2} display="flex" flexDirection="column" flex={1} maxHeight="calc(100vh - 142px)" overflow="auto">
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <Box
+                sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flex: 1,
+                    maxHeight: 'calc(100vh - 142px)',
+                    overflow: 'auto',
+                }}>
                 <InteractionComponent
                     setConfirmDisabled={setConfirmDisabled}
                     currentRequest={currentRequest}
@@ -198,8 +206,8 @@ const Pager = memo(function Pager(props: PagerProps) {
 
     if (totalMessages <= 1) return null
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" marginTop="auto">
-            <Box display="flex" alignItems="center">
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 'auto' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     disabled={currentMessageIndex === 0}
                     onClick={() => startTransition(() => setMessageIndex(currentMessageIndex - 1))}>
@@ -232,7 +240,7 @@ function DangerDialog({ cancel, confirm }: Record<'cancel' | 'confirm', React.Re
                 <DialogContentText variant="overline">
                     <Trans>Are you sure?</Trans>
                 </DialogContentText>
-                <DialogContentText color={(theme) => theme.palette.maskColor.danger}>
+                <DialogContentText sx={{ color: (theme) => theme.palette.maskColor.danger }}>
                     <Trans>This request may be a phishing attach. I understand this and want to continue.</Trans>
                 </DialogContentText>
             </DialogContent>

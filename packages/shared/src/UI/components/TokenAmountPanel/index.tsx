@@ -206,10 +206,10 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                         </Box>,
                 ...props.InputProps,
             }}
-            InputLabelProps={{
-                shrink: true,
-                classes: {
-                    shrink: classes.inputShrinkLabel,
+            slotProps={{
+                inputLabel: {
+                    shrink: true,
+                    classes: { shrink: classes.inputShrinkLabel },
                 },
             }}
             {...props.TextFieldProps}

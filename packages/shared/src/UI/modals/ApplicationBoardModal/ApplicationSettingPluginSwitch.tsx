@@ -125,13 +125,13 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                         targetPluginRef.current = ele
                     }}
                     className={classes.listItem}>
-                    <Stack width="100%">
-                        <Stack direction="row" width="100%">
+                    <Stack sx={{ width: '100%' }}>
+                        <Stack direction="row" sx={{ width: '100%' }}>
                             <section className={classes.listContent}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>
                                 </ListItemAvatar>
-                                <Stack className={classes.info} flex={1}>
+                                <Stack className={classes.info} sx={{ flex: 1 }}>
                                     <div className={classes.headerWrapper}>
                                         <Typography className={classes.name}>
                                             <PluginTransFieldRender field={x.entry.name} pluginID={x.pluginID} />
@@ -150,7 +150,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                     </Typography>
                                 </Stack>
                             </section>
-                            <Stack justifyContent="center">
+                            <Stack sx={{ justifyContent: 'center' }}>
                                 <Switch
                                     checked={!pluginsInMinimalMode.map((x) => x.ID).includes(x.pluginID)}
                                     onChange={(event) => onSwitch(x.pluginID, event.target.checked)}
@@ -158,12 +158,12 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                             </Stack>
                         </Stack>
                         {x.entry.features?.length ?
-                            <Stack direction="row" mt={1.25}>
+                            <Stack direction="row" sx={{ mt: 1.25 }}>
                                 <Box className={classes.placeholder} />
                                 <Stack spacing={1.25}>
                                     {x.entry.features.map((f, i) => (
                                         <Stack key={i}>
-                                            <Typography className={classes.name} fontSize={14}>
+                                            <Typography className={classes.name} sx={{ fontSize: 14 }}>
                                                 <PluginTransFieldRender field={f.name} pluginID={x.pluginID} />
                                             </Typography>
                                             <Typography className={classes.desc}>
@@ -192,15 +192,15 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
 
     return (
         <ListItem key={DSearch_KEY} ref={(ele) => setRef(ele)} className={classes.listItem}>
-            <Stack width="100%">
-                <Stack direction="row" width="100%">
+            <Stack sx={{ width: '100%' }}>
+                <Stack direction="row" sx={{ width: '100%' }}>
                     <section className={classes.listContent}>
                         <ListItemAvatar>
                             <Avatar className={classes.avatar}>
                                 <Icons.DecentralizedSearch />
                             </Avatar>
                         </ListItemAvatar>
-                        <Stack className={classes.info} flex={1}>
+                        <Stack className={classes.info} sx={{ flex: 1 }}>
                             <div className={classes.headerWrapper}>
                                 <Typography className={classes.name}>
                                     <Trans>DSearch</Trans>
@@ -220,15 +220,15 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                             </Typography>
                         </Stack>
                     </section>
-                    <Stack justifyContent="center">
+                    <Stack sx={{ justifyContent: 'center' }}>
                         <Switch checked={checked} onChange={onSwitch} />
                     </Stack>
                 </Stack>
-                <Stack direction="row" mt={1.25}>
+                <Stack direction="row" sx={{ mt: 1.25 }}>
                     <Box className={classes.placeholder} />
                     <Stack spacing={1.25}>
                         <Stack>
-                            <Typography className={classes.name} fontSize={14}>
+                            <Typography className={classes.name} sx={{ fontSize: 14 }}>
                                 <Trans>Token</Trans>
                             </Typography>
                             <Typography className={classes.desc}>
@@ -236,7 +236,7 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                             </Typography>
                         </Stack>
                         <Stack>
-                            <Typography className={classes.name} fontSize={14}>
+                            <Typography className={classes.name} sx={{ fontSize: 14 }}>
                                 <Trans>ENS or Wallet Address</Trans>
                             </Typography>
                             <Typography className={classes.desc}>

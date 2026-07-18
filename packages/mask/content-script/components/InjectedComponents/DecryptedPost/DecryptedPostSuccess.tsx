@@ -110,7 +110,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                     {selectedRecipients.length ?
                         <RecipientsToolTip recipients={selectedRecipients} openDialog={() => setShowDialog(true)} />
                     :   <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
-                            <Typography color="textPrimary" fontSize={12} fontWeight={500}>
+                            <Typography color="textPrimary" sx={{ fontSize: 12, fontWeight: 500 }}>
                                 <Trans>Only visible to yourself</Trans>
                             </Typography>
                             <div className={classes.iconAdd}>
@@ -130,7 +130,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                     :   null}
                 </>
             :   <section className={classes.visibilityBox}>
-                    <Typography color="textPrimary" fontSize={12} fontWeight={500}>
+                    <Typography color="textPrimary" sx={{ fontSize: 12, fontWeight: 500 }}>
                         <Trans>All Mask Network users</Trans>
                     </Typography>
                 </section>

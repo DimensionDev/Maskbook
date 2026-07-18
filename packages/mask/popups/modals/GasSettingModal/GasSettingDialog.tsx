@@ -246,8 +246,10 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     disabled
                     type="number"
                     fullWidth
-                    InputProps={{
-                        disableUnderline: true,
+                    slotProps={{
+                        input: {
+                            disableUnderline: true,
+                        },
                     }}
                 />
             </Box>
@@ -266,14 +268,22 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     }}
                     fullWidth
                     type="number"
-                    InputProps={{
-                        disableUnderline: true,
-                        inputProps: { min: minGas, max: maxGas },
+                    slotProps={{
+                        input: {
+                            disableUnderline: true,
+                            inputProps: { min: minGas, max: maxGas },
+                        },
                     }}
                 />
             </Box>
     return (
-        <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                rowGap: 1.5,
+                mt: 1.5,
+            }}>
             <Typography className={classes.preview}>
                 {formatBalance(totalGas, token?.decimals, {
                     significant: 4,
@@ -322,7 +332,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             {isSupport1559 ?
                 <>
                     {nonceOrGasLimitInput}
-                    <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', columnGap: 2 }}>
                         <Box>
                             <Typography className={classes.title}>
                                 <Trans>Max Priority Fee</Trans>
@@ -356,14 +366,16 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     )
                                 }}
                                 type="number"
-                                InputProps={{
-                                    endAdornment: (
-                                        <Typography className={classes.unit}>
-                                            <Trans>Gwei</Trans>
-                                        </Typography>
-                                    ),
-                                    disableUnderline: true,
-                                    inputProps: { min: 1 },
+                                slotProps={{
+                                    input: {
+                                        endAdornment: (
+                                            <Typography className={classes.unit}>
+                                                <Trans>Gwei</Trans>
+                                            </Typography>
+                                        ),
+                                        disableUnderline: true,
+                                        inputProps: { min: 1 },
+                                    },
                                 }}
                             />
                         </Box>
@@ -394,20 +406,22 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 }}
                                 value={maxFeePerGas}
                                 type="number"
-                                InputProps={{
-                                    endAdornment: (
-                                        <Typography className={classes.unit}>
-                                            <Trans>Gwei</Trans>
-                                        </Typography>
-                                    ),
-                                    disableUnderline: true,
-                                    inputProps: { min: 0 },
+                                slotProps={{
+                                    input: {
+                                        endAdornment: (
+                                            <Typography className={classes.unit}>
+                                                <Trans>Gwei</Trans>
+                                            </Typography>
+                                        ),
+                                        disableUnderline: true,
+                                        inputProps: { min: 0 },
+                                    },
                                 }}
                             />
                         </Box>
                     </Box>
                 </>
-            :   <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
+            :   <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', columnGap: 2 }}>
                     <Box>
                         <Typography className={classes.title}>
                             <Trans>Gas Price</Trans>
@@ -433,14 +447,16 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 setGasPrice(e.target.value || '1')
                             }}
                             type="number"
-                            InputProps={{
-                                endAdornment: (
-                                    <Typography className={classes.unit}>
-                                        <Trans>Gwei</Trans>
-                                    </Typography>
-                                ),
-                                disableUnderline: true,
-                                inputProps: { min: 0 },
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <Typography className={classes.unit}>
+                                            <Trans>Gwei</Trans>
+                                        </Typography>
+                                    ),
+                                    disableUnderline: true,
+                                    inputProps: { min: 0 },
+                                },
                             }}
                         />
                     </Box>

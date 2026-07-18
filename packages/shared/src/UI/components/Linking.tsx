@@ -13,7 +13,7 @@ export function Linking(props: LinkingProps) {
         const { hostname } = new URL(href)
         return (
             <Link
-                color={(theme) => theme.palette.maskColor.main}
+                sx={{ color: (theme) => theme.palette.maskColor.main }}
                 target="_blank"
                 rel="noopener noreferrer"
                 href={props.href}

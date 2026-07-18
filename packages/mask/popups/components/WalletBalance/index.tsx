@@ -34,9 +34,9 @@ export const WalletBalance = memo(function WalletBalance({
     }
 
     return (
-        <Typography display="flex" {...props}>
+        <Typography {...props} sx={[{ display: 'flex' }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}>
             {formatBalance(balance, nativeToken.decimals, { significant: 0, isPrecise: false, isFixed: true })}
-            <Box component="span" ml={0.5}>
+            <Box component="span" sx={{ ml: 0.5 }}>
                 {nativeToken.symbol}
             </Box>
         </Typography>

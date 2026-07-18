@@ -103,7 +103,7 @@ export function PossiblePluginSuggestionUISingle(props: {
     })
 
     const ButtonIcon = lackHostPermission ? Icons.Approve : Icons.Plugin
-    const wrapperContent = content ?? <FallbackContent disabled={disabled} height={74} />
+    const wrapperContent = content ?? <FallbackContent disabled={disabled} sx={{ height: 74 }} />
     const buttonLabel = lackHostPermission ? <Trans>Approve</Trans> : <Trans>Enable the plugin</Trans>
 
     return (
@@ -172,7 +172,11 @@ function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
             </Box>
         )
     return (
-        <Box component="div" pl={1} {...rest} className={cx(classes.content, rest.className)}>
+        <Box
+            component="div"
+            {...rest}
+            className={cx(classes.content, rest.className)}
+            sx={[{ pl: 1 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={103} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={68} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={48} height={16} />

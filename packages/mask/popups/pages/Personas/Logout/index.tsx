@@ -131,8 +131,8 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
     }, [backupPassword, password, error, _])
 
     return (
-        <Box flex={1} maxHeight="544px" overflow="auto" data-hide-scrollbar>
-            <Box p={2} pb={11} display="flex" gap={1.5} flexDirection="column">
+        <Box sx={{ flex: 1, maxHeight: '544px', overflow: 'auto' }} data-hide-scrollbar>
+            <Box sx={{ p: 2, pb: 11, display: 'flex', gap: 1.5, flexDirection: 'column' }}>
                 <Box className={classes.infoBox}>
                     <PersonaAvatar
                         size={30}
@@ -140,8 +140,8 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
                         pubkey={currentPersona?.identifier.publicKeyAsHex || ''}
                     />
                     <Box>
-                        <Typography fontWeight={700}>{currentPersona?.nickname}</Typography>
-                        <Typography fontSize={10} color={theme.palette.maskColor.third} lineHeight="10px">
+                        <Typography sx={{ fontWeight: 700 }}>{currentPersona?.nickname}</Typography>
+                        <Typography color={theme.palette.maskColor.third} sx={{ fontSize: 10, lineHeight: '10px' }}>
                             {currentPersona?.identifier.rawPublicKey}
                         </Typography>
                     </Box>

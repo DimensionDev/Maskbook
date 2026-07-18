@@ -159,7 +159,7 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
                 }
                 action={
                     info.personas.length ?
-                        <Box display="flex" columnGap={1}>
+                        <Box sx={{ display: 'flex', columnGap: 1 }}>
                             <Typography component="div" className={classes.headerAction}>
                                 <TextOverflowTooltip title={personas} arrow placement="top">
                                     <Typography className={classes.personas}>{personas}</Typography>
@@ -252,15 +252,14 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                             <ListItemText className={classes.listText}>
                                 <Link
                                     className={classes.link}
-                                    fontSize={0}
+                                    sx={{ fontSize: 0 }}
                                     href={EVMExplorerResolver.addressLink(ChainId.Mainnet, wallet)}
                                     target="_blank">
                                     <ReversedAddress
                                         component="span"
                                         pluginID={NetworkPluginID.PLUGIN_EVM}
                                         address={wallet}
-                                        mr="10px"
-                                        fontWeight={400}
+                                        sx={{ mr: '10px', fontWeight: 400 }}
                                     />
                                     <Icons.LinkOut size={18} color={theme.palette.maskColor.second} />
                                 </Link>

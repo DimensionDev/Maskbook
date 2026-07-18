@@ -254,7 +254,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 </div>
                             </div>
                             {results.length > 0 ?
-                                <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0' }}>
+                                <Stack sx={{ alignItems: 'center', flexDirection: 'row', padding: '16px 0' }}>
                                     <Checkbox
                                         size="small"
                                         sx={{ width: 20, height: 20 }}

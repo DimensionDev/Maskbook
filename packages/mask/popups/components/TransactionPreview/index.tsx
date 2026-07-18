@@ -169,25 +169,22 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     return (
         <Box>
             <Box className={classes.info}>
-                <Box display="flex" justifyContent="space-between">
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography className={classes.title}>{title}</Typography>
                     {receiver ?
                         <Typography className={classes.title}>{receiver}</Typography>
                     :   null}
                 </Box>
                 {to ?
-                    <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
+                    <Box sx={{ mt: 2, display: 'flex', columnGap: 0.5, alignItems: 'center' }}>
                         <Trans>
                             <Typography className={classes.addressTitle}>To</Typography>:{' '}
-                            <Typography fontSize={11} fontWeight={700} lineHeight="16px">
-                                {to}
-                            </Typography>
+                            <Typography sx={{ fontSize: 11, fontWeight: 700, lineHeight: '16px' }}>{to}</Typography>
                         </Trans>
                     </Box>
                 :   null}
             </Box>
-
-            <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>
                 <Typography component="div" className={classes.amount}>
                     {tokenId ?
                         <Typography>Token #{tokenId}</Typography>
@@ -222,7 +219,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     </Typography>
                 :   null}
             </Box>
-            <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
+            <Box sx={{ mt: 3.75, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography className={classes.gasFeeTitle}>
                     <Trans>Gas Fee</Trans>
                 </Typography>

@@ -5,7 +5,7 @@ import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-sc
 
 export const Container = memo(function Container(props: PropsWithChildren) {
     return (
-        <Typography color="textPrimary" fontSize="inherit">
+        <Typography color="textPrimary" sx={{ fontSize: 'inherit' }}>
             {props.children}
         </Typography>
     )
@@ -14,7 +14,7 @@ export const Container = memo(function Container(props: PropsWithChildren) {
 export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkProps) {
     const text = props.children.startsWith('https://mask.io') ? 'Mask.io' : props.children
     return (
-        <MaterialLink href={props.href} fontSize="inherit">
+        <MaterialLink href={props.href} sx={{ fontSize: 'inherit' }}>
             {text}
             {props.suggestedPostImage}
         </MaterialLink>

@@ -252,7 +252,7 @@ export function TrendingView(props: TrendingViewProps) {
             trending={trending}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
-                <Stack px={2}>
+                <Stack sx={{ px: 2 }}>
                     <MaskTabList
                         variant="base"
                         classes={{ root: classes.tabListRoot }}
@@ -303,7 +303,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 :   null}
                 {currentTab === ContentTab.Exchange && trending.dataProvider ?
-                    <Box p={2}>
+                    <Box sx={{ p: 2 }}>
                         <TickersTable tickers={tickers} />
                     </Box>
                 :   null}

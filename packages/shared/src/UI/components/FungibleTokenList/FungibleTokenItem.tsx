@@ -5,7 +5,7 @@ import { ActionButton, CheckBoxIndicator, LoadingBase, makeStyles } from '@maskn
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleTokenBalance, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
-import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Box, Link, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { FormattedBalance } from '../../wallet/index.js'
@@ -220,9 +220,8 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
 
         return (
             <div style={style}>
-                <ListItem
+                <ListItemButton
                     title={address}
-                    button
                     className={`${classes.list} dashboard token-list`}
                     onClick={() => {
                         if (mode === TokenListMode.List) {
@@ -233,7 +232,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
                     }}
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
-                        <Box position="relative">
+                        <Box sx={{ position: 'relative' }}>
                             <TokenIcon
                                 pluginID={pluginID}
                                 chainId={chainId}
@@ -289,7 +288,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
                             {action}
                         </Typography>
                     </ListItemText>
-                </ListItem>
+                </ListItemButton>
             </div>
         )
     })

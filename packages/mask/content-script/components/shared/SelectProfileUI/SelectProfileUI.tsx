@@ -188,7 +188,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             </Box>
                         </div>
                         {profiles.length ?
-                            <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0px' }}>
+                            <Stack sx={{ alignItems: 'center', flexDirection: 'row', padding: '16px 0px' }}>
                                 <Checkbox
                                     sx={{ width: 20, height: 20 }}
                                     onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}

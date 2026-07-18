@@ -9,7 +9,7 @@ interface Props extends IconButtonProps {
 }
 export function AvatarBadge({ userId, socialAccounts }: Props) {
     return socialAccounts?.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM).length ?
-            <Box display="flex" alignItems="top" justifyContent="center">
+            <Box sx={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
                     <ProfileAvatarBadge userId={userId} address={socialAccounts[0]?.address} />
                 </div>

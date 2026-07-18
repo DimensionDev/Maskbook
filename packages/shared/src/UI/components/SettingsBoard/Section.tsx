@@ -23,7 +23,7 @@ export function Section(props: SectionProps) {
 
     return (
         <div className={classes.root}>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Typography className={classes.title}>{title}</Typography>
                 {additions ?? <div />}
             </Box>

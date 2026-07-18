@@ -117,7 +117,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         return (
             <Box>
                 <NormalHeader />
-                <Box p={2}>
+                <Box sx={{ p: 2 }}>
                     <AvatarEditor
                         ref={editorRef}
                         image={file}
@@ -151,9 +151,9 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     }
 
     return (
-        <Box flex={1} display="flex" flexDirection="column" overflow="auto" data-hide-scrollbar>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }} data-hide-scrollbar>
             <NormalHeader />
-            <Box p={2}>
+            <Box sx={{ p: 2 }}>
                 <Box className={classes.uploadBox} {...bound}>
                     <input
                         className={classes.file}

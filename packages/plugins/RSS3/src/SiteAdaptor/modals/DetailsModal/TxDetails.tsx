@@ -159,9 +159,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
                     <Trans>From</Trans>
                 </Typography>
                 <Tooltip title={feed.from}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={feed.from} fontWeight={400} />
+                        <ReversedAddress address={feed.from} sx={{ fontWeight: 400 }} />
                         <CopyButton text={feed.from} size={20} />
                     </Typography>
                 </Tooltip>
@@ -171,9 +171,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
                     <Trans>To</Trans>
                 </Typography>
                 <Tooltip title={feed.to}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={feed.to} fontWeight={400} />
+                        <ReversedAddress address={feed.to} sx={{ fontWeight: 400 }} />
                         <CopyButton text={feed.to} size={20} />
                     </Typography>
                 </Tooltip>

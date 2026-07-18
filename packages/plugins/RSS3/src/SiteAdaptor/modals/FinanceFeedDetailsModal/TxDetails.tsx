@@ -134,7 +134,7 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                     <Trans>From</Trans>
                 </Typography>
                 <Tooltip title={tx.from}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <AccountLabel address={tx.from} size={16} />
                         <CopyButton text={tx.from} size={20} />
                     </Typography>
@@ -145,7 +145,7 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                     <Trans>To</Trans>
                 </Typography>
                 <Tooltip title={tx.to}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <AccountLabel address={tx.to} size={16} /> <CopyButton text={tx.to} size={20} />
                     </Typography>
                 </Tooltip>

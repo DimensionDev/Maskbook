@@ -90,7 +90,7 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
             </Typography>
             {origin ?
                 <Box className={classes.source}>
-                    <Typography fontSize={16} fontWeight={700}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                         <Trans>Request Source</Trans>
                     </Typography>
                     <Typography

@@ -64,7 +64,7 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
                     when you click Add Google Drive button，you will be forwarded to Google authorization pages.
                 </Trans>
             </Typography>
-            <Box display="flex" justifyContent="center" mt="48px">
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: '48px' }}>
                 <ActionButton variant="roundedContained" onClick={login} loading={loading}>
                     Add Google Drive
                 </ActionButton>

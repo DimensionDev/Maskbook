@@ -253,7 +253,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                     }
                                 />
                             </IconButton>
-                            <Typography className={dialogTitleTypography} display="inline" variant="inherit">
+                            <Typography className={dialogTitleTypography} sx={{ display: 'inline' }} variant="inherit">
                                 {title}
                             </Typography>
                             <Stack

@@ -57,7 +57,7 @@ export const SearchList = memo<SearchListProps>(function SearchList({ searchResu
                             />
                         )
                     })}
-                    <ElementAnchor callback={() => fetchNextPage()} height={10} />
+                    <ElementAnchor callback={() => fetchNextPage()} sx={{ height: 10 }} />
                 </Box>
             </RestorableScroll>
 })

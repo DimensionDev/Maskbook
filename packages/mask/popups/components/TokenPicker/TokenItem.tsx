@@ -137,7 +137,7 @@ export const TokenItem = memo(function TokenItem({
             </ListItemIcon>
             <ListItemText
                 className={classes.listText}
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{ secondary: { component: 'div' } }}
                 secondary={
                     <>
                         <Typography className={classes.name}>

@@ -176,8 +176,8 @@ export const RecipientSelect = memo(({ className }: Props) => {
                 disableScrollLock: true,
                 container: () => selectRef.current,
                 anchorEl: () => selectRef.current!,
-                BackdropProps: {
-                    invisible: true,
+                slotProps: {
+                    backdrop: { invisible: true },
                 },
             }}
             renderValue={(value) => {

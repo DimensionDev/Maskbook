@@ -73,11 +73,13 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
 
                         <Stack className={classes.itemText}>
                             <Typography
-                                fontSize={14}
-                                fontWeight={700}
-                                flexGrow={1}
-                                overflow="hidden"
-                                textOverflow="ellipsis">
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 700,
+                                    flexGrow: 1,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                }}>
                                 <span className={classes.name}>{x.name}</span>
                                 {x.symbol ?
                                     <span className={classes.symbol}>({x.symbol})</span>
@@ -86,12 +88,14 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
                             <div className={classes.itemCheckout}>
                                 {x.rank ?
                                     <Typography
-                                        fontSize={14}
-                                        fontWeight={700}
-                                        flexGrow={1}
-                                        overflow="hidden"
-                                        className={classes.rank}
-                                        textOverflow="ellipsis">
+                                        sx={{
+                                            fontSize: 14,
+                                            fontWeight: 700,
+                                            flexGrow: 1,
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}
+                                        className={classes.rank}>
                                         #{x.rank}
                                     </Typography>
                                 :   null}

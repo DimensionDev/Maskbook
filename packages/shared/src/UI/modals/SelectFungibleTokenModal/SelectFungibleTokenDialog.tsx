@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Button, DialogActions, DialogContent, inputClasses, useMediaQuery, type Theme } from '@mui/material'
+import { Button, DialogActions, DialogContent, inputClasses, useMediaQuery } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
@@ -131,7 +131,7 @@ export function SelectFungibleTokenDialog({
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const { classes, cx } = useStyles({ compact })
-    const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
+    const isMdScreen = useMediaQuery((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isPrivyWallet = !!usePrivyWallet(account)

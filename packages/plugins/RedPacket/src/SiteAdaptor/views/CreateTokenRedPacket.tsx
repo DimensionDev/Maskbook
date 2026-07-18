@@ -279,8 +279,10 @@ export function CreateTokenRedPacket() {
                         </div>
                         <Typography
                             color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
-                            fontSize={16}
-                            fontWeight={isRandom ? 700 : 400}>
+                            sx={{
+                                fontSize: 16,
+                                fontWeight: isRandom ? 700 : 400,
+                            }}>
                             <Trans>Random Amount</Trans>
                         </Typography>
                     </label>
@@ -290,15 +292,17 @@ export function CreateTokenRedPacket() {
                         </div>
                         <Typography
                             color={isRandom ? theme.palette.maskColor.second : theme.palette.maskColor.main}
-                            fontSize={16}
-                            fontWeight={isRandom ? 400 : 700}>
+                            sx={{
+                                fontSize: 16,
+                                fontWeight: isRandom ? 400 : 700,
+                            }}>
                             <Trans>Equal Amount</Trans>
                         </Typography>
                     </label>
                 </div>
                 <MessageInput message={message} onChange={setMessage} />
                 <div className={classes.field}>
-                    <Box width={180}>
+                    <Box sx={{ width: 180 }}>
                         <InputBase
                             className={cx(classes.input, classes.iconInput)}
                             fullWidth

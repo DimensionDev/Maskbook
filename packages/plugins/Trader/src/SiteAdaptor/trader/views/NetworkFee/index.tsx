@@ -369,7 +369,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     <div className={classes.boxContent}>
                         {isSupport1559 ?
                             <>
-                                <Box display="flex" alignItems="center">
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography className={classes.fieldName}>
                                         <Trans>Max base fee</Trans>
                                     </Typography>
@@ -447,7 +447,7 @@ export const NetworkFee = memo(function NetworkFee() {
                                 />
                             </>
                         :   <>
-                                <Box display="flex" alignItems="center">
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography className={classes.fieldName}>
                                         <Trans>Gas Price</Trans>
                                     </Typography>

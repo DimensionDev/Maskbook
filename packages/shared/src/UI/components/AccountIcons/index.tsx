@@ -67,7 +67,7 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
             classes={{ tooltip: classes.tooltip }}
             disableInteractive
             title={
-                <Typography fontSize={14} lineHeight="18px">
+                <Typography sx={{ fontSize: 14, lineHeight: '18px' }}>
                     {SocialAddressType.Address === type ?
                         <Trans>
                             Data source is retrieved from{' '}
@@ -228,7 +228,7 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
         <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}
             title={
-                <Typography fontSize={14} lineHeight="18px" component="div">
+                <Typography sx={{ fontSize: 14, lineHeight: '18px' }} component="div">
                     <Trans>
                         Data source is retrieved from{' '}
                         <Select

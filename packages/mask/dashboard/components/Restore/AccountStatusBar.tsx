@@ -21,7 +21,12 @@ interface Props extends BoxProps {
 export const AccountStatusBar = memo(function AccountStatusBar({ label, actionLabel, onAction, ...rest }: Props) {
     const { classes } = useStyles()
     return (
-        <Box display="flex" justifyContent="space-between" alignItems="center" {...rest}>
+        <Box
+            {...rest}
+            sx={[
+                { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+                ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx]),
+            ]}>
             {label ?
                 <Typography className={classes.label}>{label}</Typography>
             :   null}

@@ -316,8 +316,10 @@ export function CreateSolRedPacket() {
                         </div>
                         <Typography
                             color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
-                            fontSize={16}
-                            fontWeight={isRandom ? 700 : 400}>
+                            sx={{
+                                fontSize: 16,
+                                fontWeight: isRandom ? 700 : 400,
+                            }}>
                             <Trans>Random Amount</Trans>
                         </Typography>
                     </label>
@@ -327,8 +329,10 @@ export function CreateSolRedPacket() {
                         </div>
                         <Typography
                             color={isRandom ? theme.palette.maskColor.second : theme.palette.maskColor.main}
-                            fontSize={16}
-                            fontWeight={isRandom ? 400 : 700}>
+                            sx={{
+                                fontSize: 16,
+                                fontWeight: isRandom ? 400 : 700,
+                            }}>
                             <Trans>Equal Amount</Trans>
                         </Typography>
                     </label>
@@ -354,7 +358,7 @@ export function CreateSolRedPacket() {
                     }}
                 />
                 <div className={classes.field}>
-                    <Box width={180}>
+                    <Box sx={{ width: 180 }}>
                         <InputBase
                             className={cx(classes.input, classes.iconInput)}
                             fullWidth
@@ -417,7 +421,7 @@ export function CreateSolRedPacket() {
                     <Typography className={classes.label}>
                         <Trans>Choose a Cover</Trans>
                     </Typography>
-                    <Box display="flex" flexDirection="row" gap={1} ml="auto">
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, ml: 'auto' }}>
                         {redpacketThemes.map((theme) => (
                             <div
                                 key={theme.tid}

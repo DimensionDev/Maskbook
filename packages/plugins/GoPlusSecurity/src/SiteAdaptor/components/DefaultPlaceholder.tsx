@@ -4,7 +4,7 @@ import { Trans } from '@lingui/react/macro'
 
 export function DefaultPlaceholder() {
     return (
-        <Stack alignItems="center" spacing={2.5}>
+        <Stack sx={{ alignItems: 'center' }} spacing={2.5}>
             <Box>
                 <Icons.SecurityChecker size={48} />
             </Box>

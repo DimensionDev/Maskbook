@@ -38,13 +38,13 @@ export const Component = memo(function ExportPrivateKey() {
 
     return (
         <Box>
-            <Box p={2} display="flex" flexDirection="column" rowGap={2}>
-                <Typography fontWeight={700}>
+            <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', rowGap: 2 }}>
+                <Typography sx={{ fontWeight: 700 }}>
                     <Trans>Private Key</Trans>
                 </Typography>
                 {value ?
                     <Typography
-                        p={1.5}
+                        sx={{ p: 1.5 }}
                         style={{ background: theme.palette.maskColor.input, wordWrap: 'break-word', borderRadius: 8 }}>
                         {value}
                     </Typography>

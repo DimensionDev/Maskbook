@@ -52,7 +52,7 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
     const PluginName = (
         <Stack className={classes.title} direction="row">
             {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
-            <Typography fontSize={16} fontWeight={700} color={theme.palette.maskColor.main}>
+            <Typography sx={{ fontSize: 16, fontWeight: 700 }} color={theme.palette.maskColor.main}>
                 {title ?? <Trans>Web3 Profile</Trans>}
             </Typography>
         </Stack>
@@ -60,9 +60,9 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
 
     return (
         <Stack className={classes.container}>
-            <Stack direction="row" justifyContent="space-between" p={1.5}>
+            <Stack direction="row" sx={{ justifyContent: 'space-between', p: 1.5 }}>
                 {PluginName}
-                <Stack direction="row" gap={0.5}>
+                <Stack direction="row" sx={{ gap: 0.5 }}>
                     <Trans>
                         <Typography className={classes.item1}>Powered by </Typography>
                         <Typography className={classes.item2}>{provider ?? 'Mask Network'}</Typography>
@@ -73,14 +73,17 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
                         rel="noopener noreferrer"
                         color="textPrimary"
                         href={providerLink ?? 'https://mask.io/'}
-                        width="22px"
-                        height="22px"
-                        style={{ alignSelf: 'center', marginLeft: '4px' }}>
+                        sx={{
+                            width: '22px',
+                            height: '22px',
+                            alignSelf: 'center',
+                            marginLeft: '4px',
+                        }}>
                         <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                     </Link>
                 </Stack>
             </Stack>
-            <Stack flex={1} justifyContent="center" alignItems="center" p={1.5}>
+            <Stack sx={{ flex: 1, justifyContent: 'center', alignItems: 'center', p: 1.5 }}>
                 {children ?? (
                     <LoadingStatus iconSize={24} color={theme.palette.maskColor.main}>
                         <Trans>Loading....</Trans>

@@ -91,16 +91,16 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
             fullWidth
             title={<Trans>Confirm swap risk</Trans>}>
             <DialogContent className={classes.content}>
-                <Stack alignItems="center">
+                <Stack sx={{ alignItems: 'center' }}>
                     <Icons.SecurityRisk size={68} />
                     <Typography className={classes.warningTitle}>
                         <Trans>Risk Warning</Trans>
                     </Typography>
                 </Stack>
-                <Stack marginTop="51px">
+                <Stack sx={{ marginTop: '51px' }}>
                     <Trans>
-                        <Typography color={(theme) => theme.palette.maskColor.danger}>Dear Users,</Typography>
-                        <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
+                        <Typography sx={{ color: (theme) => theme.palette.maskColor.danger }}>Dear Users,</Typography>
+                        <Typography sx={{ color: (theme) => theme.palette.maskColor.danger, marginTop: '16px' }}>
                             Clicking the confirm button means that you agree to take the potential risks and proceed
                             with the transaction.
                         </Typography>

@@ -43,7 +43,7 @@ export function PersonaAction(props: PersonaActionProps) {
 
     return (
         <div className={classes.bottomFixed}>
-            <Box display="flex">
+            <Box sx={{ display: 'flex' }}>
                 <PlatformAvatar networkIcon={avatar} size={36} />
                 <div style={{ marginLeft: '4px' }}>
                     <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>

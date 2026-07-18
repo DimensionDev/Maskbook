@@ -75,24 +75,24 @@ export function SavingsTable({ tab, protocols, loadingProtocols, onWithdraw, onD
     return (
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
-                <Grid item xs={4} className={classes.tableCell}>
+                <Grid size={4} className={classes.tableCell}>
                     <Typography variant="body1">
                         <Trans>Asset</Trans>
                     </Typography>
                 </Grid>
                 {isDeposit ?
-                    <Grid item xs={2} className={classes.tableCell}>
+                    <Grid size={2} className={classes.tableCell}>
                         <Typography variant="body1">
                             <Trans>APR</Trans>
                         </Typography>
                     </Grid>
                 :   null}
-                <Grid item xs={isDeposit ? 3 : 5} className={classes.tableCell}>
+                <Grid size={isDeposit ? 3 : 5} className={classes.tableCell}>
                     <Typography variant="body1">
                         <Trans>Wallet</Trans>
                     </Typography>
                 </Grid>
-                <Grid item xs={3} className={classes.tableCell}>
+                <Grid size={3} className={classes.tableCell}>
                     <Typography variant="body1">
                         <Trans>Operation</Trans>
                     </Typography>
@@ -120,7 +120,7 @@ export function SavingsTable({ tab, protocols, loadingProtocols, onWithdraw, onD
                 </div>
             :   <div className={classes.placeholder}>
                     <Icons.EmptySimple size={36} className={classes.empty} />
-                    <Typography fontSize="14px" mt={1.5} color={theme.palette.maskColor.second}>
+                    <Typography sx={{ fontSize: '14px', mt: 1.5 }} color={theme.palette.maskColor.second}>
                         <Trans>No deposit protocols found.</Trans>
                     </Typography>
                 </div>

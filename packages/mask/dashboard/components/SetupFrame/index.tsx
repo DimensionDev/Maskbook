@@ -56,18 +56,27 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpli
                     <Outlet />
                 </Box>
             </Box>
-            <Box className={classes.sidebar} position="relative">
+            <Box className={classes.sidebar} sx={{ position: 'relative' }}>
                 {hiddenSpline ? null : (
                     <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: '#d2deff' }}>
-                        <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                marginTop: 21.5,
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}>
                             <Typography
-                                fontSize={36}
-                                fontWeight={700}
-                                lineHeight={1.2}
                                 color={theme.palette.maskColor.publicMain}
-                                display="flex"
-                                width="70%"
-                                justifyContent="center">
+                                sx={{
+                                    fontSize: 36,
+                                    fontWeight: 700,
+                                    lineHeight: 1.2,
+                                    display: 'flex',
+                                    width: '70%',
+                                    justifyContent: 'center',
+                                }}>
                                 {/* Don't translate this slogan */}
                                 The Web3 identity for everyone
                             </Typography>
@@ -79,7 +88,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpli
                     </div>
                 )}
                 {loading && !hiddenSpline ?
-                    <Box position="absolute" top="calc(50% - 18px)" left="calc(50% - 18px)">
+                    <Box sx={{ position: 'absolute', top: 'calc(50% - 18px)', left: 'calc(50% - 18px)' }}>
                         <LoadingBase size={36} />
                     </Box>
                 :   null}
@@ -90,9 +99,5 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpli
 
 interface SetupFrameControllerProps extends PropsWithChildren {}
 export const SetupFrameController = memo<SetupFrameControllerProps>(function SetupFrameController({ children }) {
-    return (
-        <Box marginTop="auto" py={3}>
-            {children}
-        </Box>
-    )
+    return <Box sx={{ marginTop: 'auto', py: 3 }}>{children}</Box>
 })

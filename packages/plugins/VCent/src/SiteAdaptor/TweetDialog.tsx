@@ -70,14 +70,19 @@ export const VCentDialog = memo(function VCentDialog({ tweetAddress }: { tweetAd
             <Box className={classes.content}>
                 <Box className={classes.title}>
                     <ImageIcon icon={networkDescriptor?.icon} size={20} />
-                    <Typography fontWeight="bold" fontSize={14} lineHeight="18px" sx={{ marginLeft: 0.5 }}>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: 14, lineHeight: '18px', marginLeft: 0.5 }}>
                         {tweet.amount_eth.toFixed(4)}
                     </Typography>
                 </Box>
                 <Box className={classes.title}>
                     <Trans>
                         <Typography className={classes.fieldName}>Latest offer at </Typography>
-                        <Typography fontWeight="bold" fontSize={14} color={(t) => t.palette.maskColor.publicMain}>
+                        <Typography
+                            sx={{
+                                fontWeight: 'bold',
+                                fontSize: 14,
+                                color: (t) => t.palette.maskColor.publicMain,
+                            }}>
                             ${tweet.amount_usd}
                         </Typography>
                     </Trans>

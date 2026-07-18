@@ -88,7 +88,8 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                 message: (
                     <Trans>
                         Do you want to delete file{' '}
-                        <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} fontWeight={700}>
+                        <Typography
+                            sx={{ color: (theme) => theme.palette.maskColor.main, fontSize: 14, fontWeight: 700 }}>
                             {file.name}
                         </Typography>
                     </Trans>

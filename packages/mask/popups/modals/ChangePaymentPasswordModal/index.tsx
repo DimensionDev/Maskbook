@@ -78,13 +78,15 @@ function ChangePaymentPasswordDrawer({
     return (
         <BottomDrawer {...rest} classes={{ title: classes.title }}>
             <Typography
-                fontWeight={700}
-                textAlign="center"
                 color={theme.palette.maskColor.third}
-                sx={{ marginTop: '12px' }}>
+                sx={{
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    marginTop: '12px',
+                }}>
                 <Trans>At least 6 characters</Trans>
             </Typography>
-            <Box display="flex" justifyContent="center" flexDirection="column">
+            <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
@@ -126,7 +128,7 @@ function ChangePaymentPasswordDrawer({
                     InputProps={inputProps}
                 />
             </Box>
-            <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1.5} height={32}>
+            <Typography color={theme.palette.maskColor.danger} sx={{ fontSize: 14, mt: 1.5, height: 32 }}>
                 {passwordTooShort || passwordNotMatch || originalPasswordWrong}
             </Typography>
             <ActionButton loading={loading} disabled={loading} onClick={handleClick} sx={{ marginTop: '16px' }}>

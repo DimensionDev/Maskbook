@@ -124,8 +124,24 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
         )
 
     return (
-        <Box overflow="auto" display="flex" flexGrow={1} flexDirection="column" data-hide-scrollbar {...props}>
-            <Box pt={1} pb={9} px={2} display="flex" flexGrow={1} minHeight={0} flexDirection="column" rowGap="6px">
+        <Box
+            data-hide-scrollbar
+            {...props}
+            sx={[
+                { overflow: 'auto', display: 'flex', flexGrow: 1, flexDirection: 'column' },
+                ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+            ]}>
+            <Box
+                sx={{
+                    pt: 1,
+                    pb: 9,
+                    px: 2,
+                    display: 'flex',
+                    flexGrow: 1,
+                    minHeight: 0,
+                    flexDirection: 'column',
+                    rowGap: '6px',
+                }}>
                 {wallets.map((item) => {
                     return (
                         <WalletItem

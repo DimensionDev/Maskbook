@@ -124,7 +124,9 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                                 onDelete?.(file)
                                 setMenuOpen(false)
                             }}>
-                            <Typography className={classes.menuLabel} color={(theme) => theme.palette.maskColor.danger}>
+                            <Typography
+                                className={classes.menuLabel}
+                                sx={{ color: (theme) => theme.palette.maskColor.danger }}>
                                 <Trans>Delete</Trans>
                             </Typography>
                         </MenuItem>

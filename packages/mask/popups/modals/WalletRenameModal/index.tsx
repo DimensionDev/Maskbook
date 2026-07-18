@@ -50,13 +50,15 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
     return (
         <BottomDrawer {...rest}>
             <Typography
-                fontWeight={700}
-                textAlign="center"
                 color={theme.palette.maskColor.third}
-                sx={{ marginTop: '12px' }}>
+                sx={{
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    marginTop: '12px',
+                }}>
                 <Trans>Wallet name must between 3 to 18 characters.</Trans>
             </Typography>
-            <Box display="flex" justifyContent="center" mx={0.5}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mx: 0.5 }}>
                 <TextField
                     sx={{ mt: 2 }}
                     fullWidth
@@ -68,24 +70,26 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
                         setName(e.target.value)
                         setError('')
                     }}
-                    InputProps={{
-                        endAdornment:
-                            name.length ?
-                                <Icons.PopupClose
-                                    onClick={() => {
-                                        setName('')
-                                        setError('')
-                                    }}
-                                    size={18}
-                                    color={error ? theme.palette.maskColor.danger : undefined}
-                                />
-                            :   null,
-                        disableUnderline: true,
+                    slotProps={{
+                        input: {
+                            endAdornment:
+                                name.length ?
+                                    <Icons.PopupClose
+                                        onClick={() => {
+                                            setName('')
+                                            setError('')
+                                        }}
+                                        size={18}
+                                        color={error ? theme.palette.maskColor.danger : undefined}
+                                    />
+                                :   null,
+                            disableUnderline: true,
+                        },
                     }}
                 />
             </Box>
             {error ?
-                <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1}>
+                <Typography color={theme.palette.maskColor.danger} sx={{ fontSize: 14, mt: 1 }}>
                     {error}
                 </Typography>
             :   null}

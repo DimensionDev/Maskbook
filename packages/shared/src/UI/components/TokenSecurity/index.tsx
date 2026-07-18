@@ -23,19 +23,23 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     }
 
     return (
-        <Stack direction="row" alignItems="center" spacing={1.5}>
+        <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1.5}>
             {riskyFactors !== 0 && (
                 <Stack
                     direction="row"
-                    alignItems="center"
-                    borderRadius="4px"
-                    padding="4px 8px"
-                    bgcolor={DefineMapping[SecurityMessageLevel.High].bgColor}
-                    spacing={0.5}>
+                    spacing={0.5}
+                    sx={{
+                        alignItems: 'center',
+                        borderRadius: '4px',
+                        padding: '4px 8px',
+                        bgcolor: DefineMapping[SecurityMessageLevel.High].bgColor,
+                    }}>
                     {DefineMapping[SecurityMessageLevel.High].icon(14)}
                     <Typography
                         component="span"
-                        fontSize="12px"
+                        sx={{
+                            fontSize: '12px',
+                        }}
                         color={DefineMapping[SecurityMessageLevel.High].titleColor}>
                         <Plural one="# Risky item" other="# Risky items" value={riskyFactors} />
                     </Typography>
@@ -44,15 +48,19 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
             {attentionFactors !== 0 && (
                 <Stack
                     direction="row"
-                    alignItems="center"
-                    borderRadius="4px"
-                    padding="4px 8px"
-                    bgcolor={DefineMapping[SecurityMessageLevel.Medium].bgColor}
+                    sx={{
+                        alignItems: 'center',
+                        borderRadius: '4px',
+                        padding: '4px 8px',
+                        bgcolor: DefineMapping[SecurityMessageLevel.Medium].bgColor,
+                    }}
                     spacing={0.5}>
                     {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
                     <Typography
                         component="span"
-                        fontSize="12px"
+                        sx={{
+                            fontSize: '12px',
+                        }}
                         color={DefineMapping[SecurityMessageLevel.Medium].titleColor}>
                         <Plural one="# Attention item" other="# Attention items" value={attentionFactors} />
                     </Typography>
@@ -61,14 +69,16 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
             {(attentionFactors !== 0 || riskyFactors !== 0) && (
                 <Stack
                     direction="row"
-                    alignItems="center"
-                    borderRadius="4px"
-                    padding="4px 8px"
-                    bgcolor="rgba(28, 104, 243, 0.1)"
-                    sx={{ cursor: 'pointer' }}
+                    sx={{
+                        alignItems: 'center',
+                        borderRadius: '4px',
+                        padding: '4px 8px',
+                        bgcolor: 'rgba(28, 104, 243, 0.1)',
+                        cursor: 'pointer',
+                    }}
                     onClick={handleOpenDialog}
                     spacing={0.5}>
-                    <Typography component="span" fontSize="12px" color="#1C68F3">
+                    <Typography component="span" sx={{ fontSize: '12px', color: '#1C68F3' }}>
                         <Trans>More</Trans>
                     </Typography>
                     <Icons.RightArrow size={14} color="#1C68F3" />

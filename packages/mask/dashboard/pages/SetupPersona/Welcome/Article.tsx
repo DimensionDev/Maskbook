@@ -60,7 +60,7 @@ function Permissions() {
 
     return (
         <>
-            <Typography className={classes.h2} variant="h2" mt="24px">
+            <Typography className={classes.h2} variant="h2" sx={{ mt: '24px' }}>
                 Please grant us permission for these websites.
             </Typography>
 

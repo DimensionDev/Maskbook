@@ -47,10 +47,15 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
     const [menu, openMenu] = useMenuConfig(
         options.map((x, i) => (
             <MenuItem disabled={x.disabled} key={x.value.id} onClick={() => onSelect(x)}>
-                <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">
-                    <Stack flexGrow={1} color={theme.palette.maskColor.main}>
-                        {x.name}
-                    </Stack>
+                <Stack
+                    direction="row"
+                    sx={{
+                        justifyContent: 'space-around',
+                        gap: 1,
+                        alignItems: 'center',
+                        width: '100%',
+                    }}>
+                    <Stack sx={{ flexGrow: 1, color: theme.palette.maskColor.main }}>{x.name}</Stack>
                     {selectedIndex === i ?
                         <Icons.CheckCircle
                             size={20}
@@ -76,8 +81,8 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                 vertical: 'top',
                 horizontal: 'right',
             },
-            PaperProps: {
-                style: { background: theme.palette.maskColor.bottom },
+            slotProps: {
+                paper: { style: { background: theme.palette.maskColor.bottom } },
             },
         },
     )

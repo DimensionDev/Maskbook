@@ -154,7 +154,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     })
 
     // the red packet can fetch without account
-    if (!availability || !token) return <LoadingStatus minHeight={148} />
+    if (!availability || !token) return <LoadingStatus sx={{ minHeight: 148 }} />
 
     return (
         <>

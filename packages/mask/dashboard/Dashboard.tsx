@@ -1,5 +1,6 @@
 import { cloneElement, useEffect } from 'react'
-import { CssBaseline, ThemeProvider, StyledEngineProvider, GlobalStyles } from '@mui/material'
+import { CssBaseline, ThemeProvider, GlobalStyles } from '@mui/material'
+import { StyledEngineProvider } from '@mui/material/styles'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
     CustomSnackbarProvider,

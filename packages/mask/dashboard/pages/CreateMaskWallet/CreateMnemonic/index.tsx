@@ -401,7 +401,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
             <Typography className={classes.tips}>
                 <Trans>Please write down or copy these words and save them in a secure place.</Trans>
             </Typography>
-            <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
+            <Stack direction="row" sx={{ justifyContent: 'flex-end', marginBottom: (theme) => theme.spacing(2) }}>
                 <Button className={classes.refresh} variant="text" onClick={onRefreshWords}>
                     <Icons.Refresh size={16} />
                     <Trans>Refresh</Trans>
@@ -435,7 +435,6 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                     <Trans>Kept safely</Trans>
                 </PrimaryButton>
             </SetupFrameController>
-
             <Box sx={{ position: 'absolute', top: -9999 }}>
                 <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
             </Box>

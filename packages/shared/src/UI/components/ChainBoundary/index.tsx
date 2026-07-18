@@ -154,7 +154,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                 arrow
                 placement="top">
-                <Box className={props.className} display="flex" flexDirection="column" width="100%">
+                <Box className={props.className} sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                     {children}
                 </Box>
             </ShadowRootTooltip>

@@ -917,8 +917,10 @@ export const TextField = (mode: PaletteMode, colors: MaskColor) => ({
         MuiTextField: {
             defaultProps: {
                 variant: 'filled',
-                InputProps: {
-                    disableUnderline: true,
+                slotProps: {
+                    input: {
+                        disableUnderline: true,
+                    },
                 },
             },
             styleOverrides: {

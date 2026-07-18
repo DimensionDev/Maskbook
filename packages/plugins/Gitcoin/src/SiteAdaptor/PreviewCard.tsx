@@ -167,13 +167,13 @@ export function PreviewCard(props: PreviewCardProps) {
     if (loading)
         return (
             <article className={classes.card} data-hide-scrollbar>
-                <LoadingStatus height={148} p={1} />
+                <LoadingStatus sx={{ height: 148, p: 1 }} />
             </article>
         )
     if (error)
         return (
             <article className={classes.card} data-hide-scrollbar>
-                <ReloadStatus height={120} message={<Trans>Something went wrong.</Trans>} onRetry={refetch} />
+                <ReloadStatus sx={{ height: 120 }} message={<Trans>Something went wrong.</Trans>} onRetry={refetch} />
             </article>
         )
 
@@ -243,7 +243,7 @@ export function PreviewCard(props: PreviewCardProps) {
 
     return (
         <article className={classes.card} data-hide-scrollbar>
-            <Box display="flex" gap={1.5} justifyContent="space-between" alignItems="center">
+            <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography component="h1" className={classes.title}>
                     {project.metadata.title}
                 </Typography>
@@ -354,7 +354,7 @@ function RoundItem({ round }: { round: Round }) {
         <Box className={classes.round}>
             <Typography className={classes.roundName}>{round.project.name}</Typography>
             <Typography className={classes.roundName}>{round.roundMetadata.name}</Typography>
-            <Box display="flex" justifyContent="space-between" alignItems="flex-end">
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <Typography className={classes.roundName}>
                     {roundType === 'Quadratic funding' ?
                         <span>

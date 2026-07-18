@@ -105,7 +105,7 @@ export function WizardDialog(props: WizardDialogProps) {
     return (
         <Paper className={cx(classes.root, small ? 'small' : '')}>
             <header className={classes.header}>
-                <Typography color="textPrimary" variant="h3" fontSize={24}>
+                <Typography color="textPrimary" variant="h3" sx={{ fontSize: 24 }}>
                     {title}
                 </Typography>
             </header>

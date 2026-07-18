@@ -44,7 +44,10 @@ export const ReloadStatus = memo(function ReloadStatus({
 }: Props) {
     const { classes, cx } = useStyles()
     return (
-        <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
+        <Box
+            className={cx(classes.statusBox, className)}
+            {...rest}
+            sx={[{ p: 2 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             {hideMessage ?
                 <Typography className={classes.text}>{message ?? <Trans>Load failed</Trans>}</Typography>
             :   null}

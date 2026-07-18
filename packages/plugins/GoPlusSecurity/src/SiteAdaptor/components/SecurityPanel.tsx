@@ -79,14 +79,15 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
             <Stack
                 spacing={1}
                 direction="row"
-                justifyContent="space-between"
-                boxShadow={(theme) =>
-                    theme.palette.mode === 'light' ?
-                        ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-                    :   '0px 0px 20px rgba(255, 255, 255, 0.12);'
-                }
-                padding="16px"
-                borderRadius="16px">
+                sx={{
+                    justifyContent: 'space-between',
+                    boxShadow: (theme) =>
+                        theme.palette.mode === 'light' ?
+                            ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+                        :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
+                    padding: '16px',
+                    borderRadius: '16px',
+                }}>
                 <Stack direction="row" spacing={0.8}>
                     {tokenSecurity?.token_name ?
                         <TokenIcon
@@ -140,8 +141,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 :   null}
             </Stack>
             <Stack spacing={1}>
-                <Stack direction="row" justifyContent="space-between">
-                    <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.6}>
+                <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+                    <Stack direction="row" sx={{ display: 'inline-flex', alignItems: 'center' }} spacing={0.6}>
                         <Typography variant="h6" className={classes.header}>
                             <Trans>Token info</Trans>
                         </Typography>
@@ -150,12 +151,12 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             sx={{ fontSize: 15, cursor: 'pointer' }}
                         />
                     </Stack>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography component="span" lineHeight="14px" fontSize={14} fontWeight={400}>
+                    <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
+                        <Typography component="span" sx={{ lineHeight: '14px', fontSize: 14, fontWeight: 400 }}>
                             <Trans>More Details</Trans>
                         </Typography>
                         <Link
-                            lineHeight="14px"
+                            sx={{ lineHeight: '14px' }}
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
@@ -167,14 +168,14 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap} />
                 </Collapse>
             </Stack>
-            <Stack spacing={1.5} flex={1}>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={3.5}>
+            <Stack spacing={1.5} sx={{ flex: 1 }}>
+                <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }} spacing={3.5}>
                     <Typography variant="h6" className={classes.header}>
                         <Trans>Security Detection</Trans>
                     </Typography>
-                    <Stack direction="row" alignItems="center" spacing={1.5}>
+                    <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1.5}>
                         {riskyFactors !== 0 && (
-                            <Stack direction="row" alignItems="center" spacing={0.5}>
+                            <Stack direction="row" sx={{ alignItems: 'center' }} spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.High].icon(16)}
                                 <Typography component="span" className={classes.itemTitle}>
                                     {riskyFactors > 1 ?
@@ -184,7 +185,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             </Stack>
                         )}
                         {attentionFactors !== 0 && (
-                            <Stack direction="row" alignItems="center" spacing={0.5}>
+                            <Stack direction="row" sx={{ alignItems: 'center' }} spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
                                 <Typography component="span" className={classes.itemTitle}>
                                     {attentionFactors > 1 ?

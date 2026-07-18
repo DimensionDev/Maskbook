@@ -233,8 +233,8 @@ export const Component = memo(function TransactionDetail() {
         :   !transaction.to && loadingTx
     return (
         <>
-            <Box p={2} overflow="auto" data-hide-scrollbar>
-                <Box display="flex" alignItems="center">
+            <Box sx={{ p: 2, overflow: 'auto' }} data-hide-scrollbar>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h2" className={classes.statusTitle}>
                         <Trans>status</Trans>
                     </Typography>
@@ -264,7 +264,7 @@ export const Component = memo(function TransactionDetail() {
                     </Typography>
                     <Typography className={classes.fieldValue}>
                         <Trans>View on Explorer</Trans>
-                        <Link href={link} target="_blank" ml={0.5} fontSize={0}>
+                        <Link href={link} target="_blank" sx={{ ml: 0.5, fontSize: 0 }}>
                             <Icons.LinkOut size={16} color={theme.palette.maskColor.second} />
                         </Link>
                     </Typography>

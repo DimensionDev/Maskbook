@@ -109,7 +109,10 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
     const shouldShowAddress = !!address && address !== userInput
 
     return (
-        <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
+        <Box
+            {...props}
+            className={cx(classes.receiverPanel, props.className)}
+            sx={[{ padding: 2 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}>
             {isManage ? null : (
                 <Typography className={classes.toText}>
                     <Trans>To</Trans>
@@ -137,16 +140,16 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
                     }}
                 />
                 {inputWarningMessage && !addressValidationMessage ?
-                    <Typography className={classes.warning} mt={1}>
+                    <Typography className={classes.warning} sx={{ mt: 1 }}>
                         {inputWarningMessage}
                     </Typography>
                 :   null}
                 {addressValidationMessage ?
-                    <Typography className={classes.validation} mt={1}>
+                    <Typography className={classes.validation} sx={{ mt: 1 }}>
                         {addressValidationMessage}
                     </Typography>
                 : shouldShowAddress ?
-                    <Typography className={classes.receiver} mt={1}>
+                    <Typography className={classes.receiver} sx={{ mt: 1 }}>
                         {address}
                         <Icons.LinkOut
                             size={18}

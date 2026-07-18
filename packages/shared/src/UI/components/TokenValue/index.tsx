@@ -55,7 +55,10 @@ export function TokenValue({ className, token, amount, ...rest }: Props) {
     return amount && token ?
             <div className={cx(classes.container, className)} {...rest}>
                 <div className={classes.token}>
-                    <Typography className={classes.amount} component="strong" fontWeight="700" fontSize="24px">
+                    <Typography
+                        className={classes.amount}
+                        component="strong"
+                        sx={{ fontWeight: '700', fontSize: '24px' }}>
                         {amount}
                     </Typography>
                     <TokenIcon

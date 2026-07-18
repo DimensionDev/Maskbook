@@ -128,7 +128,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
             {...rest}>
             <WalletAvatar address={wallet.address} size={24} />
             <Box className={classes.text}>
-                <Box width={180} overflow="auto">
+                <Box sx={{ width: 180, overflow: 'auto' }}>
                     <Typography className={classes.mainLine} component="div">
                         <Typography className={classes.name}>{walletName}</Typography>
                         {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (

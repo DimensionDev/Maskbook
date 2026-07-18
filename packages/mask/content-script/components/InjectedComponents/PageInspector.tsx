@@ -30,7 +30,7 @@ export function PageInspector() {
                         <Typography color="textPrimary">
                             <Trans>Do you need to paste encrypted content manually?</Trans>
                         </Typography>
-                        <Box display="flex" justifyContent="flex-end">
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
                                 color="inherit"
                                 variant="text"

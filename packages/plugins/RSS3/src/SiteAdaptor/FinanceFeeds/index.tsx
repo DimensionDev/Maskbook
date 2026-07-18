@@ -50,8 +50,8 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
 
     if (error && !feeds.length)
         return (
-            <Box p={2} boxSizing="border-box">
-                <Box mt="100px" color={(theme) => theme.palette.maskColor.main}>
+            <Box sx={{ p: 2, boxSizing: 'border-box' }}>
+                <Box sx={{ mt: '100px', color: (theme) => theme.palette.maskColor.main }}>
                     <ReloadStatus onRetry={fetchNextPage} />
                 </Box>
             </Box>
@@ -59,9 +59,9 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
 
     if (isInitialLoading || (loading && !feeds.length) || !feedOwner) {
         return (
-            <Box p={2} boxSizing="border-box">
+            <Box sx={{ p: 2, boxSizing: 'border-box' }}>
                 {range(3).map((i) => (
-                    <Box mb={1} key={i}>
+                    <Box key={i} sx={{ mb: 1 }}>
                         <Skeleton animation="wave" variant="rectangular" height={90} className={classes.skeleton} />
                     </Box>
                 ))}
@@ -70,7 +70,7 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
     }
     if (!feeds?.length && !loading) {
         return (
-            <EmptyStatus height={260}>
+            <EmptyStatus sx={{ height: 260 }}>
                 <Trans>There's no feed associated with this address.</Trans>
             </EmptyStatus>
         )
@@ -83,12 +83,12 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
                 ))}
 
                 {hasNextPage ?
-                    <ElementAnchor height={30} callback={() => fetchNextPage()}>
+                    <ElementAnchor sx={{ height: 30 }} callback={() => fetchNextPage()}>
                         {loading ?
                             <LoadingBase className={classes.loading} />
                         :   null}
                     </ElementAnchor>
-                :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
+                :   <Typography sx={{ color: (theme) => theme.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                         <Trans>No more data available.</Trans>
                     </Typography>
                 }

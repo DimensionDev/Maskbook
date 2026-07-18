@@ -110,7 +110,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend,
                         <Avatar className={classes.avatar} src={avatar} />
                     :   <Icons.MaskBlue className={classes.avatar} />}
                     <Box>
-                        <Typography fontSize={14} fontWeight={700} lineHeight="18px">
+                        <Typography sx={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>
                             {publicKey ? formatPersonaFingerprint(publicKey) : null}
                         </Typography>
                     </Box>

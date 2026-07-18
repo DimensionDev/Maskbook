@@ -121,9 +121,13 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
 
     return (
         <Grid container {...rest}>
-            <Grid item className={classes.cell} textAlign="left" md={4}>
-                <Stack overflow="hidden">
-                    <Typography className={classes.methodName} title={formatted || ''} variant="body1" fontWeight={500}>
+            <Grid className={classes.cell} size={{ md: 4 }} sx={{ textAlign: 'left' }}>
+                <Stack sx={{ overflow: 'hidden' }}>
+                    <Typography
+                        className={classes.methodName}
+                        title={formatted || ''}
+                        variant="body1"
+                        sx={{ fontWeight: 500 }}>
                         {formatted}
                     </Typography>
                     <Typography className={classes.timestamp} variant="body1" color={theme.palette.text.secondary}>
@@ -131,7 +135,7 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
                     </Typography>
                 </Stack>
             </Grid>
-            <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
+            <Grid className={classes.cell} size={{ md: 4 }} sx={{ flexGrow: 1, justifyContent: 'right' }}>
                 <Typography variant="body1" className={classes.linkText}>
                     {address && isSameAddress(domainOrAddress, address) ?
                         Utils.formatAddress(address, 4)
@@ -145,14 +149,16 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
                     <Icons.LinkOut className={classes.linkIcon} />
                 </Link>
             </Grid>
-            <Grid item className={classes.cell} md={2} justifyContent="center">
-                <Typography fontWeight={400} justifyContent="center" color={statusTextColorMap[txStatus]} fontSize={14}>
+            <Grid className={classes.cell} size={{ md: 2 }} sx={{ justifyContent: 'center' }}>
+                <Typography
+                    sx={{ fontWeight: 400, justifyContent: 'center', fontSize: 14 }}
+                    color={statusTextColorMap[txStatus]}>
                     {statusTextMap[txStatus]}
                 </Typography>
             </Grid>
-            <Grid item className={classes.cell} md={2} justifyContent="right">
+            <Grid className={classes.cell} size={{ md: 2 }} sx={{ justifyContent: 'right' }}>
                 {txStatus === TransactionStatusType.NOT_DEPEND ?
-                    <Typography fontWeight={300} className={classes.clear} onClick={handleClear}>
+                    <Typography sx={{ fontWeight: 300 }} className={classes.clear} onClick={handleClear}>
                         <Trans>Clear</Trans>
                     </Typography>
                 :   null}

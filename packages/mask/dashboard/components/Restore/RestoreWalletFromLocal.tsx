@@ -73,7 +73,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
     }, [disabled, keyStoreContent, keyStorePassword])
 
     return (
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
             <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit />
             {file ?
                 <>
@@ -92,7 +92,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
                         </Typography>
                     </FileFrame>
                     {readingFile ? null : (
-                        <Box mt={4}>
+                        <Box sx={{ mt: 4 }}>
                             <PasswordField
                                 fullWidth
                                 placeholder={t`Keystore password`}

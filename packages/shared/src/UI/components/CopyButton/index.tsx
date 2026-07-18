@@ -90,8 +90,8 @@ export const CopyButton = memo(function CopyButton({
                 onClick={handleCopy}
                 color="inherit"
                 {...props}
-                fontSize={0}
-                className={cx(classes.root, className)}>
+                className={cx(classes.root, className)}
+                sx={[{ fontSize: 0 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}>
                 {active ?
                     <Icons.Check {...iconProps} color={theme.palette.maskColor.success} />
                 :   <Icons.Copy {...iconProps} className={classes.copy} />}

@@ -79,11 +79,11 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                         <CloseIcon />
                     </IconButton>
                     {loading ?
-                        <Stack className={classes.status} alignItems="center" justifyContent="center">
+                        <Stack className={classes.status} sx={{ alignItems: 'center', justifyContent: 'center' }}>
                             <LoadingBase size={36} />
                         </Stack>
                     : error || !widgetUrl ?
-                        <Stack className={classes.status} alignItems="center" justifyContent="center">
+                        <Stack className={classes.status} sx={{ alignItems: 'center', justifyContent: 'center' }}>
                             <Typography variant="body1">
                                 Transak is temporarily unavailable. Please try again later.
                             </Typography>

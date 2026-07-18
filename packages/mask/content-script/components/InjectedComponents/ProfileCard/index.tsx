@@ -236,11 +236,13 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                             <Trans>
                                 Powered by{' '}
                                 <Typography
-                                    fontWeight={700}
-                                    fontSize="inherit"
                                     variant="body1"
                                     component="strong"
-                                    color={(theme) => theme.palette.text.primary}>
+                                    sx={{
+                                        color: (theme) => theme.palette.text.primary,
+                                        fontWeight: 700,
+                                        fontSize: 'inherit',
+                                    }}>
                                     Mask Network
                                 </Typography>
                             </Trans>

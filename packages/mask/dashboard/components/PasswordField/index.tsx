@@ -15,25 +15,27 @@ export default function PasswordField({ show = true, ...props }: PasswordFieldPr
             {...props}
             type={showPassword ? 'text' : 'password'}
             size="medium"
-            InputProps={{
-                ...props.InputProps,
-                size: 'medium',
-                disableUnderline: true,
-                endAdornment:
-                    show ?
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setShowPassword(!showPassword)}
-                                onMouseDown={(event) => event.preventDefault()}
-                                edge="end"
-                                size="small">
-                                {showPassword ?
-                                    <Icons.EyeOff size={18} />
-                                :   <Icons.Eye size={18} />}
-                            </IconButton>
-                        </InputAdornment>
-                    :   null,
+            slotProps={{
+                input: {
+                    ...props.InputProps,
+                    size: 'medium',
+                    disableUnderline: true,
+                    endAdornment:
+                        show ?
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    onMouseDown={(event) => event.preventDefault()}
+                                    edge="end"
+                                    size="small">
+                                    {showPassword ?
+                                        <Icons.EyeOff size={18} />
+                                    :   <Icons.Eye size={18} />}
+                                </IconButton>
+                            </InputAdornment>
+                        :   null,
+                },
             }}
         />
     )

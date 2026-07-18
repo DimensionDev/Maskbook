@@ -151,13 +151,19 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         href={EVMExplorerResolver.addressLink(chainId, address)}
-                        marginLeft="4px"
-                        width={16}
-                        height={16}>
+                        sx={{
+                            marginLeft: '4px',
+                            width: 16,
+                            height: 16,
+                        }}>
                         <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
                     </Link>
                 </Typography>
-                <ProgressiveText loading={isPending} className={classes.description} fontSize={12} skeletonWidth={50}>
+                <ProgressiveText
+                    loading={isPending}
+                    className={classes.description}
+                    sx={{ fontSize: 12 }}
+                    skeletonWidth={50}>
                     <FormattedBalance value={balance} decimals={18} symbol={'ETH'} formatter={formatBalance} />
                 </ProgressiveText>
             </div>
@@ -232,7 +238,7 @@ export const Component = memo(function SetPaymentPassword() {
                         :   <Trans>Set Payment Password</Trans>}
                     </Typography>
                     {isCreating ?
-                        <Typography className={classes.description} fontSize={14} fontWeight={700}>
+                        <Typography className={classes.description} sx={{ fontSize: 14, fontWeight: 700 }}>
                             <Trans>At least 6 characters</Trans>
                         </Typography>
                     :   null}
@@ -272,7 +278,9 @@ export const Component = memo(function SetPaymentPassword() {
                                 />
                             </div>
                             {errorMsg && !isValid ?
-                                <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
+                                <Typography
+                                    color={theme.palette.maskColor.danger}
+                                    sx={{ fontSize: 14, marginTop: '12px' }}>
                                     {errorMsg}
                                 </Typography>
                             :   null}
@@ -281,17 +289,21 @@ export const Component = memo(function SetPaymentPassword() {
                         </form>
                         <Typography
                             color={theme.palette.maskColor.third}
-                            fontSize={14}
-                            textAlign="center"
-                            fontWeight={700}>
+                            sx={{
+                                fontSize: 14,
+                                textAlign: 'center',
+                                fontWeight: 700,
+                            }}>
                             <Trans>By proceeding you agree to the</Trans>
                         </Typography>
 
                         <Typography
                             color={theme.palette.maskColor.third}
-                            fontSize={14}
-                            textAlign="center"
-                            fontWeight={700}>
+                            sx={{
+                                fontSize: 14,
+                                textAlign: 'center',
+                                fontWeight: 700,
+                            }}>
                             <Trans>
                                 <a
                                     className={classes.strong}

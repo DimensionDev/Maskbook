@@ -224,7 +224,7 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
 
     return (
         <>
-            <Box padding={2}>
+            <Box sx={{ padding: 2 }}>
                 <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
                     {tokenPrice === undefined ? null : (
                         <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
@@ -233,16 +233,17 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                 {hideChart ? null : (
                     <>
                         <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
-                        <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
+                        <PriceChartRange days={chartRange} onDaysChange={setChartRange} sx={{ gap: '10px', mt: 2 }} />
                         {!isLoadingStats && isError ?
                             <ReloadStatus
                                 onRetry={refetch}
                                 className={classes.trending}
-                                height={DIMENSION.height}
-                                width={DIMENSION.width}
+                                sx={{ height: DIMENSION.height, width: DIMENSION.width }}
                             />
                         : !isLoadingStats && !stats?.length ?
-                            <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
+                            <EmptyStatus
+                                className={classes.trending}
+                                sx={{ height: DIMENSION.height, width: DIMENSION.width }}>
                                 <Trans>Not enough data to present.</Trans>
                             </EmptyStatus>
                         :   <TrendingChart
@@ -254,13 +255,13 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                     </>
                 )}
 
-                <Box display="flex" flexDirection="row" justifyContent="space-between">
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Box>
                         <Typography className={classes.label}>
                             <Trans>Balance</Trans>
                         </Typography>
                         {asset ?
-                            <Typography component="div" className={classes.value} justifyContent="flex-start">
+                            <Typography component="div" className={classes.value} sx={{ justifyContent: 'flex-start' }}>
                                 <TokenIcon
                                     className={classes.tokenIcon}
                                     address={asset.address}
@@ -283,11 +284,11 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                             </Typography>
                         }
                     </Box>
-                    <Box textAlign="right">
+                    <Box sx={{ textAlign: 'right' }}>
                         <Typography className={classes.label}>
                             <Trans>value</Trans>
                         </Typography>
-                        <Typography component="div" className={classes.value} justifyContent="flex-end">
+                        <Typography component="div" className={classes.value} sx={{ justifyContent: 'flex-end' }}>
                             <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                         </Typography>
                     </Box>

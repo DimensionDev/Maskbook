@@ -167,7 +167,7 @@ const AppListItem = memo(function AppListItem({ pluginID, entry, isListing }: Ap
 
     return (
         <ShadowRootTooltip
-            PopperProps={popperProps}
+            slotProps={{ popper: popperProps }}
             disableInteractive
             title={
                 <Typography>

@@ -76,7 +76,7 @@ export const ActivityList = memo(function ActivityList() {
 
     if (!isPending && !localeTxes.length && !transactions?.length)
         return (
-            <EmptyStatus height="100%">
+            <EmptyStatus sx={{ height: '100%' }}>
                 <Trans>No Data</Trans>
             </EmptyStatus>
         )
@@ -112,7 +112,7 @@ export const ActivityList = memo(function ActivityList() {
                 })}
                 {isFetching ? range(4).map((i) => <ActivityItemSkeleton key={i} />) : null}
             </List>
-            <ElementAnchor callback={() => fetchNextPage()} key={transactions?.length} height={10} />
+            <ElementAnchor callback={() => fetchNextPage()} key={transactions?.length} sx={{ height: 10 }} />
         </div>
     )
 })

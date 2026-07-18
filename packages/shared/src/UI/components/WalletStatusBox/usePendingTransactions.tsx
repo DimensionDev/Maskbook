@@ -49,13 +49,13 @@ export function usePendingTransactions() {
             <section className={classes.summaryWrapper}>
                 <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
                     {pendingTransactions.length ?
-                        <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
+                        <Typography className={classes.pendingSummary} variant="body2" sx={{ mr: 1, fontWeight: 700 }}>
                             <Trans>{pendingTransactions.length} Pending</Trans>
                         </Typography>
                     :   null}
                 </div>
                 {pendingTransactions.length ?
-                    <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
+                    <Typography className={classes.clearAll} onClick={clearRecentTxes} sx={{ fontWeight: 700 }}>
                         <Trans>Clear All</Trans>
                     </Typography>
                 :   null}

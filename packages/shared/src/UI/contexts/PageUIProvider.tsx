@@ -1,5 +1,6 @@
 import React, { cloneElement, Suspense } from 'react'
-import { StyledEngineProvider, type Theme } from '@mui/material'
+import type { Theme } from '@mui/material'
+import { StyledEngineProvider } from '@mui/material/styles'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, CustomSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { LinguiProviderHMR, PrivySetup, SharedContextProvider } from '@masknet/shared'

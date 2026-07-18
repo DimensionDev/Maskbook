@@ -84,15 +84,15 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
     return (
         <InjectedDialog title={<Trans>Check Security</Trans>} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
-                <Stack minHeight={0} flexGrow={1}>
+                <Stack sx={{ minHeight: 0, flexGrow: 1 }}>
                     {!searchHidden && (
-                        <Box m={2}>
+                        <Box sx={{ m: 2 }}>
                             <SearchBox onSearch={onSearch} />
                         </Box>
                     )}
-                    <Stack flex={1} overflow="auto" p={2}>
+                    <Stack sx={{ flex: 1, overflow: 'auto', p: 2 }}>
                         {searching || loadingToken ?
-                            <Stack height="100%" justifyContent="center" alignItems="center">
+                            <Stack sx={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                                 <LoadingBase size={36} />
                             </Stack>
                         : error ?
@@ -104,7 +104,7 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
                                 tokenPrice={tokenPrice}
                                 tokenMarketCap={tokenMarketCap ?? undefined}
                             />
-                        :   <Stack height="100%" justifyContent="center" alignItems="center">
+                        :   <Stack sx={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                                 <DefaultPlaceholder />
                             </Stack>
                         }

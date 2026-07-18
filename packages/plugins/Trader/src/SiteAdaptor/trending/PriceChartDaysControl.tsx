@@ -40,7 +40,7 @@ export function PriceChartDaysControl({
 }: PriceChartDaysControlProps) {
     const { classes, cx } = useStyles()
     return (
-        <Stack className={classes.root} direction="row" gap={2}>
+        <Stack className={classes.root} direction="row" sx={{ gap: 2 }}>
             {rangeOptions.map((daysOption) => (
                 <Link
                     className={cx(classes.link, days === daysOption ? classes.active : '')}

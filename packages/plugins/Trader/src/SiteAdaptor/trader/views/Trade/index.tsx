@@ -231,11 +231,11 @@ export function TradeView() {
         <div className={classes.view}>
             <Box className={classes.container}>
                 <Box className={classes.box}>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                        <Typography lineHeight="18px" fontWeight="700" fontSize="14px">
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography sx={{ lineHeight: '18px', fontWeight: '700', fontSize: '14px' }}>
                             <Trans>From</Trans>
                         </Typography>
-                        <Box display="flex" flexDirection="row">
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
@@ -260,7 +260,7 @@ export function TradeView() {
                                         chainIconSize={12}
                                     />
                                 </Box>
-                                <Box display="flex" flexDirection="column">
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <Typography component="strong" className={classes.symbol}>
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
@@ -274,8 +274,8 @@ export function TradeView() {
                             </Box>
                         </Box>
                     </Box>
-                    <Box flexGrow={1}>
-                        <Box height="100%" position="relative">
+                    <Box sx={{ flexGrow: 1 }}>
+                        <Box sx={{ height: '100%', position: 'relative' }}>
                             {isLoadingFromTokenBalance ?
                                 <Box className={classes.tokenStatus}>
                                     <Icons.Wallet size={16} />
@@ -332,11 +332,9 @@ export function TradeView() {
                         }}>
                         <Icons.BiArrow size={16} color={theme.palette.maskColor.main} />
                     </Box>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                        <Typography lineHeight="18px" fontWeight="700" fontSize="14px">
-                            To
-                        </Typography>
-                        <Box display="flex" flexDirection="row">
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography sx={{ lineHeight: '18px', fontWeight: '700', fontSize: '14px' }}>To</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
@@ -355,7 +353,7 @@ export function TradeView() {
                                         chainIconSize={12}
                                     />
                                 </Box>
-                                <Box display="flex" flexDirection="column">
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <Typography component="strong" className={classes.symbol}>
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
@@ -369,8 +367,8 @@ export function TradeView() {
                             </Box>
                         </Box>
                     </Box>
-                    <Box flexGrow={1}>
-                        <Box height="100%" position="relative">
+                    <Box sx={{ flexGrow: 1 }}>
+                        <Box sx={{ height: '100%', position: 'relative' }}>
                             {toTokenBalance ?
                                 <Box className={classes.tokenStatus}>
                                     <Icons.Wallet size={16} />

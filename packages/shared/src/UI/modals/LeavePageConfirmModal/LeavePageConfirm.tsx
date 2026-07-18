@@ -99,7 +99,7 @@ export function LeavePageConfirm(props: LeavePageConfirmProps) {
                     </Stack>
                 </DialogContent>
                 <DialogActions classes={{ root: classes.actions }}>
-                    <Stack width="100%">
+                    <Stack sx={{ width: '100%' }}>
                         <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
                             {info?.actionHint}
                         </Button>
