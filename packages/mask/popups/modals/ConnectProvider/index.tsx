@@ -19,7 +19,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
     tips: {
         fontSize: 14,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontWeight: 700,
         lineHeight: '18px',
         textAlign: 'center',
@@ -46,14 +46,14 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
                 width: 56,
                 height: 56,
                 borderRadius: '50%',
-                border: `2px solid ${theme.palette.maskColor.main}`,
-                borderTopColor: theme.palette.maskColor.second,
+                border: `2px solid ${theme.vars.palette.maskColor.main}`,
+                borderTopColor: theme.vars.palette.maskColor.second,
                 animation: 'spinner 2s linear infinite',
             },
         }),
 
         ...(timeout && {
-            border: `2px solid ${theme.palette.maskColor.danger}`,
+            border: `2px solid ${theme.vars.palette.maskColor.danger}`,
             borderRadius: '50%',
             padding: 10,
         }),

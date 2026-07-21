@@ -23,18 +23,18 @@ import { Plural, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         boxShadow: 'none',
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
         marginBottom: theme.spacing(2),
     },
     cardHeader: {
         padding: theme.spacing(2),
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
     },
     title: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
     },
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         height: theme.spacing(4.5),
         alignItems: 'center',
         justifyContent: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
         whiteSpace: 'nowrap',
@@ -76,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     personaIcon: {
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
         backgroundColor: '#FFB100',
         boxShadow: '0px 6px 12px rgba(255, 177, 0, 0.2)',
     },
@@ -106,19 +106,19 @@ const useStyles = makeStyles()((theme) => ({
     listItemIcon: {
         marginRight: theme.spacing(1),
         width: theme.spacing(4.5),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         minWidth: 'unset',
     },
     walletIcon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         minWidth: 'unset',
     },
     listText: {
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     link: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -261,7 +261,7 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                                         address={wallet}
                                         sx={{ mr: '10px', fontWeight: 400 }}
                                     />
-                                    <Icons.LinkOut size={18} color={theme.palette.maskColor.second} />
+                                    <Icons.LinkOut size={18} color={theme.vars.palette.maskColor.second} />
                                 </Link>
                             </ListItemText>
                         </ListItem>

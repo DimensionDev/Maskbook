@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
     },
     summary: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
         overflow: 'auto',

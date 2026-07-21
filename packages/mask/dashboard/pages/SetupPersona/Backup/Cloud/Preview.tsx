@@ -28,14 +28,14 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     userAccount: {
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     text: {
         fontSize: 14,
@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         padding: theme.spacing(2),
         marginTop: theme.spacing(3),
         display: 'flex',
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2),
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         marginTop: theme.spacing(3),
     },
     button: {
@@ -145,7 +145,7 @@ export const Component = memo(function CloudBackupPreview() {
                                             fontSize: 12,
                                             lineHeight: '16px',
                                         }}
-                                        color={theme.palette.maskColor.third}>
+                                        color={theme.vars.palette.maskColor.third}>
                                         {formatDateTime(
                                             fromUnixTime(Number(previewInfo.uploadedAt)),
                                             'yyyy-MM-dd HH:mm',

@@ -21,12 +21,12 @@ const useStyles = makeStyles()((theme) => ({
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     recovery: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
     },
     title: {

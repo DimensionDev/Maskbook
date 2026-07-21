@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
     },
     checked: {
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
         boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
     },
     label: {
@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     heading: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         margin: theme.spacing(3, 2, 0.5),
     },
     fileList: {
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     emptyMessage: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: theme.spacing(1.5),
     },
 }))
@@ -136,7 +136,7 @@ export function UploadFile() {
                             color="primary"
                             checked={encrypted}
                             icon={<Icons.CheckboxBlank size={18} />}
-                            checkedIcon={<Icons.Checkbox color={theme.palette.maskColor.primary} size={18} />}
+                            checkedIcon={<Icons.Checkbox color={theme.vars.palette.maskColor.primary} size={18} />}
                             onChange={(event) => setEncrypted(event.target.checked)}
                         />
                     }

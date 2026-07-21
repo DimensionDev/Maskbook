@@ -23,7 +23,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         gap: 1.5,
         margin: 'auto',
         [`.${refs.active}`]: {
-            backgroundColor: theme.palette.maskColor.second,
+            backgroundColor: theme.vars.palette.maskColor.second,
         },
     },
     indicator: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         height: 3,
         display: 'inline-block',
         borderRadius: '50%',
-        backgroundColor: theme.palette.maskColor.third,
+        backgroundColor: theme.vars.palette.maskColor.third,
     },
     active: {},
 }))

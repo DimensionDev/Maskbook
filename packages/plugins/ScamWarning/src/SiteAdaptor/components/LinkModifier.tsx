@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 4,
         verticalAlign: 'bottom',
         '& > a': {
-            color: theme.palette.maskColor.danger,
+            color: theme.vars.palette.maskColor.danger,
         },
     },
     address: {

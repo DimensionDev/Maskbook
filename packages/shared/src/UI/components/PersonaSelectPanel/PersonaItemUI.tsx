@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => {
         nickname: {
             fontSize: 16,
             lineHeight: '20px',
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => {
         fingerprint: {
             fontSize: 12,
             lineHeight: '16px',
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
         indicator: {
             display: 'inline-block',
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => {
             right: '5.84%',
             top: '5.84%',
             bottom: '77.62%',
-            border: `1px solid ${theme.palette.maskColor.bottom}`,
+            border: `1px solid ${theme.vars.palette.maskColor.bottom}`,
         },
     }
 })

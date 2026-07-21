@@ -6,8 +6,8 @@ import {
     type SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { editTypedMessageMeta } from '@masknet/typed-message-react'
-import { makeStyles } from '@masknet/theme'
-import { InputBase, Alert, Button, inputBaseClasses, alpha } from '@mui/material'
+import { alpha, makeStyles  } from '@masknet/theme'
+import { InputBase, Alert, Button, inputBaseClasses } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, memo, useMemo, useEffect, type RefAttributes } from 'react'
 import { BadgeRenderer } from './BadgeRenderer.js'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         display: 'flex',
         height: '100%',
-        backgroundColor: theme.palette.maskColor.input,
+        backgroundColor: theme.vars.palette.maskColor.input,
         [`& > .${inputBaseClasses.input}`]: {
             height: 'calc(100% - 22px) !important',
             overflow: 'unset',
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         [`&.${inputBaseClasses.focused}`]: {
             backgroundColor: 'transparent',
             border: 0,
-            outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
+            outline: `2px solid ${alpha(theme.vars.palette.maskColor.primary, 0.2)}`,
         },
     },
     badgeInput: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundColor: theme.vars.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
         },
     },

@@ -17,28 +17,28 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
         fontWeight: 400,
-        borderColor: theme.palette.divider,
-        color: theme.palette.text.primary,
-        background: theme.palette.maskColor.input,
+        borderColor: theme.vars.palette.divider,
+        color: theme.vars.palette.text.primary,
+        background: theme.vars.palette.maskColor.input,
 
         '&:hover': {
-            background: theme.palette.maskColor.input,
+            background: theme.vars.palette.maskColor.input,
         },
     },
     searchButton: {
         borderRadius: 8,
     },
     search: {
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         height: 40,
         borderRadius: 8,
     },
     menu: {
-        background: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)',
+        }),
     },
 }))
 

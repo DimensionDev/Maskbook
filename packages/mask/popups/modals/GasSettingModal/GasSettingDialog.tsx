@@ -39,19 +39,19 @@ const useStyles = makeStyles()((theme) => ({
     title: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
         marginBottom: theme.spacing(1.5),
     },
     unit: {
         fontSize: 14,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         lineHeight: '18px',
     },
     seconds: {
         textAlign: 'center',
         fontSize: 14,
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
     },
     preview: {
         textAlign: 'center',
@@ -310,8 +310,8 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     sx={{
                         color:
                             replaceType === ReplaceType.CANCEL ?
-                                theme.palette.maskColor.danger
-                            :   theme.palette.maskColor.warn,
+                                theme.vars.palette.maskColor.danger
+                            :   theme.vars.palette.maskColor.warn,
                     }}>
                     {tips}
                 </Typography>

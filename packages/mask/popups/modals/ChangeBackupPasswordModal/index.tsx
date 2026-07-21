@@ -184,7 +184,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         />
                     )}
                 />
-                <Typography sx={{ fontSize: 12 }} color={theme.palette.maskColor.second}>
+                <Typography sx={{ fontSize: 12 }} color={theme.vars.palette.maskColor.second}>
                     <Trans>
                         Backup password must be 8-20 characters, including uppercase, lowercase, special characters and
                         numbers.

@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     iconBlack: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
     },

@@ -9,7 +9,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
             borderRadius: '8px',
             height: 104,
             gap: theme.spacing(1),
@@ -20,11 +20,11 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             cursor: 'pointer',
             '&:hover': {
                 transform: 'scale(1.02) translateY(-2px)',
-                background: theme.palette.maskColor.bottom,
-                boxShadow:
-                    theme.palette.mode === 'light' ?
-                        '0px 5px 8px rgba(0, 0, 0, 0.05)'
-                    :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+                background: theme.vars.palette.maskColor.bottom,
+                boxShadow: '0px 5px 8px rgba(0, 0, 0, 0.05)',
+                ...theme.applyStyles('dark', {
+                    boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+                }),
             },
         },
         title: {
@@ -50,7 +50,10 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             ...(iconFilterColor && { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})` }),
         },
         arrow: {
-            color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
+            color: theme.vars.palette.common.black,
+            ...theme.applyStyles('dark', {
+                color: theme.vars.palette.common.white,
+            }),
         },
         recommendFeatureApplicationBox: {
             width: 257,
@@ -78,14 +81,14 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             fontSize: 18,
             fontWeight: 700,
             cursor: disabled ? 'default' : 'pointer',
-            color: theme.palette.common.white,
+            color: theme.vars.palette.common.white,
         },
         recommendFeatureAppListItemDescription: {
             textAlign: 'left',
             fontSize: 12,
             fontWeight: 500,
             cursor: disabled ? 'default' : 'pointer',
-            color: theme.palette.common.white,
+            color: theme.vars.palette.common.white,
         },
     }),
 )

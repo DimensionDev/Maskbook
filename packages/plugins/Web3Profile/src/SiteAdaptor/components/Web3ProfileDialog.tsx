@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     titleTailButton: {
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     profileItem: {
         padding: theme.spacing(1.5),

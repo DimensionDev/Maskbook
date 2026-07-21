@@ -13,8 +13,8 @@ import PasswordField from '../PasswordField/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
-        backgroundColor: theme.palette.maskColor.input,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.input,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 

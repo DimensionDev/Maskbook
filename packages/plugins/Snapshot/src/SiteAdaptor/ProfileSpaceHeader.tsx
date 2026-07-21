@@ -37,14 +37,14 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 20,
         lineHeight: 1.2,
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
         display: 'flex',
         alignItems: 'center',
         marginRight: 5,
     },
     followersCount: {
         fontSize: 14,
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.vars.palette.maskColor.secondaryDark,
     },
     spaceInfo: {
         marginLeft: 4,
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     arrowIcon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
     joinButton: {
         marginLeft: 'auto',

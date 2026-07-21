@@ -18,22 +18,22 @@ const useStyles = makeStyles()((theme) => {
         root: {},
         tabs: {
             overflow: 'visible',
-            backgroundColor: theme.palette.maskColor.input,
+            backgroundColor: theme.vars.palette.maskColor.input,
         },
         additions: {
             fontWeight: 700,
         },
         label: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             fontWeight: 700,
         },
         price: {
             fontWeight: 700,
         },
         tab: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             '&[aria-selected="true"]': {
-                color: theme.palette.maskColor.main,
+                color: theme.vars.palette.maskColor.main,
             },
         },
     }

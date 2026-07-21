@@ -14,13 +14,13 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     section: {
-        border: `solid 1px ${theme.palette.maskColor.line}`,
+        border: `solid 1px ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
         padding: theme.spacing(3),
         marginBottom: theme.spacing(2),
     },
     card: {
-        border: `solid 1px ${theme.palette.maskColor.line}`,
+        border: `solid 1px ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
         marginTop: theme.spacing(3),
         display: 'inline-block',
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         flexDirection: 'row',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         padding: theme.spacing(1.5),
         display: 'inline-block',
-        border: `solid 1px ${theme.palette.maskColor.line}`,
+        border: `solid 1px ${theme.vars.palette.maskColor.line}`,
         marginRight: theme.spacing(3),
     },
 }))

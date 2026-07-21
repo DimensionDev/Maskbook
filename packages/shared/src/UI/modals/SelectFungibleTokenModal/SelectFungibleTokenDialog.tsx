@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
@@ -64,10 +64,10 @@ const useStyles = makeStyles<StyleProps, 'container' | 'sidebar' | 'tokenList'>(
         },
     },
     search: {
-        backgroundColor: Sniffings.is_dashboard_page ? 'transparent !important' : theme.palette.maskColor.input,
-        border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
+        backgroundColor: Sniffings.is_dashboard_page ? 'transparent !important' : theme.vars.palette.maskColor.input,
+        border: `solid 1px ${theme.vars.palette.maskColor.twitterBorderLine}`,
         [`&.${inputClasses.focused}`]: {
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
     },
     wrapper: {

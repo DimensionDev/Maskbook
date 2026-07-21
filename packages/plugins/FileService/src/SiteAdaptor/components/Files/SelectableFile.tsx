@@ -8,17 +8,17 @@ import type { FileBaseProps, FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         fontSize: 12,
     },
     meta: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
     metaValue: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 
@@ -41,7 +41,7 @@ export const SelectableFile = memo(({ file, selected, onChange, disabled, ...res
                     disabled={disabled}
                     checked={selected}
                     icon={<Icons.CheckboxBlank size={20} />}
-                    checkedIcon={<Icons.Checkbox size={20} color={theme.palette.maskColor.primary} />}
+                    checkedIcon={<Icons.Checkbox size={20} color={theme.vars.palette.maskColor.primary} />}
                     onChange={(event) => {
                         onChange?.(file.id, event.currentTarget.checked)
                     }}

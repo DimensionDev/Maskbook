@@ -25,14 +25,14 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     selectedItem: {
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
     },
     itemBox: {
         display: 'flex',
         alignItems: 'center',
     },
     text: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         fontWeight: 700,
         marginLeft: 8,
@@ -63,7 +63,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
                 <FiatCurrencyIcon type={fiatCurrencyType} size={24} />
                 <Typography className={classes.text}>{resolveCurrencyFullName(fiatCurrencyType)}</Typography>
             </Box>
-            <RadioIndicator size={20} checked={checked} uncheckedColor={theme.palette.maskColor.secondaryLine} />
+            <RadioIndicator size={20} checked={checked} uncheckedColor={theme.vars.palette.maskColor.secondaryLine} />
         </li>
     )
 })

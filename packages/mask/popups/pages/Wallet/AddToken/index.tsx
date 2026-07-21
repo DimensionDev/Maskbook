@@ -44,7 +44,7 @@ const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }
     },
     panel: {
         padding: 0,
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         flex: 1,
         overflow: 'auto',
     },

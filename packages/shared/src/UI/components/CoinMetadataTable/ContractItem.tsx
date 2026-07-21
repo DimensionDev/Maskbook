@@ -15,15 +15,15 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0.5, 0),
         boxSizing: 'border-box',
         ':not(:last-of-type)': {
-            borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+            borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         },
     },
     icon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     address: {
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         fontWeight: 700,
         minWidth: theme.spacing(11),

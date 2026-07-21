@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 10,
     },
     icon: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 
@@ -55,17 +55,17 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                         alignItems: 'center',
                         width: '100%',
                     }}>
-                    <Stack sx={{ flexGrow: 1, color: theme.palette.maskColor.main }}>{x.name}</Stack>
+                    <Stack sx={{ flexGrow: 1, color: theme.vars.palette.maskColor.main }}>{x.name}</Stack>
                     {selectedIndex === i ?
                         <Icons.CheckCircle
                             size={20}
                             style={{
-                                color: theme.palette.maskColor.primary,
+                                color: theme.vars.palette.maskColor.primary,
                                 boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
                             }}
                         />
                     :   <RadioButtonUncheckedIcon
-                            style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
+                            style={{ fontSize: 20, color: theme.vars.palette.maskColor.secondaryLine }}
                         />
                     }
                 </Stack>
@@ -82,7 +82,7 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                 horizontal: 'right',
             },
             slotProps: {
-                paper: { style: { background: theme.palette.maskColor.bottom } },
+                paper: { style: { background: theme.vars.palette.maskColor.bottom } },
             },
         },
     )

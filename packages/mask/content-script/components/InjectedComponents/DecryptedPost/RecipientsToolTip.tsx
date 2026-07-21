@@ -8,7 +8,7 @@ const useStyles = makeStyles<{ isMore: boolean }>()((theme, { isMore }) => {
     return {
         iconStack: {
             padding: theme.spacing(0.5),
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
             borderRadius: '999px',
             cursor: 'pointer',
             display: 'inline-flex',
@@ -40,7 +40,7 @@ const useStyles = makeStyles<{ isMore: boolean }>()((theme, { isMore }) => {
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: isMore ? 4 : 10,
-            background: theme.palette.maskColor.primary,
+            background: theme.vars.palette.maskColor.primary,
             borderRadius: '50%',
             height: 16,
             width: 16,
@@ -64,10 +64,10 @@ export function RecipientsToolTip({ recipients, openDialog }: RecipientsToolTipP
                 <Avatar key={recipient.identifier.userId} classes={{ root: classes.icon }} person={recipient} />
             ))}
             {isMore ?
-                <Icons.More size={13} className={classes.iconMore} color={theme.palette.text.primary} />
+                <Icons.More size={13} className={classes.iconMore} color={theme.vars.palette.text.primary} />
             :   null}
             <div className={classes.iconAdd}>
-                <Icons.Plus size={12} color={theme.palette.maskColor.white} />
+                <Icons.Plus size={12} color={theme.vars.palette.maskColor.white} />
             </div>
         </div>
     )

@@ -10,10 +10,10 @@ const useStyles = makeStyles<void, 'warning'>()((theme, _, refs) => ({
         display: 'flex',
         borderRadius: 4,
         padding: 12,
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         fontSize: 14,
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         backdropFilter: 'blur(5px)',
         gap: 10,
         [`&.${refs.warning}`]: {

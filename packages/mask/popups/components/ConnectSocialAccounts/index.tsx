@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(2),
     },
     item: {
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         padding: theme.spacing(1.5),
         borderRadius: 8,
         display: 'flex',
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     network: {
         marginLeft: 8,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 700,

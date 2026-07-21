@@ -23,11 +23,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         textAlign: 'center',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: theme.spacing(1.25),
     },
     tokenInfo: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
         padding: theme.spacing(1),
         marginTop: theme.spacing(1.25),
         display: 'flex',
@@ -42,34 +42,34 @@ const useStyles = makeStyles()((theme) => ({
     address: {
         fontSize: 12,
         transform: 'scale(0.8333)',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 400,
         transformOrigin: 'left',
     },
     link: {
         width: 16,
         height: 16,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     amountInfo: {
         marginTop: theme.spacing(3.25),
         padding: theme.spacing(1.5),
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         display: 'flex',
         flexDirection: 'column',
         rowGap: 10,
     },
     input: {
         paddingRight: '0px !important',
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
     },
     max: {
         fontWeight: 400,
         textTransform: 'uppercase',
     },
     spender: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     spenderAddress: {
         marginTop: 4,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
@@ -89,7 +89,7 @@ const useStyles = makeStyles()((theme) => ({
     gasFeeTitle: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 
@@ -235,8 +235,8 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         }}
                         color={
                             isGreaterThan(value, leftShift(balance, token?.decimals)) ?
-                                theme.palette.maskColor.danger
-                            :   theme.palette.maskColor.warn
+                                theme.vars.palette.maskColor.danger
+                            :   theme.vars.palette.maskColor.warn
                         }>
                         {tips}
                     </Typography>
@@ -257,7 +257,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                     transaction.formattedTransaction.popup.spender,
                                 )}
                                 className={classes.link}
-                                style={{ color: theme.palette.maskColor.second }}>
+                                style={{ color: theme.vars.palette.maskColor.second }}>
                                 <Icons.LinkOut size={16} />
                             </Link>
                         </Typography>

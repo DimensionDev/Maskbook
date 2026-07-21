@@ -1,10 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback } from 'react'
-import { Box, Avatar, Typography } from '@mui/material'
+import { Box, Avatar, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { type ProfileIdentifier, formatPersonaFingerprint } from '@masknet/shared-base'
-import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
 import type { Profile } from '../common.js'
@@ -26,12 +25,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     profileInfo: {
         width: '100%',
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
     },
     back: {
         fontSize: 24,
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         border: 'none',
         background: 'none',
         padding: 0,
@@ -49,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 12,
         height: 12,
         fontSize: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     empty: {
         position: 'absolute',
@@ -60,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     emptyContainer: {
@@ -123,7 +122,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                         {publicKey ? formatPersonaFingerprint(publicKey) : null}
                     </Typography>
                     <Typography
-                        color={theme.palette.maskColor.second}
+                        color={theme.vars.palette.maskColor.second}
                         sx={{
                             fontSize: 12,
                             lineHeight: '16px',

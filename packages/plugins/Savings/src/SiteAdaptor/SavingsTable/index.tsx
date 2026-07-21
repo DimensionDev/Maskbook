@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme, props) => ({
     tableContainer: {},
     tableHeader: {
         display: 'flex',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: theme.spacing(1),
         margin: '0 0 15px 0',
     },
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme, props) => ({
         width: '100%',
     },
     loading: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         lineHeight: '18px',
         marginTop: 12,
     },
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme, props) => ({
         animation: 'loadingAnimation 1s linear infinite',
     },
     empty: {
-        color: theme.palette.secondaryDivider,
+        color: theme.vars.palette.secondaryDivider,
     },
 }))
 
@@ -120,7 +120,7 @@ export function SavingsTable({ tab, protocols, loadingProtocols, onWithdraw, onD
                 </div>
             :   <div className={classes.placeholder}>
                     <Icons.EmptySimple size={36} className={classes.empty} />
-                    <Typography sx={{ fontSize: '14px', mt: 1.5 }} color={theme.palette.maskColor.second}>
+                    <Typography sx={{ fontSize: '14px', mt: 1.5 }} color={theme.vars.palette.maskColor.second}>
                         <Trans>No deposit protocols found.</Trans>
                     </Typography>
                 </div>

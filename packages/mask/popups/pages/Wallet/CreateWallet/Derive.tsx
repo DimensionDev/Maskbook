@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         borderRadius: 8,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
         position: 'relative',
         paddingLeft: 44,
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
         lineHeight: '16px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     editButton: {
         cursor: 'pointer',

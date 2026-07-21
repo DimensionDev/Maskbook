@@ -1,11 +1,10 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { alpha, makeStyles  } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import {
-    alpha,
     Box,
     Chip,
     chipClasses,
@@ -41,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         fontSize: 13,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     control: {
@@ -59,14 +58,14 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         fontWeight: 700,
         paddingLeft: 4,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tokenIcon: {
         margin: '0px !important',
     },
     selectToken: {
-        backgroundColor: theme.palette.maskColor.primary,
-        color: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.white,
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 700,
@@ -77,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 99,
         cursor: 'pointer',
         ['&:hover']: {
-            backgroundColor: lighten(theme.palette.maskColor.primary, 0.1),
+            backgroundColor: lighten(theme.vars.palette.maskColor.primary, 0.1),
         },
     },
     maxChip: {
@@ -93,10 +92,10 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         cursor: 'pointer',
         boxSizing: 'border-box',
-        color: theme.palette.maskColor.bottom,
-        background: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.main,
         '&:hover': {
-            background: alpha(theme.palette.maskColor.main, 0.8),
+            background: alpha(theme.vars.palette.maskColor.main, 0.8),
         },
         [`& > .${chipClasses.label}`]: {
             padding: 0,
@@ -106,13 +105,13 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         lineHeight: '18px',
         fontWeight: 700,
         marginLeft: 4,
     },
     arrowIcon: {
-        color: `${theme.palette.maskColor.second}!important`,
+        color: `${theme.vars.palette.maskColor.second}!important`,
     },
     chipLabel: {
         maxWidth: 150,

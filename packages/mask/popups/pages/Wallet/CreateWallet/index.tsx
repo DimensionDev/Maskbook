@@ -24,14 +24,14 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         marginBottom: theme.spacing(2),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     groups: {
         padding: 0,
         marginBottom: theme.spacing(2),
     },
     group: {
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         padding: theme.spacing(1.5),
         backdropFilter: 'blur(8px)',
         borderRadius: 8,
@@ -56,12 +56,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     walletCount: {
         marginRight: theme.spacing(1),
         fontSize: 12,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',
     },
@@ -100,7 +100,7 @@ export const Component = memo(function CreateWallet() {
                                         })
                                     }}>
                                     <ListItemIcon className={classes.groupIcon}>
-                                        <Icons.MaskBlue size={24} color={theme.palette.maskColor.white} />
+                                        <Icons.MaskBlue size={24} color={theme.vars.palette.maskColor.white} />
                                     </ListItemIcon>
                                     <ListItemText
                                         className={classes.groupText}

@@ -21,10 +21,8 @@ export interface MenuConfigOptions extends Partial<MenuProps> {
 const useStyles = makeStyles()((theme) => ({
     menu: {
         // TODO: replace hard code to theme
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 0px 20px rgba(255, 255, 255, 0.12)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)' }),
     },
 }))
 

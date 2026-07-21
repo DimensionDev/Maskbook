@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: 10,
         left: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     inputIcon: {
         position: 'absolute',
@@ -102,7 +102,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '50%',
         alignItems: 'center',
-        color: theme.palette.maskColor.line,
+        color: theme.vars.palette.maskColor.line,
         cursor: 'pointer',
     },
     checkIconWrapper: {
@@ -121,7 +121,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     fieldValue: {
         marginLeft: 'auto',
@@ -278,7 +278,7 @@ export function CreateTokenRedPacket() {
                             <RadioIndicator checked={isRandom} size={20} />
                         </div>
                         <Typography
-                            color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                            color={isRandom ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.second}
                             sx={{
                                 fontSize: 16,
                                 fontWeight: isRandom ? 700 : 400,
@@ -291,7 +291,7 @@ export function CreateTokenRedPacket() {
                             <RadioIndicator checked={!isRandom} size={20} />
                         </div>
                         <Typography
-                            color={isRandom ? theme.palette.maskColor.second : theme.palette.maskColor.main}
+                            color={isRandom ? theme.vars.palette.maskColor.second : theme.vars.palette.maskColor.main}
                             sx={{
                                 fontSize: 16,
                                 fontWeight: isRandom ? 400 : 700,

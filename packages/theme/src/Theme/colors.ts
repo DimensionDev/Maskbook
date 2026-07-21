@@ -1,5 +1,9 @@
 // TODO: Just only provide maskColor, others will be deprecate.
 declare module '@mui/material/styles' {
+    interface CssThemeVariables {
+        enabled: true
+    }
+
     interface Palette {
         maskColor: MaskColor['maskColor']
         shadow: MaskColor['shadow']
@@ -16,11 +20,16 @@ declare module '@mui/material/styles' {
         third: string
         strong: string
         buttonText: string
+        twitterButton: string
+        twitterButtonText: string
     }
 
     interface TypeBackground {
         input: string
         tipMask: string
+        twitterTooltipBg: string
+        primaryBackground2: string
+        mainBackground: string
     }
 
     interface TypeAction {
@@ -28,8 +37,12 @@ declare module '@mui/material/styles' {
     }
 }
 
+export const alpha = (color: string, opacity: number) =>
+    `color-mix(in srgb, ${color}, transparent ${(1 - opacity) * 100}%)`
+
 export const MaskColors = {
     light: {
+        primary: { main: '#1c68f3' },
         grey: {
             '700': '#536471',
             '300': '#b9cad3',
@@ -42,9 +55,16 @@ export const MaskColors = {
             third: '#ACB4C1',
             strong: '#111418',
             buttonText: '#FFFFFF',
+            twitterButton: '#111418',
+            twitterButtonText: '#FFFFFF',
         },
         maskColor: {
             main: '#07101B',
+            textPrimary: '#111432',
+            textPluginColor: '#07101B',
+            textSecondary: '#7B8192',
+            normalText: '#7B8192',
+            textLight: '#A6A9B6',
             second: '#767F8D',
             third: '#ACB4C1',
             primaryMain: '#B5B7BB',
@@ -67,6 +87,10 @@ export const MaskColors = {
             primary: '#1C68F3',
             success: '#3DC233',
             warn: '#FFB100',
+            orangeMain: '#FFB915',
+            redMain: '#FF5F5F',
+            twitterBorderLine: '#EDF1F2',
+            setupGuideBorder: '#536471',
             danger: '#FF3545',
             white: '#ffffff',
             secondaryDark: '#767F8D',
@@ -84,11 +108,16 @@ export const MaskColors = {
         },
         shadow: {
             popup: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            selectMenu: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            tooltip: '0px 0px 20px rgba(0, 0, 0, 0.05)',
         },
         background: {
             default: '#F9F9F9',
             input: '#F2F6FA',
             tipMask: 'rgba(0, 0, 0, 0.85)',
+            twitterTooltipBg: 'rgba(0, 0, 0, 0.6)',
+            primaryBackground2: '#FBFBFC',
+            mainBackground: '#FFFFFF',
             messageShadow: 'rgba(101, 119, 134, 0.2)',
             paper: '#ffffff',
         },
@@ -104,6 +133,7 @@ export const MaskColors = {
         },
     },
     dark: {
+        primary: { main: '#1c68f3' },
         grey: {
             '700': '#8899a6',
             '300': '#6b7d8c',
@@ -112,6 +142,11 @@ export const MaskColors = {
         },
         maskColor: {
             main: '#F5F5F5',
+            textPrimary: '#FFFFFF',
+            textPluginColor: '#07101B',
+            textSecondary: 'ghostwhite',
+            normalText: 'rgba(255, 255, 255, 0.8)',
+            textLight: '#A6A9B6',
             second: 'rgba(255, 255, 255, 0.78)',
             third: 'rgba(255, 255, 255, 0.44)',
             primaryMain: 'rgba(255, 255, 255, 0.28)',
@@ -132,6 +167,10 @@ export const MaskColors = {
             primary: '#1C68F3',
             success: '#3DC233',
             warn: '#FFB100',
+            orangeMain: '#FFB915',
+            redMain: '#FF5F5F',
+            twitterBorderLine: '#2F3336',
+            setupGuideBorder: '#6E767D',
             danger: '#FF3545',
             white: '#ffffff',
             secondaryDark: '#767F8D',
@@ -144,10 +183,13 @@ export const MaskColors = {
             publicTwitter: '#1D9BF0',
             publicThirdMain: '#F3F3F4',
             publicBg: '#F9F9F9',
+            publicInput: '#F2F6FA',
             borderSecondary: '#536471',
         },
         shadow: {
             popup: '0px 4px 30px rgba(255, 255, 255, 0.15)',
+            selectMenu: '0px 4px 30px rgba(255, 255, 255, 0.15)',
+            tooltip: '0px 0px 20px rgba(255, 255, 255, 0.12)',
         },
         text: {
             primary: '#F5F5F5',
@@ -155,11 +197,16 @@ export const MaskColors = {
             third: '#666C75',
             strong: '#FFFFFF',
             buttonText: '#0F1419',
+            twitterButton: '#EFF3F4',
+            twitterButtonText: '#0F1419',
         },
         background: {
             default: '#1C1C1C',
             input: '#26292C',
             tipMask: 'rgba(255, 255, 255, 0.85)',
+            twitterTooltipBg: 'rgba(91, 112, 131, 0.6)',
+            primaryBackground2: '#212442',
+            mainBackground: '#111432',
             messageShadow: 'rgba(136, 153, 166, 0.2)',
             paper: '#101010',
         },

@@ -46,15 +46,15 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             marginLeft: theme.spacing(2),
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         ratio: {
             marginLeft: 'auto',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         choice: {
             maxWidth: choiceMaxWidth,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         linearProgressWrap: {
             width: '100%',
@@ -68,19 +68,19 @@ const useStyles = makeStyles()((theme) => {
         resultButton: {
             width: 200,
             margin: '0 auto',
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.publicMain,
-                color: theme.palette.maskColor.white,
+                backgroundColor: theme.vars.palette.maskColor.publicMain,
+                color: theme.vars.palette.maskColor.white,
             },
         },
         tooltip: {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
         },
         arrow: {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     }
 })
@@ -89,7 +89,7 @@ const StyledLinearProgress = styled(LinearProgress)(({ theme }) => ({
     [`&.${linearProgressClasses.root}`]: {
         height: 8,
         borderRadius: 5,
-        backgroundColor: theme.palette.maskColor.publicBg,
+        backgroundColor: theme.vars.palette.maskColor.publicBg,
     },
     [`&.${linearProgressClasses.bar}`]: {
         borderRadius: 5,

@@ -9,7 +9,7 @@ const useStyles = makeStyles<{ iconSize: number }>()((theme, { iconSize }) => ({
         fontSize: 14,
         fontWeight: 400,
         lineHeight: '16px',
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         display: 'flex',
         columnGap: 2,
         alignItems: 'center',
@@ -19,7 +19,7 @@ const useStyles = makeStyles<{ iconSize: number }>()((theme, { iconSize }) => ({
         height: iconSize,
         fontSize: iconSize,
         lineHeight: `${iconSize}px`,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
 }))
 

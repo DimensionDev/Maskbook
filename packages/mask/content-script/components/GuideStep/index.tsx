@@ -17,11 +17,13 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'absolute',
-        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.3)' : 'rgba(110,118,125,.3)'}`,
+        boxShadow: '0 0 0 3000px rgba(0,0,0,.3)',
+        ...theme.applyStyles('dark', { boxShadow: '0 0 0 3000px rgba(110,118,125,.3)' }),
         borderRadius: 8,
     },
     noBoxShadowCover: {
-        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.2)' : 'rgba(110,118,125,.2)'}`,
+        boxShadow: '0 0 0 3000px rgba(0,0,0,.2)',
+        ...theme.applyStyles('dark', { boxShadow: '0 0 0 3000px rgba(110,118,125,.2)' }),
     },
     target: {
         background: 'transparent',

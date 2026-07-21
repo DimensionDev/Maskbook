@@ -9,7 +9,7 @@ import { SocialFeed } from './SocialFeed.js'
 
 const useStyles = makeStyles()((theme) => ({
     loading: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     skeleton: {
         borderRadius: theme.spacing(1),
@@ -27,7 +27,7 @@ export const SocialFeeds = memo<SocialFeedsProps>(function SocialFeeds({ userId,
     if (error && !feeds.length)
         return (
             <Box sx={{ p: 2, boxSizing: 'border-box' }}>
-                <Box sx={{ mt: '100px', color: (theme) => theme.palette.maskColor.main }}>
+                <Box sx={{ mt: '100px', color: (theme) => theme.vars.palette.maskColor.main }}>
                     <ReloadStatus onRetry={fetchNextPage} />
                 </Box>
             </Box>
@@ -63,7 +63,7 @@ export const SocialFeeds = memo<SocialFeedsProps>(function SocialFeeds({ userId,
                         <LoadingBase className={classes.loading} />
                     :   null}
                 </ElementAnchor>
-            :   <Typography sx={{ color: (theme) => theme.palette.maskColor.second, textAlign: 'center', py: 2 }}>
+            :   <Typography sx={{ color: (theme) => theme.vars.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                     <Trans>No more data available.</Trans>
                 </Typography>
             }

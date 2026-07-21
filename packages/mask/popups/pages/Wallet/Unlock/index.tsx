@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
     },
     content: {
         padding: '0px 16px',
@@ -98,7 +98,9 @@ const Unlock = memo(function Unlock() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     {verified === false ?
-                        <Typography color={theme.palette.maskColor.danger} sx={{ fontSize: 14, marginTop: '12px' }}>
+                        <Typography
+                            color={theme.vars.palette.maskColor.danger}
+                            sx={{ fontSize: 14, marginTop: '12px' }}>
                             <Trans>Incorrect password</Trans>
                         </Typography>
                     :   null}
@@ -114,7 +116,7 @@ const Unlock = memo(function Unlock() {
                 </Button>
 
                 <Typography
-                    color={theme.palette.maskColor.main}
+                    color={theme.vars.palette.maskColor.main}
                     onClick={navigateToResetWallet}
                     className={classes.pointer}
                     sx={{

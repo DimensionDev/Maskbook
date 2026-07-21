@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     box: {
         position: 'relative',
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         padding: theme.spacing(1.5),
         borderRadius: 12,
         display: 'flex',
@@ -65,10 +65,10 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateX(-50%) rotate(90deg)',
         width: 32,
         height: 32,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: '50%',
-        color: theme.palette.maskColor.main,
-        backgroundColor: theme.palette.maskColor.bottom,
+        color: theme.vars.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         cursor: 'pointer',
     },
     token: {
@@ -90,11 +90,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     chain: {
         fontSize: 13,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
     },
     tokenStatus: {
@@ -109,7 +109,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tokenInput: {
         height: '100%',
@@ -117,7 +117,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         border: 'none',
         backgroundColor: 'transparent',
         outline: 'none',
@@ -127,7 +127,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '13px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         position: 'absolute',
         right: 0,
         bottom: 0,
@@ -136,8 +136,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 6px',
         fontSize: 12,
         lineHeight: '16px',
-        color: theme.palette.maskColor.bottom,
-        backgroundColor: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.main,
         borderRadius: 4,
         minWidth: 0,
     },
@@ -146,10 +146,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     footer: {
         flexShrink: 0,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)' }),
     },
 }))
 
@@ -330,7 +328,7 @@ export function TradeView() {
                             setFromToken(toToken)
                             setToToken(fromToken)
                         }}>
-                        <Icons.BiArrow size={16} color={theme.palette.maskColor.main} />
+                        <Icons.BiArrow size={16} color={theme.vars.palette.maskColor.main} />
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <Typography sx={{ lineHeight: '18px', fontWeight: '700', fontSize: '14px' }}>To</Typography>
@@ -391,8 +389,8 @@ export function TradeView() {
                                             className={classes.diff}
                                             color={
                                                 isGreaterThan(priceDiff, 0) ?
-                                                    theme.palette.maskColor.success
-                                                :   theme.palette.maskColor.danger
+                                                    theme.vars.palette.maskColor.success
+                                                :   theme.vars.palette.maskColor.danger
                                             }>
                                             ({isGreaterThan(priceDiff, 0) ? '+' : ''}
                                             {priceDiff.toFixed(2)}%)

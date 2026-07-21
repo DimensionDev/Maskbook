@@ -43,7 +43,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
         flexDirection: 'column',
         justifyContent: 'center',
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         lineHeight: '18px',
         marginLeft: theme.spacing(1.5),
     },

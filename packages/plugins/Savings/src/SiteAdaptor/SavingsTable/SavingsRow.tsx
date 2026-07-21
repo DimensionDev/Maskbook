@@ -15,7 +15,7 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     tableRow: {
         display: 'flex',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: theme.spacing(1),
         marginBottom: theme.spacing(1),
 

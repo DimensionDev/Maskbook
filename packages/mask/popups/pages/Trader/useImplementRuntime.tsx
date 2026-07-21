@@ -59,13 +59,13 @@ export function useImplementRuntime() {
                         fontSize: '15px',
                         lineHeight: '20px',
                         fontWeight: 400,
-                        color: theme.palette.maskColor.main,
+                        color: theme.vars.palette.maskColor.main,
                         marginTop: 16,
                     },
                 },
             })
         },
-        [theme.palette.maskColor.main],
+        [theme.vars.palette.maskColor.main],
     )
 
     const { showSnackbar } = usePopupCustomSnackbar()

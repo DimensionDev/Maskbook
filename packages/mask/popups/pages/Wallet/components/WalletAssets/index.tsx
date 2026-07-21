@@ -14,7 +14,6 @@ import { AssetsList } from '../AssetsList/index.js'
 import { Component as SelectWallet } from '../../SelectWallet/index.js'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         content: {
             flex: 1,
@@ -32,16 +31,17 @@ const useStyles = makeStyles()((theme) => {
             padding: '8px 12px',
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             minHeight: 'unset',
             backgroundColor: 'transparent',
             borderRadius: '12px 12px 0 0',
             boxShadow: 'none',
             [`&.${tabClasses.selected}`]: {
-                backgroundColor: theme.palette.maskColor.bottom,
+                backgroundColor: theme.vars.palette.maskColor.bottom,
                 fontWeight: 700,
-                color: theme.palette.maskColor.main,
-                boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
+                color: theme.vars.palette.maskColor.main,
+                boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+                ...theme.applyStyles('dark', { boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.10)' }),
                 backdropFilter: 'blur(5px)',
             },
         },
@@ -73,8 +73,9 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             boxSizing: 'border-box',
             padding: theme.spacing(0.5),
-            backgroundColor: theme.palette.maskColor.bottom,
-            boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
+            boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+            ...theme.applyStyles('dark', { boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.10)' }),
             marginLeft: 'auto',
         },
     }

@@ -8,24 +8,24 @@ import type { FileBaseProps, FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         fontSize: 12,
     },
     meta: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
     metaValue: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     operations: {
         display: 'flex',
         alignItems: 'center',
     },
     operationButton: {
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
         marginLeft: theme.spacing(1),
     },
 }))

@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 16,
             padding: theme.spacing(2, 1.5),
             translate: theme.spacing(1.9, 1),
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
         menuList: {
             padding: 0,

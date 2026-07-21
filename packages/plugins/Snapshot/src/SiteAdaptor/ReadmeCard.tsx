@@ -9,25 +9,25 @@ const useStyles = makeStyles()((theme) => ({
         '& p, & li': {
             margin: 0,
             fontSize: 14,
-            color: `${theme.palette.maskColor.secondaryDark} !important`,
+            color: `${theme.vars.palette.maskColor.secondaryDark} !important`,
         },
         '& p + p': {
             marginTop: theme.spacing(0.5),
-            color: `${theme.palette.maskColor.secondaryDark} !important`,
+            color: `${theme.vars.palette.maskColor.secondaryDark} !important`,
         },
         '& h1, & h2, & h3, & h4, & h5, & h6': {
             fontSize: 14,
             fontWeight: 500,
-            color: `${theme.palette.maskColor.secondaryDark} !important`,
+            color: `${theme.vars.palette.maskColor.secondaryDark} !important`,
         },
         '& img': {
             maxWidth: '100%',
         },
         '& a': {
-            color: `${theme.palette.maskColor.secondaryDark} !important`,
+            color: `${theme.vars.palette.maskColor.secondaryDark} !important`,
         },
         '& td, & th': {
-            color: `${theme.palette.maskColor.secondaryDark} !important`,
+            color: `${theme.vars.palette.maskColor.secondaryDark} !important`,
         },
     },
 }))

@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton, FormattedCurrency, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
+import { alpha, ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
@@ -19,7 +19,7 @@ import {
     formatWeiToGwei,
     type Transaction as EvmTransaction,
 } from '@masknet/web3-shared-evm'
-import { Box, Link, Typography, alpha } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { format } from 'date-fns'
@@ -51,29 +51,29 @@ const useStyles = makeStyles()((theme) => ({
         transition: 'all 0.3s ease-in-out',
     },
     statusFail: {
-        color: theme.palette.maskColor.danger,
-        backgroundColor: alpha(theme.palette.maskColor.danger, 0.1),
+        color: theme.vars.palette.maskColor.danger,
+        backgroundColor: alpha(theme.vars.palette.maskColor.danger, 0.1),
     },
     statusSuccess: {
-        color: theme.palette.maskColor.success,
-        backgroundColor: alpha(theme.palette.maskColor.success, 0.1),
+        color: theme.vars.palette.maskColor.success,
+        backgroundColor: alpha(theme.vars.palette.maskColor.success, 0.1),
     },
     statusPending: {
-        color: theme.palette.maskColor.warn,
-        backgroundColor: alpha(theme.palette.maskColor.warn, 0.1),
+        color: theme.vars.palette.maskColor.warn,
+        backgroundColor: alpha(theme.vars.palette.maskColor.warn, 0.1),
     },
     field: {
         display: 'flex',
         marginTop: theme.spacing(1.5),
     },
     fieldName: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 12,
         fontWeight: 700,
     },
     fieldValue: {
         minWidth: '5em',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginLeft: 'auto',
         display: 'flex',
         alignItems: 'center',
@@ -83,10 +83,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     sectionName: {
         marginTop: theme.spacing(1.5),
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         padding: 10,
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         borderRadius: 4,
     },
@@ -115,7 +115,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     logText: {
         lineHeight: '16px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginLeft: theme.spacing(1.5),
         fontWeight: 700,
         fontSize: 12,
@@ -123,7 +123,7 @@ const useStyles = makeStyles()((theme) => ({
     actionGroup: {
         display: 'flex',
         justifyContent: 'center',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(8px)',
         gap: theme.spacing(2),
@@ -265,7 +265,7 @@ export const Component = memo(function TransactionDetail() {
                     <Typography className={classes.fieldValue}>
                         <Trans>View on Explorer</Trans>
                         <Link href={link} target="_blank" sx={{ ml: 0.5, fontSize: 0 }}>
-                            <Icons.LinkOut size={16} color={theme.palette.maskColor.second} />
+                            <Icons.LinkOut size={16} color={theme.vars.palette.maskColor.second} />
                         </Link>
                     </Typography>
                 </Box>

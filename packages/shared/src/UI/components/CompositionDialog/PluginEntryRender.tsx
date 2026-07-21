@@ -7,8 +7,8 @@ import {
     usePluginTransField,
     useCompositionContext,
 } from '@masknet/plugin-infra/content-script'
-import { DialogContent, alpha } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { DialogContent } from '@mui/material'
+import { alpha, makeStyles  } from '@masknet/theme'
 import { ClickableChip, GrantPermissions, InjectedDialog, usePluginHostPermissionCheck } from '@masknet/shared'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
@@ -20,8 +20,8 @@ const useStyles = makeStyles()((theme) => ({
         paddingLeft: 2,
     },
     clickRoot: {
-        background: theme.palette.maskColor.bottom,
-        boxShadow: `0px 0px 20px 0px ${alpha(theme.palette.maskColor.main, 0.05)}`,
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: `0px 0px 20px 0px ${alpha(theme.vars.palette.maskColor.main, 0.05)}`,
         marginBottom: 0,
     },
 }))
@@ -86,7 +86,7 @@ const usePermissionDialogStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
     },
     dialogTitle: {
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
     },
     action: {
         width: '80%',

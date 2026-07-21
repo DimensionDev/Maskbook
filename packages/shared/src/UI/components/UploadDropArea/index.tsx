@@ -2,8 +2,8 @@ import { t } from '@lingui/core/macro'
 import { Select, Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/shared'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { alpha, Button, Typography } from '@mui/material'
+import { alpha, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { Button, Typography } from '@mui/material'
 import { type HTMLProps, memo, type ReactNode, useCallback, useRef } from 'react'
 import { useDropArea } from 'react-use'
 
@@ -21,10 +21,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(3),
         overflow: 'hidden',
         userSelect: 'none',
-        background: theme.palette.maskColor.whiteBlue,
+        background: theme.vars.palette.maskColor.whiteBlue,
     },
     dragOver: {
-        borderColor: theme.palette.maskColor.primary,
+        borderColor: theme.vars.palette.maskColor.primary,
     },
     uploadIcon: {
         height: 54,
@@ -33,32 +33,36 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor: alpha(theme.vars.palette.maskColor.bottom, 0.8),
         borderRadius: '50%',
-        boxShadow:
-            theme.palette.mode === 'dark' ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : '0px 4px 6px rgba(102, 108, 135, 0.1)',
+        boxShadow: '0px 4px 6px rgba(102, 108, 135, 0.1)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }),
     },
     tips: {
         lineHeight: '18px',
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
     },
     limit: {
         lineHeight: '18px',
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     or: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
     },
     button: {
         width: 164,
         marginBottom: 4,
-        boxShadow: theme.palette.mode === 'dark' ? 'none' : '0px 8px 25px rgba(0, 0, 0, 0.2)',
-        backgroundColor: theme.palette.maskColor.main,
-        color: theme.palette.mode === 'dark' ? theme.palette.maskColor.bottom : theme.palette.maskColor.white,
+        boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.2)',
+        backgroundColor: theme.vars.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.white,
+        ...theme.applyStyles('dark', {
+            boxShadow: 'none',
+            color: theme.vars.palette.maskColor.bottom,
+        }),
     },
 }))
 

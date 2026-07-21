@@ -41,25 +41,25 @@ const useStyles = makeStyles()((theme) => ({
     transactionDetail: {
         padding: theme.spacing(1.5),
         margin: theme.spacing(2, 0),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
         display: 'flex',
         flexDirection: 'column',
         rowGap: 10,
     },
     document: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     data: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         wordBreak: 'break-all',
     },
     itemTitle: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     itemValue: {
         fontSize: 12,

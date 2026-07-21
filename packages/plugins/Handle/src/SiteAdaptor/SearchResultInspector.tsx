@@ -6,7 +6,7 @@ import { MaskLightTheme, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { EVMUtils } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Link, Typography, type Theme } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { memo, useContext, useEffect } from 'react'
 import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
@@ -28,14 +28,14 @@ const useStyles = makeStyles()((theme) => {
         },
         domain: {
             fontWeight: 700,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
             fontSize: 18,
             lineHeight: '18px',
         },
         reversedAddress: {
             display: 'flex',
             alignItems: 'center',
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
             fontSize: 14,
             lineHeight: '18px',
         },
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
         reversedAddressIcon: {
             marginRight: 2,
             cursor: 'pointer',
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
             lineHeight: 0,
         },
         accounts: {
@@ -62,13 +62,13 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'flex-end',
         },
         label: {
-            color: theme.palette.maskColor.publicSecond,
+            color: theme.vars.palette.maskColor.publicSecond,
             fontSize: 14,
             fontWeight: 400,
             lineHeight: '18px',
         },
         value: {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
             fontSize: 16,
             fontWeight: 700,
             lineHeight: '20px',

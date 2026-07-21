@@ -124,7 +124,7 @@ export function PossiblePluginSuggestionUISingle(props: {
                     variant="roundedDark"
                     onClick={onClick}
                     sx={{
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.vars.palette.maskColor.dark,
                         color: 'white',
                         width: '254px',
                         height: '36px',
@@ -132,7 +132,7 @@ export function PossiblePluginSuggestionUISingle(props: {
                         fontWeight: 700,
                         lineHeight: 1.5,
                         '&:hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.vars.palette.maskColor.dark,
                         },
                     }}>
                     {buttonLabel}

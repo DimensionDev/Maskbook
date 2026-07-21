@@ -15,11 +15,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(1.5),
-        backgroundColor: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 4px 30px 0px rgba(0, 0, 0, 0.1)'
-            :   '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
+        backgroundColor: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
+        }),
     },
     header: {
         display: 'flex',
@@ -45,10 +45,10 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     providerName: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
     },
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         minWidth: 0,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
@@ -77,8 +77,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
-        backgroundColor: theme.palette.maskColor.danger,
-        color: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.white,
     },
 }))
 

@@ -36,7 +36,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             paddingBottom: 0,
             cursor: 'pointer',
             '&:hover': {
-                background: theme.palette.maskColor.bg,
+                background: theme.vars.palette.maskColor.bg,
             },
         },
         authorInfo: { display: 'flex', alignItems: 'center' },
@@ -49,11 +49,13 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             width: 72,
             borderRadius: 99,
             color:
-                state === 'active' || state === 'pending' ? theme.palette.common.white : theme.palette.maskColor.bottom,
+                state === 'active' || state === 'pending' ?
+                    theme.vars.palette.common.white
+                :   theme.vars.palette.maskColor.bottom,
             backgroundColor:
-                state === 'active' ? theme.palette.maskColor.success
-                : state === 'pending' ? theme.palette.maskColor.warn
-                : theme.palette.maskColor.main,
+                state === 'active' ? theme.vars.palette.maskColor.success
+                : state === 'pending' ? theme.vars.palette.maskColor.warn
+                : theme.vars.palette.maskColor.main,
         },
         blockieIcon: {
             width: 20,
@@ -88,7 +90,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             width: '100%',
             paddingTop: 0,
             paddingBottom: 12,
-            borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+            borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         },
         voteItem: {
             padding: '8px 6px',
@@ -98,7 +100,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             borderRadius: 4,
         },
         selectedVoteItem: {
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
         },
         voteName: {
             fontWeight: 700,
@@ -114,7 +116,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
         },
         strategyName: {
             fontSize: 14,
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
         },
         percentage: {
             fontWeight: 700,
@@ -131,13 +133,13 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: theme.palette.maskColor.main,
+            background: theme.vars.palette.maskColor.main,
             marginLeft: 12,
         },
         myVoteText: {
             fontSize: 10,
             fontWeight: 700,
-            color: theme.palette.maskColor.bottom,
+            color: theme.vars.palette.maskColor.bottom,
         },
     }
 })
@@ -255,7 +257,11 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                     )}>
                     <div className={classes.voteInfo}>
                         {i === 0 && proposal.state !== 'pending' ?
-                            <Icons.Check color={theme.palette.maskColor.main} size={18} className={classes.voteIcon} />
+                            <Icons.Check
+                                color={theme.vars.palette.maskColor.main}
+                                size={18}
+                                className={classes.voteIcon}
+                            />
                         :   null}
                         <Typography className={classes.voteName}>{x}</Typography>
                         <Typography className={classes.strategyName}>

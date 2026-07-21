@@ -1,6 +1,6 @@
 import { Suspense, type ReactNode, useMemo, useImperativeHandle, useState, type JSX } from 'react'
-import { Typography, Link } from '@mui/material'
-import { makeStyles, MaskColorVar, MaskLightTheme } from '@masknet/theme'
+import { Typography, Link, useTheme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/system'
 import {
     usePluginTransField,
@@ -41,7 +41,7 @@ const useStyles = makeStyles<{
         },
         header: {
             backgroundColor: 'transparent',
-            color: theme.palette.text.primary,
+            color: theme.vars.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
             padding: theme.spacing(1.5),
@@ -75,7 +75,7 @@ const useStyles = makeStyles<{
             marginRight: theme.spacing(0.5),
             fontSize: 14,
             fontWeight: 700,
-            color: MaskLightTheme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
     }
 })
@@ -87,6 +87,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         borderRadius: wrapperProps?.borderRadius,
         margin: wrapperProps?.margin,
     })
+    const theme = useTheme()
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return
@@ -98,7 +99,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     fontWeight: '700',
                 }}
                 component="div"
-                color={MaskColorVar.textPluginColor}>
+                color={theme.vars.palette.maskColor.textPluginColor}>
                 {publisher}
             </Typography>
         )
@@ -115,13 +116,13 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                         <Icons.Provider
                             size={18}
                             style={{ marginLeft: 4 }}
-                            color={MaskLightTheme.palette.maskColor.main}
+                            color={theme.vars.palette.maskColor.textPluginColor}
                         />
                     </Link>
                 :   null}
             </Box>
         )
-    }, [publisher, publisherLink])
+    }, [publisher, publisherLink, theme.vars.palette.maskColor.textPluginColor])
 
     const inner = (
         <div
@@ -140,7 +141,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                         marginLeft: 0.5,
                     }}
                     component="div"
-                    color={MaskColorVar.textPluginColor}>
+                    color={theme.vars.palette.maskColor.main}>
                     {wrapperProps?.title ?? title ?? <Trans>Default</Trans>}
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>

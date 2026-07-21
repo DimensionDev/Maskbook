@@ -10,15 +10,15 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
     },
     wordCard: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         padding: theme.spacing(1),
         borderRadius: 8,
         listStyleType: 'decimal',
         listStylePosition: 'inside',
         position: 'relative',
         '&::marker': {
-            backgroundColor: theme.palette.maskColor.bg,
-            color: theme.palette.maskColor.third,
+            backgroundColor: theme.vars.palette.maskColor.bg,
+            color: theme.vars.palette.maskColor.third,
             fontSize: 14,
         },
     },

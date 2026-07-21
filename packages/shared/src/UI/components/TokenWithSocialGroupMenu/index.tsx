@@ -29,16 +29,14 @@ const useStyles = makeStyles()((theme) => ({
     menuPaper: {
         padding: theme.spacing(2, 0),
         borderRadius: 16,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)' }),
     },
     addressMenu: {
         maxHeight: MENU_ITEM_HEIGHT * 9,
         minWidth: 320,
         padding: 0,
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         overflow: 'auto',
         scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
@@ -49,8 +47,8 @@ const useStyles = makeStyles()((theme) => ({
     divider: {
         margin: theme.spacing(1, 0),
         width: 'calc(100% - 24px)',
-        color: theme.palette.maskColor.line,
-        borderColor: theme.palette.maskColor.line,
+        color: theme.vars.palette.maskColor.line,
+        borderColor: theme.vars.palette.maskColor.line,
         position: 'relative',
         left: 12,
     },
@@ -67,10 +65,10 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     secondLinkIcon: {
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.vars.palette.maskColor.secondaryDark,
     },
     selectedIcon: {
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
         marginLeft: theme.spacing(2),
     },
 }))

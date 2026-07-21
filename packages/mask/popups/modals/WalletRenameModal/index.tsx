@@ -50,7 +50,7 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
     return (
         <BottomDrawer {...rest}>
             <Typography
-                color={theme.palette.maskColor.third}
+                color={theme.vars.palette.maskColor.third}
                 sx={{
                     fontWeight: 700,
                     textAlign: 'center',
@@ -80,7 +80,7 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
                                             setError('')
                                         }}
                                         size={18}
-                                        color={error ? theme.palette.maskColor.danger : undefined}
+                                        color={error ? theme.vars.palette.maskColor.danger : undefined}
                                     />
                                 :   null,
                             disableUnderline: true,
@@ -89,7 +89,7 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
                 />
             </Box>
             {error ?
-                <Typography color={theme.palette.maskColor.danger} sx={{ fontSize: 14, mt: 1 }}>
+                <Typography color={theme.vars.palette.maskColor.danger} sx={{ fontSize: 14, mt: 1 }}>
                     {error}
                 </Typography>
             :   null}

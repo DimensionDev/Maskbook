@@ -10,15 +10,15 @@ const FlexibleTabTabWrap = styled(Button, {
     height: 38,
     lineHeight: '16px',
     minWidth: theme.spacing(3),
-    background: activated ? theme.palette.maskColor.input : 'transparent',
+    background: activated ? theme.vars.palette.maskColor.input : 'transparent',
     borderRadius: `${theme.spacing(1)} !important`,
-    color: activated ? (theme.palette.maskColor.highlight ?? '#1C68F3') : theme.palette.text.secondary,
+    color: activated ? (theme.vars.palette.maskColor.highlight ?? '#1C68F3') : theme.vars.palette.text.secondary,
     fontSize: 14,
     fontWeight: 'bold !important',
 
     '&:hover': {
-        background: activated ? theme.palette.maskColor.input : 'transparent',
-        color: activated ? (theme.palette.maskColor.highlight ?? '#1C68F3') : theme.palette.text.primary,
+        background: activated ? theme.vars.palette.maskColor.input : 'transparent',
+        color: activated ? (theme.vars.palette.maskColor.highlight ?? '#1C68F3') : theme.vars.palette.text.primary,
         boxShadow: 'none',
     },
 }))

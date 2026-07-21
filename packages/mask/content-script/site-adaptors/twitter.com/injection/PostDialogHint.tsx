@@ -1,9 +1,8 @@
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { useLingui } from '@lingui/react/macro'
 import { CrossIsolationMessages, sayHelloShowed } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
-import { alpha } from '@mui/material'
 import { clamp } from 'lodash-es'
 import { useCallback } from 'react'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
@@ -16,15 +15,15 @@ import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelec
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
         '&:hover': {
-            background: alpha(theme.palette.primary.main, 0.1),
+            background: alpha(theme.vars.palette.primary.main, 0.1),
         },
     },
     tooltip: {
         marginTop: '2px !important',
         borderRadius: 2,
         padding: 4,
-        background: MaskColorVar.twitterTooltipBg,
-        color: MaskColorVar.white,
+        background: theme.vars.palette.background.twitterTooltipBg,
+        color: theme.vars.palette.common.white,
     },
 }))
 

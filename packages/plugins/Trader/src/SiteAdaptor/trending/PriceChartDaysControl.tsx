@@ -5,13 +5,13 @@ import { resolveDaysName } from '../../helpers/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         borderRadius: 28,
         padding: theme.spacing(0.5),
     },
     active: {
         boxShadow: '0px 2px 5px 1px rgba(0, 0, 0, 0.05)',
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         fontWeight: 700,
     },
     link: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         borderRadius: 18,
         textAlign: 'center',
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         textDecoration: 'none !important',
     },
 }))

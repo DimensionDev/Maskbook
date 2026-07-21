@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     text: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 700,
         lineHeight: '36px',

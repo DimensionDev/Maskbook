@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             backgroundColor: 'transparent',
             backgroundRepeat: 'no-repeat',
-            color: theme.palette.common.white,
+            color: theme.vars.palette.common.white,
             flexDirection: 'column',
             gap: theme.spacing(2),
             justifyContent: 'space-between',

@@ -1,8 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
-import { alpha } from '@mui/system'
 import { Box, Typography } from '@mui/material'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
@@ -20,17 +19,17 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
     },
     secondaryButton: {
-        backgroundColor: theme.palette.maskColor.thirdMain,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
         border: 'none!important',
         ['&:hover']: {
-            background: theme.palette.maskColor.thirdMain,
-            boxShadow: `0px 8px 25px ${alpha(theme.palette.maskColor.thirdMain, 0.1)}`,
+            background: theme.vars.palette.maskColor.thirdMain,
+            boxShadow: `0px 8px 25px ${alpha(theme.vars.palette.maskColor.thirdMain, 0.1)}`,
             border: 'none',
         },
         [`&.${buttonClasses.disabled}`]: {
-            color: theme.palette.maskColor.main,
-            background: theme.palette.maskColor.thirdMain,
+            color: theme.vars.palette.maskColor.main,
+            background: theme.vars.palette.maskColor.thirdMain,
             opacity: 0.4,
         },
     },
@@ -52,9 +51,9 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         fontSize: 18,
         fontWeight: 700,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         height: 30,
-        caretColor: theme.palette.maskColor.primary,
+        caretColor: theme.vars.palette.maskColor.primary,
         border: 'none',
         outline: 'none',
         '&.Mui-focused': {
@@ -66,12 +65,12 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     helperText: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         marginTop: 12,
     },
     address: {
         textAlign: 'center',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: 12,
         fontSize: 16,
     },

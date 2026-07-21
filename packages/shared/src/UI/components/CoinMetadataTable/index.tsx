@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         border: 'none',
     },
     label: {
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         fontSize: 14,
         whiteSpace: 'nowrap',
         textAlign: 'left',
@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(0.25),
         whiteSpace: 'nowrap',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         '&:last-child': {
             paddingRight: 0,
@@ -66,8 +66,8 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        background: theme.palette.maskColor.bottom,
-        boxShadow: theme.palette.maskColor.bottomBg,
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
     },
     item: {

@@ -68,9 +68,9 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             fontSize: 36,
             display: 'flex',
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             '&:hover': {
-                background: theme.palette.maskColor.bg,
+                background: theme.vars.palette.maskColor.bg,
             },
         },
     }
@@ -201,7 +201,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
             </section>
             {unavailableProviders.length ?
                 <>
-                    <Typography sx={{ mt: 2, fontSize: 14 }} color={theme.palette.maskColor.second}>
+                    <Typography sx={{ mt: 2, fontSize: 14 }} color={theme.vars.palette.maskColor.second}>
                         <Trans>The following wallets are not installed or in conflict with others</Trans>
                     </Typography>
                     <section className={classes.section}>

@@ -5,19 +5,19 @@ import { Typography, Card, ButtonBase, type ButtonBaseProps, type CardProps } fr
 const useStyles = makeStyles()((theme) => ({
     card: {
         textAlign: 'center',
-        border: `solid 1px ${theme.palette.maskColor.line}`,
+        border: `solid 1px ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
     },
     button: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         padding: theme.spacing(1.5),
         transition: 'all ease 0.3s',
         '&:hover': {
-            background: theme.palette.maskColor.bg,
-            color: theme.palette.text.primary,
+            background: theme.vars.palette.maskColor.bg,
+            color: theme.vars.palette.text.primary,
         },
     },
     icon: {
@@ -50,7 +50,7 @@ export function ProviderItem({ icon, name, iconFilterColor, className, ButtonBas
             <ButtonBase className={`${classes.button} dashboard-style`} {...ButtonBaseProps}>
                 <img src={icon} className={classes.icon} style={style} />
                 <Typography className={classes.name}>{name}</Typography>
-                <Icons.RightArrow size={20} color={theme.palette.maskColor.second} />
+                <Icons.RightArrow size={20} color={theme.vars.palette.maskColor.second} />
             </ButtonBase>
         </Card>
     )

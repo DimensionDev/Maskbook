@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     fieldValue: {
         marginLeft: 'auto',
@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     value: {
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     envelope: {
         width: 484,
@@ -77,8 +77,8 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 568,
         fontWeight: 300,
         borderRadius: 8,
-        backgroundColor: theme.palette.maskColor.bg,
-        color: theme.palette.text.primary,
+        backgroundColor: theme.vars.palette.maskColor.bg,
+        color: theme.vars.palette.text.primary,
         padding: 12,
     },
     controller: {

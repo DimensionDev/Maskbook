@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     eventCard: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 0',
         flexDirection: 'column',
         gap: '8px',
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         fontWeight: 700,
         lineHeight: '16px',
         fontSize: '12px',
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     projectName: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '12px',
         fontWeight: 700,
         lineHeight: '16px',
@@ -77,20 +77,20 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     eventContent: {
         fontSize: '13px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     eventType: {
         fontSize: '12px',
         fontWeight: 400,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         borderRadius: '4px',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         padding: '2px 4px',
         textAlign: 'center',
         display: 'flex',
@@ -101,11 +101,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '14px',
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         padding: '10px 0',
     },
     loading: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 
@@ -220,7 +220,8 @@ export function NewsList({ date }: NewsListProps) {
                             <LoadingBase className={classes.loading} />
                         :   null}
                     </ElementAnchor>
-                :   <Typography sx={{ color: (theme) => theme.palette.maskColor.second, textAlign: 'center', py: 2 }}>
+                :   <Typography
+                        sx={{ color: (theme) => theme.vars.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                         <Trans>No more data available.</Trans>
                     </Typography>
                 }

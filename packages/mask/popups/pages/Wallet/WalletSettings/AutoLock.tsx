@@ -22,7 +22,7 @@ export function AutoLock() {
                 })
             }>
             <Box className={classes.itemBox}>
-                <Icons.Time size={20} color={theme.palette.maskColor.second} />
+                <Icons.Time size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Auto-lock Time</Trans>
                 </Typography>
@@ -35,7 +35,7 @@ export function AutoLock() {
                         :   <Trans>{millisecondsToMinutes(value)} Mins</Trans>}
                     </Typography>
                 :   null}
-                <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+                <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>
     )

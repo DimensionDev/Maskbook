@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 12,
         display: 'flex',
         gap: theme.spacing(1),
-        color: theme.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.warn,
         alignItems: 'center',
     },
     title: {

@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyItems: 'center',
         padding: theme.spacing(3),
         boxSizing: 'border-box',
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         textAlign: 'center',
         fontSize: 18,
     },
@@ -30,20 +30,20 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: '20px',
         lineHeight: '24px',
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
     },
     actions: {
         padding: theme.spacing(0, 3, 3),
     },
     messageText: {
         fontSize: 16,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '20px',
     },
     tokenIcon: {
         margin: 'auto',
-        border: `1px ${theme.palette.maskColor.secondaryLine} solid`,
+        border: `1px ${theme.vars.palette.maskColor.secondaryLine} solid`,
         borderRadius: '50%',
     },
     icon: {

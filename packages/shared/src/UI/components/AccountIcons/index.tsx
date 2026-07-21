@@ -4,7 +4,7 @@ import { SocialAddressType, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { resolveSocialAddressLink } from '@masknet/web3-shared-base'
-import { Link, Typography, type TooltipProps } from '@mui/material'
+import { Link, Typography, type SxProps, type Theme, type TooltipProps } from '@mui/material'
 import { compact } from 'lodash-es'
 import { Linking } from '../../../index.js'
 
@@ -29,12 +29,12 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
         },
         link: {
-            color: theme.palette.maskColor.primary,
+            color: theme.vars.palette.maskColor.primary,
             textDecoration: 'none',
         },
         actionIcon: {
             marginLeft: theme.spacing(0.5),
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
         roundedIcon: {
             borderRadius: '50%',
@@ -93,19 +93,17 @@ export interface AccountIconProps extends withClasses<'icon'> {
     socialAccount: SocialAccount<Web3Helper.ChainIdAll>
 }
 
+const iconSx: SxProps<Theme> = (theme) =>
+    theme.applyStyles('light', {
+        boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
+        backdropFilter: 'blur(8px)',
+    })
+
 export function AccountIcons({ socialAccount, classes: externalClasses }: AccountIconProps) {
-    const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
+    const { classes, cx } = useStyles(undefined, { props: { classes: externalClasses } })
 
     const { supportedAddressTypes } = socialAccount
     if (!supportedAddressTypes?.length) return null
-
-    const iconStyle =
-        theme.palette.mode === 'light' ?
-            {
-                boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
-                backdropFilter: 'blur(8px)',
-            }
-        :   undefined
 
     const fromTwitter = [
         SocialAddressType.ENS,
@@ -124,14 +122,14 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
             {
                 platform: AddressPlatform.Twitter,
                 type: fromTwitter,
-                icon: <Icons.TwitterXRound className={roundedClasses} style={iconStyle} />,
+                icon: <Icons.TwitterXRound className={roundedClasses} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.CyberConnect) ?
             {
                 link: resolveSocialAddressLink(SocialAddressType.CyberConnect),
                 type: SocialAddressType.CyberConnect,
-                icon: <Icons.CyberConnect className={normalClasses} size={18} style={iconStyle} />,
+                icon: <Icons.CyberConnect className={normalClasses} size={18} sx={iconSx} />,
             }
         :   null,
 
@@ -139,50 +137,50 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
             {
                 link: resolveSocialAddressLink(SocialAddressType.Leaderboard),
                 type: SocialAddressType.Leaderboard,
-                icon: <Icons.Leaderboard className={normalClasses} size={18} style={iconStyle} />,
+                icon: <Icons.Leaderboard className={normalClasses} size={18} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.Sybil) ?
             {
                 link: resolveSocialAddressLink(SocialAddressType.Sybil),
                 type: SocialAddressType.Sybil,
-                icon: <Icons.Sybil className={roundedClasses} size={18} style={iconStyle} />,
+                icon: <Icons.Sybil className={roundedClasses} size={18} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.Mask) ?
             {
                 type: SocialAddressType.Mask,
-                icon: <Icons.MaskBlue className={roundedClasses} size={18} style={iconStyle} />,
+                icon: <Icons.MaskBlue className={roundedClasses} size={18} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.Firefly) ?
             {
                 type: SocialAddressType.Firefly,
-                icon: <Icons.Firefly className={normalClasses} size={18} style={iconStyle} />,
+                icon: <Icons.Firefly className={normalClasses} size={18} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.OpenSea) ?
             {
                 type: SocialAddressType.OpenSea,
-                icon: <Icons.OpenSea className={roundedClasses} size={18} style={iconStyle} />,
+                icon: <Icons.OpenSea className={roundedClasses} size={18} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.RSS3) ?
             {
                 type: SocialAddressType.RSS3,
-                icon: <Icons.RSS3 className={roundedClasses} size={18} style={iconStyle} />,
+                icon: <Icons.RSS3 className={roundedClasses} size={18} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.SPACE_ID) ?
             {
                 type: SocialAddressType.SPACE_ID,
-                icon: <Icons.SpaceId className={roundedClasses} size={18} style={iconStyle} />,
+                icon: <Icons.SpaceId className={roundedClasses} size={18} sx={iconSx} />,
             }
         :   null,
         supportedAddressTypes.includes(SocialAddressType.Lens) ?
             {
                 type: SocialAddressType.Lens,
-                icon: <Icons.DarkLens className={roundedClasses} size={18} style={iconStyle} />,
+                icon: <Icons.DarkLens className={roundedClasses} size={18} sx={iconSx} />,
             }
         :   null,
     ])

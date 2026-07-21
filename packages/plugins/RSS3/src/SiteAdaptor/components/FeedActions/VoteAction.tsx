@@ -10,7 +10,7 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     summary: {
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textOverflow: 'ellipsis',
         whiteSpace: 'pre',
         overflow: 'auto',

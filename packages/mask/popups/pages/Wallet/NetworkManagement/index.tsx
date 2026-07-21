@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { Icon, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { Box, List, ListItem, Typography, alpha } from '@mui/material'
+import { alpha, ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
+import { Box, List, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from '../../../hooks/index.js'
@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     network: {
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         height: theme.spacing(6),
         padding: theme.spacing(1.5),
         boxSizing: 'border-box',
@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(0.5),
         fontSize: 12,
         maxWidth: '50%',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',
         textOverflow: 'ellipsis',
@@ -54,8 +54,8 @@ const useStyles = makeStyles()((theme) => ({
     footer: {
         padding: theme.spacing(2),
         borderRadius: 12,
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow: theme.palette.maskColor.bottomBg,
+        background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
     },
 }))
@@ -89,7 +89,7 @@ export const Component = memo(function NetworkManagement() {
                                 </TextOverflowTooltip>
                                 {network.isCustomized ? null : <Icons.Lock size={16} />}
                             </Box>
-                            <Icons.RightArrow color={theme.palette.maskColor.second} size={20} />
+                            <Icons.RightArrow color={theme.vars.palette.maskColor.second} size={20} />
                         </ListItem>
                     )
                 })}

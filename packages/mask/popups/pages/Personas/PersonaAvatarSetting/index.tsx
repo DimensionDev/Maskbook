@@ -17,7 +17,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     uploadBox: {
-        background: theme.palette.maskColor.whiteBlue,
+        background: theme.vars.palette.maskColor.whiteBlue,
         padding: theme.spacing(3),
         borderRadius: 8,
         display: 'flex',
@@ -29,21 +29,22 @@ const useStyles = makeStyles()((theme) => ({
         width: 54,
         height: 54,
         borderRadius: '50%',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        boxShadow: `0px 4px 6px 0px ${
-            theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'
-        }`,
+        boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.10)',
+        }),
     },
     typo: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         textAlign: 'center',
         lineHeight: '18px',
     },
     strong: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         textAlign: 'center',
         lineHeight: '18px',
     },

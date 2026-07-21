@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             width: '100%',
         },
         title: {
@@ -54,10 +54,10 @@ const useStyles = makeStyles()((theme) => {
         },
         info: {
             marginTop: 0,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         infoColor: {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     }
 })

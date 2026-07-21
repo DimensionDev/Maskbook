@@ -10,11 +10,11 @@ const useStyles = makeStyles()((theme) => ({
     meta: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
     metaValue: {
         fontSize: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     operations: {
         display: 'flex',
@@ -22,10 +22,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     operationButton: {
         marginLeft: theme.spacing(1),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     menuButton: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     menuLabel: {
         fontSize: 14,
@@ -35,10 +35,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     menu: {
         minWidth: 229,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+        boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
+        }),
     },
     row: {
         display: 'flex',
@@ -126,7 +126,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                             }}>
                             <Typography
                                 className={classes.menuLabel}
-                                sx={{ color: (theme) => theme.palette.maskColor.danger }}>
+                                sx={{ color: (theme) => theme.vars.palette.maskColor.danger }}>
                                 <Trans>Delete</Trans>
                             </Typography>
                         </MenuItem>

@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.spacing(1),
         backdropFilter: 'blur(16px)',
         '&:hover': {
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
         },
     },
     text: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         alignItems: 'center',
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     nameText: {
         maxWidth: 400,
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     balance: {
         fontSize: 16,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     importButton: {
         borderRadius: 99,
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
         left: theme.spacing(1),
     },
     link: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     dotLoadingWrapper: {
         display: 'flex',
@@ -187,9 +187,9 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
                 return (
                     <CheckBoxIndicator
                         className={enabled || selected ? undefined : classes.disabled}
-                        color={theme.palette.maskColor.primary}
+                        color={theme.vars.palette.maskColor.primary}
                         checked={selected}
-                        uncheckedColor={theme.palette.maskColor.secondaryLine}
+                        uncheckedColor={theme.vars.palette.maskColor.secondaryLine}
                     />
                 )
             }

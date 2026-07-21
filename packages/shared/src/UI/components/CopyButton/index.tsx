@@ -17,7 +17,7 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     copy: {
         '&:hover': {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
     },
 }))
@@ -93,7 +93,7 @@ export const CopyButton = memo(function CopyButton({
                 className={cx(classes.root, className)}
                 sx={[{ fontSize: 0 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}>
                 {active ?
-                    <Icons.Check {...iconProps} color={theme.palette.maskColor.success} />
+                    <Icons.Check {...iconProps} color={theme.vars.palette.maskColor.success} />
                 :   <Icons.Copy {...iconProps} className={classes.copy} />}
             </Link>
         </ShadowRootTooltip>

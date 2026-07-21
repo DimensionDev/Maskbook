@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     clickable: {
         cursor: 'pointer',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
     },
     header: {
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     timestamp: {
         fontSize: 14,
         fontWeight: 400,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
     body: {
         marginTop: theme.spacing(1.5),

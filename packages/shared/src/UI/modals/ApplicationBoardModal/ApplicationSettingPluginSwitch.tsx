@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { PluginTransFieldRender, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
 import { Trans } from '@lingui/react/macro'
 
@@ -11,12 +11,12 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         padding: theme.spacing(1.5),
         borderRadius: 12,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         '&:hover': {
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
         },
         '&:hover .MuiAvatar-root': {
-            background: theme.palette.background.paper,
+            background: theme.vars.palette.background.paper,
         },
         '&:not(:last-child)': {
             marginBottom: theme.spacing(1.5),
@@ -38,11 +38,12 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: theme.spacing(0.5),
         marginLeft: theme.spacing(0.5),
         cursor: 'pointer',
-        color: MaskColorVar.textSecondary,
-        opacity: theme.palette.mode === 'dark' ? 0.5 : 1,
+        color: theme.vars.palette.maskColor.textSecondary,
+        opacity: 1,
+        ...theme.applyStyles('dark', { opacity: 0.5 }),
     },
     avatar: {
-        background: theme.palette.background.default,
+        background: theme.vars.palette.background.default,
         width: '44px',
         height: '44px',
         '> *': {
@@ -63,7 +64,8 @@ const useStyles = makeStyles()((theme) => ({
     desc: {
         fontSize: 12,
         fontWeight: 400,
-        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
+        ...theme.applyStyles('dark', { color: theme.vars.palette.text.secondary }),
     },
 }))
 

@@ -1,10 +1,9 @@
-import type { CSSProperties } from 'react'
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
-import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, useTheme } from '@mui/material'
+import { Box, styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from '@mui/material'
 
 const mindsBreakPoint = 1221 /** px */
 
-const Container = styled('div')`
+const Container = styled(Box)`
     height: 45px;
     margin-bottom: 10px;
     padding-left: 10px;
@@ -52,15 +51,14 @@ const Icon = styled(ListItemIcon)`
 
 export function ToolboxHintAtMinds(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${mindsBreakPoint}px)`)
-    const theme = useTheme()
-
     return (
         <ToolboxHintUnstyled
-            style={
-                {
-                    '--nav-text-color': theme.palette.mode === 'dark' ? '#fff' : '#43434d',
-                } as CSSProperties
-            }
+            sx={(theme) => ({
+                '--nav-text-color': '#43434d',
+                ...theme.applyStyles('dark', {
+                    '--nav-text-color': '#fff',
+                }),
+            })}
             mini={mini}
             Container={Container}
             ListItemButton={Item}

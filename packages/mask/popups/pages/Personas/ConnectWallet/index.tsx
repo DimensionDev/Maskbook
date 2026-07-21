@@ -20,7 +20,7 @@ import { WalletAvatar } from '../../../components/WalletAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     provider: {
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: 8,
         padding: theme.spacing(1),
         display: 'flex',
@@ -33,21 +33,21 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 4,
     },
     address: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 10,
         lineHeight: '10px',
         display: 'flex',
         alignItems: 'center',
     },
     link: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         height: 10,
     },
     description: {
         marginTop: theme.spacing(1.5),
         fontSize: 12,
         lineHeight: '16px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 

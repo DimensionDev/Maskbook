@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 1.2,
         fontWeight: 700,
         '& > strong': {
-            color: theme.palette.maskColor.highlight,
+            color: theme.vars.palette.maskColor.highlight,
         },
     },
     typing: {

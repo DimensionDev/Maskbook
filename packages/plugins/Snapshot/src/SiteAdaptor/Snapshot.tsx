@@ -9,7 +9,7 @@ import {
     TextOverflowTooltip,
     makeStyles,
     useTabs,
-} from '@masknet/theme'
+ } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -42,16 +42,16 @@ const useStyles = makeStyles()((theme) => {
         tab: {
             whiteSpace: 'nowrap',
             background: 'transparent',
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
             '&:hover': {
                 background: 'transparent',
             },
         },
         tabActive: {
-            background: theme.palette.maskColor.white,
-            color: `${theme.palette.maskColor.publicMain}!important`,
+            background: theme.vars.palette.maskColor.white,
+            color: `${theme.vars.palette.maskColor.publicMain}!important`,
             '&:hover': {
-                background: theme.palette.maskColor.white,
+                background: theme.vars.palette.maskColor.white,
             },
         },
         content: {
@@ -62,15 +62,15 @@ const useStyles = makeStyles()((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            background: theme.palette.maskColor.white,
+            background: theme.vars.palette.maskColor.white,
         },
         active: {
-            color: theme.palette.maskColor.white,
-            backgroundColor: theme.palette.maskColor.success,
+            color: theme.vars.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.success,
         },
         default: {
-            color: theme.palette.maskColor.white,
-            backgroundColor: new Color(theme.palette.maskColor.primary).alpha(0.1).toString(),
+            color: theme.vars.palette.maskColor.white,
+            backgroundColor: new Color(theme.vars.palette.maskColor.primary).alpha(0.1).toString(),
         },
         avatar: {
             boxShadow: '0px 6px 12px rgba(81, 62, 255, 0.2)',
@@ -80,11 +80,11 @@ const useStyles = makeStyles()((theme) => {
         },
         shadowRootTooltip: {},
         tooltip: {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
         },
         arrow: {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     }
 })
@@ -131,7 +131,7 @@ export function Snapshot() {
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography
-                                        color={theme.palette.maskColor.publicMain}
+                                        color={theme.vars.palette.maskColor.publicMain}
                                         sx={{
                                             fontSize: 18,
                                             fontWeight: 'bold',
@@ -143,7 +143,7 @@ export function Snapshot() {
                                         {proposal.space.name}
                                     </Typography>
                                 </TextOverflowTooltip>
-                                <Box sx={{ color: theme.palette.maskColor.publicSecond, display: 'flex' }}>
+                                <Box sx={{ color: theme.vars.palette.maskColor.publicSecond, display: 'flex' }}>
                                     <Typography sx={{ fontSize: 14, paddingRight: 1 }}>by</Typography>
                                     <Typography sx={{ fontSize: 14, fontWeight: '700' }}>
                                         {formatSpaceId(proposal.space.id)}
@@ -158,7 +158,7 @@ export function Snapshot() {
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
-                                    color={theme.palette.maskColor.publicSecond}
+                                    color={theme.vars.palette.maskColor.publicSecond}
                                     sx={{
                                         fontSize: 14,
                                         fontWeight: '700',

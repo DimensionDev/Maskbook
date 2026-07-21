@@ -5,14 +5,15 @@ import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/t
 
 const useStyles = makeStyles()((theme) => ({
     file: {
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(1.5),
         overflow: 'auto',
         ['&:hover']: {
-            background: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
+            ...theme.applyStyles('dark', { background: 'rgba(255, 255, 255, 0.08)' }),
         },
     },
     content: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
     },
     name: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '18px',
         overflow: 'hidden',

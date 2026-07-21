@@ -1,6 +1,5 @@
 import { Icons } from '@masknet/icons'
 import {
-    alpha,
     buttonClasses,
     radioClasses,
     checkboxClasses,
@@ -8,7 +7,6 @@ import {
     menuItemClasses,
     popoverClasses,
     menuClasses,
-    type PaletteMode,
     type ThemeOptions,
     InputBase as MuiInputBase,
     switchClasses,
@@ -19,9 +17,7 @@ import {
     formHelperTextClasses,
     inputAdornmentClasses,
 } from '@mui/material'
-import type { MaskColor } from './colors.js'
-
-type ThemeOverride = (mode: PaletteMode, colors: MaskColor) => ThemeOptions
+import { alpha, MaskColors } from './colors.js'
 
 declare module '@mui/material/Button' {
     interface ButtonPropsVariantOverrides {
@@ -39,8 +35,17 @@ declare module '@mui/material/InputBase' {
     }
 }
 
-// this override extends the mui theme and cannot fit ThemeOptions
-export const Button = (mode: PaletteMode, colors: MaskColor) => ({
+function toCssVariableColors<T>(value: T, path: string[] = []): T {
+    if (typeof value === 'string') return `var(--mui-palette-${path.join('-')})` as T
+    if (value === null || typeof value !== 'object') return value
+
+    return Object.fromEntries(
+        Object.entries(value).map(([key, child]) => [key, toCssVariableColors(child, [...path, key])]),
+    ) as T
+}
+const colors = toCssVariableColors(MaskColors.light)
+
+export const Button = {
     components: {
         MuiButton: {
             defaultProps: {
@@ -675,9 +680,9 @@ export const Button = (mode: PaletteMode, colors: MaskColor) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const Radio: ThemeOverride = (mode, colors) => ({
+export const Radio = {
     components: {
         MuiRadio: {
             defaultProps: {
@@ -705,9 +710,9 @@ export const Radio: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const Checkbox: ThemeOverride = (mode, colors) => ({
+export const Checkbox = {
     components: {
         MuiCheckbox: {
             defaultProps: {
@@ -735,9 +740,9 @@ export const Checkbox: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
+export const InputBase = {
     components: {
         MuiInputBase: {
             defaultProps: {
@@ -893,10 +898,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     // For Select Menu
                     [`& .${popoverClasses.paper}`]: {
                         borderRadius: 16,
-                        boxShadow:
-                            mode === 'dark' ?
-                                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+                        boxShadow: colors.shadow.selectMenu,
                         backgroundColor: colors.maskColor.bottom,
                         backgroundImage: 'unset',
                         [`& .${menuClasses.list}`]: {
@@ -927,9 +929,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const TextField = (mode: PaletteMode, colors: MaskColor) => ({
+export const TextField = {
     components: {
         MuiTextField: {
             defaultProps: {
@@ -964,9 +966,9 @@ export const TextField = (mode: PaletteMode, colors: MaskColor) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const Select: ThemeOverride = (mode, colors) => ({
+export const Select = {
     components: {
         MuiSelect: {
             defaultProps: {
@@ -983,9 +985,9 @@ export const Select: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const Slider: ThemeOverride = (mode, colors) => ({
+export const Slider = {
     components: {
         MuiSlider: {
             styleOverrides: {
@@ -999,9 +1001,9 @@ export const Slider: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const Switch: ThemeOverride = (mode, colors) => ({
+export const Switch = {
     components: {
         MuiSwitch: {
             defaultProps: {
@@ -1056,9 +1058,9 @@ export const Switch: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const Tooltip: ThemeOverride = (mode, colors) => ({
+export const Tooltip = {
     components: {
         MuiTooltip: {
             defaultProps: {
@@ -1073,8 +1075,7 @@ export const Tooltip: ThemeOverride = (mode, colors) => ({
                     lineHeight: '18px',
                     backgroundColor: colors.maskColor.tips,
                     color: colors.maskColor.bottom,
-                    boxShadow:
-                        mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+                    boxShadow: colors.shadow.tooltip,
                     '& > *': {
                         fontSize: 14,
                         lineHeight: '18px',
@@ -1086,9 +1087,9 @@ export const Tooltip: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const Alert: ThemeOverride = (mode, colors) => ({
+export const Alert = {
     components: {
         MuiAlert: {
             defaultProps: {
@@ -1104,25 +1105,39 @@ export const Alert: ThemeOverride = (mode, colors) => ({
                 root: {
                     padding: '4px 12px',
                     backdropFilter: 'blur(10px)',
-                },
-                standardInfo: {
-                    backgroundColor: colors.maskColor.bg,
-                    color: colors.maskColor.main,
-                    [`& .${alertClasses.icon}`]: {
-                        color: colors.maskColor.main,
-                    },
-                },
-                standardWarning: {
-                    backgroundColor: alpha(colors.maskColor.warn, 0.1),
-                    color: colors.maskColor.warn,
-                },
-                standardError: {
-                    backgroundColor: alpha(colors.maskColor.danger, 0.1),
-                    color: colors.maskColor.danger,
-                },
-                standardSuccess: {
-                    backgroundColor: alpha(colors.maskColor.success, 0.1),
-                    color: colors.maskColor.success,
+                    variants: [
+                        {
+                            props: { variant: 'standard', color: 'info' },
+                            style: {
+                                backgroundColor: colors.maskColor.bg,
+                                color: colors.maskColor.main,
+                                [`& .${alertClasses.icon}`]: {
+                                    color: colors.maskColor.main,
+                                },
+                            },
+                        },
+                        {
+                            props: { variant: 'standard', color: 'warning' },
+                            style: {
+                                backgroundColor: alpha(colors.maskColor.warn, 0.1),
+                                color: colors.maskColor.warn,
+                            },
+                        },
+                        {
+                            props: { variant: 'standard', color: 'error' },
+                            style: {
+                                backgroundColor: alpha(colors.maskColor.danger, 0.1),
+                                color: colors.maskColor.danger,
+                            },
+                        },
+                        {
+                            props: { variant: 'standard', color: 'success' },
+                            style: {
+                                backgroundColor: alpha(colors.maskColor.success, 0.1),
+                                color: colors.maskColor.success,
+                            },
+                        },
+                    ],
                 },
                 icon: {
                     padding: '8px 0',
@@ -1133,9 +1148,9 @@ export const Alert: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions
 
-export const LinearProgress: ThemeOverride = (mode, colors) => ({
+export const LinearProgress = {
     components: {
         MuiLinearProgress: {
             styleOverrides: {
@@ -1150,4 +1165,4 @@ export const LinearProgress: ThemeOverride = (mode, colors) => ({
             },
         },
     },
-})
+} satisfies ThemeOptions

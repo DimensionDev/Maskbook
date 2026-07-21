@@ -17,7 +17,7 @@ import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     placeholder: {
         flex: 1,
@@ -26,9 +26,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actions: {
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         padding: theme.spacing(2),
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         display: 'flex',
         columnGap: theme.spacing(2),

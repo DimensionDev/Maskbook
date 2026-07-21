@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     nickname: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         fontWeight: 700,
         fontSize: 18,
         lineHeight: '22px',
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 2,
     },
     address: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         fontSize: 14,
         height: 18,
         fontWeight: 400,
@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '14px',
         height: 14,
         overflow: 'hidden',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         cursor: 'pointer',
         flexShrink: 0,
     },
@@ -169,7 +169,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         </Link>
                         <Icons.ArrowDrop
                             size={14}
-                            color={theme.palette.text.primary}
+                            color={theme.vars.palette.text.primary}
                             onClick={() => {
                                 setWalletMenuOpen((v) => !v)
                             }}

@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1.5),
     },
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         fontSize: 12,
         marginTop: 7,
@@ -82,7 +82,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
                         fileName={file.name}
                         operations={
                             <Button variant="text" disableRipple sx={{ p: 1, minWidth: 'auto' }} onClick={reset}>
-                                <Icons.Clear size={24} color={theme.palette.maskColor.main} />
+                                <Icons.Clear size={24} color={theme.vars.palette.maskColor.main} />
                             </Button>
                         }>
                         <Typography className={classes.desc}>

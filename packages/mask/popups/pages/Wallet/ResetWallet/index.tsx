@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
     },
     content: {
         flexGrow: 1,
@@ -41,16 +41,16 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 16,
         textAlign: 'center',
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     strong: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         fontWeight: 700,
     },
     bottomAction: {
         display: 'flex',
         justifyContent: 'center',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         position: 'absolute',
         backdropFilter: 'blur(8px)',
@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         flex: '1 0 0',
         '&:disabled': {
-            color: theme.palette.maskColor.white,
+            color: theme.vars.palette.maskColor.white,
         },
     },
 }))

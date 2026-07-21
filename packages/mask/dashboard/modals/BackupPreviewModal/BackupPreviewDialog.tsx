@@ -49,8 +49,8 @@ const useStyles = makeStyles()((theme) => ({
             width: 68,
             height: 68,
             borderRadius: '50%',
-            border: `2px solid ${theme.palette.maskColor.main}`,
-            borderTopColor: theme.palette.maskColor.second,
+            border: `2px solid ${theme.vars.palette.maskColor.main}`,
+            borderTopColor: theme.vars.palette.maskColor.second,
             animation: 'spinner 2s linear infinite',
         },
     },
@@ -208,7 +208,9 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         />
                     :   null}
                     {isUpload ?
-                        <Typography color={theme.palette.maskColor.danger} sx={{ fontSize: 14, lineHeight: '18px' }}>
+                        <Typography
+                            color={theme.vars.palette.maskColor.danger}
+                            sx={{ fontSize: 14, lineHeight: '18px' }}>
                             <Trans>
                                 This will overwrite the existing cloud backup with the local data, this cannot be undo.
                             </Trans>
@@ -227,7 +229,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         setBackupWallets,
         hasPassword,
         isUpload,
-        theme.palette.maskColor.danger,
+        theme.vars.palette.maskColor.danger,
         _,
         errors.backupPassword?.message,
         errors.paymentPassword?.message,

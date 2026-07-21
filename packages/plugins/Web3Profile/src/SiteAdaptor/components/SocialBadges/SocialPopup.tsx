@@ -11,19 +11,21 @@ import { Web3BioProfileToFireflyLens } from '../../../utils.js'
 import { useControlSocialPopup } from '../../hooks/useControlSocialPopup.js'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         popup: {
             position: 'absolute',
             zIndex: 99,
             borderRadius: 16,
-            boxShadow:
-                theme.palette.mode === 'light' ?
-                    '0px 4px 30px rgba(0, 0, 0, 0.1)'
-                :   '0px 4px 30px rgba(255, 255, 255, 0.15)',
+            boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            ...theme.applyStyles('dark', {
+                boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)',
+            }),
         },
         list: {
-            backgroundColor: isDark ? '#030303' : theme.palette.common.white,
+            backgroundColor: theme.vars.palette.common.white,
+            ...theme.applyStyles('dark', {
+                backgroundColor: '#030303',
+            }),
             maxWidth: 320,
             // Show up to 6 item
             maxHeight: 244,

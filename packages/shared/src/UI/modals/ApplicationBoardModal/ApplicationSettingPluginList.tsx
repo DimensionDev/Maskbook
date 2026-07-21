@@ -6,7 +6,7 @@ import {
     type Plugin,
 } from '@masknet/plugin-infra/content-script'
 import { PersistentStorages, type PluginID } from '@masknet/shared-base'
-import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
+import { Boundary, ShadowRootTooltip, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import { List, ListItemButton, Typography } from '@mui/material'
 import { Trans } from '@lingui/react/macro'
 
@@ -52,10 +52,9 @@ const useStyles = makeStyles<{
         width: 84,
         height: 56,
         padding: 0,
-        background: theme.palette.maskColor.bottom,
-        boxShadow: `0px 0px 20px ${
-            theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'
-        }`,
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)' }),
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
@@ -82,7 +81,7 @@ const useStyles = makeStyles<{
         height: 238,
     },
     placeholder: {
-        color: getMaskColor(theme).textLight,
+        color: theme.vars.palette.maskColor.textLight,
     },
 }))
 

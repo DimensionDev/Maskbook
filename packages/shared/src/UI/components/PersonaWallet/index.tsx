@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { type PersonaInformation, formatPersonaFingerprint, type Wallet } from '@masknet/shared-base'
-import { MaskColorVar, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Stack, Typography } from '@mui/material'
 import { FormattedAddress } from '../../../index.js'
@@ -10,20 +10,20 @@ const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
         padding: '8px 16px',
         display: 'flex',
         gap: 20,
-        backgroundColor: MaskColorVar.primaryBackground2,
+        backgroundColor: theme.vars.palette.background.primaryBackground2,
         borderRadius: 8,
     },
     nickname: {
         lineHeight: '16px',
         fontWeight: 600,
         fontSize: 14,
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
     },
     finger: {
         lineHeight: '16px',
         fontWeight: 400,
         fontSize: 12,
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
     },
 }))
 

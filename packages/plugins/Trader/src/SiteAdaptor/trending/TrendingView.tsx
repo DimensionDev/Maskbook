@@ -10,8 +10,7 @@ import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext } from '@mui/lab'
-import { Stack, Tab, ThemeProvider } from '@mui/material'
-import { Box, useTheme } from '@mui/system'
+import { Box, Stack, Tab, ThemeProvider, useTheme } from '@mui/material'
 import { first } from 'lodash-es'
 import { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { usePriceStats } from '../../trending/usePriceStats.js'
@@ -36,10 +35,10 @@ const useStyles = makeStyles<{
                 {
                     width: 598,
                     borderRadius: theme.spacing(2),
-                    boxShadow:
-                        theme.palette.mode === 'dark' ?
-                            'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
-                        :   'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
+                    boxShadow: 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
+                    ...theme.applyStyles('dark', {
+                        boxShadow: 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px',
+                    }),
                 }
             :   {
                     width: '100%',
@@ -60,7 +59,7 @@ const useStyles = makeStyles<{
             props.isTokenTagPopper ?
                 {}
             :   {
-                    borderBottom: `solid 1px ${theme.palette.divider}`,
+                    borderBottom: `solid 1px ${theme.vars.palette.divider}`,
                 },
         content:
             props.isTokenTagPopper ?
@@ -274,7 +273,7 @@ export function TrendingView(props: TrendingViewProps) {
             </TabContext>
             <Stack
                 sx={{
-                    backgroundColor: isTokenTagPopper ? theme.palette.maskColor.bottom : 'transparent',
+                    backgroundColor: isTokenTagPopper ? theme.vars.palette.maskColor.bottom : 'transparent',
                     flexGrow: 1,
                     overflow: 'auto',
                     scrollbarWidth: 'none',

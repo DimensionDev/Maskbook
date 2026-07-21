@@ -19,7 +19,7 @@ export function usePriceLineChart(
     },
 ) {
     const theme = useTheme()
-    const colors = theme.palette.maskColor
+    const colors = theme.vars.palette.maskColor
     const startValue = first(data)?.value ?? 0
     const endValue = last(data)?.value ?? 0
     const defaultColor = endValue < startValue ? colors.danger : colors.success

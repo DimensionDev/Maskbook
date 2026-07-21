@@ -41,16 +41,16 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     title: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     tips: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
         marginTop: theme.spacing(2),
     },
     minimum: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         margin: theme.spacing(1, 0),
     },
 }))

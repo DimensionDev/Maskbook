@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ActionButton, makeStyles } from '@masknet/theme'
-import { Button, DialogActions, DialogContent, alpha } from '@mui/material'
+import { alpha, ActionButton, makeStyles } from '@masknet/theme'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-es'
@@ -33,31 +33,31 @@ const useStyles = makeStyles()((theme) => ({
         padding: 16,
         boxSizing: 'border-box',
         alignItems: 'center',
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
+        background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         borderRadius: '0px 0px 12px 12px',
         flex: 1,
         backdropFilter: 'blur(8px)',
     },
 
     cancel: {
-        color: theme.palette.maskColor.main,
-        background: theme.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
+        background: theme.vars.palette.maskColor.thirdMain,
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         height: 40,
         '&:hover': {
-            color: theme.palette.maskColor.main,
-            background: theme.palette.maskColor.thirdMain,
+            color: theme.vars.palette.maskColor.main,
+            background: theme.vars.palette.maskColor.thirdMain,
         },
     },
     share: {
-        color: theme.palette.maskColor.bottom,
-        background: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',

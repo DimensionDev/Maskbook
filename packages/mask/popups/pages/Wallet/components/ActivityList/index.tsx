@@ -24,14 +24,14 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         overflow: 'auto',
     },
     list: {
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         padding: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(1.5),
     },
     day: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '18px',
     },

@@ -13,7 +13,7 @@ export function Footer() {
                             <Typography
                                 sx={{
                                     fontSize: '14px',
-                                    color: (theme) => theme.palette.maskColor.second,
+                                    color: (theme) => theme.vars.palette.maskColor.second,
                                     fontWeight: '700',
                                     marginRight: '4px',
                                 }}>
@@ -22,7 +22,7 @@ export function Footer() {
                             <Typography
                                 sx={{
                                     fontSize: '14px',
-                                    color: (theme) => theme.palette.maskColor.main,
+                                    color: (theme) => theme.vars.palette.maskColor.main,
                                     fontWeight: '700',
                                     marginRight: '12px',
                                 }}>

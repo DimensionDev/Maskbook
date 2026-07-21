@@ -61,7 +61,10 @@ const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
+            borderBottom: '1px solid #eff3f4',
+            ...theme.applyStyles('dark', {
+                borderBottom: '1px solid #2f3336',
+            }),
             '& > h2': {
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
@@ -98,7 +101,10 @@ const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
             },
         },
         dialogBackdropRoot: {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            ...theme.applyStyles('dark', {
+                backgroundColor: 'rgba(110, 118, 125, 0.4)',
+            }),
         },
     }
 })

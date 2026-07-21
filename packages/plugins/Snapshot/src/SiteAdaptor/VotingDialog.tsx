@@ -32,12 +32,12 @@ const useStyles = makeStyles()((theme) => ({
         textDecoration: 'none !important',
     },
     field: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         margin: '0',
     },
     value: {
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     content: {
         padding: 16,
@@ -56,26 +56,26 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(2),
     },
     optionButton: {
-        backgroundColor: theme.palette.maskColor.thirdMain,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
         '&:hover': {
             backgroundColor: 'transparent',
         },
     },
     selectedOption: {
-        backgroundColor: `${theme.palette.maskColor.main} !important`,
-        color: `${theme.palette.maskColor.bottom} !important`,
+        backgroundColor: `${theme.vars.palette.maskColor.main} !important`,
+        color: `${theme.vars.palette.maskColor.bottom} !important`,
     },
     tip: {
         padding: theme.spacing(2),
         borderRadius: 16,
-        border: `1px solid ${theme.palette.maskColor.line}`,
-        color: theme.palette.maskColor.main,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
         '& a': {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             textDecoration: 'underline',
         },
     },

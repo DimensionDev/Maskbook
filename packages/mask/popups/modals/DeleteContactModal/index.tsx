@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { alpha } from '@mui/system'
 import { Typography } from '@mui/material'
 import { buttonClasses } from '@mui/material/Button'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
@@ -17,17 +16,17 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
     },
     secondaryButton: {
-        backgroundColor: theme.palette.maskColor.thirdMain,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
         border: 'none!important',
         ['&:hover']: {
-            background: theme.palette.maskColor.thirdMain,
-            boxShadow: `0px 8px 25px ${alpha(theme.palette.maskColor.thirdMain, 0.1)}`,
+            background: theme.vars.palette.maskColor.thirdMain,
+            boxShadow: `0px 8px 25px ${alpha(theme.vars.palette.maskColor.thirdMain, 0.1)}`,
             border: 'none',
         },
         [`&.${buttonClasses.disabled}`]: {
-            color: theme.palette.maskColor.main,
-            background: theme.palette.maskColor.thirdMain,
+            color: theme.vars.palette.maskColor.main,
+            background: theme.vars.palette.maskColor.thirdMain,
             opacity: 0.4,
         },
     },
@@ -42,13 +41,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     address: {
         textAlign: 'center',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: 12,
         fontSize: 16,
     },
     name: {
         textAlign: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginTop: 12,
         fontSize: 18,
         fontWeight: 700,

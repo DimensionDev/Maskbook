@@ -22,12 +22,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         borderRadius: '99px',
-        backgroundColor: theme.palette.maskColor.dark,
-        color: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.white,
         marginTop: 'auto',
         ':hover': {
-            color: theme.palette.maskColor.white,
-            backgroundColor: theme.palette.maskColor.dark,
+            color: theme.vars.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.dark,
         },
     },
 }))

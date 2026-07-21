@@ -23,9 +23,9 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     box: {
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         padding: theme.spacing(1.5),
         display: 'flex',
@@ -176,7 +176,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                         <Typography className={classes.fileName}>{fileName}</Typography>
                         <LinearProgress variant="determinate" value={progress} sx={{ my: 0.5 }} />
                         <Typography
-                            color={theme.palette.maskColor.third}
+                            color={theme.vars.palette.maskColor.third}
                             sx={{ display: 'flex', gap: 0.5, fontSize: 12, fontWeight: 700, lineHeight: '16px' }}>
                             {progress === 100 ?
                                 <>
@@ -187,7 +187,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                                             fontWeight: 700,
                                             lineHeight: '16px',
                                         }}
-                                        color={theme.palette.maskColor.main}>
+                                        color={theme.vars.palette.maskColor.main}>
                                         {formatFileSize(Number(size))}
                                     </Typography>
                                     <Typography
@@ -196,7 +196,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                                             fontSize: 12,
                                             lineHeight: '16px',
                                         }}
-                                        color={theme.palette.maskColor.third}>
+                                        color={theme.vars.palette.maskColor.third}>
                                         {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
                                     </Typography>
                                 </>

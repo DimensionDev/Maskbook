@@ -1,6 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useState } from 'react'
-import { Box, useTheme } from '@mui/material'
+import { Box } from '@mui/material'
+import { useColorScheme } from '@mui/material/styles'
 
 const MASK_DARK_FALLBACK = new URL('../assets/mask.dark.svg', import.meta.url).href
 const MASK_LIGHT_FALLBACK = new URL('../assets/mask.light.svg', import.meta.url).href
@@ -13,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '8px',
         justifyContent: 'center',
         alignItems: 'center',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         position: 'relative',
     },
     poster: {
@@ -39,16 +40,12 @@ export function ImageLoader({ src }: ImageLoaderProps) {
     const [loaded, setLoaded] = useState(false)
     const [failed, setFailed] = useState(false)
     const { classes } = useStyles()
-    const theme = useTheme()
+    const { mode } = useColorScheme()
 
     return (
         <div className={classes.container}>
             {failed ?
-                <img
-                    src={theme.palette.mode === 'light' ? MASK_LIGHT_FALLBACK : MASK_DARK_FALLBACK}
-                    width={60}
-                    height={60}
-                />
+                <img src={mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK} width={60} height={60} />
             :   <img
                     src={src}
                     className={classes.poster}

@@ -5,15 +5,15 @@ import { Grid, TextField, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
-        backgroundColor: theme.palette.maskColor.input,
+        backgroundColor: theme.vars.palette.maskColor.input,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textAlign: 'center',
         fontSize: 14,
     },
     end: {
         width: 22,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: 14,
     },
 }))

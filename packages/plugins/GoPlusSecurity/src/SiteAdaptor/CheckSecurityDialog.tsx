@@ -30,10 +30,10 @@ const useStyles = makeStyles()((theme) => ({
     footer: {
         height: 56,
         boxSizing: 'border-box',
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         padding: '8px',
         justifyContent: 'flex-end',
     },

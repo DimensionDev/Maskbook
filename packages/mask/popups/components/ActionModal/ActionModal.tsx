@@ -12,13 +12,13 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: '80vh',
         padding: 18,
         borderRadius: theme.spacing(3, 3, 0, 0),
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
     },
     closeButton: {
         position: 'absolute',
         width: 24,
         height: 24,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         minWidth: 'auto',
         right: 18,
         top: 18,
@@ -45,9 +45,10 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         [`& .${backdropClasses.root}`]: {
             background:
-                theme.palette.mode === 'dark' ?
-                    'rgba(255, 255, 255, 0.10)'
-                :   'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
+                'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
+            ...theme.applyStyles('dark', {
+                background: 'rgba(255, 255, 255, 0.10)',
+            }),
             backdropFilter: 'blur(5px)',
         },
     },

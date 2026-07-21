@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 16,
     },
     text: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         lineHeight: '18px',
         fontSize: 14,
         fontWeight: 700,
@@ -34,7 +34,7 @@ export function DisablePermit() {
                     <Trans>Disable Permit</Trans>
                 </Typography>
                 <Icons.Questions
-                    color={theme.palette.maskColor.second}
+                    color={theme.vars.palette.maskColor.second}
                     size={20}
                     onClick={() => {
                         ConfirmModal.openAndWaitForClose({

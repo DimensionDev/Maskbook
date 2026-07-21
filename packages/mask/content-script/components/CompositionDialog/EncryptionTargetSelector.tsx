@@ -18,17 +18,17 @@ const useStyles = makeStyles()((theme) => ({
     optionTitle: {
         lineHeight: '18px',
         fontSize: 14,
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         marginRight: 12,
     },
     divider: {
         width: '100%',
         height: 1,
-        background: theme.palette.divider,
+        background: theme.vars.palette.divider,
         margin: '8px 0',
     },
     mainTitle: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         fontWeight: 700,
     },
     flex: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     create: {
         cursor: 'pointer',
         fontWeight: 700,
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
         textAlign: 'right',
     },
     rightIcon: {

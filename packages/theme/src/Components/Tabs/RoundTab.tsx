@@ -8,17 +8,17 @@ const RoundTabWrap = styled(Button, {
     paddingRight: theme.spacing(2),
     height: 34,
     lineHeight: '16px',
-    background: activated ? theme.palette.maskColor.bottom : 'transparent',
+    background: activated ? theme.vars.palette.maskColor.bottom : 'transparent',
     borderRadius: `${theme.spacing(2)} !important`,
-    color: activated ? theme.palette.text.primary : theme.palette.text.secondary,
+    color: activated ? theme.vars.palette.text.primary : theme.vars.palette.text.secondary,
     fontSize: 14,
     fontWeight: 'bold',
     boxShadow: activated ? ' 0px 2px 5px 1px rgba(0, 0, 0, 0.05);' : 'none',
 
     '&:hover': {
         boxShadow: activated ? ' 0px 2px 5px 1px rgba(0, 0, 0, 0.05);' : 'none',
-        color: theme.palette.text.primary,
-        background: activated ? theme.palette.maskColor.bottom : 'transparent',
+        color: theme.vars.palette.text.primary,
+        background: activated ? theme.vars.palette.maskColor.bottom : 'transparent',
     },
 }))
 

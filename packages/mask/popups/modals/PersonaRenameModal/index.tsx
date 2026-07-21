@@ -42,7 +42,7 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
                     <Trans>Confirm</Trans>
                 </ActionButton>
             }>
-            <Typography sx={{ fontWeight: 700, textAlign: 'center' }} color={theme.palette.maskColor.third}>
+            <Typography sx={{ fontWeight: 700, textAlign: 'center' }} color={theme.vars.palette.maskColor.third}>
                 <Trans>Persona name must between 1 to 24 characters.</Trans>
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'center', mx: 0.5, mb: 0.5 }}>
@@ -69,7 +69,7 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
                                             setError('')
                                         }}
                                         size={18}
-                                        color={error ? theme.palette.maskColor.danger : undefined}
+                                        color={error ? theme.vars.palette.maskColor.danger : undefined}
                                     />
                                 :   null,
                             disableUnderline: true,

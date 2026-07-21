@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     setup: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         textDecoration: 'none',
     },
@@ -37,20 +37,21 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     description: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
     },
     tabContainer: {
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         marginTop: theme.spacing(3),
         borderRadius: theme.spacing(1, 1, 0, 0),
         overflow: 'hidden',
     },
     tabList: {
         background:
-            theme.palette.mode === 'light' ?
-                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
-            :   'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%)',
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
+        ...theme.applyStyles('dark', {
+            background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%)',
+        }),
         padding: theme.spacing('14px', 2, 0),
     },
     tab: {

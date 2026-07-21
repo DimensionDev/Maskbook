@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: 4,
         verticalAlign: 'bottom',
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
     },
     icon: {
         width: 18,

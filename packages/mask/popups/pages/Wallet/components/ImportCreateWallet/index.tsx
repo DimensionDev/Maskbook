@@ -4,9 +4,9 @@ import { Icons } from '@masknet/icons'
 import { timeout } from '@masknet/kit'
 import { LoadingStatus } from '@masknet/shared'
 import { DashboardRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles } from '@masknet/theme'
 import { useQueryClient } from '@tanstack/react-query'
-import { alpha, Box, Typography, type BoxProps } from '@mui/material'
+import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'absolute',
             inset: 0,
             margin: 'auto',
-            background: alpha(theme.palette.maskColor.bottom, 0.8),
+            background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
             backdropFilter: 'blur(10px)',
             padding: theme.spacing(4),
         },
@@ -35,26 +35,26 @@ const useStyles = makeStyles()((theme) => {
             padding: 12,
             alignItems: 'center',
             gap: 8,
-            background: theme.palette.maskColor.bottom,
-            border: `1px solid ${theme.palette.maskColor.line}`,
+            background: theme.vars.palette.maskColor.bottom,
+            border: `1px solid ${theme.vars.palette.maskColor.line}`,
             borderRadius: 8,
             cursor: 'pointer',
         },
         subTitle: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: 12,
             fontWeight: 700,
         },
         description: {
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
             fontSize: 12,
             fontWeight: 400,
         },
         mnemonicIcon: {
-            background: theme.palette.maskColor.success,
+            background: theme.vars.palette.maskColor.success,
         },
         walletIcon: {
-            background: theme.palette.maskColor.primary,
+            background: theme.vars.palette.maskColor.primary,
         },
         iconWrapper: {
             display: 'flex',
@@ -179,7 +179,7 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
                         boxShadow: '0 6px 12px 0 rgba(28, 104, 243, 0.20)',
                         backdropFilter: 'blur(8px)',
                     }}>
-                    <Icons.Wallet size={20} color={theme.palette.maskColor.white} />
+                    <Icons.Wallet size={20} color={theme.vars.palette.maskColor.white} />
                 </div>
                 <div>
                     <Typography className={classes.subTitle}>
@@ -198,7 +198,7 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
                         boxShadow: '0 6px 12px 0 rgba(61, 194, 51, 0.20)',
                         backdropFilter: 'blur(8px)',
                     }}>
-                    <Icons.Mnemonic size={20} color={theme.palette.maskColor.white} />
+                    <Icons.Mnemonic size={20} color={theme.vars.palette.maskColor.white} />
                 </div>
                 <div>
                     <Typography className={classes.subTitle}>
@@ -213,8 +213,8 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
                 <Box className={classes.mask}>
                     {oauthTimeout ?
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <Icons.Time size={32} color={theme.palette.maskColor.main} />
-                            <Typography color={theme.palette.maskColor.second} sx={{ fontWeight: 400, my: 1.5 }}>
+                            <Icons.Time size={32} color={theme.vars.palette.maskColor.main} />
+                            <Typography color={theme.vars.palette.maskColor.second} sx={{ fontWeight: 400, my: 1.5 }}>
                                 <Trans>Your X account authorization has timed out. Please try again.</Trans>
                             </Typography>
                             <ActionButton fullWidth onClick={createPrivyWallet}>

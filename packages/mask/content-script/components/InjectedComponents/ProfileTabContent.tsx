@@ -57,7 +57,7 @@ import { SearchResultInspector } from './SearchResultInspector.js'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: Sniffings.is_facebook_page ? 876 : 'auto',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     container: {
         background:
@@ -97,7 +97,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
     },
     gearIcon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
     currentAddress: {
         fontSize: '18px',
@@ -106,11 +106,11 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
     mainLinkIcon: {
         margin: '0px 2px',
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.vars.palette.maskColor.secondaryDark,
     },
     reload: {
         borderRadius: 20,
@@ -326,7 +326,7 @@ function Content(props: ProfileTabContentProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <LoadingStatus iconSize={24} color={theme.palette.maskColor.main}>
+                        <LoadingStatus iconSize={24} color={theme.vars.palette.maskColor.main}>
                             <Trans>Loading account information...</Trans>
                         </LoadingStatus>
                     </PluginCardFrameMini>
@@ -460,7 +460,7 @@ function Content(props: ProfileTabContentProps) {
                                     fontSize: '14px',
                                     fontWeight: 700,
                                     marginRight: '5px',
-                                    color: (theme) => theme.palette.maskColor.secondaryDark,
+                                    color: (theme) => theme.vars.palette.maskColor.secondaryDark,
                                 }}>
                                 Powered by
                             </Typography>
@@ -469,7 +469,7 @@ function Content(props: ProfileTabContentProps) {
                                     fontSize: '14px',
                                     fontWeight: 700,
                                     marginRight: '4px',
-                                    color: (theme) => theme.palette.maskColor.dark,
+                                    color: (theme) => theme.vars.palette.maskColor.dark,
                                 }}>
                                 Mask Network
                             </Typography>

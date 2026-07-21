@@ -1,6 +1,6 @@
-import { makeStyles, LoadingBase } from '@masknet/theme'
+import { alpha, makeStyles, LoadingBase  } from '@masknet/theme'
 import { memo } from 'react'
-import { alpha, Box, Link, Typography } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { CopyButton, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Trans } from '@lingui/react/macro'
@@ -19,12 +19,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         columnGap: 4,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '18px',
     },
     address: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
         display: 'flex',
         alignItems: 'center',
@@ -36,15 +36,15 @@ const useStyles = makeStyles()((theme) => ({
         gap: 2,
         borderRadius: 2,
         padding: '2px 4px',
-        backgroundColor: alpha(theme.palette.maskColor.warn, 0.1),
-        color: theme.palette.maskColor.warn,
+        backgroundColor: alpha(theme.vars.palette.maskColor.warn, 0.1),
+        color: theme.vars.palette.maskColor.warn,
         lineHeight: '18px',
     },
     progress: {
-        color: theme.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.warn,
     },
     linkIcon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         cursor: 'pointer',
         height: 14,
     },

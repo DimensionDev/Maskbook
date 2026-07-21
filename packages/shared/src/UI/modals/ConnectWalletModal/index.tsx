@@ -44,12 +44,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     retryButton: {
         fontSize: 12,
-        backgroundColor: theme.palette.maskColor.publicMain,
-        color: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.publicMain,
+        color: theme.vars.palette.maskColor.white,
         marginTop: theme.spacing(1.5),
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
         },
     },
 }))

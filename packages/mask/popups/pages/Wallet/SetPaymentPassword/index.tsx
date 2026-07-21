@@ -30,7 +30,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         display: 'flex',
         flexGrow: 1,
         flexDirection: 'column',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         paddingBottom: hasNav ? 72 : undefined,
     },
     content: {
@@ -58,7 +58,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         gap: 8,
         marginBottom: 12,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
         '&:last-child': {
             marginBottom: '0 !important',
@@ -74,13 +74,13 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     subTitle: {
         display: 'flex',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 700,
     },
     description: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontWeight: 400,
     },
     setPasswordButtonWrapper: {
@@ -92,7 +92,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     bottomAction: {
         display: 'flex',
         justifyContent: 'center',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         marginTop: 'auto',
         backdropFilter: 'blur(8px)',
@@ -113,7 +113,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         width: '100%',
     },
     strong: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     walletItemList: {
         height: 240,
@@ -156,7 +156,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                             width: 16,
                             height: 16,
                         }}>
-                        <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
+                        <Icons.LinkOut size={16} color={theme.vars.palette.maskColor.main} />
                     </Link>
                 </Typography>
                 <ProgressiveText
@@ -279,7 +279,7 @@ export const Component = memo(function SetPaymentPassword() {
                             </div>
                             {errorMsg && !isValid ?
                                 <Typography
-                                    color={theme.palette.maskColor.danger}
+                                    color={theme.vars.palette.maskColor.danger}
                                     sx={{ fontSize: 14, marginTop: '12px' }}>
                                     {errorMsg}
                                 </Typography>
@@ -288,7 +288,7 @@ export const Component = memo(function SetPaymentPassword() {
                             <button type="submit" hidden />
                         </form>
                         <Typography
-                            color={theme.palette.maskColor.third}
+                            color={theme.vars.palette.maskColor.third}
                             sx={{
                                 fontSize: 14,
                                 textAlign: 'center',
@@ -298,7 +298,7 @@ export const Component = memo(function SetPaymentPassword() {
                         </Typography>
 
                         <Typography
-                            color={theme.palette.maskColor.third}
+                            color={theme.vars.palette.maskColor.third}
                             sx={{
                                 fontSize: 14,
                                 textAlign: 'center',

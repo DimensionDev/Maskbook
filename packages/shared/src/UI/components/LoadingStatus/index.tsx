@@ -11,10 +11,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     icon: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     text: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 400,
         marginTop: theme.spacing(1.5),

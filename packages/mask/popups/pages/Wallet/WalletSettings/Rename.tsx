@@ -33,14 +33,14 @@ export const Rename = function Rename() {
                 })
             }>
             <Box className={classes.itemBox}>
-                <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />
+                <Icons.Edit2 size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Rename</Trans>
                 </Typography>
             </Box>
             <Box className={classes.itemBox}>
                 <Typography className={classes.itemText}>{walletName}</Typography>
-                <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+                <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>
     )

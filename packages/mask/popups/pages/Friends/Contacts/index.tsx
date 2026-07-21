@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         whiteSpace: 'nowrap',
     },
     cardContainer: {

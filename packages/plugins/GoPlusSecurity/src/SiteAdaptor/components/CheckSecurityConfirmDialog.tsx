@@ -17,11 +17,11 @@ const useStyles = makeStyles()((theme) => ({
     intro: {
         fontSize: '14px',
         marginTop: '24px',
-        color: theme.palette.grey[700],
+        color: theme.vars.palette.grey[700],
     },
     confirmButton: {
-        backgroundColor: `${theme.palette.maskColor.warn} !important`,
-        color: theme.palette.maskColor.white,
+        backgroundColor: `${theme.vars.palette.maskColor.warn} !important`,
+        color: theme.vars.palette.maskColor.white,
         borderRadius: '99px',
     },
 }))

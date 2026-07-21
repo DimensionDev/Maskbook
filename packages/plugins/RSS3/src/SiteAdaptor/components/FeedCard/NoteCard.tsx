@@ -19,7 +19,7 @@ const useStyles = makeStyles<
     title: {
         fontWeight: 700,
         marginTop: theme.spacing(1),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     info: {},
     center: {
@@ -43,14 +43,14 @@ const useStyles = makeStyles<
         },
     },
     playButton: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         width: 64,
         height: 64,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         [`& + .${refs.info}`]: {
             marginLeft: theme.spacing(1.5),
         },
@@ -70,7 +70,7 @@ const useStyles = makeStyles<
     content: {
         marginTop: theme.spacing(1),
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         lineHeight: '18px',
         maxHeight: 80,
         overflow: 'hidden',

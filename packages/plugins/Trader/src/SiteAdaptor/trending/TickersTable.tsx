@@ -36,7 +36,7 @@ const useStyles = makeStyles<{ themeMode?: 'dim' | 'dark' | 'light'; isPopper?: 
         cell: {
             paddingLeft: theme.spacing(0.5),
             paddingRight: theme.spacing(0.5),
-            background: themeMode === 'dim' && !isPopper ? '#15202b' : theme.palette.maskColor.bottom,
+            background: themeMode === 'dim' && !isPopper ? '#15202b' : theme.vars.palette.maskColor.bottom,
             fontSize: 12,
             fontWeight: 700,
             whiteSpace: 'nowrap',
@@ -120,7 +120,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
                         arrow>
                         <Box className={classes.pair}>
                             <Link
-                                sx={{ color: (theme) => theme.palette.maskColor?.primary }}
+                                sx={{ color: (theme) => theme.vars.palette.maskColor?.primary }}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 href={ticker.trade_url}>

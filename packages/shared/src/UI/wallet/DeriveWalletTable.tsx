@@ -26,7 +26,7 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
-        backgroundColor: theme.palette.maskColor.publicBg,
+        backgroundColor: theme.vars.palette.maskColor.publicBg,
         padding: '14px 0',
         borderBottom: 'none',
     },
@@ -36,15 +36,15 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         marginLeft: 6,
         marginRight: 8,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     second: {
         fontSize: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     third: {
         fontSize: 12,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
     symbol: {
         marginLeft: 8,
@@ -55,11 +55,11 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateY(-2px)',
     },
     icon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         cursor: 'pointer',
     },
     link: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginLeft: 8,
         cursor: 'pointer',
     },
@@ -85,11 +85,11 @@ const useStyles = makeStyles()((theme) => ({
     tableRowWithHoverEffect: {
         '&:hover': {
             borderRadius: 8,
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
         },
     },
     colorPrimary: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 
@@ -217,19 +217,19 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                 <Checkbox
                     disabled={added}
                     checked={selected || added}
-                    icon={<Icons.CheckboxNo size={16} color={theme.palette.maskColor.secondaryLine} />}
+                    icon={<Icons.CheckboxNo size={16} color={theme.vars.palette.maskColor.secondaryLine} />}
                     checkedIcon={<Icons.Checkbox size={16} />}
                     sx={{
-                        color: theme.palette.maskColor.primary,
+                        color: theme.vars.palette.maskColor.primary,
                         padding: 0,
                         width: 16,
                         height: 16,
                         borderRadius: 1,
                         [`&.${checkboxClasses.checked}`]: {
-                            color: theme.palette.maskColor.primary,
+                            color: theme.vars.palette.maskColor.primary,
                         },
                         [`&.${checkboxClasses.disabled}`]: {
-                            color: `${theme.palette.maskColor.secondaryMain}!important`,
+                            color: `${theme.vars.palette.maskColor.secondaryMain}!important`,
                         },
                     }}
                     onChange={(e) => onCheck(e.target.checked)}

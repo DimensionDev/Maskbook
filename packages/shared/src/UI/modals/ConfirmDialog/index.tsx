@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     content: {
         display: 'flex',
@@ -34,14 +34,14 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0, 2),
         lineHeight: '20px',
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         hyphens: 'auto',
     },
     desc: {
         flexGrow: 1,
         fontSize: 14,
         textAlign: 'center',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginBottom: theme.spacing(1),
     },
     buttonGroup: {

@@ -4,7 +4,7 @@ import { Days } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ columns: number }>()((theme, { columns }) => ({
     container: {
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         borderRadius: 28,
         padding: theme.spacing(0.5),
         display: 'grid',
@@ -12,7 +12,7 @@ const useStyles = makeStyles<{ columns: number }>()((theme, { columns }) => ({
     },
     active: {
         boxShadow: '0px 2px 5px 1px rgba(0, 0, 0, 0.05)',
-        background: theme.palette.background.paper,
+        background: theme.vars.palette.background.paper,
         fontWeight: 700,
     },
     link: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles<{ columns: number }>()((theme, { columns }) => ({
         flexShrink: 0,
         borderRadius: 18,
         textAlign: 'center',
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         textDecoration: 'none !important',
     },
 }))

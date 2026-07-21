@@ -26,7 +26,7 @@ export const WalletSettingsEntry = memo(function WalletSettingsEntry() {
     return (
         <>
             <Stack sx={{ flex: 1 }}>
-                <Typography sx={{ fontWeight: 400, fontSize: 14 }} color={theme.palette.maskColor.second}>
+                <Typography sx={{ fontWeight: 400, fontSize: 14 }} color={theme.vars.palette.maskColor.second}>
                     <Trans>Please select the wallet to activate the function after saving the settings.</Trans>
                 </Typography>
             </Stack>

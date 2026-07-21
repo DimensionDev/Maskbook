@@ -1,7 +1,7 @@
 import { memo, type PropsWithChildren, useCallback, useMemo } from 'react'
-import { alpha, Box, Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { alpha, makeStyles  } from '@masknet/theme'
 import {
     useNetworkContext,
     useProviderDescriptor,
@@ -28,11 +28,11 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'content-box',
         display: 'flex',
         backgroundColor:
-            Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 0px 20px rgba(255, 255, 255, 0.12)'
-            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            Sniffings.is_dashboard_page ?
+                theme.vars.palette.background.mainBackground
+            :   alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)' }),
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',

@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'break-all',
     },
     label: {
-        color: theme.palette.primary.main,
+        color: theme.vars.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
@@ -72,9 +72,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     selected: {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.vars.palette.primary.main,
         '& > *': {
-            color: `${theme.palette.primary.contrastText}!important`,
+            color: `${theme.vars.palette.primary.contrastText}!important`,
         },
     },
     button: {

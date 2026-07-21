@@ -8,12 +8,12 @@ import { ProposeAction } from '../FeedActions/ProposeAction.js'
 const useStyles = makeStyles()((theme) => ({
     title: {
         marginTop: theme.spacing(1),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     content: {
         marginTop: theme.spacing(1),
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         lineHeight: '18px',
         marginLeft: theme.spacing(1.5),
         maxHeight: 80,

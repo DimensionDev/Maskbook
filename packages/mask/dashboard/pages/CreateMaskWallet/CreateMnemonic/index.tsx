@@ -6,14 +6,14 @@ import { toBlob } from 'html-to-image'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { generateNewWalletName } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Alert, Box, Button, Stack, Typography, alpha, useTheme } from '@mui/material'
+import { Alert, Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import Services from '#services'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -29,12 +29,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 30,
         margin: '12px 0',
         lineHeight: '120%',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tips: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     refresh: {
         display: 'flex',
@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         float: 'right',
         cursor: 'pointer',
         fontSize: 12,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'center',
         alignItems: 'center',
         gap: '4px',
@@ -60,12 +60,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         cursor: 'pointer',
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     bold: {
         fontWeight: 700,
@@ -73,8 +73,8 @@ const useStyles = makeStyles()((theme) => ({
     alert: {
         marginTop: 24,
         padding: 12,
-        color: theme.palette.maskColor.warn,
-        background: alpha(theme.palette.maskColor.warn, 0.1),
+        color: theme.vars.palette.maskColor.warn,
+        background: alpha(theme.vars.palette.maskColor.warn, 0.1),
         backdropFilter: 'blur(5px)',
     },
     storeWords: {
@@ -91,7 +91,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: '8px',
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
     },
     buttonGroup: {
         display: 'flex',
@@ -107,7 +107,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: '12px',
         alignSelf: 'stretch',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: '12px',
     },
     puzzleWordList: {
@@ -121,7 +121,7 @@ const useStyles = makeStyles()((theme) => ({
     puzzleWordIndex: {
         display: 'flex',
         fontSize: 14,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         justifyContent: 'center',
         alignItems: 'center',
         width: 36,
@@ -152,14 +152,14 @@ const useStyles = makeStyles()((theme) => ({
     checkIcon: {
         width: 20,
         height: 20,
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
     },
     emptyCheckbox: {
-        border: `2px solid ${theme.palette.maskColor.secondaryLine}`,
+        border: `2px solid ${theme.vars.palette.maskColor.secondaryLine}`,
         background: 'transparent',
     },
     verificationFail: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         fontSize: 14,
         fontWeight: 400,
     },
@@ -412,11 +412,11 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
             </div>
             <div className={classes.storeWords}>
                 <div className={classes.iconBox} onClick={handleDownload}>
-                    <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
+                    <Icons.Download2 color={theme.vars.palette.maskColor.main} size={18} />
                 </div>
                 <CopyButton
                     classes={{ root: classes.iconBox }}
-                    color={theme.palette.maskColor.main}
+                    color={theme.vars.palette.maskColor.main}
                     size={18}
                     text={words.join(' ')}
                     successText={<Trans>The mnemonic word has been copied, please keep it in a safe place.</Trans>}

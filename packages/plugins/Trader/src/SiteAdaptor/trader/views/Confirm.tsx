@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
     },
     pair: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         borderRadius: 12,
         padding: theme.spacing(1.5),
     },
@@ -87,14 +87,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     network: {
         fontSize: 13,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
     },
     toToken: {
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
     },
     infoList: {
         display: 'flex',
@@ -105,14 +105,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '100%',
         alignItems: 'flex-start',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
         fontSize: 14,
         display: 'flex',
         gap: theme.spacing(0.5),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         alignItems: 'center',
         flexGrow: 1,
         marginRight: 'auto',
@@ -130,12 +130,12 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'right',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     text: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     rotate: {
         transform: 'rotate(180deg)',
@@ -145,16 +145,16 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'monospace',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         overflow: 'auto',
         scrollbarWidth: 'none',
     },
     footer: {
         flexShrink: 0,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
     },
     toastLink: {
         display: 'flex',
@@ -229,7 +229,7 @@ export const Confirm = memo(function Confirm() {
                 1 {baseToken.tokenSymbol} ≈ {formatCompact(rate.toNumber())} {targetToken.tokenSymbol}
                 <Icons.Cached
                     size={16}
-                    color={theme.palette.maskColor.main}
+                    color={theme.vars.palette.maskColor.main}
                     onClick={() => setForwardCompare((v) => !v)}
                 />
             </>

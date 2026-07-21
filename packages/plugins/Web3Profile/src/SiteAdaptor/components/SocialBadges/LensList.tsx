@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => {
             marginBottom: 6,
             borderRadius: 4,
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.bg,
+                backgroundColor: theme.vars.palette.maskColor.bg,
             },
             '&:last-of-type': {
                 marginBottom: 0,
@@ -42,14 +42,14 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: '50%',
         },
         badge: {
-            border: `1px solid ${theme.palette.maskColor.bg}`,
+            border: `1px solid ${theme.vars.palette.maskColor.bg}`,
             borderRadius: '50%',
             position: 'absolute',
             right: -3,
             bottom: -3,
         },
         name: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontWeight: 400,
             marginLeft: theme.spacing(1),
             marginRight: theme.spacing(1),
@@ -64,12 +64,12 @@ const useStyles = makeStyles()((theme) => {
             minWidth: 64,
             padding: theme.spacing(1, 1.5),
             backgroundColor: '#ABFE2C',
-            color: theme.palette.common.black,
+            color: theme.vars.palette.common.black,
             borderRadius: 99,
             fontSize: '12px',
             '&:hover': {
                 backgroundColor: '#ABFE2C',
-                color: theme.palette.common.black,
+                color: theme.vars.palette.common.black,
             },
         },
     }

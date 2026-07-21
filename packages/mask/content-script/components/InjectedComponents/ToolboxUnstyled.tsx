@@ -11,6 +11,8 @@ import {
     ListItemText as MuiListItemText,
     Box,
     useTheme,
+    type SxProps,
+    type Theme,
 } from '@mui/material'
 import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -45,6 +47,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface ToolboxHintProps extends HTMLProps<HTMLDivElement> {
+    sx?: SxProps<Theme>
     Container?: React.ComponentType<React.PropsWithChildren>
     ListItemButton?: React.ComponentType<Pick<ListItemButtonProps, 'onClick' | 'children'>>
     ListItemText?: React.ComponentType<Pick<ListItemTextProps, 'primary'>>
@@ -131,7 +134,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                 size={iconSize}
                                 badgeSize={badgeSize}
                                 mainIcon={provider.icon}
-                                badgeIconBorderColor={theme.palette.background.paper}
+                                badgeIconBorderColor={theme.vars.palette.background.paper}
                             />
                         :   <Icons.Wallet size={iconSize} />}
                     </ListItemIcon>

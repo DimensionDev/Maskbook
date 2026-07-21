@@ -10,19 +10,19 @@ interface ActionButtonProps extends ButtonProps {
 const useStyles = makeStyles()((theme) => ({
     // eslint-disable-next-line tss-unused-classes/unused-classes
     root: {
-        backgroundColor: theme.palette.maskColor.main,
-        color: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
         fontWeight: 700,
         fontSize: 16,
         lineHeight: '20px',
         ['&:hover']: {
-            backgroundColor: theme.palette.maskColor.main,
+            backgroundColor: theme.vars.palette.maskColor.main,
             boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)',
         },
         [`&.${buttonClasses.disabled}`]: {
-            background: theme.palette.maskColor.primaryMain,
+            background: theme.vars.palette.maskColor.primaryMain,
             opacity: 0.6,
-            color: theme.palette.maskColor.bottom,
+            color: theme.vars.palette.maskColor.bottom,
         },
     },
 }))

@@ -34,7 +34,7 @@ import type { ERC721Abi } from '@masknet/web3-contracts/types/ERC721.js'
 
 const useStyles = makeStyles()((theme) => ({
     info: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
         borderRadius: 8,
         padding: theme.spacing(1.5),
     },
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     addressTitle: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     amount: {
         display: 'flex',
@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     gasFeeTitle: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 

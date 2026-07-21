@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useWeb3Utils, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import {
     isSameAddress,
     type RecentTransactionComputed,
@@ -21,15 +21,15 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         borderRadius: 8,
         overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.vars.palette.background.paper,
         padding: 0,
     },
     listItem: {
         height: 52,
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.vars.palette.background.paper,
         padding: theme.spacing(1, 1),
         '&:nth-of-type(even)': {
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.vars.palette.background.default,
         },
     },
     transaction: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         boxSizing: 'border-box',
     },
     linkText: {
@@ -60,13 +60,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         // TODO: replace with theme color
-        color: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
+        color: '#07101B',
+        ...theme.applyStyles('dark', { color: '#F5F5F5' }),
         width: 17.5,
         height: 17.5,
         marginLeft: theme.spacing(0.5),
     },
     clear: {
-        color: MaskColorVar.blue,
+        color: theme.vars.palette.maskColor.primary,
         cursor: 'pointer',
     },
 }))
@@ -130,7 +131,7 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
                         sx={{ fontWeight: 500 }}>
                         {formatted}
                     </Typography>
-                    <Typography className={classes.timestamp} variant="body1" color={theme.palette.text.secondary}>
+                    <Typography className={classes.timestamp} variant="body1" color={theme.vars.palette.text.secondary}>
                         {format(tx.createdAt, 'yyyy.MM.dd HH:mm')}
                     </Typography>
                 </Stack>

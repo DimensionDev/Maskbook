@@ -19,6 +19,7 @@ import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3
 import { TokenType, formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
 import { type ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
+import { useColorScheme } from '@mui/material/styles'
 import React, { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
@@ -50,13 +51,13 @@ const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valu
         label: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             textTransform: 'capitalize',
         },
         value: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             marginTop: 2,
             display: 'flex',
             alignItems: 'center',
@@ -67,16 +68,15 @@ const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valu
             margin: theme.spacing(2, 'auto', 0),
         },
         info: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             borderRadius: '20px 20px 0 0',
             padding: theme.spacing(2),
-            boxShadow: theme.palette.maskColor.bottomBg,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
             backdropFilter: 'blur(8px)',
         },
     }
 })
 const usePageStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         page: {
             position: 'relative',
@@ -114,9 +114,11 @@ const usePageStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)',
+                }),
             },
             '&:after': {
                 position: 'absolute',
@@ -127,9 +129,11 @@ const usePageStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)',
+                }),
             },
         },
     }

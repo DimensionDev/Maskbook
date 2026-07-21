@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
     },
     pair: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         borderRadius: 12,
         padding: theme.spacing(1.5),
     },
@@ -112,14 +112,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     network: {
         fontSize: 13,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
     },
     toToken: {
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
     },
     infoList: {
         display: 'flex',
@@ -130,14 +130,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '100%',
         alignItems: 'flex-start',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
         fontSize: 14,
         display: 'flex',
         gap: theme.spacing(0.5),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         alignItems: 'center',
         flexGrow: 1,
         marginRight: 'auto',
@@ -154,7 +154,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
         marginLeft: -8,
         marginRight: theme.spacing(1),
-        boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
+        boxShadow: `0 0 0 1px ${theme.vars.palette.maskColor.bottom}`,
     },
     link: {
         cursor: 'pointer',
@@ -162,12 +162,12 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'right',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     text: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     rotate: {
         transform: 'rotate(180deg)',
@@ -177,16 +177,14 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'monospace',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         overflow: 'auto',
         scrollbarWidth: 'none',
     },
     footer: {
         flexShrink: 0,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)' }),
     },
 }))
 
@@ -254,7 +252,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 {targetToken.tokenSymbol}
                 <Icons.Cached
                     size={16}
-                    color={theme.palette.maskColor.main}
+                    color={theme.vars.palette.maskColor.main}
                     onClick={() => setForwardCompare((v) => !v)}
                 />
             </>
@@ -343,7 +341,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                             tabIndex={-1}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Typography color={theme.palette.maskColor.success} component="span">
+                            <Typography color={theme.vars.palette.maskColor.success} component="span">
                                 <Trans>Transaction submitted.</Trans>
                             </Typography>
                             <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />

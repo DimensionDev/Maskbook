@@ -45,7 +45,11 @@ export const Component = memo(function ExportPrivateKey() {
                 {value ?
                     <Typography
                         sx={{ p: 1.5 }}
-                        style={{ background: theme.palette.maskColor.input, wordWrap: 'break-word', borderRadius: 8 }}>
+                        style={{
+                            background: theme.vars.palette.maskColor.input,
+                            wordWrap: 'break-word',
+                            borderRadius: 8,
+                        }}>
                         {value}
                     </Typography>
                 :   null}

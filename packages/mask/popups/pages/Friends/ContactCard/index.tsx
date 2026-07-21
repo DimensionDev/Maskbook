@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         borderRadius: '8px',
         border: '1px solid',
-        borderColor: theme.palette.maskColor.line,
+        borderColor: theme.vars.palette.maskColor.line,
     },
     title: {
         display: 'flex',
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px',
         borderTopLeftRadius: '6px',
         borderTopRightRadius: '6px',
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
     },
     avatar: {
         width: 40,

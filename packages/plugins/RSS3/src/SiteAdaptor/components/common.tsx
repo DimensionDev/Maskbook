@@ -12,12 +12,12 @@ import { UserAvatar } from './UserAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         whiteSpace: 'nowrap',
     },
     link: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
     },
 }))

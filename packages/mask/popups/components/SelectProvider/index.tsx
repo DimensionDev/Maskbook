@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     providerItem: {
         cursor: 'pointer',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: 8,
         display: 'flex',
         flexDirection: 'column',
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     providerName: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 

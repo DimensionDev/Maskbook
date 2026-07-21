@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     eventCard: {
@@ -58,10 +58,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         gap: 8,
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     projectName: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '12px',
         fontWeight: 700,
         lineHeight: '16px',
@@ -74,19 +74,19 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     info: {
         fontSize: '13px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         gap: theme.spacing(1.5),
         alignItems: 'center',
     },
     loading: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 
@@ -180,7 +180,8 @@ export function EventList({ date }: EventListProps) {
                             <LoadingBase className={classes.loading} />
                         :   null}
                     </ElementAnchor>
-                :   <Typography sx={{ color: (theme) => theme.palette.maskColor.second, textAlign: 'center', py: 2 }}>
+                :   <Typography
+                        sx={{ color: (theme) => theme.vars.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                         <Trans>No more data available.</Trans>
                     </Typography>
                 }

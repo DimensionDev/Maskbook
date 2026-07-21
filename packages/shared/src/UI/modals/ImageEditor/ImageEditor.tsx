@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     cancel: {
         '&:hover': {
             border: 'none',
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
     },
     content: {
@@ -73,15 +73,15 @@ export function ImageEditor({ title, image, onSave, AvatarEditorProps = EMPTY_OB
                     onChange={(_, value) => setScale(value as number)}
                     aria-label="Scale"
                     sx={{
-                        color: (theme) => theme.palette.maskColor.primary,
+                        color: (theme) => theme.vars.palette.maskColor.primary,
                         '& .MuiSlider-thumb': {
                             width: 12,
                             height: 12,
-                            backgroundColor: (theme) => theme.palette.maskColor.primary,
+                            backgroundColor: (theme) => theme.vars.palette.maskColor.primary,
                         },
                         '& .MuiSlider-rail': {
                             opacity: 0.5,
-                            backgroundColor: (theme) => theme.palette.maskColor.thirdMain,
+                            backgroundColor: (theme) => theme.vars.palette.maskColor.thirdMain,
                         },
                     }}
                 />

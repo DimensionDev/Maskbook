@@ -12,19 +12,19 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         flexDirection: 'column',
         gap: 10,
         borderRadius: theme.spacing(1.5),
-        border: `1px solid ${theme.palette.maskColor.line}`,
-        backgroundColor: theme.palette.maskColor.bg,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         [`&.${refs.active}`]: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             '&::after': {
                 content: '""',
                 display: 'block',
                 borderRadius: 4,
                 border: '1px solid transparent',
-                borderRightColor: theme.palette.maskColor.line,
-                borderBottomColor: theme.palette.maskColor.line,
+                borderRightColor: theme.vars.palette.maskColor.line,
+                borderBottomColor: theme.vars.palette.maskColor.line,
                 transform: 'scaleX(.6) rotate(45deg) translate(-50%, 100%)',
-                backgroundColor: theme.palette.maskColor.bottom,
+                backgroundColor: theme.vars.palette.maskColor.bottom,
                 position: 'absolute',
                 width: 12,
                 height: 12,
@@ -42,13 +42,13 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     chainName: {
         fontSize: 16,
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     symbol: {
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     step: {
         position: 'absolute',
@@ -61,7 +61,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         fontSize: 64,
         fontWeight: 700,
         fontFamily: 'Helvetica',
-        color: theme.palette.maskColor.secondaryMain,
+        color: theme.vars.palette.maskColor.secondaryMain,
     },
 }))
 

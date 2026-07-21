@@ -14,9 +14,9 @@ const useStyles = makeStyles()((theme) => {
             top: 24,
             right: 24,
             borderRadius: 12,
-            backgroundColor: theme.palette.maskColor.bottom,
-            boxShadow: theme.palette.maskColor.bottomBg,
-            color: theme.palette.maskColor.main,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
+            color: theme.vars.palette.maskColor.main,
             overflow: 'auto',
             overflowX: 'hidden',
             '&::-webkit-scrollbar': {
@@ -25,12 +25,12 @@ const useStyles = makeStyles()((theme) => {
         },
         title: {
             flexShrink: 0,
-            background: theme.palette.maskColor.modalTitleBg,
+            background: theme.vars.palette.maskColor.modalTitleBg,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: theme.spacing(2),
-            borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+            borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         },
         closeButton: {
             padding: 0,

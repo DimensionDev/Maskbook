@@ -34,27 +34,27 @@ function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOption
 const useStyles = makeStyles()((theme) => {
     return {
         unit: {
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
         },
         caption: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },
         alertIcon: {
-            color: `${theme.palette.maskColor.main} !important`,
+            color: `${theme.vars.palette.maskColor.main} !important`,
             width: 22,
             height: 22,
             padding: 0,
         },
         alertMessage: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: 14,
             fontWeight: 400,
             padding: 0,
         },
         alertStandardSuccess: {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
     }
 })

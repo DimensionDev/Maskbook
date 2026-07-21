@@ -1,10 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { ImageIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { alpha, makeStyles  } from '@masknet/theme'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { alpha, Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo } from 'react'
 import { useAsync } from 'react-use'
@@ -18,7 +18,7 @@ const useStyle = makeStyles()((theme) => ({
         margin: theme.spacing(1.5),
         display: 'flex',
         gap: theme.spacing(1),
-        backgroundColor: alpha(theme.palette.maskColor.white, 0.8),
+        backgroundColor: alpha(theme.vars.palette.maskColor.white, 0.8),
         padding: theme.spacing(1),
         alignItems: 'center',
         borderRadius: 8,
@@ -28,7 +28,7 @@ const useStyle = makeStyles()((theme) => ({
         height: 30,
         filter: 'drop-shadow(0px 6px 12px rgba(29, 155, 240, 0.2))',
         backdropFilter: 'blur(8px)',
-        fill: theme.palette.maskColor.publicTwitter,
+        fill: theme.vars.palette.maskColor.publicTwitter,
     },
     content: {
         flex: 1,
@@ -41,14 +41,14 @@ const useStyle = makeStyles()((theme) => ({
         marginRight: theme.spacing(0.5),
         fontWeight: 'bold',
         fontSize: 14,
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.vars.palette.maskColor.publicSecond,
     },
     button: {
-        backgroundColor: theme.palette.maskColor.publicMain,
-        color: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.publicMain,
+        color: theme.vars.palette.maskColor.white,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
         },
         height: 32,
         width: 60,

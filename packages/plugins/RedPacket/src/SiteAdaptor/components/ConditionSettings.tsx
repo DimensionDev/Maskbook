@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
         button: {
             display: 'flex',
             alignItems: 'center',
-            border: `1px solid ${theme.palette.divider}`,
+            border: `1px solid ${theme.vars.palette.divider}`,
             borderRadius: 99,
             height: 26,
             cursor: 'pointer',
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
         },
         conditions: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             display: 'flex',
             flexDirection: 'column',
             gap: theme.spacing(1.5),
@@ -57,11 +57,11 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 16,
             padding: theme.spacing(1.5),
             width: 400,
-            backgroundColor: theme.palette.maskColor.bottom,
-            boxShadow:
-                theme.palette.mode === 'light' ?
-                    '0px 4px 30px rgba(0, 0, 0, 0.1)'
-                :   '0px 4px 30px rgba(255, 255, 255, 0.15)',
+            backgroundColor: theme.vars.palette.maskColor.bottom,
+            boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            ...theme.applyStyles('dark', {
+                boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)',
+            }),
         },
         section: {
             display: 'flex',
@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => {
         sectionTitle: {
             display: 'flex',
             alignItems: 'center',
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             fontSize: 14,
             fontWeight: 700,
             gap: theme.spacing(0.5),
@@ -79,8 +79,8 @@ const useStyles = makeStyles()((theme) => {
         selectButton: {
             display: 'inline-flex',
             gap: 4,
-            backgroundColor: theme.palette.maskColor.main,
-            color: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.bottom,
             padding: theme.spacing(0.5, 1),
             borderRadius: 99,
             cursor: 'pointer',
@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
             fontWeight: 400,
             lineHeight: '20px',
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             textOverflow: 'ellipsis',
             display: '-webkit-box',
             WebkitLineClamp: 2,
@@ -167,7 +167,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                 }}>
                                 <RadioIndicator
                                     checked={conditions.length === 0}
-                                    uncheckedColor={theme.palette.maskColor.secondaryLine}
+                                    uncheckedColor={theme.vars.palette.maskColor.secondaryLine}
                                 />
                                 <Typography className={classes.rowLabel}>
                                     <Trans>Everyone</Trans>
@@ -182,7 +182,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                 }}>
                                 <RadioIndicator
                                     checked={conditions.includes(ConditionType.Crypto)}
-                                    uncheckedColor={theme.palette.maskColor.secondaryLine}
+                                    uncheckedColor={theme.vars.palette.maskColor.secondaryLine}
                                 />
                                 <Typography className={classes.rowLabel}>
                                     <Trans>Crypto Holder</Trans>

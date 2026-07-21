@@ -23,14 +23,14 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
-        background: theme.palette.common.black,
-        color: theme.palette.common.white,
+        background: theme.vars.palette.common.black,
+        color: theme.vars.palette.common.white,
         borderRadius: 4,
         padding: 10,
         maxWidth: 260,
     },
     arrow: {
-        color: theme.palette.common.black,
+        color: theme.vars.palette.common.black,
     },
     connectWallet: {
         '& > .MuiButton-startIcon': {

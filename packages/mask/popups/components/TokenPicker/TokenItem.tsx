@@ -19,11 +19,11 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(1, 1.5),
             boxSizing: 'border-box',
             borderRadius: 8,
-            border: `1px solid ${theme.palette.maskColor.line}`,
+            border: `1px solid ${theme.vars.palette.maskColor.line}`,
             marginBottom: theme.spacing(1),
         },
         selected: {
-            borderColor: theme.palette.maskColor.highlight,
+            borderColor: theme.vars.palette.maskColor.highlight,
         },
         tokenIcon: {
             width: 36,
@@ -35,21 +35,21 @@ const useStyles = makeStyles()((theme) => {
         text: {
             fontSize: 16,
             fontWeight: 700,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
         name: {
             fontSize: 14,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             display: 'flex',
             alignItems: 'center',
         },
         balance: {
             fontSize: 16,
             fontWeight: 700,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
         link: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',

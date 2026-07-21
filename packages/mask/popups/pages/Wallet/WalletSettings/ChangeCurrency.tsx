@@ -22,7 +22,7 @@ export function ChangeCurrency() {
     return (
         <ListItem className={classes.item} onClick={chooseCurrency}>
             <Box className={classes.itemBox}>
-                <Icons.Currency size={20} color={theme.palette.maskColor.second} />
+                <Icons.Currency size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Currency</Trans>
                 </Typography>
@@ -31,7 +31,7 @@ export function ChangeCurrency() {
                 {currencyType ?
                     <Typography className={classes.itemText}>{resolveCurrencyName(currencyType)}</Typography>
                 :   null}
-                <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+                <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>
     )

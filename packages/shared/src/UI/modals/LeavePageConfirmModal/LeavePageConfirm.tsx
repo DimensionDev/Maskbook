@@ -17,7 +17,7 @@ const useStyles = makeStyles<{
     return {
         root: {
             width: 384,
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
             position: props.positionStyle.position,
             top: props.positionStyle.top,
             right: props.positionStyle.right,
@@ -31,7 +31,7 @@ const useStyles = makeStyles<{
             },
         },
         header: {
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
         actions: {
             padding: theme.spacing(1, 2, 2, 2),

@@ -19,14 +19,14 @@ export function Contacts() {
             className={classes.item}
             onClick={() => navigate(`${PopupRoutes.Contacts}/${wallet?.address}`, { state: { type: 'manage' } })}>
             <Box className={classes.itemBox}>
-                <Icons.BaseUser size={20} color={theme.palette.maskColor.second} />
+                <Icons.BaseUser size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Contacts</Trans>
                 </Typography>
             </Box>
             <Box className={classes.itemBox}>
                 <Typography className={classes.itemText}>{totalContacts}</Typography>
-                <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+                <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>
     )

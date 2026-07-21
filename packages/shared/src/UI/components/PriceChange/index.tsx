@@ -31,7 +31,7 @@ export const PriceChange = memo(function PriceChange({ change, loading, ...rest 
             </Box>
         )
 
-    const colors = theme.palette.maskColor
+    const colors = theme.vars.palette.maskColor
     const color = change > 0 ? colors.success : colors.danger
 
     return (

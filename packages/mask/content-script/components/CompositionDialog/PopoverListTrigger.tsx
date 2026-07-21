@@ -10,11 +10,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     paperRoot: {
-        background: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)' }),
     },
     popperText: {
         fontSize: 14,
@@ -39,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 

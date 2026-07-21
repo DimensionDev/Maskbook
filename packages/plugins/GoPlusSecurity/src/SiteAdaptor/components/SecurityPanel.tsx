@@ -1,8 +1,7 @@
 import { memo, useMemo, useState } from 'react'
-import { Collapse, Link, Stack, Typography } from '@mui/material'
+import { Collapse, Link, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
-import { useTheme } from '@mui/system'
 import { TokenIcon } from '@masknet/shared'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
@@ -36,15 +35,15 @@ const useStyles = makeStyles()((theme) => ({
     tokenName: {
         fontSize: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tokenPrice: {
         fontSize: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     itemTitle: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
     },
 }))
@@ -79,15 +78,15 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
             <Stack
                 spacing={1}
                 direction="row"
-                sx={{
+                sx={(theme) => ({
                     justifyContent: 'space-between',
-                    boxShadow: (theme) =>
-                        theme.palette.mode === 'light' ?
-                            ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-                        :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
+                    boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+                    ...theme.applyStyles('dark', {
+                        boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+                    }),
                     padding: '16px',
                     borderRadius: '16px',
-                }}>
+                })}>
                 <Stack direction="row" spacing={0.8}>
                     {tokenSecurity?.token_name ?
                         <TokenIcon
@@ -160,7 +159,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Icons.LinkOut size={18} style={{ color: theme.palette.text.strong, marginTop: 2 }} />
+                            <Icons.LinkOut size={18} style={{ color: theme.vars.palette.text.strong, marginTop: 2 }} />
                         </Link>
                     </Stack>
                 </Stack>

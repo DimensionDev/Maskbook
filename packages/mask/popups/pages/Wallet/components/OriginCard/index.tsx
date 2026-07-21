@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: '6px',
         borderRadius: '8px',
-        border: '1px solid ' + theme.palette.maskColor.line,
+        border: '1px solid ' + theme.vars.palette.maskColor.line,
     },
     site: {
         display: 'flex',
@@ -21,13 +21,13 @@ const useStyles = makeStyles()((theme) => ({
         width: '296px',
     },
     siteName: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
     },
     siteUrl: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         fontWeight: 400,
         lineHeight: '16px',
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         background: 'none',
         border: 'none',
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 

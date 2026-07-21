@@ -25,8 +25,8 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         borderRadius: 16,
         '&:hover': {
-            background: theme.palette.maskColor.bottom,
-            boxShadow: theme.palette.maskColor.bottomBg,
+            background: theme.vars.palette.maskColor.bottom,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
         },
     },
     walletInfo: {
@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
         lineHeight: '16px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         display: 'flex',
         alignItems: 'center',
     },
@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         columnGap: 4,
         padding: '21px 0',
     },
@@ -100,7 +100,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                                         formatter={formatEthereumAddress}
                                     />
                                     <Link
-                                        style={{ width: 14, height: 14, color: theme.palette.maskColor.main }}
+                                        style={{ width: 14, height: 14, color: theme.vars.palette.maskColor.main }}
                                         href={EVMExplorerResolver.addressLink(chainId, wallet.address ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">

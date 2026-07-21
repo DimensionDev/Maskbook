@@ -12,7 +12,7 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     paper: {
         borderRadius: 16,
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
     },
     list: {
         padding: theme.spacing(0.5, 0),
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         minHeight: 38,
         '& > p:first-of-type': {
             marginRight: 12,
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
     optionValue: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
 }))
 

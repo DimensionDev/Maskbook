@@ -11,10 +11,10 @@ import {
     currentPersonaIdentifier,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { DialogContent, alpha } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useCurrentPersona, usePersonasFromDB } from '../../../shared-ui/hooks/index.js'
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     persona: {
         padding: 0,
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
+        background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
         width: 'auto',
         boxShadow: 'none',
     },

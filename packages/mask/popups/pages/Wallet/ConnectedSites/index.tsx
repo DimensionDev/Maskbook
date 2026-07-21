@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '16px',
     },
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         fontWeight: 400,
         lineHeight: '18px',

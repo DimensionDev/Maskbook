@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     action: {
         marginTop: theme.spacing(10),

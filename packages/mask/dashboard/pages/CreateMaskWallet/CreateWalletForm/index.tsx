@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 30,
         margin: '12px 0',
         lineHeight: '120%',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     form: {
         marginTop: 24,
@@ -40,20 +40,20 @@ const useStyles = makeStyles()((theme) => ({
     tips: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     tipsBottom: {
         fontSize: 14,
         lineHeight: '18px',
         marginTop: 8,
         marginBottom: 24,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     bold: {
         fontWeight: 700,

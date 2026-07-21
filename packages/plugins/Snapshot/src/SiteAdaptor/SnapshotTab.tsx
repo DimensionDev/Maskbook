@@ -6,7 +6,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             width: '100%',
             borderRadius: 0,
-            backgroundColor: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.white,
             overflowY: 'auto',
             overflowX: 'hidden',
             height: 400,

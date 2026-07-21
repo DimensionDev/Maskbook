@@ -119,7 +119,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
         <ActionButton
             loading={confirmLoading}
             disabled={actionRunning || confirmDisabled}
-            sx={isDangerRequest ? { background: (theme) => theme.palette.maskColor.danger } : undefined}
+            sx={isDangerRequest ? { background: (theme) => theme.vars.palette.maskColor.danger } : undefined}
             onClick={() => {
                 if (isDangerRequest && !dangerDialogOpen) return setDangerDialogOpen(true)
                 else onConfirm()
@@ -240,7 +240,7 @@ function DangerDialog({ cancel, confirm }: Record<'cancel' | 'confirm', React.Re
                 <DialogContentText variant="overline">
                     <Trans>Are you sure?</Trans>
                 </DialogContentText>
-                <DialogContentText sx={{ color: (theme) => theme.palette.maskColor.danger }}>
+                <DialogContentText sx={{ color: (theme) => theme.vars.palette.maskColor.danger }}>
                     <Trans>This request may be a phishing attach. I understand this and want to continue.</Trans>
                 </DialogContentText>
             </DialogContent>

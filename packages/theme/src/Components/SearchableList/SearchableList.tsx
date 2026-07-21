@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundColor: theme.vars.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
         },
         '& > div > div': {
@@ -43,9 +43,9 @@ const useStyles = makeStyles()((theme) => ({
         scrollbarWidth: 'none',
     },
     error: {
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         fontSize: 14,
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
     },
 }))
 
@@ -177,7 +177,9 @@ export function SearchableList<T extends object>({
                                             size={18}
                                             onClick={handleClear}
                                             color={
-                                                textFieldPropsRest.error ? theme.palette.maskColor.danger : undefined
+                                                textFieldPropsRest.error ?
+                                                    theme.vars.palette.maskColor.danger
+                                                :   undefined
                                             }
                                         />
                                     :   null,

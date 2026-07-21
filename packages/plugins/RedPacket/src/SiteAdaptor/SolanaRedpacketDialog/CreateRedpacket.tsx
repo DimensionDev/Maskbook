@@ -12,7 +12,7 @@ import {
     WalletConnectedBoundary,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
 import { useChainContext, useEnvironmentContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { SolanaChainResolver } from '@masknet/web3-providers'
 import {
@@ -26,7 +26,7 @@ import {
     ZERO,
 } from '@masknet/web3-shared-base'
 import { type ChainId, isNativeTokenAddress, type SchemaType } from '@masknet/web3-shared-solana'
-import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@mui/material'
+import { Box, InputBase, inputBaseClasses, Typography, useTheme } from '@mui/material'
 import type { Cluster } from '@solana/web3.js'
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, useCallback, useMemo } from 'react'
@@ -80,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: 10,
         left: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     inputIcon: {
         position: 'absolute',
@@ -98,7 +98,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '50%',
         alignItems: 'center',
-        color: theme.palette.maskColor.line,
+        color: theme.vars.palette.maskColor.line,
         cursor: 'pointer',
     },
     checkIconWrapper: {
@@ -117,7 +117,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     deleteButton: {
         cursor: 'pointer',
@@ -130,8 +130,8 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: theme.palette.maskColor.bottom,
-        backgroundColor: alpha(theme.palette.maskColor.main, 0.8),
+        color: theme.vars.palette.maskColor.bottom,
+        backgroundColor: alpha(theme.vars.palette.maskColor.main, 0.8),
         borderRadius: 4,
         padding: 0,
         border: 0,
@@ -154,10 +154,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: theme.palette.maskColor.thirdMain,
+        backgroundColor: theme.vars.palette.maskColor.thirdMain,
     },
     selectedCover: {
-        boxShadow: `0 0 0 2px ${theme.palette.maskColor.main}`,
+        boxShadow: `0 0 0 2px ${theme.vars.palette.maskColor.main}`,
     },
     preview: {
         width: 484,
@@ -315,7 +315,7 @@ export function CreateSolRedPacket() {
                             <RadioIndicator checked={isRandom} size={20} />
                         </div>
                         <Typography
-                            color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                            color={isRandom ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.second}
                             sx={{
                                 fontSize: 16,
                                 fontWeight: isRandom ? 700 : 400,
@@ -328,7 +328,7 @@ export function CreateSolRedPacket() {
                             <RadioIndicator checked={!isRandom} size={20} />
                         </div>
                         <Typography
-                            color={isRandom ? theme.palette.maskColor.second : theme.palette.maskColor.main}
+                            color={isRandom ? theme.vars.palette.maskColor.second : theme.vars.palette.maskColor.main}
                             sx={{
                                 fontSize: 16,
                                 fontWeight: isRandom ? 400 : 700,

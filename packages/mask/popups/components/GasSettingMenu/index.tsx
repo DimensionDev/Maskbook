@@ -140,7 +140,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     sx={{
                         py: 0.5,
                         px: 1.5,
-                        border: `1px solid ${theme.palette.maskColor.line}`,
+                        border: `1px solid ${theme.vars.palette.maskColor.line}`,
                         borderRadius: 99,
                         display: 'inline-flex',
                         alignItems: 'center',

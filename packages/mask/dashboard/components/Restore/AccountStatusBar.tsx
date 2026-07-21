@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
     actionButton: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 interface Props extends BoxProps {

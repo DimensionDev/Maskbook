@@ -1,6 +1,6 @@
 import { type HTMLProps, type ImgHTMLAttributes, type JSX, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useTheme } from '@mui/material'
+import { useColorScheme } from '@mui/material/styles'
 
 const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((theme, { size, rounded }, refs) => ({
     optimistic: {
@@ -31,9 +31,10 @@ const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((
     failed: {
         [`&.${refs.center}`]: {
             background:
-                theme.palette.mode === 'light' ?
-                    'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
-                :   'linear-gradient(180deg, #202020 0%, #181818 100%)',
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
+            ...theme.applyStyles('dark', {
+                background: 'linear-gradient(180deg, #202020 0%, #181818 100%)',
+            }),
         },
     },
 }))
@@ -62,7 +63,7 @@ export function Image({
     ...rest
 }: ImageProps) {
     const { classes, cx } = useStyles({ size, rounded }, { props: { classes: extraClasses } })
-    const theme = useTheme()
+    const { mode } = useColorScheme()
     const [failed, setFailed] = useState(false)
 
     if (rest.src && !failed) {
@@ -103,7 +104,7 @@ export function Image({
                 width={size}
                 height={size}
                 {...rest}
-                src={fallback?.toString() ?? (theme.palette.mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK)}
+                src={fallback?.toString() ?? (mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK)}
                 className={cx(classes.image, classes.failImage, classes.fallbackImage)}
             />
         </div>

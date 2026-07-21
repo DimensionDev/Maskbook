@@ -21,7 +21,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         position: 'absolute',
         right: -6,
         bottom: -4,
-        border: `1px solid ${props.badgeIconBorderColor ?? theme.palette.common.white}`,
+        border: `1px solid ${props.badgeIconBorderColor ?? theme.vars.palette.common.white}`,
         borderRadius: '50%',
     },
 }))

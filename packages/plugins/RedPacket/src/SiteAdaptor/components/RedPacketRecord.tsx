@@ -82,18 +82,18 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
         },
         status: {},
         total: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: 20,
             fontWeight: 700,
             lineHeight: '24px',
         },
         progress: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             display: 'flex',
             whiteSpace: 'nowrap',
             gap: theme.spacing(1),
             '&>b': {
-                color: theme.palette.maskColor.main,
+                color: theme.vars.palette.maskColor.main,
             },
         },
         symbol: {
@@ -103,7 +103,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             textOverflow: 'ellipsis',
         },
         message: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontWeight: 700,
             lineHeight: '18px',
             whiteSpace: 'nowrap',
@@ -114,7 +114,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             },
         },
         datetime: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             position: 'absolute',
             right: theme.spacing(1.5),
             top: theme.spacing(1.5),
@@ -123,7 +123,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
         },
         details: {
             fontWeight: 700,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             cursor: 'pointer',
             whiteSpace: 'nowrap',
         },
@@ -134,21 +134,21 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             fontSize: 12,
             width: 88,
             height: 32,
-            background: `${theme.palette.maskColor.dark} !important`,
+            background: `${theme.vars.palette.maskColor.dark} !important`,
             opacity: '1 !important',
-            color: theme.palette.maskColor.white,
+            color: theme.vars.palette.maskColor.white,
             borderRadius: '999px',
             minHeight: 'auto',
             [smallQuery]: {
                 marginTop: theme.spacing(1),
             },
             '&:disabled': {
-                background: theme.palette.maskColor.primaryMain,
-                color: theme.palette.common.white,
+                background: theme.vars.palette.maskColor.primaryMain,
+                color: theme.vars.palette.common.white,
             },
             '&:hover': {
-                background: theme.palette.maskColor.dark,
-                color: theme.palette.maskColor.white,
+                background: theme.vars.palette.maskColor.dark,
+                color: theme.vars.palette.maskColor.white,
                 opacity: 0.8,
             },
         },

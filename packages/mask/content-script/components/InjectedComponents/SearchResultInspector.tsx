@@ -33,7 +33,7 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
         tabContent: {
             position: 'relative',
             maxHeight: 478,
-            borderBottom: isProfilePage ? 'unset' : `1px solid ${theme.palette.divider}`,
+            borderBottom: isProfilePage ? 'unset' : `1px solid ${theme.vars.palette.divider}`,
             overflow: 'auto',
             '&::-webkit-scrollbar': {
                 display: 'none',

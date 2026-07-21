@@ -76,14 +76,14 @@ function NotFull(props: { onClick: () => void }) {
                 sx={{
                     width: 254,
                     height: 40,
-                    backgroundColor: (theme) => theme.palette.maskColor.publicMain,
-                    color: (theme) => theme.palette.maskColor.white,
+                    backgroundColor: (theme) => theme.vars.palette.maskColor.publicMain,
+                    color: (theme) => theme.vars.palette.maskColor.white,
                     fontSize: 14,
                     fontWeight: 700,
                     marginBottom: 4,
                     marginTop: 2,
                     '&:hover': {
-                        backgroundColor: (theme) => theme.palette.maskColor.publicMain,
+                        backgroundColor: (theme) => theme.vars.palette.maskColor.publicMain,
                     },
                 }}
                 onClick={props.onClick}>

@@ -15,10 +15,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         overflow: 'auto',
         minHeight: '100vh',
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
     },
     content: {
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         minWidth: 720,
         width: 'clamp(720px, 66.6667%, 66.666%)',
         paddingTop: '12.5vh',
@@ -68,7 +68,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpli
                                 justifyContent: 'center',
                             }}>
                             <Typography
-                                color={theme.palette.maskColor.publicMain}
+                                color={theme.vars.palette.maskColor.publicMain}
                                 sx={{
                                     fontSize: 36,
                                     fontWeight: 700,

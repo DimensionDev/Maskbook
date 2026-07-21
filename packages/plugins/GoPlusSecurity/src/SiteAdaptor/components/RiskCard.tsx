@@ -8,10 +8,10 @@ import { useLingui } from '@lingui/react'
 const useStyles = makeStyles()((theme) => ({
     detectionCard: {
         borderRadius: 8,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         marginTop: '8px',
     },
     icon: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         fontSize: 16,
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 

@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     title: {
         fontSize: 36,
@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     paginationButton: {
         borderRadius: 99,
-        background: theme.palette.maskColor.thirdMain,
+        background: theme.vars.palette.maskColor.thirdMain,
         width: '100%',
         fontWeight: 700,
     },
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         cursor: 'pointer',
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 

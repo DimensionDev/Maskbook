@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 24,
     },
     iconButton: {
-        border: `1px solid ${theme.palette.maskColor.secondaryLine}`,
+        border: `1px solid ${theme.vars.palette.maskColor.secondaryLine}`,
         width: 170,
         height: 74,
         display: 'flex',
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
     },
     selected: {
-        border: `1px solid ${theme.palette.maskColor.highlight}`,
+        border: `1px solid ${theme.vars.palette.maskColor.highlight}`,
     },
     icons: {
         display: 'flex',
@@ -148,7 +148,7 @@ export const SwitchLogoDialog = memo(() => {
                                         fontSize: 14,
                                         fontWeight: 400,
                                         lineHeight: '18px',
-                                        color: (theme) => theme.palette.maskColor.secondaryDark,
+                                        color: (theme) => theme.vars.palette.maskColor.secondaryDark,
                                     }}>
                                     <Trans>Share and recommend this feature after saving.</Trans>
                                 </Typography>
@@ -168,7 +168,7 @@ export const SwitchLogoDialog = memo(() => {
                                 fontSize: '14px',
                                 fontWeight: 700,
                                 marginRight: '5px',
-                                color: (theme) => theme.palette.maskColor.secondaryDark,
+                                color: (theme) => theme.vars.palette.maskColor.secondaryDark,
                             }}>
                             Powered by{' '}
                         </Typography>

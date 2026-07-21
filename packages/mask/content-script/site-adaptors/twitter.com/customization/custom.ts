@@ -14,8 +14,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
 
         const TwitterTheme = produce(baseTheme, (theme) => {
             if (themeSettings.isDim) {
-                theme.palette.maskColor.bottom = '#15202B'
-                theme.palette.maskColor.secondaryBottom = 'rgba(21, 32, 43, 0.8)'
+                theme.vars.palette.maskColor.bottom = '#15202B'
+                theme.vars.palette.maskColor.secondaryBottom = 'rgba(21, 32, 43, 0.8)'
             }
 
             theme.palette.primary = {

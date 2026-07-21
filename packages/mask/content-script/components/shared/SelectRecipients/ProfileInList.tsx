@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     highLightBg: {
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
     },
     avatarBox: {
         padding: '6px 0px 6px 8px',

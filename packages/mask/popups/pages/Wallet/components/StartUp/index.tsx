@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
     },
     content: {
         padding: 16,
@@ -36,9 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         margin: theme.spacing(1.5, 0),
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         borderRadius: 8,
         padding: theme.spacing(2),
     },

@@ -27,15 +27,15 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         height: 32,
-        background: theme.palette.maskColor.thirdMain,
+        background: theme.vars.palette.maskColor.thirdMain,
         flex: '1 0 0',
         fontSize: 12,
         fontWeight: 700,
         cursor: 'pointer',
     },
     selected: {
-        color: theme.palette.maskColor.bottom,
-        background: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.main,
     },
     listItemOneDay: {
         flex: 'auto',
@@ -97,7 +97,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     return (
         <BottomDrawer {...props}>
             <Typography
-                color={theme.palette.maskColor.third}
+                color={theme.vars.palette.maskColor.third}
                 sx={{
                     fontWeight: 700,
                     textAlign: 'center',

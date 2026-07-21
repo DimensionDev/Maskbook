@@ -19,7 +19,7 @@ import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme, _, refs) => ({
     infoBox: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
         borderRadius: 8,
         padding: theme.spacing(1.5),
         display: 'flex',
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme, _, refs) => ({
     tips: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         margin: theme.spacing(0.5, 0),
         wordWrap: 'break-word',
     },
@@ -141,7 +141,9 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
                     />
                     <Box>
                         <Typography sx={{ fontWeight: 700 }}>{currentPersona?.nickname}</Typography>
-                        <Typography color={theme.palette.maskColor.third} sx={{ fontSize: 10, lineHeight: '10px' }}>
+                        <Typography
+                            color={theme.vars.palette.maskColor.third}
+                            sx={{ fontSize: 10, lineHeight: '10px' }}>
                             {currentPersona?.identifier.rawPublicKey}
                         </Typography>
                     </Box>

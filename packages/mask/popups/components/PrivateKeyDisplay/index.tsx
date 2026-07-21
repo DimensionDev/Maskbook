@@ -4,7 +4,7 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useState } from 'react'
 import Services from '#services'
 import { Icons } from '@masknet/icons'
-import { Box, Typography, alpha } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { WalletBalance } from '../index.js'
 import { useToggle } from '@react-hookz/web'
@@ -22,16 +22,16 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     address: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 12,
         lineHeight: '16px',
     },
     balance: {
         fontSize: 12,
         lineHeight: '16px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         '& > span': {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             fontSize: 12,
             lineHeight: '16px',
         },
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     privateKey: {
         padding: theme.spacing(1.5),
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         position: 'relative',
         borderRadius: 8,
     },
@@ -56,14 +56,17 @@ const useStyles = makeStyles()((theme) => ({
         wordWrap: 'break-word',
     },
     view: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         cursor: 'pointer',
         position: 'absolute',
         bottom: 6,
         right: 12,
     },
     mask: {
-        background: alpha(theme.palette.mode === 'dark' ? '#000000' : '#ffffff', 0.4),
+        background: 'rgba(255, 255, 255, 0.4)',
+        ...theme.applyStyles('dark', {
+            background: 'rgba(0, 0, 0, 0.4)',
+        }),
         backdropFilter: 'blur(5px)',
         position: 'absolute',
         zIndex: 1,
@@ -78,7 +81,7 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 12,
     },
     tips: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '18px',
         textAlign: 'left',

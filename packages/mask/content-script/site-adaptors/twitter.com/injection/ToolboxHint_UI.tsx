@@ -23,7 +23,7 @@ const ListItem = styled(ListItemButton)`
     display: inline-flex;
     &:hover {
         background: rgba(15, 20, 25, 0.1);
-        ${({ theme }) => (theme.palette.mode === 'dark' ? 'background: rgba(217, 217, 217, 0.1);' : '')}
+        ${({ theme }) => theme.applyStyles('dark', { background: 'rgba(217, 217, 217, 0.1)' })}
     }
     /* twitter break point */
     @media screen and (max-width: ${HORIZONTAL_BREAKPOINT}px) {
@@ -35,10 +35,12 @@ const Text = styled(Typography)`
     font-family: inherit;
     font-weight: 400;
     white-space: nowrap;
-    color: ${({ theme }) => (theme.palette.mode === 'light' ? 'rgb(15, 20, 25)' : 'rgb(216, 216, 216)')};
+    color: rgb(15, 20, 25);
+    ${({ theme }) => theme.applyStyles('dark', { color: 'rgb(216, 216, 216)' })}
 `
 const Icon = styled(ListItemIcon)`
-    color: ${({ theme }) => (theme.palette.mode === 'light' ? 'rgb(15, 20, 25)' : 'rgb(216, 216, 216)')};
+    color: rgb(15, 20, 25);
+    ${({ theme }) => theme.applyStyles('dark', { color: 'rgb(216, 216, 216)' })}
     min-width: 0;
 `
 

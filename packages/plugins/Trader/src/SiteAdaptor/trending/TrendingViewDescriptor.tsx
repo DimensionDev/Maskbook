@@ -18,7 +18,7 @@ const useStyles = makeStyles<{
             justifyContent: 'space-between',
         },
         sourceNote: {
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
             marginRight: 4,
             fontWeight: 700,
         },
@@ -28,10 +28,10 @@ const useStyles = makeStyles<{
         },
         selectedOption: {
             fontWeight: 700,
-            color: props.isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark,
+            color: props.isTokenTagPopper ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.dark,
         },
         arrowDropIcon: {
-            color: props.isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark,
+            color: props.isTokenTagPopper ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.dark,
         },
     }
 })

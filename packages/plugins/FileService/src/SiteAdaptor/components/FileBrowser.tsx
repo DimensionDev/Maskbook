@@ -25,7 +25,7 @@ const Tab = styled(MuiTab)(({ theme }) => ({
     padding: theme.spacing(0, 2),
     minHeight: 'auto',
     boxSizing: 'border-box',
-    color: theme.palette.maskColor.second,
+    color: theme.vars.palette.maskColor.second,
     fontSize: 14,
     fontWeight: 700,
     backgroundColor: 'transparent',
@@ -33,11 +33,11 @@ const Tab = styled(MuiTab)(({ theme }) => ({
     cursor: 'pointer',
     borderRadius: 18,
     '&:hover': {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     [`&.${tabClasses.selected}`]: {
-        color: theme.palette.maskColor.main,
-        backgroundColor: theme.palette.maskColor.bg,
+        color: theme.vars.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bg,
     },
 }))
 
@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     emptyMessage: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: theme.spacing(1.5),
     },
     fileList: {
@@ -110,10 +110,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 2, 0),
         flexShrink: 0,
         boxSizing: 'border-box',
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
     },
 }))
 

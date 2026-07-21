@@ -28,12 +28,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     label: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginRight: 0,
         marginLeft: 0,
     },
     link: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textDecoration: 'underline',
     },
     checkbox: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     policy: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: 48,
     },
 }))

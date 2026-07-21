@@ -10,10 +10,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         display: 'flex',
         cursor: 'pointer',
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
         [`& .${listItemSecondaryActionClasses.root}`]: {
             right: 0,
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
     },
     icon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 

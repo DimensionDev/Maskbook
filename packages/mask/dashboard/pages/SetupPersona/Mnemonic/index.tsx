@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { MaskColorVar, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Box, Button, Checkbox, FormControlLabel, IconButton, Stack, Typography, alpha } from '@mui/material'
+import { alpha, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { Box, Button, Checkbox, FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import { toBlob } from 'html-to-image'
 import { memo, useCallback, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -25,12 +25,12 @@ const useStyles = makeStyles()((theme) => ({
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     recovery: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
     },
     title: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 
     refresh: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         columnGap: 4,
         fontWeight: 700,
         fontSize: 12,
@@ -51,14 +51,14 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 12,
     },
     iconButton: {
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         height: 36,
         width: 36,
     },
     warning: {
-        background: alpha(theme.palette.maskColor.warn, 0.1),
+        background: alpha(theme.vars.palette.maskColor.warn, 0.1),
         borderRadius: 4,
         backdropFilter: 'blur(5px)',
         marginTop: theme.spacing(1.5),
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
     warningText: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.warn,
     },
     label: {
         fontSize: 14,
@@ -187,7 +187,7 @@ export const Component = memo(function SignUpMnemonic() {
                 classes={{ label: classes.label }}
                 control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
                 label={<Trans>I wrote down those words in the correct order</Trans>}
-                sx={{ marginTop: '12px', color: MaskColorVar.textSecondary }}
+                sx={(theme) => ({ marginTop: '12px', color: theme.vars.palette.maskColor.textSecondary })}
             />
 
             <Box sx={{ position: 'absolute', top: -9999 }}>

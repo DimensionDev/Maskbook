@@ -2,12 +2,12 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner, useUnmountedRef } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { alpha, LoadingBase, makeStyles } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, leftShift, TransactionStatusType } from '@masknet/web3-shared-base'
 import { type ChainId, formatEthereumAddress, isTransactionReceiptSuccess } from '@masknet/web3-shared-evm'
-import { alpha, Box, Button, Link as MuiLink, Typography } from '@mui/material'
+import { Box, Button, Link as MuiLink, Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -64,14 +64,14 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
     },
     countdown: {
         fontWeight: 700,
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
     },
     note: {
         fontSize: 14,
         lineHeight: '18px',
     },
     box: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         borderRadius: 12,
         padding: theme.spacing(1.5),
     },
@@ -110,7 +110,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
         '&::before': {
             content: '""',
             height: 40,
-            borderLeft: `1px solid ${theme.palette.maskColor.line}`,
+            borderLeft: `1px solid ${theme.vars.palette.maskColor.line}`,
             position: 'absolute',
             zIndex: 1,
         },
@@ -145,7 +145,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
         lineHeight: '18px',
         padding: theme.spacing(0.5),
         borderRadius: theme.spacing(0.5),
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
     },
     value: {
         fontSize: 14,
@@ -158,14 +158,14 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
     },
     network: {
         fontSize: 13,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
     },
     toToken: {
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
         display: 'flex',
         alignItems: 'center',
     },
@@ -178,14 +178,14 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
         display: 'flex',
         width: '100%',
         alignItems: 'flex-start',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
         fontSize: 14,
         display: 'flex',
         gap: theme.spacing(0.5),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         alignItems: 'center',
         flexGrow: 1,
         marginRight: 'auto',
@@ -199,13 +199,13 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
     },
     footer: {
         flexShrink: 0,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor: alpha(theme.vars.palette.maskColor.bottom, 0.8),
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
@@ -213,7 +213,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
         justifyContent: 'space-between',
         flex: 1,
         maxHeight: 40,
-        color: theme.palette.maskColor.bottom,
+        color: theme.vars.palette.maskColor.bottom,
     },
     button: {
         display: 'flex',
@@ -224,7 +224,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
         borderRadius: '50%',
         marginLeft: -8,
         marginRight: theme.spacing(1),
-        boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
+        boxShadow: `0 0 0 1px ${theme.vars.palette.maskColor.bottom}`,
     },
     toastLink: {
         display: 'flex',
@@ -355,7 +355,7 @@ export const Transaction = memo(function Transaction() {
                 {targetToken.symbol}
                 <Icons.Cached
                     size={16}
-                    color={theme.palette.maskColor.main}
+                    color={theme.vars.palette.maskColor.main}
                     onClick={() => setForwardCompare((v) => !v)}
                 />
             </>
@@ -403,13 +403,13 @@ export const Transaction = memo(function Transaction() {
                 : txSucceed || bridgeStatus?.status === 'SUCCESS' ?
                     <div className={classes.header}>
                         <Icons.FillSuccess size={72} />
-                        <Typography className={classes.title} color={theme.palette.maskColor.success}>
+                        <Typography className={classes.title} color={theme.vars.palette.maskColor.success}>
                             <Trans>Complete</Trans>
                         </Typography>
                     </div>
                 :   <div className={classes.header}>
-                        <Icons.ColorfulClose color={theme.palette.maskColor.danger} size={72} />
-                        <Typography className={classes.title} color={theme.palette.maskColor.danger}>
+                        <Icons.ColorfulClose color={theme.vars.palette.maskColor.danger} size={72} />
+                        <Typography className={classes.title} color={theme.vars.palette.maskColor.danger}>
                             <Trans>Failed</Trans>
                         </Typography>
                     </div>
@@ -470,7 +470,7 @@ export const Transaction = memo(function Transaction() {
                                     <a
                                         href={EVMExplorerResolver.transactionLink(fromChainId, bridgeStatus.fromTxHash)}
                                         target="_blank">
-                                        <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
+                                        <Icons.LinkOut color={theme.vars.palette.maskColor.second} size={16} />
                                     </a>
                                 :   null}
                             </div>
@@ -538,11 +538,11 @@ export const Transaction = memo(function Transaction() {
                                 <a
                                     href={EVMExplorerResolver.transactionLink(toChainId, bridgeStatus.toTxHash)}
                                     target="_blank">
-                                    <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
+                                    <Icons.LinkOut color={theme.vars.palette.maskColor.second} size={16} />
                                 </a>
                             : tx.kind === 'swap' ?
                                 <a href={EVMExplorerResolver.transactionLink(tx.chainId, tx.hash)} target="_blank">
-                                    <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
+                                    <Icons.LinkOut color={theme.vars.palette.maskColor.second} size={16} />
                                 </a>
                             :   null}
                         </div>
@@ -653,7 +653,7 @@ export const Transaction = memo(function Transaction() {
                             setToToken(okxTokenToFungibleToken(tx.toToken))
                             navigate(urlcat(basePath, RoutePaths.Trade, { mode: tx.kind }))
                         }}>
-                        <Icons.Cached color={theme.palette.maskColor.bottom} />
+                        <Icons.Cached color={theme.vars.palette.maskColor.bottom} />
                         {txSucceed ?
                             isSwap ?
                                 <Trans>Make another Swap</Trans>

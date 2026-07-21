@@ -61,7 +61,7 @@ export function MaskPostExtraPluginWrapperWithPermission({
                         wrapperProps={props.definition.wrapperProps}
                         content={
                             <Typography
-                                color={theme.palette.maskColor.publicMain}
+                                color={theme.vars.palette.maskColor.publicMain}
                                 component="div"
                                 sx={{
                                     fontSize: 14,

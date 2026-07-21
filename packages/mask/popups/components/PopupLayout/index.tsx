@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         position: 'relative',
     },
     body: {

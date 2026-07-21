@@ -24,12 +24,12 @@ const useStyles = makeStyles<void, 'tokenIcon'>()((theme, _, ref) => ({
     },
     tokenIcon: {},
     amount: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '24px',
         fontWeight: 700,
     },
     price: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',

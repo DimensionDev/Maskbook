@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     p: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: 24,
     },
     h2: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     list: {
         marginTop: theme.spacing(2),
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         listStyleType: 'none',
         paddingLeft: 0,
         marginLeft: 0,
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     siteName: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '20px',
         marginLeft: theme.spacing(1),
@@ -66,13 +66,13 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 12,
     },
     link: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textDecoration: 'underline',
     },
     policy: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: 48,
     },
 }))

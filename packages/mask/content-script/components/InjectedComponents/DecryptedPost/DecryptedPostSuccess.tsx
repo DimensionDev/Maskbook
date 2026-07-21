@@ -79,7 +79,7 @@ const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canA
             justifyContent: 'center',
             alignItems: 'center',
             padding: theme.spacing(0.5, 1),
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
             borderRadius: '999px',
             cursor: canAppendShareTarget ? 'pointer' : 'default',
         },
@@ -88,7 +88,7 @@ const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canA
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: 8,
-            background: theme.palette.maskColor.primary,
+            background: theme.vars.palette.maskColor.primary,
             borderRadius: '50%',
             height: 16,
             width: 16,
@@ -114,7 +114,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                                 <Trans>Only visible to yourself</Trans>
                             </Typography>
                             <div className={classes.iconAdd}>
-                                <Icons.Plus size={12} color={theme.palette.maskColor.white} />
+                                <Icons.Plus size={12} color={theme.vars.palette.maskColor.white} />
                             </div>
                         </section>
                     }

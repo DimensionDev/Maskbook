@@ -11,7 +11,6 @@ import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         header: {
             display: 'flex',
@@ -26,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
         },
         badge: {
             position: 'absolute',
-            border: `1px solid ${theme.palette.maskColor.white}`,
+            border: `1px solid ${theme.vars.palette.maskColor.white}`,
             width: 17,
             height: 17,
             borderRadius: '50%',
@@ -37,13 +36,13 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
         },
         name: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             marginTop: theme.spacing(1),
             fontSize: 24,
             fontWeight: 700,
         },
         address: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             marginTop: theme.spacing(1),
             fontSize: 16,
             height: 30,
@@ -53,7 +52,7 @@ const useStyles = makeStyles()((theme) => {
         qrcode: {
             width: 250,
             height: 250,
-            boxShadow: theme.palette.maskColor.bottomBg,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
             borderRadius: theme.spacing(2),
             overflow: 'hidden',
         },
@@ -70,9 +69,11 @@ const useStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)',
+                }),
             },
             '&:after': {
                 position: 'absolute',
@@ -83,16 +84,18 @@ const useStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)',
+                }),
             },
         },
         qrcodeContainer: {
             width: 282,
             margin: theme.spacing(2, 'auto', 0),
             padding: theme.spacing(2),
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             position: 'relative',
             zIndex: 10,
         },
@@ -100,11 +103,11 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
             marginTop: 10,
             textAlign: 'center',
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
         copyButton: {
             marginLeft: 8,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
     }
 })

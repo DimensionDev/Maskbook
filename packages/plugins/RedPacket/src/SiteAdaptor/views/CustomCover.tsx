@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     actions: {
         display: 'flex',
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: theme.spacing(1),
         top: theme.spacing(1),
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
     },
     dialogActions: {
         padding: 16,
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     cancel: {
         '&:hover': {
             border: 'none',
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
     },
 }))

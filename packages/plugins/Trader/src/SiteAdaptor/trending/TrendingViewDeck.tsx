@@ -83,12 +83,12 @@ const useStyles = makeStyles<{
             overflow: 'hidden',
             fontSize: 18,
             fontWeight: 700,
-            color: theme.palette.maskColor.dark,
+            color: theme.vars.palette.maskColor.dark,
         },
         symbol: {
             fontWeight: 700,
             fontSize: 18,
-            color: theme.palette.maskColor.dark,
+            color: theme.vars.palette.maskColor.dark,
             marginLeft: theme.spacing(0.5),
             marginRight: theme.spacing(0.5),
             display: 'flex',
@@ -106,17 +106,17 @@ const useStyles = makeStyles<{
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
-            color: theme.palette.maskColor.white,
+            color: theme.vars.palette.maskColor.white,
             fontWeight: 400,
             fontSize: 10,
-            background: theme.palette.maskColor.dark,
+            background: theme.vars.palette.maskColor.dark,
             borderRadius: theme.spacing(0.5),
         },
         avatar: {
             width: 24,
             height: 24,
             fontSize: 10,
-            backgroundColor: theme.palette.common.white,
+            backgroundColor: theme.vars.palette.common.white,
         },
         buttons: {
             marginLeft: 'auto',
@@ -136,7 +136,7 @@ const useStyles = makeStyles<{
             right: 0,
             display: 'flex',
             alignItems: 'center',
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
             backdropFilter: 'blur(5px)',
             boxSizing: 'border-box',
             borderBottomRightRadius: '16px',
@@ -355,7 +355,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 fontWeight: 500,
                                                 lineHeight: '24px',
                                             }}
-                                            color={theme.palette.maskColor.dark}>
+                                            color={theme.vars.palette.maskColor.dark}>
                                             {floorPrice ? formatCurrency(floorPrice, 'USD') : '--'}
                                         </Typography>
                                     :   <Typography sx={{ fontSize: 14, fontWeight: 500, lineHeight: '24px' }}>
@@ -384,7 +384,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                     {isTokenTagPopper && currentTab === ContentTab.Market ?
-                        <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
+                        <Stack style={{ height: 48, width: '100%', background: theme.vars.palette.maskColor.bottom }} />
                     :   null}
                 </Paper>
                 {isTokenTagPopper ?

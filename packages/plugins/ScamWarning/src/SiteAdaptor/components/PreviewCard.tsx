@@ -14,8 +14,8 @@ const useStyles = makeStyles()((theme) => ({
     root: {},
     card: {
         padding: theme.spacing(1),
-        color: theme.palette.maskColor.bottom,
-        backgroundColor: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.danger,
         borderRadius: theme.spacing(1),
     },
     title: {

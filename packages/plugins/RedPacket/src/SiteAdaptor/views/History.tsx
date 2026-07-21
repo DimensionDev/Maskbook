@@ -110,7 +110,8 @@ export function History() {
                             <LoadingBase />
                         :   null}
                     </ElementAnchor>
-                :   <Typography sx={{ color: (theme) => theme.palette.maskColor.second, textAlign: 'center', py: 2 }}>
+                :   <Typography
+                        sx={{ color: (theme) => theme.vars.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                         <Trans>No more data available.</Trans>
                     </Typography>
                 }

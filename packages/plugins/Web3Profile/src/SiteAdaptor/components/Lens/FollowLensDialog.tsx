@@ -36,14 +36,14 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginTop: 24,
     },
     handle: {
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 400,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         margin: theme.spacing(0.5, 0),
     },
     followers: {
@@ -52,7 +52,7 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
         columnGap: 8,
     },
     dialogTitle: {
-        background: `${theme.palette.maskColor.bottom}!important`,
+        background: `${theme.vars.palette.maskColor.bottom}!important`,
     },
     dialogContent: {
         maxWidth: 400,
@@ -67,15 +67,15 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
     followAction: {
         backgroundColor: '#A1FE27',
-        color: theme.palette.maskColor.publicMain,
+        color: theme.vars.palette.maskColor.publicMain,
         '&:hover': {
             backgroundColor: '#A1FE27',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         [`&.${buttonClasses.disabled}`]: {
             background: '#A1FE27',
             opacity: 0.6,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     },
     profile: {
@@ -84,7 +84,7 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
     tips: {
         marginBottom: theme.spacing(3),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
     },
     canvas: {
@@ -98,7 +98,7 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
     linkButton: {
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.thirdMain,
+            backgroundColor: theme.vars.palette.maskColor.thirdMain,
         },
     },
 }))

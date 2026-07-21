@@ -42,7 +42,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
             padding: 0,
         },
         nickname: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             lineHeight: '18px',
             fontWeight: 700,
             maxWidth: 290,
@@ -52,7 +52,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
         },
         identifier: {
             fontSize: 14,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             lineHeight: 1,
             display: 'flex',
             alignItems: 'center',
@@ -64,7 +64,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
             paddingRight: '16px !important',
             cursor: 'pointer',
             '&:hover': {
-                backgroundColor: theme.palette.background.default,
+                backgroundColor: theme.vars.palette.background.default,
             },
         },
         contactsListItemInfo: {
@@ -72,7 +72,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
             alignItems: 'center',
         },
         contactTitle: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: 14,
             fontWeight: 700,
             paddingLeft: 16,
@@ -97,7 +97,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
                     {
                         '&:after': {
                             content: '""',
-                            background: theme.palette.divider,
+                            background: theme.vars.palette.divider,
                             bottom: 0,
                             position: 'absolute',
                             width: 120,
@@ -122,7 +122,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
             position: 'absolute',
             display: 'flex',
             justifyContent: 'center',
-            background: theme.palette.maskColor.secondaryBottom,
+            background: theme.vars.palette.maskColor.secondaryBottom,
             boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
             backdropFilter: 'blur(8px)',
             width: '100%',
@@ -161,7 +161,9 @@ const ContactListUI = memo(function ContactListUI() {
 
     useEffect(() => {
         if (!isManage) return
-        setExtension(<Icons.Add color={theme.palette.maskColor.main} sx={{ cursor: 'pointer' }} onClick={addContact} />)
+        setExtension(
+            <Icons.Add color={theme.vars.palette.maskColor.main} sx={{ cursor: 'pointer' }} onClick={addContact} />,
+        )
         return () => setExtension(undefined)
     }, [isManage])
 
@@ -282,12 +284,12 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
     const menuOptions = [
         {
             name: <Trans>Edit</Trans>,
-            icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
+            icon: <Icons.Edit2 size={20} color={theme.vars.palette.maskColor.second} />,
             handler: editContact,
         },
         {
             name: <Trans>Delete</Trans>,
-            icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
+            icon: <Icons.Decrease size={20} color={theme.vars.palette.maskColor.second} />,
             handler: deleteContact,
         },
     ]
@@ -329,7 +331,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                             href={EVMExplorerResolver.addressLink(chainId, address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Icons.PopupLink className={classes.icon} color={theme.palette.maskColor.second} />
+                            <Icons.PopupLink className={classes.icon} color={theme.vars.palette.maskColor.second} />
                         </Link>
                     </Typography>
                 </div>

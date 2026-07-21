@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'absolute',
             top: 10,
             left: 12,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
     }
 })

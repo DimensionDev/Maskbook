@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 35,
     },
     text: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',

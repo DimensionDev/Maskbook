@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 0,
     },
     arrowDropIcon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
 }))
 

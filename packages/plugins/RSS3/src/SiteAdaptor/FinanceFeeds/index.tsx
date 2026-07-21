@@ -12,7 +12,7 @@ import { useFinanceFeeds } from './useFinanceFeeds.js'
 
 const useStyles = makeStyles()((theme) => ({
     loading: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     skeleton: {
         borderRadius: theme.spacing(1),
@@ -51,7 +51,7 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
     if (error && !feeds.length)
         return (
             <Box sx={{ p: 2, boxSizing: 'border-box' }}>
-                <Box sx={{ mt: '100px', color: (theme) => theme.palette.maskColor.main }}>
+                <Box sx={{ mt: '100px', color: (theme) => theme.vars.palette.maskColor.main }}>
                     <ReloadStatus onRetry={fetchNextPage} />
                 </Box>
             </Box>
@@ -88,7 +88,8 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
                             <LoadingBase className={classes.loading} />
                         :   null}
                     </ElementAnchor>
-                :   <Typography sx={{ color: (theme) => theme.palette.maskColor.second, textAlign: 'center', py: 2 }}>
+                :   <Typography
+                        sx={{ color: (theme) => theme.vars.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                         <Trans>No more data available.</Trans>
                     </Typography>
                 }

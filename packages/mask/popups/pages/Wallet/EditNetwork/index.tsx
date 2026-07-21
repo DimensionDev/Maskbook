@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { fetchChains } from '@masknet/web3-providers/helpers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType, ZERO_ADDRESS, getRPCConstant } from '@masknet/web3-shared-evm'
-import { Button, Input, Typography, alpha } from '@mui/material'
+import { Button, Input, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -40,24 +40,24 @@ const useStyles = makeStyles()((theme) => ({
     footer: {
         padding: theme.spacing(2),
         borderRadius: 12,
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow: theme.palette.maskColor.bottomBg,
+        background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(2),
     },
     label: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginBottom: theme.spacing(0.5),
         marginTop: theme.spacing(2),
     },
     error: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         marginTop: theme.spacing(0.5),
     },
     warn: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginTop: theme.spacing(0.5),
     },
 }))

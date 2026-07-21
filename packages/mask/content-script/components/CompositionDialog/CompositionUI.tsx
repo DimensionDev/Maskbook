@@ -8,7 +8,7 @@ import {
     useRef,
     useState,
 } from 'react'
-import { Button, DialogActions, Typography, alpha } from '@mui/material'
+import { Button, DialogActions, Typography } from '@mui/material'
 import type { EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
 import {
@@ -25,7 +25,7 @@ import {
     type ProfileIdentifier,
     type ProfileInformation,
 } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
@@ -58,13 +58,13 @@ const useStyles = makeStyles()((theme) => ({
     optionTitle: {
         lineHeight: '18px',
         fontSize: 14,
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         marginRight: 12,
     },
     editorWrapper: {
         flex: 1,
         width: 568,
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         padding: 0,
         boxSizing: 'border-box',
         borderRadius: 8,
@@ -73,16 +73,16 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 18,
         height: 18,
-        fill: theme.palette.text.buttonText,
+        fill: theme.vars.palette.text.buttonText,
     },
     action: {
         height: 68,
         padding: '0 16px',
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
+        background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
         justifyContent: 'space-between',
         display: 'flex',
     },
