@@ -8,7 +8,6 @@ import {
     useRef,
     useState,
 } from 'react'
-import { LoadingButton } from '@mui/lab'
 import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import type { EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
@@ -297,7 +296,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                             <Trans>Enable auto paste</Trans>
                         </Button>
                     :   null}
-                    <LoadingButton
+                    <Button
                         style={{ opacity: 1 }}
                         disabled={!submitAvailable}
                         loading={sending}
@@ -306,7 +305,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                         onClick={onSubmit}
                         startIcon={<Icons.Send className={classes.icon} />}>
                         <Trans>Encrypt</Trans>
-                    </LoadingButton>
+                    </Button>
                 </div>
             </DialogActions>
         </CompositionContext>

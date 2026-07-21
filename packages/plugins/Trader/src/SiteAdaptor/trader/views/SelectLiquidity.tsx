@@ -142,11 +142,13 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                     placeholder="Search"
                     autoFocus
                     fullWidth
-                    InputProps={{
-                        style: { height: 40 },
-                        inputProps: { style: { paddingLeft: 4 } },
-                        startAdornment: <Icons.Search size={18} />,
-                        endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
+                    slotProps={{
+                        input: {
+                            style: { height: 40 },
+                            startAdornment: <Icons.Search size={18} />,
+                            endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
+                        },
+                        htmlInput: { style: { paddingLeft: 4 } },
                     }}
                     onChange={(e) => {
                         setKeyword(e.currentTarget.value)

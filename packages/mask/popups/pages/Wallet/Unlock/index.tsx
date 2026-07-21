@@ -2,8 +2,7 @@ import urlcat from 'urlcat'
 import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { LoadingButton } from '@mui/lab'
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import Services from '#services'
@@ -105,14 +104,14 @@ const Unlock = memo(function Unlock() {
                     :   null}
                 </Box>
 
-                <LoadingButton
+                <Button
                     loading={loading}
                     fullWidth
                     variant="contained"
                     disabled={!password || loading}
                     onClick={handleUnlock}>
                     <Trans>Unlock</Trans>
-                </LoadingButton>
+                </Button>
 
                 <Typography
                     color={theme.palette.maskColor.main}

@@ -143,12 +143,12 @@ export const Slippage = memo(function Slippage() {
                             placeholder="0.1-50"
                             type="number"
                             inputRef={inputRef}
-                            InputProps={{
-                                inputProps: {
+                            slotProps={{
+                                htmlInput: {
                                     min: 0.1,
                                     max: 50,
                                 },
-                                endAdornment: <Typography>%</Typography>,
+                                input: { endAdornment: <Typography>%</Typography> },
                             }}
                             value={pendingSlippage}
                             onChange={(e) => {

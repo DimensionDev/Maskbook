@@ -124,8 +124,10 @@ export const SearchBox = memo<SearchBoxProps>(function SearchBox({ onSearch }) {
                             onSearch(selectedChain?.chainId ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')
                         }}
                         onChange={(e) => setSearchSearchContent(e.target.value)}
-                        InputProps={{
-                            classes: { root: classes.search },
+                        slotProps={{
+                            input: {
+                                classes: { root: classes.search },
+                            },
                         }}
                     />
                 </Box>

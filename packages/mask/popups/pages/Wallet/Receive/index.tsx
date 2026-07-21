@@ -4,7 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress, type ChainId } from '@masknet/web3-shared-evm'
-import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
+import { Box, Skeleton, Typography } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
@@ -109,9 +109,6 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const avatarProps: AvatarProps = {
-    sx: { fontSize: 26 },
-}
 export const Component = memo(function Receive() {
     const { t } = useLingui()
     const { classes } = useStyles()
@@ -131,7 +128,7 @@ export const Component = memo(function Receive() {
         isChain ?
             currentNetwork?.iconUrl ?
                 <ImageIcon size={60} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
-            :   <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} {...avatarProps} />
+            :   <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} sx={{ fontSize: 26 }} />
         :   <TokenIcon
                 chainId={chainId as ChainId}
                 address={address}

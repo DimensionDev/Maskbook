@@ -22,6 +22,23 @@ import {
 import type { MaskColor } from './colors.js'
 
 type ThemeOverride = (mode: PaletteMode, colors: MaskColor) => ThemeOptions
+
+declare module '@mui/material/Button' {
+    interface ButtonPropsVariantOverrides {
+        rounded: true
+        roundedContained: true
+        roundedOutlined: true
+        roundedText: true
+        roundedDark: true
+    }
+}
+
+declare module '@mui/material/InputBase' {
+    interface InputBasePropsSizeOverrides {
+        large: true
+    }
+}
+
 // this override extends the mui theme and cannot fit ThemeOptions
 export const Button = (mode: PaletteMode, colors: MaskColor) => ({
     components: {

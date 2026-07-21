@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Button, DialogActions, DialogContent, inputClasses, useMediaQuery } from '@mui/material'
+import { Button, DialogActions, DialogContent, inputClasses } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
@@ -131,7 +131,6 @@ export function SelectFungibleTokenDialog({
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const { classes, cx } = useStyles({ compact })
-    const isMdScreen = useMediaQuery((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isPrivyWallet = !!usePrivyWallet(account)
@@ -144,10 +143,6 @@ export function SelectFungibleTokenDialog({
 
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
-    const FixedSizeListProps = useMemo(
-        () => ({ itemSize: rowSize + 18.5, height: 428, className: classes.wrapper }),
-        [rowSize, isMdScreen, classes.wrapper],
-    )
     const [pendingSelectedTokens, setPendingSelectedTokens] = useState(selectedTokens)
     const enabled = multiple && maxTokens ? pendingSelectedTokens.length < maxTokens : true
     const noChanges = useMemo(() => {
@@ -196,10 +191,8 @@ export function SelectFungibleTokenDialog({
                         selectedTokens={pendingSelectedTokens}
                         onSelectedChange={setPendingSelectedTokens}
                         onSelect={onClose}
-                        FixedSizeListProps={FixedSizeListProps}
-                        SearchTextFieldProps={{
-                            InputProps: { classes: { root: classes.search } },
-                        }}
+                        FixedSizeListProps={{ itemSize: rowSize + 18.5, height: 428, className: classes.wrapper }}
+                        SearchTextFieldProps={{ slotProps: { input: { classes: { root: classes.search } } } }}
                         isHiddenChainIcon={false}
                         enabled={enabled}
                     />

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, type HTMLProps } from 'react'
 import { FixedSizeList, type FixedSizeListProps, type ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { Box, Stack, Typography, useTheme } from '@mui/material'
+import { Box, mergeSlotProps, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '../../UIHelper/index.js'
 import { MaskTextField, type MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
@@ -109,7 +109,7 @@ export function SearchableList<T extends object>({
     const theme = useTheme()
     const { classes, cx } = useStyles(undefined, { props })
     const { height = 300, itemSize, ...rest } = FixedSizeListProps || {}
-    const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
+    const { slotProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
     const fuse = useMemo(() => {
         return new Fuse(data, {
@@ -166,19 +166,23 @@ export function SearchableList<T extends object>({
                         placeholder="Search"
                         autoFocus
                         fullWidth
-                        InputProps={{
-                            style: { height: 40 },
-                            inputProps: { style: { paddingLeft: 4 } },
-                            startAdornment: <Icons.Search size={18} />,
-                            endAdornment:
-                                keyword ?
-                                    <Icons.Close
-                                        size={18}
-                                        onClick={handleClear}
-                                        color={textFieldPropsRest.error ? theme.palette.maskColor.danger : undefined}
-                                    />
-                                :   null,
-                            ...InputProps,
+                        slotProps={{
+                            ...slotProps,
+                            input: mergeSlotProps(slotProps?.input, {
+                                style: { height: 40 },
+                                startAdornment: <Icons.Search size={18} />,
+                                endAdornment:
+                                    keyword ?
+                                        <Icons.Close
+                                            size={18}
+                                            onClick={handleClear}
+                                            color={
+                                                textFieldPropsRest.error ? theme.palette.maskColor.danger : undefined
+                                            }
+                                        />
+                                    :   null,
+                            }),
+                            htmlInput: mergeSlotProps(slotProps?.htmlInput, { style: { paddingLeft: 4 } }),
                         }}
                         onChange={handleChange}
                         {...textFieldPropsRest}

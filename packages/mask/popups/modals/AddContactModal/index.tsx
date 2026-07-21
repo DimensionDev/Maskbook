@@ -110,19 +110,21 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             <MaskTextField
                 spellCheck={false}
                 placeholder={t`Address`}
-                wrapperProps={{ className: classes.input }}
+                className={classes.input}
                 value={address}
                 onChange={(ev) => setAddress(ev.target.value)}
                 error={addressError || addressExistError}
-                InputProps={{
-                    endAdornment:
-                        addressError || addressExistError ?
-                            <InputAdornment position="end">
-                                <IconButton onClick={() => setAddress('')} edge="end" size="small">
-                                    <Icons.Close size={18} color={theme.palette.maskColor.danger} />
-                                </IconButton>
-                            </InputAdornment>
-                        :   null,
+                slotProps={{
+                    input: {
+                        endAdornment:
+                            addressError || addressExistError ?
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setAddress('')} edge="end" size="small">
+                                        <Icons.Close size={18} color={theme.palette.maskColor.danger} />
+                                    </IconButton>
+                                </InputAdornment>
+                            :   null,
+                    },
                 }}
             />
             {validationMessage ?

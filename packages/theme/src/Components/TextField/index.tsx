@@ -1,15 +1,15 @@
 import { omit } from 'lodash-es'
-import type { BoxProps } from '@mui/system'
 import {
     Box,
     formHelperTextClasses,
     TextField,
     type StandardTextFieldProps,
-    type InputProps,
     Typography,
     InputBase,
+    type InputBaseProps,
     inputBaseClasses,
     alpha,
+    mergeSlotProps,
 } from '@mui/material'
 import { Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
@@ -83,16 +83,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'variant'> {
-    wrapperProps?: BoxProps
+type TextFieldHtmlInputSlotProps = NonNullable<NonNullable<StandardTextFieldProps['slotProps']>['htmlInput']>
+type InputBaseHtmlInputSlotProps = NonNullable<NonNullable<InputBaseProps['slotProps']>['input']>
+
+export interface MaskTextFieldProps extends StandardTextFieldProps {
+    slotProps?: Omit<NonNullable<StandardTextFieldProps['slotProps']>, 'htmlInput'> & {
+        htmlInput?: TextFieldHtmlInputSlotProps & InputBaseHtmlInputSlotProps
+    }
 }
 
 export function MaskTextField(props: MaskTextFieldProps) {
-    const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
-    const InputProps = (props.InputProps as InputProps) ?? {}
-    const { classes, cx } = useStyles()
+    const { label, sx, required = false, className, helperText, slotProps, ...rest } = props
+    const { classes } = useStyles()
     return (
-        <Box sx={sx} {...wrapperProps}>
+        <Box sx={sx} className={className}>
             {label && typeof label === 'string' ?
                 <Typography sx={{ mb: 1 }} variant="body2" className={classes.label}>
                     {label}
@@ -111,30 +115,23 @@ export function MaskTextField(props: MaskTextFieldProps) {
                     variant="standard"
                     required={required}
                     helperText={helperText}
-                    InputProps={{
-                        disableUnderline: true,
-                        classes: {
-                            disabled: classes.inputDisabled,
-                            focused: classes.inputFocused,
-                            ...InputProps.classes,
-                        },
-                        ...InputProps,
-                        className: cx(classes.input, InputProps.className),
+                    slotProps={{
+                        ...slotProps,
+                        input: mergeSlotProps(slotProps?.input, {
+                            disableUnderline: true,
+                            classes: {
+                                disabled: classes.inputDisabled,
+                                focused: classes.inputFocused,
+                            },
+                            className: classes.input,
+                        }),
                     }}
                 />
             :   <InputBase
                     className={classes.field}
-                    {...omit(InputProps, 'disableUnderline')}
-                    {...omit(
-                        rest,
-                        'margin',
-                        'onKeyDown',
-                        'onKeyUp',
-                        'InputProps',
-                        'inputProps',
-                        'FormHelperTextProps',
-                        'onInvalid',
-                    )}
+                    {...omit(slotProps?.input, 'disableUnderline')}
+                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'onInvalid')}
+                    slotProps={{ input: slotProps?.htmlInput }}
                 />
             }
         </Box>

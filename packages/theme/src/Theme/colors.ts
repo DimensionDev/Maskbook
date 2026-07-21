@@ -1,4 +1,33 @@
 // TODO: Just only provide maskColor, others will be deprecate.
+declare module '@mui/material/styles' {
+    interface Palette {
+        maskColor: MaskColor['maskColor']
+        shadow: MaskColor['shadow']
+        secondaryDivider: string
+    }
+
+    interface PaletteOptions {
+        maskColor?: MaskColor['maskColor']
+        shadow?: MaskColor['shadow']
+        secondaryDivider?: string
+    }
+
+    interface TypeText {
+        third: string
+        strong: string
+        buttonText: string
+    }
+
+    interface TypeBackground {
+        input: string
+        tipMask: string
+    }
+
+    interface TypeAction {
+        mask: string
+    }
+}
+
 export const MaskColors = {
     light: {
         grey: {

@@ -2,7 +2,6 @@
 /* eslint-disable @eslint-react/rules-of-hooks */
 import { useRef, useContext } from 'react'
 import { Flags } from '@masknet/flags'
-import type { PopperProps } from '@mui/material'
 import {
     DisableShadowRootContext,
     PreventShadowRootEventPropagationListContext,
@@ -89,18 +88,6 @@ export function createShadowRootForwardedComponent<
 >(Component: React.ComponentType<T>) {
     return ((props: T) => {
         return usePortalShadowRoot((container) => <Component container={container} {...props} />)
-    }) as typeof Component
-}
-
-export function createShadowRootForwardedPopperComponent<
-    T extends {
-        PopperProps?: Partial<PopperProps>
-    },
->(Component: React.ComponentType<T>) {
-    return ((props: T) => {
-        return usePortalShadowRoot((container) => {
-            return <Component {...props} PopperProps={{ container, ...props.PopperProps }} />
-        })
     }) as typeof Component
 }
 

@@ -1,7 +1,13 @@
 import { memo, type RefAttributes } from 'react'
-import { TextField, type TextFieldProps } from '@mui/material'
+import { mergeSlotProps, TextField, type TextFieldProps } from '@mui/material'
 
-export const StyledInput = memo(function StyledInput({ ref, ...props }: TextFieldProps & RefAttributes<unknown>) {
+export type StyledInputProps = TextFieldProps
+
+export const StyledInput = memo(function StyledInput({
+    ref,
+    slotProps,
+    ...props
+}: TextFieldProps & RefAttributes<unknown>) {
     return (
         <TextField
             {...props}
@@ -9,12 +15,12 @@ export const StyledInput = memo(function StyledInput({ ref, ...props }: TextFiel
             inputRef={ref}
             variant="standard"
             autoComplete="off"
-            inputProps={{ 'aria-autocomplete': 'none', ...props.inputProps }}
-            InputProps={{
-                ...props.InputProps,
-                disableUnderline: true,
+            slotProps={{
+                ...slotProps,
+                htmlInput: mergeSlotProps(slotProps?.htmlInput, { 'aria-autocomplete': 'none' }),
+                input: mergeSlotProps(slotProps?.input, { disableUnderline: true }),
+                formHelperText: mergeSlotProps(slotProps?.formHelperText, { style: { marginTop: 12 } }),
             }}
-            FormHelperTextProps={{ ...props.FormHelperTextProps, style: { marginTop: 12 } }}
         />
     )
 })

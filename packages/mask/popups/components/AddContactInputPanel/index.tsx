@@ -123,20 +123,22 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
                     placeholder={t`Ens or Address(0x)`}
                     value={userInput}
                     onChange={(ev) => setUserInput(ev.target.value)}
-                    wrapperProps={{ className: classes.input }}
+                    className={classes.input}
                     autoFocus={autoFocus}
-                    InputProps={{
-                        spellCheck: false,
-                        endAdornment:
-                            addable ?
-                                <div className={classes.endAdornment} onClick={openAddContactModal}>
-                                    <Typography className={classes.save}>
-                                        <Trans>Save</Trans>
-                                    </Typography>
-                                    <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
-                                </div>
-                            :   undefined,
-                        classes: { input: classes.inputText },
+                    slotProps={{
+                        input: {
+                            spellCheck: false,
+                            endAdornment:
+                                addable ?
+                                    <div className={classes.endAdornment} onClick={openAddContactModal}>
+                                        <Typography className={classes.save}>
+                                            <Trans>Save</Trans>
+                                        </Typography>
+                                        <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
+                                    </div>
+                                :   undefined,
+                            classes: { input: classes.inputText },
+                        },
                     }}
                 />
                 {inputWarningMessage && !addressValidationMessage ?

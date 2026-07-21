@@ -82,9 +82,11 @@ export const Component = memo(function RecoveryPrivateKey() {
                     <PasswordField
                         {...field}
                         autoFocus
-                        InputProps={{
-                            className: classes.input,
-                            disableUnderline: true,
+                        slotProps={{
+                            input: {
+                                className: classes.input,
+                                disableUnderline: true,
+                            },
                         }}
                         autoComplete="off"
                         sx={{ width: '100%' }}

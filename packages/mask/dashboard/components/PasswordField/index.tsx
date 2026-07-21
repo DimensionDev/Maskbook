@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { MaskTextFieldProps } from '@masknet/theme'
-import { IconButton, InputAdornment, TextField } from '@mui/material'
+import { IconButton, InputAdornment, mergeSlotProps, TextField } from '@mui/material'
 import { Icons } from '@masknet/icons'
 
 interface PasswordFieldProps extends Exclude<MaskTextFieldProps, 'type'> {
@@ -16,8 +16,8 @@ export default function PasswordField({ show = true, ...props }: PasswordFieldPr
             type={showPassword ? 'text' : 'password'}
             size="medium"
             slotProps={{
-                input: {
-                    ...props.InputProps,
+                ...props.slotProps,
+                input: mergeSlotProps(props.slotProps?.input, {
                     size: 'medium',
                     disableUnderline: true,
                     endAdornment:
@@ -35,7 +35,7 @@ export default function PasswordField({ show = true, ...props }: PasswordFieldPr
                                 </IconButton>
                             </InputAdornment>
                         :   null,
-                },
+                }),
             }}
         />
     )

@@ -183,16 +183,18 @@ export function GasForm(props: GasFormProps) {
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    InputProps={{
-                                        inputProps: {
+                                    slotProps={{
+                                        htmlInput: {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
-                                        type: 'number',
-                                        endAdornment: (
-                                            <Typography className={classes.unit}>
-                                                <Trans>Gwei</Trans>
-                                            </Typography>
-                                        ),
+                                        input: {
+                                            type: 'number',
+                                            endAdornment: (
+                                                <Typography className={classes.unit}>
+                                                    <Trans>Gwei</Trans>
+                                                </Typography>
+                                            ),
+                                        },
                                     }}
                                     value={isZero(gasPriceByUser ?? 0) ? gasPrice : gasPriceByUser}
                                     label={
@@ -218,11 +220,11 @@ export function GasForm(props: GasFormProps) {
                         render={({ field }) => (
                             <MaskTextField
                                 {...field}
-                                InputProps={{
-                                    inputProps: {
+                                slotProps={{
+                                    htmlInput: {
                                         pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                     },
-                                    type: 'number',
+                                    input: { type: 'number' },
                                 }}
                                 disabled={props.disableGasLimit}
                                 value={isZero(gasLimit) ? defaultGasLimit : new BigNumber(gasLimit).toString()}
@@ -251,16 +253,18 @@ export function GasForm(props: GasFormProps) {
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    InputProps={{
-                                        inputProps: {
+                                    slotProps={{
+                                        htmlInput: {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
-                                        type: 'number',
-                                        endAdornment: (
-                                            <Typography className={classes.unit}>
-                                                <Trans>Gwei</Trans>
-                                            </Typography>
-                                        ),
+                                        input: {
+                                            type: 'number',
+                                            endAdornment: (
+                                                <Typography className={classes.unit}>
+                                                    <Trans>Gwei</Trans>
+                                                </Typography>
+                                            ),
+                                        },
                                     }}
                                     value={
                                         isZero(maxPriorityFeePerGasByUser ?? 0) ? maxPriorityFeePerGas : (
@@ -289,16 +293,18 @@ export function GasForm(props: GasFormProps) {
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    InputProps={{
-                                        inputProps: {
+                                    slotProps={{
+                                        htmlInput: {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
-                                        type: 'number',
-                                        endAdornment: (
-                                            <Typography className={classes.unit}>
-                                                <Trans>Gwei</Trans>
-                                            </Typography>
-                                        ),
+                                        input: {
+                                            type: 'number',
+                                            endAdornment: (
+                                                <Typography className={classes.unit}>
+                                                    <Trans>Gwei</Trans>
+                                                </Typography>
+                                            ),
+                                        },
                                     }}
                                     value={isZero(maxFeePerGasByUser ?? 0) ? maxFeePerGas : maxFeePerGasByUser}
                                     label={

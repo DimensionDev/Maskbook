@@ -55,7 +55,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             ...rest,
             ref,
             'data-icon': name,
-            sx: { ...iconStyle, ...sx },
+            sx: Array.isArray(sx) ? [iconStyle, ...sx] : [iconStyle, sx],
             // To align icon center.
             fontSize: 0,
         }

@@ -3,8 +3,7 @@ import { Icons } from '@masknet/icons'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
-import { LoadingButton } from '@mui/lab'
-import { DialogActions, Typography, alpha } from '@mui/material'
+import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
@@ -152,7 +151,7 @@ export function CompositionDialogUI(props: CompositionProps) {
                     {props.maxLength ?
                         <CharLimitIndicator value={currentPostSize} max={props.maxLength} />
                     :   null}
-                    <LoadingButton
+                    <Button
                         style={{ opacity: 1 }}
                         disabled={!submitAvailable}
                         loading={sending}
@@ -161,7 +160,7 @@ export function CompositionDialogUI(props: CompositionProps) {
                         onClick={onSubmit}
                         startIcon={<Icons.Send className={classes.icon} />}>
                         <Trans>Encrypt</Trans>
-                    </LoadingButton>
+                    </Button>
                 </div>
             </DialogActions>
         </CompositionContext>

@@ -1,27 +1,7 @@
-declare global {
-    module '@mui/material/Button' {
-        interface ButtonPropsVariantOverrides {
-            rounded: true
-            roundedContained: true
-            roundedOutlined: true
-            roundedText: true
-            roundedDark: true
-            containedDark: true
-        }
-        interface ButtonPropsColorOverrides {
-            warning: true
-            error: true
-        }
-    }
-    module '@mui/material/InputBase' {
-        interface InputBasePropsSizeOverrides {
-            large: true
-        }
-    }
-    module '@mui/material/Paper' {
-        interface PaperPropsVariantOverrides {
-            background: true
-            rounded: true
-        }
-    }
-}
+/// <reference path="./Theme/colors.ts" />
+/// <reference path="./Theme/component-changes.tsx" />
+/// <reference path="./Theme/theme.ts" />
+/// <reference path="./Components/Snackbar/index.tsx" />
+
+// The module augmentations live beside their implementations. This file ensures
+// they are loaded by every @masknet/theme entry point.

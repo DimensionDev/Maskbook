@@ -222,10 +222,12 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     if (props.isOnBack) onClose?.()
                     else closeBothCompositionDialog()
                 }}
-                BackdropProps={{
-                    transitionDuration: 0,
-                    classes: {
-                        root: dialogBackdropRoot,
+                slotProps={{
+                    backdrop: {
+                        transitionDuration: 0,
+                        classes: {
+                            root: dialogBackdropRoot,
+                        },
                     },
                 }}
                 {...omit(rest, 'isOnBack')}

@@ -77,9 +77,11 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                     <PasswordField
                         {...field}
                         autoFocus
-                        InputProps={{
-                            className: classes.input,
-                            disableUnderline: true,
+                        slotProps={{
+                            input: {
+                                className: classes.input,
+                                disableUnderline: true,
+                            },
                         }}
                         autoComplete="off"
                         multiline={multiline}

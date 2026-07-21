@@ -394,10 +394,12 @@ export const NetworkFee = memo(function NetworkFee() {
                                                         setValue('baseFee', value)
                                                         field.onChange(e)
                                                     }}
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                            <Typography className={classes.gwei}>Gwei</Typography>
-                                                        ),
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: (
+                                                                <Typography className={classes.gwei}>Gwei</Typography>
+                                                            ),
+                                                        },
                                                     }}
                                                 />
                                                 {fieldState.error ?
@@ -430,10 +432,12 @@ export const NetworkFee = memo(function NetworkFee() {
                                                         setValue('priorityFee', value)
                                                         field.onChange(e)
                                                     }}
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                            <Typography className={classes.gwei}>Gwei</Typography>
-                                                        ),
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: (
+                                                                <Typography className={classes.gwei}>Gwei</Typography>
+                                                            ),
+                                                        },
                                                     }}
                                                 />
                                                 {fieldState.error ?
@@ -469,10 +473,12 @@ export const NetworkFee = memo(function NetworkFee() {
                                                         setValue('gasPrice', value)
                                                         field.onChange(e)
                                                     }}
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                            <Typography className={classes.gwei}>Gwei</Typography>
-                                                        ),
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: (
+                                                                <Typography className={classes.gwei}>Gwei</Typography>
+                                                            ),
+                                                        },
                                                     }}
                                                 />
                                                 {fieldState.error ?

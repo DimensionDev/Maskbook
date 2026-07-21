@@ -8,8 +8,7 @@ import { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
+import { Typography, Button } from '@mui/material'
 import { NetworkPluginID, PopupRoutes, NUMERIC_INPUT_REGEXP_PATTERN, toHex } from '@masknet/shared-base'
 import {
     formatCurrency,
@@ -385,8 +384,8 @@ export const GasSetting1559 = memo(() => {
                                 }}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
-                                InputProps={{
-                                    inputProps: {
+                                slotProps={{
+                                    htmlInput: {
                                         pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                     },
                                 }}
@@ -421,8 +420,8 @@ export const GasSetting1559 = memo(() => {
                             }}
                             error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
                             helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
-                            InputProps={{
-                                inputProps: {
+                            slotProps={{
+                                htmlInput: {
                                     pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                 },
                             }}
@@ -454,8 +453,8 @@ export const GasSetting1559 = memo(() => {
                             }}
                             error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
                             helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
-                            InputProps={{
-                                inputProps: {
+                            slotProps={{
+                                htmlInput: {
                                     pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                 },
                             }}
@@ -464,7 +463,7 @@ export const GasSetting1559 = memo(() => {
                     name="maxFeePerGas"
                 />
             </form>
-            <LoadingButton
+            <Button
                 loading={loading}
                 variant="contained"
                 fullWidth
@@ -472,7 +471,7 @@ export const GasSetting1559 = memo(() => {
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 <Trans>Confirm</Trans>
-            </LoadingButton>
+            </Button>
         </>
     )
 })

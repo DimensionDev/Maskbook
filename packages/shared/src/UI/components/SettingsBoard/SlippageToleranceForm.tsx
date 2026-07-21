@@ -88,9 +88,9 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                             <MaskTextField
                                 {...field}
                                 placeholder={t`Custom`}
-                                InputProps={{
-                                    type: 'number',
-                                    inputProps: {
+                                slotProps={{
+                                    input: { type: 'number' },
+                                    htmlInput: {
                                         pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                     },
                                 }}

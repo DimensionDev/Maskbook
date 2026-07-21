@@ -131,7 +131,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                 <MaskTextField
                     variant="standard"
                     autoFocus
-                    inputProps={{ style: { textAlign: 'center' } }}
+                    slotProps={{ htmlInput: { style: { textAlign: 'center' } } }}
                     classes={{ root: classes.inputRoot }}
                     spellCheck={false}
                     placeholder={t`Name`}

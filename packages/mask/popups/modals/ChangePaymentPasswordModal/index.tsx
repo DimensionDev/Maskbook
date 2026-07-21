@@ -99,7 +99,7 @@ function ChangePaymentPasswordDrawer({
                         setOriginalPasswordWrong('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={inputProps}
+                    slotProps={{ input: inputProps }}
                 />
                 <PasswordField
                     sx={{ mt: 2 }}
@@ -112,7 +112,7 @@ function ChangePaymentPasswordDrawer({
                         setPasswordNotMatch('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={inputProps}
+                    slotProps={{ input: inputProps }}
                 />
                 <PasswordField
                     sx={{ mt: 2 }}
@@ -125,7 +125,7 @@ function ChangePaymentPasswordDrawer({
                         setPasswordNotMatch('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={inputProps}
+                    slotProps={{ input: inputProps }}
                 />
             </Box>
             <Typography color={theme.palette.maskColor.danger} sx={{ fontSize: 14, mt: 1.5, height: 32 }}>
