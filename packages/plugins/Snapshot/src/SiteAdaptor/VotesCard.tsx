@@ -126,7 +126,7 @@ function Content() {
                                     <Box className={classes.avatarWrapper}>
                                         <EthereumBlockie address={v.address} />
                                     </Box>
-                                    <Typography color={theme.vars.palette.maskColor.dark}>
+                                    <Typography sx={{ color: theme.vars.palette.maskColor.dark }}>
                                         {isSameAddress(v.address, account) ?
                                             <Trans>You</Trans>
                                         :   formatLongHex(v.address)}

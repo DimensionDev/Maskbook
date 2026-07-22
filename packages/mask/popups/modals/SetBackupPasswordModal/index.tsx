@@ -102,14 +102,14 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     helperText={passwordMatched ? '' : <Trans>Two entered passwords are not the same.</Trans>}
                 />
                 <Box>
-                    <Typography sx={{ fontSize: 12 }} color={theme.vars.palette.maskColor.second}>
+                    <Typography sx={{ color: theme.vars.palette.maskColor.second, fontSize: 12 }}>
                         <Trans>
                             Backup password must be 8-20 characters, including uppercase, lowercase, special characters
                             and numbers.
                         </Trans>
                     </Typography>
                     {to ?
-                        <Typography sx={{ mt: 2, fontSize: 12 }} color={theme.vars.palette.maskColor.second}>
+                        <Typography sx={{ color: theme.vars.palette.maskColor.second, mt: 2, fontSize: 12 }}>
                             <Trans>Please set up backup password to export private key.</Trans>
                         </Typography>
                     :   null}

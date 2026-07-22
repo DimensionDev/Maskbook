@@ -279,8 +279,11 @@ export const Component = memo(function SetPaymentPassword() {
                             </div>
                             {errorMsg && !isValid ?
                                 <Typography
-                                    color={theme.vars.palette.maskColor.danger}
-                                    sx={{ fontSize: 14, marginTop: '12px' }}>
+                                    sx={{
+                                        color: theme.vars.palette.maskColor.danger,
+                                        fontSize: 14,
+                                        marginTop: '12px',
+                                    }}>
                                     {errorMsg}
                                 </Typography>
                             :   null}
@@ -288,8 +291,8 @@ export const Component = memo(function SetPaymentPassword() {
                             <button type="submit" hidden />
                         </form>
                         <Typography
-                            color={theme.vars.palette.maskColor.third}
                             sx={{
+                                color: theme.vars.palette.maskColor.third,
                                 fontSize: 14,
                                 textAlign: 'center',
                                 fontWeight: 700,
@@ -298,8 +301,8 @@ export const Component = memo(function SetPaymentPassword() {
                         </Typography>
 
                         <Typography
-                            color={theme.vars.palette.maskColor.third}
                             sx={{
+                                color: theme.vars.palette.maskColor.third,
                                 fontSize: 14,
                                 textAlign: 'center',
                                 fontWeight: 700,

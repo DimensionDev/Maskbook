@@ -1,4 +1,4 @@
-import { alpha, makeStyles, LoadingBase  } from '@masknet/theme'
+import { alpha, makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
 import { Box, Link, Typography } from '@mui/material'
 import { CopyButton, WalletIcon } from '@masknet/shared'

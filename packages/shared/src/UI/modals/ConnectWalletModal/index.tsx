@@ -170,11 +170,11 @@ export function ConnectWalletModal({
                 </Box>
                 <Typography
                     sx={{
+                        color: error && !loading ? maskColor.danger : undefined,
                         fontWeight: 700,
                         fontSize: 16,
                         mt: 1.5,
-                    }}
-                    color={error && !loading ? maskColor.danger : undefined}>
+                    }}>
                     <Trans>Requesting Connection</Trans>
                 </Typography>
                 <Typography sx={{ fontWeight: 400, mt: 1.5 }}>

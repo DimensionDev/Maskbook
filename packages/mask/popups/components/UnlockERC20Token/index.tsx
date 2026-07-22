@@ -232,12 +232,11 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         sx={{
                             fontSize: 12,
                             fontWeight: 700,
-                        }}
-                        color={
-                            isGreaterThan(value, leftShift(balance, token?.decimals)) ?
-                                theme.vars.palette.maskColor.danger
-                            :   theme.vars.palette.maskColor.warn
-                        }>
+                            color:
+                                isGreaterThan(value, leftShift(balance, token?.decimals)) ?
+                                    theme.vars.palette.maskColor.danger
+                                :   theme.vars.palette.maskColor.warn,
+                        }}>
                         {tips}
                     </Typography>
                 :   null}

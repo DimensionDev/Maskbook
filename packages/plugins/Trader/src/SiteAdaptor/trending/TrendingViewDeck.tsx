@@ -340,11 +340,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     {market ?
                                         <Typography
                                             sx={{
+                                                color: theme.vars.palette.maskColor.dark,
                                                 fontSize: 18,
                                                 fontWeight: 500,
                                                 lineHeight: '24px',
-                                            }}
-                                            color={theme.vars.palette.maskColor.dark}>
+                                            }}>
                                             {floorPrice ? formatCurrency(floorPrice, 'USD') : '--'}
                                         </Typography>
                                     :   <Typography sx={{ fontSize: 14, fontWeight: 500, lineHeight: '24px' }}>

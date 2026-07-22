@@ -1,4 +1,4 @@
 export { MaskColors, alpha, DarkMaskColors, LightMaskColors } from './colors.js'
-export { MaskThemeProvider, useMaskIconPalette, type MaskThemeProviderProps, usePalette } from './Provider.js'
+export { MaskThemeProvider, type MaskThemeProviderProps, usePalette } from './Provider.js'
 export { MaskTheme } from './theme.js'
 export { fromRGB, getBackgroundColor, shade, toRGB } from './color-tools.js'

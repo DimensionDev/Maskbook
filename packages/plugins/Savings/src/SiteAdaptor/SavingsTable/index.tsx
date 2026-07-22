@@ -120,7 +120,7 @@ export function SavingsTable({ tab, protocols, loadingProtocols, onWithdraw, onD
                 </div>
             :   <div className={classes.placeholder}>
                     <Icons.EmptySimple size={36} className={classes.empty} />
-                    <Typography sx={{ fontSize: '14px', mt: 1.5 }} color={theme.vars.palette.maskColor.second}>
+                    <Typography sx={{ color: theme.vars.palette.maskColor.second, fontSize: '14px', mt: 1.5 }}>
                         <Trans>No deposit protocols found.</Trans>
                     </Typography>
                 </div>

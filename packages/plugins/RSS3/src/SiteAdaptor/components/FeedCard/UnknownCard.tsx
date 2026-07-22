@@ -22,7 +22,7 @@ export function UnknownCard({ feed, ...rest }: TokenFeedCardProps) {
         <CardFrame type={cardType} feed={feed} {...rest}>
             <UnknownAction feed={feed} />
             {process.env.NODE_ENV === 'development' ?
-                <Typography color="red">
+                <Typography sx={{ color: 'red' }}>
                     Unknown feed. Tag: {feed.tag}, Type: {feed.type}, {feed.actions.length} actions
                 </Typography>
             :   null}

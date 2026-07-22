@@ -8,7 +8,7 @@ import {
     useCompositionContext,
 } from '@masknet/plugin-infra/content-script'
 import { DialogContent } from '@mui/material'
-import { alpha, makeStyles  } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { ClickableChip, GrantPermissions, InjectedDialog, usePluginHostPermissionCheck } from '@masknet/shared'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'

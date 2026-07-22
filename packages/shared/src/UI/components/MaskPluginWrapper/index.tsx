@@ -94,12 +94,8 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         const publisherNode = (
             <Typography
                 variant="body1"
-                sx={{
-                    fontSize: 14,
-                    fontWeight: '700',
-                }}
-                component="div"
-                color={theme.vars.palette.maskColor.textPluginColor}>
+                sx={{ color: theme.vars.palette.maskColor.textPluginColor, fontSize: 14, fontWeight: '700' }}
+                component="div">
                 {publisher}
             </Typography>
         )
@@ -135,13 +131,8 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 )}
                 <Typography
                     variant="body1"
-                    sx={{
-                        fontSize: 16,
-                        fontWeight: 700,
-                        marginLeft: 0.5,
-                    }}
-                    component="div"
-                    color={theme.vars.palette.maskColor.main}>
+                    sx={{ color: theme.vars.palette.maskColor.main, fontSize: 16, fontWeight: 700, marginLeft: 0.5 }}
+                    component="div">
                     {wrapperProps?.title ?? title ?? <Trans>Default</Trans>}
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>

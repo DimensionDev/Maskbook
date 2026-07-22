@@ -17,12 +17,12 @@ export const SelectProviderModal = memo<ActionModalBaseProps>(function SelectPro
             {...props}>
             <Typography
                 sx={{
+                    color: theme.vars.palette.maskColor.third,
                     textAlign: 'center',
                     fontSize: 14,
                     fontWeight: 700,
                     lineHeight: '18px',
-                }}
-                color={theme.vars.palette.maskColor.third}>
+                }}>
                 {onlyMask ?
                     <Trans>Select and Connect to your wallet</Trans>
                 :   <Trans>Connect Mask Network Account using your wallet.</Trans>}

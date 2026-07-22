@@ -99,8 +99,7 @@ const Unlock = memo(function Unlock() {
                     />
                     {verified === false ?
                         <Typography
-                            color={theme.vars.palette.maskColor.danger}
-                            sx={{ fontSize: 14, marginTop: '12px' }}>
+                            sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, marginTop: '12px' }}>
                             <Trans>Incorrect password</Trans>
                         </Typography>
                     :   null}
@@ -116,10 +115,10 @@ const Unlock = memo(function Unlock() {
                 </Button>
 
                 <Typography
-                    color={theme.vars.palette.maskColor.main}
                     onClick={navigateToResetWallet}
                     className={classes.pointer}
                     sx={{
+                        color: theme.vars.palette.maskColor.main,
                         marginTop: '16px',
                         fontSize: 14,
                         textAlign: 'center',

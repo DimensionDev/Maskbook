@@ -278,8 +278,9 @@ export function CreateTokenRedPacket() {
                             <RadioIndicator checked={isRandom} size={20} />
                         </div>
                         <Typography
-                            color={isRandom ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.second}
                             sx={{
+                                color:
+                                    isRandom ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.second,
                                 fontSize: 16,
                                 fontWeight: isRandom ? 700 : 400,
                             }}>
@@ -291,8 +292,9 @@ export function CreateTokenRedPacket() {
                             <RadioIndicator checked={!isRandom} size={20} />
                         </div>
                         <Typography
-                            color={isRandom ? theme.vars.palette.maskColor.second : theme.vars.palette.maskColor.main}
                             sx={{
+                                color:
+                                    isRandom ? theme.vars.palette.maskColor.second : theme.vars.palette.maskColor.main,
                                 fontSize: 16,
                                 fontWeight: isRandom ? 400 : 700,
                             }}>

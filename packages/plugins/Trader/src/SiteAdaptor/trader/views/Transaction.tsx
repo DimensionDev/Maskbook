@@ -403,13 +403,13 @@ export const Transaction = memo(function Transaction() {
                 : txSucceed || bridgeStatus?.status === 'SUCCESS' ?
                     <div className={classes.header}>
                         <Icons.FillSuccess size={72} />
-                        <Typography className={classes.title} color={theme.vars.palette.maskColor.success}>
+                        <Typography className={classes.title} sx={{ color: theme.vars.palette.maskColor.success }}>
                             <Trans>Complete</Trans>
                         </Typography>
                     </div>
                 :   <div className={classes.header}>
                         <Icons.ColorfulClose color={theme.vars.palette.maskColor.danger} size={72} />
-                        <Typography className={classes.title} color={theme.vars.palette.maskColor.danger}>
+                        <Typography className={classes.title} sx={{ color: theme.vars.palette.maskColor.danger }}>
                             <Trans>Failed</Trans>
                         </Typography>
                     </div>

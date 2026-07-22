@@ -64,7 +64,7 @@ export const RiskCardUI = memo<RiskCardUIProps>(({ icon, title, titleColor, desc
         <Stack spacing={1} key={title} sx={{ p: 1.5 }} direction="row" className={classes.detectionCard}>
             <Box className={classes.icon}>{icon}</Box>
             <Box>
-                <Typography className={classes.header} color={titleColor}>
+                <Typography className={classes.header} sx={{ color: titleColor }}>
                     {title}
                 </Typography>
                 {description ?

@@ -131,8 +131,8 @@ export function Snapshot() {
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography
-                                        color={theme.vars.palette.maskColor.publicMain}
                                         sx={{
+                                            color: theme.vars.palette.maskColor.publicMain,
                                             fontSize: 18,
                                             fontWeight: 'bold',
                                             width: 150,
@@ -158,8 +158,8 @@ export function Snapshot() {
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
-                                    color={theme.vars.palette.maskColor.publicSecond}
                                     sx={{
+                                        color: theme.vars.palette.maskColor.publicSecond,
                                         fontSize: 14,
                                         fontWeight: '700',
                                         width: 300,

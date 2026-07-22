@@ -341,7 +341,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                             tabIndex={-1}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Typography color={theme.vars.palette.maskColor.success} component="span">
+                            <Typography sx={{ color: theme.vars.palette.maskColor.success }} component="span">
                                 <Trans>Transaction submitted.</Trans>
                             </Typography>
                             <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />

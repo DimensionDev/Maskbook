@@ -201,7 +201,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
             </section>
             {unavailableProviders.length ?
                 <>
-                    <Typography sx={{ mt: 2, fontSize: 14 }} color={theme.vars.palette.maskColor.second}>
+                    <Typography sx={{ color: theme.vars.palette.maskColor.second, mt: 2, fontSize: 14 }}>
                         <Trans>The following wallets are not installed or in conflict with others</Trans>
                     </Typography>
                     <section className={classes.section}>

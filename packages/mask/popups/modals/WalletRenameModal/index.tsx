@@ -50,8 +50,8 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
     return (
         <BottomDrawer {...rest}>
             <Typography
-                color={theme.vars.palette.maskColor.third}
                 sx={{
+                    color: theme.vars.palette.maskColor.third,
                     fontWeight: 700,
                     textAlign: 'center',
                     marginTop: '12px',
@@ -89,7 +89,7 @@ function WalletRenameDrawer({ wallet, walletName, ...rest }: WalletRenameDrawerP
                 />
             </Box>
             {error ?
-                <Typography color={theme.vars.palette.maskColor.danger} sx={{ fontSize: 14, mt: 1 }}>
+                <Typography sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, mt: 1 }}>
                     {error}
                 </Typography>
             :   null}

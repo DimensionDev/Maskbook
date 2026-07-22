@@ -37,10 +37,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     {DefineMapping[SecurityMessageLevel.High].icon(14)}
                     <Typography
                         component="span"
-                        sx={{
-                            fontSize: '12px',
-                        }}
-                        color={DefineMapping[SecurityMessageLevel.High].titleColor}>
+                        sx={{ color: DefineMapping[SecurityMessageLevel.High].titleColor, fontSize: '12px' }}>
                         <Plural one="# Risky item" other="# Risky items" value={riskyFactors} />
                     </Typography>
                 </Stack>
@@ -58,10 +55,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
                     <Typography
                         component="span"
-                        sx={{
-                            fontSize: '12px',
-                        }}
-                        color={DefineMapping[SecurityMessageLevel.Medium].titleColor}>
+                        sx={{ color: DefineMapping[SecurityMessageLevel.Medium].titleColor, fontSize: '12px' }}>
                         <Plural one="# Attention item" other="# Attention items" value={attentionFactors} />
                     </Typography>
                 </Stack>

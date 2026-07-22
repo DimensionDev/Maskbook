@@ -175,7 +175,7 @@ export const Component = memo(function ExportPrivateKey() {
                     <Box className={classes.iconWrapper}>
                         <Icons.EncryptedFiles size={36} />
                     </Box>
-                    <Typography color={theme.vars.palette.maskColor.danger}>
+                    <Typography sx={{ color: theme.vars.palette.maskColor.danger }}>
                         <Trans>
                             This JSON file is encrypted with your current payment password. The same password is
                             required for decryption when importing this wallet.

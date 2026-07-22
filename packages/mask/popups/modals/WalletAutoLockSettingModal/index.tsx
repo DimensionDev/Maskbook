@@ -97,8 +97,8 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     return (
         <BottomDrawer {...props}>
             <Typography
-                color={theme.vars.palette.maskColor.third}
                 sx={{
+                    color: theme.vars.palette.maskColor.third,
                     fontWeight: 700,
                     textAlign: 'center',
                     marginTop: '12px',

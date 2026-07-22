@@ -122,8 +122,8 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                         {publicKey ? formatPersonaFingerprint(publicKey) : null}
                     </Typography>
                     <Typography
-                        color={theme.vars.palette.maskColor.second}
                         sx={{
+                            color: theme.vars.palette.maskColor.second,
                             fontSize: 12,
                             lineHeight: '16px',
                             display: 'flex',

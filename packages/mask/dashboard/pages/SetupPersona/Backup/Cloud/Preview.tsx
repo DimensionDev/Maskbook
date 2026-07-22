@@ -142,10 +142,10 @@ export const Component = memo(function CloudBackupPreview() {
                                     <Typography
                                         component="span"
                                         sx={{
+                                            color: theme.vars.palette.maskColor.third,
                                             fontSize: 12,
                                             lineHeight: '16px',
-                                        }}
-                                        color={theme.vars.palette.maskColor.third}>
+                                        }}>
                                         {formatDateTime(
                                             fromUnixTime(Number(previewInfo.uploadedAt)),
                                             'yyyy-MM-dd HH:mm',

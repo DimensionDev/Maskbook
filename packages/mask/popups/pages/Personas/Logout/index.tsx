@@ -142,8 +142,7 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
                     <Box>
                         <Typography sx={{ fontWeight: 700 }}>{currentPersona?.nickname}</Typography>
                         <Typography
-                            color={theme.vars.palette.maskColor.third}
-                            sx={{ fontSize: 10, lineHeight: '10px' }}>
+                            sx={{ color: theme.vars.palette.maskColor.third, fontSize: 10, lineHeight: '10px' }}>
                             {currentPersona?.identifier.rawPublicKey}
                         </Typography>
                     </Box>

@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { alpha, makeStyles  } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'

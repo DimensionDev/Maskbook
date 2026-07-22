@@ -64,10 +64,7 @@ const useStyles = makeStyles()((theme) => ({
             borderColor: alpha(theme.vars.palette.maskColor.redMain, 0.8),
         },
         [`&.${formHelperTextClasses.focused}`]: {
-            borderColor:
-                Sniffings.is_dashboard_page ?
-                    alpha(theme.vars.palette.maskColor.primary, 0.5)
-                :   'transparent',
+            borderColor: Sniffings.is_dashboard_page ? alpha(theme.vars.palette.maskColor.primary, 0.5) : 'transparent',
         },
     },
     inputDisabled: {

@@ -48,7 +48,7 @@ export function PluginHeader() {
             sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', gap: 0.5, alignItems: 'center' }}>
                 <Icons.DecentralizedSearch size={24} />
-                <Typography color={theme.vars.palette.maskColor.dark} sx={{ fontWeight: 'bolder' }}>
+                <Typography sx={{ color: theme.vars.palette.maskColor.dark, fontWeight: 'bolder' }}>
                     <Trans>DSearch</Trans>
                 </Typography>
             </Stack>
@@ -61,11 +61,11 @@ export function PluginHeader() {
                                 className={classes.publisher}
                                 variant="body1"
                                 sx={{
+                                    color: theme.vars.palette.maskColor.textPluginColor,
                                     fontSize: 14,
                                     fontWeight: '700',
                                 }}
-                                component="span"
-                                color={theme.vars.palette.maskColor.textPluginColor}>
+                                component="span">
                                 Mask Network
                                 <Link
                                     target="_blank"

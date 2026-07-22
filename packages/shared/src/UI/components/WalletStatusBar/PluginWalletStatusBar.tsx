@@ -1,7 +1,7 @@
 import { memo, type PropsWithChildren, useCallback, useMemo } from 'react'
 import { Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { alpha, makeStyles  } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import {
     useNetworkContext,
     useProviderDescriptor,

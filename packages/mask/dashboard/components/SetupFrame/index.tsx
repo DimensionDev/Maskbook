@@ -68,8 +68,8 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpli
                                 justifyContent: 'center',
                             }}>
                             <Typography
-                                color={theme.vars.palette.maskColor.publicMain}
                                 sx={{
+                                    color: theme.vars.palette.maskColor.publicMain,
                                     fontSize: 36,
                                     fontWeight: 700,
                                     lineHeight: 1.2,

@@ -12,7 +12,7 @@ export const WalletList = memo(function WalletList() {
     return (
         <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             <Icons.EmptySimple size={36} />
-            <Typography color={theme.vars.palette.maskColor.second} sx={{ fontSize: 14, mt: 1.5, textAlign: 'center' }}>
+            <Typography sx={{ color: theme.vars.palette.maskColor.second, fontSize: 14, mt: 1.5, textAlign: 'center' }}>
                 <Trans>
                     No associated wallet.{' '}
                     <RouterLink

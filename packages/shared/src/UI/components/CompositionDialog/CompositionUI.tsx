@@ -1,7 +1,7 @@
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
-import { alpha, makeStyles  } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { Button, DialogActions, Typography } from '@mui/material'
 import { CharLimitIndicator } from './CharLimitIndicator.js'

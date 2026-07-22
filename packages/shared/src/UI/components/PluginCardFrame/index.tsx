@@ -52,7 +52,7 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
     const PluginName = (
         <Stack className={classes.title} direction="row">
             {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
-            <Typography sx={{ fontSize: 16, fontWeight: 700 }} color={theme.vars.palette.maskColor.main}>
+            <Typography sx={{ color: theme.vars.palette.maskColor.main, fontSize: 16, fontWeight: 700 }}>
                 {title ?? <Trans>Web3 Profile</Trans>}
             </Typography>
         </Stack>

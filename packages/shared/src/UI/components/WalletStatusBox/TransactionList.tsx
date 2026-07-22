@@ -131,7 +131,10 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
                         sx={{ fontWeight: 500 }}>
                         {formatted}
                     </Typography>
-                    <Typography className={classes.timestamp} variant="body1" color={theme.vars.palette.text.secondary}>
+                    <Typography
+                        className={classes.timestamp}
+                        variant="body1"
+                        sx={{ color: theme.vars.palette.text.secondary }}>
                         {format(tx.createdAt, 'yyyy.MM.dd HH:mm')}
                     </Typography>
                 </Stack>
@@ -152,8 +155,12 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
             </Grid>
             <Grid className={classes.cell} size={{ md: 2 }} sx={{ justifyContent: 'center' }}>
                 <Typography
-                    sx={{ fontWeight: 400, justifyContent: 'center', fontSize: 14 }}
-                    color={statusTextColorMap[txStatus]}>
+                    sx={{
+                        color: statusTextColorMap[txStatus],
+                        fontWeight: 400,
+                        justifyContent: 'center',
+                        fontSize: 14,
+                    }}>
                     {statusTextMap[txStatus]}
                 </Typography>
             </Grid>

@@ -6,7 +6,7 @@ import {
     type SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { editTypedMessageMeta } from '@masknet/typed-message-react'
-import { alpha, makeStyles  } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button, inputBaseClasses } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, memo, useMemo, useEffect, type RefAttributes } from 'react'
 import { BadgeRenderer } from './BadgeRenderer.js'

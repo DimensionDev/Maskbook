@@ -1,4 +1,4 @@
-import { useTheme, Box } from '@mui/material'
+import { Box } from '@mui/material'
 import * as React from 'react'
 import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 
@@ -84,8 +84,8 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
 }
 
 function useDefaultPalette() {
-    const theme = useTheme()
-    return theme.palette.mode
+    const palette = React.useContext(MaskIconPaletteContext)
+    return palette
 }
 
 /**

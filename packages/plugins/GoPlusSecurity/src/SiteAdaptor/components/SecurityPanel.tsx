@@ -124,12 +124,14 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                 riskyFactors === 0 ? SecurityMessageLevel.Medium : SecurityMessageLevel.High
                             ].icon(24)}
                             <Typography
-                                sx={{ fontSize: '16px', fontWeight: 500, marginLeft: '8px' }}
-                                color={
-                                    DefineMapping[
+                                sx={{
+                                    color: DefineMapping[
                                         riskyFactors === 0 ? SecurityMessageLevel.Medium : SecurityMessageLevel.High
-                                    ].titleColor
-                                }>
+                                    ].titleColor,
+                                    fontSize: '16px',
+                                    fontWeight: 500,
+                                    marginLeft: '8px',
+                                }}>
                                 {' '}
                                 {riskyFactors === 0 ?
                                     <Trans>Medium Risk</Trans>

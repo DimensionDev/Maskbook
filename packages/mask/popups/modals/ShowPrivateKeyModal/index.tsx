@@ -61,7 +61,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                 />
             </Box>
             {error ?
-                <Typography color={theme.vars.palette.maskColor.danger} sx={{ fontSize: 14, mt: 1 }}>
+                <Typography sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, mt: 1 }}>
                     {error}
                 </Typography>
             :   null}

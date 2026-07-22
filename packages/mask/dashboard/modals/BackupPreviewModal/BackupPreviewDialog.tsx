@@ -209,8 +209,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     :   null}
                     {isUpload ?
                         <Typography
-                            color={theme.vars.palette.maskColor.danger}
-                            sx={{ fontSize: 14, lineHeight: '18px' }}>
+                            sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, lineHeight: '18px' }}>
                             <Trans>
                                 This will overwrite the existing cloud backup with the local data, this cannot be undo.
                             </Trans>

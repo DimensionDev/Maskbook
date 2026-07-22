@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { ImageIcon } from '@masknet/shared'
-import { alpha, makeStyles  } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'

@@ -387,11 +387,12 @@ export function TradeView() {
                                         <Typography
                                             component="span"
                                             className={classes.diff}
-                                            color={
-                                                isGreaterThan(priceDiff, 0) ?
-                                                    theme.vars.palette.maskColor.success
-                                                :   theme.vars.palette.maskColor.danger
-                                            }>
+                                            sx={{
+                                                color:
+                                                    isGreaterThan(priceDiff, 0) ?
+                                                        theme.vars.palette.maskColor.success
+                                                    :   theme.vars.palette.maskColor.danger,
+                                            }}>
                                             ({isGreaterThan(priceDiff, 0) ? '+' : ''}
                                             {priceDiff.toFixed(2)}%)
                                         </Typography>

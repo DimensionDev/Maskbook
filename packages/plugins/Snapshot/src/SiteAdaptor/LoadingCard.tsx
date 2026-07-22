@@ -1,6 +1,6 @@
 import { Suspense, type ReactNode } from 'react'
 import { Skeleton } from '@mui/material'
-import { alpha, makeStyles  } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { SnapshotCard } from './SnapshotCard.js'
 import { range } from 'lodash-es'
 
