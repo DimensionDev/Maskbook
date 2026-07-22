@@ -1,8 +1,8 @@
 import { Plural } from '@lingui/react/macro'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { makeStyles, MaskDarkTheme } from '@masknet/theme'
+import { makeStyles, MaskThemeProvider } from '@masknet/theme'
 import { CryptoScamDB } from '@masknet/web3-providers'
-import { Stack, ThemeProvider, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { uniq } from 'lodash-es'
 import { useAsync } from 'react-use'
 
@@ -35,7 +35,7 @@ export function PreviewCard({ links }: PreviewCardProps) {
     if (!value?.length || loading) return null
 
     return (
-        <ThemeProvider theme={MaskDarkTheme}>
+        <MaskThemeProvider palette="dark">
             <Stack sx={{ p: 1.5, pt: 0 }} className={classes.root}>
                 <Stack className={classes.card}>
                     {value.map((x) => (
@@ -59,6 +59,6 @@ export function PreviewCard({ links }: PreviewCardProps) {
                     </Typography>
                 </Stack>
             </Stack>
-        </ThemeProvider>
+        </MaskThemeProvider>
     )
 }

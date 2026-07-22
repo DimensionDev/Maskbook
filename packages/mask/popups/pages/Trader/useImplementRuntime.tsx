@@ -6,15 +6,15 @@ import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo } from 'react'
 import { AssetSource } from '../../components/index.js'
-import { usePopupTheme } from '../../hooks/usePopupTheme.js'
 import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
+import { useTheme } from '@mui/material'
 
 export function useImplementRuntime() {
     const chainQuery = useSupportedChains()
     const { mode, chainId, fromToken } = useTrade()
     const isSwap = mode === 'swap'
     const fromChainId = fromToken?.chainId as ChainId
-    const theme = usePopupTheme()
+    const theme = useTheme()
     const pickToken = useCallback(
         async (
             currentToken: Web3Helper.FungibleTokenAll | null | undefined,

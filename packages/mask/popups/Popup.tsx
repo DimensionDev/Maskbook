@@ -1,7 +1,12 @@
-import { PageUIProvider, PersonaContext, PrivySetup } from '@masknet/shared'
+import { PersonaContext, LinguiProviderHMR, PrivySetup, SharedContextProvider } from '@masknet/shared'
 import { jsxCompose, MaskMessages, PopupRoutes } from '@masknet/shared-base'
-import { PopupSnackbarProvider } from '@masknet/theme'
-import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import {
+    PopupSnackbarProvider,
+    CustomSnackbarProvider,
+    DialogStackingProvider,
+    MaskThemeProvider,
+} from '@masknet/theme'
+import { EVMWeb3ContextProvider, RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { Suspense, cloneElement, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
@@ -15,21 +20,23 @@ import {
     useSearchParams,
     useRouteError,
 } from 'react-router-dom'
-import { usePopupTheme } from './hooks/usePopupTheme.js'
 import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { PopupContext, PageTitleContext } from './hooks/index.js'
 import { Modals } from './modals/index.js'
-import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
+import { UserContext, queryPersistOptions, usePageThemePalette, useThemeLanguage } from '../shared-ui/index.js'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { queryClient } from '@masknet/shared-base-ui'
+import { queryClient, ErrorBoundary } from '@masknet/shared-base-ui'
 import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
 import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
 import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
 import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
 import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
+import { StyledEngineProvider, type PaletteMode } from '@mui/material/styles'
+import { i18n } from '@lingui/core'
+import type { Localization } from '@mui/material/locale'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -110,10 +117,12 @@ export default function Popups() {
         throttle: 10_000,
     })
 
+    const mode = usePageThemePalette()
+    const [localization] = useThemeLanguage()
+
     return jsxCompose(
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
-        // eslint-disable-next-line react-compiler/react-compiler
-        <PageUIProvider useTheme={usePopupTheme} />,
+        <PageUIProvider palette={mode} localization={localization} />,
         <PopupSnackbarProvider> </PopupSnackbarProvider>,
         <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,
         <PopupContext />,
@@ -125,7 +134,6 @@ export default function Popups() {
             {process.env.NODE_ENV === 'development' ?
                 <ReactQueryDevtools buttonPosition="bottom-right" />
             :   null}
-            <PrivySetup />
             <RouterProvider router={router} />
         </>,
     )
@@ -134,4 +142,38 @@ export default function Popups() {
 function ErrorPageBoundary() {
     const error = useRouteError()
     return <ErrorBoundaryUIOfError error={error} hasError />
+}
+
+interface PageUIProviderProps {
+    palette: PaletteMode
+    localization?: Localization
+    children?: React.ReactNode
+    fallback?: React.ReactNode
+}
+function PageUIProvider({ children, fallback, palette, localization }: PageUIProviderProps) {
+    return jsxCompose(
+        // Avoid the crash due to unhandled suspense
+        <Suspense />,
+        // Provide the minimal environment (i18n context) for CrashUI in page mode
+        <LinguiProviderHMR i18n={i18n} />,
+        <StyledEngineProvider injectFirst />,
+        <ErrorBoundary />,
+
+        <Suspense fallback={fallback} />,
+        <DialogStackingProvider hasGlobalBackdrop={false} />,
+        <MaskThemeProvider palette={palette} localization={localization} />,
+        <RootWeb3ContextProvider />,
+    )(
+        cloneElement,
+        <>
+            <PrivySetup />
+            <SharedContextProvider>
+                <CustomSnackbarProvider
+                    disableWindowBlurListener={false}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    {children}
+                </CustomSnackbarProvider>
+            </SharedContextProvider>
+        </>,
+    )
 }

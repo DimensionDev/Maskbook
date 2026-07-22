@@ -15,7 +15,7 @@ import getSearchedKeywordAtMinds from './collecting/getSearchedKeyword.js'
 import { IdentityProviderMinds } from './collecting/identity.js'
 import { ThemeSettingsProviderMinds } from './collecting/theme.js'
 import { PostProviderMinds } from './collecting/post.js'
-import { useThemeMindsVariant } from './customization/custom.js'
+import { getThemeMindsVariant } from './customization/custom.js'
 import injectCommentBoxAtMinds from './injection/CommentBox.js'
 import { injectPostBoxComposed } from './injection/inject.js'
 import { injectPostInspectorAtMinds } from './injection/PostInspector.js'
@@ -148,7 +148,7 @@ const mindsUI: SiteAdaptorUI.Definition = {
         componentOverwrite: {
             RenderFragments: MindsRenderFragments,
         },
-        useTheme: useThemeMindsVariant,
+        getTheme: getThemeMindsVariant,
     },
     init(signal) {
         const profiles = stateCreator.profiles()

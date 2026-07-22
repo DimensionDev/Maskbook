@@ -15,7 +15,7 @@ import { publishPostTwitter } from './automation/publishPost.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
 import { PostProviderTwitter, getPostIdFromNewPostToast } from './collecting/post.js'
-import { useThemeTwitterVariant } from './customization/custom.js'
+import { getThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
 import { injectSearchResultInspectorAtTwitter } from './injection/SearchResultInspector.js'
@@ -158,7 +158,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
         componentOverwrite: {
             RenderFragments: TwitterRenderFragments,
         },
-        useTheme: useThemeTwitterVariant,
+        getTheme: getThemeTwitterVariant,
         i18nOverwrite: i18NOverwriteTwitter,
     },
     init(signal) {

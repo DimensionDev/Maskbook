@@ -1,5 +1,5 @@
 import { cloneElement, Suspense } from 'react'
-import { CSSVariableInjector, CustomSnackbarProvider } from '@masknet/theme'
+import { CustomSnackbarProvider } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Sniffings, jsxCompose } from '@masknet/shared-base'
 
@@ -14,11 +14,5 @@ export function ShadowRootAttachPointRoot(children: React.ReactNode) {
             offsetY={Sniffings.is_facebook_page ? 80 : undefined}>
             {' '}
         </CustomSnackbarProvider>,
-    )(
-        cloneElement,
-        <>
-            <CSSVariableInjector />
-            {children}
-        </>,
-    )
+    )(cloneElement, children)
 }

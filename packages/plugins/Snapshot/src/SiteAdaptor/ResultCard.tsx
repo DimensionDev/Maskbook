@@ -1,16 +1,6 @@
 import { useContext, useMemo, unstable_useCacheRefresh } from 'react'
-import {
-    Box,
-    List,
-    ListItem,
-    Typography,
-    LinearProgress,
-    styled,
-    Button,
-    linearProgressClasses,
-    ThemeProvider,
-} from '@mui/material'
-import { makeStyles, MaskLightTheme, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
+import { makeStyles, MaskThemeProvider, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
@@ -116,7 +106,7 @@ function Content() {
     }, [votes])
 
     return (
-        <ThemeProvider theme={MaskLightTheme}>
+        <MaskThemeProvider palette="light">
             <SnapshotCard title={proposal.isEnd ? <Trans>Results</Trans> : <Trans>Current results</Trans>}>
                 <List className={classes.list}>
                     {results.map((result, i) => (
@@ -181,7 +171,7 @@ function Content() {
                     </Button>
                 :   null}
             </SnapshotCard>
-        </ThemeProvider>
+        </MaskThemeProvider>
     )
 }
 

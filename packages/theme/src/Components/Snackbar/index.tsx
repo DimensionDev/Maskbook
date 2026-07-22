@@ -1,21 +1,20 @@
-import { useRef, memo, useCallback, type RefAttributes } from 'react'
+import { useRef, memo, useCallback, forwardRef, type RefAttributes } from 'react'
 import { keyframes } from 'tss-react'
 import {
     SnackbarProvider,
     type SnackbarProviderProps,
-    type SnackbarKey,
     useSnackbar,
     type VariantType,
     type SnackbarMessage,
     SnackbarContent,
-    type SnackbarAction,
     type OptionsObject,
+    type CustomContentProps,
 } from 'notistack'
-import { Typography, IconButton, alpha } from '@mui/material'
+import { Typography, IconButton } from '@mui/material'
 import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
+import { alpha } from '../../Theme/colors.js'
 import { makeStyles } from '../../UIHelper/index.js'
-import { MaskColorVar } from '../../CSSVariables/index.js'
 import { usePortalShadowRoot } from '../../ShadowRoot/index.js'
 
 export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.js'
@@ -33,13 +32,13 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
         }
     `
     const title = {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
     } as const
     const message = {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 400,
         display: 'flex',
         alignItems: 'center',
@@ -55,12 +54,10 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
         },
     } as const
     const defaultVariant = {
-        background: theme.palette.maskColor.bottom,
-        color: theme.palette.maskColor.main,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        background: theme.vars.palette.maskColor.bottom,
+        color: theme.vars.palette.maskColor.main,
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)' }),
         [`& .${classNames.title}`]: {
             color: 'inherit',
         },
@@ -70,67 +67,65 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
         },
     }
     const success = {
-        backgroundColor: theme.palette.maskColor.success,
-        color: theme.palette.maskColor.white,
-        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.success, 0.15)}`,
+        backgroundColor: theme.vars.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.vars.palette.maskColor.success, 0.15)}`,
         backdropFilter: 'blur(16px)',
         [`& .${classNames.title}`]: {
             color: 'inherit',
         },
         [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
+            color: alpha(theme.vars.palette.maskColor.white, 0.8),
             '& svg': {
-                color: theme.palette.maskColor.white,
+                color: theme.vars.palette.maskColor.white,
             },
         },
     } as const
 
     const error = {
-        background: theme.palette.maskColor.danger,
-        color: theme.palette.maskColor.white,
-        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.danger, 0.15)}`,
+        background: theme.vars.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.vars.palette.maskColor.danger, 0.15)}`,
         backdropFilter: 'blur(16px)',
         [`& .${classNames.title}`]: {
             color: 'inherit',
         },
         [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
+            color: alpha(theme.vars.palette.maskColor.white, 0.8),
             '& svg': {
-                color: theme.palette.maskColor.white,
+                color: theme.vars.palette.maskColor.white,
             },
         },
     } as const
 
     const info = {
-        background: theme.palette.maskColor.primary,
-        color: theme.palette.maskColor.white,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        background: theme.vars.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.white,
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)' }),
         [`& .${classNames.title}`]: {
             color: 'inherit',
         },
         [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
+            color: alpha(theme.vars.palette.maskColor.white, 0.8),
             '& svg': {
-                color: theme.palette.maskColor.white,
+                color: theme.vars.palette.maskColor.white,
             },
         },
     }
 
     const warning = {
-        backgroundColor: theme.palette.maskColor.warn,
-        color: theme.palette.maskColor.white,
-        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.warn, 0.15)}`,
+        backgroundColor: theme.vars.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.vars.palette.maskColor.warn, 0.15)}`,
         backdropFilter: 'blur(16px)',
         [`& .${classNames.title}`]: {
             color: 'inherit',
         },
         [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
+            color: alpha(theme.vars.palette.maskColor.white, 0.8),
             '& svg': {
-                color: theme.palette.maskColor.white,
+                color: theme.vars.palette.maskColor.white,
             },
         },
     } as const
@@ -139,7 +134,7 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
         root: {
             zIndex: 9999,
             transform: offsetY === undefined ? 'none' : `translateY(${offsetY}px)`,
-            color: MaskColorVar.textLight,
+            color: theme.vars.palette.maskColor.textLight,
             pointerEvents: 'inherit',
         },
         content: {
@@ -149,7 +144,7 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
             width: 380,
             flexWrap: 'nowrap !important' as 'nowrap',
         },
-        // eslint-disable-next-line tss-unused-classes/unused-classes
+
         default: defaultVariant,
         success,
         error,
@@ -186,16 +181,27 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
     }
 })
 
-interface CustomSnackbarContentProps extends RefAttributes<HTMLDivElement> {
-    id: SnackbarKey
-    title: SnackbarMessage
-    message?: string | React.ReactNode
+export interface CustomSnackbarOptions {
+    detail?: React.ReactNode
     icon?: React.ReactNode
     processing?: boolean
-    variant?: VariantType
-    action?: SnackbarAction
+    classes?: Partial<Record<'content' | 'title' | 'message', string>>
+}
+
+type NotistackVariantOptions = CustomSnackbarOptions & Record<string, unknown>
+
+declare module 'notistack' {
+    interface VariantOverrides {
+        default: NotistackVariantOptions
+        success: NotistackVariantOptions
+        error: NotistackVariantOptions
+        warning: NotistackVariantOptions
+        info: NotistackVariantOptions
+    }
+}
+
+interface CustomSnackbarContentProps extends CustomContentProps, CustomSnackbarOptions, RefAttributes<HTMLDivElement> {
     offsetY?: number
-    classes?: Partial<ReturnType<typeof useStyles>['classes']>
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
@@ -205,41 +211,50 @@ const IconMap: Record<VariantType, React.ReactNode> = {
     info: <InfoIcon color="inherit" />,
 }
 
-function CustomSnackbarContent(props: CustomSnackbarContentProps) {
-    const { classes, cx } = useStyles({ offsetY: props.offsetY }, { props })
-    const snackbar = useSnackbar()
-    const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
-    const variantIcon =
-        props.processing ? loadingIcon
-        : props.variant ? IconMap[props.variant]
-        : null
-    let renderedAction: React.ReactNode = (
-        <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>
-            <CloseIcon />
-        </IconButton>
-    )
-    if (props.action) {
-        renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
-    }
-    return (
-        <SnackbarContent ref={props.ref} className={cx(classes.content, classes[props.variant!])}>
-            {variantIcon ?
-                <div className={classes.icon}>{variantIcon}</div>
-            :   null}
-            <div className={classes.texts}>
-                <Typography className={classes.title} variant="h2">
-                    {props.title}
-                </Typography>
-                {props.message ?
-                    <Typography className={classes.message} variant="body1">
+const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>(
+    function CustomSnackbarContent(props, ref) {
+        const { classes, cx } = useStyles({ offsetY: props.offsetY }, { props })
+        const variantClass = {
+            default: classes.default,
+            success: classes.success,
+            error: classes.error,
+            warning: classes.warning,
+            info: classes.info,
+        }[props.variant]
+        const snackbar = useSnackbar()
+        const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
+        const variantIcon =
+            props.processing ? loadingIcon
+            : props.variant ? IconMap[props.variant]
+            : null
+        let renderedAction: React.ReactNode = (
+            <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>
+                <CloseIcon />
+            </IconButton>
+        )
+        if (props.action) {
+            renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
+        }
+        return (
+            <SnackbarContent ref={ref} className={cx(classes.content, variantClass, props.classes?.content)}>
+                {variantIcon ?
+                    <div className={classes.icon}>{variantIcon}</div>
+                :   null}
+                <div className={classes.texts}>
+                    <Typography className={cx(classes.title, props.classes?.title)} variant="h2">
                         {props.message}
                     </Typography>
-                :   null}
-            </div>
-            <div className={classes.action}>{renderedAction}</div>
-        </SnackbarContent>
-    )
-}
+                    {props.detail ?
+                        <Typography className={cx(classes.message, props.classes?.message)} variant="body1">
+                            {props.detail}
+                        </Typography>
+                    :   null}
+                </div>
+                <div className={classes.action}>{renderedAction}</div>
+            </SnackbarContent>
+        )
+    },
+)
 
 export const CustomSnackbarProvider = memo<
     SnackbarProviderProps & {
@@ -259,9 +274,13 @@ export const CustomSnackbarProvider = memo<
             disableWindowBlurListener
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             hideIconVariant
-            content={(key, title) => (
-                <CustomSnackbarContent id={key} variant={rest.variant ?? 'default'} title={title} offsetY={offsetY} />
-            )}
+            Components={{
+                default: CustomSnackbarContent,
+                success: CustomSnackbarContent,
+                error: CustomSnackbarContent,
+                warning: CustomSnackbarContent,
+                info: CustomSnackbarContent,
+            }}
             action={(key) => (
                 <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />
@@ -269,10 +288,6 @@ export const CustomSnackbarProvider = memo<
             )}
             classes={{
                 containerRoot: classes.root,
-                variantSuccess: classes.success,
-                variantError: classes.error,
-                variantInfo: classes.info,
-                variantWarning: classes.warning,
             }}
             domRoot={container}
             {...rest}
@@ -280,32 +295,21 @@ export const CustomSnackbarProvider = memo<
     ))
 })
 
-export interface ShowSnackbarOptions
-    extends OptionsObject,
-        Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon' | 'classes'> {}
+export interface ShowSnackbarOptions extends OptionsObject, Omit<CustomSnackbarOptions, 'detail'> {
+    message?: React.ReactNode
+}
 
 export function useCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const showSnackbar = useCallback(
         (text: SnackbarMessage, options?: ShowSnackbarOptions) => {
-            const { processing, message, variant, ...rest } = options || {
-                variant: 'default',
-            }
-            return enqueueSnackbar(text, {
+            const { processing, message: detail, icon, classes, variant = 'default', ...rest } = options ?? {}
+            return enqueueSnackbar<VariantType>(text, {
                 variant,
-                content: (key, title) => {
-                    return (
-                        <CustomSnackbarContent
-                            variant={variant ?? 'default'}
-                            id={key}
-                            title={title}
-                            message={message}
-                            processing={processing}
-                            action={rest.action}
-                            classes={rest.classes}
-                        />
-                    )
-                },
+                detail,
+                icon,
+                processing,
+                classes,
                 ...rest,
             })
         },

@@ -3,14 +3,14 @@ import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
 import { Days, EMPTY_LIST, NetworkPluginID, PluginID, type SocialIdentity } from '@masknet/shared-base'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, MaskThemeProvider, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext } from '@mui/lab'
-import { Box, Stack, Tab, ThemeProvider, useTheme } from '@mui/material'
+import { Box, Stack, Tab, useTheme } from '@mui/material'
 import { first } from 'lodash-es'
 import { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { usePriceStats } from '../../trending/usePriceStats.js'
@@ -222,12 +222,12 @@ export function TrendingView(props: TrendingViewProps) {
     // #region display loading skeleton
     if (!trending?.currency || loadingTrending)
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <TrendingViewSkeleton
                     classes={{ footer: classes.footerSkeleton }}
                     TrendingCardProps={{ classes: { root: classes.root } }}
                 />
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     // #endregion
 
@@ -313,9 +313,9 @@ export function TrendingView(props: TrendingViewProps) {
     if (isProfilePage && isWeb3ProfileMinimalMode) {
         return (
             <PluginCardFrameMini>
-                <ThemeProvider theme={MaskLightTheme}>
+                <MaskThemeProvider palette="light">
                     <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{Component}</PluginEnableBoundary>
-                </ThemeProvider>
+                </MaskThemeProvider>
             </PluginCardFrameMini>
         )
     }

@@ -22,7 +22,7 @@ import { ThemeSettingsProviderFacebook } from './collecting/theme.js'
 import { pasteImageToCompositionDefault } from '../../site-adaptor-infra/defaults/automation/AttachImageToComposition.js'
 import { injectPageInspectorDefault } from '../../site-adaptor-infra/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../site-adaptor-infra/defaults/inject/StartSetupGuide.js'
-import { useThemeFacebookVariant } from './customization/custom.js'
+import { getThemeFacebookVariant } from './customization/custom.js'
 import { activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar.js'
 import { injectPostReplacerAtFacebook } from './injection/PostReplacer.js'
@@ -139,7 +139,7 @@ const facebookUI: SiteAdaptorUI.Definition = {
         componentOverwrite: {
             RenderFragments: FacebookRenderFragments,
         },
-        useTheme: useThemeFacebookVariant,
+        getTheme: getThemeFacebookVariant,
     },
     init(signal) {
         const profiles = stateCreator.profiles()

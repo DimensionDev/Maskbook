@@ -14,12 +14,11 @@ import {
     TokenIcon,
 } from '@masknet/shared'
 import { Days, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { MaskThemeProvider, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
 import { type ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
-import { useColorScheme } from '@mui/material/styles'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
 import React, { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
@@ -31,6 +30,7 @@ import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
 import { Trans } from '@lingui/react/macro'
+import { usePageThemePalette } from '../../../../shared-ui/index.js'
 
 const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valueAlign }) => {
     return {
@@ -140,7 +140,8 @@ const usePageStyles = makeStyles()((theme) => {
 })
 
 export const Component = memo(function TokenDetailPage() {
-    const { classes, theme } = usePageStyles()
+    const { classes } = usePageStyles()
+    const mode = usePageThemePalette()
     const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -190,9 +191,9 @@ export const Component = memo(function TokenDetailPage() {
         <div className={classes.halo}>
             <Box className={classes.page}>
                 <TokenDetailUI address={address} chainId={chainId}>
-                    <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
+                    <MaskThemeProvider palette={mode}>
                         <ActionGroup className={classes.actions} chainId={chainId} address={address} asset={asset} />
-                    </ThemeProvider>
+                    </MaskThemeProvider>
                 </TokenDetailUI>
             </Box>
         </div>

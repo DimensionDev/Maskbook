@@ -1,8 +1,11 @@
 import type { SiteAdaptorUI } from '@masknet/types'
-import { fromRGB, getBackgroundColor, isDark } from '@masknet/plugin-infra/content-script'
+import { fromRGB, getBackgroundColor } from '@masknet/theme'
 import { ThemeMode } from '@masknet/web3-shared-base'
 import { creator } from '../../../site-adaptor-infra/utils.js'
 
+function isDark([r, g, b]: [number, number, number]) {
+    return r < 68 && g < 68 && b < 68
+}
 function resolveThemeSettingsInner(
     ref: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider['recognized'],
     cancel: AbortSignal,

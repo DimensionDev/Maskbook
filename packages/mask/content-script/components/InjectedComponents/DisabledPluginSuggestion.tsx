@@ -11,7 +11,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -143,14 +143,14 @@ export function PossiblePluginSuggestionUISingle(props: {
     )
 }
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
     },
     text: {
-        color: MaskLightTheme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     rectangle: {
         backgroundColor: 'rgba(255,255,255,0.5)',

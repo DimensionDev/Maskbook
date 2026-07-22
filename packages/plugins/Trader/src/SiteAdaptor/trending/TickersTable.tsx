@@ -11,10 +11,8 @@ import {
     TableHead,
     TableRow,
     Typography,
-    useTheme,
 } from '@mui/material'
-import { getSiteThemeMode } from '@masknet/plugin-infra/content-script'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, useMaskIconPalette } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CurrencyType, formatCurrency } from '@masknet/web3-shared-base'
@@ -73,8 +71,7 @@ interface TickersTableProps {
 type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 
 export function TickersTable({ tickers }: TickersTableProps) {
-    const theme = useTheme()
-    const themeMode = getSiteThemeMode(theme)
+    const themeMode = useMaskIconPalette()
     const { isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles({ themeMode, isPopper: isTokenTagPopper })
 

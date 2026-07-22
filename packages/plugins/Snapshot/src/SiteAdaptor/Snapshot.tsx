@@ -3,17 +3,17 @@ import { ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ActionButton,
-    MaskLightTheme,
     MaskTabList,
+    MaskThemeProvider,
     ShadowRootTooltip,
     TextOverflowTooltip,
     makeStyles,
     useTabs,
- } from '@masknet/theme'
+} from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Avatar, Box, Chip, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Avatar, Box, Chip, Tab, Typography } from '@mui/material'
 import Color from 'color'
 import { useContext, useState } from 'react'
 import { SnapshotContext } from '../context.js'
@@ -116,7 +116,7 @@ export function Snapshot() {
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
                     <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
-                    <ThemeProvider theme={MaskLightTheme}>
+                    <MaskThemeProvider palette="light">
                         <Box className={classes.title}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <TextOverflowTooltip
@@ -171,7 +171,7 @@ export function Snapshot() {
                                 </Typography>
                             </ShadowRootTooltip>
                         </Box>
-                    </ThemeProvider>
+                    </MaskThemeProvider>
                     <Box>
                         <Chip
                             className={proposal.status === 'Active' ? classes.active : classes.default}

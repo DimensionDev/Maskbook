@@ -1,8 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { type Plugin, usePluginWrapper, usePostInfoMentionedLinks } from '@masknet/plugin-infra/content-script'
 import { parseURLs } from '@masknet/shared-base'
-import { MaskLightTheme } from '@masknet/theme'
-import { ThemeProvider } from '@mui/material'
+import { MaskThemeProvider } from '@masknet/theme'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { PreviewCard } from './PreviewCard.js'
@@ -18,9 +17,9 @@ function Renderer(props: { id: string; link: string }) {
     usePluginWrapper(true)
 
     return (
-        <ThemeProvider theme={MaskLightTheme}>
+        <MaskThemeProvider palette="light">
             <PreviewCard grantId={props.id} link={props.link} />
-        </ThemeProvider>
+        </MaskThemeProvider>
     )
 }
 

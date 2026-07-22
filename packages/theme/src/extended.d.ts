@@ -3,5 +3,12 @@
 /// <reference path="./Theme/theme.ts" />
 /// <reference path="./Components/Snackbar/index.tsx" />
 
+export {}
+
+declare module '@mui/material/styles' {
+    interface CssThemeVariables {
+        enabled: true
+    }
+}
 // The module augmentations live beside their implementations. This file ensures
 // they are loaded by every @masknet/theme entry point.

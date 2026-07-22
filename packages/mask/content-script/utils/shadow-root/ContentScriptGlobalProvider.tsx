@@ -1,5 +1,4 @@
 import { i18n } from '@lingui/core'
-import { getSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { LinguiProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { jsxCompose } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
@@ -12,8 +11,13 @@ import { cloneElement, Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import { queryPersistOptions } from '../../../shared-ui/utils/persistOptions.js'
 import { useMaskSiteAdaptorMixedTheme } from '../../components/useMaskSiteAdaptorMixedTheme.js'
+import { useThemeLanguage } from '../../../shared-ui/hooks/index.js'
+import { useThemeSettings } from '../../components/DataSource/useActivatedUI.js'
 
 export function ContentScriptGlobalProvider(children: React.ReactNode) {
+    const theme = useMaskSiteAdaptorMixedTheme()
+    const [localization] = useThemeLanguage()
+    const { mode } = useThemeSettings()
     return jsxCompose(
         <Suspense />,
         <DialogStackingProvider hasGlobalBackdrop={false} />,
@@ -22,8 +26,7 @@ export function ContentScriptGlobalProvider(children: React.ReactNode) {
         <RootWeb3ContextProvider />,
         <SharedContextProvider />,
         <LinguiProviderHMR i18n={i18n} />,
-        // eslint-disable-next-line react-compiler/react-compiler
-        <MaskThemeProvider useMaskIconPalette={getSiteThemeMode} useTheme={useMaskSiteAdaptorMixedTheme} />,
+        <MaskThemeProvider supportsDimPalette theme={theme} localization={localization} palette={mode} />,
     )(
         cloneElement,
         process.env.NODE_ENV === 'development' ?

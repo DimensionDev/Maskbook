@@ -1,8 +1,7 @@
-/* eslint-disable react-compiler/react-compiler */
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, SocialAccountList, useUserTotalBalance } from '@masknet/shared'
-import { MaskLightTheme, MaskThemeProvider, makeStyles } from '@masknet/theme'
+import { MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { EVMUtils } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -146,15 +145,10 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
     )
 })
 
-// eslint-disable-next-line @eslint-react/no-unnecessary-use-prefix
-const useTheme = () => MaskLightTheme
-// eslint-disable-next-line @eslint-react/no-unnecessary-use-prefix
-const useMaskIconPalette = (theme: Theme) => theme.palette.mode
-
 export const SearchResultInspector = memo(function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
         <ENSProvider {...props}>
-            <MaskThemeProvider useTheme={useTheme} useMaskIconPalette={useMaskIconPalette}>
+            <MaskThemeProvider palette="light">
                 <SearchResultInspectorContent />
             </MaskThemeProvider>
         </ENSProvider>

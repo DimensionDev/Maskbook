@@ -17,25 +17,14 @@ import {
     type SocialIdentity,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
+import { MaskColors, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import {
-    Avatar,
-    Box,
-    Button,
-    CardContent,
-    IconButton,
-    Paper,
-    Stack,
-    ThemeProvider,
-    Typography,
-    useTheme,
-} from '@mui/material'
+import { Avatar, Box, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { first } from 'lodash-es'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ContentTab, type Currency } from '../../types/index.js'
@@ -322,7 +311,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     </>
                                 :   null}
                                 <Box className={classes.buttons}>
-                                    <ThemeProvider theme={MaskLightTheme}>
+                                    <MaskThemeProvider palette="light">
                                         {isSwappable ?
                                             <Button
                                                 color="primary"
@@ -343,7 +332,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 <Trans>Buy Now</Trans>
                                             </Button>
                                         :   null}
-                                    </ThemeProvider>
+                                    </MaskThemeProvider>
                                 </Box>
                             </Stack>
                             <Stack direction="row" sx={{ justifyContent: 'space-between', marginTop: 2 }}>

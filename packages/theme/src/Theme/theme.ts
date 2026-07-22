@@ -87,8 +87,3 @@ export const MaskTheme = unstable_createMuiStrictModeTheme({
         },
     },
 })
-
-/** @deprecated */
-export const MaskLightTheme = MaskTheme
-/** @deprecated */
-export const MaskDarkTheme = MaskTheme

@@ -1,4 +1,3 @@
-import { rgbToHex, type Theme } from '@mui/material'
 import { TRANSAK_API_KEY_PRODUCTION, TRANSAK_API_KEY_STAGING } from '../constants.js'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { TransakConfig } from '../types.js'
@@ -17,11 +16,11 @@ const DEFAULT_PARAMETERS: TransakConfig = {
 }
 
 // Query params shared by the legacy direct URL and the session proxy.
-export function buildTransakSearchParams(config?: Partial<TransakConfig>, theme?: Theme): URLSearchParams {
+export function buildTransakSearchParams(config?: Partial<TransakConfig>, themeColor?: string): URLSearchParams {
     const config_: TransakConfig = {
         ...DEFAULT_PARAMETERS,
         referrerDomain: location.origin,
-        themeColor: theme ? rgbToHex(theme.palette.maskColor.dark).slice(1) : undefined,
+        themeColor,
         exchangeScreenTitle:
             config?.walletAddress ? `Buy Crypto to ${formatEthereumAddress(config.walletAddress, 4)}` : undefined,
         ...config,

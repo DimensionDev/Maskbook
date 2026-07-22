@@ -4,10 +4,9 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry, formatFileSize } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { MaskLightTheme } from '@masknet/theme'
+import { MaskThemeProvider } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { ThemeProvider } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { base } from '../base.js'
 import { META_KEY_1, META_KEY_2, META_KEY_3 } from '../constants.js'
@@ -35,9 +34,9 @@ const definition: Plugin.SiteAdaptor.Definition = {
 
         if (!metadata.isOk()) return null
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <FileViewer files={metadata.value} />
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     },
     CompositionDialogMetadataBadgeRender: new Map<string, BadgeRenderer<FileInfo> | BadgeRenderer<FileInfo[]>>([

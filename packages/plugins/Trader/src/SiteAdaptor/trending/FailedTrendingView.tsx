@@ -1,5 +1,4 @@
-import { MaskLightTheme, makeStyles } from '@masknet/theme'
-import { ThemeProvider } from '@mui/material'
+import { MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { EmptyStatus } from '@masknet/shared'
 import { TrendingViewDescriptor, type TrendingViewDescriptorProps } from './TrendingViewDescriptor.js'
@@ -22,7 +21,7 @@ interface Props extends TrendingCardProps, TrendingViewDescriptorProps {}
 export function FailedTrendingView({ result, resultList, setResult, ...rest }: Props) {
     const { classes } = useStyles()
     return (
-        <ThemeProvider theme={MaskLightTheme}>
+        <MaskThemeProvider palette="light">
             <TrendingCard {...rest}>
                 <div className={classes.content}>
                     <EmptyStatus style={{ height: 'auto', flexGrow: 1 }}>
@@ -31,6 +30,6 @@ export function FailedTrendingView({ result, resultList, setResult, ...rest }: P
                     <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                 </div>
             </TrendingCard>
-        </ThemeProvider>
+        </MaskThemeProvider>
     )
 }

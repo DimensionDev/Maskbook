@@ -1,5 +1,5 @@
 import { createIndicator, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme } from '@masknet/theme'
+import { makeStyles, MaskThemeProvider } from '@masknet/theme'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
@@ -11,7 +11,6 @@ import { RedPacketRecord } from '../components/RedPacketRecord.js'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
 import { useEnvironmentContext } from '@masknet/web3-hooks-base'
-import { ThemeProvider } from '@mui/material'
 import { DURATION } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,9 +80,9 @@ export function HistoryDetail() {
     return (
         <div className={classes.container}>
             {patchedHistory ?
-                <ThemeProvider theme={MaskLightTheme}>
+                <MaskThemeProvider palette="light">
                     <RedPacketRecord onlyView={!!isClaimed} history={patchedHistory} showDetailLink={false} />
-                </ThemeProvider>
+                </MaskThemeProvider>
             :   null}
             {isLoading ?
                 <div className={cx(classes.interactions, classes.status)}>

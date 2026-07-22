@@ -1,26 +1,19 @@
-import { useMemo } from 'react'
 import { produce, setAutoFreeze } from 'immer'
-import { type Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
-import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
+import { MaskTheme } from '@masknet/theme'
 
-export function useThemeInstagramVariant(baseTheme: Theme) {
-    const themeSettings = useThemeSettings()
+export function getThemeInstagramVariant() {
+    setAutoFreeze(false)
 
-    return useMemo(() => {
-        setAutoFreeze(false)
-
-        const InstagramTheme = produce(baseTheme, (theme) => {
-            theme.components ||= {}
-            theme.components.MuiTypography = {
-                styleOverrides: {
-                    root: {
-                        fontFamily:
-                            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-                    },
+    const InstagramTheme = produce(MaskTheme, (theme) => {
+        theme.components ||= {}
+        theme.components.MuiTypography = {
+            styleOverrides: {
+                root: {
+                    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
                 },
-            }
-        })
-        setAutoFreeze(true)
-        return unstable_createMuiStrictModeTheme(InstagramTheme)
-    }, [baseTheme, themeSettings])
+            },
+        }
+    })
+    setAutoFreeze(true)
+    return InstagramTheme
 }

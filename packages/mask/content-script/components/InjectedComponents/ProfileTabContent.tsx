@@ -32,14 +32,14 @@ import {
     Sniffings,
 } from '@masknet/shared-base'
 import { useLocationChange, useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, MaskThemeProvider, useTabs } from '@masknet/theme'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
 import { Web3Bio } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext } from '@mui/lab'
-import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Button, Stack, Tab, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -308,7 +308,7 @@ function Content(props: ProfileTabContentProps) {
 
     if (lackHostPermission?.size) {
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <GrantPermissions
@@ -317,13 +317,13 @@ function Content(props: ProfileTabContentProps) {
                         />
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 
     if (!currentVisitingUserId || (loadingSocialAccounts && !socialAccounts.length) || loadingPersonaStatus)
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <LoadingStatus iconSize={24} color={theme.vars.palette.maskColor.main}>
@@ -331,7 +331,7 @@ function Content(props: ProfileTabContentProps) {
                         </LoadingStatus>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
 
     if (((isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) && socialAccounts.length === 0) {
@@ -340,7 +340,7 @@ function Content(props: ProfileTabContentProps) {
             if (loadSocialAccounts) retrySocialAccounts()
         }
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <Stack sx={{ display: 'inline-flex', gap: 3, justifyContent: 'center', alignItems: 'center' }}>
@@ -359,7 +359,7 @@ function Content(props: ProfileTabContentProps) {
                         </Stack>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 
@@ -367,7 +367,7 @@ function Content(props: ProfileTabContentProps) {
     if (socialAccounts.length === 0 && !isOnTwitter) {
         if (Sniffings.is_facebook_page) return null
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <Stack
@@ -389,13 +389,13 @@ function Content(props: ProfileTabContentProps) {
                         </Stack>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 
     if (!socialAccounts.length) {
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <Stack
@@ -409,7 +409,7 @@ function Content(props: ProfileTabContentProps) {
                         </Stack>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 

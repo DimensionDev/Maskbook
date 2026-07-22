@@ -60,10 +60,7 @@ export {
     useLastRecognizedSocialIdentity,
     usePostLink,
     useSocialIdentity,
-    getSiteThemeMode,
     useSocialIdentityByUserId,
     type __SiteAdaptorContext__,
     __setSiteAdaptorContext__,
 } from './site-adaptor/index.js'
-
-export { getBackgroundColor, isDark, toRGB, fromRGB, shade } from './utils/theme/color-tools.js'

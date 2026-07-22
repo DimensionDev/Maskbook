@@ -16,7 +16,7 @@ import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity.
 import { injectProfileTabAtInstagram } from './injection/ProfileTab.js'
 import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent.js'
 import { injectAvatar } from './injection/Avatar/index.js'
-import { useThemeInstagramVariant } from './customization/custom.js'
+import { getThemeInstagramVariant } from './customization/custom.js'
 
 const define: SiteAdaptorUI.Definition = {
     ...instagramShared,
@@ -36,7 +36,7 @@ const define: SiteAdaptorUI.Definition = {
     },
     configuration: {},
     customization: {
-        useTheme: useThemeInstagramVariant,
+        getTheme: getThemeInstagramVariant,
     },
     init(signal) {
         const profiles = stateCreator.profiles()
