@@ -164,7 +164,7 @@ export const Component = memo(function SignUpMnemonic() {
             </Stack>
             <Words words={words} />
             <Box className={classes.buttonGroup}>
-                <IconButton className={classes.iconButton} onClick={handleDownload}>
+                <IconButton size="small" className={classes.iconButton} onClick={handleDownload}>
                     <Icons.Download2 size={18} />
                 </IconButton>
                 <IconButton className={classes.iconButton}>

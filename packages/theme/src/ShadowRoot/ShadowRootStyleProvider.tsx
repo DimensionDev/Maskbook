@@ -18,7 +18,8 @@ interface ShadowRootStyleProviderProps extends React.PropsWithChildren {
  */
 export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     const { shadow, children } = props
-    const [cache, sheets] = getShadowRootEmotionCache(shadow)
+    const parentSheets = useContext(StyleSheetsContext)
+    const [cache, sheets] = getShadowRootEmotionCache(shadow, parentSheets)
 
     const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
     useEffect(() => {
@@ -38,7 +39,7 @@ export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
 
 const styleSheetMap = new WeakMap<ShadowRoot, [EmotionCache, StyleSheet]>()
 
-function getShadowRootEmotionCache(shadow: ShadowRoot) {
+function getShadowRootEmotionCache(shadow: ShadowRoot, parentSheets: StyleSheet | null) {
     if (styleSheetMap.has(shadow)) return styleSheetMap.get(shadow)!
 
     // emotion doesn't allow numbers appears in the key
@@ -46,7 +47,7 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     const key = 'css-' + instanceID
 
     const muiEmotionCache = createEmotionCache({ key })
-    const muiStyleSheet = new StyleSheet({ key, container: shadow })
+    const muiStyleSheet = new StyleSheet({ key, container: shadow, parent: parentSheets })
     // @ts-expect-error internal api?
     muiEmotionCache.sheet = muiStyleSheet
 

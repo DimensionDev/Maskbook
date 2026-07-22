@@ -17,9 +17,10 @@ export class StyleSheet {
     readonly container = document.createElement('div')
     readonly isSpeedy = false
     readonly key: string
-    constructor(options: { key: string; container: HTMLElement | ShadowRoot }) {
+    constructor(options: { key: string; container: HTMLElement | ShadowRoot; parent?: StyleSheet | null }) {
         this.key = options.key
         if (options.container instanceof ShadowRoot) {
+            this.parent = options.parent
             this.implementation =
                 'adoptedStyleSheets' in Document.prototype ? new ConstructableStyleSheet() : new SynchronizeStyleSheet()
             this.addContainer(options.container)
@@ -41,6 +42,7 @@ export class StyleSheet {
         }
     }
     addContainer(container: ShadowRoot) {
+        this.parent?.addContainer(container)
         this.implementation.addContainer(container, this.key)
     }
     hydrate() {
@@ -69,6 +71,7 @@ export class StyleSheet {
         this._alreadyInsertedOrderInsensitiveRule = false
     }
     private implementation!: ConstructableStyleSheet | SynchronizeStyleSheet
+    private parent?: StyleSheet | null
     private _alreadyInsertedOrderInsensitiveRule = false
 }
 

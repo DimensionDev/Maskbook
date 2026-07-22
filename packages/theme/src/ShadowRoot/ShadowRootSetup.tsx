@@ -2,6 +2,7 @@ import { ObservableMap } from '@masknet/shared-base'
 import { StrictMode, useSyncExternalStore, type JSX } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PreventShadowRootEventPropagationListContext } from './Contexts.js'
+import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
 
 /**
  * This container is used to attach the single React root.
@@ -31,7 +32,9 @@ export function setupReactShadowRootEnvironment(
     // Note: This React Root does not expect to have any direct DOM children.
     createRoot(globalContainer).render(
         <StrictMode>
-            <MountingPoint wrapJSX={wrapJSX} preventPropagationList={preventEventPropagationList} />
+            <ShadowRootStyleProvider preventPropagation={false} shadow={portalContainer}>
+                <MountingPoint wrapJSX={wrapJSX} preventPropagationList={preventEventPropagationList} />
+            </ShadowRootStyleProvider>
         </StrictMode>,
     )
     return portalContainer
