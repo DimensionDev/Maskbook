@@ -81,17 +81,17 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const StyledTabList = styled(TabList)`
-    &.${tabsClasses.root} {
-        min-height: unset;
-        background-color: transparent;
-        padding: 0 16px;
-        flex-shrink: 0;
-    }
-    & .${tabsClasses.indicator} {
-        display: none;
-    }
-`
+const StyledTabList = styled(TabList)({
+    [`&.${tabsClasses.root}`]: {
+        minHeight: 'unset',
+        backgroundColor: 'transparent',
+        padding: '0 16px',
+        flexShrink: 0,
+    },
+    [`& .${tabsClasses.indicator}`]: {
+        display: 'none',
+    },
+})
 
 export const Component = memo(function WalletAssets() {
     const navigate = useNavigate()

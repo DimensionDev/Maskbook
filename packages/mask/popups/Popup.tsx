@@ -151,7 +151,7 @@ function PageUIProvider({ children }: PageUIProviderProps) {
         <Suspense />,
         // Provide the minimal environment (i18n context) for CrashUI in page mode
         <LinguiProviderHMR i18n={i18n} />,
-        <StyledEngineProvider injectFirst />,
+        <StyledEngineProvider injectFirst enableCssLayer />,
         <ErrorBoundary />,
 
         <Suspense />,

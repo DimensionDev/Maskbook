@@ -38,7 +38,7 @@ export default function Dashboard() {
     return jsxCompose(
         <RootWeb3ContextProvider enforceEVM />,
         <LinguiProviderHMR i18n={i18n} />,
-        <StyledEngineProvider injectFirst />,
+        <StyledEngineProvider injectFirst enableCssLayer />,
         <MaskThemeProvider palette={mode} localization={localization} />,
         <DialogStackingProvider />,
         <UserContext.Provider />,

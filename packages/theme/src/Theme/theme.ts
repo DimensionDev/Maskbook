@@ -73,7 +73,7 @@ export const MaskTheme = unstable_createMuiStrictModeTheme({
             styleOverrides: { root: { backgroundImage: 'unset' } },
         },
     },
-    // modularCssLayers: 'mui',
+    modularCssLayers: true,
     cssVariables: {
         colorSchemeSelector: 'data',
     },

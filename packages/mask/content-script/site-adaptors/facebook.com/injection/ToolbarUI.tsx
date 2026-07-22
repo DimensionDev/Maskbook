@@ -2,24 +2,20 @@ import { styled, ListItemButton, Typography, ListItemIcon } from '@mui/material'
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useMemo } from 'react'
 
-const Container = styled('div')`
-    padding: 0 4px;
-`
-const ContainerHasNavBar = styled('div')`
-    padding: 0 8px;
-`
+const Container = styled('div')({ padding: '0 4px' })
+const ContainerHasNavBar = styled('div')({ padding: '0 8px' })
 
-const Item = styled(ListItemButton)`
-    border-radius: 8px;
-    padding-left: 10px;
-`
-const Text = styled(Typography)`
-    font-size: 0.9375rem;
-    /* This CSS variable is inherit from Facebook. */
-    color: var(--primary-text);
-    font-weight: 500;
-    padding-left: 0.1rem;
-`
+const Item = styled(ListItemButton)({
+    borderRadius: 8,
+    paddingLeft: 10,
+})
+const Text = styled(Typography)({
+    fontSize: '0.9375rem',
+    // This CSS variable is inherited from Facebook.
+    color: 'var(--primary-text)',
+    fontWeight: 500,
+    paddingLeft: '0.1rem',
+})
 const Icon = styled(ListItemIcon, {
     shouldForwardProp(name) {
         return name !== 'hasTopNavBar' && name !== 'hasSpecificLeftRailStartBar'
@@ -27,16 +23,15 @@ const Icon = styled(ListItemIcon, {
 })<{
     hasTopNavBar: boolean
     hasSpecificLeftRailStartBar: boolean
-}>`
-    min-width: ${(props) =>
-        props.hasSpecificLeftRailStartBar ?
-            props.hasTopNavBar ?
-                '46px'
+}>(({ hasSpecificLeftRailStartBar, hasTopNavBar }) => ({
+    minWidth:
+        hasSpecificLeftRailStartBar ?
+            hasTopNavBar ? 46
             :   'auto'
-        :   '24px'};
-    margin-right: ${(props) => (props.hasTopNavBar && props.hasSpecificLeftRailStartBar ? '0px' : '12px')};
-    padding-left: 4px;
-`
+        :   24,
+    marginRight: hasTopNavBar && hasSpecificLeftRailStartBar ? 0 : 12,
+    paddingLeft: 4,
+}))
 
 export function ToolboxAtFacebook(props: {
     category: 'wallet' | 'application'

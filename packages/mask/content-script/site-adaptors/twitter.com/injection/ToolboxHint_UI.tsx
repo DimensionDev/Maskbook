@@ -11,38 +11,38 @@ import { Trans } from '@lingui/react/macro'
 const HORIZONTAL_BREAKPOINT = 1265
 const VERTICAL_BREAKPOINT = 855
 
-const Container = styled('div')`
-    cursor: pointer;
-    padding: 4px 0;
-    @media screen and (max-height: ${VERTICAL_BREAKPOINT}px) {
-        padding: 0;
-    }
-`
-const ListItem = styled(ListItemButton)`
-    border-radius: 9999px;
-    display: inline-flex;
-    &:hover {
-        background: rgba(15, 20, 25, 0.1);
-        ${({ theme }) => theme.applyStyles('dark', { background: 'rgba(217, 217, 217, 0.1)' })}
-    }
-    /* twitter break point */
-    @media screen and (max-width: ${HORIZONTAL_BREAKPOINT}px) {
-        height: 50px;
-    }
-`
-const Text = styled(Typography)`
-    margin-right: 16px;
-    font-family: inherit;
-    font-weight: 400;
-    white-space: nowrap;
-    color: rgb(15, 20, 25);
-    ${({ theme }) => theme.applyStyles('dark', { color: 'rgb(216, 216, 216)' })}
-`
-const Icon = styled(ListItemIcon)`
-    color: rgb(15, 20, 25);
-    ${({ theme }) => theme.applyStyles('dark', { color: 'rgb(216, 216, 216)' })}
-    min-width: 0;
-`
+const Container = styled('div')({
+    cursor: 'pointer',
+    padding: '4px 0',
+    [`@media screen and (max-height: ${VERTICAL_BREAKPOINT}px)`]: {
+        padding: 0,
+    },
+})
+const ListItem = styled(ListItemButton)(({ theme }) => ({
+    borderRadius: 9999,
+    display: 'inline-flex',
+    '&:hover': {
+        background: 'rgba(15, 20, 25, 0.1)',
+        ...theme.applyStyles('dark', { background: 'rgba(217, 217, 217, 0.1)' }),
+    },
+    // Twitter breakpoint
+    [`@media screen and (max-width: ${HORIZONTAL_BREAKPOINT}px)`]: {
+        height: 50,
+    },
+}))
+const Text = styled(Typography)(({ theme }) => ({
+    marginRight: 16,
+    fontFamily: 'inherit',
+    fontWeight: 400,
+    whiteSpace: 'nowrap',
+    color: 'rgb(15, 20, 25)',
+    ...theme.applyStyles('dark', { color: 'rgb(216, 216, 216)' }),
+}))
+const Icon = styled(ListItemIcon)(({ theme }) => ({
+    color: 'rgb(15, 20, 25)',
+    ...theme.applyStyles('dark', { color: 'rgb(216, 216, 216)' }),
+    minWidth: 0,
+}))
 
 export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application' }) {
     const { textMarginLeft, itemPadding, iconSize } = useSideBarNativeItemStyleVariants()
