@@ -264,11 +264,12 @@ export async function createConfiguration(
                 'process.stderr': '/* stdin */ null',
             }),
             flags.reactRefresh &&
-                new (
-                    await (rspack ?
-                        import('@rspack/plugin-react-refresh')
-                    :   import('@pmmmwh/react-refresh-webpack-plugin'))
-                ).default({ overlay: false, esModule: true }),
+                new (rspack ?
+                    (await import('@rspack/plugin-react-refresh')).ReactRefreshRspackPlugin
+                :   (await import('@pmmmwh/react-refresh-webpack-plugin')).default)({
+                    overlay: false,
+                    esModule: true,
+                }),
             flags.profiling && new ProfilingPlugin(),
             // TODO: crashes rspack
             !rspack && new TrustedTypesPlugin(),

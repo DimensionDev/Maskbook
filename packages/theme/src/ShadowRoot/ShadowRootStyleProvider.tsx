@@ -47,6 +47,7 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
 
     const muiEmotionCache = createEmotionCache({ key })
     const muiStyleSheet = new StyleSheet({ key, container: shadow })
+    // @ts-expect-error internal api?
     muiEmotionCache.sheet = muiStyleSheet
 
     styleSheetMap.set(shadow, [muiEmotionCache, muiStyleSheet])

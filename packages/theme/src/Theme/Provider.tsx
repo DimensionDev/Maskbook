@@ -3,14 +3,14 @@ import {
     type Theme,
     ThemeProvider,
     type PaletteMode,
-    unstable_createMuiStrictModeTheme,
     useColorScheme,
+    type StorageManager,
+    unstable_createMuiStrictModeTheme,
 } from '@mui/material'
-import { type MaskIconPalette, MaskIconPaletteContext } from '@masknet/icons'
-import { getBackgroundColor } from './color-tools.ts'
+import { MaskIconPaletteContext } from '@masknet/icons'
 import { MaskTheme } from './theme.js'
 import type { Localization } from '@mui/material/locale'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 export interface MaskThemeProviderProps extends React.PropsWithChildren {
     theme?: Theme
@@ -19,41 +19,49 @@ export interface MaskThemeProviderProps extends React.PropsWithChildren {
     supportsDimPalette?: boolean
 }
 
+function useStorageManager(palette: PaletteMode): StorageManager {
+    const storageManagerRef = useRef<StorageManager>(null)
+    const storageManagerCallbackRef = useRef<Set<(value: PaletteMode) => void>>(new Set())
+    useEffect(() => {
+        for (const callback of storageManagerCallbackRef.current) {
+            callback(palette)
+        }
+    }, [palette])
+    if (!storageManagerRef.current) {
+        storageManagerRef.current = () => ({
+            get: () => palette,
+            set: () => {
+                // ignore, we managed it by ourselves
+            },
+            subscribe: (callback) => {
+                storageManagerCallbackRef.current.add(callback)
+                return () => {
+                    storageManagerCallbackRef.current.delete(callback)
+                }
+            },
+        })
+    }
+    return storageManagerRef.current
+}
+
 export function MaskThemeProvider(props: MaskThemeProviderProps) {
-    const { children, theme = MaskTheme, localization, supportsDimPalette } = props
-    // TODO: palette
-    let maskIconPalette = useMaskIconPalette()
-    maskIconPalette =
-        supportsDimPalette ? maskIconPalette
-        : maskIconPalette === 'dim' ? 'dark'
-        : maskIconPalette
+    const { children, theme = MaskTheme, palette, localization, supportsDimPalette } = props
+    const storageManager = useStorageManager(palette)
+
     const themeWithLocalization = useMemo(() => {
         if (!localization) return theme
         return unstable_createMuiStrictModeTheme(theme, localization)
     }, [theme, localization])
 
     return (
-        <ThemeProvider theme={themeWithLocalization}>
-            <MaskIconPaletteContext value={maskIconPalette}>
+        <ThemeProvider theme={themeWithLocalization} storageManager={storageManager}>
+            <MaskIconPaletteContext value={palette}>
                 <CssBaseline />
                 {children}
             </MaskIconPaletteContext>
         </ThemeProvider>
     )
 }
-
-/**
- * In content script, if background color is pure black, it returns 'dim' rather than 'dark'.
- */
-export function useMaskIconPalette(): MaskIconPalette {
-    const palette = usePalette()
-    if (palette === 'dark') {
-        const backgroundColor = getBackgroundColor(document.body)
-        return backgroundColor === 'rgb(0,0,0)' ? 'dim' : 'dark'
-    }
-    return 'light'
-}
-
 export function usePalette(): PaletteMode {
     const { mode, systemMode } = useColorScheme()
     return (mode === 'system' ? systemMode : mode) || 'light'

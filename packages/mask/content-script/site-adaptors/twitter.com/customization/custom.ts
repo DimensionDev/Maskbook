@@ -1,5 +1,4 @@
-import { produce, setAutoFreeze } from 'immer'
-import { unstable_createMuiStrictModeTheme } from '@mui/material'
+import { produce } from 'immer'
 import { colorChannel } from '@mui/system'
 import { fromRGB, MaskTheme, shade, toRGB } from '@masknet/theme'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
@@ -7,14 +6,7 @@ import type { ThemeSettings } from '@masknet/web3-shared-base'
 export function getThemeTwitterVariant(themeSettings: ThemeSettings) {
     const primaryColorRGB = fromRGB(themeSettings.color)!
     const primaryContrastColorRGB = fromRGB('rgb(255, 255, 255)')
-    setAutoFreeze(false)
-
     const TwitterTheme = produce(MaskTheme, (theme) => {
-        if (themeSettings.isDim) {
-            theme.vars.palette.maskColor.bottom = '#15202B'
-            theme.vars.palette.maskColor.secondaryBottom = 'rgba(21, 32, 43, 0.8)'
-        }
-
         const primary = {
             light: toRGB(shade(primaryColorRGB, 10)),
             main: toRGB(primaryColorRGB),
@@ -71,6 +63,5 @@ export function getThemeTwitterVariant(themeSettings: ThemeSettings) {
             },
         }
     })
-    setAutoFreeze(true)
-    return unstable_createMuiStrictModeTheme(TwitterTheme)
+    return TwitterTheme
 }

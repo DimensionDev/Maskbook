@@ -34,9 +34,8 @@ import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
 import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
 import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
 import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
-import { StyledEngineProvider, type PaletteMode } from '@mui/material/styles'
+import { StyledEngineProvider } from '@mui/material/styles'
 import { i18n } from '@lingui/core'
-import type { Localization } from '@mui/material/locale'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -117,12 +116,9 @@ export default function Popups() {
         throttle: 10_000,
     })
 
-    const mode = usePageThemePalette()
-    const [localization] = useThemeLanguage()
-
     return jsxCompose(
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
-        <PageUIProvider palette={mode} localization={localization} />,
+        <PageUIProvider />,
         <PopupSnackbarProvider> </PopupSnackbarProvider>,
         <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,
         <PopupContext />,
@@ -145,12 +141,11 @@ function ErrorPageBoundary() {
 }
 
 interface PageUIProviderProps {
-    palette: PaletteMode
-    localization?: Localization
     children?: React.ReactNode
-    fallback?: React.ReactNode
 }
-function PageUIProvider({ children, fallback, palette, localization }: PageUIProviderProps) {
+function PageUIProvider({ children }: PageUIProviderProps) {
+    const palette = usePageThemePalette()
+    const [localization] = useThemeLanguage()
     return jsxCompose(
         // Avoid the crash due to unhandled suspense
         <Suspense />,
@@ -159,7 +154,7 @@ function PageUIProvider({ children, fallback, palette, localization }: PageUIPro
         <StyledEngineProvider injectFirst />,
         <ErrorBoundary />,
 
-        <Suspense fallback={fallback} />,
+        <Suspense />,
         <DialogStackingProvider hasGlobalBackdrop={false} />,
         <MaskThemeProvider palette={palette} localization={localization} />,
         <RootWeb3ContextProvider />,

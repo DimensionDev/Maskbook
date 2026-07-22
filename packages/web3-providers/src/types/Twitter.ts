@@ -145,7 +145,6 @@ export namespace TwitterBaseAPI {
 
     export enum ThemeMode {
         Dark = 'darker',
-        Dim = 'dark',
         Light = 'light',
     }
 

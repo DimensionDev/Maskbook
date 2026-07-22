@@ -205,7 +205,6 @@ const twitterUI: SiteAdaptorUI.Definition = {
             color: ThemeColor.Blue,
             size: FontSize.Normal,
             mode: ThemeMode.Light,
-            isDim: false,
         },
         steganography: {
             // ! Change this is a breaking change !
