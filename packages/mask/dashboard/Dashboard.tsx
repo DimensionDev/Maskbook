@@ -44,7 +44,7 @@ export default function Dashboard() {
         <UserContext.Provider />,
         <PersonaContext.Provider initialState={PersonaContextIO} />,
         <ErrorBoundary />,
-        <MaskSnackbarProvider> </MaskSnackbarProvider>,
+        <MaskSnackbarProvider />,
         <SharedContextProvider />,
     )(
         cloneElement,

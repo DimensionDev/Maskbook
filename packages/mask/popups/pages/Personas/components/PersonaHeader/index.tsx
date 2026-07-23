@@ -26,7 +26,6 @@ export const PersonaHeader = memo(function PersonaHeader() {
                 avatar={avatar}
                 fingerprint={currentPersona.identifier.rawPublicKey}
                 nickname={currentPersona.nickname}
-                publicHexString={currentPersona.identifier.publicKeyAsHex}
             />
         )
     if (matchHome || matchWalletConnect || matchProfilePhoto) return null

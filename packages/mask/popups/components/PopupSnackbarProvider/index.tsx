@@ -1,4 +1,4 @@
-import type { RefAttributes } from 'react'
+import type { PropsWithChildren, RefAttributes } from 'react'
 import { Typography, collapseClasses } from '@mui/material'
 import { SnackbarProvider, SnackbarContent, type CustomContentProps } from 'notistack'
 import { alpha, makeStyles } from '@masknet/theme'
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     info: {},
 }))
 
-export function PopupSnackbarProvider() {
+export function PopupSnackbarProvider(props: PropsWithChildren) {
     const { classes } = useStyles()
 
     return (
@@ -64,8 +64,9 @@ export function PopupSnackbarProvider() {
             }}
             classes={{
                 containerRoot: classes.container,
-            }}
-        />
+            }}>
+            {props.children}
+        </SnackbarProvider>
     )
 }
 

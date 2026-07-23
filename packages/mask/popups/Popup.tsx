@@ -117,13 +117,12 @@ export default function Popups() {
 
         // Provide the minimal environment (i18n, material theme) for CrashUI in page mode
         <LinguiProviderHMR i18n={i18n} />,
+        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
         <MaskPopupThemeProvider />,
         <StyledEngineProvider injectFirst enableCssLayer />,
-
         <ErrorBoundary />,
-        <Suspense />,
 
-        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
+        <Suspense />,
         <DialogStackingProvider hasGlobalBackdrop={false} />,
         <RootWeb3ContextProvider />,
         <SharedContextProvider />,

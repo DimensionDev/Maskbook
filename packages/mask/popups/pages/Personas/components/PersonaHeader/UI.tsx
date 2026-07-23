@@ -52,10 +52,9 @@ interface PersonaHeaderUIProps {
     avatar?: string | null
     fingerprint: string
     nickname?: string
-    publicHexString: string
 }
 
-export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint, nickname, publicHexString }) => {
+export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint, nickname }) => {
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>

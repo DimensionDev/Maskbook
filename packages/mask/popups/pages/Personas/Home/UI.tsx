@@ -2,10 +2,10 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PopupHomeTabType, useParamTab } from '@masknet/shared'
 import {
+    type EnhanceableSite,
     PopupModalRoutes,
     PopupRoutes,
     type BindingProof,
-    type EnhanceableSite,
     type ProfileAccount,
 } from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'

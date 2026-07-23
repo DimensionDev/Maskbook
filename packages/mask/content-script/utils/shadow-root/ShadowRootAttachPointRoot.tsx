@@ -11,8 +11,7 @@ export function ShadowRootAttachPointRoot(children: React.ReactNode) {
         <MaskSnackbarProvider
             disableWindowBlurListener={false}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            offsetY={Sniffings.is_facebook_page ? 80 : undefined}>
-            {' '}
-        </MaskSnackbarProvider>,
+            offsetY={Sniffings.is_facebook_page ? 80 : undefined}
+        />,
     )(cloneElement, children)
 }
