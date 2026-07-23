@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Typography } from '@mui/material'
 import { buttonClasses } from '@mui/material/Button'
-import { alpha, ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
@@ -68,11 +68,11 @@ interface DeleteContactModalProps extends BottomDrawerProps {
 function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContactModalProps) {
     const { classes, cx } = useStyles()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
         await evm.state!.AddressBook?.removeContact(address)
-        showSnackbar(<Trans>Contact deleted.</Trans>)
+        enqueueSnackbar(<Trans>Contact deleted.</Trans>, { variant: 'success' })
         onConfirm?.()
     }, [address, onConfirm])
 

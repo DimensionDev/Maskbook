@@ -14,7 +14,7 @@ import {
     TokenIcon,
 } from '@masknet/shared'
 import { Days, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { MaskThemeProvider, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { MaskThemeProvider, makeStyles, useSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
 import { type ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
@@ -149,7 +149,7 @@ export const Component = memo(function TokenDetailPage() {
     const asset = useAsset(chainId, address, account)
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const { setExtension } = useContext(PageTitleContext)
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
@@ -178,14 +178,14 @@ export const Component = memo(function TokenDetailPage() {
                         schema: SchemaType.ERC20,
                         address: asset.address,
                     })
-                    showSnackbar(<Trans>Asset is hidden.</Trans>)
+                    enqueueSnackbar(<Trans>Asset is hidden.</Trans>, { variant: 'success' })
                     navigate(-1)
                 }}>
                 <Icons.EyeOff size={24} />
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, account])
+    }, [chainId, asset, isNativeToken, classes.deleteButton, enqueueSnackbar, account])
 
     return (
         <div className={classes.halo}>

@@ -8,7 +8,7 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, useSnackbar } from '@masknet/theme'
 import { Trans } from '@lingui/react/macro'
 
 export const Component = memo(function ExportPrivateKey() {
@@ -16,7 +16,7 @@ export const Component = memo(function ExportPrivateKey() {
     const navigate = useNavigate()
     const { currentPersona } = PersonaContext.useContainer()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [, copyToClipboard] = useCopyToClipboard()
     const { value } = useAsync(async () => {
         if (!currentPersona) return
@@ -31,7 +31,7 @@ export const Component = memo(function ExportPrivateKey() {
         if (!value) return
         copyToClipboard(value)
 
-        showSnackbar(<Trans>Copied</Trans>)
+        enqueueSnackbar(<Trans>Copied</Trans>, { variant: 'success' })
     }, [value])
 
     useTitle(currentPersona?.nickname ?? '')

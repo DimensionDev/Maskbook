@@ -3,7 +3,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { decryptBackup, type BackupSummary } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { formatFileSize, InjectedDialog } from '@masknet/shared'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
@@ -80,7 +80,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
     const [progress, setProgress] = useState(0)
     const [backupPassword, setBackupPassword] = useState('')
     const [backupPasswordError, setBackupPasswordError] = useState<ReactNode>()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const handleClose = useCallback(() => {
         setBackupPassword('')
@@ -98,11 +98,11 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
             }
             return step.value
         } catch (err) {
-            showSnackbar((err as Error).message, { variant: 'error' })
+            enqueueSnackbar((err as Error).message, { variant: 'error' })
             handleClose()
             throw err
         }
-    }, [open, download, showSnackbar, handleClose])
+    }, [open, download, enqueueSnackbar, handleClose])
 
     const isImport = strategy === 'import'
     const [{ loading }, handleRestore] = useAsyncFn(async () => {
@@ -123,9 +123,9 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                 if (!hasPassword) await Services.Wallet.setDefaultPassword()
             }
             await Services.Backup.restoreBackup(backupJson)
-            showSnackbar(isImport ? <Trans>Restore Completed</Trans> : <Trans>Merge Completed</Trans>, {
+            enqueueSnackbar(isImport ? <Trans>Restore Completed</Trans> : <Trans>Merge Completed</Trans>, {
                 variant: 'success',
-                message:
+                detail:
                     restoreSuccessMessage ||
                     (isImport ?
                         <Trans>Your file has been successfully restore into the browser data.</Trans>
@@ -134,14 +134,14 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
             onClose(backupSummary)
         } catch (err) {
             if (isImport) {
-                showSnackbar(<Trans>Restore Failed</Trans>, {
+                enqueueSnackbar(<Trans>Restore Failed</Trans>, {
                     variant: 'error',
-                    message: restoreErrorMessage || (
+                    detail: restoreErrorMessage || (
                         <Trans>Failed to restore the backup: {(err as Error).message}</Trans>
                     ),
                 })
             } else {
-                showSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
+                enqueueSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
                     variant: 'error',
                 })
             }
@@ -151,7 +151,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
         decryptWithAccount,
         account,
         backupPassword,
-        showSnackbar,
+        enqueueSnackbar,
         isImport,
         restoreSuccessMessage,
         onClose,

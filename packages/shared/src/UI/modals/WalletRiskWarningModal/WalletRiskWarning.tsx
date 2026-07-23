@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
-import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
+import { makeStyles, useSnackbar, ActionButton } from '@masknet/theme'
 import { InjectedDialog, ActionButtonPromise, WalletStatusBox } from '@masknet/shared'
 import { Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
@@ -66,13 +66,13 @@ interface WalletRiskWarningProps {
 
 export function WalletRiskWarning({ account, open, onClose }: WalletRiskWarningProps) {
     const { classes, cx } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const isMobile = useMatchXS()
 
     const onConfirm = useCallback(async () => {
         try {
             if (!account) {
-                showSnackbar(<Trans>No wallet selected.</Trans>, {
+                enqueueSnackbar(<Trans>No wallet selected.</Trans>, {
                     variant: 'error',
                     preventDuplicate: true,
                 })
@@ -82,7 +82,7 @@ export function WalletRiskWarning({ account, open, onClose }: WalletRiskWarningP
         } catch {
             // do nothing
         }
-    }, [showSnackbar, account, onClose])
+    }, [enqueueSnackbar, account, onClose])
 
     return (
         <InjectedDialog title={isMobile ? undefined : <Trans>Risk Warning</Trans>} open={open} onClose={onClose}>

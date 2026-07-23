@@ -1,5 +1,5 @@
 import type { Wallet } from '@masknet/shared-base'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useState } from 'react'
 import Services from '#services'
@@ -107,7 +107,7 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
     const [display, toggle] = useToggle(false)
     const [expand, setExpand] = useState(!!hiddenArrow)
     const { classes, cx } = useStyles()
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [, copyToClipboard] = useCopyToClipboard()
 
     const { value: privateKey } = useAsync(async () => {
@@ -118,7 +118,7 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
     const handleCopy = useCallback(() => {
         if (!privateKey) return
         copyToClipboard(privateKey)
-        showSnackbar(<Trans>Copied</Trans>)
+        enqueueSnackbar(<Trans>Copied</Trans>, { variant: 'success' })
     }, [privateKey])
 
     return (

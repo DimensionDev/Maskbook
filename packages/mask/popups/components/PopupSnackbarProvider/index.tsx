@@ -1,17 +1,7 @@
-import { memo, useRef, useCallback, forwardRef, type RefAttributes } from 'react'
+import type { RefAttributes } from 'react'
 import { Typography, collapseClasses } from '@mui/material'
-import { alpha } from '../../Theme/colors.js'
-import {
-    SnackbarProvider,
-    type SnackbarProviderProps,
-    type SnackbarMessage,
-    SnackbarContent,
-    type VariantType,
-    useSnackbar,
-    type CustomContentProps,
-} from 'notistack'
-import { makeStyles } from '../../UIHelper/index.js'
-import type { ShowSnackbarOptions } from './index.js'
+import { SnackbarProvider, SnackbarContent, type CustomContentProps } from 'notistack'
+import { alpha, makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -53,17 +43,14 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.vars.palette.maskColor.white,
     },
     default: {},
-
     info: {},
 }))
 
-export const PopupSnackbarProvider = memo<SnackbarProviderProps>(function PopupSnackbarProvider(props) {
-    const ref = useRef<SnackbarProvider>(null)
+export function PopupSnackbarProvider() {
     const { classes } = useStyles()
 
     return (
         <SnackbarProvider
-            ref={ref}
             maxSnack={1}
             disableWindowBlurListener
             autoHideDuration={2000}
@@ -78,19 +65,17 @@ export const PopupSnackbarProvider = memo<SnackbarProviderProps>(function PopupS
             classes={{
                 containerRoot: classes.container,
             }}
-            {...props}
         />
     )
-})
-
-interface PopupSnackbarContentProps extends CustomContentProps, RefAttributes<HTMLDivElement> {
-    detail?: React.ReactNode
 }
 
-const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProps>(function PopupSnackbarContent(
-    { id, message, detail, variant },
+function PopupSnackbarContent({
+    id,
+    message,
+    detail,
+    variant,
     ref,
-) {
+}: CustomContentProps & RefAttributes<HTMLDivElement>) {
     const { classes, cx } = useStyles()
     const variantClass = {
         default: classes.default,
@@ -110,22 +95,4 @@ const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProp
             :   detail}
         </SnackbarContent>
     )
-})
-
-export function usePopupCustomSnackbar() {
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-    const showSnackbar = useCallback(
-        (text: SnackbarMessage, options?: ShowSnackbarOptions) => {
-            const { message: detail, variant = 'success', ...rest } = options ?? {}
-            return enqueueSnackbar<VariantType>(text, {
-                variant,
-                detail,
-                autoHideDuration: 2000,
-                ...rest,
-            })
-        },
-        [enqueueSnackbar],
-    )
-
-    return { showSnackbar, closeSnackbar }
 }

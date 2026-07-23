@@ -5,7 +5,7 @@ import { Trans } from '@lingui/react/macro'
 import { PersonaContext } from '@masknet/shared'
 import { PopupRoutes, type PersonaInformation } from '@masknet/shared-base'
 import { useContainer } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Box, Button, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -42,7 +42,7 @@ export const Component = memo(function Logout() {
     const { Provider } = useWeb3State()
 
     const { user } = useContainer(UserContext)
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
         try {
@@ -54,10 +54,10 @@ export const Component = memo(function Logout() {
                 await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
             }
 
-            showSnackbar(<Trans>Logout successfully</Trans>)
+            enqueueSnackbar(<Trans>Logout successfully</Trans>, { variant: 'success' })
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(<Trans>Logout failed</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Logout failed</Trans>, { variant: 'error' })
         }
     }, [currentPersona, Provider])
 

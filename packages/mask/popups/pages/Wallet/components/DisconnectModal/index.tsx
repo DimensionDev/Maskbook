@@ -1,7 +1,7 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -92,7 +92,7 @@ interface DisconnectModalProps {
 const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: DisconnectModalProps) {
     const queryClient = useQueryClient()
     const { classes, cx } = useStyles()
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const address = useWallet()?.address
     const { mutate: onDisconnect } = useMutation({
         mutationFn: async (): Promise<void> => {
@@ -101,7 +101,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
         },
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
-            showSnackbar(
+            enqueueSnackbar(
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icons.FillSuccess style={{ marginRight: 6 }} />
                     <Trans>Disconnected successfully.</Trans>
@@ -121,7 +121,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
         },
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address!] })
-            showSnackbar(
+            enqueueSnackbar(
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icons.FillSuccess style={{ marginRight: 6 }} />
                     <Trans>Disconnected successfully.</Trans>

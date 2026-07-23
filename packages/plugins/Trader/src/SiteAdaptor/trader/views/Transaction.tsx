@@ -2,7 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner, useUnmountedRef } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { alpha, LoadingBase, makeStyles } from '@masknet/theme'
+import { alpha, LoadingBase, makeStyles, useSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, leftShift, TransactionStatusType } from '@masknet/web3-shared-base'
@@ -237,7 +237,8 @@ export const Transaction = memo(function Transaction() {
     const { t } = useLingui()
     const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
-    const { basePath, showSnackbar } = useRuntime()
+    const { enqueueSnackbar } = useSnackbar()
+    const { basePath } = useRuntime()
     const navigate = useNavigate()
     const [params, setParams] = useSearchParams()
     const hash = params.get('hash')
@@ -301,8 +302,8 @@ export const Transaction = memo(function Transaction() {
             const received = await getReceived({ hash: toTxHash, account, chainId: toChainId })
 
             if (received && !unmountedRef.current) {
-                showSnackbar(t`Bridge`, {
-                    message: (
+                enqueueSnackbar(t`Bridge`, {
+                    detail: (
                         <MuiLink
                             className={classes.toastLink}
                             color="inherit"
@@ -321,8 +322,9 @@ export const Transaction = memo(function Transaction() {
                 })
             }
         } else {
-            showSnackbar(t`Bridge`, {
-                message: <Trans>Failed to bridge</Trans>,
+            enqueueSnackbar(t`Bridge`, {
+                detail: <Trans>Failed to bridge</Trans>,
+                variant: 'error',
             })
         }
 

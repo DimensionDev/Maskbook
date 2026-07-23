@@ -1,16 +1,16 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, PluginWalletStatusBar, useSnackbarCallback, WalletConnectedBoundary } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, WalletConnectedBoundary } from '@masknet/shared'
 import { EMPTY_LIST, formatWithCommas, type NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { formatCount } from '@masknet/web3-shared-base'
 import { checksumAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
-import { unstable_useCacheRefresh, useContext, useMemo, useState } from 'react'
+import { unstable_useCacheRefresh, useContext, useMemo, useState, useCallback } from 'react'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
 import { SnapshotContext } from '../context.js'
 import { PluginSnapshotRPC } from '../messages.js'
@@ -121,10 +121,10 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
 
     const [loading, setLoading] = useState(false)
     const retry = unstable_useCacheRefresh()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const queryClient = useQueryClient()
-    const onVoteConfirm = useSnackbarCallback(
-        async () => {
+    const onVoteConfirm = useCallback(() => {
+        const act = async () => {
             setLoading(true)
             const isType2 = identifier.id.startsWith('0x')
             const types = {
@@ -147,8 +147,8 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                 app: isType2 ? 'snapshot-v2' : 'snapshot',
             }
             const domain = SNAPSHOT_VOTE_DOMAIN
-            showSnackbar(<Trans>Vote</Trans>, {
-                message: <Trans>Confirm this Signature in your wallet.</Trans>,
+            enqueueSnackbar(<Trans>Vote</Trans>, {
+                detail: <Trans>Confirm this Signature in your wallet.</Trans>,
                 autoHideDuration: 3000,
             })
             const sig = await EVMWeb3.signMessage(
@@ -177,18 +177,28 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
             setSelected(EMPTY_LIST)
             queryClient.invalidateQueries({ queryKey: ['snapshot', 'proposal', identifier.id] })
             return result
-        },
-        [selectedIndexes, identifier, account, proposal],
-        () => {
-            setLoading(false)
-            onClose()
-            retry()
-        },
-        (_err: Error) => setLoading(false),
-        void 0,
-        messageText(<Trans>Your vote has been successful.</Trans>),
-        messageText(<Trans>Please try again if you failed to vote.</Trans>),
-    )
+        }
+        act().then(
+            (res) => {
+                enqueueSnackbar(messageText(<Trans>Your vote has been successful.</Trans>), {
+                    variant: 'success',
+                    preventDuplicate: true,
+                })
+                setLoading(false)
+                onClose()
+                retry()
+                return res
+            },
+            (error: unknown) => {
+                enqueueSnackbar(messageText(<Trans>Please try again if you failed to vote.</Trans>), {
+                    preventDuplicate: true,
+                    variant: 'error',
+                })
+                setLoading(false)
+                throw error
+            },
+        )
+    }, [selectedIndexes, identifier, account, proposal])
     const link = `https://snapshot.box/#/${identifier.space}/proposal/${identifier.id}`
 
     return (

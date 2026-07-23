@@ -2,7 +2,7 @@ import Services from '#services'
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { DashboardRoutes, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { memo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -58,7 +58,7 @@ export const Component = memo(function Welcome() {
     const [params] = useSearchParams()
     const navigate = useNavigate()
 
-    const snackbar = useCustomSnackbar()
+    const snackbar = useSnackbar()
     const [{ loading }, handleAgree] = useAsyncFn(async () => {
         if (allowedToCollect) {
             Services.Settings.setTelemetryEnabled(true)
@@ -71,7 +71,7 @@ export const Component = memo(function Welcome() {
             if (!granted) return
             if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         } catch (err) {
-            snackbar.showSnackbar(t`Failed to get permissions`, { variant: 'error' })
+            snackbar.enqueueSnackbar(t`Failed to get permissions`, { variant: 'error' })
             throw err
         }
         const from = params.get('from')

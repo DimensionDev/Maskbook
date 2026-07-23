@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { delay } from '@masknet/kit'
 import { Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { makeStyles, ShadowRootTooltip, ActionButton, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, ActionButton, useSnackbar } from '@masknet/theme'
 import {
     useNetworkContext,
     useChainContext,
@@ -86,7 +86,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const Web3 = useWeb3Connection(actualPluginID)
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const {
         account,
         chainId: actualChainId,
@@ -123,10 +123,10 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         } catch (error) {
             if (Error.isError(error)) {
                 if (error.message === 'Chain currently not supported' || error.message === 'Invalid Request') {
-                    showSnackbar(<Trans>Switch Network</Trans>, {
+                    enqueueSnackbar(<Trans>Switch Network</Trans>, {
                         processing: false,
                         variant: 'error',
-                        message: (
+                        detail: (
                             <Trans>
                                 {expectedChainName ?? ''} network is not added to the wallet. Please add it and try
                                 again.
@@ -135,10 +135,10 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                         autoHideDuration: 5000,
                     })
                 } else {
-                    showSnackbar(<Trans>Switch Network</Trans>, {
+                    enqueueSnackbar(<Trans>Switch Network</Trans>, {
                         processing: false,
                         variant: 'error',
-                        message: <Trans>Network error or user cancels the process.</Trans>,
+                        detail: <Trans>Network error or user cancels the process.</Trans>,
                         autoHideDuration: 5000,
                     })
                 }

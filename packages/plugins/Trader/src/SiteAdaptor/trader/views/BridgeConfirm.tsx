@@ -53,6 +53,7 @@ import { useBridgable } from '../hooks/useBridgable.js'
 import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
+import { useSnackbar } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -191,7 +192,8 @@ const useStyles = makeStyles()((theme) => ({
 export const BridgeConfirm = memo(function BridgeConfirm() {
     const { t } = useLingui()
     const { classes, cx, theme } = useStyles()
-    const { basePath, showToolTip, showSnackbar } = useRuntime()
+    const { enqueueSnackbar } = useSnackbar()
+    const { basePath, showToolTip } = useRuntime()
     const navigate = useNavigate()
     const {
         mode,
@@ -322,8 +324,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
 
             if (!hash) {
-                showSnackbar(t`Bridge`, {
-                    message: <Trans>Transaction rejected</Trans>,
+                enqueueSnackbar(t`Bridge`, {
+                    detail: <Trans>Transaction rejected</Trans>,
                     variant: 'error',
                 })
                 return
@@ -331,8 +333,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
             const receipt = await Web3.getTransactionReceipt(hash)
             if (isTransactionReceiptSuccess(receipt)) {
-                showSnackbar(t`Bridge`, {
-                    message: (
+                enqueueSnackbar(t`Bridge`, {
+                    detail: (
                         <MuiLink
                             sx={{ wordBreak: 'break-word' }}
                             className={classes.link}
@@ -351,8 +353,9 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     processing: true,
                 })
             } else {
-                showSnackbar(t`Bridge`, {
-                    message: <Trans>Failed to bridge</Trans>,
+                enqueueSnackbar(t`Bridge`, {
+                    detail: <Trans>Failed to bridge</Trans>,
+                    variant: 'error',
                 })
             }
             await addTransaction(account, {
@@ -397,8 +400,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
             navigate(url, { replace: true })
         } catch (err) {
-            showSnackbar(t`Bridge`, {
-                message: (err as Error).message,
+            enqueueSnackbar(t`Bridge`, {
+                detail: (err as Error).message,
                 variant: 'error',
             })
         }
@@ -412,7 +415,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         spender,
         bridge,
         sendBridge,
-        showSnackbar,
+        enqueueSnackbar,
         fromChainId,
         toChainId,
         gasFee,

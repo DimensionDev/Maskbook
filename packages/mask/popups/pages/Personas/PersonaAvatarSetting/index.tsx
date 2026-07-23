@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AvatarEditor from 'react-avatar-editor'
 import { Box, Button, Slider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { NormalHeader } from '../../../components/index.js'
@@ -61,7 +61,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     const queryClient = useQueryClient()
     const [avatarLoaded, setAvatarLoaded] = useState(false)
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { currentPersona, refreshAvatar } = PersonaContext.useContainer()
 
@@ -72,7 +72,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const handleSetFile = useCallback((file: File) => {
         if (file.size > MAX_FILE_SIZE) {
-            showSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
             return
         }
         setAvatarLoaded(false)
@@ -105,10 +105,10 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
             })
             refreshAvatar()
 
-            showSnackbar(<Trans>Avatar set successfully</Trans>)
+            enqueueSnackbar(<Trans>Avatar set successfully</Trans>, { variant: 'success' })
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
         }
     }, [file, currentPersona, refreshAvatar, queryClient])
 

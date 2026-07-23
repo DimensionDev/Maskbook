@@ -2,7 +2,7 @@ import { cloneElement } from 'react'
 import { CssBaseline, GlobalStyles } from '@mui/material'
 import { StyledEngineProvider } from '@mui/material/styles'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { CustomSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
+import { MaskSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
@@ -44,7 +44,7 @@ export default function Dashboard() {
         <UserContext.Provider />,
         <PersonaContext.Provider initialState={PersonaContextIO} />,
         <ErrorBoundary />,
-        <CustomSnackbarProvider> </CustomSnackbarProvider>,
+        <MaskSnackbarProvider> </MaskSnackbarProvider>,
         <SharedContextProvider />,
     )(
         cloneElement,

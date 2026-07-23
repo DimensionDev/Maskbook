@@ -2,7 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Select, Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/shared'
-import { alpha, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { alpha, makeStyles, useSnackbar } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { type HTMLProps, memo, type ReactNode, useCallback, useRef } from 'react'
 import { useDropArea } from 'react-use'
@@ -77,7 +77,7 @@ interface Props extends HTMLProps<HTMLDivElement>, withClasses<'button'> {
 export const UploadDropArea = memo(function UploadDropArea(props: Props) {
     const { maxFileSize = Infinity, omitSizeLimit, className, accept, subtitle, onSelectFile, ...rest } = props
     const { classes, cx } = useStyles(undefined, { props })
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const handleFiles = (files: File[] | FileList | null) => {
         if (files?.length !== 1) {
             showMessage(101)
@@ -112,16 +112,16 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
     const showMessage = (code: 101 | 102 | 103) => {
         switch (code) {
             case 101:
-                showSnackbar(<Trans>The input is not a single file.</Trans>, { variant: 'error' })
+                enqueueSnackbar(<Trans>The input is not a single file.</Trans>, { variant: 'error' })
                 break
             case 102:
-                showSnackbar(<Trans>Failed to upload file</Trans>, {
+                enqueueSnackbar(<Trans>Failed to upload file</Trans>, {
                     variant: 'error',
-                    message: <Trans>Exceeded the maximum file size of {fileSize}.</Trans>,
+                    detail: <Trans>Exceeded the maximum file size of {fileSize}.</Trans>,
                 })
                 break
             case 103:
-                showSnackbar(<Trans>Invalid file type</Trans>, {
+                enqueueSnackbar(<Trans>Invalid file type</Trans>, {
                     variant: 'error',
                 })
                 break

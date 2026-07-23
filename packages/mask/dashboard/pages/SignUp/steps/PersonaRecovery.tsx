@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useCustomSnackbar } from '@masknet/theme'
+import { useSnackbar } from '@masknet/theme'
 import { DashboardRoutes, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
 import Services from '#services'
 import { PersonaNameUI } from './PersonaNameUI.js'
@@ -14,7 +14,7 @@ export function Component() {
     const navigate = useNavigate()
 
     const createPersona = createPersonaV2
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const state = useLocation().state as {
         mnemonic?: string[]
@@ -62,7 +62,7 @@ export function Component() {
                 }
 
                 await Services.Settings.setCurrentPersonaIdentifier(identifier)
-                showSnackbar(<Trans>Persona created.</Trans>, { variant: 'success' })
+                enqueueSnackbar(<Trans>Persona created.</Trans>, { variant: 'success' })
 
                 await delay(300)
                 navigate(

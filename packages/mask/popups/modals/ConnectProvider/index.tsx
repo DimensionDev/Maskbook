@@ -3,7 +3,7 @@ import { useAsyncFn, useMount } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Button, Typography } from '@mui/material'
 import { delay, timeout } from '@masknet/kit'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -66,7 +66,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     const location = useLocation()
     const { pluginID } = useNetworkContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { Provider } = useWeb3State<void, NetworkPluginID.PLUGIN_EVM>(pluginID)
 
@@ -116,7 +116,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             if (Error.isError(error)) {
                 if (error.message === 'timeout') throw error
                 if (error.message.includes('reject') || error.message.includes('cancel')) {
-                    showSnackbar(<Trans>Connecting operation cancelled in third-party wallet.</Trans>, {
+                    enqueueSnackbar(<Trans>Connecting operation cancelled in third-party wallet.</Trans>, {
                         variant: 'warning',
                     })
                     handleClose()

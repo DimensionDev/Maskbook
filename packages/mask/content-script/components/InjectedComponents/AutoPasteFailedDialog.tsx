@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { format as formatDateTime } from 'date-fns'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import {
     DialogActions,
     DialogContent,
@@ -38,7 +38,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { classes } = useStyles()
     // eslint-disable-next-line @eslint-react/purity
     const url = data.image ? URL.createObjectURL(data.image) : undefined
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
     // eslint-disable-next-line @eslint-react/purity
@@ -81,7 +81,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 variant="contained"
                                 onClick={() => {
                                     copy(data.text)
-                                    showSnackbar(<Trans>Text copied!</Trans>, {
+                                    enqueueSnackbar(<Trans>Text copied!</Trans>, {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
@@ -109,7 +109,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             onClick={async () => {
                                 if (!data.image) return
                                 await navigator.clipboard.write([new ClipboardItem({ [data.image.type]: data.image })])
-                                showSnackbar(<Trans>Image copied!</Trans>, {
+                                enqueueSnackbar(<Trans>Image copied!</Trans>, {
                                     variant: 'success',
                                     preventDuplicate: true,
                                     anchorOrigin: {

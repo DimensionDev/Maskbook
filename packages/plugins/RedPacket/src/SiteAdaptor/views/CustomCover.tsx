@@ -2,7 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { formatFileSize, ImageEditorModal, UploadDropArea, useUnmountedRef } from '@masknet/shared'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { FireflyConfig, FireflyRedPacket } from '@masknet/web3-providers'
 import { Box, Button, DialogActions, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
@@ -81,7 +81,7 @@ export function CustomCover() {
         }
     }, [url])
 
-    const snackbar = useCustomSnackbar()
+    const snackbar = useSnackbar()
     const unmountedRef = useUnmountedRef()
     const [{ loading: saving }, save] = useAsyncFn(async () => {
         if (!blob) return
@@ -102,9 +102,9 @@ export function CustomCover() {
                 throw new Error('No theme created')
             }
         } catch (err) {
-            snackbar.showSnackbar(t`Failed to create theme.`, {
+            snackbar.enqueueSnackbar(t`Failed to create theme.`, {
                 variant: 'error',
-                message: (err as Error).message,
+                detail: (err as Error).message,
             })
         }
     }, [blob])

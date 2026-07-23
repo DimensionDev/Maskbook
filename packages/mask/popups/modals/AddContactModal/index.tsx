@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { alpha, ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, MaskTextField, makeStyles, useSnackbar } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
@@ -67,7 +67,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const contacts = useContacts()
     const wallets = useWallets()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const addressError = Boolean(address) && !isValidAddress(address)
     const nameExistError = Boolean(
@@ -80,7 +80,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await evm.state!.AddressBook?.addContact({ name, address })
-        showSnackbar(<Trans>Contact added.</Trans>)
+        enqueueSnackbar(<Trans>Contact added.</Trans>, { variant: 'success' })
         onConfirm?.()
     }, [name, address, onConfirm])
 

@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMContract, EVMWeb3, SolanaChainResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
@@ -68,7 +68,7 @@ interface SolanaRefundOptions {
 }
 export function useSolanaRefundCallback({ rpid, chainId, tokenSymbol, tokenDecimals }: SolanaRefundOptions) {
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_SOLANA)
     const [isRefunded, setIsRefunded] = useState(false)
     const { account } = useChainContext()
@@ -115,7 +115,7 @@ export function useSolanaRefundCallback({ rpid, chainId, tokenSymbol, tokenDecim
 
             const remain = redpacket.totalAmount.sub(redpacket.claimedAmount)
             setIsRefunded(true)
-            showSnackbar(
+            enqueueSnackbar(
                 <span className={classes.message}>
                     <Trans>
                         Refund {formatBalance(remain.toString(), tokenDecimals, { significant: 2, isPrecise: true })}{' '}
@@ -136,7 +136,7 @@ export function useSolanaRefundCallback({ rpid, chainId, tokenSymbol, tokenDecim
             )
         } catch (error) {
             if (Error.isError(error)) {
-                showSnackbar(error.message, { variant: 'error' })
+                enqueueSnackbar(error.message, { variant: 'error' })
             }
             throw error
         }

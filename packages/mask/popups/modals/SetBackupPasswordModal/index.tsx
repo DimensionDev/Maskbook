@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, useSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { UserContext } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
@@ -24,7 +24,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
 
     const navigate = useNavigate()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const validPassword = useCallback(() => {
         if (newPassword.length < 8 || newPassword.length > 20) {
@@ -47,7 +47,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
             backupPassword: newPassword,
         })
 
-        showSnackbar(<Trans>Backup password set successfully</Trans>)
+        enqueueSnackbar(<Trans>Backup password set successfully</Trans>, { variant: 'success' })
 
         if (to) {
             navigate(to, { replace: true })

@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../types.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { DisplayingFileList } from './components/FileList.js'
@@ -26,23 +26,23 @@ export function FileViewer({ files }: { files: FileInfo[] }) {
     usePluginWrapper(true)
     const { classes } = useStyles()
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const handleSave = useCallback(
         async (file: FileInfo) => {
             try {
                 await PluginFileServiceRPC.setFileInfo(file)
-                showSnackbar(<Trans>File saved</Trans>, {
+                enqueueSnackbar(<Trans>File saved</Trans>, {
                     variant: 'success',
-                    message: <Trans>You've saved {file.name} to Web3 file service.</Trans>,
+                    detail: <Trans>You've saved {file.name} to Web3 file service.</Trans>,
                 })
             } catch {
-                showSnackbar(<Trans>Failed to save file</Trans>, {
+                enqueueSnackbar(<Trans>Failed to save file</Trans>, {
                     variant: 'error',
-                    message: <Trans>Failed to save the file. Please try again.</Trans>,
+                    detail: <Trans>Failed to save the file. Please try again.</Trans>,
                 })
             }
         },
-        [showSnackbar, showSnackbar],
+        [enqueueSnackbar],
     )
 
     return (

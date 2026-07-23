@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, MaskColors, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, MaskColors, makeStyles, useSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     ChainContextProvider,
@@ -154,7 +154,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         account,
         chainId,
     })
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
@@ -169,7 +169,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         } catch (err) {
             let message = (err as Error).message
             message = message.includes('"blockNumber":') ? '' : message
-            showSnackbar(<Trans>Failed to transfer token: {message}</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Failed to transfer token: {message}</Trans>, { variant: 'error' })
         }
     }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, network?.rpcUrl])
 

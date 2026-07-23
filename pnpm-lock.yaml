@@ -594,6 +594,9 @@ importers:
       json-stable-stringify:
         specifier: ^1.1.1
         version: 1.1.1
+      notistack:
+        specifier: ^3.0.2
+        version: 3.0.2(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-avatar-editor:
         specifier: ^13.0.2
         version: 13.0.2(@babel/core@7.27.1)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { alpha, ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { fetchChains } from '@masknet/web3-providers/helpers'
@@ -89,7 +89,7 @@ export const Component = memo(function EditNetwork() {
     }, [chainId, networks])
     // #endregion
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     useTitle(network ? network.name : _(msg`Add Network`))
     const { setExtension } = useContext(PageTitleContext)
 
@@ -109,7 +109,7 @@ export const Component = memo(function EditNetwork() {
                         setChainId(ChainId.Mainnet)
                     }
                     await Network.removeNetwork(id)
-                    showSnackbar(<Trans>Network removed.</Trans>)
+                    enqueueSnackbar(<Trans>Network removed.</Trans>, { variant: 'success' })
                     // Trigger UI update.
                     queryClient.invalidateQueries({ queryKey: QUERY_KEY })
                     navigate(-1)
@@ -118,7 +118,7 @@ export const Component = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, showSnackbar, Network, currentChainId, queryClient])
+    }, [isBuiltIn, id, classes.iconButton, enqueueSnackbar, Network, currentChainId, queryClient])
 
     const schema = useMemo(() => {
         return createSchema(
@@ -206,16 +206,16 @@ export const Component = memo(function EditNetwork() {
                 }
                 if (isEditing) {
                     await Network.updateNetwork(id, network)
-                    showSnackbar(<Trans>Network saved</Trans>)
+                    enqueueSnackbar(<Trans>Network saved</Trans>, { variant: 'success' })
                 } else {
                     await Network.addNetwork(network)
-                    showSnackbar(<Trans>Network added</Trans>)
+                    enqueueSnackbar(<Trans>Network added</Trans>, { variant: 'success' })
                 }
                 navigate(-1)
                 queryClient.invalidateQueries({ queryKey: QUERY_KEY })
             } catch (err) {
                 checkZodError((err as Error).message)
-                showSnackbar(<Trans>Failed to save network</Trans>)
+                enqueueSnackbar(<Trans>Failed to save network</Trans>, { variant: 'error' })
             }
             setIsSubmitting(false)
         },

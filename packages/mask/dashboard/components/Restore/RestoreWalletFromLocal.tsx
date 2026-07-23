@@ -2,7 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
@@ -40,7 +40,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
 
     const [file, setFile] = useState<File | null>(null)
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [readingFile, setReadingFile] = useState(false)
 
     const handleSetFile = useCallback(async (file: File) => {
@@ -51,7 +51,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
             setKeyStoreContent(value)
             setReadingFile(false)
         } else {
-            showSnackbar(<Trans>Unsupported key store data</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Unsupported key store data</Trans>, { variant: 'error' })
         }
     }, [])
     const reset = useCallback(() => {

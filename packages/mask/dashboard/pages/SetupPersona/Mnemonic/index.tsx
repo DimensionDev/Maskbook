@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { alpha, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { alpha, makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Button, Checkbox, FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import { toBlob } from 'html-to-image'
 import { memo, useCallback, useRef, useState } from 'react'
@@ -100,7 +100,7 @@ export const Component = memo(function SignUpMnemonic() {
 
     const [checked, setChecked] = useState(true)
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { words, refreshCallback } = useMnemonicWordsPuzzle()
 
@@ -121,7 +121,7 @@ export const Component = memo(function SignUpMnemonic() {
             await Services.Settings.setCurrentPersonaIdentifier(identifier)
             navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { isCreate: true }))
         } catch (error) {
-            showSnackbar((error as Error).message, { variant: 'error' })
+            enqueueSnackbar((error as Error).message, { variant: 'error' })
         }
     }, [words])
 

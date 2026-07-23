@@ -2,7 +2,7 @@ import type { EvmAddress } from '@lens-protocol/client'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useLensClient, useMyLensAccount } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useCustomSnackbar, type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage } from '@masknet/theme'
+import { useSnackbar, type ShowMaskSnackbarOptions, type SnackbarKey, type SnackbarMessage } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useRef, useState } from 'react'
@@ -19,17 +19,17 @@ export function useFollow({ accountAddress, onSuccess, onFailed }: FollowOptions
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const snackbarKeyRef = useRef<SnackbarKey>(undefined)
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const showSingletonSnackbar = useCallback(
-        (title: SnackbarMessage, options: ShowSnackbarOptions) => {
+        (title: SnackbarMessage, options: ShowMaskSnackbarOptions) => {
             if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
-            snackbarKeyRef.current = showSnackbar(title, options)
+            snackbarKeyRef.current = enqueueSnackbar(title, options)
             return () => {
                 closeSnackbar(snackbarKeyRef.current)
             }
         },
-        [showSnackbar, closeSnackbar],
+        [enqueueSnackbar, closeSnackbar],
     )
 
     const myLensAccount = useMyLensAccount()
@@ -57,7 +57,7 @@ export function useFollow({ accountAddress, onSuccess, onFailed }: FollowOptions
                     showSingletonSnackbar(t`Follow Lens handle`, {
                         processing: false,
                         variant: 'warning',
-                        message: <Trans>Already following</Trans>,
+                        detail: <Trans>Already following</Trans>,
                     })
                 } else if (
                     !message.includes('Transaction was rejected') &&
@@ -70,7 +70,7 @@ export function useFollow({ accountAddress, onSuccess, onFailed }: FollowOptions
                     showSingletonSnackbar(t`Follow Lens handle`, {
                         processing: false,
                         variant: 'error',
-                        message: <Trans>Network error, try again: {error.message}</Trans>,
+                        detail: <Trans>Network error, try again: {error.message}</Trans>,
                     })
                 }
             } finally {

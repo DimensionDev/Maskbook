@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, useSnackbar } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
 import { Trans, useLingui } from '@lingui/react/macro'
 interface FormInputs {
@@ -23,7 +23,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
 
     const { user, updateUser } = UserContext.useContainer()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const {
         control,
@@ -85,11 +85,11 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                 backupPassword: data.newPassword,
             })
 
-            showSnackbar(<Trans>Backup password set successfully</Trans>)
+            enqueueSnackbar(<Trans>Backup password set successfully</Trans>, { variant: 'success' })
 
             navigate(-1)
         },
-        [handleSubmit, updateUser, showSnackbar],
+        [handleSubmit, updateUser, enqueueSnackbar],
     )
 
     return (

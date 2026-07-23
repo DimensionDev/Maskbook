@@ -3,7 +3,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { ReasonableMessage, JsonRpcResponse } from '@masknet/web3-shared-base'
 import { EthereumMethodType, type MessageRequest } from '@masknet/web3-shared-evm'
@@ -48,7 +48,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
     const { currentRequest } = props
     const navigate = useNavigate()
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [isDangerRequest, setIsDanger] = useState(false)
     const [confirmDisabled, setConfirmDisabled] = useState(false)
@@ -90,7 +90,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
             await confirmActionRef.current(isLastRequest)
             await onRequestCountMightChanged()
         } catch (error) {
-            showSnackbar(
+            enqueueSnackbar(
                 <Typography sx={{ textAlign: 'center', width: '275px' }}>
                     <Trans>There was a network or RPC provider error, please try again later!</Trans>
                     <br />
@@ -99,7 +99,7 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
                 { variant: 'error', autoHideDuration: 5000 },
             )
         }
-    }, [isLastRequest, onRequestCountMightChanged, showSnackbar])
+    }, [isLastRequest, onRequestCountMightChanged, enqueueSnackbar])
 
     const actionRunning = confirmLoading || cancelLoading
     const CancelButton = (

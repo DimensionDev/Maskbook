@@ -7,7 +7,7 @@ import {
     getDefaultWalletPassword,
     type Wallet,
 } from '@masknet/shared-base'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -179,7 +179,7 @@ export const Component = memo(function SetPaymentPassword() {
     const wallets = useWallets()
     const [params] = useSearchParams()
     const [isCreating, setIsCreating] = useState(!!params.get('isCreating'))
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const theme = useTheme()
 
     const {
@@ -210,7 +210,7 @@ export const Component = memo(function SetPaymentPassword() {
 
                 if (hasPassword) {
                     const from = params.get('from')
-                    showSnackbar(<Trans>Set payment password successfully.</Trans>, { variant: 'success' })
+                    enqueueSnackbar(<Trans>Set payment password successfully.</Trans>, { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     params.delete('from')
                     navigate({ pathname: from || PopupRoutes.Wallet, search: params.toString() }, { replace: true })

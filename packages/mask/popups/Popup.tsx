@@ -1,15 +1,10 @@
 import { PersonaContext, LinguiProviderHMR, PrivySetup, SharedContextProvider } from '@masknet/shared'
 import { jsxCompose, MaskMessages, PopupRoutes } from '@masknet/shared-base'
-import {
-    PopupSnackbarProvider,
-    CustomSnackbarProvider,
-    DialogStackingProvider,
-    MaskThemeProvider,
-} from '@masknet/theme'
+import { DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider, RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { Suspense, cloneElement, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
+import React, { Suspense, cloneElement, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
     createHashRouter,
@@ -36,6 +31,7 @@ import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/Erro
 import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
 import { StyledEngineProvider } from '@mui/material/styles'
 import { i18n } from '@lingui/core'
+import { PopupSnackbarProvider } from './components/PopupSnackbarProvider/index.js'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -117,15 +113,28 @@ export default function Popups() {
     })
 
     return jsxCompose(
+        <Suspense />,
+
+        // Provide the minimal environment (i18n, material theme) for CrashUI in page mode
+        <LinguiProviderHMR i18n={i18n} />,
+        <MaskPopupThemeProvider />,
+        <StyledEngineProvider injectFirst enableCssLayer />,
+
+        <ErrorBoundary />,
+        <Suspense />,
+
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
-        <PageUIProvider />,
-        <PopupSnackbarProvider> </PopupSnackbarProvider>,
+        <DialogStackingProvider hasGlobalBackdrop={false} />,
+        <RootWeb3ContextProvider />,
+        <SharedContextProvider />,
+        <PopupSnackbarProvider />,
         <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,
         <PopupContext />,
         <PageTitleContext value={titleContext} />,
     )(
         cloneElement,
         <>
+            <PrivySetup />
             {/* https://github.com/TanStack/query/issues/5417 */}
             {process.env.NODE_ENV === 'development' ?
                 <ReactQueryDevtools buttonPosition="bottom-right" />
@@ -140,35 +149,13 @@ function ErrorPageBoundary() {
     return <ErrorBoundaryUIOfError error={error} hasError />
 }
 
-interface PageUIProviderProps {
-    children?: React.ReactNode
-}
-function PageUIProvider({ children }: PageUIProviderProps) {
+function MaskPopupThemeProvider({ children }: React.PropsWithChildren) {
+    // those two hooks depends on tanstack's provider
     const palette = usePageThemePalette()
     const [localization] = useThemeLanguage()
-    return jsxCompose(
-        // Avoid the crash due to unhandled suspense
-        <Suspense />,
-        // Provide the minimal environment (i18n context) for CrashUI in page mode
-        <LinguiProviderHMR i18n={i18n} />,
-        <StyledEngineProvider injectFirst enableCssLayer />,
-        <ErrorBoundary />,
-
-        <Suspense />,
-        <DialogStackingProvider hasGlobalBackdrop={false} />,
-        <MaskThemeProvider palette={palette} localization={localization} />,
-        <RootWeb3ContextProvider />,
-    )(
-        cloneElement,
-        <>
-            <PrivySetup />
-            <SharedContextProvider>
-                <CustomSnackbarProvider
-                    disableWindowBlurListener={false}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                    {children}
-                </CustomSnackbarProvider>
-            </SharedContextProvider>
-        </>,
+    return (
+        <MaskThemeProvider palette={palette} localization={localization}>
+            {children}
+        </MaskThemeProvider>
     )
 }

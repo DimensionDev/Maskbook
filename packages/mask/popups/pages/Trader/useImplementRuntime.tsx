@@ -1,6 +1,5 @@
 import { Trans } from '@lingui/react/macro'
 import { useSupportedChains, useTrade, type ShowTooltipOptions } from '@masknet/plugin-trader'
-import { usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
@@ -19,7 +18,6 @@ export function useImplementRuntime() {
         async (
             currentToken: Web3Helper.FungibleTokenAll | null | undefined,
             side: 'from' | 'to',
-            excludes: Web3Helper.FungibleTokenAll[],
         ): Promise<Web3Helper.FungibleTokenAll | null> => {
             const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
 
@@ -68,10 +66,5 @@ export function useImplementRuntime() {
         [theme.vars.palette.maskColor.main],
     )
 
-    const { showSnackbar } = usePopupCustomSnackbar()
-
-    return useMemo(
-        () => ({ pickToken, basePath: '/trader', showToolTip, showSnackbar }),
-        [pickToken, showToolTip, showSnackbar],
-    )
+    return useMemo(() => ({ pickToken, basePath: '/trader', showToolTip }), [pickToken, showToolTip])
 }

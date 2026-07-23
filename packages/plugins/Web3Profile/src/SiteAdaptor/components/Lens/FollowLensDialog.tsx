@@ -11,7 +11,7 @@ import {
     WalletConnectedBoundary,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -117,7 +117,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { account: walletAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const lensClient = useLensClient()
     const myLensAccount = useMyLensAccount()
     const myLensAddress = myLensAccount?.account.address
@@ -171,9 +171,9 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const handleClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
             if (task) {
-                showSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
+                enqueueSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
                     processing: true,
-                    message:
+                    detail:
                         isFollowing ?
                             <Trans>Previous unfollow transaction is in processing, please wait and try again.</Trans>
                         :   <Trans>Previous follow transaction is in processing, please wait and try again.</Trans>,
@@ -183,7 +183,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             }
             task = (isFollowing ? handleUnfollow() : handleFollow(event)).finally(() => (task = undefined))
         },
-        [handleFollow, handleUnfollow, isFollowing, showSnackbar],
+        [handleFollow, handleUnfollow, isFollowing, enqueueSnackbar],
     )
 
     const accountConditions = !walletAccount || !currentAccount || pluginID !== NetworkPluginID.PLUGIN_EVM

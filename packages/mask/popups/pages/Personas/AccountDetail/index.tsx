@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { PersonaContext } from '@masknet/shared'
 import { MaskMessages, PopupRoutes, currentSetupGuideStatus } from '@masknet/shared-base'
-import { usePopupCustomSnackbar } from '@masknet/theme'
+import { useSnackbar } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,7 +20,7 @@ export const Component = memo(() => {
     const { selectedAccount, currentPersona } = PersonaContext.useContainer()
     const { setExtension } = useContext(PageTitleContext)
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const queryClient = useQueryClient()
     const handleDetachProfile = useCallback(async () => {
@@ -32,14 +32,14 @@ export const Component = memo(() => {
             await Service.Identity.detachProfile(selectedAccount.identifier)
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.removeQueries({ queryKey: ['@@my-own-persona-info'] })
-            showSnackbar(<Trans>Disconnected.</Trans>, {
+            enqueueSnackbar(<Trans>Disconnected.</Trans>, {
                 variant: 'success',
             })
             Telemetry.captureEvent(EventType.Access, DisconnectEventMap[selectedAccount.identifier.network])
             await delay(300)
             navigate(-1)
         } catch {
-            showSnackbar(<Trans>Disconnect failed.</Trans>, {
+            enqueueSnackbar(<Trans>Disconnect failed.</Trans>, {
                 variant: 'error',
             })
         }

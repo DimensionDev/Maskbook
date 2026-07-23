@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, EnhanceableSite, PopupRoutes, userGuideStatus } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo } from 'react'
 import { Trend } from '../../../assets/index.js'
@@ -80,7 +80,7 @@ export const Component = memo(function Onboarding() {
     const { classes } = useStyles()
 
     const [params] = useSearchParams()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const isCreate = params.get('isCreate')
     const count = params.get('count')
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
@@ -107,9 +107,9 @@ export const Component = memo(function Onboarding() {
         return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
             if (!hasPassword) return
             retry()
-            showSnackbar(<Trans>Set Payment Password</Trans>, {
+            enqueueSnackbar(<Trans>Set Payment Password</Trans>, {
                 variant: 'success',
-                message: <Trans>Payment password set.</Trans>,
+                detail: <Trans>Payment password set.</Trans>,
             })
         })
     }, [retry])
@@ -157,9 +157,9 @@ export const Component = memo(function Onboarding() {
                 <OnboardingWriter
                     sentence={sentence}
                     onFinish={() => {
-                        showSnackbar(<Trans>Creation Completed</Trans>, {
+                        enqueueSnackbar(<Trans>Creation Completed</Trans>, {
                             variant: 'success',
-                            message: t`Your Persona has been successfully created.`,
+                            detail: t`Your Persona has been successfully created.`,
                         })
                     }}
                 />

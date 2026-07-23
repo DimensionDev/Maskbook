@@ -32,6 +32,7 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useSnackbar } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -167,7 +168,8 @@ export const Confirm = memo(function Confirm() {
     const { t } = useLingui()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
-    const { basePath, showToolTip, showSnackbar } = useRuntime()
+    const { enqueueSnackbar } = useSnackbar()
+    const { basePath, showToolTip } = useRuntime()
     const {
         mode,
         inputAmount,
@@ -283,8 +285,8 @@ export const Confirm = memo(function Confirm() {
             })
 
             if (!hash) {
-                showSnackbar(t`Swap`, {
-                    message: <Trans>Transaction rejected</Trans>,
+                enqueueSnackbar(t`Swap`, {
+                    detail: <Trans>Transaction rejected</Trans>,
                     variant: 'error',
                 })
                 return
@@ -294,8 +296,8 @@ export const Confirm = memo(function Confirm() {
                 await waitForTransaction({ chainId, hash })
                 const received = await getReceived({ hash, account, chainId })
                 if (received && !unmountedRef.current) {
-                    showSnackbar(t`Swap`, {
-                        message: (
+                    enqueueSnackbar(t`Swap`, {
+                        detail: (
                             <MuiLink
                                 className={classes.toastLink}
                                 color="inherit"
@@ -314,8 +316,8 @@ export const Confirm = memo(function Confirm() {
                     })
                 }
             } catch {
-                showSnackbar(t`Swap`, {
-                    message: <Trans>Wait too long for the confirmation.</Trans>,
+                enqueueSnackbar(t`Swap`, {
+                    detail: <Trans>Wait too long for the confirmation.</Trans>,
                     variant: 'error',
                 })
             }
@@ -356,8 +358,8 @@ export const Confirm = memo(function Confirm() {
             const url = urlcat(basePath, RoutePaths.Transaction, { hash, chainId, mode })
             navigate(url, { replace: true })
         } catch (err) {
-            showSnackbar(t`Swap`, {
-                message: (err as Error).message,
+            enqueueSnackbar(t`Swap`, {
+                detail: (err as Error).message,
                 variant: 'error',
             })
         }
@@ -368,7 +370,7 @@ export const Confirm = memo(function Confirm() {
         transaction,
         spender,
         sendSwap,
-        showSnackbar,
+        enqueueSnackbar,
         getReceived,
         account,
         gasConfig,

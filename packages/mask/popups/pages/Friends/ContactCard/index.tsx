@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { Box, Typography, Avatar, useTheme, ButtonBase as Button } from '@mui/material'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
+import { Box, Typography, Avatar, ButtonBase as Button } from '@mui/material'
 import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import Services from '#services'
@@ -48,12 +48,11 @@ interface ContactCardProps {
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend, avatar, refetch }) {
-    const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [local, setLocal] = useState(false)
-    const [seen, ref] = useEverSeen<HTMLLIElement>()
+    const [, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
     const publicKey = friend.persona.publicKeyAsHex
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
@@ -92,7 +91,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend,
                     }
                 },
             )
-            showSnackbar(<Trans>Added successfully</Trans>, { variant: 'success' })
+            enqueueSnackbar(<Trans>Added successfully</Trans>, { variant: 'success' })
             setLocal(true)
         },
         onSettled: async () => {

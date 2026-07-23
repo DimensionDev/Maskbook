@@ -1,5 +1,5 @@
 import { cloneElement, Suspense } from 'react'
-import { CustomSnackbarProvider } from '@masknet/theme'
+import { MaskSnackbarProvider } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Sniffings, jsxCompose } from '@masknet/shared-base'
 
@@ -8,11 +8,11 @@ export function ShadowRootAttachPointRoot(children: React.ReactNode) {
     return jsxCompose(
         <Suspense />,
         <ErrorBoundary />,
-        <CustomSnackbarProvider
+        <MaskSnackbarProvider
             disableWindowBlurListener={false}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             offsetY={Sniffings.is_facebook_page ? 80 : undefined}>
             {' '}
-        </CustomSnackbarProvider>,
+        </MaskSnackbarProvider>,
     )(cloneElement, children)
 }

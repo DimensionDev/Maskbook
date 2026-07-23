@@ -2,7 +2,7 @@ import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PopupRoutes } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { memo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
@@ -114,7 +114,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function CreateWalletForm() {
     const { classes, cx } = useStyles()
     const [open, setOpen] = useState(false)
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const {
         retry,
@@ -140,7 +140,7 @@ export const Component = memo(function CreateWalletForm() {
                 const result = await Services.Helper.requestXOAuthToken()
                 if (result) await Services.Helper.loginFireflyViaTwitter()
             } else {
-                showSnackbar(<Trans>Failed to login firefly</Trans>, {
+                enqueueSnackbar(<Trans>Failed to login firefly</Trans>, {
                     variant: 'error',
                     content: (err as Error).message,
                 })

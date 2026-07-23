@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { FileFrame, PersonaContext, UploadDropArea } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function RecoveryLocalBackup() {
     const { t } = useLingui()
     const { classes, theme } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const navigate = useNavigate()
 
     const [file, setFile] = useState<File | null>(null)
@@ -77,7 +77,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {
             reset()
-            showSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
         }
     }, [])
 
@@ -89,7 +89,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             setSummary(summary.value)
             setRestoreStatus(RestoreStatus.Verified)
         } else {
-            showSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
             setRestoreStatus(RestoreStatus.WaitingInput)
             setBackupValue('')
         }
@@ -142,7 +142,7 @@ export const Component = memo(function RecoveryLocalBackup() {
 
             await onRestore(summary?.countOfWallets)
         } catch {
-            showSnackbar(<Trans>Restore backup failed.</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Restore backup failed.</Trans>, { variant: 'error' })
         } finally {
             setProcessing(false)
         }

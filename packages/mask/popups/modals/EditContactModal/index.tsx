@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { alpha, ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, MaskTextField, makeStyles, useSnackbar } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import type { SingletonModalProps } from '@masknet/shared-base'
@@ -98,7 +98,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const contacts = useContacts()
     const wallets = useWallets()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const nameAlreadyExist = Boolean(
         contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)) ||
@@ -118,7 +118,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             await EVMWeb3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
-        showSnackbar(<Trans>Contact edited.</Trans>)
+        enqueueSnackbar(<Trans>Contact edited.</Trans>, { variant: 'success' })
 
         onConfirm?.()
     }, [name, address, type, onConfirm])
