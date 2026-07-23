@@ -1,8 +1,9 @@
-import type { RefAttributes } from 'react'
-import { keyframes } from 'tss-react'
+import { useMemo, type RefAttributes } from 'react'
+import { keyframes, type Css } from 'tss-react'
 import {
     SnackbarProvider,
     type SnackbarProviderProps,
+    type MakeStyles,
     type VariantType,
     SnackbarContent,
     type OptionsObject,
@@ -233,29 +234,41 @@ export interface MaskSnackbarProviderProps extends SnackbarProviderProps {
     offsetY?: number
 }
 
+function createEmotionMakeStyles(css: Css): MakeStyles {
+    return (styles) =>
+        Object.fromEntries(Object.entries(styles).map(([name, style]) => [name, css(style)])) as {
+            [name in keyof typeof styles]: string
+        }
+}
+
 export function MaskSnackbarProvider({ offsetY, ...rest }: MaskSnackbarProviderProps) {
-    const { classes } = useProviderStyles({ offsetY })
-    return usePortalShadowRoot((container) => (
-        <SnackbarProvider
-            maxSnack={30}
-            disableWindowBlurListener
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            hideIconVariant
-            Components={{
-                default: MaskSnackbarContent,
-                success: MaskSnackbarContent,
-                error: MaskSnackbarContent,
-                warning: MaskSnackbarContent,
-                info: MaskSnackbarContent,
-            }}
-            action={(id) => <SnackbarAction id={id} />}
-            classes={{
-                containerRoot: classes.root,
-            }}
-            domRoot={container}
-            {...rest}
-        />
-    ))
+    const { classes, css } = useProviderStyles({ offsetY })
+    const makeSnackbarStyles = useMemo(() => createEmotionMakeStyles(css), [css])
+    return usePortalShadowRoot(
+        (container) => (
+            <SnackbarProvider
+                maxSnack={30}
+                disableWindowBlurListener
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                hideIconVariant
+                Components={{
+                    default: MaskSnackbarContent,
+                    success: MaskSnackbarContent,
+                    error: MaskSnackbarContent,
+                    warning: MaskSnackbarContent,
+                    info: MaskSnackbarContent,
+                }}
+                action={(id) => <SnackbarAction id={id} />}
+                classes={{
+                    containerRoot: classes.root,
+                }}
+                domRoot={container}
+                makeStyles={makeSnackbarStyles}
+                {...rest}
+            />
+        ),
+        'Snackbar Portal',
+    )
 }
 // #endregion
 

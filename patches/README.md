@@ -23,3 +23,4 @@
 - typeson-registry: <https://github.com/dfahlander/typeson-registry/issues/37>
 - @scamsniffer/detector: <https://github.com/scamsniffer/scamsniffer/pull/3>
 - @lingui/cli: <https://github.com/lingui/js-lingui/issues/2308> and <https://github.com/lingui/js-lingui/pull/2309>
+- [notistack](https://github.com/iamhosseindhv/notistack/pull/628) not compatible with ShadowRoot

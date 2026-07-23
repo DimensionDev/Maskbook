@@ -1,8 +1,8 @@
 import { i18n } from '@lingui/core'
 import { LinguiProviderHMR, SharedContextProvider } from '@masknet/shared'
-import { jsxCompose } from '@masknet/shared-base'
+import { jsxCompose, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
+import { DialogStackingProvider, MaskThemeProvider, MaskSnackbarProvider } from '@masknet/theme'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -27,6 +27,11 @@ export function ContentScriptGlobalProvider(children: React.ReactNode) {
         <SharedContextProvider />,
         <LinguiProviderHMR i18n={i18n} />,
         <MaskThemeProvider supportsDimPalette theme={theme} localization={localization} palette={mode} />,
+        <MaskSnackbarProvider
+            disableWindowBlurListener={false}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            offsetY={Sniffings.is_facebook_page ? 80 : undefined}
+        />,
     )(
         cloneElement,
         process.env.NODE_ENV === 'development' ?

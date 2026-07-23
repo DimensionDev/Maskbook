@@ -51,6 +51,7 @@ patchedDependencies:
   '@types/react-highlight-words@0.20.0': f29881aac139c1fe526819717a60157afd2b12358d3d9c87c18f464666954689
   bloom-filters@3.0.0: a5e85bac08776b8696d4e85af25d3143c9b9a9895a2cc4b531d85639fe0eb30f
   gulp: f4316218fc0ee2671324cec1242936e896fb44878d3f60021eaca6bd669f43cb
+  notistack@3.0.2: 94efdc8000831bca496b1a3702560d127b8b4ba024a4a26d2a4fe325f2baedae
   react-devtools-inline@5.3.0: 51dda06a782a674a7cc25a64cf1787137ec9dc1079c38586eb3c017a3b961342
   react-use@17.5.0: d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7
   reflect-metadata@0.1.13: 3c19db0a577da75ff3c875a0fa4ef586a0ca002a6f7935687a9cd524fea56f79
@@ -596,7 +597,7 @@ importers:
         version: 1.1.1
       notistack:
         specifier: ^3.0.2
-        version: 3.0.2(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 3.0.2(patch_hash=94efdc8000831bca496b1a3702560d127b8b4ba024a4a26d2a4fe325f2baedae)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-avatar-editor:
         specifier: ^13.0.2
         version: 13.0.2(@babel/core@7.27.1)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2066,7 +2067,7 @@ importers:
         version: 7.0.0
       notistack:
         specifier: 3.0.2
-        version: 3.0.2(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 3.0.2(patch_hash=94efdc8000831bca496b1a3702560d127b8b4ba024a4a26d2a4fe325f2baedae)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -21578,7 +21579,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  notistack@3.0.2(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
+  notistack@3.0.2(patch_hash=94efdc8000831bca496b1a3702560d127b8b4ba024a4a26d2a4fe325f2baedae)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       clsx: 1.2.1
       csstype: 3.2.3

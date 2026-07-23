@@ -74,6 +74,7 @@ patchedDependencies:
   gulp: patches/gulp.patch
   ts-results-es: patches/ts-results-es.patch
   '@lingui/cli': patches/@lingui__cli.patch
+  notistack@3.0.2: patches/notistack@3.0.2.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:
