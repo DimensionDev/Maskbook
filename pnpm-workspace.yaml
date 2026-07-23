@@ -10,6 +10,8 @@ packages:
   - packages/web3-shared/evm
   - packages/web3-shared/flow
   - packages/web3-shared/solana
+  # forked dependency
+  - patches/scamsniffer-detector
 '@dimensiondev:registry': https://npm.pkg.github.com/
 ignoreScripts: true
 blockExoticSubdeps: true
@@ -42,9 +44,6 @@ overrides:
   react-dom: $react-dom
   tss-react: 4.9.21
   reflect-metadata: 0.1.13
-  # by @scamsniffer/detector
-  ts-jest: '-'
-  ts-node: '-'
   # unused
   '@onflow/config>eslint': '-'
   '@onflow/config>eslint-plugin-jsdoc': '-'
@@ -72,7 +71,6 @@ patchedDependencies:
   react-use@17.5.0: patches/react-use@17.5.0.patch
   react-devtools-inline@5.3.0: patches/react-devtools-inline@5.3.0.patch
   '@splinetool/runtime@0.9.342': patches/@splinetool__runtime@0.9.342.patch
-  '@scamsniffer/detector': patches/@scamsniffer__detector.patch
   gulp: patches/gulp.patch
   ts-results-es: patches/ts-results-es.patch
   '@lingui/cli': patches/@lingui__cli.patch
