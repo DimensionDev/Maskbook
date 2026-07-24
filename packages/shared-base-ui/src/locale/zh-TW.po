@@ -2311,7 +2311,6 @@ msgstr ""
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsForm.tsx
-#: packages/shared/src/hooks/useSnackbarCallback.tsx
 #: packages/shared/src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Done"
 msgstr "完成！"

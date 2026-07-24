@@ -39,5 +39,8 @@ export function useImplementRuntime(): RuntimeOptions {
 
     const { enqueueSnackbar } = useSnackbar()
 
-    return useMemo(() => ({ pickToken, basePath: '', showToolTip: noop, enqueueSnackbar }), [pickToken, enqueueSnackbar])
+    return useMemo(
+        () => ({ pickToken, basePath: '', showToolTip: noop, enqueueSnackbar }),
+        [pickToken, enqueueSnackbar],
+    )
 }
