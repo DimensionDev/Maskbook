@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             backgroundColor: 'transparent',
             backgroundRepeat: 'no-repeat',
-            color: theme.palette.common.white,
+            color: theme.vars.palette.common.white,
             flexDirection: 'column',
             gap: theme.spacing(2),
             justifyContent: 'space-between',
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 99,
             fontSize: 14,
             fontWeight: 700,
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.vars.palette.maskColor.dark,
             color: 'white',
             cursor: 'pointer',
             textDecoration: 'none !important',
@@ -210,7 +210,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     }
 
     // the red packet can fetch without account
-    if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
+    if (!availability || !token || isLoadingCover) return <LoadingStatus sx={{ minHeight: 148 }} />
     const unsatisfied = !!account && claimStrategyStatus?.canClaim === false && !isClaimed
 
     const card = (

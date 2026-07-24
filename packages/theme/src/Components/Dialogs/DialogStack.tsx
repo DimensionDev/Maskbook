@@ -26,7 +26,6 @@ DialogHierarchyContext.displayName = 'DialogHierarchyContext'
  *
  * Your dialog component MUST support the following attributes with the same semantics with MUI Dialog component.
  *
- * - disableEscapeKeyDown
  * - disableScrollLock
  * - hideBackdrop
  * - style
@@ -81,7 +80,7 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
     if (stack.at(-1) !== selfID) {
         returnVal.extraProps = {
             ...returnVal.extraProps,
-            disableEscapeKeyDown: true,
+            onClose: noop,
             disableScrollLock: true,
             hideBackdrop: true,
             hidden: true,

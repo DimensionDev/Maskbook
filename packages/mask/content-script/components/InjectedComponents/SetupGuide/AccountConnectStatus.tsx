@@ -92,7 +92,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                     <Typography className={classes.text}>
                         <Trans>Sent verification post successfully.</Trans>
                     </Typography>
-                    <Typography className={classes.text} mt="1.5em">
+                    <Typography className={classes.text} sx={{ mt: '1.5em' }}>
                         <Trans>
                             You could check the verification result on Mask Pop-up after few minutes. If failed, try
                             sending verification post again.
@@ -103,7 +103,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                     <Typography className={classes.text}>
                         <Trans>Connected successfully.</Trans>
                     </Typography>
-                    <Typography className={classes.text} mt="1.5em">
+                    <Typography className={classes.text} sx={{ mt: '1.5em' }}>
                         <Trans>Trying exploring more features powered by Mask Network.</Trans>
                     </Typography>
                 </Frame>
@@ -117,10 +117,10 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                         <b>@{currentUserId}</b> connected already.
                     </Trans>
                 </Typography>
-                <Typography className={classes.text} mt="1.5em">
+                <Typography className={classes.text} sx={{ mt: '1.5em' }}>
                     <Trans>Change another account and try again.</Trans>
                 </Typography>
-                <Box mt="auto" width="100%">
+                <Box sx={{ mt: 'auto', width: '100%' }}>
                     <Button fullWidth onClick={rest.onClose}>
                         <Trans>Done</Trans>
                     </Button>
@@ -134,7 +134,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                 <Typography className={classes.text}>
                     <Trans>Current account is not the verifying account.</Trans>
                 </Typography>
-                <Typography className={classes.text} mt="1.5em">
+                <Typography className={classes.text} sx={{ mt: '1.5em' }}>
                     <Trans>
                         Please switch to <b>@{expectAccount}</b> to continue the account verification progress.
                     </Trans>

@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme, props) => ({
     },
     dialogContent: {
         width: 600,
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         padding: 0,
         margin: 'auto',
         overflowX: 'hidden',
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme, props) => ({
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundColor: theme.vars.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
         },
     },

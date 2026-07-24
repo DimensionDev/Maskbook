@@ -10,7 +10,10 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.maskColor.bottom : theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.white,
+        ...theme.applyStyles('dark', {
+            backgroundColor: theme.vars.palette.maskColor.bottom,
+        }),
         display: 'flex',
         flexDirection: 'column',
         maxHeight: '100vh',
@@ -25,11 +28,11 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     mainText: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
     },
 }))
 
@@ -57,7 +60,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     const { classes, cx } = useStyles()
     return (
         <div className={classes.container}>
-            <Box padding="16px">
+            <Box sx={{ padding: '16px' }}>
                 <Search setSearchValue={setSearchValue} />
             </Box>
             {loading ?

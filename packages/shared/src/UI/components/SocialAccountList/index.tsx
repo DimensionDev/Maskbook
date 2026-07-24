@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 16,
             padding: theme.spacing(2, 1.5),
             translate: theme.spacing(1.9, 1),
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
         menuList: {
             padding: 0,
@@ -137,15 +137,15 @@ export const SocialAccountList = memo(function SocialAccountList({
             },
             anchorPosition,
             anchorReference,
-            PaperProps: {
-                className: classes.menuPaper,
-            },
-            MenuListProps: {
-                className: classes.menuList,
-                // Remove space for scrollbar
-                style: {
-                    paddingRight: 0,
-                    width: '100%',
+            slotProps: {
+                paper: { className: classes.menuPaper },
+                list: {
+                    className: classes.menuList,
+                    // Remove space for scrollbar
+                    style: {
+                        paddingRight: 0,
+                        width: '100%',
+                    },
                 },
             },
         },

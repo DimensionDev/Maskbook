@@ -14,7 +14,7 @@ interface AccountProps {
 
 const useStyles = makeStyles()((theme) => ({
     iconBlack: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
     },
@@ -46,7 +46,7 @@ export const Account = memo<AccountProps>(function Account({ userId, displayName
         : userId
 
     return (
-        <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
+        <Box sx={{ width: '156px', padding: '4px', display: 'flex', gap: '10px', alignItems: 'center' }}>
             <Icon size={30} />
             <Box className={classes.userId}>
                 <TextOverflowTooltip title={name}>

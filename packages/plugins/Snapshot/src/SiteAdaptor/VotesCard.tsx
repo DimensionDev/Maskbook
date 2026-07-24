@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => {
         listItem: {
             display: 'flex',
             justifyContent: 'space-between',
-            borderBottom: `1px solid ${theme.palette.maskColor.publicLine}`,
+            borderBottom: `1px solid ${theme.vars.palette.maskColor.publicLine}`,
             paddingLeft: 0,
             paddingRight: 0,
             gap: 16,
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             maxWidth: 170,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         ellipsisText: {
             textOverflow: 'ellipsis',
@@ -64,21 +64,21 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             minWidth: 90,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             maxWidth: 90,
         },
         shadowRootTooltip: {
-            color: theme.palette.maskColor.white,
+            color: theme.vars.palette.maskColor.white,
         },
         tooltip: {
-            backgroundColor: theme.palette.maskColor.publicMain,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
             color: 'white',
         },
         arrow: {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     }
 })
@@ -126,7 +126,7 @@ function Content() {
                                     <Box className={classes.avatarWrapper}>
                                         <EthereumBlockie address={v.address} />
                                     </Box>
-                                    <Typography color={theme.palette.maskColor.dark}>
+                                    <Typography sx={{ color: theme.vars.palette.maskColor.dark }}>
                                         {isSameAddress(v.address, account) ?
                                             <Trans>You</Trans>
                                         :   formatLongHex(v.address)}
@@ -136,9 +136,7 @@ function Content() {
                                     <Typography className={classes.choice}>{v.choice}</Typography>
                                 : v.choices ?
                                     <ShadowRootTooltip
-                                        PopperProps={{
-                                            disablePortal: false,
-                                        }}
+                                        slotProps={{ popper: { disablePortal: false } }}
                                         title={
                                             <Typography className={classes.shadowRootTooltip}>
                                                 {fullChoiceText}
@@ -152,9 +150,7 @@ function Content() {
                                 :   null}
                                 <TextOverflowTooltip
                                     as={ShadowRootTooltip}
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     title={
                                         <Typography className={classes.shadowRootTooltip}>

@@ -4,8 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-material'
-import { MenuItem, Stack, Typography } from '@mui/material'
-import { useTheme } from '@mui/system'
+import { MenuItem, Stack, Typography, useTheme } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     menuItem: {
@@ -42,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     checkedIcon: {
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
     },
 }))
 
@@ -73,11 +72,13 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
 
                         <Stack className={classes.itemText}>
                             <Typography
-                                fontSize={14}
-                                fontWeight={700}
-                                flexGrow={1}
-                                overflow="hidden"
-                                textOverflow="ellipsis">
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 700,
+                                    flexGrow: 1,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                }}>
                                 <span className={classes.name}>{x.name}</span>
                                 {x.symbol ?
                                     <span className={classes.symbol}>({x.symbol})</span>
@@ -86,12 +87,14 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
                             <div className={classes.itemCheckout}>
                                 {x.rank ?
                                     <Typography
-                                        fontSize={14}
-                                        fontWeight={700}
-                                        flexGrow={1}
-                                        overflow="hidden"
-                                        className={classes.rank}
-                                        textOverflow="ellipsis">
+                                        sx={{
+                                            fontSize: 14,
+                                            fontWeight: 700,
+                                            flexGrow: 1,
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}
+                                        className={classes.rank}>
                                         #{x.rank}
                                     </Typography>
                                 :   null}
@@ -102,7 +105,7 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
                                 :   <RadioButtonUncheckedIcon
                                         style={{
                                             fontSize: 20,
-                                            color: theme.palette.maskColor.secondaryLine,
+                                            color: theme.vars.palette.maskColor.secondaryLine,
                                             visibility: 'hidden',
                                         }}
                                     />

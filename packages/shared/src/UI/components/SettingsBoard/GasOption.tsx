@@ -22,19 +22,19 @@ const useStyles = makeStyles()((theme) => {
         },
         type: {
             fontWeight: 700,
-            color: theme.palette.text.primary,
+            color: theme.vars.palette.text.primary,
             margin: theme.spacing(0, 0.5, 0, 1),
             fontSize: 16,
         },
         estimate: {
             flex: 1,
-            color: theme.palette.text.secondary,
+            color: theme.vars.palette.text.secondary,
             fontWeight: 400,
             fontSize: 16,
         },
         amount: {
             fontWeight: 700,
-            color: theme.palette.text.primary,
+            color: theme.vars.palette.text.primary,
             fontSize: 16,
         },
     }
@@ -61,7 +61,7 @@ export function GasOption(props: GasOptionProps) {
     return (
         <div
             className={classes.root}
-            style={{ color: checked ? theme.palette.maskColor.primary : theme.palette.maskColor.line }}
+            style={{ color: checked ? theme.vars.palette.maskColor.primary : theme.vars.palette.maskColor.line }}
             onClick={onClick}>
             {checked ?
                 <CheckCircle color="inherit" />

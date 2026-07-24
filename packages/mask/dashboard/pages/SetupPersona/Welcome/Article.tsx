@@ -14,12 +14,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     p: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: 24,
     },
     list: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         listStyleType: 'none',
         paddingLeft: 0,
         marginLeft: 0,
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     siteName: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '20px',
         marginLeft: theme.spacing(1),
@@ -60,7 +60,7 @@ function Permissions() {
 
     return (
         <>
-            <Typography className={classes.h2} variant="h2" mt="24px">
+            <Typography className={classes.h2} variant="h2" sx={{ mt: '24px' }}>
                 Please grant us permission for these websites.
             </Typography>
 

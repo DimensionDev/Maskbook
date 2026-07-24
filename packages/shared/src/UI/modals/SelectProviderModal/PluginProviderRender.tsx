@@ -10,7 +10,7 @@ import {
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
 import { NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS } from '@masknet/web3-shared-solana'
-import { Box, List, ListItem, Typography } from '@mui/material'
+import { Box, List, ListItemButton, Typography } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ProviderItem } from './ProviderItem.js'
@@ -68,9 +68,9 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             fontSize: 36,
             display: 'flex',
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             '&:hover': {
-                background: theme.palette.maskColor.bg,
+                background: theme.vars.palette.maskColor.bg,
             },
         },
     }
@@ -175,7 +175,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                             placement="top"
                             disableInteractive
                             key={provider.ID}>
-                            <ListItem
+                            <ListItemButton
                                 className={cx(
                                     classes.walletItem,
                                     getDisabled(provider) ? classes.disabledWalletItem : '',
@@ -194,14 +194,14 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                     name={provider.name}
                                     iconFilterColor={provider.iconFilterColor}
                                 />
-                            </ListItem>
+                            </ListItemButton>
                         </ShadowRootTooltip>
                     ))}
                 </List>
             </section>
             {unavailableProviders.length ?
                 <>
-                    <Typography mt={2} color={theme.palette.maskColor.second} fontSize={14}>
+                    <Typography sx={{ color: theme.vars.palette.maskColor.second, mt: 2, fontSize: 14 }}>
                         <Trans>The following wallets are not installed or in conflict with others</Trans>
                     </Typography>
                     <section className={classes.section}>
@@ -213,7 +213,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                     placement="top"
                                     disableInteractive
                                     key={provider.ID}>
-                                    <ListItem
+                                    <ListItemButton
                                         className={cx(
                                             classes.walletItem,
                                             getDisabled(provider) ? classes.disabledWalletItem : '',
@@ -232,7 +232,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                             name={provider.name}
                                             iconFilterColor={provider.iconFilterColor}
                                         />
-                                    </ListItem>
+                                    </ListItemButton>
                                 </ShadowRootTooltip>
                             ))}
                         </List>

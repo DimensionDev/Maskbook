@@ -2,7 +2,7 @@ import { type HTMLProps, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-import { makeStyles, Boundary, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, Boundary, useSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../../types.js'
 import {
     DisplayingFile,
@@ -60,21 +60,21 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const deleteFile = useCallback(
         async (file: FileInfo) => {
             try {
                 await PluginFileServiceRPC.deleteFile(file.id)
                 refetchFiles()
-                showSnackbar(<Trans>File delete</Trans>, {
+                enqueueSnackbar(<Trans>File delete</Trans>, {
                     variant: 'success',
-                    message: <Trans>File {file.name} deleted.</Trans>,
+                    detail: <Trans>File {file.name} deleted.</Trans>,
                 })
             } catch {
-                showSnackbar(<Trans>File delete failed</Trans>, {
+                enqueueSnackbar(<Trans>File delete failed</Trans>, {
                     variant: 'error',
-                    message: <Trans>Failed to delete, please try again.</Trans>,
+                    detail: <Trans>Failed to delete, please try again.</Trans>,
                 })
             }
         },
@@ -88,7 +88,12 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                 message: (
                     <Trans>
                         Do you want to delete file{' '}
-                        <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} fontWeight={700}>
+                        <Typography
+                            sx={{
+                                color: (theme) => theme.vars.palette.maskColor.main,
+                                fontSize: 14,
+                                fontWeight: 700,
+                            }}>
                             {file.name}
                         </Typography>
                     </Trans>

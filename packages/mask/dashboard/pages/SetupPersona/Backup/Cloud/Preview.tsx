@@ -28,14 +28,14 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     userAccount: {
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     text: {
         fontSize: 14,
@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         padding: theme.spacing(2),
         marginTop: theme.spacing(3),
         display: 'flex',
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2),
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         marginTop: theme.spacing(3),
     },
     button: {
@@ -120,26 +120,32 @@ export const Component = memo(function CloudBackupPreview() {
                         </Box>
                         <Box className={classes.content}>
                             <Icons.Message size={48} />
-                            <Box display="flex" flexDirection="column" gap="12px" flex={1} minWidth={0}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1, minWidth: 0 }}>
                                 <TextOverflowTooltip title={previewInfo.abstract} arrow placement="top">
                                     <Typography
                                         className={classes.text}
-                                        whiteSpace="nowrap"
-                                        textOverflow="ellipsis"
-                                        overflow="hidden">
+                                        sx={{
+                                            whiteSpace: 'nowrap',
+                                            textOverflow: 'ellipsis',
+                                            overflow: 'hidden',
+                                        }}>
                                         {previewInfo.abstract}
                                     </Typography>
                                 </TextOverflowTooltip>
 
-                                <Typography display="flex" columnGap="4px">
-                                    <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
+                                <Typography sx={{ display: 'flex', columnGap: '4px' }}>
+                                    <Typography
+                                        component="span"
+                                        sx={{ fontSize: 12, fontWeight: 700, lineHeight: '16px' }}>
                                         {formatFileSize(Number(previewInfo.size))}
                                     </Typography>
                                     <Typography
                                         component="span"
-                                        fontSize={12}
-                                        lineHeight="16px"
-                                        color={theme.palette.maskColor.third}>
+                                        sx={{
+                                            color: theme.vars.palette.maskColor.third,
+                                            fontSize: 12,
+                                            lineHeight: '16px',
+                                        }}>
                                         {formatDateTime(
                                             fromUnixTime(Number(previewInfo.uploadedAt)),
                                             'yyyy-MM-dd HH:mm',
@@ -148,7 +154,7 @@ export const Component = memo(function CloudBackupPreview() {
                                 </Typography>
                             </Box>
 
-                            <Box display="flex" justifyContent="flex-end" flex={1} columnGap={1}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1, columnGap: 1 }}>
                                 <ActionButton
                                     className={classes.button}
                                     startIcon={<Icons.Cloud size={18} />}
@@ -170,7 +176,7 @@ export const Component = memo(function CloudBackupPreview() {
                         </Box>
                     </>
                 :   <Box className={classes.container}>
-                        <Box py={0.5} px={2} mt={3} display="flex" justifyContent="space-between">
+                        <Box sx={{ py: 0.5, px: 2, mt: 3, display: 'flex', justifyContent: 'space-between' }}>
                             <Typography className={classes.text}>{previewInfo.account}</Typography>
                             <Typography
                                 sx={{ cursor: 'pointer' }}

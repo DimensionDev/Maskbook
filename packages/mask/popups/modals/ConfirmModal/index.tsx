@@ -9,7 +9,7 @@ import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 const useStyles = makeStyles()((theme) => ({
     message: {
         fontSize: 14,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontWeight: 700,
         lineHeight: '18px',
         padding: theme.spacing(1.5, 0, 2),

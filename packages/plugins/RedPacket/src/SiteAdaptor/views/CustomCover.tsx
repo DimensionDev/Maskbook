@@ -2,7 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { formatFileSize, ImageEditorModal, UploadDropArea, useUnmountedRef } from '@masknet/shared'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { FireflyConfig, FireflyRedPacket } from '@masknet/web3-providers'
 import { Box, Button, DialogActions, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     actions: {
         display: 'flex',
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: theme.spacing(1),
         top: theme.spacing(1),
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
     },
     dialogActions: {
         padding: 16,
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     cancel: {
         '&:hover': {
             border: 'none',
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
     },
 }))
@@ -81,7 +81,7 @@ export function CustomCover() {
         }
     }, [url])
 
-    const snackbar = useCustomSnackbar()
+    const snackbar = useSnackbar()
     const unmountedRef = useUnmountedRef()
     const [{ loading: saving }, save] = useAsyncFn(async () => {
         if (!blob) return
@@ -102,9 +102,9 @@ export function CustomCover() {
                 throw new Error('No theme created')
             }
         } catch (err) {
-            snackbar.showSnackbar(t`Failed to create theme.`, {
+            snackbar.enqueueSnackbar(t`Failed to create theme.`, {
                 variant: 'error',
-                message: (err as Error).message,
+                detail: (err as Error).message,
             })
         }
     }, [blob])

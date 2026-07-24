@@ -2,7 +2,7 @@ import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PopupRoutes } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { memo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
@@ -22,12 +22,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 30,
         margin: '12px 0',
         lineHeight: '120%',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tips: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     bold: {
         fontWeight: 700,
@@ -40,9 +40,10 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 12,
         marginTop: theme.spacing(3),
         background:
-            theme.palette.mode === 'dark' ?
-                'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)'
-            :   'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.20) 0%, rgba(59, 153, 252, 0.20) 100%)',
+            'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.20) 0%, rgba(59, 153, 252, 0.20) 100%)',
+        ...theme.applyStyles('dark', {
+            background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
+        }),
     },
     fireflyLogo: {
         width: 120,
@@ -53,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         listStyle: 'none',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '13px',
         lineHeight: '18px',
         fontWeight: 400,
@@ -74,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 24,
     },
     dialogTitle: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 18,
         fontWeight: 700,
         lineHeight: '22px',
@@ -87,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
     },
     permissions: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         padding: 12,
         borderRadius: 8,
         height: 212,
@@ -113,7 +114,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function CreateWalletForm() {
     const { classes, cx } = useStyles()
     const [open, setOpen] = useState(false)
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const {
         retry,
@@ -139,7 +140,7 @@ export const Component = memo(function CreateWalletForm() {
                 const result = await Services.Helper.requestXOAuthToken()
                 if (result) await Services.Helper.loginFireflyViaTwitter()
             } else {
-                showSnackbar(<Trans>Failed to login firefly</Trans>, {
+                enqueueSnackbar(<Trans>Failed to login firefly</Trans>, {
                     variant: 'error',
                     content: (err as Error).message,
                 })
@@ -199,9 +200,11 @@ export const Component = memo(function CreateWalletForm() {
             </SetupFrameController>
             <Dialog
                 open={open}
-                PaperProps={{
-                    elevation: 0,
-                    className: classes.dialog,
+                slotProps={{
+                    paper: {
+                        elevation: 0,
+                        className: classes.dialog,
+                    },
                 }}>
                 <DialogTitle className={classes.dialogTitle}>
                     <Trans>Mask needs the following permissions</Trans>
@@ -212,7 +215,7 @@ export const Component = memo(function CreateWalletForm() {
                     </Typography>
                     <div className={classes.permissions} data-hide-scrollbar>
                         {XOAuthRequestOrigins.map((origin) => (
-                            <Typography key={origin} lineHeight="18px">
+                            <Typography key={origin} sx={{ lineHeight: '18px' }}>
                                 {origin}
                             </Typography>
                         ))}

@@ -104,7 +104,7 @@ export function TabContent({ identity, socialAccount }: TabContentProps) {
                 <TableBody>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Profile Data
                             </Typography>
                         </TableCell>
@@ -112,7 +112,7 @@ export function TabContent({ identity, socialAccount }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Address Name
                             </Typography>
                         </TableCell>
@@ -120,7 +120,7 @@ export function TabContent({ identity, socialAccount }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 All Address Names
                             </Typography>
                         </TableCell>

@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '120%',
         fontWeight: 700,
         marginTop: theme.spacing(3),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     content: {
         display: 'flex',
@@ -33,21 +33,21 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(1.5, 0),
         lineHeight: '20px',
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         wordBreak: 'break-all',
     },
     desc: {
         flexGrow: 1,
         fontSize: 14,
         textAlign: 'center',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginBottom: theme.spacing(1),
     },
     closeButton: {
         position: 'absolute',
         top: theme.spacing(2),
         right: theme.spacing(2),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 

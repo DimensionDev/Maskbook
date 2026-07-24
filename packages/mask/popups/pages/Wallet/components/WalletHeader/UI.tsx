@@ -18,7 +18,6 @@ import { WalletAssetsValue } from './WalletAssetsValue.js'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         container: {
             padding: '16px',
@@ -26,9 +25,8 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             // padding bottom space for assets tabs
             paddingBottom: disabled ? 16 : 34,
             background:
-                isDark ?
-                    theme.palette.maskColor.modalTitleBg
-                :   'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+            ...theme.applyStyles('dark', { background: theme.vars.palette.maskColor.modalTitleBg }),
         },
         topBar: {
             display: 'flex',
@@ -38,18 +36,19 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             gap: theme.spacing(1),
         },
         action: {
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
             borderRadius: 99,
             padding: '5px 8px 5px 4px',
             display: 'flex',
             alignItems: 'center',
             cursor: 'pointer',
             maxWidth: '60%',
-            boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
+            boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+            ...theme.applyStyles('dark', { boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.10)' }),
             backdropFilter: 'blur(5px)',
         },
         nickname: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             lineHeight: '18px',
             fontWeight: 700,
             whiteSpace: 'nowrap',
@@ -58,7 +57,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
         },
         identifier: {
             fontSize: 10,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             lineHeight: 1,
             display: 'flex',
             alignItems: 'center',
@@ -66,7 +65,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
         icon: {
             height: 12,
             width: 12,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             cursor: 'pointer',
             marginLeft: 4,
         },
@@ -74,7 +73,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             fontSize: 20,
             transition: 'all 300ms',
             flexShrink: 0,
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
         },
         networkSelector: {
             display: 'flex',
@@ -86,7 +85,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
         chainName: {
             flexGrow: 1,
             lineHeight: '18px',
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontWeight: 700,
             textOverflow: 'ellipsis',
             overflow: 'hidden',
@@ -98,7 +97,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             alignItems: 'center',
             lineHeight: '18px',
             fontSize: 12,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             columnGap: 4,
         },
         dot: {
@@ -108,15 +107,15 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             borderRadius: 99,
         },
         connectedDot: {
-            backgroundColor: theme.palette.maskColor.success,
+            backgroundColor: theme.vars.palette.maskColor.success,
         },
         unconnectedDot: {
-            backgroundColor: theme.palette.maskColor.third,
+            backgroundColor: theme.vars.palette.maskColor.third,
         },
         balance: {
             fontSize: 36,
             fontWeight: 700,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             height: 54,
             paddingTop: theme.spacing(1.5),
             display: 'flex',
@@ -176,8 +175,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         <ImageIcon size={30} icon={currentNetwork.iconUrl} name={currentNetwork.name || '?'} />
                     :   <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />}
 
-                    <Box ml={0.5} overflow="auto">
-                        <Box overflow="auto" display="flex">
+                    <Box sx={{ ml: 0.5, overflow: 'auto' }}>
+                        <Box sx={{ overflow: 'auto', display: 'flex' }}>
                             <TextOverflowTooltip title={networkName}>
                                 <Typography className={classes.chainName} component="div">
                                     {networkName}
@@ -215,7 +214,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         onActionClick()
                     }}>
                     <WalletAvatar address={wallet.address} size={30} />
-                    <Box ml={0.5} overflow="hidden">
+                    <Box sx={{ ml: 0.5, overflow: 'hidden' }}>
                         <TextOverflowTooltip title={wallet.name}>
                             <Typography className={classes.nickname}>{walletName}</Typography>
                         </TextOverflowTooltip>
@@ -256,7 +255,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
             {disabled ? null : (
                 <>
                     <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-                    <ActionGroup chainId={chainId} mt={2} />
+                    <ActionGroup chainId={chainId} sx={{ mt: 2 }} />
                 </>
             )}
         </Box>

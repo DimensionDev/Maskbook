@@ -75,8 +75,8 @@ export function GasSettingBar(props: GasSettingBarProps) {
     }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 
     return (
-        <Box display="flex" flexDirection="row" alignItems="center">
-            <Typography fontSize="14px" sx={{ marginRight: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '14px', marginRight: 1 }}>
                 <span>
                     {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} &asymp;
                 </span>

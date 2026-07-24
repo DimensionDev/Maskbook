@@ -3,7 +3,7 @@ import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ActionButtonPromise, EmptyStatus, InjectedDialog } from '@masknet/shared'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
-import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
+import { alpha, Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import Fuse from 'fuse.js'
 import {
@@ -15,7 +15,6 @@ import {
     InputBase,
     Stack,
     Typography,
-    alpha,
 } from '@mui/material'
 import { ProfileInList } from './ProfileInList.js'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -30,13 +29,13 @@ const useStyles = makeStyles()((theme) => ({
         padding: '4px 10px',
         borderRadius: 8,
         width: '100%',
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         fontSize: 14,
         marginBottom: 16,
     },
     inputFocused: {
-        background: theme.palette.maskColor.bottom,
-        borderColor: theme.palette.text.third,
+        background: theme.vars.palette.maskColor.bottom,
+        borderColor: theme.vars.palette.text.third,
     },
     paper: {
         height: 450,
@@ -56,11 +55,11 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         whiteSpace: 'nowrap',
     },
     mainText: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
     },
     listParent: {
         height: 400,
@@ -74,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         overflowY: 'auto',
         flex: 1,
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
     },
     list: {
         gridGap: '12px',
@@ -88,32 +87,32 @@ const useStyles = makeStyles()((theme) => ({
         padding: 16,
         boxSizing: 'border-box',
         alignItems: 'center',
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
+        background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         borderRadius: '0px 0px 12px 12px',
         flex: 1,
         backdropFilter: 'blur(8px)',
     },
     back: {
-        color: theme.palette.maskColor.main,
-        background: theme.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
+        background: theme.vars.palette.maskColor.thirdMain,
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         '&:hover': {
-            color: theme.palette.maskColor.main,
-            background: theme.palette.maskColor.thirdMain,
+            color: theme.vars.palette.maskColor.main,
+            background: theme.vars.palette.maskColor.thirdMain,
             fontSize: 14,
             fontWeight: 700,
             lineHeight: '18px',
         },
     },
     done: {
-        color: theme.palette.maskColor.bottom,
-        background: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
@@ -254,7 +253,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 </div>
                             </div>
                             {results.length > 0 ?
-                                <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0' }}>
+                                <Stack sx={{ alignItems: 'center', flexDirection: 'row', padding: '16px 0' }}>
                                     <Checkbox
                                         size="small"
                                         sx={{ width: 20, height: 20 }}

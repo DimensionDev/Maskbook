@@ -56,7 +56,7 @@ const Transfer = memo(function Transfer() {
         <Box className={classes.page}>
             <NormalHeader />
             <div className={classes.body}>
-                <AddContactInputPanel p={0} m="16px 16px 0" autoFocus />
+                <AddContactInputPanel sx={{ p: 0, m: '16px 16px 0' }} autoFocus />
                 <div className={classes.panel} data-hide-scrollbar>
                     <FungibleTokenSection />
                 </div>

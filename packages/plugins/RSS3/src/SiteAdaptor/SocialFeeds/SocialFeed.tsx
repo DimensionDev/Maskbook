@@ -21,7 +21,7 @@ const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body'
             cursor: 'pointer',
             padding: theme.spacing(1.5),
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.bg,
+                backgroundColor: theme.vars.palette.maskColor.bg,
             },
             [`.${refs.markdown}`]: {
                 display: '-webkit-box',
@@ -41,7 +41,7 @@ const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body'
         timestamp: {
             fontSize: 14,
             fontWeight: 400,
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
         },
         body: {
             display: 'flex',
@@ -64,7 +64,7 @@ const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body'
             },
         },
         summary: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             display: 'flex',
             alignItems: 'center',
             whiteSpace: 'pre',
@@ -83,14 +83,14 @@ const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body'
             },
         },
         playButton: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             width: 64,
             height: 64,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
             [`& + .${refs.markdown}`]: {
                 marginLeft: theme.spacing(1.5),
             },
@@ -133,14 +133,14 @@ const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body'
         },
         line: {
             width: 1,
-            borderLeft: `1px solid ${theme.palette.maskColor.line}`,
+            borderLeft: `1px solid ${theme.vars.palette.maskColor.line}`,
             marginLeft: 10,
         },
         target: {
             display: 'flex',
             alignItems: 'center',
             padding: theme.spacing(1, 0),
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: 14,
             [`.${refs.image}`]: {
                 width: 120,
@@ -226,7 +226,7 @@ export const SocialFeed = memo<SocialFeedProps>(function SocialFeed({ post, verb
             </div>
             {target ?
                 <div className={classes.quoted}>
-                    <FeedSummary className={classes.summary} post={target} mt={0.5} />
+                    <FeedSummary className={classes.summary} post={target} sx={{ mt: 0.5 }} />
                     <div className={classes.quotedPost}>
                         <div className={classes.line} />
                         <article className={cx(classes.target, verbose ? classes.verbose : null)}>
@@ -256,7 +256,7 @@ export const SocialFeed = memo<SocialFeedProps>(function SocialFeed({ post, verb
                     </div>
                 </div>
             :   null}
-            <FeedSummary post={post} mt={0.5} />
+            <FeedSummary post={post} sx={{ mt: 0.5 }} />
             <div className={classes.body}>
                 {media?.type === 'Image' ?
                     <Image

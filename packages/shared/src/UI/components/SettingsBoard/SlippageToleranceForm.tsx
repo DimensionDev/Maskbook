@@ -16,7 +16,8 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             alignItems: 'center',
-            boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
+            boxShadow: '0px 0px 20px 0px #0000000D',
+            ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px 0px #FFFFFF1F' }),
             backdropFilter: 'blur(16px)',
             marginTop: theme.spacing(1),
             padding: theme.spacing(2),
@@ -88,9 +89,9 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                             <MaskTextField
                                 {...field}
                                 placeholder={t`Custom`}
-                                InputProps={{
-                                    type: 'number',
-                                    inputProps: {
+                                slotProps={{
+                                    input: { type: 'number' },
+                                    htmlInput: {
                                         pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                     },
                                 }}

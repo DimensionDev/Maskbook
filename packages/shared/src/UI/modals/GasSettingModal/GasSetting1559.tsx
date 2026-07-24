@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -29,7 +29,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         overflowX: 'scroll',
         '& > *': {
-            backgroundColor: theme.palette.mode === 'dark' ? '#212442' : '#f7f9fa',
+            backgroundColor: '#f7f9fa',
+            ...theme.applyStyles('dark', { backgroundColor: '#212442' }),
             borderRadius: 8,
             padding: 10,
             display: 'flex',
@@ -49,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'break-all',
     },
     label: {
-        color: theme.palette.primary.main,
+        color: theme.vars.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
@@ -58,9 +59,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     selected: {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.vars.palette.primary.main,
         '& > *': {
-            color: theme.palette.primary.contrastText,
+            color: theme.vars.palette.primary.contrastText,
         },
     },
     button: {
@@ -78,7 +79,7 @@ const useStyles = makeStyles()((theme) => ({
     price: {
         fontSize: 12,
         lineHeight: '16px',
-        color: MaskColorVar.normalText,
+        color: theme.vars.palette.maskColor.normalText,
     },
 }))
 

@@ -21,14 +21,23 @@ export default function injectCommentBoxAtMinds(): (signal: AbortSignal, current
                 height: 44,
                 borderRadius: 2,
                 padding: '2px 1em',
-                border: `1px solid ${theme.palette.mode === 'dark' ? '#414c57' : '#d3dbe3'}`,
+                border: '1px solid #d3dbe3',
+                ...theme.applyStyles('dark', {
+                    border: '1px solid #414c57',
+                }),
                 margin: '0 10px 10px',
-                color: theme.palette.mode === 'dark' ? '#fff' : '#43434d',
+                color: '#43434d',
+                ...theme.applyStyles('dark', {
+                    color: '#fff',
+                }),
                 fontWeight: 400,
             },
             input: {
                 '&::placeholder': {
-                    color: theme.palette.mode === 'dark' ? '#b8c1c' : '#72727c',
+                    color: '#72727c',
+                    ...theme.applyStyles('dark', {
+                        color: '#b8c1c',
+                    }),
                     opacity: 1,
                     fontWeight: 400,
                 },

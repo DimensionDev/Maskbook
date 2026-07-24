@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, ProgressiveText } from '@masknet/shared'
-import { NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
+import { type NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
@@ -25,8 +25,8 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         borderRadius: 16,
         '&:hover': {
-            background: theme.palette.maskColor.bottom,
-            boxShadow: theme.palette.maskColor.bottomBg,
+            background: theme.vars.palette.maskColor.bottom,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
         },
     },
     walletInfo: {
@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
         lineHeight: '16px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         display: 'flex',
         alignItems: 'center',
     },
@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         columnGap: 4,
         padding: '21px 0',
     },
@@ -75,14 +75,13 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const localWallets = useWallets()
     const modalNavigate = useModalNavigate()
-    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <Box className={classes.walletList}>
             {localWallets.map((wallet, index) => {
                 return (
                     <Box className={classes.wallet} key={index}>
-                        <Box display="flex" alignItems="center">
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <WalletAvatar size={24} className={classes.walletIcon} address={wallet.address} />
                             <Typography className={classes.walletInfo} component="div">
                                 <ProgressiveText
@@ -101,7 +100,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                                         formatter={formatEthereumAddress}
                                     />
                                     <Link
-                                        style={{ width: 14, height: 14, color: theme.palette.maskColor.main }}
+                                        style={{ width: 14, height: 14, color: theme.vars.palette.maskColor.main }}
                                         href={EVMExplorerResolver.addressLink(chainId, wallet.address ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
@@ -115,7 +114,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
             })}
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.SelectProvider)}>
                 <Icons.Connect size={16} />
-                <Typography fontSize={12} fontWeight={700} lineHeight="16px">
+                <Typography sx={{ fontSize: 12, fontWeight: 700, lineHeight: '16px' }}>
                     <Trans>Connect</Trans>
                 </Typography>
             </Box>

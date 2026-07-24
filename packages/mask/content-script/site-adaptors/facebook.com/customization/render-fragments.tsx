@@ -8,7 +8,7 @@ function Hash(props: RenderFragmentsContextType.HashLinkProps | RenderFragmentsC
     const target = `/hashtag/${encodeURIComponent(text)}`
     const { hasMatch, ...events } = useTagEnhancer('hash', text)
     return (
-        <Link {...events} href={target} fontSize="inherit">
+        <Link {...events} href={target} sx={{ fontSize: 'inherit' }}>
             {props.children}
         </Link>
     )

@@ -16,13 +16,23 @@ export function createIcon(name, svg, viewBox, defaultSize) {
     /** @type {import('react').ComponentType<import('@mui/material').SvgIconProps>} */ let Icon
     if (typeof svg === 'function') {
         Icon = ({ sx, ref, ...props }) => {
-            const style = defaultSize ? { width, height, ...sx } : sx
-            return React.createElement(SvgIcon, { viewBox, ...props, ref, sx: style }, svg(useTheme()))
+            const next_sx =
+                defaultSize ?
+                    Array.isArray(sx) ?
+                        [{ width, height }, ...sx]
+                    :   [{ width, height }, sx]
+                :   sx
+            return React.createElement(SvgIcon, { viewBox, ...props, ref, sx: next_sx }, svg(useTheme()))
         }
     } else {
         Icon = ({ sx, ref, ...props }) => {
-            const style = defaultSize ? { width, height, ...sx } : sx
-            return React.createElement(SvgIcon, { viewBox, ...props, ref, sx: style }, svg)
+            const next_sx =
+                defaultSize ?
+                    Array.isArray(sx) ?
+                        [{ width, height }, ...sx]
+                    :   [{ width, height }, sx]
+                :   sx
+            return React.createElement(SvgIcon, { viewBox, ...props, ref, sx: next_sx }, svg)
         }
     }
     Icon.displayName = `Icon (${name})`

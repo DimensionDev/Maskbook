@@ -17,28 +17,28 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
         fontWeight: 400,
-        borderColor: theme.palette.divider,
-        color: theme.palette.text.primary,
-        background: theme.palette.maskColor.input,
+        borderColor: theme.vars.palette.divider,
+        color: theme.vars.palette.text.primary,
+        background: theme.vars.palette.maskColor.input,
 
         '&:hover': {
-            background: theme.palette.maskColor.input,
+            background: theme.vars.palette.maskColor.input,
         },
     },
     searchButton: {
         borderRadius: 8,
     },
     search: {
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         height: 40,
         borderRadius: 8,
     },
     menu: {
-        background: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)',
+        }),
     },
 }))
 
@@ -73,12 +73,14 @@ export const SearchBox = memo<SearchBoxProps>(function SearchBox({ onSearch }) {
                             setSelectedChain(chain)
                         }}>
                         <Stack
-                            display="inline-flex"
                             direction="row"
-                            alignItems="center"
-                            justifyContent="flex-start"
-                            gap={1}
-                            width="100%">
+                            sx={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                gap: 1,
+                                width: '100%',
+                            }}>
                             <WalletIcon mainIcon={chain.icon} size={18} />
                             <Typography>{getChainName(chain)}</Typography>
                         </Stack>
@@ -90,25 +92,29 @@ export const SearchBox = memo<SearchBoxProps>(function SearchBox({ onSearch }) {
 
     return (
         <Stack direction="row" spacing={1}>
-            <Box width={140} height={40}>
+            <Box sx={{ width: 140, height: 40 }}>
                 <Button onClick={openMenu} variant="outlined" className={classes.selectedButton}>
                     <Stack
                         className={classes.option}
-                        display="inline-flex"
                         direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        width="100%">
-                        <Stack gap={0.5} display="inline-flex" direction="row" alignItems="center">
+                        sx={{
+                            display: 'inline-flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            width: '100%',
+                        }}>
+                        <Stack direction="row" sx={{ gap: 0.5, display: 'inline-flex', alignItems: 'center' }}>
                             <WalletIcon mainIcon={selectedChain?.icon ?? supportedChains[0]?.icon} size={18} />
-                            <Typography fontSize={14}>{getChainName(selectedChain ?? supportedChains[0])}</Typography>
+                            <Typography sx={{ fontSize: 14 }}>
+                                {getChainName(selectedChain ?? supportedChains[0])}
+                            </Typography>
                         </Stack>
                         <KeyboardArrowDownIcon />
                     </Stack>
                 </Button>
             </Box>
-            <Stack direction="row" flex={1} spacing={1}>
-                <Box flex={1}>
+            <Stack direction="row" spacing={1} sx={{ flex: 1 }}>
+                <Box sx={{ flex: 1 }}>
                     <MaskTextField
                         placeholder={t`Please enter token contract address.`}
                         autoFocus
@@ -118,8 +124,10 @@ export const SearchBox = memo<SearchBoxProps>(function SearchBox({ onSearch }) {
                             onSearch(selectedChain?.chainId ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')
                         }}
                         onChange={(e) => setSearchSearchContent(e.target.value)}
-                        InputProps={{
-                            classes: { root: classes.search },
+                        slotProps={{
+                            input: {
+                                classes: { root: classes.search },
+                            },
                         }}
                     />
                 </Box>

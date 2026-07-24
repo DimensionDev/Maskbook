@@ -32,11 +32,11 @@ const useStyles = makeStyles()((theme) => ({
         width: 6,
         height: 6,
         borderRadius: 99,
-        border: `1px solid ${theme.palette.maskColor.bottom}`,
+        border: `1px solid ${theme.vars.palette.maskColor.bottom}`,
         position: 'absolute',
         top: 3,
         right: 2,
-        backgroundColor: theme.palette.maskColor.warn,
+        backgroundColor: theme.vars.palette.maskColor.warn,
     },
 }))
 

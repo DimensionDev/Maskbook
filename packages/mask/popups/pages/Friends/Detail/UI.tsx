@@ -1,10 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback } from 'react'
-import { Box, Avatar, Typography } from '@mui/material'
+import { Box, Avatar, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { type ProfileIdentifier, formatPersonaFingerprint } from '@masknet/shared-base'
-import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
 import type { Profile } from '../common.js'
@@ -26,12 +25,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     profileInfo: {
         width: '100%',
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
     },
     back: {
         fontSize: 24,
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         border: 'none',
         background: 'none',
         padding: 0,
@@ -49,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 12,
         height: 12,
         fontSize: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     empty: {
         position: 'absolute',
@@ -60,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     emptyContainer: {
@@ -98,7 +97,9 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     const handleBack = useCallback(() => navigate(-1), [])
     const theme = useTheme()
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" width="100%" className={classes.container}>
+        <Box
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
+            className={classes.container}>
             <Box className={classes.profileInfo}>
                 <Box className={classes.header}>
                     <button onClick={handleBack} type="submit" className={classes.back}>
@@ -117,16 +118,18 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                             <Avatar src={avatar} style={{ width: 60, height: 60 }} />
                         :   <Icons.MaskBlue size={60} style={{ borderRadius: 99 }} />}
                     </Box>
-                    <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                    <Typography sx={{ fontSize: 18, fontWeight: '700', lineHeight: '22px', marginTop: '8px' }}>
                         {publicKey ? formatPersonaFingerprint(publicKey) : null}
                     </Typography>
                     <Typography
-                        fontSize={12}
-                        color={theme.palette.maskColor.second}
-                        lineHeight="16px"
-                        display="flex"
-                        alignItems="center"
-                        columnGap="2px">
+                        sx={{
+                            color: theme.vars.palette.maskColor.second,
+                            fontSize: 12,
+                            lineHeight: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '2px',
+                        }}>
                         {formatPersonaFingerprint(nextId, 4)}
                         <CopyButton text={nextId} size={12} className={classes.icon} />
                     </Typography>

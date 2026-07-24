@@ -23,24 +23,22 @@ import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         width: 320,
         padding: theme.spacing(1.5),
-        filter:
-            theme.palette.mode === 'light' ?
-                'drop-shadow(0px 4px 30px rgba(0, 0, 0, 0.1))'
-            :   'drop-shadow(0px 4px 30px rgba(255, 255, 255, 0.15))',
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 4px 30px 0px rgba(0, 0, 0, 0.1)'
-            :   '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
+        filter: 'drop-shadow(0px 4px 30px rgba(0, 0, 0, 0.1))',
+        boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', {
+            filter: 'drop-shadow(0px 4px 30px rgba(255, 255, 255, 0.15))',
+            boxShadow: '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
+        }),
     },
     avatar: {
         borderRadius: 99,
         overflow: 'hidden',
     },
     primary: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '18px',
         overflow: 'hidden',
@@ -57,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: 8,
         padding: theme.spacing(1.5),
     },
@@ -69,13 +67,13 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     address: {
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     list: {
         maxHeight: 200,
@@ -90,13 +88,13 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundColor: theme.vars.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
         },
     },
     managedTag: {
-        background: theme.palette.maskColor.third,
-        color: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.bottom,
         fontSize: 12,
         padding: theme.spacing(0.5),
         borderRadius: 4,
@@ -187,7 +185,9 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                             <ListItemText
                                 classes={{ primary: classes.primary, root: classes.listItemText }}
                                 primary={name}
-                                secondaryTypographyProps={{ component: 'div' }}
+                                slotProps={{
+                                    secondary: { component: 'div' },
+                                }}
                                 secondary={
                                     <div className={classes.second}>
                                         <Typography component="div" className={classes.address}>

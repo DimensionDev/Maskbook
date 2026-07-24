@@ -17,13 +17,13 @@ export function ChangeNetwork() {
     return (
         <ListItem className={classes.item} onClick={chooseNetwork}>
             <Box className={classes.itemBox}>
-                <Icons.Globe size={20} color={theme.palette.maskColor.second} />
+                <Icons.Globe size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Change Network</Trans>
                 </Typography>
             </Box>
             <Box className={classes.itemBox}>
-                <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+                <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>
     )

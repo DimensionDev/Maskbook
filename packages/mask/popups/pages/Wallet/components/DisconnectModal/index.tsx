@@ -1,7 +1,7 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         padding: '24px',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: '14px',
         width: '320px',
         alignItems: 'center',
@@ -31,14 +31,14 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translate(-50%, -50%)',
     },
     title: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '16px',
         fontWeight: 700,
         lineHeight: '20px',
         marginBottom: '24px',
     },
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
@@ -65,15 +65,15 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
     },
     confirmButton: {
-        background: theme.palette.maskColor.warn,
-        color: theme.palette.maskColor.white,
+        background: theme.vars.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.white,
     },
     cancelButton: {
-        background: theme.palette.maskColor.thirdMain,
-        color: theme.palette.maskColor.main,
+        background: theme.vars.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
     },
     disconnectAll: {
-        color: theme.palette.maskColor.highlight,
+        color: theme.vars.palette.maskColor.highlight,
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
@@ -92,7 +92,7 @@ interface DisconnectModalProps {
 const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: DisconnectModalProps) {
     const queryClient = useQueryClient()
     const { classes, cx } = useStyles()
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const address = useWallet()?.address
     const { mutate: onDisconnect } = useMutation({
         mutationFn: async (): Promise<void> => {
@@ -101,8 +101,8 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
         },
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
-            showSnackbar(
-                <Box display="flex" alignItems="center">
+            enqueueSnackbar(
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icons.FillSuccess style={{ marginRight: 6 }} />
                     <Trans>Disconnected successfully.</Trans>
                 </Box>,
@@ -121,8 +121,8 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
         },
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address!] })
-            showSnackbar(
-                <Box display="flex" alignItems="center">
+            enqueueSnackbar(
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Icons.FillSuccess style={{ marginRight: 6 }} />
                     <Trans>Disconnected successfully.</Trans>
                 </Box>,

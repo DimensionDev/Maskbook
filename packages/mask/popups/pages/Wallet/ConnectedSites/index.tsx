@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '16px',
     },
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         fontWeight: 400,
         lineHeight: '18px',
@@ -40,7 +40,7 @@ export const Component = memo(function ConnectedSites() {
 
     if (!origins?.length)
         return (
-            <Box className={classes.container} height="100%" justifyContent="center">
+            <Box className={classes.container} sx={{ height: '100%', justifyContent: 'center' }}>
                 <EmptyStatus>
                     <Trans>No websites connected to this wallet</Trans>
                 </EmptyStatus>

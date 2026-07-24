@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Typography, alpha } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
 import { Trans } from '@lingui/react/macro'
 
@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(1),
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         position: 'relative',
     },
     words: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
     },
     word: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         padding: theme.spacing(1),
         borderRadius: 8,
         listStyleType: 'decimal',
@@ -30,14 +30,17 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 14,
         '&::marker': {
-            backgroundColor: theme.palette.maskColor.bg,
-            color: theme.palette.maskColor.third,
+            backgroundColor: theme.vars.palette.maskColor.bg,
+            color: theme.vars.palette.maskColor.third,
             fontSize: 14,
             fontWeight: 400,
         },
     },
     mask: {
-        background: alpha(theme.palette.mode === 'dark' ? '#000000' : '#ffffff', 0.4),
+        background: 'rgba(255, 255, 255, 0.4)',
+        ...theme.applyStyles('dark', {
+            background: 'rgba(0, 0, 0, 0.4)',
+        }),
         backdropFilter: 'blur(5px)',
         position: 'absolute',
         zIndex: 1,
@@ -52,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     tips: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '18px',
         textAlign: 'center',
@@ -60,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     footer: {
         marginTop: theme.spacing(2),
         display: 'flex',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'center',
         gap: 8,
     },
@@ -68,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
     },
     icon: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         cursor: 'pointer',
     },
 }))

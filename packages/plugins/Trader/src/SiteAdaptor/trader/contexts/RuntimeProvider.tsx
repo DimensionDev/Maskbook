@@ -1,4 +1,3 @@
-import type { ShowSnackbarOptions, SnackbarKey, SnackbarMessage } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createContext, useContext, type PropsWithChildren } from 'react'
 
@@ -15,7 +14,6 @@ export interface RuntimeOptions {
         excludes: Web3Helper.FungibleTokenAll[],
     ): Promise<Web3Helper.FungibleTokenAll | null>
     showToolTip(options: ShowTooltipOptions): void
-    showSnackbar(text: SnackbarMessage, options?: ShowSnackbarOptions): SnackbarKey
 }
 
 const RuntimeContext = createContext<RuntimeOptions>(null!)

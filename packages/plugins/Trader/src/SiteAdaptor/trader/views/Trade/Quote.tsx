@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '100%',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textDecoration: 'none',
     },
     rotate: {
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     bestTag: {
-        backgroundColor: theme.palette.maskColor.success,
+        backgroundColor: theme.vars.palette.maskColor.success,
         borderRadius: 4,
         lineHeight: '18px',
         fontSize: 14,
@@ -94,7 +94,11 @@ export function Quote({ quote, ...props }: QuoteProps) {
         <>
             1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber(), { maximumFractionDigits: 6 }) : '--'}{' '}
             {targetToken.tokenSymbol}
-            <Icons.Cached size={16} color={theme.palette.maskColor.main} onClick={() => setForwardCompare((v) => !v)} />
+            <Icons.Cached
+                size={16}
+                color={theme.vars.palette.maskColor.main}
+                onClick={() => setForwardCompare((v) => !v)}
+            />
         </>
     )
 
@@ -166,10 +170,12 @@ export function Quote({ quote, ...props }: QuoteProps) {
                                 title={isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}>
                                 <Box
                                     component="span"
-                                    maxWidth="200px"
-                                    textOverflow="ellipsis"
-                                    overflow="hidden"
-                                    whiteSpace="nowrap">
+                                    sx={{
+                                        maxWidth: '200px',
+                                        textOverflow: 'ellipsis',
+                                        overflow: 'hidden',
+                                        whiteSpace: 'nowrap',
+                                    }}>
                                     {isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}
                                 </Box>
                             </TextOverflowTooltip>

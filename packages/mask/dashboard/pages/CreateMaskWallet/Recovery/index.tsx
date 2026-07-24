@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     title: {
         fontSize: 36,
@@ -41,19 +41,19 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     tabContainer: {
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         marginTop: theme.spacing(3),
         borderRadius: theme.spacing(1),
         overflow: 'hidden',
     },
     tabList: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
         padding: theme.spacing('14px', 2, 0),
     },
     tab: {
         fontSize: 16,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     panels: {
         display: 'flex',
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         cursor: 'pointer',
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 
@@ -226,8 +226,7 @@ export const Component = memo(function Recovery() {
                     <Trans>Recover your wallet</Trans>
                 </Typography>
             </Box>
-
-            <Typography className={classes.second} mt={2}>
+            <Typography className={classes.second} sx={{ mt: 2 }}>
                 <Trans>
                     Please enter the correct mnemonic words, private key, or upload the correct keystore file.
                 </Trans>

@@ -5,13 +5,13 @@ import { useCurrentPersona } from '../../../../shared-ui/index.js'
 import Services from '#services'
 import { FriendsDetailUI } from './UI.js'
 import { useQueryClient, useMutation, type InfiniteData } from '@tanstack/react-query'
-import { usePopupCustomSnackbar } from '@masknet/theme'
+import { useSnackbar } from '@masknet/theme'
 import type { Friend } from '../../../hooks/index.js'
 import { Trans } from '@lingui/react/macro'
 
 export const Component = memo(function FriendsDetail() {
     const location = useLocation()
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const { avatar, profiles, nextId, publicKey, isLocal, localProfile } = location.state
     const navigate = useNavigate()
     const [deleted, setDeleted] = useState(false)
@@ -55,7 +55,7 @@ export const Component = memo(function FriendsDetail() {
                     }
                 },
             )
-            showSnackbar(<Trans>Deleted successfully</Trans>, { variant: 'success' })
+            enqueueSnackbar(<Trans>Deleted successfully</Trans>, { variant: 'success' })
             setDeleted(true)
             navigate('/friends')
         },

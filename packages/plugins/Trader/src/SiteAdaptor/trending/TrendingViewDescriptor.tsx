@@ -18,7 +18,7 @@ const useStyles = makeStyles<{
             justifyContent: 'space-between',
         },
         sourceNote: {
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
             marginRight: 4,
             fontWeight: 700,
         },
@@ -28,10 +28,10 @@ const useStyles = makeStyles<{
         },
         selectedOption: {
             fontWeight: 700,
-            color: props.isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark,
+            color: props.isTokenTagPopper ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.dark,
         },
         arrowDropIcon: {
-            color: props.isTokenTagPopper ? theme.palette.maskColor.main : theme.palette.maskColor.dark,
+            color: props.isTokenTagPopper ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.dark,
         },
     }
 })
@@ -58,10 +58,12 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
             <Box className={classes.source}>
                 <Stack
                     className={classes.sourceMenu}
-                    display="inline-flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={0.5}>
+                    sx={{
+                        display: 'inline-flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 0.5,
+                    }}>
                     <Typography className={classes.sourceNote}>
                         <Trans>Powered by</Trans>
                     </Typography>

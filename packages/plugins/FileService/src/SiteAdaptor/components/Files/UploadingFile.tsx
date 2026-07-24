@@ -6,7 +6,7 @@ import type { FileBaseProps, FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         fontSize: 12,
         marginTop: 7,
@@ -16,11 +16,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 7,
         borderRadius: 2,
         [`&.${linearProgressClasses.colorPrimary}`]: {
-            backgroundColor: theme.palette.maskColor.thirdMain,
+            backgroundColor: theme.vars.palette.maskColor.thirdMain,
         },
         [`& .${linearProgressClasses.bar}`]: {
             borderRadius: 2,
-            backgroundColor: theme.palette.maskColor.success,
+            backgroundColor: theme.vars.palette.maskColor.success,
         },
     },
 }))

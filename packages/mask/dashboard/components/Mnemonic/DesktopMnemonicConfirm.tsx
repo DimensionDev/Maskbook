@@ -5,15 +5,15 @@ import { Grid, TextField, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
-        backgroundColor: theme.palette.maskColor.input,
+        backgroundColor: theme.vars.palette.maskColor.input,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textAlign: 'center',
         fontSize: 14,
     },
     end: {
         width: 22,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: 14,
     },
 }))
@@ -51,26 +51,28 @@ export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props
             {puzzleWords.map((word, i) => {
                 const no = i + 1
                 return (
-                    <Grid item xs={3} key={i}>
+                    <Grid key={i} size={3}>
                         <TextField
                             sx={{ width: '100%', userSelect: 'none' }}
                             value={word}
                             autoFocus={i === 0}
                             autoComplete="off"
                             type="password"
-                            InputProps={{
-                                disableUnderline: true,
-                                className: classes.input,
-                                startAdornment: <Typography className={classes.end}>{no}.</Typography>,
-                                endAdornment: (
-                                    <Typography className={classes.end}>
-                                        {/* balance the input, make the cursor center */}
-                                    </Typography>
-                                ),
-                                size: 'small',
-                                inputProps: {
-                                    style: {
-                                        textAlign: 'center',
+                            slotProps={{
+                                input: {
+                                    disableUnderline: true,
+                                    className: classes.input,
+                                    startAdornment: <Typography className={classes.end}>{no}.</Typography>,
+                                    endAdornment: (
+                                        <Typography className={classes.end}>
+                                            {/* balance the input, make the cursor center */}
+                                        </Typography>
+                                    ),
+                                    size: 'small',
+                                    inputProps: {
+                                        style: {
+                                            textAlign: 'center',
+                                        },
                                     },
                                 },
                             }}

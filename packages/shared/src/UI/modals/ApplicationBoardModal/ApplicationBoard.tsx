@@ -15,7 +15,7 @@ import {
     type PersonaInformation,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
+import { Boundary, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { createContext, useMemo, useState, type PropsWithChildren } from 'react'
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
             minHeight: 0,
             boxSizing: 'border-box',
-            scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
+            scrollbarColor: `${theme.vars.palette.maskColor.secondaryLine} ${theme.vars.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => {
                 borderRadius: '20px',
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
+                backgroundColor: theme.vars.palette.maskColor.secondaryLine,
                 backgroundClip: 'padding-box',
             },
             [smallQuery]: {
@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => {
             height: 324,
         },
         placeholder: {
-            color: getMaskColor(theme).textLight,
+            color: theme.vars.palette.maskColor.textLight,
         },
     }
 })

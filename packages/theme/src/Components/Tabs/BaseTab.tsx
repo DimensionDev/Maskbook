@@ -1,27 +1,24 @@
-import { Button, type ButtonProps, styled, type Theme } from '@mui/material'
-import type { ComponentType } from 'react'
+import { Button, type ButtonProps, styled } from '@mui/material'
 
-const BaseTabWrap: ComponentType<ButtonProps & { activated: boolean }> = styled(Button, {
+const BaseTabWrap = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
-})(({ theme, activated }: { theme: Theme; activated?: boolean }) => ({
+})<{ activated?: boolean }>(({ theme, activated }) => ({
     flex: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     height: 36,
     lineHeight: '18px',
-    boxShadow:
-        activated ?
-            `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
-        :   'none',
-    background: activated ? theme.palette.maskColor.bottom : 'transparent',
+    boxShadow: activated ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
+    ...theme.applyStyles('dark', { boxShadow: activated ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : 'none' }),
+    background: activated ? theme.vars.palette.maskColor.bottom : 'transparent',
     borderRadius: `${theme.spacing(1.5)} ${theme.spacing(1.5)} 0px 0px !important`,
-    color: activated ? theme.palette.maskColor.main + ' !important' : theme.palette.maskColor.secondaryDark,
+    color: activated ? theme.vars.palette.maskColor.main + ' !important' : theme.vars.palette.maskColor.secondaryDark,
     fontSize: 16,
     fontWeight: 'bold',
 
     '&:hover': {
         boxShadow: activated ? '0 0 20px rgba(0, 0, 0, 0.05)' : 'none',
-        background: activated ? theme.palette.maskColor.bottom : 'transparent',
+        background: activated ? theme.vars.palette.maskColor.bottom : 'transparent',
     },
     // If there is only single one tab.
     '&:first-of-type:last-of-type': {

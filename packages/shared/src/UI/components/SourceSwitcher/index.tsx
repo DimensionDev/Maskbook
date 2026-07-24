@@ -18,7 +18,8 @@ const useStyles = makeStyles()((theme) => {
         },
         sourceName: {
             fontWeight: 700,
-            color: theme.palette.mode === 'dark' ? '' : theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
+            ...theme.applyStyles('dark', { color: '' }),
         },
     }
 })
@@ -37,14 +38,17 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
         <Box className={classes.source}>
             <Stack
                 className={classes.sourceMenu}
-                display="inline-flex"
-                flexDirection="row"
-                alignItems="center"
-                gap={0.5}>
+                sx={{
+                    display: 'inline-flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 0.5,
+                }}>
                 <FootnoteMenu
                     options={uniqBy(resultList, (x) => x.source).map((x) => ({
                         name: (
-                            <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                            <Stack
+                                sx={{ display: 'inline-flex', flexDirection: 'row', alignItems: 'center', gap: 0.5 }}>
                                 <Typography className={classes.sourceName}>
                                     {resolveSourceTypeName(x.source)}
                                 </Typography>

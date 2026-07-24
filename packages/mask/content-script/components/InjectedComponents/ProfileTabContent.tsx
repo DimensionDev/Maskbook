@@ -32,14 +32,14 @@ import {
     Sniffings,
 } from '@masknet/shared-base'
 import { useLocationChange, useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, MaskThemeProvider, useTabs } from '@masknet/theme'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
 import { Web3Bio } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext } from '@mui/lab'
-import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Button, Stack, Tab, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -57,7 +57,7 @@ import { SearchResultInspector } from './SearchResultInspector.js'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: Sniffings.is_facebook_page ? 876 : 'auto',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     container: {
         background:
@@ -97,7 +97,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
     },
     gearIcon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
     currentAddress: {
         fontSize: '18px',
@@ -106,11 +106,11 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
     mainLinkIcon: {
         margin: '0px 2px',
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.vars.palette.maskColor.secondaryDark,
     },
     reload: {
         borderRadius: 20,
@@ -308,7 +308,7 @@ function Content(props: ProfileTabContentProps) {
 
     if (lackHostPermission?.size) {
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <GrantPermissions
@@ -317,21 +317,21 @@ function Content(props: ProfileTabContentProps) {
                         />
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 
     if (!currentVisitingUserId || (loadingSocialAccounts && !socialAccounts.length) || loadingPersonaStatus)
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <LoadingStatus iconSize={24} color={theme.palette.maskColor.main}>
+                        <LoadingStatus iconSize={24} color={theme.vars.palette.maskColor.main}>
                             <Trans>Loading account information...</Trans>
                         </LoadingStatus>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
 
     if (((isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) && socialAccounts.length === 0) {
@@ -340,15 +340,17 @@ function Content(props: ProfileTabContentProps) {
             if (loadSocialAccounts) retrySocialAccounts()
         }
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                        <Stack sx={{ display: 'inline-flex', gap: 3, justifyContent: 'center', alignItems: 'center' }}>
                             <Typography
-                                fontSize={14}
-                                fontWeight={400}
-                                lineHeight="18px"
-                                color={(t) => t.palette.maskColor.danger}>
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 400,
+                                    lineHeight: '18px',
+                                    color: (t) => t.palette.maskColor.danger,
+                                }}>
                                 <Trans>Load failed</Trans>
                             </Typography>
                             <Button color="primary" className={classes.reload} onClick={handleClick}>
@@ -357,7 +359,7 @@ function Content(props: ProfileTabContentProps) {
                         </Stack>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 
@@ -365,35 +367,49 @@ function Content(props: ProfileTabContentProps) {
     if (socialAccounts.length === 0 && !isOnTwitter) {
         if (Sniffings.is_facebook_page) return null
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                        <Stack
+                            sx={{
+                                display: 'inline-flex',
+                                gap: 3,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
                             <Typography
-                                fontSize={14}
-                                fontWeight={400}
-                                lineHeight="18px"
-                                color={(t) => t.palette.maskColor.publicMain}>
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 400,
+                                    lineHeight: '18px',
+                                    color: (t) => t.palette.maskColor.publicMain,
+                                }}>
                                 <Trans>Can't find a valid user address data source.</Trans>
                             </Typography>
                         </Stack>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 
     if (!socialAccounts.length) {
         return (
-            <ThemeProvider theme={MaskLightTheme}>
+            <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                        <Stack
+                            sx={{
+                                display: 'inline-flex',
+                                gap: 3,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
                             <WalletSettingsEntry />
                         </Stack>
                     </PluginCardFrameMini>
                 </div>
-            </ThemeProvider>
+            </MaskThemeProvider>
         )
     }
 
@@ -440,17 +456,21 @@ function Content(props: ProfileTabContentProps) {
                     <div className={classes.settingItem}>
                         <Trans>
                             <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="5px"
-                                color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                sx={{
+                                    fontSize: '14px',
+                                    fontWeight: 700,
+                                    marginRight: '5px',
+                                    color: (theme) => theme.vars.palette.maskColor.secondaryDark,
+                                }}>
                                 Powered by
                             </Typography>
                             <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="4px"
-                                color={(theme) => theme.palette.maskColor.dark}>
+                                sx={{
+                                    fontSize: '14px',
+                                    fontWeight: 700,
+                                    marginRight: '4px',
+                                    color: (theme) => theme.vars.palette.maskColor.dark,
+                                }}>
                                 Mask Network
                             </Typography>
                         </Trans>
@@ -492,7 +512,7 @@ function Content(props: ProfileTabContentProps) {
                         tabId={componentTabId}
                         socialAccount={selectedSocialAccount}
                     />
-                :   <EmptyStatus height={260}>
+                :   <EmptyStatus sx={{ height: 260 }}>
                         <Trans>There's no content associated with this address.</Trans>
                     </EmptyStatus>
                 }

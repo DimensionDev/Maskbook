@@ -9,14 +9,14 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         lineHeight: '18px',
     },
     permissions: {
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         padding: 6,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         lineHeight: '18px',
         margin: theme.spacing(2, 0),

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ImageIcon, NetworkIcon, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { TextOverflowTooltip, makeStyles, useBoundedPopperProps } from '@masknet/theme'
+import { alpha, TextOverflowTooltip, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import {
     useAccount,
     useFungibleToken,
@@ -30,7 +30,7 @@ import {
     type Transaction as EvmTransaction,
     type SchemaType,
 } from '@masknet/web3-shared-evm'
-import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
+import { Box, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo, type JSX } from 'react'
 import { formatTokenBalance } from '../../../../../shared/index.js'
@@ -39,19 +39,19 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
     const colorMap: { [property: string]: string } = {
-        send: theme.palette.maskColor.warn,
-        receive: theme.palette.maskColor.success,
-        default: theme.palette.maskColor.primary,
+        send: theme.vars.palette.maskColor.warn,
+        receive: theme.vars.palette.maskColor.success,
+        default: theme.vars.palette.maskColor.primary,
     }
     const backgroundColorMap: { [property: string]: string } = {
-        send: alpha(theme.palette.maskColor.warn, 0.1),
-        receive: alpha(theme.palette.maskColor.success, 0.1),
-        default: alpha(theme.palette.maskColor.primary, 0.1),
+        send: alpha(theme.vars.palette.maskColor.warn, 0.1),
+        receive: alpha(theme.vars.palette.maskColor.success, 0.1),
+        default: alpha(theme.vars.palette.maskColor.primary, 0.1),
     }
     const boxShadowMap: { [property: string]: string } = {
-        send: alpha(theme.palette.maskColor.warn, 0.2),
-        receive: alpha(theme.palette.maskColor.success, 0.2),
-        default: alpha(theme.palette.maskColor.primary, 0.2),
+        send: alpha(theme.vars.palette.maskColor.warn, 0.2),
+        receive: alpha(theme.vars.palette.maskColor.success, 0.2),
+        default: alpha(theme.vars.palette.maskColor.primary, 0.2),
     }
     const iconColor = colorMap[cateType] || colorMap.default
     const iconBoxShadow = `0px 6px 12px 0px ${boxShadowMap[cateType] || boxShadowMap.default}`
@@ -89,7 +89,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             position: 'absolute',
             right: -4.5,
             bottom: -1,
-            border: `1px solid ${theme.palette.common.white}`,
+            border: `1px solid ${theme.vars.palette.common.white}`,
             borderRadius: '50%',
         },
         txName: {
@@ -100,8 +100,8 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         scamLabel: {
             display: 'inline-block',
             padding: '4px 6px',
-            backgroundColor: theme.palette.maskColor.third,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.white,
             fontSize: 12,
             lineHeight: '16px',
             fontWeight: 700,
@@ -110,7 +110,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         },
         toAddress: {
             whiteSpace: 'nowrap',
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
         operations: {
             display: 'flex',
@@ -126,16 +126,16 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             cursor: 'pointer',
         },
         speedupButton: {
-            backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
-            color: theme.palette.maskColor.primary,
+            backgroundColor: alpha(theme.vars.palette.maskColor.primary, 0.1),
+            color: theme.vars.palette.maskColor.primary,
         },
         cancelButton: {
-            backgroundColor: alpha(theme.palette.maskColor.danger, 0.1),
-            color: theme.palette.maskColor.danger,
+            backgroundColor: alpha(theme.vars.palette.maskColor.danger, 0.1),
+            color: theme.vars.palette.maskColor.danger,
         },
         failedLabel: {
             fontSize: 14,
-            color: theme.palette.maskColor.danger,
+            color: theme.vars.palette.maskColor.danger,
             fontWeight: 400,
             marginRight: 4,
         },
@@ -148,7 +148,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         asset: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             textAlign: 'right',
             display: 'inline-flex',
             alignItems: 'center',
@@ -175,9 +175,9 @@ const TransactionIcon = memo(function TransactionIcon({ cateType }: TransactionI
     const { classes, theme } = useStyles({ cateType })
     const mapType = cateType || 'default'
     const IconMap: { [property: string]: JSX.Element } = {
-        send: <Icons.BaseUpload color={theme.palette.maskColor.warn} size={20} />,
-        receive: <Icons.Download color={theme.palette.maskColor.success} size={20} />,
-        default: <Icons.Cached color={theme.palette.maskColor.primary} size={20} />,
+        send: <Icons.BaseUpload color={theme.vars.palette.maskColor.warn} size={20} />,
+        receive: <Icons.Download color={theme.vars.palette.maskColor.success} size={20} />,
+        default: <Icons.Cached color={theme.vars.palette.maskColor.primary} size={20} />,
     }
 
     return <div className={classes.txIcon}>{IconMap[mapType] || IconMap.default}</div>
@@ -245,7 +245,9 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
             </Box>
             <ListItemText
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 style={{ marginLeft: 15 }}
                 secondary={
                     <ProgressiveText
@@ -291,7 +293,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                             <Trans>Infinite</Trans>
                         :   formatTokenBalance(approveAmount, approveToken.decimals)}
                     </strong>
-                    <TextOverflowTooltip title={approveToken.symbol} PopperProps={popperProps}>
+                    <TextOverflowTooltip title={approveToken.symbol} slotProps={{ popper: popperProps }}>
                         <span className={classes.symbol}>{approveToken.symbol}</span>
                     </TextOverflowTooltip>
                 </Typography>
@@ -303,7 +305,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                         return (
                             <Typography key={i} className={classes.asset} component="div">
                                 <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
-                                <TextOverflowTooltip title={token.symbol} PopperProps={popperProps}>
+                                <TextOverflowTooltip title={token.symbol} slotProps={{ popper: popperProps }}>
                                     <span className={classes.symbol}>{token.symbol}</span>
                                 </TextOverflowTooltip>
                             </Typography>
@@ -359,7 +361,9 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                 />
             </Box>
             <ListItemText
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 style={{ marginLeft: 15 }}
                 secondary={
                     <Box>
@@ -400,7 +404,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                     <Trans>Send</Trans>
                 </Typography>
             </ListItemText>
-            <Box ml="auto">
+            <Box sx={{ ml: 'auto' }}>
                 {candidate.value && nativeToken ?
                     <Typography className={classes.asset}>
                         <strong className={classes.amount}>
@@ -424,12 +428,14 @@ export const ActivityItemSkeleton = memo<ListItemProps>(function ActivityItemSke
                 <Skeleton variant="circular" className={classes.badgeIcon} width={16} height={16} />
             </Box>
             <ListItemText
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 style={{ marginLeft: 15 }}
                 secondary={<Skeleton variant="text" width={100} />}>
                 <Skeleton variant="text" width={90} />
             </ListItemText>
-            <Box ml="auto">
+            <Box sx={{ ml: 'auto' }}>
                 <Skeleton variant="text" width={40} />
             </Box>
         </ListItem>

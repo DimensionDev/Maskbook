@@ -1,4 +1,4 @@
-import { useTheme, Box } from '@mui/material'
+import { Box } from '@mui/material'
 import * as React from 'react'
 import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 
@@ -55,7 +55,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             ...rest,
             ref,
             'data-icon': name,
-            sx: { ...iconStyle, ...sx },
+            sx: Array.isArray(sx) ? [iconStyle, ...sx] : [iconStyle, sx],
             // To align icon center.
             fontSize: 0,
         }
@@ -85,11 +85,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
 
 function useDefaultPalette() {
     const palette = React.useContext(MaskIconPaletteContext)
-
-    const theme = useTheme()
-    const isDarkMode = theme.palette.mode === 'dark'
-    if (isDarkMode && palette === 'dim') return 'dim'
-    return theme.palette.mode
+    return palette
 }
 
 /**
@@ -102,11 +98,9 @@ function selectVariant(variants, palette) {
     const light = variants.find((x) => !x.c || x.c.includes('light'))
     // !x.c means light
     const dark = variants.find((x) => x.c?.includes('dark'))
-    const dim = variants.find((x) => x.c?.includes('dim'))
 
-    if (palette === 'light') return light || dark || dim || variants[0]
-    if (palette === 'dark') return dark || dim || light || variants[0]
-    if (palette === 'dim') return dim || dark || light || variants[0]
+    if (palette === 'light') return light || dark || variants[0]
+    if (palette === 'dark') return dark || light || variants[0]
     return variants[0]
 }
 

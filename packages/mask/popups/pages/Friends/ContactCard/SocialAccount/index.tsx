@@ -15,7 +15,7 @@ interface SocialAccountProps {
 
 const useStyles = makeStyles()((theme) => ({
     iconBlack: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
     },
@@ -54,7 +54,7 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
     const { classes } = useStyles()
     const name = `@${userId}`
     return (
-        <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
+        <Box sx={{ width: '156px', padding: '4px', display: 'flex', gap: '10px', alignItems: 'center' }}>
             <AccountAvatar
                 avatar={userAvatar}
                 network={site}

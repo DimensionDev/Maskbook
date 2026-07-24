@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 0,
     },
     arrowDropIcon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
 }))
 
@@ -36,7 +36,7 @@ export interface AddressItemProps {
     isMenu?: boolean
 }
 
-const defaultTypography = { fontSize: '14px', fontWeight: 700 }
+const defaultTypography = { sx: { fontSize: '14px', fontWeight: 700 } }
 export function AddressItem({
     socialAccount,
     TypographyProps = defaultTypography,
@@ -68,7 +68,12 @@ export function AddressItem({
                         pluginID={socialAccount.pluginID}
                     />
                 :   <ShadowRootTooltip title={formattedDomain === socialAccount.label ? '' : socialAccount.label}>
-                        <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
+                        <Typography
+                            {...TypographyProps}
+                            sx={[
+                                { fontSize: '14px', fontWeight: 700 },
+                                ...(Array.isArray(TypographyProps.sx) ? TypographyProps.sx : [TypographyProps.sx]),
+                            ]}>
                             {formattedDomain}
                         </Typography>
                     </ShadowRootTooltip>

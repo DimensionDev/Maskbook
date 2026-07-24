@@ -27,10 +27,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         display: 'flex',
         cursor: 'pointer',
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
         [`& .${listItemSecondaryActionClasses.root}`]: {
             right: 0,
@@ -38,12 +38,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     address: {
         fontSize: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         display: 'flex',
         alignItems: 'center',
     },
     mainLine: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 500,
         display: 'flex',
         alignItems: 'center',
@@ -70,13 +70,13 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         lineHeight: '16px',
         height: 20,
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         marginLeft: theme.spacing(1),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     balance: {
         textAlign: 'left',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
@@ -128,7 +128,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
             {...rest}>
             <WalletAvatar address={wallet.address} size={24} />
             <Box className={classes.text}>
-                <Box width={180} overflow="auto">
+                <Box sx={{ width: 180, overflow: 'auto' }}>
                     <Typography className={classes.mainLine} component="div">
                         <Typography className={classes.name}>{walletName}</Typography>
                         {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (

@@ -7,7 +7,7 @@ const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
     icon: {
         margin: 0,
         borderRadius: '50%',
-        color: `${theme.palette.maskColor.dark} !important`,
+        color: `${theme.vars.palette.maskColor.dark} !important`,
         backgroundSize: 'cover',
         height: size,
         width: size,
@@ -15,7 +15,7 @@ const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
     },
 }))
 
-export interface IconProps extends AvatarProps {
+export interface IconProps extends Omit<AvatarProps, 'slotProps'> {
     color?: string
     size?: number | string
     name?: string
@@ -38,19 +38,20 @@ export const Icon = memo<IconProps>(function Icon(props) {
             className={cx(classes.icon, className)}
             src={logoURL}
             {...rest}
-            imgProps={{
-                onError: (event) => {
-                    setFailed(true)
-                    rest.imgProps?.onError?.(event)
+            slotProps={{
+                img: {
+                    onError: () => {
+                        setFailed(true)
+                    },
                 },
-                ...rest.imgProps,
             }}
-            sx={{
-                // eslint-disable-next-line @typescript-eslint/no-misused-spread
-                ...rest.sx,
-                backgroundImage: showImage ? undefined : `url("${defaultBackgroundImage}")`,
-                backgroundColor: showImage ? (color ?? theme.palette.common.white) : undefined,
-            }}>
+            sx={[
+                ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx]),
+                {
+                    backgroundImage: showImage ? undefined : `url("${defaultBackgroundImage}")`,
+                    backgroundColor: showImage ? (color ?? theme.vars.palette.common.white) : undefined,
+                },
+            ]}>
             {label ?? name?.slice(0, 1).toUpperCase() ?? '?'}
         </Avatar>
     )

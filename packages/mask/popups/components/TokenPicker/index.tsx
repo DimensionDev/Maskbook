@@ -218,21 +218,21 @@ export const TokenPicker = memo(function TokenPicker({
                     placeholder={t`Name or Contract address e.g. USDC or 0x234...`}
                     autoFocus
                     fullWidth
-                    wrapperProps={{
-                        padding: '2px',
-                    }}
-                    InputProps={{
-                        style: { height: 40 },
-                        inputProps: { style: { paddingLeft: 4 } },
-                        startAdornment: <Icons.Search size={18} />,
-                        endAdornment: keyword ? <Icons.Close size={18} onClick={() => setKeyword('')} /> : null,
+                    sx={{ padding: '2px' }}
+                    slotProps={{
+                        input: {
+                            style: { height: 40 },
+                            startAdornment: <Icons.Search size={18} />,
+                            endAdornment: keyword ? <Icons.Close size={18} onClick={() => setKeyword('')} /> : null,
+                        },
+                        htmlInput: { style: { paddingLeft: 4 } },
                     }}
                     onChange={(e) => {
                         setKeyword(e.target.value)
                     }}
                 />
                 {keyword && !filteredAssets.length ?
-                    <EmptyStatus flexGrow={1} alignItems="center">
+                    <EmptyStatus sx={{ flexGrow: 1, alignItems: 'center' }}>
                         <Trans>No matched tokens</Trans>
                     </EmptyStatus>
                 :   <FixedSizeList

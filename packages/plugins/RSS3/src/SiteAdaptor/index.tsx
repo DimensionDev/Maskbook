@@ -129,7 +129,7 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = {
                 supportedAddressTypes: [SocialAddressType.ENS],
             }
             return (
-                <Box minHeight={300} sx={{ scrollbarWidth: 'none' }}>
+                <Box sx={{ minHeight: 300, scrollbarWidth: 'none' }}>
                     <EVMWeb3ContextProvider>
                         <SocialFeeds key={socialAccount.address} address={socialAccount.address} />
                     </EVMWeb3ContextProvider>

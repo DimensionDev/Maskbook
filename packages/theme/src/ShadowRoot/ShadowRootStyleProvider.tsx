@@ -18,7 +18,8 @@ interface ShadowRootStyleProviderProps extends React.PropsWithChildren {
  */
 export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     const { shadow, children } = props
-    const [cache, sheets] = getShadowRootEmotionCache(shadow)
+    const parentSheets = useContext(StyleSheetsContext)
+    const [cache, sheets] = getShadowRootEmotionCache(shadow, parentSheets)
 
     const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
     useEffect(() => {
@@ -38,7 +39,7 @@ export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
 
 const styleSheetMap = new WeakMap<ShadowRoot, [EmotionCache, StyleSheet]>()
 
-function getShadowRootEmotionCache(shadow: ShadowRoot) {
+function getShadowRootEmotionCache(shadow: ShadowRoot, parentSheets: StyleSheet | null) {
     if (styleSheetMap.has(shadow)) return styleSheetMap.get(shadow)!
 
     // emotion doesn't allow numbers appears in the key
@@ -46,9 +47,18 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     const key = 'css-' + instanceID
 
     const muiEmotionCache = createEmotionCache({ key })
-    const muiStyleSheet = new StyleSheet({ key, container: shadow })
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
+    // hack to enable CSS @layer
+    // see https://github.com/emotion-js/emotion/issues/3134
+    // impl: https://github.com/mui/material-ui/pull/45428/changes#diff-b0c45a41eb00f494af85ef7b71794928afbab0332ebbb410f3a91e0e9bebc797R84
+    const insert = muiEmotionCache.insert
+    muiEmotionCache.insert = (...args) => {
+        if (!/^@layer\s+[^{]*$/u.test(args[1].styles)) {
+            args[1].styles = `@layer mui {${args[1].styles}}`
+        }
+        return insert(...args)
+    }
+    const muiStyleSheet = new StyleSheet({ key, container: shadow, parent: parentSheets })
+    // @ts-expect-error internal api?
     muiEmotionCache.sheet = muiStyleSheet
 
     styleSheetMap.set(shadow, [muiEmotionCache, muiStyleSheet])

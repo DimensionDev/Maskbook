@@ -339,16 +339,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         isHiddenChainIcon,
         enabled,
     ])
-    const SearchFieldProps = useMemo(
-        () => ({
-            placeholder: t`Name or Contract address e.g. USDC or 0x234...`,
-            helperText: searchError,
-            error: !!searchError,
-            ...props.SearchTextFieldProps,
-        }),
-        // eslint-disable-next-line react-compiler/react-compiler
-        [searchError, JSON.stringify(props.SearchTextFieldProps)],
-    )
 
     const [, startTransition] = useTransition()
 
@@ -393,7 +383,12 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             itemKey="address"
             itemRender={itemRender}
             FixedSizeListProps={FixedSizeListProps}
-            SearchFieldProps={SearchFieldProps}
+            SearchFieldProps={{
+                placeholder: t`Name or Contract address e.g. USDC or 0x234...`,
+                helperText: searchError,
+                error: !!searchError,
+                ...props.SearchTextFieldProps,
+            }}
         />
     )
 }

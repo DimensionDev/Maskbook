@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textAlign: 'center',
     },
     message: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0),
         lineHeight: '20px',
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         textAlign: 'center',
     },
     buttonGroup: {

@@ -7,7 +7,7 @@ import {
     getDefaultWalletPassword,
     type Wallet,
 } from '@masknet/shared-base'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -30,7 +30,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         display: 'flex',
         flexGrow: 1,
         flexDirection: 'column',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         paddingBottom: hasNav ? 72 : undefined,
     },
     content: {
@@ -58,7 +58,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         gap: 8,
         marginBottom: 12,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
         '&:last-child': {
             marginBottom: '0 !important',
@@ -74,13 +74,13 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     subTitle: {
         display: 'flex',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 700,
     },
     description: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontWeight: 400,
     },
     setPasswordButtonWrapper: {
@@ -92,7 +92,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     bottomAction: {
         display: 'flex',
         justifyContent: 'center',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         marginTop: 'auto',
         backdropFilter: 'blur(8px)',
@@ -113,7 +113,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         width: '100%',
     },
     strong: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     walletItemList: {
         height: 240,
@@ -151,13 +151,19 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         href={EVMExplorerResolver.addressLink(chainId, address)}
-                        marginLeft="4px"
-                        width={16}
-                        height={16}>
-                        <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
+                        sx={{
+                            marginLeft: '4px',
+                            width: 16,
+                            height: 16,
+                        }}>
+                        <Icons.LinkOut size={16} color={theme.vars.palette.maskColor.main} />
                     </Link>
                 </Typography>
-                <ProgressiveText loading={isPending} className={classes.description} fontSize={12} skeletonWidth={50}>
+                <ProgressiveText
+                    loading={isPending}
+                    className={classes.description}
+                    sx={{ fontSize: 12 }}
+                    skeletonWidth={50}>
                     <FormattedBalance value={balance} decimals={18} symbol={'ETH'} formatter={formatBalance} />
                 </ProgressiveText>
             </div>
@@ -173,7 +179,7 @@ export const Component = memo(function SetPaymentPassword() {
     const wallets = useWallets()
     const [params] = useSearchParams()
     const [isCreating, setIsCreating] = useState(!!params.get('isCreating'))
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const theme = useTheme()
 
     const {
@@ -204,7 +210,7 @@ export const Component = memo(function SetPaymentPassword() {
 
                 if (hasPassword) {
                     const from = params.get('from')
-                    showSnackbar(<Trans>Set payment password successfully.</Trans>, { variant: 'success' })
+                    enqueueSnackbar(<Trans>Set payment password successfully.</Trans>, { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     params.delete('from')
                     navigate({ pathname: from || PopupRoutes.Wallet, search: params.toString() }, { replace: true })
@@ -232,7 +238,7 @@ export const Component = memo(function SetPaymentPassword() {
                         :   <Trans>Set Payment Password</Trans>}
                     </Typography>
                     {isCreating ?
-                        <Typography className={classes.description} fontSize={14} fontWeight={700}>
+                        <Typography className={classes.description} sx={{ fontSize: 14, fontWeight: 700 }}>
                             <Trans>At least 6 characters</Trans>
                         </Typography>
                     :   null}
@@ -272,7 +278,12 @@ export const Component = memo(function SetPaymentPassword() {
                                 />
                             </div>
                             {errorMsg && !isValid ?
-                                <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
+                                <Typography
+                                    sx={{
+                                        color: theme.vars.palette.maskColor.danger,
+                                        fontSize: 14,
+                                        marginTop: '12px',
+                                    }}>
                                     {errorMsg}
                                 </Typography>
                             :   null}
@@ -280,18 +291,22 @@ export const Component = memo(function SetPaymentPassword() {
                             <button type="submit" hidden />
                         </form>
                         <Typography
-                            color={theme.palette.maskColor.third}
-                            fontSize={14}
-                            textAlign="center"
-                            fontWeight={700}>
+                            sx={{
+                                color: theme.vars.palette.maskColor.third,
+                                fontSize: 14,
+                                textAlign: 'center',
+                                fontWeight: 700,
+                            }}>
                             <Trans>By proceeding you agree to the</Trans>
                         </Typography>
 
                         <Typography
-                            color={theme.palette.maskColor.third}
-                            fontSize={14}
-                            textAlign="center"
-                            fontWeight={700}>
+                            sx={{
+                                color: theme.vars.palette.maskColor.third,
+                                fontSize: 14,
+                                textAlign: 'center',
+                                fontWeight: 700,
+                            }}>
                             <Trans>
                                 <a
                                     className={classes.strong}

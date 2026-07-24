@@ -34,7 +34,7 @@ import type { ERC721Abi } from '@masknet/web3-contracts/types/ERC721.js'
 
 const useStyles = makeStyles()((theme) => ({
     info: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
         borderRadius: 8,
         padding: theme.spacing(1.5),
     },
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     addressTitle: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     amount: {
         display: 'flex',
@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     gasFeeTitle: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 
@@ -169,25 +169,22 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     return (
         <Box>
             <Box className={classes.info}>
-                <Box display="flex" justifyContent="space-between">
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography className={classes.title}>{title}</Typography>
                     {receiver ?
                         <Typography className={classes.title}>{receiver}</Typography>
                     :   null}
                 </Box>
                 {to ?
-                    <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
+                    <Box sx={{ mt: 2, display: 'flex', columnGap: 0.5, alignItems: 'center' }}>
                         <Trans>
                             <Typography className={classes.addressTitle}>To</Typography>:{' '}
-                            <Typography fontSize={11} fontWeight={700} lineHeight="16px">
-                                {to}
-                            </Typography>
+                            <Typography sx={{ fontSize: 11, fontWeight: 700, lineHeight: '16px' }}>{to}</Typography>
                         </Trans>
                     </Box>
                 :   null}
             </Box>
-
-            <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>
                 <Typography component="div" className={classes.amount}>
                     {tokenId ?
                         <Typography>Token #{tokenId}</Typography>
@@ -222,7 +219,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     </Typography>
                 :   null}
             </Box>
-            <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
+            <Box sx={{ mt: 3.75, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography className={classes.gasFeeTitle}>
                     <Trans>Gas Fee</Trans>
                 </Typography>

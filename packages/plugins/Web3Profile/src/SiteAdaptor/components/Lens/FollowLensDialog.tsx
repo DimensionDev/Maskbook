@@ -11,7 +11,7 @@ import {
     WalletConnectedBoundary,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -36,14 +36,14 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginTop: 24,
     },
     handle: {
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 400,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         margin: theme.spacing(0.5, 0),
     },
     followers: {
@@ -52,7 +52,7 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
         columnGap: 8,
     },
     dialogTitle: {
-        background: `${theme.palette.maskColor.bottom}!important`,
+        background: `${theme.vars.palette.maskColor.bottom}!important`,
     },
     dialogContent: {
         maxWidth: 400,
@@ -67,15 +67,15 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
     followAction: {
         backgroundColor: '#A1FE27',
-        color: theme.palette.maskColor.publicMain,
+        color: theme.vars.palette.maskColor.publicMain,
         '&:hover': {
             backgroundColor: '#A1FE27',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         [`&.${buttonClasses.disabled}`]: {
             background: '#A1FE27',
             opacity: 0.6,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     },
     profile: {
@@ -84,7 +84,7 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
     tips: {
         marginBottom: theme.spacing(3),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
     },
     canvas: {
@@ -98,7 +98,7 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
     linkButton: {
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.thirdMain,
+            backgroundColor: theme.vars.palette.maskColor.thirdMain,
         },
     },
 }))
@@ -117,7 +117,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { account: walletAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const lensClient = useLensClient()
     const myLensAccount = useMyLensAccount()
     const myLensAddress = myLensAccount?.account.address
@@ -171,9 +171,9 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const handleClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
             if (task) {
-                showSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
+                enqueueSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
                     processing: true,
-                    message:
+                    detail:
                         isFollowing ?
                             <Trans>Previous unfollow transaction is in processing, please wait and try again.</Trans>
                         :   <Trans>Previous follow transaction is in processing, please wait and try again.</Trans>,
@@ -183,7 +183,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             }
             task = (isFollowing ? handleUnfollow() : handleFollow(event)).finally(() => (task = undefined))
         },
-        [handleFollow, handleUnfollow, isFollowing, showSnackbar],
+        [handleFollow, handleUnfollow, isFollowing, enqueueSnackbar],
     )
 
     const accountConditions = !walletAccount || !currentAccount || pluginID !== NetworkPluginID.PLUGIN_EVM
@@ -236,7 +236,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
                 {!lensAccount && isLoading ?
-                    <Box display="flex" justifyContent="center" alignItems="center" minHeight={342}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 342 }}>
                         <CircularProgress />
                     </Box>
                 :   <Box className={classes.container}>

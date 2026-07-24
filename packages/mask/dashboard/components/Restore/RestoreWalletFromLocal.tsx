@@ -2,7 +2,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1.5),
     },
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         fontSize: 12,
         marginTop: 7,
@@ -40,7 +40,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
 
     const [file, setFile] = useState<File | null>(null)
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [readingFile, setReadingFile] = useState(false)
 
     const handleSetFile = useCallback(async (file: File) => {
@@ -51,7 +51,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
             setKeyStoreContent(value)
             setReadingFile(false)
         } else {
-            showSnackbar(<Trans>Unsupported key store data</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Unsupported key store data</Trans>, { variant: 'error' })
         }
     }, [])
     const reset = useCallback(() => {
@@ -73,7 +73,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
     }, [disabled, keyStoreContent, keyStorePassword])
 
     return (
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
             <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit />
             {file ?
                 <>
@@ -82,7 +82,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
                         fileName={file.name}
                         operations={
                             <Button variant="text" disableRipple sx={{ p: 1, minWidth: 'auto' }} onClick={reset}>
-                                <Icons.Clear size={24} color={theme.palette.maskColor.main} />
+                                <Icons.Clear size={24} color={theme.vars.palette.maskColor.main} />
                             </Button>
                         }>
                         <Typography className={classes.desc}>
@@ -92,7 +92,7 @@ export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
                         </Typography>
                     </FileFrame>
                     {readingFile ? null : (
-                        <Box mt={4}>
+                        <Box sx={{ mt: 4 }}>
                             <PasswordField
                                 fullWidth
                                 placeholder={t`Keystore password`}

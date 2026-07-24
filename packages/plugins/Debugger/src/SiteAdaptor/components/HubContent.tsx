@@ -54,7 +54,7 @@ export function HubContent() {
                 <TableBody>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Keyword
                             </Typography>
                         </TableCell>
@@ -70,7 +70,7 @@ export function HubContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Contract Address
                             </Typography>
                         </TableCell>
@@ -86,7 +86,7 @@ export function HubContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Token ID
                             </Typography>
                         </TableCell>
@@ -103,7 +103,7 @@ export function HubContent() {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Source Type
                             </Typography>
                         </TableCell>
@@ -133,7 +133,7 @@ export function HubContent() {
                         return (
                             <TableRow key={key}>
                                 <TableCell>
-                                    <Typography variant="body2" whiteSpace="nowrap">
+                                    <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                         {key}
                                     </Typography>
                                 </TableCell>
@@ -163,7 +163,7 @@ export function HubContent() {
                     })}
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
+                            <Typography variant="body2" sx={{ whiteSpace: 'nowrap' }}>
                                 Open Select Token
                             </Typography>
                         </TableCell>

@@ -6,9 +6,9 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'fixed',
         bottom: 0,
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         padding: theme.spacing(2),
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         left: 0,
         right: 0,

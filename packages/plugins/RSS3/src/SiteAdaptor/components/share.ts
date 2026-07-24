@@ -9,7 +9,6 @@ type IconComponent =
     | ComponentType<GeneratedIconNonSquareProps>
     | ComponentType<GeneratedIconNonSquareProps<'light'>>
     | ComponentType<GeneratedIconNonSquareProps<'dark'>>
-    | ComponentType<GeneratedIconNonSquareProps<'dim'>>
     | ComponentType<GeneratedIconNonSquareProps<'light' | 'dark'>>
 
 export enum CardType {

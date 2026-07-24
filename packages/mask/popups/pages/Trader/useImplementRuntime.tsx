@@ -1,25 +1,23 @@
 import { Trans } from '@lingui/react/macro'
 import { useSupportedChains, useTrade, type ShowTooltipOptions } from '@masknet/plugin-trader'
-import { usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo } from 'react'
 import { AssetSource } from '../../components/index.js'
-import { usePopupTheme } from '../../hooks/usePopupTheme.js'
 import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
+import { useTheme } from '@mui/material'
 
 export function useImplementRuntime() {
     const chainQuery = useSupportedChains()
     const { mode, chainId, fromToken } = useTrade()
     const isSwap = mode === 'swap'
     const fromChainId = fromToken?.chainId as ChainId
-    const theme = usePopupTheme()
+    const theme = useTheme()
     const pickToken = useCallback(
         async (
             currentToken: Web3Helper.FungibleTokenAll | null | undefined,
             side: 'from' | 'to',
-            excludes: Web3Helper.FungibleTokenAll[],
         ): Promise<Web3Helper.FungibleTokenAll | null> => {
             const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
 
@@ -59,19 +57,14 @@ export function useImplementRuntime() {
                         fontSize: '15px',
                         lineHeight: '20px',
                         fontWeight: 400,
-                        color: theme.palette.maskColor.main,
+                        color: theme.vars.palette.maskColor.main,
                         marginTop: 16,
                     },
                 },
             })
         },
-        [theme.palette.maskColor.main],
+        [theme.vars.palette.maskColor.main],
     )
 
-    const { showSnackbar } = usePopupCustomSnackbar()
-
-    return useMemo(
-        () => ({ pickToken, basePath: '/trader', showToolTip, showSnackbar }),
-        [pickToken, showToolTip, showSnackbar],
-    )
+    return useMemo(() => ({ pickToken, basePath: '/trader', showToolTip }), [pickToken, showToolTip])
 }

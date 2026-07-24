@@ -1,6 +1,6 @@
 import { Suspense, type ReactNode } from 'react'
-import { alpha, Skeleton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Skeleton } from '@mui/material'
+import { alpha, makeStyles } from '@masknet/theme'
 import { SnapshotCard } from './SnapshotCard.js'
 import { range } from 'lodash-es'
 
@@ -29,7 +29,9 @@ export function LoadingCard(
                         <Skeleton
                             key={i}
                             className={classes.skeleton}
-                            sx={{ backgroundColor: alpha(theme.palette.maskColor.publicMain, 0.6) }}
+                            sx={{
+                                backgroundColor: alpha(theme.vars.palette.maskColor.publicMain, 0.6),
+                            }}
                             animation="wave"
                             variant="rectangular"
                             width={i === 0 ? '80%' : '60%'}

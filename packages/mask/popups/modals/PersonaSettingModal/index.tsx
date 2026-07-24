@@ -32,14 +32,14 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     arrow: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         cursor: 'pointer',
     },
     icon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     right: {
         display: 'flex',

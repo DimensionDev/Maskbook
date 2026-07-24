@@ -14,11 +14,11 @@ import {
     TokenIcon,
 } from '@masknet/shared'
 import { Days, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { MaskThemeProvider, makeStyles, useSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
 import { type ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
 import React, { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
@@ -30,6 +30,7 @@ import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
 import { Trans } from '@lingui/react/macro'
+import { usePageThemePalette } from '../../../../shared-ui/index.js'
 
 const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valueAlign }) => {
     return {
@@ -50,13 +51,13 @@ const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valu
         label: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             textTransform: 'capitalize',
         },
         value: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             marginTop: 2,
             display: 'flex',
             alignItems: 'center',
@@ -67,16 +68,15 @@ const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valu
             margin: theme.spacing(2, 'auto', 0),
         },
         info: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             borderRadius: '20px 20px 0 0',
             padding: theme.spacing(2),
-            boxShadow: theme.palette.maskColor.bottomBg,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
             backdropFilter: 'blur(8px)',
         },
     }
 })
 const usePageStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         page: {
             position: 'relative',
@@ -114,9 +114,11 @@ const usePageStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)',
+                }),
             },
             '&:after': {
                 position: 'absolute',
@@ -127,16 +129,19 @@ const usePageStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)',
+                }),
             },
         },
     }
 })
 
 export const Component = memo(function TokenDetailPage() {
-    const { classes, theme } = usePageStyles()
+    const { classes } = usePageStyles()
+    const mode = usePageThemePalette()
     const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -144,7 +149,7 @@ export const Component = memo(function TokenDetailPage() {
     const asset = useAsset(chainId, address, account)
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const { setExtension } = useContext(PageTitleContext)
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
@@ -173,22 +178,22 @@ export const Component = memo(function TokenDetailPage() {
                         schema: SchemaType.ERC20,
                         address: asset.address,
                     })
-                    showSnackbar(<Trans>Asset is hidden.</Trans>)
+                    enqueueSnackbar(<Trans>Asset is hidden.</Trans>, { variant: 'success' })
                     navigate(-1)
                 }}>
                 <Icons.EyeOff size={24} />
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, account])
+    }, [chainId, asset, isNativeToken, classes.deleteButton, enqueueSnackbar, account])
 
     return (
         <div className={classes.halo}>
             <Box className={classes.page}>
                 <TokenDetailUI address={address} chainId={chainId}>
-                    <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
+                    <MaskThemeProvider palette={mode}>
                         <ActionGroup className={classes.actions} chainId={chainId} address={address} asset={asset} />
-                    </ThemeProvider>
+                    </MaskThemeProvider>
                 </TokenDetailUI>
             </Box>
         </div>
@@ -224,7 +229,7 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
 
     return (
         <>
-            <Box padding={2}>
+            <Box sx={{ padding: 2 }}>
                 <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
                     {tokenPrice === undefined ? null : (
                         <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
@@ -233,16 +238,17 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                 {hideChart ? null : (
                     <>
                         <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
-                        <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
+                        <PriceChartRange days={chartRange} onDaysChange={setChartRange} sx={{ gap: '10px', mt: 2 }} />
                         {!isLoadingStats && isError ?
                             <ReloadStatus
                                 onRetry={refetch}
                                 className={classes.trending}
-                                height={DIMENSION.height}
-                                width={DIMENSION.width}
+                                sx={{ height: DIMENSION.height, width: DIMENSION.width }}
                             />
                         : !isLoadingStats && !stats?.length ?
-                            <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
+                            <EmptyStatus
+                                className={classes.trending}
+                                sx={{ height: DIMENSION.height, width: DIMENSION.width }}>
                                 <Trans>Not enough data to present.</Trans>
                             </EmptyStatus>
                         :   <TrendingChart
@@ -254,13 +260,13 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                     </>
                 )}
 
-                <Box display="flex" flexDirection="row" justifyContent="space-between">
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Box>
                         <Typography className={classes.label}>
                             <Trans>Balance</Trans>
                         </Typography>
                         {asset ?
-                            <Typography component="div" className={classes.value} justifyContent="flex-start">
+                            <Typography component="div" className={classes.value} sx={{ justifyContent: 'flex-start' }}>
                                 <TokenIcon
                                     className={classes.tokenIcon}
                                     address={asset.address}
@@ -283,11 +289,11 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                             </Typography>
                         }
                     </Box>
-                    <Box textAlign="right">
+                    <Box sx={{ textAlign: 'right' }}>
                         <Typography className={classes.label}>
                             <Trans>value</Trans>
                         </Typography>
-                        <Typography component="div" className={classes.value} justifyContent="flex-end">
+                        <Typography component="div" className={classes.value} sx={{ justifyContent: 'flex-end' }}>
                             <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                         </Typography>
                     </Box>

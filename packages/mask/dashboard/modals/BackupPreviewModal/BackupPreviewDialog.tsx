@@ -6,7 +6,7 @@ import { encryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, LoadingStatus } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { format } from 'date-fns'
@@ -49,8 +49,8 @@ const useStyles = makeStyles()((theme) => ({
             width: 68,
             height: 68,
             borderRadius: '50%',
-            border: `2px solid ${theme.palette.maskColor.main}`,
-            borderTopColor: theme.palette.maskColor.second,
+            border: `2px solid ${theme.vars.palette.maskColor.main}`,
+            borderTopColor: theme.vars.palette.maskColor.second,
             animation: 'spinner 2s linear infinite',
         },
     },
@@ -92,7 +92,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     } = useBackupFormState()
     const { errors, isDirty, isValid } = formState
     const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { updateUser } = UserContext.useContainer()
     const [{ loading: uploadLoading, value }, handleUploadBackup] = useAsyncFn(
@@ -120,13 +120,13 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 controllerRef.current = controller
                 await onUpload?.(encrypted, controller.signal)
                 updateUser({ cloudBackupAt: format(new Date(), 'yyyy-MM-dd HH:mm:ss') })
-                showSnackbar(<Trans>Backup Successful</Trans>, {
+                enqueueSnackbar(<Trans>Backup Successful</Trans>, {
                     variant: 'success',
-                    message: <Trans>Data backed up successfully!</Trans>,
+                    detail: <Trans>Data backed up successfully!</Trans>,
                 })
                 onClose()
             } catch (error) {
-                showSnackbar(<Trans>Backup Failed</Trans>, { variant: 'error' })
+                enqueueSnackbar(<Trans>Backup Failed</Trans>, { variant: 'error' })
                 onClose()
                 if ((error as any).status === 400) navigate(DashboardRoutes.BackupCloud, { replace: true })
             }
@@ -137,7 +137,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             encryptWithAccount,
             account,
             onUpload,
-            showSnackbar,
+            enqueueSnackbar,
             onClose,
             setError,
             _,
@@ -166,7 +166,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 </Box>
             )
         return !loading && previewInfo ?
-                <Box display="flex" flexDirection="column">
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <PersonasBackupPreview info={previewInfo} />
 
                     <Controller
@@ -208,14 +208,15 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         />
                     :   null}
                     {isUpload ?
-                        <Typography color={theme.palette.maskColor.danger} fontSize={14} lineHeight="18px">
+                        <Typography
+                            sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, lineHeight: '18px' }}>
                             <Trans>
                                 This will overwrite the existing cloud backup with the local data, this cannot be undo.
                             </Trans>
                         </Typography>
                     :   null}
                 </Box>
-            :   <LoadingStatus minHeight={320} />
+            :   <LoadingStatus sx={{ minHeight: 320 }} />
     }, [
         uploadLoading,
         classes.container,
@@ -227,7 +228,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         setBackupWallets,
         hasPassword,
         isUpload,
-        theme.palette.maskColor.danger,
+        theme.vars.palette.maskColor.danger,
         _,
         errors.backupPassword?.message,
         errors.paymentPassword?.message,

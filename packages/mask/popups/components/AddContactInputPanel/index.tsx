@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
     },
     toText: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         fontWeight: 700,
         height: 40,
@@ -33,11 +33,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         paddingRight: '0px !important',
         '&&::placeholder': {
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
         },
     },
     save: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginRight: 4,
     },
     endAdornment: {
@@ -49,22 +49,22 @@ const useStyles = makeStyles()((theme) => ({
     receiver: {
         display: 'flex',
         alignItems: 'flex-start',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 13,
     },
     validation: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         fontSize: 14,
     },
     warning: {
-        color: theme.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.warn,
         fontSize: 14,
     },
     fieldWrapper: {
         flex: 1,
     },
     linkOut: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginLeft: 4,
         cursor: 'pointer',
     },
@@ -109,7 +109,10 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
     const shouldShowAddress = !!address && address !== userInput
 
     return (
-        <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
+        <Box
+            {...props}
+            className={cx(classes.receiverPanel, props.className)}
+            sx={[{ padding: 2 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}>
             {isManage ? null : (
                 <Typography className={classes.toText}>
                     <Trans>To</Trans>
@@ -120,33 +123,35 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
                     placeholder={t`Ens or Address(0x)`}
                     value={userInput}
                     onChange={(ev) => setUserInput(ev.target.value)}
-                    wrapperProps={{ className: classes.input }}
+                    className={classes.input}
                     autoFocus={autoFocus}
-                    InputProps={{
-                        spellCheck: false,
-                        endAdornment:
-                            addable ?
-                                <div className={classes.endAdornment} onClick={openAddContactModal}>
-                                    <Typography className={classes.save}>
-                                        <Trans>Save</Trans>
-                                    </Typography>
-                                    <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
-                                </div>
-                            :   undefined,
-                        classes: { input: classes.inputText },
+                    slotProps={{
+                        input: {
+                            spellCheck: false,
+                            endAdornment:
+                                addable ?
+                                    <div className={classes.endAdornment} onClick={openAddContactModal}>
+                                        <Typography className={classes.save}>
+                                            <Trans>Save</Trans>
+                                        </Typography>
+                                        <Icons.AddUser size={18} color={theme.vars.palette.maskColor.main} />
+                                    </div>
+                                :   undefined,
+                            classes: { input: classes.inputText },
+                        },
                     }}
                 />
                 {inputWarningMessage && !addressValidationMessage ?
-                    <Typography className={classes.warning} mt={1}>
+                    <Typography className={classes.warning} sx={{ mt: 1 }}>
                         {inputWarningMessage}
                     </Typography>
                 :   null}
                 {addressValidationMessage ?
-                    <Typography className={classes.validation} mt={1}>
+                    <Typography className={classes.validation} sx={{ mt: 1 }}>
                         {addressValidationMessage}
                     </Typography>
                 : shouldShowAddress ?
-                    <Typography className={classes.receiver} mt={1}>
+                    <Typography className={classes.receiver} sx={{ mt: 1 }}>
                         {address}
                         <Icons.LinkOut
                             size={18}

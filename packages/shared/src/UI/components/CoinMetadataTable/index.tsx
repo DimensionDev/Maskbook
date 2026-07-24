@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         border: 'none',
     },
     label: {
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         fontSize: 14,
         whiteSpace: 'nowrap',
         textAlign: 'left',
@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(0.25),
         whiteSpace: 'nowrap',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         '&:last-child': {
             paddingRight: 0,
@@ -66,8 +66,8 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        background: theme.palette.maskColor.bottom,
-        boxShadow: theme.palette.maskColor.bottomBg,
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
     },
     item: {
@@ -132,7 +132,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                 horizontal: 'right',
             },
             classes: { paper: classes.menu, list: classes.list },
-            MenuListProps: { classes: { root: classes.item } },
+            slotProps: { list: { classes: { root: classes.item } } },
         },
     )
 
@@ -144,7 +144,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
     return (
         <Stack>
             <Stack>
-                <Typography fontSize={14} fontWeight={700}>
+                <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
                     <Trans>Info</Trans>
                 </Typography>
             </Stack>
@@ -162,9 +162,12 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                     {contracts[0].address ?
                                         <Stack
                                             direction="row"
-                                            justifyContent="flex-end"
-                                            height={18}
-                                            style={{ position: 'relative', right: -5 }}>
+                                            sx={{
+                                                justifyContent: 'flex-end',
+                                                height: 18,
+                                                position: 'relative',
+                                                right: '-5px',
+                                            }}>
                                             <ContractSection
                                                 pluginID={contracts[0].pluginID}
                                                 chainId={contracts[0].chainId}
@@ -198,7 +201,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                                     key={i}
                                                     href={x}
                                                     LinkProps={{ className: classes.link }}
-                                                    TypographyProps={{ fontWeight: 700, fontSize: 14 }}
+                                                    TypographyProps={{ sx: { fontWeight: 700, fontSize: 14 } }}
                                                 />
                                             ))}
                                         </div>
@@ -215,13 +218,15 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                 </TableCell>
                                 <TableCell className={classes.cellValue} align="right">
                                     <Stack
-                                        height="100%"
-                                        display="flex"
                                         direction="row"
-                                        justifyContent="flex-end"
-                                        flexWrap="wrap"
-                                        alignItems="center"
-                                        gap={1}>
+                                        sx={{
+                                            height: '100%',
+                                            display: 'flex',
+                                            justifyContent: 'flex-end',
+                                            flexWrap: 'wrap',
+                                            alignItems: 'center',
+                                            gap: 1,
+                                        }}>
                                         {trending.coin.community_urls.map((x) =>
                                             brands[x.type] ?
                                                 <Linking
@@ -251,7 +256,7 @@ export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton
     return (
         <Stack>
             <Stack>
-                <Typography fontSize={14} fontWeight={700}>
+                <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
                     <Trans>Info</Trans>
                 </Typography>
             </Stack>

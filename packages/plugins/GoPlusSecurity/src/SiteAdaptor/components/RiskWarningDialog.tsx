@@ -25,18 +25,21 @@ const useStyles = makeStyles()((theme) => ({
     },
     warningTitle: {
         marginTop: '22px',
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         fontSize: '24px',
         fontWeight: '600',
     },
     tokenInfo: {
         marginTop: '16px',
-        backgroundColor: theme.palette.mode === 'light' ? '#f9f9f9' : '#1c1c1c',
+        backgroundColor: '#f9f9f9',
+        ...theme.applyStyles('dark', {
+            backgroundColor: '#1c1c1c',
+        }),
         borderRadius: '8px',
         padding: '12px',
     },
     link: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -44,10 +47,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     actions: {
         padding: '16px',
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         justifyContent: 'space-between',
         flexGrow: 1,
     },
@@ -91,16 +94,18 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
             fullWidth
             title={<Trans>Confirm swap risk</Trans>}>
             <DialogContent className={classes.content}>
-                <Stack alignItems="center">
+                <Stack sx={{ alignItems: 'center' }}>
                     <Icons.SecurityRisk size={68} />
                     <Typography className={classes.warningTitle}>
                         <Trans>Risk Warning</Trans>
                     </Typography>
                 </Stack>
-                <Stack marginTop="51px">
+                <Stack sx={{ marginTop: '51px' }}>
                     <Trans>
-                        <Typography color={(theme) => theme.palette.maskColor.danger}>Dear Users,</Typography>
-                        <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
+                        <Typography sx={{ color: (theme) => theme.vars.palette.maskColor.danger }}>
+                            Dear Users,
+                        </Typography>
+                        <Typography sx={{ color: (theme) => theme.vars.palette.maskColor.danger, marginTop: '16px' }}>
                             Clicking the confirm button means that you agree to take the potential risks and proceed
                             with the transaction.
                         </Typography>

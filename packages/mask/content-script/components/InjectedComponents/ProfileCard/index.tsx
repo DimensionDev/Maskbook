@@ -44,11 +44,11 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             overscrollBehavior: 'contain',
             borderRadius: theme.spacing(1.5),
-            boxShadow: theme.palette.shadow.popup,
-            backgroundColor: theme.palette.maskColor.bottom,
+            boxShadow: theme.vars.palette.shadow.popup,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
         },
         header: {
-            background: theme.palette.maskColor.modalTitleBg,
+            background: theme.vars.palette.maskColor.modalTitleBg,
             padding: theme.spacing(2, 2, 0, 2),
             boxSizing: 'border-box',
             flexShrink: 0,
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
         content: {
             position: 'relative',
             flexGrow: 1,
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             overflow: 'auto',
             scrollbarWidth: 'none',
             '::-webkit-scrollbar': {
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
             backdropFilter: 'blur(5px)',
             padding: theme.spacing(1.5),
             boxSizing: 'border-box',
@@ -93,13 +93,13 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: theme.spacing(0.25),
         },
         cardName: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontWeight: 700,
             marginRight: 'auto',
             marginLeft: theme.spacing(0.5),
         },
         powered: {
-            color: theme.palette.text.secondary,
+            color: theme.vars.palette.text.secondary,
             fontWeight: 700,
         },
     }
@@ -236,11 +236,13 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                             <Trans>
                                 Powered by{' '}
                                 <Typography
-                                    fontWeight={700}
-                                    fontSize="inherit"
                                     variant="body1"
                                     component="strong"
-                                    color={(theme) => theme.palette.text.primary}>
+                                    sx={{
+                                        color: (theme) => theme.vars.palette.text.primary,
+                                        fontWeight: 700,
+                                        fontSize: 'inherit',
+                                    }}>
                                     Mask Network
                                 </Typography>
                             </Trans>

@@ -1,6 +1,6 @@
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'
 import { useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -48,7 +48,7 @@ function ChangePaymentPasswordDrawer({
     const theme = useTheme()
     const { classes } = useStyles()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (newPassword !== confirmNewPassword) {
@@ -61,7 +61,7 @@ function ChangePaymentPasswordDrawer({
         }
         try {
             await Services.Wallet.changePassword(oldPassword, newPassword)
-            showSnackbar(<Trans>Payment password changed.</Trans>)
+            enqueueSnackbar(<Trans>Payment password changed.</Trans>, { variant: 'success' })
             rest.onClose?.()
         } catch (error) {
             setOriginalPasswordWrong((error as Error).message)
@@ -78,13 +78,15 @@ function ChangePaymentPasswordDrawer({
     return (
         <BottomDrawer {...rest} classes={{ title: classes.title }}>
             <Typography
-                fontWeight={700}
-                textAlign="center"
-                color={theme.palette.maskColor.third}
-                sx={{ marginTop: '12px' }}>
+                sx={{
+                    color: theme.vars.palette.maskColor.third,
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    marginTop: '12px',
+                }}>
                 <Trans>At least 6 characters</Trans>
             </Typography>
-            <Box display="flex" justifyContent="center" flexDirection="column">
+            <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
@@ -97,7 +99,7 @@ function ChangePaymentPasswordDrawer({
                         setOriginalPasswordWrong('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={inputProps}
+                    slotProps={{ input: inputProps }}
                 />
                 <PasswordField
                     sx={{ mt: 2 }}
@@ -110,7 +112,7 @@ function ChangePaymentPasswordDrawer({
                         setPasswordNotMatch('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={inputProps}
+                    slotProps={{ input: inputProps }}
                 />
                 <PasswordField
                     sx={{ mt: 2 }}
@@ -123,10 +125,10 @@ function ChangePaymentPasswordDrawer({
                         setPasswordNotMatch('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={inputProps}
+                    slotProps={{ input: inputProps }}
                 />
             </Box>
-            <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1.5} height={32}>
+            <Typography sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, mt: 1.5, height: 32 }}>
                 {passwordTooShort || passwordNotMatch || originalPasswordWrong}
             </Typography>
             <ActionButton loading={loading} disabled={loading} onClick={handleClick} sx={{ marginTop: '16px' }}>

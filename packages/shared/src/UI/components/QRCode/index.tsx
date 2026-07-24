@@ -19,7 +19,8 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 50,
     },
     info: {
-        color: theme.palette.mode === 'dark' ? blue[500] : blue[800],
+        color: blue[800],
+        ...theme.applyStyles('dark', { color: blue[500] }),
         extDecoration: 'underline',
         cursor: 'pointer',
     },

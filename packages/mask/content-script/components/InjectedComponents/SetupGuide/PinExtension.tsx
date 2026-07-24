@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { SetupGuideStep } from '@masknet/shared-base'
-import { MaskColorVar, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
 import { WizardDialog } from './WizardDialog.js'
@@ -24,8 +24,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         wordBreak: 'keep-all',
         '&,&:hover': {
-            color: `${MaskColorVar.twitterButtonText} !important`,
-            background: `${MaskColorVar.twitterButton} !important`,
+            color: `${theme.vars.palette.text.twitterButtonText} !important`,
+            background: `${theme.vars.palette.text.twitterButton} !important`,
         },
     },
     tip: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     line: {
         width: 100,
         height: 1,
-        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
+        borderTop: `dashed 1px ${theme.vars.palette.maskColor.setupGuideBorder}`,
     },
     name: {
         fontSize: 16,

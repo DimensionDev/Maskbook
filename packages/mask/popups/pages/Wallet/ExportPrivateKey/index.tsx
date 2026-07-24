@@ -37,16 +37,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     panel: {
         padding: theme.spacing(0),
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         flex: 1,
         overflow: 'auto',
     },
     iconWrapper: {
         height: 120,
         background:
-            theme.palette.mode === 'light' ?
-                'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.20) 0%, rgba(59, 153, 252, 0.20) 100%)'
-            :   'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
+            'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.20) 0%, rgba(59, 153, 252, 0.20) 100%)',
+        ...theme.applyStyles('dark', {
+            background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
+        }),
         borderRadius: 8,
         display: 'flex',
         justifyContent: 'center',
@@ -122,14 +123,19 @@ export const Component = memo(function ExportPrivateKey() {
                         </MaskTabList>
                 }
             />
-            <Box p={2} display="flex" flexDirection="column" rowGap={2} flex={1}>
+            <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', rowGap: 2, flex: 1 }}>
                 {!getMnemonicLoading && mnemonic ?
                     <TabPanel className={classes.panel} value={TabType.Mnemonic}>
                         <Typography sx={{ fontSize: 14, lineHeight: '18px', fontWeight: 700 }}>
                             <Trans>Write down mnemonic words</Trans>
                         </Typography>
                         <Typography
-                            sx={{ py: 2, color: theme.palette.maskColor.second, fontSize: 14, lineHeight: '18px' }}>
+                            sx={{
+                                py: 2,
+                                color: theme.vars.palette.maskColor.second,
+                                fontSize: 14,
+                                lineHeight: '18px',
+                            }}>
                             <Trans>
                                 Please write down the following words in correct order. Keep it safe and do not share
                                 with anyone!
@@ -143,12 +149,14 @@ export const Component = memo(function ExportPrivateKey() {
                         <Trans>Click on the down-arrow to see the private key.</Trans>
                     </Typography>
                     <Box
-                        display="flex"
-                        flexDirection="column"
-                        mt={2}
-                        rowGap={2}
-                        maxHeight="450px"
-                        overflow="auto"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mt: 2,
+                            rowGap: 2,
+                            maxHeight: '450px',
+                            overflow: 'auto',
+                        }}
                         data-hide-scrollbar>
                         {(
                             wallet?.mnemonicId &&
@@ -167,7 +175,7 @@ export const Component = memo(function ExportPrivateKey() {
                     <Box className={classes.iconWrapper}>
                         <Icons.EncryptedFiles size={36} />
                     </Box>
-                    <Typography color={theme.palette.maskColor.danger}>
+                    <Typography sx={{ color: theme.vars.palette.maskColor.danger }}>
                         <Trans>
                             This JSON file is encrypted with your current payment password. The same password is
                             required for decryption when importing this wallet.

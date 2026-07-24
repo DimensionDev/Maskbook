@@ -18,7 +18,7 @@ const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, 
         },
         menuItem: {
             minHeight: 32,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             borderRadius: theme.spacing(1),
             padding: 6,
             gap: theme.spacing(1),
@@ -74,7 +74,7 @@ const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, 
         },
         actionIcon: {
             marginLeft: theme.spacing(0.5),
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
         checkIcon: {
             marginLeft: 'auto',
@@ -176,8 +176,8 @@ export const RecipientSelect = memo(({ className }: Props) => {
                 disableScrollLock: true,
                 container: () => selectRef.current,
                 anchorEl: () => selectRef.current!,
-                BackdropProps: {
-                    invisible: true,
+                slotProps: {
+                    backdrop: { invisible: true },
                 },
             }}
             renderValue={(value) => {

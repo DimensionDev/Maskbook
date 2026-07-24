@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         borderRadius: 8,
         padding: theme.spacing(1.5),
     },
@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     avatar: {
         objectFit: 'cover',
@@ -111,7 +111,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(function Handler
         <Box className={classes.container}>
             <Box className={classes.description}>
                 <WalletIcon classes={{ mainIcon: classes.avatar }} size={36} mainIcon={avatar} />
-                <Box minWidth={0}>
+                <Box sx={{ minWidth: 0 }}>
                     <TextOverflowTooltip as={ShadowRootTooltip} placement="top" title={displayName}>
                         <Typography className={classes.name}>{displayName}</Typography>
                     </TextOverflowTooltip>

@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         borderRadius: 8,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
         position: 'relative',
         paddingLeft: 44,
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
         lineHeight: '16px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     editButton: {
         cursor: 'pointer',
@@ -132,11 +132,13 @@ export const Component = memo(function DeriveWallet() {
                             <Icons.CheckCircle className={classes.indicator} size={20} />
                         :   null}
                         <Icons.MaskBlue size={24} />
-                        <Box flexGrow={1} ml={1}>
+                        <Box sx={{ flexGrow: 1, ml: 1 }}>
                             <Typography className={classes.walletName}>{wallet.name}</Typography>
-                            <Box display="flex" flexDirection="row">
+                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                                 <Tooltip title={wallet.address} className={classes.walletAddress}>
-                                    <Typography mr="auto">{formatEthereumAddress(wallet.address, 4)}</Typography>
+                                    <Typography sx={{ mr: 'auto' }}>
+                                        {formatEthereumAddress(wallet.address, 4)}
+                                    </Typography>
                                 </Tooltip>
                                 <WalletBalance
                                     className={classes.balance}

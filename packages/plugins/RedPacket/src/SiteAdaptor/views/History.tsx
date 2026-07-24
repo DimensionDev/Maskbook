@@ -2,10 +2,10 @@ import { Trans } from '@lingui/react/macro'
 import { RoutePaths } from '@masknet/plugin-redpacket'
 import { ElementAnchor, EmptyStatus, LoadingStatus, RestorableScroll, useParamTab } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, MaskLightTheme } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskThemeProvider } from '@masknet/theme'
 import { useChainContext, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { ThemeProvider, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HistoryTabs } from '../../types.js'
@@ -93,24 +93,26 @@ export function History() {
     return (
         <RestorableScroll key={currentHistoryTab} scrollKey={`redpacket-history-${currentHistoryTab}`}>
             <div className={classes.container}>
-                {histories.map((history) => (
-                    <ThemeProvider key={history.redpacket_id} theme={MaskLightTheme}>
+                <MaskThemeProvider palette="light">
+                    {histories.map((history) => (
                         <RedPacketRecord
+                            key={history.redpacket_id}
                             history={history as FireflyRedPacketAPI.RedPacketSentInfo}
                             onlyView={currentHistoryTab === HistoryTabs.Claimed}
                             onSelect={
                                 pluginID === NetworkPluginID.PLUGIN_SOLANA ? solanaSelectRedpacket : selectRedPacket
                             }
                         />
-                    </ThemeProvider>
-                ))}
+                    ))}
+                </MaskThemeProvider>
                 {hasNextPage ?
-                    <ElementAnchor height={30} callback={() => fetchNextPage()}>
+                    <ElementAnchor sx={{ height: 30 }} callback={() => fetchNextPage()}>
                         {isFetching ?
                             <LoadingBase />
                         :   null}
                     </ElementAnchor>
-                :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
+                :   <Typography
+                        sx={{ color: (theme) => theme.vars.palette.maskColor.second, textAlign: 'center', py: 2 }}>
                         <Trans>No more data available.</Trans>
                     </Typography>
                 }

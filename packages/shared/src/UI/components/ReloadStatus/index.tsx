@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     text: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 700,
         lineHeight: '36px',
@@ -44,7 +44,10 @@ export const ReloadStatus = memo(function ReloadStatus({
 }: Props) {
     const { classes, cx } = useStyles()
     return (
-        <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
+        <Box
+            className={cx(classes.statusBox, className)}
+            {...rest}
+            sx={[{ p: 2 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             {hideMessage ?
                 <Typography className={classes.text}>{message ?? <Trans>Load failed</Trans>}</Typography>
             :   null}

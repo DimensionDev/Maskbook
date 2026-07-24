@@ -24,12 +24,12 @@ const useStyles = makeStyles<void, 'tokenIcon'>()((theme, _, ref) => ({
     },
     tokenIcon: {},
     amount: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '24px',
         fontWeight: 700,
     },
     price: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
@@ -55,7 +55,10 @@ export function TokenValue({ className, token, amount, ...rest }: Props) {
     return amount && token ?
             <div className={cx(classes.container, className)} {...rest}>
                 <div className={classes.token}>
-                    <Typography className={classes.amount} component="strong" fontWeight="700" fontSize="24px">
+                    <Typography
+                        className={classes.amount}
+                        component="strong"
+                        sx={{ fontWeight: '700', fontSize: '24px' }}>
                         {amount}
                     </Typography>
                     <TokenIcon

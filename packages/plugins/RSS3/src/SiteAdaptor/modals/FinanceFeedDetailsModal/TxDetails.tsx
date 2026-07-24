@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(3),
     },
     key: {
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         fontSize: 14,
         width: 80,
     },
@@ -37,10 +37,10 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'break-all',
     },
     sep: {
-        borderTop: `1px dashed ${theme.palette.maskColor.secondaryLine}`,
+        borderTop: `1px dashed ${theme.vars.palette.maskColor.secondaryLine}`,
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
-        backgroundColor: theme.palette.divider,
+        backgroundColor: theme.vars.palette.divider,
     },
     title: {
         display: 'flex',
@@ -48,17 +48,17 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         margin: theme.spacing(3, 0),
     },
     tag: {
         padding: '4px 6px',
         borderRadius: 4,
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         fontSize: 13,
         lineHeight: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textTransform: 'capitalize',
     },
 }))
@@ -96,7 +96,7 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                     <Typography
                         className={classes.value}
                         component="div"
-                        style={{ display: 'block', color: theme.palette.maskColor.second, marginLeft: 4 }}>
+                        style={{ display: 'block', color: theme.vars.palette.maskColor.second, marginLeft: 4 }}>
                         {tx.hash}
                         <CopyButton text={tx.hash!} size={20} />
                     </Typography>
@@ -134,7 +134,7 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                     <Trans>From</Trans>
                 </Typography>
                 <Tooltip title={tx.from}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <AccountLabel address={tx.from} size={16} />
                         <CopyButton text={tx.from} size={20} />
                     </Typography>
@@ -145,7 +145,7 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                     <Trans>To</Trans>
                 </Typography>
                 <Tooltip title={tx.to}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <AccountLabel address={tx.to} size={16} /> <CopyButton text={tx.to} size={20} />
                     </Typography>
                 </Tooltip>

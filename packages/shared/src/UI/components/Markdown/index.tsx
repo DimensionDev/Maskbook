@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         '& p, & li': {
             margin: 0,
             fontSize: 12,
-            color: theme.palette.text.secondary,
+            color: theme.vars.palette.text.secondary,
         },
         '& p + p': {
             marginTop: theme.spacing(0.5),
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
             maxWidth: '100%',
         },
         '& a': {
-            color: theme.palette.text.primary,
+            color: theme.vars.palette.text.primary,
         },
     },
 }))

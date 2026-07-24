@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTextField } from '@masknet/theme'
-import { alpha, Avatar, Box, Button, Checkbox, Radio, Typography } from '@mui/material'
+import { alpha, makeStyles, MaskTextField } from '@masknet/theme'
+import { Avatar, Box, Button, Checkbox, Radio, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { groupBy, sortBy } from 'lodash-es'
 import { memo, useMemo, useState } from 'react'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 12,
     },
     groupName: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginBottom: theme.spacing(1),
         paddingLeft: theme.spacing(0.5),
         fontSize: 14,
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     liquidityName: {
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         lineHeight: '18px',
         fontSize: 14,
     },
@@ -72,11 +72,11 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'content-box',
         display: 'flex',
         gap: theme.spacing(1.5),
-        backgroundColor: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 0px 20px rgba(255, 255, 255, 0.12)'
-            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        backgroundColor: alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         flexShrink: 0,
         flexGrow: 1,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 
@@ -142,11 +142,13 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                     placeholder="Search"
                     autoFocus
                     fullWidth
-                    InputProps={{
-                        style: { height: 40 },
-                        inputProps: { style: { paddingLeft: 4 } },
-                        startAdornment: <Icons.Search size={18} />,
-                        endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
+                    slotProps={{
+                        input: {
+                            style: { height: 40 },
+                            startAdornment: <Icons.Search size={18} />,
+                            endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
+                        },
+                        htmlInput: { style: { paddingLeft: 4 } },
                     }}
                     onChange={(e) => {
                         setKeyword(e.currentTarget.value)
@@ -175,9 +177,9 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                                                 checkedIcon={
                                                     <Icons.Checkbox
                                                         sx={{
-                                                            '--stroke-color': theme.palette.maskColor.bottom,
+                                                            '--stroke-color': theme.vars.palette.maskColor.bottom,
                                                         }}
-                                                        color={theme.palette.maskColor.main}
+                                                        color={theme.vars.palette.maskColor.main}
                                                         size={20}
                                                     />
                                                 }
@@ -215,18 +217,18 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                             setPendingDisabledDexIds(isSelectedAll ? liquidityList.map((x) => x.id) : EMPTY_LIST)
                         }}
                         checked={isSelectedAll}
-                        icon={<Icons.RadioButtonUnChecked size={18} color={theme.palette.maskColor.main} />}
+                        icon={<Icons.RadioButtonUnChecked size={18} color={theme.vars.palette.maskColor.main} />}
                         checkedIcon={
                             <Icons.RadioButtonChecked
                                 size={18}
-                                color={theme.palette.maskColor.main}
-                                sx={{ '--stroke-color': theme.palette.maskColor.bottom }}
+                                color={theme.vars.palette.maskColor.main}
+                                sx={{ '--stroke-color': theme.vars.palette.maskColor.bottom }}
                             />
                         }
                     />
                     <Typography>Select all</Typography>
                 </label>
-                <Box flexGrow={1}>
+                <Box sx={{ flexGrow: 1 }}>
                     <Button
                         fullWidth
                         disabled={!remains.length}

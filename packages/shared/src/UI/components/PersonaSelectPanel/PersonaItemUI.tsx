@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => {
         nickname: {
             fontSize: 16,
             lineHeight: '20px',
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => {
         fingerprint: {
             fontSize: 12,
             lineHeight: '16px',
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
         indicator: {
             display: 'inline-block',
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => {
             right: '5.84%',
             top: '5.84%',
             bottom: '77.62%',
-            border: `1px solid ${theme.palette.maskColor.bottom}`,
+            border: `1px solid ${theme.vars.palette.maskColor.bottom}`,
         },
     }
 })
@@ -58,8 +58,8 @@ export function PersonaItemUI(props: PersonaItemProps) {
     const { classes } = useStyles(undefined, { props })
 
     return (
-        <Stack direction="row" alignItems="center" gap={1} onClick={onClick}>
-            <Box flexGrow={0} position="relative">
+        <Stack direction="row" onClick={onClick} sx={{ alignItems: 'center', gap: 1 }}>
+            <Box sx={{ flexGrow: 0, position: 'relative' }}>
                 {data.avatar ?
                     <Avatar
                         src={data.avatar}
@@ -73,16 +73,19 @@ export function PersonaItemUI(props: PersonaItemProps) {
                 :   <EmojiAvatar value={data.persona.identifier.publicKeyAsHex} />}
                 {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.indicator} />}
             </Box>
-            <Stack flexGrow={1}>
+            <Stack sx={{ flexGrow: 1 }}>
                 <Typography className={classes.nickname}>{data.persona.nickname}</Typography>
                 <Typography className={classes.fingerprint}>
-                    <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
+                    <Stack
+                        component="span"
+                        direction="row"
+                        sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25 }}>
                         {formatPersonaFingerprint(data.persona.identifier.rawPublicKey, 4)}
                         <CopyButton size={14} text={data.persona.identifier.rawPublicKey} />
                     </Stack>
                 </Typography>
             </Stack>
-            <Stack flexGrow={0}>
+            <Stack sx={{ flexGrow: 0 }}>
                 {isSamePersona(currentPersona?.persona, data.persona) ?
                     <Icons.CheckCircle size={20} className={classes.checked} />
                 :   <Icons.RadioNo size={20} className={classes.unchecked} />}

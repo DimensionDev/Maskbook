@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
 import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
                 fontSize: 28,
                 fontFamily: props.fontFamily,
                 fontWeight: 700,
-                color: getMaskColor(theme).textPrimary,
+                color: theme.vars.palette.maskColor.textPrimary,
             },
         },
         button: {

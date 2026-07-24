@@ -6,7 +6,7 @@ import type {
     PersonaIdentifier,
     ProfileInformation,
 } from '@masknet/shared-base'
-import type { PaletteMode, Theme } from '@mui/material'
+import type { PaletteMode, ThemeOptions } from '@mui/material'
 import type { GrayscaleAlgorithm } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
@@ -211,12 +211,7 @@ export namespace SiteAdaptorUI {
     }
     export namespace Customization {
         export interface Define {
-            /**
-             * This is a React hook.
-             *
-             * Should follow the color scheme of the website.
-             */
-            useTheme?(baseTheme: Theme): Theme
+            getTheme?(themeSettings: ThemeSettings): ThemeOptions
             i18nOverwrite?: I18NOverwrite
             sharedComponentOverwrite?: SharedComponentOverwrite
             componentOverwrite?: ComponentOverwrite

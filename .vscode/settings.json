@@ -10,9 +10,6 @@
         "README.md": ".commitlintrc*, .ecrc, .node-version, .npm*, .prettier*, .unlock*, .ignore, CNAME, gulp*, LICENSE, lint-staged*, cspell*, svgo*, *.ts, crowdin*",
         "package.json": "pnpm-*.yaml, .pnpmfile.cjs"
     },
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
-    },
     "editor.tabSize": 4,
     "json.schemas": [
         {

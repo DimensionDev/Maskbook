@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     titleTailButton: {
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     profileItem: {
         padding: theme.spacing(1.5),
@@ -76,11 +76,11 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                         <div key={profile.identifier.toText()} className={classes.profileItem}>
                             <Avatar src={profile.avatar} />
                             <div>
-                                <Typography fontSize={14} fontWeight={700}>
+                                <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
                                     @{profile.identifier.userId}
                                 </Typography>
                                 {profile.nickname ?
-                                    <Typography fontSize={12} color="text.secondary">
+                                    <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
                                         {profile.nickname}
                                     </Typography>
                                 :   null}

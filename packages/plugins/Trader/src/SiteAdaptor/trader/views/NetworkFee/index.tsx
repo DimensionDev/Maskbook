@@ -37,10 +37,10 @@ const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, 
     },
     box: {
         borderRadius: theme.spacing(1.5),
-        border: `1px solid ${theme.palette.maskColor.secondaryMain}`,
+        border: `1px solid ${theme.vars.palette.maskColor.secondaryMain}`,
         transition: 'border 0.2s ease',
         [`&.${refs.active}`]: {
-            border: `1px solid ${theme.palette.maskColor.main}`,
+            border: `1px solid ${theme.vars.palette.maskColor.main}`,
         },
     },
     option: {
@@ -68,7 +68,7 @@ const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, 
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     gasWarning: {},
     gasOk: {},
@@ -76,12 +76,12 @@ const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, 
         fontWeight: 400,
         fontSize: 13,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         [`&.${refs.gasWarning}`]: {
-            color: theme.palette.maskColor.warn,
+            color: theme.vars.palette.maskColor.warn,
         },
         [`&.${refs.gasOk}`]: {
-            color: theme.palette.maskColor.success,
+            color: theme.vars.palette.maskColor.success,
         },
     },
     boxSubtitle: {
@@ -91,7 +91,7 @@ const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, 
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     gwei: {
         lineHeight: '20px',
@@ -103,26 +103,26 @@ const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, 
         fontSize: 13,
         fontWeight: 400,
         padding: theme.spacing(1.5),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(1.5),
         lineHeight: '18px',
-        borderTop: `1px solid ${theme.palette.maskColor.line}`,
+        borderTop: `1px solid ${theme.vars.palette.maskColor.line}`,
     },
     fieldName: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     fieldNote: {
         fontSize: 13,
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginLeft: theme.spacing(1.5),
     },
     error: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         fontSize: 13,
         lineHeight: '18px',
     },
@@ -233,7 +233,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     setPendingGasConfig(config)
                     navigate(-1)
                 }}>
-                <Icons.Bike size={30} color={theme.palette.maskColor.danger} />
+                <Icons.Bike size={30} color={theme.vars.palette.maskColor.danger} />
                 <div className={classes.boxMain}>
                     <Typography className={classes.boxTitle} variant="h2">
                         <Trans>Slow</Trans>
@@ -271,7 +271,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     setPendingGasConfig(config)
                     navigate(-1)
                 }}>
-                <Icons.Car size={30} color={theme.palette.maskColor.main} />
+                <Icons.Car size={30} color={theme.vars.palette.maskColor.main} />
                 <div className={classes.boxMain}>
                     <Typography className={classes.boxTitle} variant="h2">
                         <Trans>Average</Trans>
@@ -305,7 +305,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     setPendingGasConfig(config)
                     navigate(-1)
                 }}>
-                <Icons.Rocket size={30} color={theme.palette.maskColor.success} />
+                <Icons.Rocket size={30} color={theme.vars.palette.maskColor.success} />
                 <div className={classes.boxMain}>
                     <Typography className={classes.boxTitle} variant="h2">
                         <Trans>Fast</Trans>
@@ -369,7 +369,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     <div className={classes.boxContent}>
                         {isSupport1559 ?
                             <>
-                                <Box display="flex" alignItems="center">
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography className={classes.fieldName}>
                                         <Trans>Max base fee</Trans>
                                     </Typography>
@@ -394,10 +394,12 @@ export const NetworkFee = memo(function NetworkFee() {
                                                         setValue('baseFee', value)
                                                         field.onChange(e)
                                                     }}
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                            <Typography className={classes.gwei}>Gwei</Typography>
-                                                        ),
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: (
+                                                                <Typography className={classes.gwei}>Gwei</Typography>
+                                                            ),
+                                                        },
                                                     }}
                                                 />
                                                 {fieldState.error ?
@@ -430,10 +432,12 @@ export const NetworkFee = memo(function NetworkFee() {
                                                         setValue('priorityFee', value)
                                                         field.onChange(e)
                                                     }}
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                            <Typography className={classes.gwei}>Gwei</Typography>
-                                                        ),
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: (
+                                                                <Typography className={classes.gwei}>Gwei</Typography>
+                                                            ),
+                                                        },
                                                     }}
                                                 />
                                                 {fieldState.error ?
@@ -447,7 +451,7 @@ export const NetworkFee = memo(function NetworkFee() {
                                 />
                             </>
                         :   <>
-                                <Box display="flex" alignItems="center">
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography className={classes.fieldName}>
                                         <Trans>Gas Price</Trans>
                                     </Typography>
@@ -469,10 +473,12 @@ export const NetworkFee = memo(function NetworkFee() {
                                                         setValue('gasPrice', value)
                                                         field.onChange(e)
                                                     }}
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                            <Typography className={classes.gwei}>Gwei</Typography>
-                                                        ),
+                                                    slotProps={{
+                                                        input: {
+                                                            endAdornment: (
+                                                                <Typography className={classes.gwei}>Gwei</Typography>
+                                                            ),
+                                                        },
                                                     }}
                                                 />
                                                 {fieldState.error ?

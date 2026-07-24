@@ -23,7 +23,6 @@ const resolveThemeColor = createLookupTableResolver<TwitterBaseAPI.ThemeColor, s
 const resolveThemeMode = createLookupTableResolver<TwitterBaseAPI.ThemeMode, ThemeMode>(
     {
         [TwitterBaseAPI.ThemeMode.Dark]: ThemeMode.Dark,
-        [TwitterBaseAPI.ThemeMode.Dim]: ThemeMode.Dark,
         [TwitterBaseAPI.ThemeMode.Light]: ThemeMode.Light,
     },
     ThemeMode.Light,
@@ -54,7 +53,6 @@ async function resolveThemeSettingsInner(
             color: userSettings.themeColor ? resolveThemeColor(userSettings.themeColor) : ref.value.color,
             size: userSettings.scale ? resolveFontSize(userSettings.scale) : ref.value.size,
             mode: userSettings.themeBackground ? resolveThemeMode(userSettings.themeBackground) : ref.value.mode,
-            isDim: userSettings.themeBackground === TwitterBaseAPI.ThemeMode.Dim,
         }
     }
 

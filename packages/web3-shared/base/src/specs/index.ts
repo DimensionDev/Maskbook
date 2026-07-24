@@ -219,7 +219,6 @@ export interface ThemeSettings {
     size: FontSize
     color: string
     mode: ThemeMode
-    isDim: boolean
 }
 
 export interface Identity {

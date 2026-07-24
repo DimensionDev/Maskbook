@@ -23,10 +23,10 @@ import { MoreMenu } from './MoreMenu/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tableContainer: {
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
         overflow: 'hidden',
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
     },
     table: {
         borderRadius: 8,
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         borderSpacing: 0,
     },
     tableHeadCell: {
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
@@ -47,16 +47,16 @@ const useStyles = makeStyles()((theme) => ({
         height: 42,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         verticalAlign: 'middle',
     },
     cellText: {
         fontSize: 14,
     },
     actionButton: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         '&:hover': {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
     },
     actions: {
@@ -73,14 +73,14 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         borderRadius: 8,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
     },
     actionLabel: {
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     fileName: {
         display: 'flex',
@@ -160,7 +160,7 @@ export const GoogleDriveFileTable = memo<GoogleDriveFileTableProps>(function Goo
                                                 size={20}
                                                 checked={selectedFileId === file.id}
                                                 onClick={() => onSelect?.(file)}
-                                                uncheckedColor={theme.palette.maskColor.secondaryLine}
+                                                uncheckedColor={theme.vars.palette.maskColor.secondaryLine}
                                             />
                                         :   null}
                                         {file.name}
@@ -212,7 +212,7 @@ export const GoogleDriveFileTable = memo<GoogleDriveFileTableProps>(function Goo
                 :   <TableBody>
                         <TableRow>
                             <TableCell colSpan={4}>
-                                <EmptyStatus height="300px">
+                                <EmptyStatus sx={{ height: '300px' }}>
                                     <Trans>No backups found</Trans>
                                 </EmptyStatus>
                             </TableCell>

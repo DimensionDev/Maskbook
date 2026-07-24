@@ -12,13 +12,12 @@ import { Footer } from './components/Footer.js'
 import { NewsList } from './components/NewsList.js'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         calendar: {
             display: 'flex',
             flexDirection: 'column',
             borderRadius: '12px',
-            border: `1px solid ${theme.palette.maskColor.line}`,
+            border: `1px solid ${theme.vars.palette.maskColor.line}`,
             position: 'relative',
             marginBottom: '20px',
         },
@@ -28,9 +27,10 @@ const useStyles = makeStyles()((theme) => {
         },
         tabList: {
             background:
-                isDark ?
-                    'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.06) 100%)'
-                :   'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.80) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.20) 0%, rgba(69, 163, 251, 0.20) 100%), #FFF',
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.80) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.20) 0%, rgba(69, 163, 251, 0.20) 100%), #FFF',
+            ...theme.applyStyles('dark', {
+                background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.06) 100%)',
+            }),
             padding: '8px 16px 0 16px',
             borderRadius: '12px 12px 0 0',
         },

@@ -16,12 +16,12 @@ export function ChangePaymentPassword() {
                 })
             }>
             <Box className={classes.itemBox}>
-                <Icons.Lock size={20} color={theme.palette.maskColor.second} />
+                <Icons.Lock size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Change Payment Password</Trans>
                 </Typography>
             </Box>
-            <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+            <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
         </ListItem>
     )
 }

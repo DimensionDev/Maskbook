@@ -23,11 +23,11 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         actionButton: {
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.vars.palette.maskColor.dark,
             width: '100%',
             color: 'white',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
+                backgroundColor: theme.vars.palette.maskColor.dark,
             },
         },
     }

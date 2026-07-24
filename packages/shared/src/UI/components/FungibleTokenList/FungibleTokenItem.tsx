@@ -5,7 +5,7 @@ import { ActionButton, CheckBoxIndicator, LoadingBase, makeStyles } from '@maskn
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleTokenBalance, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
-import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Box, Link, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { FormattedBalance } from '../../wallet/index.js'
@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.spacing(1),
         backdropFilter: 'blur(16px)',
         '&:hover': {
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
         },
     },
     text: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         alignItems: 'center',
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     nameText: {
         maxWidth: 400,
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     balance: {
         fontSize: 16,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     importButton: {
         borderRadius: 99,
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
         left: theme.spacing(1),
     },
     link: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     dotLoadingWrapper: {
         display: 'flex',
@@ -187,9 +187,9 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
                 return (
                     <CheckBoxIndicator
                         className={enabled || selected ? undefined : classes.disabled}
-                        color={theme.palette.maskColor.primary}
+                        color={theme.vars.palette.maskColor.primary}
                         checked={selected}
-                        uncheckedColor={theme.palette.maskColor.secondaryLine}
+                        uncheckedColor={theme.vars.palette.maskColor.secondaryLine}
                     />
                 )
             }
@@ -220,9 +220,8 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
 
         return (
             <div style={style}>
-                <ListItem
+                <ListItemButton
                     title={address}
-                    button
                     className={`${classes.list} dashboard token-list`}
                     onClick={() => {
                         if (mode === TokenListMode.List) {
@@ -233,7 +232,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
                     }}
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
-                        <Box position="relative">
+                        <Box sx={{ position: 'relative' }}>
                             <TokenIcon
                                 pluginID={pluginID}
                                 chainId={chainId}
@@ -289,7 +288,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
                             {action}
                         </Typography>
                     </ListItemText>
-                </ListItem>
+                </ListItemButton>
             </div>
         )
     })

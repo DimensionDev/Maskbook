@@ -10,13 +10,13 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'sans-serif',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         marginRight: 12,
     },
     divider: {
         width: '100%',
         height: 1,
-        background: theme.palette.divider,
+        background: theme.vars.palette.divider,
         margin: '8px 0',
     },
 }))

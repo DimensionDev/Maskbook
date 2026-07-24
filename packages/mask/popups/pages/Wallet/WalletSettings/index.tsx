@@ -80,7 +80,7 @@ export const Component = memo(function WalletSettings() {
                         <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
                     </div>
                 </Box>
-                <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
+                <Icons.ArrowDownRound color={theme.vars.palette.maskColor.white} size={24} />
             </Box>
             <List dense className={classes.list} data-hide-scrollbar>
                 <Rename />

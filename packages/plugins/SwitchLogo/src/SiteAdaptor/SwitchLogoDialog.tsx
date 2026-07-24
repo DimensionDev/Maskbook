@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 24,
     },
     iconButton: {
-        border: `1px solid ${theme.palette.maskColor.secondaryLine}`,
+        border: `1px solid ${theme.vars.palette.maskColor.secondaryLine}`,
         width: 170,
         height: 74,
         display: 'flex',
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
     },
     selected: {
-        border: `1px solid ${theme.palette.maskColor.highlight}`,
+        border: `1px solid ${theme.vars.palette.maskColor.highlight}`,
     },
     icons: {
         display: 'flex',
@@ -116,7 +116,7 @@ export const SwitchLogoDialog = memo(() => {
                         )}
                         onClick={() => onChange(SwitchLogoType.Classics)}>
                         <Icons.TwitterColored />
-                        <Typography fontSize={14} fontWeight={700}>
+                        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
                             <Trans>Classics Logo</Trans>
                         </Typography>
                     </Stack>
@@ -127,7 +127,7 @@ export const SwitchLogoDialog = memo(() => {
                         )}
                         onClick={() => onChange(SwitchLogoType.New)}>
                         <Icons.TwitterX />
-                        <Typography fontSize={14} fontWeight={700}>
+                        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
                             <Trans>New Logo</Trans>
                         </Typography>
                     </Stack>
@@ -144,10 +144,12 @@ export const SwitchLogoDialog = memo(() => {
                             }
                             label={
                                 <Typography
-                                    fontSize={14}
-                                    fontWeight={400}
-                                    lineHeight="18px"
-                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                    sx={{
+                                        fontSize: 14,
+                                        fontWeight: 400,
+                                        lineHeight: '18px',
+                                        color: (theme) => theme.vars.palette.maskColor.secondaryDark,
+                                    }}>
                                     <Trans>Share and recommend this feature after saving.</Trans>
                                 </Typography>
                             }
@@ -162,13 +164,15 @@ export const SwitchLogoDialog = memo(() => {
                 <Stack className={classes.powered_by}>
                     <Trans>
                         <Typography
-                            fontSize="14px"
-                            fontWeight={700}
-                            marginRight="5px"
-                            color={(theme) => theme.palette.maskColor.secondaryDark}>
+                            sx={{
+                                fontSize: '14px',
+                                fontWeight: 700,
+                                marginRight: '5px',
+                                color: (theme) => theme.vars.palette.maskColor.secondaryDark,
+                            }}>
                             Powered by{' '}
                         </Typography>
-                        <Typography fontSize="14px" fontWeight={700} marginRight="4px">
+                        <Typography sx={{ fontSize: '14px', fontWeight: 700, marginRight: '4px' }}>
                             Mask Network
                         </Typography>
                     </Trans>

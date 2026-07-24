@@ -12,13 +12,13 @@ export const useMarkdownStyles = makeStyles()((theme) => ({
             maxWidth: '100%',
         },
         a: {
-            color: theme.palette.maskColor.highlight,
+            color: theme.vars.palette.maskColor.highlight,
         },
         pre: {
             overflow: 'auto',
         },
         p: {
-            color: theme.palette.text.secondary,
+            color: theme.vars.palette.text.secondary,
         },
         '& p, & li': {
             fontSize: 14,

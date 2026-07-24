@@ -26,32 +26,32 @@ const useStyles = makeStyles()((theme) => ({
     },
     title: {
         fontSize: 16,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '20px',
     },
     introduction: {
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: theme.spacing(2),
         flexGrow: 1,
         marginBottom: 'auto',
     },
     footNote: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 16,
         marginTop: theme.spacing(2),
     },
     link: {
-        color: theme.palette.primary.main,
+        color: theme.vars.palette.primary.main,
     },
     actions: {
         padding: '16px',
         display: 'flex',
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         justifyContent: 'space-between',
         gap: theme.spacing(2),
         '& > :not(:first-of-type)': {
@@ -59,15 +59,15 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     cancelButton: {
-        color: theme.palette.maskColor.main,
-        backgroundColor: theme.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.thirdMain,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.thirdMain,
+            backgroundColor: theme.vars.palette.maskColor.thirdMain,
         },
     },
     confirmButton: {
-        color: theme.palette.maskColor.bottom,
-        backgroundColor: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.main,
     },
     button: {
         flexGrow: 1,

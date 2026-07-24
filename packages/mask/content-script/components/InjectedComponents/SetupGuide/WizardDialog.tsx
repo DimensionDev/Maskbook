@@ -51,8 +51,12 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(3),
         position: 'relative',
-        boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
-        border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
+        boxShadow: theme.shadows[4],
+        border: `none 1px ${theme.vars.palette.divider}`,
+        ...theme.applyStyles('dark', {
+            boxShadow: 'none',
+            border: `solid 1px ${theme.vars.palette.divider}`,
+        }),
         borderRadius: 20,
         [theme.breakpoints.down('sm')]: {
             position: 'fixed',
@@ -62,7 +66,7 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
             alignSelf: 'center',
             borderRadius: 0,
             boxShadow: 'none',
-            border: `solid 1px ${theme.palette.divider}`,
+            border: `solid 1px ${theme.vars.palette.divider}`,
             width: '100%',
         },
         userSelect: 'none',
@@ -74,7 +78,7 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     close: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         position: 'absolute',
         right: 10,
         top: 10,
@@ -105,7 +109,7 @@ export function WizardDialog(props: WizardDialogProps) {
     return (
         <Paper className={cx(classes.root, small ? 'small' : '')}>
             <header className={classes.header}>
-                <Typography color="textPrimary" variant="h3" fontSize={24}>
+                <Typography color="textPrimary" variant="h3" sx={{ fontSize: 24 }}>
                     {title}
                 </Typography>
             </header>

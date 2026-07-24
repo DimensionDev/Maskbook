@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     box: {
         position: 'relative',
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         padding: theme.spacing(1.5),
         borderRadius: 12,
         display: 'flex',
@@ -65,10 +65,10 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateX(-50%) rotate(90deg)',
         width: 32,
         height: 32,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: '50%',
-        color: theme.palette.maskColor.main,
-        backgroundColor: theme.palette.maskColor.bottom,
+        color: theme.vars.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         cursor: 'pointer',
     },
     token: {
@@ -90,11 +90,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     chain: {
         fontSize: 13,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
     },
     tokenStatus: {
@@ -109,7 +109,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tokenInput: {
         height: '100%',
@@ -117,7 +117,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         border: 'none',
         backgroundColor: 'transparent',
         outline: 'none',
@@ -127,7 +127,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '13px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         position: 'absolute',
         right: 0,
         bottom: 0,
@@ -136,8 +136,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 6px',
         fontSize: 12,
         lineHeight: '16px',
-        color: theme.palette.maskColor.bottom,
-        backgroundColor: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.main,
         borderRadius: 4,
         minWidth: 0,
     },
@@ -146,10 +146,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     footer: {
         flexShrink: 0,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)' }),
     },
 }))
 
@@ -231,11 +229,11 @@ export function TradeView() {
         <div className={classes.view}>
             <Box className={classes.container}>
                 <Box className={classes.box}>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                        <Typography lineHeight="18px" fontWeight="700" fontSize="14px">
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography sx={{ lineHeight: '18px', fontWeight: '700', fontSize: '14px' }}>
                             <Trans>From</Trans>
                         </Typography>
-                        <Box display="flex" flexDirection="row">
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
@@ -260,7 +258,7 @@ export function TradeView() {
                                         chainIconSize={12}
                                     />
                                 </Box>
-                                <Box display="flex" flexDirection="column">
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <Typography component="strong" className={classes.symbol}>
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
@@ -274,8 +272,8 @@ export function TradeView() {
                             </Box>
                         </Box>
                     </Box>
-                    <Box flexGrow={1}>
-                        <Box height="100%" position="relative">
+                    <Box sx={{ flexGrow: 1 }}>
+                        <Box sx={{ height: '100%', position: 'relative' }}>
                             {isLoadingFromTokenBalance ?
                                 <Box className={classes.tokenStatus}>
                                     <Icons.Wallet size={16} />
@@ -330,13 +328,11 @@ export function TradeView() {
                             setFromToken(toToken)
                             setToToken(fromToken)
                         }}>
-                        <Icons.BiArrow size={16} color={theme.palette.maskColor.main} />
+                        <Icons.BiArrow size={16} color={theme.vars.palette.maskColor.main} />
                     </Box>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                        <Typography lineHeight="18px" fontWeight="700" fontSize="14px">
-                            To
-                        </Typography>
-                        <Box display="flex" flexDirection="row">
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography sx={{ lineHeight: '18px', fontWeight: '700', fontSize: '14px' }}>To</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
@@ -355,7 +351,7 @@ export function TradeView() {
                                         chainIconSize={12}
                                     />
                                 </Box>
-                                <Box display="flex" flexDirection="column">
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                     <Typography component="strong" className={classes.symbol}>
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
@@ -369,8 +365,8 @@ export function TradeView() {
                             </Box>
                         </Box>
                     </Box>
-                    <Box flexGrow={1}>
-                        <Box height="100%" position="relative">
+                    <Box sx={{ flexGrow: 1 }}>
+                        <Box sx={{ height: '100%', position: 'relative' }}>
                             {toTokenBalance ?
                                 <Box className={classes.tokenStatus}>
                                     <Icons.Wallet size={16} />
@@ -391,11 +387,12 @@ export function TradeView() {
                                         <Typography
                                             component="span"
                                             className={classes.diff}
-                                            color={
-                                                isGreaterThan(priceDiff, 0) ?
-                                                    theme.palette.maskColor.success
-                                                :   theme.palette.maskColor.danger
-                                            }>
+                                            sx={{
+                                                color:
+                                                    isGreaterThan(priceDiff, 0) ?
+                                                        theme.vars.palette.maskColor.success
+                                                    :   theme.vars.palette.maskColor.danger,
+                                            }}>
                                             ({isGreaterThan(priceDiff, 0) ? '+' : ''}
                                             {priceDiff.toFixed(2)}%)
                                         </Typography>

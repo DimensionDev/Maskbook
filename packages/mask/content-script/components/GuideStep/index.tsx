@@ -17,11 +17,13 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'absolute',
-        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.3)' : 'rgba(110,118,125,.3)'}`,
+        boxShadow: '0 0 0 3000px rgba(0,0,0,.3)',
+        ...theme.applyStyles('dark', { boxShadow: '0 0 0 3000px rgba(110,118,125,.3)' }),
         borderRadius: 8,
     },
     noBoxShadowCover: {
-        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.2)' : 'rgba(110,118,125,.2)'}`,
+        boxShadow: '0 0 0 3000px rgba(0,0,0,.2)',
+        ...theme.applyStyles('dark', { boxShadow: '0 0 0 3000px rgba(110,118,125,.2)' }),
     },
     target: {
         background: 'transparent',
@@ -204,15 +206,13 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                                 :   'arrow-bottom'
                                             :   '',
                                         )}>
-                                        <Box paddingBottom="16px">
-                                            <Typography fontSize={20}>
+                                        <Box sx={{ paddingBottom: '16px' }}>
+                                            <Typography sx={{ fontSize: 20 }}>
                                                 {step}/{total}
                                             </Typography>
                                         </Box>
                                         <div>
-                                            <Typography fontSize={14} fontWeight={600}>
-                                                {tip}
-                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{tip}</Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
                                             {step === total ?

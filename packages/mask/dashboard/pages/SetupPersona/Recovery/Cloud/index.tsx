@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     toggleButton: {
         cursor: 'pointer',
@@ -30,10 +30,10 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 18,
         height: 34,
         gap: theme.spacing(1),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         display: 'inline-flex',
         padding: theme.spacing(1, 1.5),
-        backgroundColor: theme.palette.maskColor.input,
+        backgroundColor: theme.vars.palette.maskColor.input,
     },
 }))
 

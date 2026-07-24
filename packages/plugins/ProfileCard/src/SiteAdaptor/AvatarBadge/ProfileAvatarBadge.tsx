@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react'
 const useStyles = makeStyles()((theme) => ({
     badge: {
         padding: 0,
-        boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
+        boxShadow: `0 0 0 1px ${theme.vars.palette.maskColor.bottom}`,
     },
 }))
 

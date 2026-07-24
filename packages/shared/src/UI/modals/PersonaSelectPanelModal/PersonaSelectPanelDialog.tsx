@@ -18,7 +18,7 @@ const useStyles = makeStyles<{
             width: 384,
             height: 386,
             padding: theme.spacing(1),
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
             position: props.positionStyle.position,
             top: props.positionStyle.top,
             right: props.positionStyle.right,
@@ -31,7 +31,7 @@ const useStyles = makeStyles<{
             },
         },
         header: {
-            background: `${theme.palette.maskColor.bottom} !important`,
+            background: `${theme.vars.palette.maskColor.bottom} !important`,
         },
     }
 })

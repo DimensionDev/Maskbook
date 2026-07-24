@@ -46,8 +46,6 @@ export function getComputedUserSettings(): TwitterBaseAPI.UserSettings {
         switch (rgb.toLowerCase()) {
             case 'rgb(255, 255, 255)':
                 return TwitterBaseAPI.ThemeMode.Light
-            case 'rgb(21, 32, 43)':
-                return TwitterBaseAPI.ThemeMode.Dim
             case 'rgb(0, 0, 0)':
                 return TwitterBaseAPI.ThemeMode.Dark
             default:

@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: -3,
         bottom: -3,
-        border: `1px solid ${theme.palette.common.white}`,
+        border: `1px solid ${theme.vars.palette.common.white}`,
         borderRadius: '50%',
     },
 }))

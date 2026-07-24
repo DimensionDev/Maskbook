@@ -29,7 +29,7 @@ const useStyles = makeStyles<void, 'body'>()((theme, _, refs) => ({
         alignItems: 'center',
     },
     name: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         marginLeft: theme.spacing(1),
     },

@@ -34,27 +34,27 @@ function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOption
 const useStyles = makeStyles()((theme) => {
     return {
         unit: {
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
         },
         caption: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },
         alertIcon: {
-            color: `${theme.palette.maskColor.main} !important`,
+            color: `${theme.vars.palette.maskColor.main} !important`,
             width: 22,
             height: 22,
             padding: 0,
         },
         alertMessage: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: 14,
             fontWeight: 400,
             padding: 0,
         },
         alertStandardSuccess: {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
     }
 })
@@ -170,7 +170,7 @@ export function GasForm(props: GasFormProps) {
                     classes={{
                         icon: classes.alertIcon,
                         message: classes.alertMessage,
-                        standardSuccess: classes.alertStandardSuccess,
+                        colorSuccess: classes.alertStandardSuccess,
                     }}
                     icon={<Icons.Info />}>
                     <Trans>Current base fee is {formatCurrency(formatWeiToGwei(baseFeePerGas), '')} Gwei</Trans>
@@ -178,21 +178,23 @@ export function GasForm(props: GasFormProps) {
             :   null}
             <Grid container direction="row" spacing={2}>
                 {isEIP1559 ? null : (
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <Controller
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    InputProps={{
-                                        inputProps: {
+                                    slotProps={{
+                                        htmlInput: {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
-                                        type: 'number',
-                                        endAdornment: (
-                                            <Typography className={classes.unit}>
-                                                <Trans>Gwei</Trans>
-                                            </Typography>
-                                        ),
+                                        input: {
+                                            type: 'number',
+                                            endAdornment: (
+                                                <Typography className={classes.unit}>
+                                                    <Trans>Gwei</Trans>
+                                                </Typography>
+                                            ),
+                                        },
                                     }}
                                     value={isZero(gasPriceByUser ?? 0) ? gasPrice : gasPriceByUser}
                                     label={
@@ -213,16 +215,16 @@ export function GasForm(props: GasFormProps) {
                         />
                     </Grid>
                 )}
-                <Grid item xs={isEIP1559 ? 12 : 6}>
+                <Grid size={isEIP1559 ? 12 : 6}>
                     <Controller
                         render={({ field }) => (
                             <MaskTextField
                                 {...field}
-                                InputProps={{
-                                    inputProps: {
+                                slotProps={{
+                                    htmlInput: {
                                         pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                     },
-                                    type: 'number',
+                                    input: { type: 'number' },
                                 }}
                                 disabled={props.disableGasLimit}
                                 value={isZero(gasLimit) ? defaultGasLimit : new BigNumber(gasLimit).toString()}
@@ -246,21 +248,23 @@ export function GasForm(props: GasFormProps) {
             </Grid>
             {isEIP1559 ?
                 <Grid container direction="row" spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <Controller
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    InputProps={{
-                                        inputProps: {
+                                    slotProps={{
+                                        htmlInput: {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
-                                        type: 'number',
-                                        endAdornment: (
-                                            <Typography className={classes.unit}>
-                                                <Trans>Gwei</Trans>
-                                            </Typography>
-                                        ),
+                                        input: {
+                                            type: 'number',
+                                            endAdornment: (
+                                                <Typography className={classes.unit}>
+                                                    <Trans>Gwei</Trans>
+                                                </Typography>
+                                            ),
+                                        },
                                     }}
                                     value={
                                         isZero(maxPriorityFeePerGasByUser ?? 0) ? maxPriorityFeePerGas : (
@@ -284,21 +288,23 @@ export function GasForm(props: GasFormProps) {
                             name="maxPriorityFeePerGas"
                         />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={6}>
                         <Controller
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    InputProps={{
-                                        inputProps: {
+                                    slotProps={{
+                                        htmlInput: {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
-                                        type: 'number',
-                                        endAdornment: (
-                                            <Typography className={classes.unit}>
-                                                <Trans>Gwei</Trans>
-                                            </Typography>
-                                        ),
+                                        input: {
+                                            type: 'number',
+                                            endAdornment: (
+                                                <Typography className={classes.unit}>
+                                                    <Trans>Gwei</Trans>
+                                                </Typography>
+                                            ),
+                                        },
                                     }}
                                     value={isZero(maxFeePerGasByUser ?? 0) ? maxFeePerGas : maxFeePerGasByUser}
                                     label={

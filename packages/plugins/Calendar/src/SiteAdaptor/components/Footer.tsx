@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     poweredBy: {
         display: 'flex',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 700,
         gap: theme.spacing(0.5),
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     calendarText: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: '16px',
         fontWeight: 700,
         lineHeight: '20px',

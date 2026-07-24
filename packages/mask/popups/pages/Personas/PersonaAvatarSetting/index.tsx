@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AvatarEditor from 'react-avatar-editor'
 import { Box, Button, Slider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { NormalHeader } from '../../../components/index.js'
@@ -17,7 +17,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     uploadBox: {
-        background: theme.palette.maskColor.whiteBlue,
+        background: theme.vars.palette.maskColor.whiteBlue,
         padding: theme.spacing(3),
         borderRadius: 8,
         display: 'flex',
@@ -29,21 +29,22 @@ const useStyles = makeStyles()((theme) => ({
         width: 54,
         height: 54,
         borderRadius: '50%',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        boxShadow: `0px 4px 6px 0px ${
-            theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'
-        }`,
+        boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.10)',
+        }),
     },
     typo: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         textAlign: 'center',
         lineHeight: '18px',
     },
     strong: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         textAlign: 'center',
         lineHeight: '18px',
     },
@@ -60,7 +61,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     const queryClient = useQueryClient()
     const [avatarLoaded, setAvatarLoaded] = useState(false)
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { currentPersona, refreshAvatar } = PersonaContext.useContainer()
 
@@ -71,7 +72,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const handleSetFile = useCallback((file: File) => {
         if (file.size > MAX_FILE_SIZE) {
-            showSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
             return
         }
         setAvatarLoaded(false)
@@ -104,10 +105,10 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
             })
             refreshAvatar()
 
-            showSnackbar(<Trans>Avatar set successfully</Trans>)
+            enqueueSnackbar(<Trans>Avatar set successfully</Trans>, { variant: 'success' })
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
         }
     }, [file, currentPersona, refreshAvatar, queryClient])
 
@@ -117,7 +118,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         return (
             <Box>
                 <NormalHeader />
-                <Box p={2}>
+                <Box sx={{ p: 2 }}>
                     <AvatarEditor
                         ref={editorRef}
                         image={file}
@@ -151,9 +152,9 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     }
 
     return (
-        <Box flex={1} display="flex" flexDirection="column" overflow="auto" data-hide-scrollbar>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }} data-hide-scrollbar>
             <NormalHeader />
-            <Box p={2}>
+            <Box sx={{ p: 2 }}>
                 <Box className={classes.uploadBox} {...bound}>
                     <input
                         className={classes.file}

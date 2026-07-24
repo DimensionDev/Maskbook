@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(3),
     },
     key: {
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         fontSize: 14,
         width: 80,
     },
@@ -35,10 +35,10 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'break-all',
     },
     sep: {
-        borderTop: `1px dashed ${theme.palette.maskColor.secondaryLine}`,
+        borderTop: `1px dashed ${theme.vars.palette.maskColor.secondaryLine}`,
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
-        backgroundColor: theme.palette.divider,
+        backgroundColor: theme.vars.palette.divider,
     },
     title: {
         display: 'flex',
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         margin: theme.spacing(3, 0),
     },
     tags: {
@@ -56,11 +56,11 @@ const useStyles = makeStyles()((theme) => ({
     tag: {
         padding: '4px 6px',
         borderRadius: 4,
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         fontSize: 13,
         lineHeight: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textTransform: 'capitalize',
     },
     blockieIcon: {
@@ -100,7 +100,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
                     <Typography
                         className={classes.value}
                         component="div"
-                        style={{ display: 'block', color: theme.palette.maskColor.second, marginLeft: 4 }}>
+                        style={{ display: 'block', color: theme.vars.palette.maskColor.second, marginLeft: 4 }}>
                         {feed.id}
                         <CopyButton text={feed.id} size={20} />
                     </Typography>
@@ -159,9 +159,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
                     <Trans>From</Trans>
                 </Typography>
                 <Tooltip title={feed.from}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={feed.from} fontWeight={400} />
+                        <ReversedAddress address={feed.from} sx={{ fontWeight: 400 }} />
                         <CopyButton text={feed.from} size={20} />
                     </Typography>
                 </Tooltip>
@@ -171,9 +171,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
                     <Trans>To</Trans>
                 </Typography>
                 <Tooltip title={feed.to}>
-                    <Typography className={classes.value} gap={10} component="div">
+                    <Typography className={classes.value} sx={{ gap: 10 }} component="div">
                         <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={feed.to} fontWeight={400} />
+                        <ReversedAddress address={feed.to} sx={{ fontWeight: 400 }} />
                         <CopyButton text={feed.to} size={20} />
                     </Typography>
                 </Tooltip>

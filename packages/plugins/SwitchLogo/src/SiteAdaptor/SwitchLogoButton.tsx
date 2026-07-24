@@ -58,7 +58,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function SwitchLogoButton() {
-    const { classes, cx, theme } = useStyles()
+    const { classes, cx } = useStyles()
     const current = useLastRecognizedIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
     const isMinimalMode = useIsMinimalMode(PluginID.SwitchLogo)
@@ -74,7 +74,7 @@ export function SwitchLogoButton() {
         node.setHTMLUnsafe(
             logoType === SwitchLogoType.Classics && !isMinimalMode ? BlueBirdHTML : LetterHTML || defaultXIcon,
         )
-    }, [logoType, isMinimalMode, theme.palette.mode, theme.palette.primary.main])
+    }, [logoType, isMinimalMode])
 
     const onClick = useCallback(() => {
         if (isMinimalMode) return

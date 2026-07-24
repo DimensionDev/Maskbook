@@ -18,7 +18,6 @@ export const creator = {
                 size: FontSize.Normal,
                 mode: ThemeMode.Light,
                 color: ThemeColor.Blue,
-                isDim: false,
             },
             isEqual,
         ),

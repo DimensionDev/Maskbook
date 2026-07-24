@@ -8,10 +8,9 @@ import { CrossIsolationMessages, PopupRoutes } from '@masknet/shared-base'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         header: {
-            background: theme.palette.maskColor.modalTitleBg,
+            background: theme.vars.palette.maskColor.modalTitleBg,
             padding: theme.spacing(2),
         },
         icon: {
@@ -30,7 +29,7 @@ const useStyles = makeStyles()((theme) => {
         qrcode: {
             width: 250,
             height: 250,
-            boxShadow: theme.palette.maskColor.bottomBg,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
             borderRadius: theme.spacing(2),
             overflow: 'hidden',
         },
@@ -47,9 +46,11 @@ const useStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)',
+                }),
             },
             '&:after': {
                 position: 'absolute',
@@ -60,16 +61,18 @@ const useStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)',
+                }),
             },
         },
         qrcodeContainer: {
             width: 282,
             margin: theme.spacing(2, 'auto', 0),
             padding: theme.spacing(2),
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             position: 'relative',
             zIndex: 10,
         },
@@ -77,7 +80,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 12,
             marginTop: 10,
             textAlign: 'center',
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
     }
 })

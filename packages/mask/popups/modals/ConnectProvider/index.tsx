@@ -3,7 +3,7 @@ import { useAsyncFn, useMount } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Button, Typography } from '@mui/material'
 import { delay, timeout } from '@masknet/kit'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -19,7 +19,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
     tips: {
         fontSize: 14,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontWeight: 700,
         lineHeight: '18px',
         textAlign: 'center',
@@ -46,14 +46,14 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
                 width: 56,
                 height: 56,
                 borderRadius: '50%',
-                border: `2px solid ${theme.palette.maskColor.main}`,
-                borderTopColor: theme.palette.maskColor.second,
+                border: `2px solid ${theme.vars.palette.maskColor.main}`,
+                borderTopColor: theme.vars.palette.maskColor.second,
                 animation: 'spinner 2s linear infinite',
             },
         }),
 
         ...(timeout && {
-            border: `2px solid ${theme.palette.maskColor.danger}`,
+            border: `2px solid ${theme.vars.palette.maskColor.danger}`,
             borderRadius: '50%',
             padding: 10,
         }),
@@ -66,7 +66,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     const location = useLocation()
     const { pluginID } = useNetworkContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { Provider } = useWeb3State<void, NetworkPluginID.PLUGIN_EVM>(pluginID)
 
@@ -116,7 +116,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             if (Error.isError(error)) {
                 if (error.message === 'timeout') throw error
                 if (error.message.includes('reject') || error.message.includes('cancel')) {
-                    showSnackbar(<Trans>Connecting operation cancelled in third-party wallet.</Trans>, {
+                    enqueueSnackbar(<Trans>Connecting operation cancelled in third-party wallet.</Trans>, {
                         variant: 'warning',
                     })
                     handleClose()
@@ -148,7 +148,15 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                     <Trans>Connecting your {providerType} wallet</Trans>
                 :   <Trans>Not found your {providerType} wallet</Trans>}
             </Typography>
-            <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
+            <Box
+                sx={{
+                    mt: 4,
+                    p: 1.5,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}>
                 {provider?.icon ?
                     <Box className={classes.icon}>
                         <img src={provider.icon} style={{ width: 32, height: 32 }} />
@@ -161,7 +169,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 :   null}
                 {providerExist ? null : (
                     <>
-                        <Typography fontSize={14} lineHeight="18px" my={1.25}>
+                        <Typography sx={{ fontSize: 14, lineHeight: '18px', my: 1.25 }}>
                             <Trans>Please install your metamask wallet and set up your first wallet.</Trans>
                         </Typography>
                         <Button variant="roundedContained" size="small" onClick={handleChooseAnotherWallet}>

@@ -42,10 +42,10 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
                     <Trans>Confirm</Trans>
                 </ActionButton>
             }>
-            <Typography fontWeight={700} textAlign="center" color={theme.palette.maskColor.third}>
+            <Typography sx={{ color: theme.vars.palette.maskColor.third, fontWeight: 700, textAlign: 'center' }}>
                 <Trans>Persona name must between 1 to 24 characters.</Trans>
             </Typography>
-            <Box display="flex" justifyContent="center" mx={0.5} mb={0.5}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mx: 0.5, mb: 0.5 }}>
                 <TextField
                     sx={{ mt: 4 }}
                     fullWidth
@@ -59,19 +59,21 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
                         if (error) setError('')
                         setName(e.target.value)
                     }}
-                    InputProps={{
-                        endAdornment:
-                            name.length ?
-                                <Icons.PopupClose
-                                    onClick={() => {
-                                        setName('')
-                                        setError('')
-                                    }}
-                                    size={18}
-                                    color={error ? theme.palette.maskColor.danger : undefined}
-                                />
-                            :   null,
-                        disableUnderline: true,
+                    slotProps={{
+                        input: {
+                            endAdornment:
+                                name.length ?
+                                    <Icons.PopupClose
+                                        onClick={() => {
+                                            setName('')
+                                            setError('')
+                                        }}
+                                        size={18}
+                                        color={error ? theme.vars.palette.maskColor.danger : undefined}
+                                    />
+                                :   null,
+                            disableUnderline: true,
+                        },
                     }}
                 />
             </Box>

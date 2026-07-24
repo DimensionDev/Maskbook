@@ -33,7 +33,7 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                     <Trans>Export</Trans>
                 </ActionButton>
             }>
-            <Box display="flex" flexDirection="column" m={0.5}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', m: 0.5 }}>
                 <PasswordField
                     placeholder={t`Password`}
                     onFocus={() => setPasswordMatched(true)}

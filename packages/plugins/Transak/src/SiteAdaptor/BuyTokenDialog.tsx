@@ -13,8 +13,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 !important',
     },
     close: {
-        color: `${theme.palette.common.white} !important`,
-        backgroundColor: `${theme.palette.maskColor.dark} !important`,
+        color: `${theme.vars.palette.common.white} !important`,
+        backgroundColor: `${theme.vars.palette.maskColor.dark} !important`,
         top: theme.spacing(-2),
         right: theme.spacing(-2),
         position: 'absolute',
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         width: '100%',
         padding: 0,
-        backgroundColor: theme.palette.common.white,
+        backgroundColor: theme.vars.palette.common.white,
         position: 'relative',
         '::-webkit-scrollbar': {
             display: 'none',
@@ -79,11 +79,11 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                         <CloseIcon />
                     </IconButton>
                     {loading ?
-                        <Stack className={classes.status} alignItems="center" justifyContent="center">
+                        <Stack className={classes.status} sx={{ alignItems: 'center', justifyContent: 'center' }}>
                             <LoadingBase size={36} />
                         </Stack>
                     : error || !widgetUrl ?
-                        <Stack className={classes.status} alignItems="center" justifyContent="center">
+                        <Stack className={classes.status} sx={{ alignItems: 'center', justifyContent: 'center' }}>
                             <Typography variant="body1">
                                 Transak is temporarily unavailable. Please try again later.
                             </Typography>

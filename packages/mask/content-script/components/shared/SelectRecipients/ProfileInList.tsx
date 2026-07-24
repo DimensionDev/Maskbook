@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     highLightBg: {
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
     },
     avatarBox: {
         padding: '6px 0px 6px 8px',
@@ -104,7 +104,6 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
-                primaryTypographyProps={{ component: 'div' }}
                 primary={
                     <ShadowRootTooltip
                         title={tooltipTitle}
@@ -122,7 +121,10 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                         </div>
                     </ShadowRootTooltip>
                 }
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    primary: { component: 'div' },
+                    secondary: { component: 'div' },
+                }}
                 secondary={
                     <div className={classes.flex}>
                         <Highlighter

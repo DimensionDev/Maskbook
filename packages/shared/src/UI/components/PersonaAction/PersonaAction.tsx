@@ -14,17 +14,17 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         padding: 16,
-        boxShadow: theme.palette.shadow.popup,
+        boxShadow: theme.vars.palette.shadow.popup,
     },
     linkIcon: {
         marginRight: theme.spacing(1),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         cursor: 'pointer',
     },
     personaKey: {
         fontSize: '12px',
         fontWeight: '400',
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
 }))
 
@@ -43,7 +43,7 @@ export function PersonaAction(props: PersonaActionProps) {
 
     return (
         <div className={classes.bottomFixed}>
-            <Box display="flex">
+            <Box sx={{ display: 'flex' }}>
                 <PlatformAvatar networkIcon={avatar} size={36} />
                 <div style={{ marginLeft: '4px' }}>
                     <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>

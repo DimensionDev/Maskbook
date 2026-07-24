@@ -15,8 +15,10 @@ const ChooseTokenDrawer = memo(function ChooseTokenDrawer({ title, open, onClose
                 key={`${others.chainId}.${others.address}`}
                 {...others}
                 defaultChainId={others.chainId}
-                mt={2}
-                height={455}
+                sx={{
+                    mt: 2,
+                    height: 455,
+                }}
             />
         </BottomDrawer>
     )

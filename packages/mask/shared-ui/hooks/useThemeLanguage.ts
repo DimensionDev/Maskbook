@@ -1,7 +1,8 @@
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
-import { jaJP, koKR, zhTW, zhCN, enUS, type Localization } from '@mui/material/locale/index.js'
-import { updateLanguage } from '@masknet/shared-base'
+import { jaJP, koKR, zhTW, zhCN, enUS, type Localization } from '@mui/material/locale'
+import { languageSettings, updateLanguage } from '@masknet/shared-base'
 import { startTransition, useEffect } from 'react'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 const langs: Record<SupportedLanguages, Localization> = {
     [SupportedLanguages.enUS]: enUS,
@@ -10,7 +11,8 @@ const langs: Record<SupportedLanguages, Localization> = {
     [SupportedLanguages.zhTW]: zhTW,
     [SupportedLanguages.zhCN]: zhCN,
 }
-export function useThemeLanguage(_language: LanguageOptions): [loc: Localization, RTL: boolean] {
+export function useThemeLanguage(): [loc: Localization, RTL: boolean] {
+    const _language = useValueRef(languageSettings)
     let language = _language
     useEffect(() => {
         if (language !== LanguageOptions.__auto__) return

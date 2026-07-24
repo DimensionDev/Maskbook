@@ -8,7 +8,7 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
     },
 }))
 

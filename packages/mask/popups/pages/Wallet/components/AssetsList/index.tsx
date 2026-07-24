@@ -26,7 +26,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         overflow: 'auto',
     },
     list: {
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         padding: theme.spacing(2),
     },
     item: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         cursor: 'pointer',
         borderRadius: 8,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
         },
     },
     tokenIcon: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         position: 'absolute',
         right: -6,
         bottom: -4,
-        border: `1px solid ${theme.palette.common.white}`,
+        border: `1px solid ${theme.vars.palette.common.white}`,
         borderRadius: '50%',
     },
     text: {
@@ -56,21 +56,21 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     name: {
         fontSize: 16,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
     balance: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 400,
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
     },
     customToken: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: 13,
         fontWeight: 400,
         lineHeight: '18px',
@@ -135,7 +135,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                     />
                 </Typography>
             }>
-            <Box position="relative">
+            <Box sx={{ position: 'relative' }}>
                 <TokenIcon
                     className={classes.tokenIcon}
                     chainId={asset.chainId}
@@ -155,7 +155,9 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
             </Box>
             <ListItemText
                 className={classes.text}
-                secondaryTypographyProps={{ component: 'div' }}
+                slotProps={{
+                    secondary: { component: 'div' },
+                }}
                 secondary={
                     <>
                         <TextOverflowTooltip title={`${balance.value} ${asset.symbol}`}>
@@ -228,7 +230,7 @@ const AssetsListSkeleton = memo(function AssetsListSkeleton() {
                             <Skeleton width={60} />
                         </Typography>
                     }>
-                    <Box position="relative">
+                    <Box sx={{ position: 'relative' }}>
                         <Skeleton variant="circular" className={classes.tokenIcon} />
                         <Skeleton variant="circular" width={16} height={16} className={classes.badgeIcon} />
                     </Box>

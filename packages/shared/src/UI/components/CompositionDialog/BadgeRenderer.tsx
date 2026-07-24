@@ -7,8 +7,11 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     chip: {
         maxWidth: 500,
-        background: theme.palette.background.paper,
-        boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
+        background: theme.vars.palette.background.paper,
+        boxShadow: '0px 0px 20px 0px #0000000D',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px 0px #FFFFFF1F',
+        }),
     },
 }))
 

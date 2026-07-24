@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 12,
         },
         icon: {
-            color: theme.palette.text.primary,
+            color: theme.vars.palette.text.primary,
             pointerEvents: 'none',
         },
         tokenIcon: {

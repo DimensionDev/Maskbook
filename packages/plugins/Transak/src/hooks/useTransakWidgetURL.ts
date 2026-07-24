@@ -1,17 +1,19 @@
 import { useMemo } from 'react'
-import { useTheme } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
+import { DarkMaskColors, LightMaskColors, usePalette } from '@masknet/theme'
 import { TRANSAK_PROXY_HOST } from '../constants.js'
 import type { TransakConfig } from '../types.js'
 import { buildTransakSearchParams } from './useTransakURL.js'
+import { rgbToHex } from '@mui/material'
 
 // Fetches a single-use, iframe-safe widgetUrl from the session proxy.
 export function useTransakWidgetURL(config?: Partial<TransakConfig>) {
-    const theme = useTheme()
+    const palette = usePalette()
+    const themeColor = rgbToHex((palette === 'dark' ? DarkMaskColors : LightMaskColors).maskColor.dark).slice(1)
     const url = useMemo(
-        () => `${TRANSAK_PROXY_HOST}?${buildTransakSearchParams(config, theme).toString()}`,
+        () => `${TRANSAK_PROXY_HOST}?${buildTransakSearchParams(config, themeColor).toString()}`,
         // eslint-disable-next-line react-compiler/react-compiler
-        [theme.palette.primary.main, JSON.stringify(config)],
+        [JSON.stringify(config), themeColor],
     )
     return useQuery({
         queryKey: ['transak', 'widget-url', url],

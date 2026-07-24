@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
     },
     content: {
         padding: 16,
@@ -36,9 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         margin: theme.spacing(1.5, 0),
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         borderRadius: 8,
         padding: theme.spacing(2),
     },
@@ -66,14 +66,14 @@ export const WalletStartUp = memo(function WalletStartUp() {
                     </Typography>
                 </Box>
             </WalletSetupHeaderUI>
-            <Box className={classes.content} gap={1.5}>
+            <Box className={classes.content} sx={{ gap: 1.5 }}>
                 <Typography className={classes.placeholderDescription}>
                     <Trans>
                         Supports traditional wallet creation and import, creation of Firefly.social wallets via your X
                         account.
                     </Trans>
                 </Typography>
-                <ImportCreateWallet onChoose={onEnterCreateWallet} flex="column" gap={1.5} />
+                <ImportCreateWallet onChoose={onEnterCreateWallet} sx={{ flex: 'column', gap: 1.5 }} />
             </Box>
         </Box>
     )

@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         listStyle: 'none',
         borderRadius: 8,
         padding: theme.spacing(1.5),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         overflow: 'auto',
     },
     disabled: {
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     name: {
         fontSize: 12,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',
         textOverflow: 'ellipsis',
@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     balance: {
         fontSize: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         lineHeight: '16px',
     },
@@ -137,7 +137,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId, disab
             </div>
             {selected ?
                 <Icons.RadioButtonChecked size={20} />
-            :   <Icons.RadioButtonUnChecked size={20} color={theme.palette.maskColor.line} />}
+            :   <Icons.RadioButtonUnChecked size={20} color={theme.vars.palette.maskColor.line} />}
         </li>
     )
 })

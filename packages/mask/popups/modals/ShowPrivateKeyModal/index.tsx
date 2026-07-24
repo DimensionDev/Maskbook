@@ -46,7 +46,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
 
     return (
         <BottomDrawer {...rest}>
-            <Box display="flex" justifyContent="center" mx={0.5}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mx: 0.5 }}>
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
@@ -61,7 +61,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                 />
             </Box>
             {error ?
-                <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1}>
+                <Typography sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, mt: 1 }}>
                     {error}
                 </Typography>
             :   null}

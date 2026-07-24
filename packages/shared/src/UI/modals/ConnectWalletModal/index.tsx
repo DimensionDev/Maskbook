@@ -44,12 +44,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     retryButton: {
         fontSize: 12,
-        backgroundColor: theme.palette.maskColor.publicMain,
-        color: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.publicMain,
+        color: theme.vars.palette.maskColor.white,
         marginTop: theme.spacing(1.5),
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
         },
     },
 }))
@@ -148,7 +148,7 @@ export function ConnectWalletModal({
             maxWidth="sm"
             className={classes.dialog}>
             <DialogContent className={classes.dialogContent}>
-                <Box width={90} height={90} position="relative" mt={9}>
+                <Box sx={{ width: 90, height: 90, position: 'relative', mt: 9 }}>
                     <Spinner
                         className={classes.spinner}
                         variant={
@@ -169,13 +169,15 @@ export function ConnectWalletModal({
                     />
                 </Box>
                 <Typography
-                    fontWeight={700}
-                    fontSize={16}
-                    mt={1.5}
-                    color={error && !loading ? maskColor.danger : undefined}>
+                    sx={{
+                        color: error && !loading ? maskColor.danger : undefined,
+                        fontWeight: 700,
+                        fontSize: 16,
+                        mt: 1.5,
+                    }}>
                     <Trans>Requesting Connection</Trans>
                 </Typography>
-                <Typography fontWeight={400} mt={1.5}>
+                <Typography sx={{ fontWeight: 400, mt: 1.5 }}>
                     {isCanceled && !loading ?
                         <Trans>You canceled the request.</Trans>
                     :   <Trans>Check {providerName} to confirm connect.</Trans>}

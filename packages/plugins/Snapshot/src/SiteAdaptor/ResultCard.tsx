@@ -1,16 +1,6 @@
 import { useContext, useMemo, unstable_useCacheRefresh } from 'react'
-import {
-    Box,
-    List,
-    ListItem,
-    Typography,
-    LinearProgress,
-    styled,
-    Button,
-    linearProgressClasses,
-    ThemeProvider,
-} from '@mui/material'
-import { makeStyles, MaskLightTheme, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
+import { makeStyles, MaskThemeProvider, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
@@ -46,15 +36,15 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             marginLeft: theme.spacing(2),
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         ratio: {
             marginLeft: 'auto',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         choice: {
             maxWidth: choiceMaxWidth,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
         linearProgressWrap: {
             width: '100%',
@@ -68,19 +58,19 @@ const useStyles = makeStyles()((theme) => {
         resultButton: {
             width: 200,
             margin: '0 auto',
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.publicMain,
-                color: theme.palette.maskColor.white,
+                backgroundColor: theme.vars.palette.maskColor.publicMain,
+                color: theme.vars.palette.maskColor.white,
             },
         },
         tooltip: {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
         },
         arrow: {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     }
 })
@@ -89,7 +79,7 @@ const StyledLinearProgress = styled(LinearProgress)(({ theme }) => ({
     [`&.${linearProgressClasses.root}`]: {
         height: 8,
         borderRadius: 5,
-        backgroundColor: theme.palette.maskColor.publicBg,
+        backgroundColor: theme.vars.palette.maskColor.publicBg,
     },
     [`&.${linearProgressClasses.bar}`]: {
         borderRadius: 5,
@@ -116,7 +106,7 @@ function Content() {
     }, [votes])
 
     return (
-        <ThemeProvider theme={MaskLightTheme}>
+        <MaskThemeProvider palette="light">
             <SnapshotCard title={proposal.isEnd ? <Trans>Results</Trans> : <Trans>Current results</Trans>}>
                 <List className={classes.list}>
                     {results.map((result, i) => (
@@ -124,9 +114,7 @@ function Content() {
                             <Box className={classes.listItemHeader}>
                                 <TextOverflowTooltip
                                     as={ShadowRootTooltip}
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     title={<Typography>{result.choice}</Typography>}
                                     placement="top"
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
@@ -136,9 +124,7 @@ function Content() {
                                     </Typography>
                                 </TextOverflowTooltip>
                                 <ShadowRootTooltip
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     title={
                                         <Typography className={classes.ellipsisText}>
@@ -185,7 +171,7 @@ function Content() {
                     </Button>
                 :   null}
             </SnapshotCard>
-        </ThemeProvider>
+        </MaskThemeProvider>
     )
 }
 

@@ -3,8 +3,8 @@ import { ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ActionButton,
-    MaskLightTheme,
     MaskTabList,
+    MaskThemeProvider,
     ShadowRootTooltip,
     TextOverflowTooltip,
     makeStyles,
@@ -13,7 +13,7 @@ import {
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Avatar, Box, Chip, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Avatar, Box, Chip, Tab, Typography } from '@mui/material'
 import Color from 'color'
 import { useContext, useState } from 'react'
 import { SnapshotContext } from '../context.js'
@@ -42,16 +42,16 @@ const useStyles = makeStyles()((theme) => {
         tab: {
             whiteSpace: 'nowrap',
             background: 'transparent',
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
             '&:hover': {
                 background: 'transparent',
             },
         },
         tabActive: {
-            background: theme.palette.maskColor.white,
-            color: `${theme.palette.maskColor.publicMain}!important`,
+            background: theme.vars.palette.maskColor.white,
+            color: `${theme.vars.palette.maskColor.publicMain}!important`,
             '&:hover': {
-                background: theme.palette.maskColor.white,
+                background: theme.vars.palette.maskColor.white,
             },
         },
         content: {
@@ -62,15 +62,15 @@ const useStyles = makeStyles()((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            background: theme.palette.maskColor.white,
+            background: theme.vars.palette.maskColor.white,
         },
         active: {
-            color: theme.palette.maskColor.white,
-            backgroundColor: theme.palette.maskColor.success,
+            color: theme.vars.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.success,
         },
         default: {
-            color: theme.palette.maskColor.white,
-            backgroundColor: new Color(theme.palette.maskColor.primary).alpha(0.1).toString(),
+            color: theme.vars.palette.maskColor.white,
+            backgroundColor: new Color(theme.vars.palette.maskColor.primary).alpha(0.1).toString(),
         },
         avatar: {
             boxShadow: '0px 6px 12px rgba(81, 62, 255, 0.2)',
@@ -80,11 +80,11 @@ const useStyles = makeStyles()((theme) => {
         },
         shadowRootTooltip: {},
         tooltip: {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.white,
         },
         arrow: {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.vars.palette.maskColor.publicMain,
         },
     }
 })
@@ -116,16 +116,14 @@ export function Snapshot() {
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
                     <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
-                    <ThemeProvider theme={MaskLightTheme}>
+                    <MaskThemeProvider palette="light">
                         <Box className={classes.title}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <TextOverflowTooltip
                                     as={ShadowRootTooltip}
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
+                                    slotProps={{ popper: { disablePortal: true } }}
                                     title={
-                                        <Typography fontSize={18} fontWeight="bold">
+                                        <Typography sx={{ fontSize: 18, fontWeight: 'bold' }}>
                                             {proposal.space.name}
                                         </Typography>
                                     }
@@ -133,10 +131,10 @@ export function Snapshot() {
                                     classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
                                     <Typography
-                                        fontSize={18}
-                                        fontWeight="bold"
-                                        color={theme.palette.maskColor.publicMain}
                                         sx={{
+                                            color: theme.vars.palette.maskColor.publicMain,
+                                            fontSize: 18,
+                                            fontWeight: 'bold',
                                             width: 150,
                                             whiteSpace: 'nowrap',
                                             textOverflow: 'ellipsis',
@@ -145,29 +143,25 @@ export function Snapshot() {
                                         {proposal.space.name}
                                     </Typography>
                                 </TextOverflowTooltip>
-                                <Box sx={{ display: 'flex' }} color={theme.palette.maskColor.publicSecond}>
-                                    <Typography fontSize={14} sx={{ paddingRight: 1 }}>
-                                        by
-                                    </Typography>
-                                    <Typography fontSize={14} fontWeight="700">
+                                <Box sx={{ color: theme.vars.palette.maskColor.publicSecond, display: 'flex' }}>
+                                    <Typography sx={{ fontSize: 14, paddingRight: 1 }}>by</Typography>
+                                    <Typography sx={{ fontSize: 14, fontWeight: '700' }}>
                                         {formatSpaceId(proposal.space.id)}
                                     </Typography>
                                 </Box>
                             </Box>
 
                             <ShadowRootTooltip
-                                PopperProps={{
-                                    disablePortal: true,
-                                }}
+                                slotProps={{ popper: { disablePortal: true } }}
                                 title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
                                 placement="top"
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
-                                    fontSize={14}
-                                    fontWeight="700"
-                                    color={theme.palette.maskColor.publicSecond}
                                     sx={{
+                                        color: theme.vars.palette.maskColor.publicSecond,
+                                        fontSize: 14,
+                                        fontWeight: '700',
                                         width: 300,
                                         whiteSpace: 'nowrap',
                                         textOverflow: 'ellipsis',
@@ -177,7 +171,7 @@ export function Snapshot() {
                                 </Typography>
                             </ShadowRootTooltip>
                         </Box>
-                    </ThemeProvider>
+                    </MaskThemeProvider>
                     <Box>
                         <Chip
                             className={proposal.status === 'Active' ? classes.active : classes.default}

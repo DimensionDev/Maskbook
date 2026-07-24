@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { PluginTransFieldRender, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
 import { Trans } from '@lingui/react/macro'
 
@@ -11,12 +11,12 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         padding: theme.spacing(1.5),
         borderRadius: 12,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         '&:hover': {
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
         },
         '&:hover .MuiAvatar-root': {
-            background: theme.palette.background.paper,
+            background: theme.vars.palette.background.paper,
         },
         '&:not(:last-child)': {
             marginBottom: theme.spacing(1.5),
@@ -38,11 +38,12 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: theme.spacing(0.5),
         marginLeft: theme.spacing(0.5),
         cursor: 'pointer',
-        color: MaskColorVar.textSecondary,
-        opacity: theme.palette.mode === 'dark' ? 0.5 : 1,
+        color: theme.vars.palette.maskColor.textSecondary,
+        opacity: 1,
+        ...theme.applyStyles('dark', { opacity: 0.5 }),
     },
     avatar: {
-        background: theme.palette.background.default,
+        background: theme.vars.palette.background.default,
         width: '44px',
         height: '44px',
         '> *': {
@@ -63,7 +64,8 @@ const useStyles = makeStyles()((theme) => ({
     desc: {
         fontSize: 12,
         fontWeight: 400,
-        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
+        ...theme.applyStyles('dark', { color: theme.vars.palette.text.secondary }),
     },
 }))
 
@@ -125,13 +127,13 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                         targetPluginRef.current = ele
                     }}
                     className={classes.listItem}>
-                    <Stack width="100%">
-                        <Stack direction="row" width="100%">
+                    <Stack sx={{ width: '100%' }}>
+                        <Stack direction="row" sx={{ width: '100%' }}>
                             <section className={classes.listContent}>
                                 <ListItemAvatar>
                                     <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>
                                 </ListItemAvatar>
-                                <Stack className={classes.info} flex={1}>
+                                <Stack className={classes.info} sx={{ flex: 1 }}>
                                     <div className={classes.headerWrapper}>
                                         <Typography className={classes.name}>
                                             <PluginTransFieldRender field={x.entry.name} pluginID={x.pluginID} />
@@ -150,7 +152,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                     </Typography>
                                 </Stack>
                             </section>
-                            <Stack justifyContent="center">
+                            <Stack sx={{ justifyContent: 'center' }}>
                                 <Switch
                                     checked={!pluginsInMinimalMode.map((x) => x.ID).includes(x.pluginID)}
                                     onChange={(event) => onSwitch(x.pluginID, event.target.checked)}
@@ -158,12 +160,12 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                             </Stack>
                         </Stack>
                         {x.entry.features?.length ?
-                            <Stack direction="row" mt={1.25}>
+                            <Stack direction="row" sx={{ mt: 1.25 }}>
                                 <Box className={classes.placeholder} />
                                 <Stack spacing={1.25}>
                                     {x.entry.features.map((f, i) => (
                                         <Stack key={i}>
-                                            <Typography className={classes.name} fontSize={14}>
+                                            <Typography className={classes.name} sx={{ fontSize: 14 }}>
                                                 <PluginTransFieldRender field={f.name} pluginID={x.pluginID} />
                                             </Typography>
                                             <Typography className={classes.desc}>
@@ -192,15 +194,15 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
 
     return (
         <ListItem key={DSearch_KEY} ref={(ele) => setRef(ele)} className={classes.listItem}>
-            <Stack width="100%">
-                <Stack direction="row" width="100%">
+            <Stack sx={{ width: '100%' }}>
+                <Stack direction="row" sx={{ width: '100%' }}>
                     <section className={classes.listContent}>
                         <ListItemAvatar>
                             <Avatar className={classes.avatar}>
                                 <Icons.DecentralizedSearch />
                             </Avatar>
                         </ListItemAvatar>
-                        <Stack className={classes.info} flex={1}>
+                        <Stack className={classes.info} sx={{ flex: 1 }}>
                             <div className={classes.headerWrapper}>
                                 <Typography className={classes.name}>
                                     <Trans>DSearch</Trans>
@@ -220,15 +222,15 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                             </Typography>
                         </Stack>
                     </section>
-                    <Stack justifyContent="center">
+                    <Stack sx={{ justifyContent: 'center' }}>
                         <Switch checked={checked} onChange={onSwitch} />
                     </Stack>
                 </Stack>
-                <Stack direction="row" mt={1.25}>
+                <Stack direction="row" sx={{ mt: 1.25 }}>
                     <Box className={classes.placeholder} />
                     <Stack spacing={1.25}>
                         <Stack>
-                            <Typography className={classes.name} fontSize={14}>
+                            <Typography className={classes.name} sx={{ fontSize: 14 }}>
                                 <Trans>Token</Trans>
                             </Typography>
                             <Typography className={classes.desc}>
@@ -236,7 +238,7 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                             </Typography>
                         </Stack>
                         <Stack>
-                            <Typography className={classes.name} fontSize={14}>
+                            <Typography className={classes.name} sx={{ fontSize: 14 }}>
                                 <Trans>ENS or Wallet Address</Trans>
                             </Typography>
                             <Typography className={classes.desc}>

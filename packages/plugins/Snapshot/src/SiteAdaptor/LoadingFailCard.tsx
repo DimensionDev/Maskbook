@@ -40,7 +40,7 @@ export class LoadingFailCard extends Component<
 function Full(props: { onClick: () => void }) {
     return (
         <Box style={{ textAlign: 'center', padding: 16 }}>
-            <Typography textAlign="center" color="error">
+            <Typography sx={{ textAlign: 'center' }} color="error">
                 <Trans>Load failed</Trans>
             </Typography>
             <Button
@@ -68,7 +68,7 @@ function Full(props: { onClick: () => void }) {
 function NotFull(props: { onClick: () => void }) {
     return (
         <Box style={{ textAlign: 'center' }}>
-            <Typography color={(t) => t.palette.maskColor.publicMain}>
+            <Typography sx={{ color: (t) => t.palette.maskColor.publicMain }}>
                 <Trans>Loading failed due to Snapshot API service breakdown.</Trans>
             </Typography>
             <Button
@@ -76,14 +76,14 @@ function NotFull(props: { onClick: () => void }) {
                 sx={{
                     width: 254,
                     height: 40,
-                    backgroundColor: (theme) => theme.palette.maskColor.publicMain,
-                    color: (theme) => theme.palette.maskColor.white,
+                    backgroundColor: (theme) => theme.vars.palette.maskColor.publicMain,
+                    color: (theme) => theme.vars.palette.maskColor.white,
                     fontSize: 14,
                     fontWeight: 700,
                     marginBottom: 4,
                     marginTop: 2,
                     '&:hover': {
-                        backgroundColor: (theme) => theme.palette.maskColor.publicMain,
+                        backgroundColor: (theme) => theme.vars.palette.maskColor.publicMain,
                     },
                 }}
                 onClick={props.onClick}>

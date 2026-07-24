@@ -1,23 +1,68 @@
-import { CssBaseline, type Theme, ThemeProvider } from '@mui/material'
-import { type MaskIconPalette, MaskIconPaletteContext } from '@masknet/icons'
-import { useRef } from 'react'
+import {
+    CssBaseline,
+    type Theme,
+    ThemeProvider,
+    type PaletteMode,
+    useColorScheme,
+    type StorageManager,
+    unstable_createMuiStrictModeTheme,
+} from '@mui/material'
+import { MaskIconPaletteContext } from '@masknet/icons'
+import { MaskTheme } from './theme.js'
+import type { Localization } from '@mui/material/locale'
+import { useEffect, useMemo, useRef } from 'react'
 
-export interface MaskThemeProvider extends React.PropsWithChildren {
-    useTheme(): Theme
-    useMaskIconPalette(theme: Theme): MaskIconPalette
+export interface MaskThemeProviderProps extends React.PropsWithChildren {
+    theme?: Theme
+    localization?: Localization
+    palette: PaletteMode
+    supportsDimPalette?: boolean
 }
 
-export function MaskThemeProvider(props: MaskThemeProvider) {
-    const { children, useTheme, useMaskIconPalette } = props
-    const theme = useRef(useTheme).current()
-    const MaskIconPalette = useRef(useMaskIconPalette).current(theme)
+function useStorageManager(palette: PaletteMode): StorageManager {
+    const storageManagerRef = useRef<StorageManager>(null)
+    const storageManagerCallbackRef = useRef<Set<(value: PaletteMode) => void>>(new Set())
+    useEffect(() => {
+        for (const callback of storageManagerCallbackRef.current) {
+            callback(palette)
+        }
+    }, [palette])
+    if (!storageManagerRef.current) {
+        storageManagerRef.current = () => ({
+            get: () => palette,
+            set: () => {
+                // ignore, we managed it by ourselves
+            },
+            subscribe: (callback) => {
+                storageManagerCallbackRef.current.add(callback)
+                return () => {
+                    storageManagerCallbackRef.current.delete(callback)
+                }
+            },
+        })
+    }
+    return storageManagerRef.current
+}
+
+export function MaskThemeProvider(props: MaskThemeProviderProps) {
+    const { children, theme = MaskTheme, palette, localization, supportsDimPalette } = props
+    const storageManager = useStorageManager(palette)
+
+    const themeWithLocalization = useMemo(() => {
+        if (!localization) return theme
+        return unstable_createMuiStrictModeTheme(theme, localization)
+    }, [theme, localization])
 
     return (
-        <MaskIconPaletteContext value={MaskIconPalette}>
-            <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themeWithLocalization} storageManager={storageManager}>
+            <MaskIconPaletteContext value={palette}>
                 <CssBaseline />
                 {children}
-            </ThemeProvider>
-        </MaskIconPaletteContext>
+            </MaskIconPaletteContext>
+        </ThemeProvider>
     )
+}
+export function usePalette(): PaletteMode {
+    const { mode, systemMode } = useColorScheme()
+    return (mode === 'system' ? systemMode : mode) || 'light'
 }

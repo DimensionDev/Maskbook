@@ -1,6 +1,6 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { GoogleDriveClient } from '@masknet/web3-providers'
 import { Box, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
@@ -35,7 +35,7 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
         [],
     )
     const { updateUser } = UserContext.useContainer()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [{ loading }, login] = useAsyncFn(async () => {
         try {
@@ -48,12 +48,12 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
                 googleAccount: userInfo.email || '',
             })
         } catch {
-            showSnackbar(t`Authorization Failed`, {
+            enqueueSnackbar(t`Authorization Failed`, {
                 variant: 'warning',
-                message: t`Failed to authorize Google Drive. Please try again.`,
+                detail: t`Failed to authorize Google Drive. Please try again.`,
             })
         }
-    }, [googleDriveClient, updateUser, showSnackbar])
+    }, [googleDriveClient, updateUser, enqueueSnackbar])
     return (
         <Box className={classes.container}>
             <Typography className={classes.title}>
@@ -64,7 +64,7 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
                     when you click Add Google Drive button，you will be forwarded to Google authorization pages.
                 </Trans>
             </Typography>
-            <Box display="flex" justifyContent="center" mt="48px">
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: '48px' }}>
                 <ActionButton variant="roundedContained" onClick={login} loading={loading}>
                     Add Google Drive
                 </ActionButton>

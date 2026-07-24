@@ -2,8 +2,7 @@ import urlcat from 'urlcat'
 import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { LoadingButton } from '@mui/lab'
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import Services from '#services'
@@ -15,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
     },
     content: {
         padding: '0px 16px',
@@ -99,29 +98,32 @@ const Unlock = memo(function Unlock() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     {verified === false ?
-                        <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
+                        <Typography
+                            sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, marginTop: '12px' }}>
                             <Trans>Incorrect password</Trans>
                         </Typography>
                     :   null}
                 </Box>
 
-                <LoadingButton
+                <Button
                     loading={loading}
                     fullWidth
                     variant="contained"
                     disabled={!password || loading}
                     onClick={handleUnlock}>
                     <Trans>Unlock</Trans>
-                </LoadingButton>
+                </Button>
 
                 <Typography
-                    color={theme.palette.maskColor.main}
-                    marginTop="16px"
                     onClick={navigateToResetWallet}
                     className={classes.pointer}
-                    fontSize={14}
-                    textAlign="center"
-                    fontWeight={700}>
+                    sx={{
+                        color: theme.vars.palette.maskColor.main,
+                        marginTop: '16px',
+                        fontSize: 14,
+                        textAlign: 'center',
+                        fontWeight: 700,
+                    }}>
                     <Trans>Forgot payment password?</Trans>
                 </Typography>
             </Box>

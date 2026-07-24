@@ -2,7 +2,7 @@ import Services from '#services'
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { DashboardRoutes, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { memo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -28,12 +28,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     label: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginRight: 0,
         marginLeft: 0,
     },
     link: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textDecoration: 'underline',
     },
     checkbox: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     policy: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: 48,
     },
 }))
@@ -58,7 +58,7 @@ export const Component = memo(function Welcome() {
     const [params] = useSearchParams()
     const navigate = useNavigate()
 
-    const snackbar = useCustomSnackbar()
+    const snackbar = useSnackbar()
     const [{ loading }, handleAgree] = useAsyncFn(async () => {
         if (allowedToCollect) {
             Services.Settings.setTelemetryEnabled(true)
@@ -71,7 +71,7 @@ export const Component = memo(function Welcome() {
             if (!granted) return
             if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         } catch (err) {
-            snackbar.showSnackbar(t`Failed to get permissions`, { variant: 'error' })
+            snackbar.enqueueSnackbar(t`Failed to get permissions`, { variant: 'error' })
             throw err
         }
         const from = params.get('from')

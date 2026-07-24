@@ -71,12 +71,20 @@ export const NetworkTab = memo(function NetworkTab({
                             key={x.chainId}
                             value={x.chainId.toString()}
                             label={
-                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                <Stack
+                                    sx={{
+                                        display: 'inline-flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        gap: 0.5,
+                                    }}>
                                     <WalletIcon mainIcon={x.icon} size={18} />
                                     <Typography
                                         variant="body2"
-                                        fontSize={14}
-                                        fontWeight={tab === x.chainId.toString() ? 700 : 400}>
+                                        sx={{
+                                            fontSize: 14,
+                                            fontWeight: tab === x.chainId.toString() ? 700 : 400,
+                                        }}>
                                         {x.shortName ?? x.name}
                                     </Typography>
                                 </Stack>

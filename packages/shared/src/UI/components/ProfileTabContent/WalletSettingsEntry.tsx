@@ -25,12 +25,12 @@ export const WalletSettingsEntry = memo(function WalletSettingsEntry() {
 
     return (
         <>
-            <Stack flex={1}>
-                <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
+            <Stack sx={{ flex: 1 }}>
+                <Typography sx={{ color: theme.vars.palette.maskColor.second, fontWeight: 400, fontSize: 14 }}>
                     <Trans>Please select the wallet to activate the function after saving the settings.</Trans>
                 </Typography>
             </Stack>
-            <Stack direction="row" justifyContent="center">
+            <Stack direction="row" sx={{ justifyContent: 'center' }}>
                 <Button className={classes.button} onClick={openWeb3ProfileSettingDialog}>
                     <Icons.Settings size={18} />
                     <Trans>Go to Settings</Trans>

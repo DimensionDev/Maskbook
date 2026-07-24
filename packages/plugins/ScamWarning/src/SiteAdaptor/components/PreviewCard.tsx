@@ -1,8 +1,8 @@
 import { Plural } from '@lingui/react/macro'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { makeStyles, MaskDarkTheme } from '@masknet/theme'
+import { makeStyles, MaskThemeProvider } from '@masknet/theme'
 import { CryptoScamDB } from '@masknet/web3-providers'
-import { Stack, ThemeProvider, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { uniq } from 'lodash-es'
 import { useAsync } from 'react-use'
 
@@ -14,8 +14,8 @@ const useStyles = makeStyles()((theme) => ({
     root: {},
     card: {
         padding: theme.spacing(1),
-        color: theme.palette.maskColor.bottom,
-        backgroundColor: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.danger,
         borderRadius: theme.spacing(1),
     },
     title: {
@@ -35,15 +35,15 @@ export function PreviewCard({ links }: PreviewCardProps) {
     if (!value?.length || loading) return null
 
     return (
-        <ThemeProvider theme={MaskDarkTheme}>
-            <Stack p={1.5} pt={0} className={classes.root}>
+        <MaskThemeProvider palette="dark">
+            <Stack sx={{ p: 1.5, pt: 0 }} className={classes.root}>
                 <Stack className={classes.card}>
                     {value.map((x) => (
                         <Typography
                             key={x.url}
                             className={classes.title}
                             variant="h6"
-                            fontWeight={700}
+                            sx={{ fontWeight: 700 }}
                             color="textPrimary">
                             {x.url}
                         </Typography>
@@ -59,6 +59,6 @@ export function PreviewCard({ links }: PreviewCardProps) {
                     </Typography>
                 </Stack>
             </Stack>
-        </ThemeProvider>
+        </MaskThemeProvider>
     )
 }

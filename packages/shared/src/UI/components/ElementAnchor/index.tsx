@@ -20,7 +20,14 @@ export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children, ...
     }, [intersection])
 
     return (
-        <Stack pt={1} ref={elementRef} justifyContent="center" alignItems="center" direction="row" {...rest}>
+        <Stack
+            ref={elementRef}
+            direction="row"
+            {...rest}
+            sx={[
+                { pt: 1, justifyContent: 'center', alignItems: 'center' },
+                ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx]),
+            ]}>
             {children}
         </Stack>
     )

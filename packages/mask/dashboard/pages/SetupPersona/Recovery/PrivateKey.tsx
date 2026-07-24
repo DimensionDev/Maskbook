@@ -18,8 +18,8 @@ import { SignUpRoutePath } from '../../SignUp/routePath.js'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
-        backgroundColor: theme.palette.maskColor.input,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.input,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 const schema = z.object({
@@ -75,16 +75,18 @@ export const Component = memo(function RecoveryPrivateKey() {
     )
 
     return (
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
             <Controller
                 control={control}
                 render={({ field }) => (
                     <PasswordField
                         {...field}
                         autoFocus
-                        InputProps={{
-                            className: classes.input,
-                            disableUnderline: true,
+                        slotProps={{
+                            input: {
+                                className: classes.input,
+                                disableUnderline: true,
+                            },
                         }}
                         autoComplete="off"
                         sx={{ width: '100%' }}

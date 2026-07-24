@@ -23,10 +23,10 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         padding: theme.spacing(0.5),
         borderRadius: 4,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'block',
         '&:hover': {
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
         },
         marginBottom: 6,
         '&:last-of-type': {
@@ -43,13 +43,13 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
     },
     socialName: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 400,
         marginLeft: 4,
         fontSize: 14,
     },
     accountName: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         paddingRight: theme.spacing(1),
@@ -114,7 +114,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         borderRadius: 4,
     },
 }))

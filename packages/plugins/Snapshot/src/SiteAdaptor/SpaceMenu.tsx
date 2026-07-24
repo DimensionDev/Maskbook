@@ -9,11 +9,11 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     menu: {
         minWidth: 320,
-        backgroundColor: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        backgroundColor: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)',
+        }),
         borderRadius: 16,
     },
     menuItem: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     checkedIcon: {
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
-        color: theme.palette.maskColor.primary,
+        color: theme.vars.palette.maskColor.primary,
     },
     group: {
         display: 'flex',
@@ -63,8 +63,8 @@ const useStyles = makeStyles()((theme) => ({
     divider: {
         margin: theme.spacing(1, 0),
         width: 'calc(100% - 24px)',
-        color: theme.palette.maskColor.line,
-        borderColor: theme.palette.maskColor.line,
+        color: theme.vars.palette.maskColor.line,
+        borderColor: theme.vars.palette.maskColor.line,
         position: 'relative',
         left: 12,
     },
@@ -80,12 +80,7 @@ interface SpaceMenuProps extends Omit<MenuProps, 'onSelect'> {
 export function SpaceMenu({ options, currentOption, onSelect, containerRef, ...rest }: SpaceMenuProps) {
     const { classes } = useStyles()
     return (
-        <ShadowRootMenu
-            anchorEl={containerRef.current}
-            PaperProps={{
-                className: classes.menu,
-            }}
-            {...rest}>
+        <ShadowRootMenu anchorEl={containerRef.current} slotProps={{ paper: { className: classes.menu } }} {...rest}>
             <div key="rss3" className={classes.group}>
                 <Typography className={classes.groupName}>
                     <Trans>Space</Trans>
@@ -98,11 +93,13 @@ export function SpaceMenu({ options, currentOption, onSelect, containerRef, ...r
                             <Avatar className={classes.coinIcon} src={option.avatar} alt={option.spaceId} />
                             <Stack className={classes.itemText}>
                                 <Typography
-                                    fontSize={14}
-                                    fontWeight={700}
-                                    flexGrow={1}
-                                    overflow="hidden"
-                                    textOverflow="ellipsis">
+                                    sx={{
+                                        fontSize: 14,
+                                        fontWeight: 700,
+                                        flexGrow: 1,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}>
                                     <span className={classes.name}>{option.spaceName}</span>
                                 </Typography>
                                 <div className={classes.itemCheckout}>

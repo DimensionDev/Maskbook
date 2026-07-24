@@ -12,7 +12,7 @@ import { CardType } from '../share.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
     summary: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
         whiteSpace: 'pre',
@@ -23,7 +23,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
         },
     },
     comment: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginTop: theme.spacing(1),
         fontSize: 14,
         wordBreak: 'break-word',
@@ -40,14 +40,14 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
     },
     line: {
         width: 1,
-        borderLeft: `1px solid ${theme.palette.maskColor.line}`,
+        borderLeft: `1px solid ${theme.vars.palette.maskColor.line}`,
         marginLeft: 10,
     },
     target: {
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(1, 0),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         [`.${refs.image}`]: {
             width: 120,
@@ -86,7 +86,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
         margin: theme.spacing(0.5, 0),
     },
     content: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
         fontSize: 14,
         overflow: 'hidden',

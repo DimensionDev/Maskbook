@@ -22,7 +22,7 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     const uiLabel = showDomain ? Utils.formatDomainName(domain) : (Utils.formatAddress(address, size) ?? address)
     const hasEllipsis = showDomain ? uiLabel !== domain : !isSameAddress(uiLabel, address)
     const node = (
-        <Typography fontWeight={700} {...rest}>
+        <Typography {...rest} sx={[{ fontWeight: 700 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             {uiLabel}
         </Typography>
     )
@@ -36,7 +36,7 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     return hasEllipsis ?
             <ShadowRootTooltip
                 title={showDomain ? domain : address}
-                PopperProps={{ ...popperProps, style: { whiteSpace: 'break-spaces' } }}>
+                slotProps={{ popper: { ...popperProps, style: { whiteSpace: 'break-spaces' } } }}>
                 {node}
             </ShadowRootTooltip>
         :   node

@@ -3,7 +3,7 @@ import {
     useRemoveTransactionCallback,
     useRecentTransactions,
 } from '@masknet/web3-hooks-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
@@ -18,11 +18,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     pendingSummary: {
         cursor: 'default',
-        color: theme.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.warn,
     },
     clearAll: {
         cursor: 'pointer',
-        color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
+        color: theme.vars.palette.maskColor.primary,
+        ...theme.applyStyles('dark', { color: theme.vars.palette.common.white }),
     },
     hide: {
         display: 'none',
@@ -49,13 +50,13 @@ export function usePendingTransactions() {
             <section className={classes.summaryWrapper}>
                 <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
                     {pendingTransactions.length ?
-                        <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
+                        <Typography className={classes.pendingSummary} variant="body2" sx={{ mr: 1, fontWeight: 700 }}>
                             <Trans>{pendingTransactions.length} Pending</Trans>
                         </Typography>
                     :   null}
                 </div>
                 {pendingTransactions.length ?
-                    <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
+                    <Typography className={classes.clearAll} onClick={clearRecentTxes} sx={{ fontWeight: 700 }}>
                         <Trans>Clear All</Trans>
                     </Typography>
                 :   null}

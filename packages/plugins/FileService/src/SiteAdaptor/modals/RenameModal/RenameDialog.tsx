@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '120%',
         fontWeight: 700,
         marginTop: theme.spacing(3),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     content: {
         display: 'flex',
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     message: {
         marginTop: theme.spacing(1.5),
         lineHeight: '18px',
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: 14,
         fontWeight: 400,
     },
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         textAlign: 'center',
         width: '100%',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: theme.spacing(4),
         boxSizing: 'border-box',
     },
@@ -57,7 +57,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: theme.spacing(2),
         right: theme.spacing(2),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 

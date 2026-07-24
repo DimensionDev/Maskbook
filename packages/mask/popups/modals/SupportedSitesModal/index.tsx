@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         fontSize: 14,
         fontWeight: 700,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         lineHeight: '18px',
     },
     list: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     name: {
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         lineHeight: '16px',
     },

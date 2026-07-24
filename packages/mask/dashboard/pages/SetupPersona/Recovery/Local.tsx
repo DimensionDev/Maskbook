@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { FileFrame, PersonaContext, UploadDropArea } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1.5),
     },
     desc: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         fontSize: 12,
         marginTop: 7,
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function RecoveryLocalBackup() {
     const { t } = useLingui()
     const { classes, theme } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const navigate = useNavigate()
 
     const [file, setFile] = useState<File | null>(null)
@@ -77,7 +77,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {
             reset()
-            showSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
         }
     }, [])
 
@@ -89,7 +89,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             setSummary(summary.value)
             setRestoreStatus(RestoreStatus.Verified)
         } else {
-            showSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
             setRestoreStatus(RestoreStatus.WaitingInput)
             setBackupValue('')
         }
@@ -142,7 +142,7 @@ export const Component = memo(function RecoveryLocalBackup() {
 
             await onRestore(summary?.countOfWallets)
         } catch {
-            showSnackbar(<Trans>Restore backup failed.</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Restore backup failed.</Trans>, { variant: 'error' })
         } finally {
             setProcessing(false)
         }
@@ -157,7 +157,7 @@ export const Component = memo(function RecoveryLocalBackup() {
     }, [loading, !file, restoreStatus, summary, !password])
 
     return (
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
             {restoreStatus === RestoreStatus.Verified ? null : (
                 <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin,.json" />
             )}
@@ -167,7 +167,7 @@ export const Component = memo(function RecoveryLocalBackup() {
                     fileName={file.name}
                     operations={
                         <Button variant="text" disableRipple sx={{ p: 1, minWidth: 'auto' }} onClick={reset}>
-                            <Icons.Clear size={24} color={theme.palette.maskColor.main} />
+                            <Icons.Clear size={24} color={theme.vars.palette.maskColor.main} />
                         </Button>
                     }>
                     <Typography className={classes.desc}>
@@ -178,7 +178,7 @@ export const Component = memo(function RecoveryLocalBackup() {
                 </FileFrame>
             :   null}
             {restoreStatus === RestoreStatus.Decrypting ?
-                <Box mt={4}>
+                <Box sx={{ mt: 4 }}>
                     <PasswordField
                         fullWidth
                         placeholder={t`Backup password`}
@@ -196,7 +196,7 @@ export const Component = memo(function RecoveryLocalBackup() {
             : restoreStatus === RestoreStatus.Verified && summary ?
                 <>
                     <AccountStatusBar label={file?.name} actionLabel={<Trans>Reselect</Trans>} onAction={reset} />
-                    <BackupPreview mt={2} info={summary} />
+                    <BackupPreview sx={{ mt: 2 }} info={summary} />
                 </>
             :   null}
             <OutletPortal>

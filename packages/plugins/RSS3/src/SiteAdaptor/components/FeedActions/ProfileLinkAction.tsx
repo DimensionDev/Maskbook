@@ -9,7 +9,7 @@ import { Select, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -61,14 +61,14 @@ export function ProfileLinkAction({ feed, ...rest }: ProfileLinkActionProps) {
         <div {...rest}>
             <Typography className={classes.summary} component="div">
                 <Trans>
-                    <Label title={user} fontSize={14}>
+                    <Label title={user} sx={{ fontSize: 14 }}>
                         {formattedUser}
                     </Label>{' '}
                     <Select _follow="followed" _unfollow="un-followed" value={feed.type} other="" />{' '}
-                    <Label title={formattedOtherUser} fontSize={14}>
+                    <Label title={formattedOtherUser} sx={{ fontSize: 14 }}>
                         {other}
                     </Label>{' '}
-                    on <Label fontSize={14}>{feed.platform}</Label>
+                    on <Label sx={{ fontSize: 14 }}>{feed.platform}</Label>
                 </Trans>
             </Typography>
         </div>

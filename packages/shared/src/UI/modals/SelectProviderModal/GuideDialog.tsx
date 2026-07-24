@@ -14,13 +14,13 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     section: {
-        border: `solid 1px ${theme.palette.maskColor.line}`,
+        border: `solid 1px ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
         padding: theme.spacing(3),
         marginBottom: theme.spacing(2),
     },
     card: {
-        border: `solid 1px ${theme.palette.maskColor.line}`,
+        border: `solid 1px ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
         marginTop: theme.spacing(3),
         display: 'inline-block',
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         flexDirection: 'row',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         padding: theme.spacing(1.5),
         display: 'inline-block',
-        border: `solid 1px ${theme.palette.maskColor.line}`,
+        border: `solid 1px ${theme.vars.palette.maskColor.line}`,
         marginRight: theme.spacing(3),
     },
 }))
@@ -56,10 +56,10 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
         <InjectedDialog {...rest} title={<Trans>How to use {provider.name} Wallet?</Trans>}>
             <DialogContent className={classes.content}>
                 <section className={classes.section}>
-                    <Typography fontSize={16} fontWeight={700}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                         <Trans>1. If you haven't installed the {name} Wallet</Trans>
                     </Typography>
-                    <Typography mt={3} fontSize={14}>
+                    <Typography sx={{ mt: 3, fontSize: 14 }}>
                         <Trans>Download the {name} Wallet here</Trans>
                     </Typography>
                     <Link
@@ -68,26 +68,24 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
                         rel="noopener noreferrer"
                         className={cx(classes.card, classes.downloadButton)}>
                         <img width={30} height={30} src={provider.icon} />
-                        <Typography fontSize={16} fontWeight={700} ml={1.5}>
+                        <Typography sx={{ fontSize: 16, fontWeight: 700, ml: 1.5 }}>
                             <Trans>Check out the official website</Trans>
                         </Typography>
                     </Link>
                 </section>
                 <section className={classes.section}>
-                    <Typography fontSize={16} fontWeight={700}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                         <Trans>2. If you have installed the {name} Wallet</Trans>
                     </Typography>
-                    <Typography mt={1.5} fontSize={14}>
+                    <Typography sx={{ mt: 1.5, fontSize: 14 }}>
                         <Trans>Enable the {name} Wallet extension and disable other wallet extensions</Trans>
                     </Typography>
                     <Stack className={classes.card} style={{ cursor: 'default' }}>
-                        <Stack flexDirection="row" alignItems="center">
+                        <Stack sx={{ flexDirection: 'row', alignItems: 'center' }}>
                             <img width={30} height={30} src={provider.icon} />
-                            <Typography ml={1.5} fontSize={16}>
-                                {name}
-                            </Typography>
+                            <Typography sx={{ ml: 1.5, fontSize: 16 }}>{name}</Typography>
                         </Stack>
-                        <Stack flexDirection="row" mt={3}>
+                        <Stack sx={{ flexDirection: 'row', mt: 3 }}>
                             <div className={classes.button}>
                                 <Trans>Details</Trans>
                             </div>

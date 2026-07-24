@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => {
         },
         gearIcon: {
             marginLeft: theme.spacing(1),
-            color: theme.palette.text.primary,
+            color: theme.vars.palette.text.primary,
             cursor: 'pointer',
         },
         tipButton: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => {
             width: 40,
             height: 40,
             borderRadius: 40,
-            border: `1px solid ${theme.palette.maskColor.line}`,
+            border: `1px solid ${theme.vars.palette.maskColor.line}`,
         },
     }
 })

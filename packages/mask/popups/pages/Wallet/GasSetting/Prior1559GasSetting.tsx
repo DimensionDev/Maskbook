@@ -7,8 +7,7 @@ import { isEmpty } from 'lodash-es'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes, toHex } from '@masknet/shared-base'
-import { Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
+import { Typography, Button } from '@mui/material'
 import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
     ChainId,
@@ -58,15 +57,15 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'break-all',
     },
     label: {
-        color: theme.palette.primary.main,
+        color: theme.vars.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
     },
     selected: {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.vars.palette.primary.main,
         '& > *': {
-            color: theme.palette.primary.contrastText,
+            color: theme.vars.palette.primary.contrastText,
         },
     },
     button: {
@@ -290,8 +289,8 @@ export const Prior1559GasSetting = memo(() => {
                                 }}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
-                                InputProps={{
-                                    inputProps: {
+                                slotProps={{
+                                    htmlInput: {
                                         pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                     },
                                 }}
@@ -314,8 +313,8 @@ export const Prior1559GasSetting = memo(() => {
                             }}
                             error={!!errors.gasPrice?.message}
                             helperText={errors.gasPrice?.message}
-                            InputProps={{
-                                inputProps: {
+                            slotProps={{
+                                htmlInput: {
                                     pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                 },
                             }}
@@ -324,7 +323,7 @@ export const Prior1559GasSetting = memo(() => {
                     name="gasPrice"
                 />
             </form>
-            <LoadingButton
+            <Button
                 loading={loading}
                 variant="contained"
                 fullWidth
@@ -332,7 +331,7 @@ export const Prior1559GasSetting = memo(() => {
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 <Trans>Confirm</Trans>
-            </LoadingButton>
+            </Button>
         </>
     )
 })

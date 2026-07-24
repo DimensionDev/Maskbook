@@ -26,16 +26,16 @@ const useStyles = makeStyles()((theme) => ({
     card: {
         overflow: 'hidden',
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
-        color: theme.palette.maskColor.main,
-        background: theme.palette.maskColor.bottom,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
+        color: theme.vars.palette.maskColor.main,
+        background: theme.vars.palette.maskColor.bottom,
     },
     image: {
         display: 'block',
         width: '100%',
         aspectRatio: '1.91 / 1',
         objectFit: 'cover',
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
     },
     imageFallback: {
         display: 'flex',
@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
     },
     eyebrow: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         lineHeight: 1,
     },
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 1.25,
     },
     description: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         display: '-webkit-box',
         overflow: 'hidden',
         WebkitBoxOrient: 'vertical',
@@ -76,14 +76,14 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 86,
         borderRadius: 8,
         padding: theme.spacing(0.75, 1),
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
     },
     metricValue: {
         fontWeight: 700,
         lineHeight: 1.2,
     },
     metricLabel: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: 1.2,
     },
     footer: {

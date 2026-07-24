@@ -43,14 +43,14 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     userAccount: {
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     folder: {
         fontSize: 14,

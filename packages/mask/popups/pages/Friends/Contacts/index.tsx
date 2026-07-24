@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         whiteSpace: 'nowrap',
     },
     cardContainer: {
@@ -51,6 +51,6 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fe
                         <ContactCard key={friend.persona.publicKeyAsHex} friend={friend} avatar={friend.avatar} />
                     ))
                 })}
-                <ElementAnchor callback={() => fetchNextPage()} height={10} />
+                <ElementAnchor callback={() => fetchNextPage()} sx={{ height: 10 }} />
             </Box>
 })

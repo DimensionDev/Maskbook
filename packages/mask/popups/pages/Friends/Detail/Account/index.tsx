@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     iconBlack: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
     },
@@ -53,11 +53,13 @@ export const Account = memo<AccountProps>(function Account({ userId, displayName
         : formatPersonaName(userId)
     return (
         <Box
-            padding="12px"
-            display="flex"
-            flexDirection="column"
-            gap="10px"
-            alignItems="center"
+            sx={{
+                padding: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                alignItems: 'center',
+            }}
             className={classes.container}>
             <Icon size={40} />
             <Box className={classes.userId}>

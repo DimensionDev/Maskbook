@@ -37,9 +37,9 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
                 )}
                 <CardContent className={classes.content}>
                     {children ?? (
-                        <Stack height="100%" alignItems="center" justifyContent="center">
+                        <Stack sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                             <LoadingBase />
-                            <Typography fontSize="14px" mt={1.5}>
+                            <Typography sx={{ fontSize: '14px', mt: 1.5 }}>
                                 <Trans>Loading</Trans>
                             </Typography>
                         </Stack>

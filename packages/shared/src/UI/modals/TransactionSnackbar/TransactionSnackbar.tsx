@@ -5,13 +5,12 @@ import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
     makeStyles,
-    type ShowSnackbarOptions,
+    type ShowMaskSnackbarOptions,
     type SnackbarKey,
     type SnackbarMessage,
-    useCustomSnackbar,
-    usePopupCustomSnackbar,
+    useSnackbar,
 } from '@masknet/theme'
-import { type NetworkPluginID, createLookupTableResolver, Sniffings } from '@masknet/shared-base'
+import { type NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
@@ -28,8 +27,7 @@ const useStyles = makeStyles()({
 
 export function useTransactionSnackbar(pluginID: NetworkPluginID) {
     const { classes } = useStyles()
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
-    const { showSnackbar: showPopupSnackbar, closeSnackbar: closePopupSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>(undefined)
 
     const { chainId } = useChainContext()
@@ -81,41 +79,37 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
 
     const resolveSnackbarConfig = createLookupTableResolver<
         TransactionStatusType,
-        Pick<ShowSnackbarOptions, 'message' | 'processing' | 'variant'>
+        Pick<ShowMaskSnackbarOptions, 'detail' | 'processing' | 'variant'>
     >(
         {
             [TransactionStatusType.NOT_DEPEND]: {
                 processing: true,
                 variant: 'default',
-                message: <Trans>Confirm this transaction in your wallet</Trans>,
+                detail: <Trans>Confirm this transaction in your wallet</Trans>,
             },
             [TransactionStatusType.SUCCEED]: {
                 processing: false,
                 variant: 'success',
-                message: <Trans>Transaction Confirmed</Trans>,
+                detail: <Trans>Transaction Confirmed</Trans>,
             },
             [TransactionStatusType.FAILED]: {
                 processing: false,
                 variant: 'error',
-                message: <Trans>Transaction Failed</Trans>,
+                detail: <Trans>Transaction Failed</Trans>,
             },
         },
         {},
     )
 
     const showSingletonSnackbar = useCallback(
-        (title: SnackbarMessage, options: ShowSnackbarOptions) => {
-            if (snackbarKeyRef.current !== undefined)
-                if (Sniffings.is_popup_page) closePopupSnackbar(snackbarKeyRef.current)
-                else closeSnackbar(snackbarKeyRef.current)
-            snackbarKeyRef.current =
-                Sniffings.is_popup_page ? showPopupSnackbar(title, options) : showSnackbar(title, options)
+        (title: SnackbarMessage, options: ShowMaskSnackbarOptions) => {
+            if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
+            snackbarKeyRef.current = enqueueSnackbar(title, options)
             return () => {
-                if (Sniffings.is_popup_page) closePopupSnackbar(snackbarKeyRef.current)
-                else closeSnackbar(snackbarKeyRef.current)
+                closeSnackbar(snackbarKeyRef.current)
             }
         },
-        [showSnackbar, closeSnackbar, showPopupSnackbar, closePopupSnackbar],
+        [enqueueSnackbar, closeSnackbar],
     )
 
     const format = useFormatMessage()
@@ -140,7 +134,7 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
         showSingletonSnackbar(title, {
             ...resolveSnackbarConfig(progress.status),
 
-            message: (
+            detail: (
                 <Link
                     sx={{ wordBreak: 'break-word' }}
                     className={classes.link}
@@ -188,7 +182,7 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
 
         showSingletonSnackbar(title, {
             ...snackbarConfig,
-            message: message ?? snackbarConfig.message,
+            detail: message ?? snackbarConfig.detail,
         })
         setErrorInfo(undefined)
     }, [JSON.stringify(errorInfo), chainId, format])

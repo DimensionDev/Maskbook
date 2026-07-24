@@ -63,7 +63,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     MaxChipProps?: Partial<ChipProps>
     MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
-    TextFieldProps?: Exclude<StandardTextFieldProps, 'variant'>
+    TextFieldProps?: Omit<StandardTextFieldProps, 'variant' | 'slotProps'>
 }
 
 // todo: merge into one with TokenAmountPanel
@@ -110,8 +110,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             value={amount}
             onChange={onChange}
             placeholder="0.0"
-            InputProps={{
-                inputProps: {
+            slotProps={{
+                htmlInput: {
                     autoComplete: 'off',
                     autoCorrect: 'off',
                     title: 'Token Amount',
@@ -123,93 +123,93 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                     spellCheck: false,
                     className: classes.input,
                 },
-                endAdornment:
-                    disableToken ? null
-                    : token ?
-                        <Box
-                            className={classes.token}
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'flex-end',
-                            }}>
-                            {disableBalance ? null : (
-                                <Typography
-                                    className={classes.balance}
-                                    color="textSecondary"
-                                    variant="body2"
-                                    component="span">
-                                    <Trans>
-                                        Balance:{' '}
-                                        <FormattedBalance
-                                            value={balance}
-                                            decimals={token.decimals}
-                                            significant={6}
-                                            formatter={formatBalance}
-                                        />
-                                    </Trans>
-                                </Typography>
-                            )}
+                input: {
+                    endAdornment:
+                        disableToken ? null
+                        : token ?
                             <Box
+                                className={classes.token}
                                 sx={{
                                     display: 'flex',
-                                    alignItems: 'center',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-end',
+                                }}>
+                                {disableBalance ? null : (
+                                    <Typography
+                                        className={classes.balance}
+                                        color="textSecondary"
+                                        variant="body2"
+                                        component="span">
+                                        <Trans>
+                                            Balance:{' '}
+                                            <FormattedBalance
+                                                value={balance}
+                                                decimals={token.decimals}
+                                                significant={6}
+                                                formatter={formatBalance}
+                                            />
+                                        </Trans>
+                                    </Typography>
+                                )}
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        marginTop: 2,
+                                    }}>
+                                    {balance !== '0' && !disableBalance ?
+                                        <Chip
+                                            classes={{
+                                                root: cx(classes.max, MaxChipProps?.classes?.root),
+                                                ...MaxChipProps?.classes,
+                                            }}
+                                            size="small"
+                                            label="MAX"
+                                            clickable
+                                            color="primary"
+                                            variant="outlined"
+                                            onClick={() => {
+                                                onAmountChange(
+                                                    formatBalance(
+                                                        new BigNumber(maxAmount ?? balance)
+                                                            .dividedBy(maxAmountShares)
+                                                            .decimalPlaces(0, 1),
+                                                        token.decimals,
+                                                    ),
+                                                )
+                                            }}
+                                            {...MaxChipProps}
+                                        />
+                                    :   null}
+                                    <SelectTokenChip token={token} {...props.SelectTokenChip} />
+                                </Box>
+                            </Box>
+                        :   <Box
+                                className={classes.token}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-end',
                                     marginTop: 2,
                                 }}>
-                                {balance !== '0' && !disableBalance ?
-                                    <Chip
-                                        classes={{
-                                            root: cx(classes.max, MaxChipProps?.classes?.root),
-                                            ...MaxChipProps?.classes,
-                                        }}
-                                        size="small"
-                                        label="MAX"
-                                        clickable
-                                        color="primary"
-                                        variant="outlined"
-                                        onClick={() => {
-                                            onAmountChange(
-                                                formatBalance(
-                                                    new BigNumber(maxAmount ?? balance)
-                                                        .dividedBy(maxAmountShares)
-                                                        .decimalPlaces(0, 1),
-                                                    token.decimals,
-                                                ),
-                                            )
-                                        }}
-                                        {...MaxChipProps}
-                                    />
-                                :   null}
+                                {disableBalance ? null : (
+                                    <Typography
+                                        className={classes.balance}
+                                        color="textSecondary"
+                                        variant="body2"
+                                        component="span">
+                                        -
+                                    </Typography>
+                                )}
                                 <SelectTokenChip token={token} {...props.SelectTokenChip} />
-                            </Box>
-                        </Box>
-                    :   <Box
-                            className={classes.token}
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'flex-end',
-                                marginTop: 2,
-                            }}>
-                            {disableBalance ? null : (
-                                <Typography
-                                    className={classes.balance}
-                                    color="textSecondary"
-                                    variant="body2"
-                                    component="span">
-                                    -
-                                </Typography>
-                            )}
-                            <SelectTokenChip token={token} {...props.SelectTokenChip} />
-                        </Box>,
-                ...props.InputProps,
-            }}
-            InputLabelProps={{
-                shrink: true,
-                classes: {
-                    shrink: classes.inputShrinkLabel,
+                            </Box>,
+                    ...props.InputProps,
+                },
+                inputLabel: {
+                    shrink: true,
+                    classes: { shrink: classes.inputShrinkLabel },
                 },
             }}
             {...props.TextFieldProps}

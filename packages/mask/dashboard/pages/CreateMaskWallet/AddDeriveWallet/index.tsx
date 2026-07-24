@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     title: {
         fontSize: 36,
@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     paginationButton: {
         borderRadius: 99,
-        background: theme.palette.maskColor.thirdMain,
+        background: theme.vars.palette.maskColor.thirdMain,
         width: '100%',
         fontWeight: 700,
     },
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         cursor: 'pointer',
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
 }))
 
@@ -208,8 +208,7 @@ export const Component = memo(function AddDeriveWallet() {
                     <Trans>Select Address</Trans>
                 </Typography>
             </Box>
-
-            <Typography className={classes.second} mt={2} mb={3}>
+            <Typography className={classes.second} sx={{ mt: 2, mb: 3 }}>
                 <Trans>Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}</Trans>
             </Typography>
 
@@ -220,7 +219,7 @@ export const Component = memo(function AddDeriveWallet() {
                     className={classes.paginationButton}
                     disabled={page === 0 || confirmLoading}
                     onClick={() => setPage((prev) => prev - 1)}>
-                    <Typography fontWeight={700}>
+                    <Typography sx={{ fontWeight: 700 }}>
                         <Trans>Previous</Trans>
                     </Typography>
                 </SecondaryButton>
@@ -228,7 +227,7 @@ export const Component = memo(function AddDeriveWallet() {
                     className={classes.paginationButton}
                     disabled={confirmLoading}
                     onClick={() => setPage((prev) => prev + 1)}>
-                    <Typography fontWeight={700}>
+                    <Typography sx={{ fontWeight: 700 }}>
                         <Trans>Next</Trans>
                     </Typography>
                 </SecondaryButton>

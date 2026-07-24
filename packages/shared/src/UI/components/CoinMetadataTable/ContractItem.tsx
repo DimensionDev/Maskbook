@@ -15,15 +15,15 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0.5, 0),
         boxSizing: 'border-box',
         ':not(:last-of-type)': {
-            borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+            borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         },
     },
     icon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     address: {
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         fontWeight: 700,
         minWidth: theme.spacing(11),
@@ -55,9 +55,9 @@ export function ContractItem({ pluginID, chainId, address, className, ...rest }:
 
     return (
         <MenuItem className={cx(classes.contractItem, className)} {...rest}>
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" sx={{ alignItems: 'center' }}>
                 <ImageIcon icon={networkDescriptor.icon} size={16} />
-                <Typography className={classes.address} ml={1}>
+                <Typography className={classes.address} sx={{ ml: 1 }}>
                     <FormattedAddress address={address} size={4} formatter={Utils.formatAddress} />
                 </Typography>
                 <CopyButton className={classes.icon} text={address} size={16} title="Copy address" scoped={false} />

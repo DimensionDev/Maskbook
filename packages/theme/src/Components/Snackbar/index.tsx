@@ -1,147 +1,42 @@
-import { useRef, memo, useCallback, type RefAttributes } from 'react'
-import { keyframes } from 'tss-react'
+import { useMemo, type RefAttributes } from 'react'
+import { keyframes, type Css } from 'tss-react'
 import {
     SnackbarProvider,
     type SnackbarProviderProps,
-    type SnackbarKey,
-    useSnackbar,
+    type MakeStyles,
     type VariantType,
-    type SnackbarMessage,
     SnackbarContent,
-    type SnackbarAction,
     type OptionsObject,
+    useSnackbar,
+    type CustomContentProps,
 } from 'notistack'
-import { Typography, IconButton, alpha } from '@mui/material'
+import { Typography, IconButton } from '@mui/material'
 import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
+import { alpha } from '../../Theme/colors.js'
 import { makeStyles } from '../../UIHelper/index.js'
-import { MaskColorVar } from '../../CSSVariables/index.js'
 import { usePortalShadowRoot } from '../../ShadowRoot/index.js'
 
-export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.js'
-export { SnackbarProvider, useSnackbar } from 'notistack'
-export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
+export { useSnackbar } from 'notistack'
+export type { SnackbarKey, SnackbarMessage } from 'notistack'
 
-export interface StyleProps {
-    offsetY?: number
+declare module 'notistack' {
+    interface OptionsObject<V extends VariantType = VariantType> extends SharedProps<V> {
+        detail?: React.ReactNode
+        processing?: boolean
+        classes?: Partial<Record<'content' | 'title' | 'message', string>>
+    }
 }
 
-const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, classNames) => {
+// #region SnackbarContent
+const useStyles = makeStyles<void, 'title' | 'message'>()((theme, _, classNames) => {
     const spinningAnimationKeyFrames = keyframes`
         to {
           transform: rotate(360deg)
         }
     `
-    const title = {
-        color: theme.palette.maskColor.main,
-        fontWeight: 700,
-        fontSize: 14,
-        lineHeight: '18px',
-    } as const
-    const message = {
-        color: theme.palette.maskColor.main,
-        fontWeight: 400,
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: 14,
-        lineHeight: '18px',
-        wordBreak: 'break-word',
-        '& > a': {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        '& :focus:not(:focus-visible)': {
-            outline: 0,
-        },
-    } as const
-    const defaultVariant = {
-        background: theme.palette.maskColor.bottom,
-        color: theme.palette.maskColor.main,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
-        [`& .${classNames.title}`]: {
-            color: 'inherit',
-        },
-
-        [`& .${classNames.message}`]: {
-            color: 'inherit',
-        },
-    }
-    const success = {
-        backgroundColor: theme.palette.maskColor.success,
-        color: theme.palette.maskColor.white,
-        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.success, 0.15)}`,
-        backdropFilter: 'blur(16px)',
-        [`& .${classNames.title}`]: {
-            color: 'inherit',
-        },
-        [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
-            '& svg': {
-                color: theme.palette.maskColor.white,
-            },
-        },
-    } as const
-
-    const error = {
-        background: theme.palette.maskColor.danger,
-        color: theme.palette.maskColor.white,
-        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.danger, 0.15)}`,
-        backdropFilter: 'blur(16px)',
-        [`& .${classNames.title}`]: {
-            color: 'inherit',
-        },
-        [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
-            '& svg': {
-                color: theme.palette.maskColor.white,
-            },
-        },
-    } as const
-
-    const info = {
-        background: theme.palette.maskColor.primary,
-        color: theme.palette.maskColor.white,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
-        [`& .${classNames.title}`]: {
-            color: 'inherit',
-        },
-        [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
-            '& svg': {
-                color: theme.palette.maskColor.white,
-            },
-        },
-    }
-
-    const warning = {
-        backgroundColor: theme.palette.maskColor.warn,
-        color: theme.palette.maskColor.white,
-        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.warn, 0.15)}`,
-        backdropFilter: 'blur(16px)',
-        [`& .${classNames.title}`]: {
-            color: 'inherit',
-        },
-        [`& .${classNames.message}`]: {
-            color: alpha(theme.palette.maskColor.white, 0.8),
-            '& svg': {
-                color: theme.palette.maskColor.white,
-            },
-        },
-    } as const
 
     return {
-        root: {
-            zIndex: 9999,
-            transform: offsetY === undefined ? 'none' : `translateY(${offsetY}px)`,
-            color: MaskColorVar.textLight,
-            pointerEvents: 'inherit',
-        },
         content: {
             alignItems: 'center',
             padding: theme.spacing(2),
@@ -149,12 +44,79 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
             width: 380,
             flexWrap: 'nowrap !important' as 'nowrap',
         },
-        // eslint-disable-next-line tss-unused-classes/unused-classes
-        default: defaultVariant,
-        success,
-        error,
-        info,
-        warning,
+        default: {
+            background: theme.vars.palette.maskColor.bottom,
+            color: theme.vars.palette.maskColor.main,
+            boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            ...theme.applyStyles('dark', { boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)' }),
+            [`& .${classNames.title}`]: {
+                color: 'inherit',
+            },
+
+            [`& .${classNames.message}`]: {
+                color: 'inherit',
+            },
+        },
+        success: {
+            backgroundColor: theme.vars.palette.maskColor.success,
+            color: theme.vars.palette.maskColor.white,
+            boxShadow: `0px 6px 20px ${alpha(theme.vars.palette.maskColor.success, 0.15)}`,
+            backdropFilter: 'blur(16px)',
+            [`& .${classNames.title}`]: {
+                color: 'inherit',
+            },
+            [`& .${classNames.message}`]: {
+                color: alpha(theme.vars.palette.maskColor.white, 0.8),
+                '& svg': {
+                    color: theme.vars.palette.maskColor.white,
+                },
+            },
+        },
+        error: {
+            background: theme.vars.palette.maskColor.danger,
+            color: theme.vars.palette.maskColor.white,
+            boxShadow: `0px 6px 20px ${alpha(theme.vars.palette.maskColor.danger, 0.15)}`,
+            backdropFilter: 'blur(16px)',
+            [`& .${classNames.title}`]: {
+                color: 'inherit',
+            },
+            [`& .${classNames.message}`]: {
+                color: alpha(theme.vars.palette.maskColor.white, 0.8),
+                '& svg': {
+                    color: theme.vars.palette.maskColor.white,
+                },
+            },
+        },
+        info: {
+            background: theme.vars.palette.maskColor.primary,
+            color: theme.vars.palette.maskColor.white,
+            boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            ...theme.applyStyles('dark', { boxShadow: '0px 4px 30px rgba(255, 255, 255, 0.15)' }),
+            [`& .${classNames.title}`]: {
+                color: 'inherit',
+            },
+            [`& .${classNames.message}`]: {
+                color: alpha(theme.vars.palette.maskColor.white, 0.8),
+                '& svg': {
+                    color: theme.vars.palette.maskColor.white,
+                },
+            },
+        },
+        warning: {
+            backgroundColor: theme.vars.palette.maskColor.warn,
+            color: theme.vars.palette.maskColor.white,
+            boxShadow: `0px 6px 20px ${alpha(theme.vars.palette.maskColor.warn, 0.15)}`,
+            backdropFilter: 'blur(16px)',
+            [`& .${classNames.title}`]: {
+                color: 'inherit',
+            },
+            [`& .${classNames.message}`]: {
+                color: alpha(theme.vars.palette.maskColor.white, 0.8),
+                '& svg': {
+                    color: theme.vars.palette.maskColor.white,
+                },
+            },
+        },
         icon: {
             display: 'flex',
             alignItems: 'center',
@@ -181,22 +143,31 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
                 outline: 0,
             },
         },
-        title,
-        message,
+        title: {
+            color: theme.vars.palette.maskColor.main,
+            fontWeight: 700,
+            fontSize: 14,
+            lineHeight: '18px',
+        },
+        message: {
+            color: theme.vars.palette.maskColor.main,
+            fontWeight: 400,
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 14,
+            lineHeight: '18px',
+            wordBreak: 'break-word',
+            '& > a': {
+                display: 'flex',
+                alignItems: 'center',
+            },
+            '& :focus:not(:focus-visible)': {
+                outline: 0,
+            },
+        },
     }
 })
 
-interface CustomSnackbarContentProps extends RefAttributes<HTMLDivElement> {
-    id: SnackbarKey
-    title: SnackbarMessage
-    message?: string | React.ReactNode
-    icon?: React.ReactNode
-    processing?: boolean
-    variant?: VariantType
-    action?: SnackbarAction
-    offsetY?: number
-    classes?: Partial<ReturnType<typeof useStyles>['classes']>
-}
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
     success: <Icons.SuccessForSnackBar />,
@@ -205,8 +176,15 @@ const IconMap: Record<VariantType, React.ReactNode> = {
     info: <InfoIcon color="inherit" />,
 }
 
-function CustomSnackbarContent(props: CustomSnackbarContentProps) {
-    const { classes, cx } = useStyles({ offsetY: props.offsetY }, { props })
+function MaskSnackbarContent(props: CustomContentProps & RefAttributes<HTMLDivElement>) {
+    const { classes, cx } = useStyles()
+    const variantClass = {
+        default: classes.default,
+        success: classes.success,
+        error: classes.error,
+        warning: classes.warning,
+        info: classes.info,
+    }[props.variant!]
     const snackbar = useSnackbar()
     const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
     const variantIcon =
@@ -222,17 +200,17 @@ function CustomSnackbarContent(props: CustomSnackbarContentProps) {
         renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
     }
     return (
-        <SnackbarContent ref={props.ref} className={cx(classes.content, classes[props.variant!])}>
+        <SnackbarContent ref={props.ref} className={cx(classes.content, variantClass, props.classes?.content)}>
             {variantIcon ?
                 <div className={classes.icon}>{variantIcon}</div>
             :   null}
             <div className={classes.texts}>
-                <Typography className={classes.title} variant="h2">
-                    {props.title}
+                <Typography className={cx(classes.title, props.classes?.title)} variant="h2">
+                    {props.message}
                 </Typography>
-                {props.message ?
-                    <Typography className={classes.message} variant="body1">
-                        {props.message}
+                {props.detail ?
+                    <Typography className={cx(classes.message, props.classes?.message)} variant="body1">
+                        {props.detail}
                     </Typography>
                 :   null}
             </div>
@@ -240,77 +218,67 @@ function CustomSnackbarContent(props: CustomSnackbarContentProps) {
         </SnackbarContent>
     )
 }
+// #endregion
 
-export const CustomSnackbarProvider = memo<
-    SnackbarProviderProps & {
-        offsetY?: number
-    }
->(function CustomSnackbarProvider({ offsetY, ...rest }) {
-    const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles({ offsetY })
-    const onDismiss = (key: string | number) => () => {
-        ref.current?.closeSnackbar(key)
-    }
+// #region Provider
+const useProviderStyles = makeStyles<{ offsetY?: number }>()((theme, { offsetY }) => ({
+    root: {
+        zIndex: 9999,
+        transform: offsetY === undefined ? 'none' : `translateY(${offsetY}px)`,
+        color: theme.vars.palette.maskColor.textLight,
+        pointerEvents: 'inherit',
+    },
+}))
 
-    return usePortalShadowRoot((container) => (
-        <SnackbarProvider
-            ref={ref}
-            maxSnack={30}
-            disableWindowBlurListener
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            hideIconVariant
-            content={(key, title) => (
-                <CustomSnackbarContent id={key} variant={rest.variant ?? 'default'} title={title} offsetY={offsetY} />
-            )}
-            action={(key) => (
-                <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
-                    <CloseIcon color="inherit" />
-                </IconButton>
-            )}
-            classes={{
-                containerRoot: classes.root,
-                variantSuccess: classes.success,
-                variantError: classes.error,
-                variantInfo: classes.info,
-                variantWarning: classes.warning,
-            }}
-            domRoot={container}
-            {...rest}
-        />
-    ))
-})
-
-export interface ShowSnackbarOptions
-    extends OptionsObject,
-        Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon' | 'classes'> {}
-
-export function useCustomSnackbar() {
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-    const showSnackbar = useCallback(
-        (text: SnackbarMessage, options?: ShowSnackbarOptions) => {
-            const { processing, message, variant, ...rest } = options || {
-                variant: 'default',
-            }
-            return enqueueSnackbar(text, {
-                variant,
-                content: (key, title) => {
-                    return (
-                        <CustomSnackbarContent
-                            variant={variant ?? 'default'}
-                            id={key}
-                            title={title}
-                            message={message}
-                            processing={processing}
-                            action={rest.action}
-                            classes={rest.classes}
-                        />
-                    )
-                },
-                ...rest,
-            })
-        },
-        [enqueueSnackbar],
-    )
-
-    return { showSnackbar, closeSnackbar }
+export interface MaskSnackbarProviderProps extends SnackbarProviderProps {
+    offsetY?: number
 }
+
+function createEmotionMakeStyles(css: Css): MakeStyles {
+    return (styles) =>
+        Object.fromEntries(Object.entries(styles).map(([name, style]) => [name, css(style)])) as {
+            [name in keyof typeof styles]: string
+        }
+}
+
+export function MaskSnackbarProvider({ offsetY, ...rest }: MaskSnackbarProviderProps) {
+    const { classes, css } = useProviderStyles({ offsetY })
+    const makeSnackbarStyles = useMemo(() => createEmotionMakeStyles(css), [css])
+    return usePortalShadowRoot(
+        (container) => (
+            <SnackbarProvider
+                maxSnack={30}
+                disableWindowBlurListener
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                hideIconVariant
+                Components={{
+                    default: MaskSnackbarContent,
+                    success: MaskSnackbarContent,
+                    error: MaskSnackbarContent,
+                    warning: MaskSnackbarContent,
+                    info: MaskSnackbarContent,
+                }}
+                action={(id) => <SnackbarAction id={id} />}
+                classes={{
+                    containerRoot: classes.root,
+                }}
+                domRoot={container}
+                makeStyles={makeSnackbarStyles}
+                {...rest}
+            />
+        ),
+        'Snackbar Portal',
+    )
+}
+// #endregion
+
+function SnackbarAction({ id }: { id: string | number }) {
+    const snackbar = useSnackbar()
+    return (
+        <IconButton size="large" onClick={() => snackbar.closeSnackbar(id)} sx={{ color: 'inherit' }}>
+            <CloseIcon color="inherit" />
+        </IconButton>
+    )
+}
+
+export type ShowMaskSnackbarOptions = OptionsObject

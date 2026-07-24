@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { MaskTextFieldProps } from '@masknet/theme'
-import { IconButton, InputAdornment, TextField } from '@mui/material'
+import { IconButton, InputAdornment, mergeSlotProps, TextField } from '@mui/material'
 import { Icons } from '@masknet/icons'
 
 interface PasswordFieldProps extends Exclude<MaskTextFieldProps, 'type'> {
@@ -15,25 +15,27 @@ export default function PasswordField({ show = true, ...props }: PasswordFieldPr
             {...props}
             type={showPassword ? 'text' : 'password'}
             size="medium"
-            InputProps={{
-                ...props.InputProps,
-                size: 'medium',
-                disableUnderline: true,
-                endAdornment:
-                    show ?
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setShowPassword(!showPassword)}
-                                onMouseDown={(event) => event.preventDefault()}
-                                edge="end"
-                                size="small">
-                                {showPassword ?
-                                    <Icons.EyeOff size={18} />
-                                :   <Icons.Eye size={18} />}
-                            </IconButton>
-                        </InputAdornment>
-                    :   null,
+            slotProps={{
+                ...props.slotProps,
+                input: mergeSlotProps(props.slotProps?.input, {
+                    size: 'medium',
+                    disableUnderline: true,
+                    endAdornment:
+                        show ?
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    onMouseDown={(event) => event.preventDefault()}
+                                    edge="end"
+                                    size="small">
+                                    {showPassword ?
+                                        <Icons.EyeOff size={18} />
+                                    :   <Icons.Eye size={18} />}
+                                </IconButton>
+                            </InputAdornment>
+                        :   null,
+                }),
             }}
         />
     )

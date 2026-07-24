@@ -31,10 +31,10 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
         gap: theme.spacing(0.5),
         padding: theme.spacing(1.5),
         borderRadius: theme.spacing(1.5),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         cursor: 'pointer',
         [`&.${refs.active}`]: {
-            border: `1px solid ${theme.palette.maskColor.main}`,
+            border: `1px solid ${theme.vars.palette.maskColor.main}`,
         },
         position: 'relative',
     },
@@ -56,7 +56,7 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
         display: 'flex',
         width: '100%',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
@@ -84,8 +84,8 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
         gap: theme.spacing(0.5),
         padding: theme.spacing(0.5),
         borderRadius: theme.spacing(0.5),
-        backgroundColor: theme.palette.maskColor.bg,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bg,
+        color: theme.vars.palette.maskColor.main,
         textDecoration: 'none',
         [`&.${refs.label}`]: {
             padding: theme.spacing(0.5, 1),
@@ -95,12 +95,12 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
     maxTag: {},
     label: {
         [`&.${refs.fastestTag}`]: {
-            backgroundColor: theme.palette.maskColor.main,
-            color: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.bottom,
         },
         [`&.${refs.maxTag}`]: {
-            backgroundColor: theme.palette.maskColor.bg,
-            color: theme.palette.maskColor.main,
+            backgroundColor: theme.vars.palette.maskColor.bg,
+            color: theme.vars.palette.maskColor.main,
         },
     },
 }))
@@ -116,7 +116,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
 
     if (!bridgeQuote?.routerList.length)
         return (
-            <Box className={classes.container} justifyContent="center">
+            <Box className={classes.container} sx={{ justifyContent: 'center' }}>
                 <EmptyStatus />
             </Box>
         )
@@ -150,9 +150,9 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                                 checkedIcon={
                                     <Icons.RadioButtonChecked
                                         size={18}
-                                        color={theme.palette.maskColor.main}
+                                        color={theme.vars.palette.maskColor.main}
                                         sx={{
-                                            '--stroke-color': theme.palette.maskColor.bottom,
+                                            '--stroke-color': theme.vars.palette.maskColor.bottom,
                                         }}
                                     />
                                 }
@@ -160,7 +160,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                         </Typography>
 
                         <div className={classes.infoRow}>
-                            <Typography className={classes.rowName} fontWeight={700}>
+                            <Typography className={classes.rowName} sx={{ fontWeight: 700 }}>
                                 {formatAmount(router.toTokenAmount, -(toToken?.decimals || 0))}{' '}
                                 {toToken?.symbol || '--'}
                             </Typography>

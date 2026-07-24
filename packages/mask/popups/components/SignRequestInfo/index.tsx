@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     source: {
         padding: theme.spacing(1.25),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         marginTop: theme.spacing(4),
         display: 'flex',
         flexDirection: 'column',
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     sourceText: {
         fontSize: 12,
         fontWeight: 700,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         wordBreak: 'break-word',
         whiteSpace: 'pre-wrap',
     },
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
     },
     dangerField: {
-        color: theme.palette.error.main,
+        color: theme.vars.palette.error.main,
     },
 }))
 
@@ -90,7 +90,7 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
             </Typography>
             {origin ?
                 <Box className={classes.source}>
-                    <Typography fontSize={16} fontWeight={700}>
+                    <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                         <Trans>Request Source</Trans>
                     </Typography>
                     <Typography

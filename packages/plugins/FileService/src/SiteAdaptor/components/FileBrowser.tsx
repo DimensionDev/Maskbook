@@ -12,7 +12,7 @@ import { useFileManagement } from '../contexts/index.js'
 import { FileList, SelectableFileList } from './FileList.js'
 import { Trans } from '@lingui/react/macro'
 
-const Tabs: typeof MuiTabs = styled(MuiTabs)(({ theme }) => ({
+const Tabs = styled(MuiTabs)(({ theme }) => ({
     display: 'flex',
     gap: theme.spacing(0.5),
     [`& .${tabsClasses.indicator}`]: {
@@ -25,7 +25,7 @@ const Tab = styled(MuiTab)(({ theme }) => ({
     padding: theme.spacing(0, 2),
     minHeight: 'auto',
     boxSizing: 'border-box',
-    color: theme.palette.maskColor.second,
+    color: theme.vars.palette.maskColor.second,
     fontSize: 14,
     fontWeight: 700,
     backgroundColor: 'transparent',
@@ -33,11 +33,11 @@ const Tab = styled(MuiTab)(({ theme }) => ({
     cursor: 'pointer',
     borderRadius: 18,
     '&:hover': {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     [`&.${tabClasses.selected}`]: {
-        color: theme.palette.maskColor.main,
-        backgroundColor: theme.palette.maskColor.bg,
+        color: theme.vars.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bg,
     },
 }))
 
@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     emptyMessage: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginTop: theme.spacing(1.5),
     },
     fileList: {
@@ -110,10 +110,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 2, 0),
         flexShrink: 0,
         boxSizing: 'border-box',
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
     },
 }))
 
@@ -194,23 +194,25 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
             {searching ?
                 <div className={classes.header}>
                     <MaskTextField
-                        wrapperProps={{ className: classes.searchInput }}
+                        className={classes.searchInput}
                         placeholder="Search my files"
                         value={input}
                         autoFocus
                         fullWidth
-                        InputProps={{
-                            style: { height: 40 },
-                            inputProps: { style: { paddingLeft: 4 } },
-                            startAdornment: <Icons.Search size={18} />,
-                            endAdornment: input ? <Icons.Close size={18} onClick={() => setInput('')} /> : null,
-                            onKeyDown: (event) => {
-                                if (event.code !== 'Enter') return
-                                setKeyword(event.currentTarget.value)
+                        slotProps={{
+                            input: {
+                                style: { height: 40 },
+                                startAdornment: <Icons.Search size={18} />,
+                                endAdornment: input ? <Icons.Close size={18} onClick={() => setInput('')} /> : null,
+                                onKeyDown: (event) => {
+                                    if (event.code !== 'Enter') return
+                                    setKeyword(event.currentTarget.value)
+                                },
+                                onBlur: (event) => {
+                                    setKeyword(event.currentTarget.value)
+                                },
                             },
-                            onBlur: (event) => {
-                                setKeyword(event.currentTarget.value)
-                            },
+                            htmlInput: { style: { paddingLeft: 4 } },
                         }}
                         onChange={(event) => {
                             setInput(event.currentTarget.value)
@@ -231,7 +233,7 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                                     aria-label={x.key}
                                     value={x.value}
                                     label={
-                                        <Typography variant="body2" fontWeight={700}>
+                                        <Typography variant="body2" sx={{ fontWeight: 700 }}>
                                             {x.value}
                                         </Typography>
                                     }

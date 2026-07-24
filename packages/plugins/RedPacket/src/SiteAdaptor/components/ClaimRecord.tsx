@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     handle: {
         fontWeight: 700,
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
     },
     badge: {
@@ -47,13 +47,13 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     asset: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
         marginLeft: 'auto',
     },
     symbol: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
         marginLeft: theme.spacing(1),
     },
@@ -86,7 +86,7 @@ export const ClaimRecord = memo(function ClaimRecord({ className, record, chainI
                 <Typography className={classes.address}>
                     <Typography component="span">{Utils.formatAddress(record.creator, 4)}</Typography>
                     <a href={Utils.explorerResolver.addressLink(chainId, record.creator)} target="_blank">
-                        <Icons.LinkOut size={20} color={theme.palette.maskColor.second} />
+                        <Icons.LinkOut size={20} color={theme.vars.palette.maskColor.second} />
                     </a>
                 </Typography>
             </div>

@@ -1,4 +1,5 @@
-import { Alert, type AlertProps, alpha } from '@mui/material'
+import { Alert, type AlertProps } from '@mui/material'
+import { alpha } from '../../Theme/colors.js'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -22,13 +23,13 @@ const useStyles = makeStyles()((theme) => ({
     action: {
         padding: 0,
     },
-    standardWarning: {
-        color: theme.palette.maskColor.warn,
-        background: alpha(theme.palette.maskColor.warn, 0.1),
+    warning: {
+        color: theme.vars.palette.maskColor.warn,
+        background: alpha(theme.vars.palette.maskColor.warn, 0.1),
     },
-    standardError: {
-        color: theme.palette.maskColor.danger,
-        background: alpha(theme.palette.maskColor.danger, 0.1),
+    error: {
+        color: theme.vars.palette.maskColor.danger,
+        background: alpha(theme.vars.palette.maskColor.danger, 0.1),
     },
 }))
 
@@ -44,8 +45,8 @@ export function MaskAlert(props: AlertProps) {
                 message: classes.message,
                 icon: classes.icon,
                 action: classes.action,
-                standardWarning: classes.standardWarning,
-                standardError: classes.standardError,
+                colorWarning: classes.warning,
+                colorError: classes.error,
                 ...rest.classes,
             }}>
             {children}

@@ -13,7 +13,7 @@ import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     content: {
         overflow: 'auto',
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },

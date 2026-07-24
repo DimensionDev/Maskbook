@@ -63,7 +63,7 @@ export const Component = memo(function PersonaSignRequest() {
     }, [requestID, params])
 
     return (
-        <Box p={2}>
+        <Box sx={{ p: 2 }}>
             <SignRequestInfo message={message} rawMessage={message} origin={source} />
             <BottomController>
                 <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">

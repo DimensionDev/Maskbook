@@ -11,7 +11,6 @@ import { Trans } from '@lingui/react/macro'
 import { useSupportedChains } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         container: {
             display: 'flex',
@@ -21,18 +20,21 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(2),
         },
         button: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             flexGrow: 1,
             minWidth: 0,
             height: theme.spacing(4.5),
             boxSizing: 'border-box',
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 8,
             border: 'none',
-            boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
+            boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+            ...theme.applyStyles('dark', {
+                boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.10)',
+            }),
             backdropFilter: 'blur(5px)',
             cursor: 'pointer',
             transition: 'transform 0.1s ease',
@@ -44,7 +46,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         label: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             marginLeft: theme.spacing(1),
             fontWeight: 700,
             fontSize: 14,
@@ -81,7 +83,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                         state: { asset },
                     })
                 }}>
-                <Icons.Send size={20} color={theme.palette.maskColor.main} />
+                <Icons.Send size={20} color={theme.vars.palette.maskColor.main} />
                 <Typography className={classes.label}>
                     <Trans>Send</Trans>
                 </Typography>
@@ -97,7 +99,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                         }),
                     )
                 }}>
-                <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
+                <Icons.ArrowDownward size={20} color={theme.vars.palette.maskColor.main} />
                 <Typography className={classes.label}>
                     <Trans>Receive</Trans>
                 </Typography>
@@ -114,7 +116,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                         })
                         navigate(url)
                     }}>
-                    <Icons.Cached size={20} color={theme.palette.maskColor.main} />
+                    <Icons.Cached size={20} color={theme.vars.palette.maskColor.main} />
                     <Typography className={classes.label}>
                         <Trans>Swap</Trans>
                     </Typography>

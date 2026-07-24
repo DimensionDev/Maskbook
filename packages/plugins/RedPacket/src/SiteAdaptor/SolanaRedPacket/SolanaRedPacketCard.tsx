@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             backgroundColor: 'transparent',
             backgroundRepeat: 'no-repeat',
-            color: theme.palette.common.white,
+            color: theme.vars.palette.common.white,
             flexDirection: 'column',
             gap: theme.spacing(2),
             justifyContent: 'space-between',
@@ -154,7 +154,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     })
 
     // the red packet can fetch without account
-    if (!availability || !token) return <LoadingStatus minHeight={148} />
+    if (!availability || !token) return <LoadingStatus sx={{ minHeight: 148 }} />
 
     return (
         <>

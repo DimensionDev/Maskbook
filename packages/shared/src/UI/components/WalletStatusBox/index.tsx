@@ -1,5 +1,5 @@
-import { Button, Link, Typography, useTheme, ThemeProvider } from '@mui/material'
-import { MaskColors, MaskLightTheme, getMaskColor, makeStyles } from '@masknet/theme'
+import { Button, Link, Typography, useTheme } from '@mui/material'
+import { MaskColors, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -33,13 +33,15 @@ const useStyles = makeStyles<{
         display: 'flex',
         background:
             contentBackground ??
-            (Sniffings.is_dashboard_page ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
+            (Sniffings.is_dashboard_page ?
+                theme.vars.palette.background.primaryBackground2
+            :   theme.vars.palette.background.default),
         borderRadius: 8,
         alignItems: 'center',
         height: disableChange ? 60 : 82,
     },
     dashboardBackground: {
-        background: theme.palette.background.default,
+        background: theme.vars.palette.background.default,
     },
     accountInfo: {
         fontSize: 16,
@@ -47,13 +49,13 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
+        color: Sniffings.is_dashboard_page ? textColor : theme.vars.palette.maskColor.dark,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
+        color: Sniffings.is_dashboard_page ? textColor : theme.vars.palette.maskColor.dark,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -64,11 +66,11 @@ const useStyles = makeStyles<{
     actionButton: {
         fontSize: 12,
         color: 'white',
-        backgroundColor: theme.palette.maskColor.dark,
+        backgroundColor: theme.vars.palette.maskColor.dark,
         marginLeft: theme.spacing(1),
         padding: theme.spacing(1, 2),
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.vars.palette.maskColor.dark,
         },
     },
     link: {
@@ -88,10 +90,10 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
+        color: Sniffings.is_dashboard_page ? textColor : theme.vars.palette.maskColor.dark,
     },
     linkIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor?.dark,
+        color: Sniffings.is_dashboard_page ? textColor : theme.vars.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -110,13 +112,13 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
-        contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
+        contentBackground: providerDescriptor?.backgroundGradient ?? theme.vars.palette.maskColor.publicBg,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
         textColor:
             providerDescriptor?.type === ProviderType.MaskWallet ?
-                theme.palette.maskColor.dark
-            :   theme.palette.text.primary,
+                theme.vars.palette.maskColor.dark
+            :   theme.vars.palette.text.primary,
     })
 
     const Web3 = useWeb3Connection()
@@ -170,14 +172,14 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 Utils.formatDomainName(domain)
                             :   <FormattedAddress address={account} size={4} formatter={Utils.formatAddress} />}
                         </Typography>
-                        <ThemeProvider theme={MaskLightTheme}>
+                        <MaskThemeProvider palette="light">
                             <CopyButton
                                 className={cx(classes.icon, classes.copyIcon)}
                                 color={MaskColors.light.maskColor.dark}
                                 size={17.5}
                                 text={account}
                             />
-                        </ThemeProvider>
+                        </MaskThemeProvider>
                         {chainIdValid ?
                             <Link
                                 className={classes.link}

@@ -3,10 +3,6 @@ import { clamp } from 'lodash-es'
 type RGB = [number, number, number]
 type RGBA = [number, number, number, number]
 
-export function isDark([r, g, b]: RGB) {
-    return r < 68 && g < 68 && b < 68
-}
-
 export function toRGB(channels: RGB | undefined) {
     if (!channels) return ''
     return `rgb(${channels.join(',')})`

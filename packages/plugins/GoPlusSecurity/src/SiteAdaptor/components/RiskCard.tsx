@@ -8,10 +8,10 @@ import { useLingui } from '@lingui/react'
 const useStyles = makeStyles()((theme) => ({
     detectionCard: {
         borderRadius: 8,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         marginTop: '8px',
     },
     icon: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         fontSize: 16,
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 
@@ -61,10 +61,10 @@ interface RiskCardUIProps {
 export const RiskCardUI = memo<RiskCardUIProps>(({ icon, title, titleColor, description }) => {
     const { classes } = useStyles()
     return (
-        <Stack spacing={1} key={title} p={1.5} direction="row" className={classes.detectionCard}>
+        <Stack spacing={1} key={title} sx={{ p: 1.5 }} direction="row" className={classes.detectionCard}>
             <Box className={classes.icon}>{icon}</Box>
             <Box>
-                <Typography className={classes.header} color={titleColor}>
+                <Typography className={classes.header} sx={{ color: titleColor }}>
                     {title}
                 </Typography>
                 {description ?

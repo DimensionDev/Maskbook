@@ -7,11 +7,13 @@ import { range } from 'lodash-es'
 import { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         container: {
-            background: theme.palette.maskColor.bottom,
-            boxShadow: isDark ? '0px 4px 30px 0px rgba(255, 255, 255, 0.1)' : '0px 4px 30px 0px rgba(0, 0, 0, 0.1)',
+            background: theme.vars.palette.maskColor.bottom,
+            boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.1)',
+            ...theme.applyStyles('dark', {
+                boxShadow: '0px 4px 30px 0px rgba(255, 255, 255, 0.1)',
+            }),
             borderRadius: '16px',
             display: 'flex',
             flexDirection: 'column',
@@ -26,7 +28,7 @@ const useStyles = makeStyles()((theme) => {
         daysOfWeek: {
             fontSize: 12,
             fontWeight: 700,
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
             marginBottom: '24px',
         },
         header: {
@@ -35,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
         },
         headerText: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: '24px',
             fontWeight: 700,
             lineHeight: '120%',
@@ -48,7 +50,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: '16px',
             fontWeight: 400,
             lineHeight: '20px',
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
             width: '38px',
             height: '38px',
             display: 'flex',
@@ -60,12 +62,12 @@ const useStyles = makeStyles()((theme) => {
             marginBottom: '8px',
         },
         canClick: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             cursor: 'pointer',
         },
         active: {
-            color: theme.palette.maskColor.white,
-            background: theme.palette.maskColor.primary,
+            color: theme.vars.palette.maskColor.white,
+            background: theme.vars.palette.maskColor.primary,
         },
         button: {
             outline: 'none',

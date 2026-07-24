@@ -2,10 +2,10 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PopupHomeTabType, useParamTab } from '@masknet/shared'
 import {
+    type EnhanceableSite,
     PopupModalRoutes,
     PopupRoutes,
     type BindingProof,
-    type EnhanceableSite,
     type ProfileAccount,
 } from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
@@ -23,7 +23,7 @@ import { useModalNavigate } from '../../../components/index.js'
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -61,17 +61,17 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
         marginBottom: 12,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
         cursor: 'pointer',
     },
     subTitle: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         fontWeight: 700,
     },
     description: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: 12,
         fontWeight: 400,
     },
@@ -79,7 +79,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         marginTop: theme.spacing(1.5),
         textAlign: 'center',
     },
@@ -87,7 +87,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         bottom: 0,
         right: 0,
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         borderRadius: 99,
         width: 18,
         height: 18,
@@ -98,10 +98,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     publicKey: {
         fontSize: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     icon: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     settings: {
         position: 'absolute',
@@ -114,14 +114,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
     },
     logo: {
         width: 100,
         height: 28,
     },
     menu: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tabs: {
         paddingLeft: 16,
@@ -130,21 +130,21 @@ const useStyles = makeStyles()((theme) => ({
     groupedButton: {
         // Increasing priority instead of using !important.
         '&&': {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
     },
     panel: {
         padding: theme.spacing(2),
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         flex: 1,
         maxHeight: 288,
         overflow: 'auto',
     },
     mnemonicIcon: {
-        background: theme.palette.maskColor.success,
+        background: theme.vars.palette.maskColor.success,
     },
     personaIcon: {
-        background: theme.palette.maskColor.primary,
+        background: theme.vars.palette.maskColor.primary,
     },
     iconWrapper: {
         display: 'flex',
@@ -160,7 +160,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: theme.palette.maskColor.whiteBlue,
+        background: theme.vars.palette.maskColor.whiteBlue,
     },
 }))
 
@@ -219,7 +219,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Box>
                             <Box className={classes.addPersonaWrapper} onClick={onCreatePersona}>
                                 <div className={cx(classes.iconWrapper, classes.personaIcon)}>
-                                    <Icons.AddUser size={20} color={theme.palette.maskColor.white} />
+                                    <Icons.AddUser size={20} color={theme.vars.palette.maskColor.white} />
                                 </div>
                                 <div>
                                     <Typography className={classes.subTitle}>
@@ -233,7 +233,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
 
                             <Box className={classes.addPersonaWrapper} onClick={onRestore}>
                                 <div className={cx(classes.iconWrapper, classes.mnemonicIcon)}>
-                                    <Icons.PopupRestore size={20} color={theme.palette.maskColor.white} />
+                                    <Icons.PopupRestore size={20} color={theme.vars.palette.maskColor.white} />
                                 </div>
                                 <div>
                                     <Typography className={classes.subTitle}>
@@ -250,7 +250,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         </Box>
                     </Box>
                 :   <TabContext value={currentTab}>
-                        <Box sx={{ background: theme.palette.maskColor.modalTitleBg }}>
+                        <Box sx={{ background: theme.vars.palette.maskColor.modalTitleBg }}>
                             <Box className={classes.header}>
                                 <Icons.MaskSquare className={classes.logo} />
                                 <Icons.HamburgerMenu
@@ -259,7 +259,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 />
                             </Box>
                             <Box className={classes.info}>
-                                <Box position="relative" height="60px">
+                                <Box sx={{ position: 'relative', height: '60px' }}>
                                     <PersonaAvatar size={60} avatar={avatar} pubkey={publicKey!} />
                                     <Box
                                         className={classes.edit}
@@ -267,7 +267,8 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                         <Icons.Edit size={12} />
                                     </Box>
                                 </Box>
-                                <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                                <Typography
+                                    sx={{ fontSize: 18, fontWeight: '700', lineHeight: '22px', marginTop: '8px' }}>
                                     {nickname}
                                 </Typography>
                                 {fingerprint && publicKey ?

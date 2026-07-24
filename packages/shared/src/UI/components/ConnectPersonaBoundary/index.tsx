@@ -22,12 +22,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         borderRadius: '99px',
-        backgroundColor: theme.palette.maskColor.dark,
-        color: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.white,
         marginTop: 'auto',
         ':hover': {
-            color: theme.palette.maskColor.white,
-            backgroundColor: theme.palette.maskColor.dark,
+            color: theme.vars.palette.maskColor.white,
+            backgroundColor: theme.vars.palette.maskColor.dark,
         },
     },
 }))
@@ -123,12 +123,12 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
 
         if (statusLoading) return null
         return (
-            <Stack className={classes.root} display="inline-flex" onClick={handleClick}>
-                <Stack style={{ pointerEvents: status.action ? 'none' : 'auto' }} display="inline-flex">
+            <Stack className={classes.root} sx={{ display: 'inline-flex' }} onClick={handleClick}>
+                <Stack sx={{ pointerEvents: status.action ? 'none' : 'auto', display: 'inline-flex' }}>
                     {actionComponent}
                 </Stack>
                 {status.action || statusLoading ?
-                    <Stack className={classes.mask} display="inline-flex" />
+                    <Stack className={classes.mask} sx={{ display: 'inline-flex' }} />
                 :   null}
             </Stack>
         )

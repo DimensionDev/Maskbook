@@ -6,7 +6,7 @@ import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-bas
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
         padding: '11px 16px',
         lineHeight: 0,
         display: 'flex',
@@ -18,11 +18,11 @@ const useStyles = makeStyles()((theme) => ({
         height: 30,
     },
     action: {
-        background: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 6px 0px rgba(0, 0, 0, 0.10)'
-            :   '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 6px 0px rgba(0, 0, 0, 0.10)',
+        }),
         borderRadius: 99,
         padding: '5px 8px 5px 4px',
         display: 'flex',
@@ -35,13 +35,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 30,
     },
     nickname: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         lineHeight: '18px',
         fontWeight: 700,
     },
     identifier: {
         fontSize: 10,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: 1,
         display: 'flex',
         alignItems: 'center',
@@ -52,10 +52,9 @@ interface PersonaHeaderUIProps {
     avatar?: string | null
     fingerprint: string
     nickname?: string
-    publicHexString: string
 }
 
-export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint, nickname, publicHexString }) => {
+export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint, nickname }) => {
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>

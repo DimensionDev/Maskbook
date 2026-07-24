@@ -1,6 +1,6 @@
 import { ListItem, List, Typography, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
@@ -39,7 +39,7 @@ const useStyles = makeStyles<void | { listItemBackground?: string; listItemBackg
             height: 90,
             padding: 0,
             marginTop: 4,
-            background: theme.palette.common.white,
+            background: theme.vars.palette.common.white,
             borderRadius: 8,
             marginBottom: theme.spacing(1),
         },
@@ -49,7 +49,7 @@ const useStyles = makeStyles<void | { listItemBackground?: string; listItemBackg
             padding: 12,
             borderRadius: 8,
             marginBottom: 0,
-            background: props?.listItemBackground ?? theme.palette.background.default,
+            background: props?.listItemBackground ?? theme.vars.palette.background.default,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -89,7 +89,7 @@ const useStyles = makeStyles<void | { listItemBackground?: string; listItemBackg
             height: 16,
         },
         linkOutIcon: {
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
             marginLeft: 2,
         },
         spenderMaskLogoIcon: {
@@ -113,28 +113,28 @@ const useStyles = makeStyles<void | { listItemBackground?: string; listItemBackg
         primaryText: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.dark,
+            color: theme.vars.palette.maskColor.dark,
         },
         secondaryText: {
             fontSize: 14,
             fontWeight: 400,
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.vars.palette.maskColor.secondaryDark,
         },
         button: {
             minWidth: 80,
             height: 32,
             fontSize: 12,
-            color: theme.palette.common.white,
-            background: theme.palette.common.black,
+            color: theme.vars.palette.common.white,
+            background: theme.vars.palette.common.black,
             flex: 'initial !important',
             '&:disabled': {
-                color: theme.palette.common.white,
-                background: theme.palette.common.black,
+                color: theme.vars.palette.common.white,
+                background: theme.vars.palette.common.black,
             },
             '&:hover': {
-                color: theme.palette.common.white,
-                background: theme.palette.common.black,
-                boxShadow: `0 8px 25px ${parseColor(theme.palette.common.black).setAlpha(0.3).toRgbString()}`,
+                color: theme.vars.palette.common.white,
+                background: theme.vars.palette.common.black,
+                boxShadow: `0 8px 25px ${alpha(theme.vars.palette.common.black, 0.3)}`,
             },
         },
         chainBoundary: {

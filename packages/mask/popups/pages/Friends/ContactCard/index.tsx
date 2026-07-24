@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { Box, Typography, Avatar, useTheme, ButtonBase as Button } from '@mui/material'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
+import { Box, Typography, Avatar, ButtonBase as Button } from '@mui/material'
 import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import Services from '#services'
@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         borderRadius: '8px',
         border: '1px solid',
-        borderColor: theme.palette.maskColor.line,
+        borderColor: theme.vars.palette.maskColor.line,
     },
     title: {
         display: 'flex',
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px',
         borderTopLeftRadius: '6px',
         borderTopRightRadius: '6px',
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
     },
     avatar: {
         width: 40,
@@ -48,12 +48,11 @@ interface ContactCardProps {
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend, avatar, refetch }) {
-    const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [local, setLocal] = useState(false)
-    const [seen, ref] = useEverSeen<HTMLLIElement>()
+    const [, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
     const publicKey = friend.persona.publicKeyAsHex
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
@@ -92,7 +91,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend,
                     }
                 },
             )
-            showSnackbar(<Trans>Added successfully</Trans>, { variant: 'success' })
+            enqueueSnackbar(<Trans>Added successfully</Trans>, { variant: 'success' })
             setLocal(true)
         },
         onSettled: async () => {
@@ -110,7 +109,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend,
                         <Avatar className={classes.avatar} src={avatar} />
                     :   <Icons.MaskBlue className={classes.avatar} />}
                     <Box>
-                        <Typography fontSize={14} fontWeight={700} lineHeight="18px">
+                        <Typography sx={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>
                             {publicKey ? formatPersonaFingerprint(publicKey) : null}
                         </Typography>
                     </Box>

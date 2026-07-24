@@ -1,4 +1,4 @@
-import { type ReactNode, useContext } from 'react'
+import type { ReactNode } from 'react'
 import { pick } from 'lodash-es'
 import {
     Box,
@@ -11,60 +11,55 @@ import {
     TableHead,
     TableRow,
     Typography,
-    useTheme,
 } from '@mui/material'
-import { getSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CurrencyType, formatCurrency } from '@masknet/web3-shared-base'
 import type { Ticker } from '../../types/index.js'
-import { TrendingViewContext } from './context.js'
 import { Trans } from '@lingui/react/macro'
 import { intlFormatDistance } from 'date-fns'
 import { useLingui } from '@lingui/react'
 
-const useStyles = makeStyles<{ themeMode?: 'dim' | 'dark' | 'light'; isPopper?: boolean }>()(
-    (theme, { themeMode, isPopper }) => ({
-        container: {
-            maxHeight: 266,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles()((theme) => ({
+    container: {
+        maxHeight: 266,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        cell: {
-            paddingLeft: theme.spacing(0.5),
-            paddingRight: theme.spacing(0.5),
-            background: themeMode === 'dim' && !isPopper ? '#15202b' : theme.palette.maskColor.bottom,
-            fontSize: 12,
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            border: 'none',
-            '&:not(:first-child)': {
-                textAlign: 'center',
-            },
+    },
+    cell: {
+        paddingLeft: theme.spacing(0.5),
+        paddingRight: theme.spacing(0.5),
+        background: theme.vars.palette.maskColor.bottom,
+        fontSize: 12,
+        fontWeight: 700,
+        whiteSpace: 'nowrap',
+        border: 'none',
+        '&:not(:first-child)': {
+            textAlign: 'center',
         },
-        logo: {
-            width: 18,
-            height: 18,
-            verticalAlign: 'bottom',
-            marginRight: theme.spacing(0.5),
-        },
-        placeholder: {
-            paddingTop: theme.spacing(10),
-            paddingBottom: theme.spacing(10),
-            borderStyle: 'none',
-        },
-        pair: {
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            maxWidth: 100,
-            width: 100,
-        },
-    }),
-)
+    },
+    logo: {
+        width: 18,
+        height: 18,
+        verticalAlign: 'bottom',
+        marginRight: theme.spacing(0.5),
+    },
+    placeholder: {
+        paddingTop: theme.spacing(10),
+        paddingBottom: theme.spacing(10),
+        borderStyle: 'none',
+    },
+    pair: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: 100,
+        width: 100,
+    },
+}))
 
 interface TickersTableProps {
     tickers: Ticker[]
@@ -73,10 +68,7 @@ interface TickersTableProps {
 type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 
 export function TickersTable({ tickers }: TickersTableProps) {
-    const theme = useTheme()
-    const themeMode = getSiteThemeMode(theme)
-    const { isTokenTagPopper } = useContext(TrendingViewContext)
-    const { classes } = useStyles({ themeMode, isPopper: isTokenTagPopper })
+    const { classes } = useStyles()
 
     const headCellMap: Record<Cells, ReactNode> = {
         volume: <Trans>Volume (24h)</Trans>,
@@ -92,7 +84,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
         const price = ticker.price ?? ticker.floor_price
         const volume = ticker.volume
         const marketplaceOrExchange = (
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" sx={{ alignItems: 'center' }}>
                 {ticker.logo_url ?
                     <img className={classes.logo} src={ticker.logo_url} />
                 :   null}
@@ -114,15 +106,13 @@ export function TickersTable({ tickers }: TickersTableProps) {
                     <ShadowRootTooltip
                         placement="top-start"
                         disableInteractive
-                        PopperProps={{
-                            disablePortal: true,
-                        }}
+                        slotProps={{ popper: { disablePortal: true } }}
                         disableHoverListener={basename.length + targetName.length < 9}
                         title={`${formatted} / ${formatEthereumAddress(ticker.target_name, 2)}`}
                         arrow>
                         <Box className={classes.pair}>
                             <Link
-                                color={(theme) => theme.palette.maskColor?.primary}
+                                sx={{ color: (theme) => theme.vars.palette.maskColor?.primary }}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 href={ticker.trade_url}>

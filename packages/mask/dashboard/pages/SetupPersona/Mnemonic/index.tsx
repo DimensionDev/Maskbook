@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { MaskColorVar, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Box, Button, Checkbox, FormControlLabel, IconButton, Stack, Typography, alpha } from '@mui/material'
+import { alpha, makeStyles, useSnackbar } from '@masknet/theme'
+import { Box, Button, Checkbox, FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import { toBlob } from 'html-to-image'
 import { memo, useCallback, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -25,12 +25,12 @@ const useStyles = makeStyles()((theme) => ({
     second: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     recovery: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
     },
     title: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 
     refresh: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         columnGap: 4,
         fontWeight: 700,
         fontSize: 12,
@@ -51,14 +51,14 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 12,
     },
     iconButton: {
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: 8,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         height: 36,
         width: 36,
     },
     warning: {
-        background: alpha(theme.palette.maskColor.warn, 0.1),
+        background: alpha(theme.vars.palette.maskColor.warn, 0.1),
         borderRadius: 4,
         backdropFilter: 'blur(5px)',
         marginTop: theme.spacing(1.5),
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
     warningText: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.warn,
+        color: theme.vars.palette.maskColor.warn,
     },
     label: {
         fontSize: 14,
@@ -100,7 +100,7 @@ export const Component = memo(function SignUpMnemonic() {
 
     const [checked, setChecked] = useState(true)
 
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { words, refreshCallback } = useMnemonicWordsPuzzle()
 
@@ -121,7 +121,7 @@ export const Component = memo(function SignUpMnemonic() {
             await Services.Settings.setCurrentPersonaIdentifier(identifier)
             navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { isCreate: true }))
         } catch (error) {
-            showSnackbar((error as Error).message, { variant: 'error' })
+            enqueueSnackbar((error as Error).message, { variant: 'error' })
         }
     }, [words])
 
@@ -153,11 +153,10 @@ export const Component = memo(function SignUpMnemonic() {
             <Typography variant="h1" className={classes.title}>
                 <Trans>Persona Recovery Phrase</Trans>
             </Typography>
-            <Typography className={classes.second} mt={2}>
+            <Typography className={classes.second} sx={{ mt: 2 }}>
                 <Trans>12-word recovery phrase is used to recover your persona data.</Trans>
             </Typography>
-
-            <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
+            <Stack direction="row" sx={{ justifyContent: 'flex-end', marginBottom: (theme) => theme.spacing(2) }}>
                 <Button className={classes.refresh} variant="text" onClick={refreshCallback}>
                     <Icons.Refresh size={16} />
                     <Trans>Refresh</Trans>
@@ -165,7 +164,7 @@ export const Component = memo(function SignUpMnemonic() {
             </Stack>
             <Words words={words} />
             <Box className={classes.buttonGroup}>
-                <IconButton className={classes.iconButton} onClick={handleDownload}>
+                <IconButton size="small" className={classes.iconButton} onClick={handleDownload}>
                     <Icons.Download2 size={18} />
                 </IconButton>
                 <IconButton className={classes.iconButton}>
@@ -188,7 +187,7 @@ export const Component = memo(function SignUpMnemonic() {
                 classes={{ label: classes.label }}
                 control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
                 label={<Trans>I wrote down those words in the correct order</Trans>}
-                sx={{ marginTop: '12px', color: MaskColorVar.textSecondary }}
+                sx={(theme) => ({ marginTop: '12px', color: theme.vars.palette.maskColor.textSecondary })}
             />
 
             <Box sx={{ position: 'absolute', top: -9999 }}>

@@ -1,21 +1,15 @@
-import { cloneElement, useEffect } from 'react'
-import { CssBaseline, ThemeProvider, StyledEngineProvider, GlobalStyles } from '@mui/material'
+import { cloneElement } from 'react'
+import { CssBaseline, GlobalStyles } from '@mui/material'
+import { StyledEngineProvider } from '@mui/material/styles'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import {
-    CustomSnackbarProvider,
-    applyMaskColorVars,
-    MaskLightTheme,
-    MaskDarkTheme,
-    useSystemPreferencePalette,
-    DialogStackingProvider,
-} from '@masknet/theme'
+import { MaskSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DashboardRoutes, jsxCompose } from '@masknet/shared-base'
 
 import { Pages } from './pages/routes.js'
-import { UserContext, useAppearance } from '../shared-ui/index.js'
+import { UserContext, usePageThemePalette, useThemeLanguage } from '../shared-ui/index.js'
 import Services from '#services'
 import { i18n } from '@lingui/core'
 
@@ -38,30 +32,19 @@ const PersonaContextIO = {
     queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 }
 export default function Dashboard() {
-    // #region theme
-    const appearance = useAppearance()
-    const mode = useSystemPreferencePalette()
-    const theme = {
-        dark: MaskDarkTheme,
-        light: MaskLightTheme,
-        default: mode === 'dark' ? MaskDarkTheme : MaskLightTheme,
-    }[appearance]
-
-    useEffect(() => {
-        applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
-    }, [appearance])
-    // #endregion
+    const mode = usePageThemePalette()
+    const [localization] = useThemeLanguage()
 
     return jsxCompose(
         <RootWeb3ContextProvider enforceEVM />,
         <LinguiProviderHMR i18n={i18n} />,
-        <StyledEngineProvider injectFirst />,
-        <ThemeProvider theme={theme} />,
+        <StyledEngineProvider injectFirst enableCssLayer />,
+        <MaskThemeProvider palette={mode} localization={localization} />,
         <DialogStackingProvider />,
         <UserContext.Provider />,
         <PersonaContext.Provider initialState={PersonaContextIO} />,
         <ErrorBoundary />,
-        <CustomSnackbarProvider> </CustomSnackbarProvider>,
+        <MaskSnackbarProvider />,
         <SharedContextProvider />,
     )(
         cloneElement,

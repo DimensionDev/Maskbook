@@ -1,19 +1,18 @@
 import { omit } from 'lodash-es'
-import type { BoxProps } from '@mui/system'
 import {
     Box,
     formHelperTextClasses,
     TextField,
     type StandardTextFieldProps,
-    type InputProps,
     Typography,
     InputBase,
+    type InputBaseProps,
     inputBaseClasses,
-    alpha,
+    mergeSlotProps,
 } from '@mui/material'
 import { Sniffings } from '@masknet/shared-base'
+import { alpha } from '../../Theme/colors.js'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
-import { MaskColorVar, getMaskColor } from '../../CSSVariables/vars.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
@@ -25,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 'bolder',
-        color: getMaskColor(theme).redMain,
+        color: theme.vars.palette.maskColor.redMain,
         paddingLeft: theme.spacing(0.5),
     },
     field: {
@@ -47,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
             WebkitAppearance: 'none',
         },
         '& input::-webkit-input-placeholder': {
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
         },
         [`&.${inputBaseClasses.focused}`]: {
             background: 'transparent',
@@ -55,17 +54,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         padding: theme.spacing(1),
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
         border: '1px solid transparent',
         [`&.${formHelperTextClasses.error}`]: {
-            boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
-            borderColor: MaskColorVar.redMain.alpha(0.8),
+            boxShadow: `0 0 0 ${theme.spacing(0.5)} ${alpha(theme.vars.palette.maskColor.redMain, 0.2)}`,
+            borderColor: alpha(theme.vars.palette.maskColor.redMain, 0.8),
         },
         [`&.${formHelperTextClasses.focused}`]: {
-            borderColor: Sniffings.is_dashboard_page ? alpha(theme.palette.maskColor.primary, 0.5) : 'transparent',
+            borderColor: Sniffings.is_dashboard_page ? alpha(theme.vars.palette.maskColor.primary, 0.5) : 'transparent',
         },
     },
     inputDisabled: {
@@ -76,23 +75,30 @@ const useStyles = makeStyles()((theme) => ({
         background: 'transparent',
         ...(Sniffings.is_dashboard_page ?
             {
-                outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
-                borderColor: alpha(theme.palette.maskColor.primary, 0.5),
+                outline: `2px solid ${alpha(theme.vars.palette.maskColor.primary, 0.2)}`,
+                borderColor: alpha(theme.vars.palette.maskColor.primary, 0.5),
             }
-        :   { boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}` }),
+        :   {
+                boxShadow: '0 0 0 2px rgba(28, 104, 243, 0.2)',
+                ...theme.applyStyles('dark', { boxShadow: '0 0 0 2px #4F5378' }),
+            }),
     },
 }))
 
-export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'variant'> {
-    wrapperProps?: BoxProps
+type TextFieldHtmlInputSlotProps = NonNullable<NonNullable<StandardTextFieldProps['slotProps']>['htmlInput']>
+type InputBaseHtmlInputSlotProps = NonNullable<NonNullable<InputBaseProps['slotProps']>['input']>
+
+export interface MaskTextFieldProps extends StandardTextFieldProps {
+    slotProps?: Omit<NonNullable<StandardTextFieldProps['slotProps']>, 'htmlInput'> & {
+        htmlInput?: TextFieldHtmlInputSlotProps & InputBaseHtmlInputSlotProps
+    }
 }
 
 export function MaskTextField(props: MaskTextFieldProps) {
-    const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
-    const InputProps = (props.InputProps as InputProps) ?? {}
-    const { classes, cx } = useStyles()
+    const { label, sx, required = false, className, helperText, slotProps, ...rest } = props
+    const { classes } = useStyles()
     return (
-        <Box sx={sx} {...wrapperProps}>
+        <Box sx={sx} className={className}>
             {label && typeof label === 'string' ?
                 <Typography sx={{ mb: 1 }} variant="body2" className={classes.label}>
                     {label}
@@ -111,30 +117,23 @@ export function MaskTextField(props: MaskTextFieldProps) {
                     variant="standard"
                     required={required}
                     helperText={helperText}
-                    InputProps={{
-                        disableUnderline: true,
-                        classes: {
-                            disabled: classes.inputDisabled,
-                            focused: classes.inputFocused,
-                            ...InputProps.classes,
-                        },
-                        ...InputProps,
-                        className: cx(classes.input, InputProps.className),
+                    slotProps={{
+                        ...slotProps,
+                        input: mergeSlotProps(slotProps?.input, {
+                            disableUnderline: true,
+                            classes: {
+                                disabled: classes.inputDisabled,
+                                focused: classes.inputFocused,
+                            },
+                            className: classes.input,
+                        }),
                     }}
                 />
             :   <InputBase
                     className={classes.field}
-                    {...omit(InputProps, 'disableUnderline')}
-                    {...omit(
-                        rest,
-                        'margin',
-                        'onKeyDown',
-                        'onKeyUp',
-                        'InputProps',
-                        'inputProps',
-                        'FormHelperTextProps',
-                        'onInvalid',
-                    )}
+                    {...omit(slotProps?.input, 'disableUnderline')}
+                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'onInvalid')}
+                    slotProps={{ input: slotProps?.htmlInput }}
                 />
             }
         </Box>

@@ -37,10 +37,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
         padding: theme.spacing(1.25),
         borderRadius: 10,
-        background: theme.palette.maskColor.primary,
+        background: theme.vars.palette.maskColor.primary,
     },
     title: {
         fontSize: 14,
@@ -50,19 +50,19 @@ const useStyles = makeStyles()((theme) => ({
     titleDescription: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
     },
     list: {
         borderRadius: 16,
-        background: theme.palette.maskColor.bottom,
-        boxShadow: theme.palette.maskColor.bottomBg,
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         padding: theme.spacing(2),
     },
     listItem: {
         cursor: 'pointer',
         padding: theme.spacing(1.5, 0),
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         '&:first-of-type': {
             paddingTop: 0,
         },
@@ -71,26 +71,26 @@ const useStyles = makeStyles()((theme) => ({
             borderBottom: 'none',
         },
         '&:hover > span': {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
     },
     listItemText: {
         margin: 0,
     },
     listItemPrimaryText: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 700,
     },
     listItemSecondaryText: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 700,
     },
     arrow: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 
@@ -167,7 +167,7 @@ export const Component = memo(function SettingsPage() {
     useTitle(t`Settings`)
 
     const websiteCountNum = data?.filter((x) => x.allowInject && x.hasPermission).length
-    const websiteCount = <span style={{ color: theme.palette.maskColor.main }}>{websiteCountNum}</span>
+    const websiteCount = <span style={{ color: theme.vars.palette.maskColor.main }}>{websiteCountNum}</span>
     return (
         <>
             <NormalHeader />

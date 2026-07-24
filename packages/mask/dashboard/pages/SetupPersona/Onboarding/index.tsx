@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, EnhanceableSite, PopupRoutes, userGuideStatus } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo } from 'react'
 import { Trend } from '../../../assets/index.js'
@@ -24,14 +24,14 @@ const useStyles = makeStyles()((theme) => ({
         top: 24,
         right: 24,
         padding: theme.spacing(2),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: 12,
         maxWidth: 360,
     },
     pin: {
         fontSize: 16,
         lineHeight: '20px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     skeleton: {
         background: 'linear-gradient(270deg, #F6F6F6 0%, rgba(217, 217, 217, 0) 94.74%)',
@@ -58,8 +58,8 @@ const useStyles = makeStyles()((theme) => ({
     pinCard: {
         marginTop: 18,
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
-        background: theme.palette.maskColor.bottom,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
+        background: theme.vars.palette.maskColor.bottom,
         padding: 16,
         display: 'flex',
         justifyContent: 'space-between',
@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         right: 408,
     },
     twitter: {
-        color: theme.palette.maskColor.bottom,
+        color: theme.vars.palette.maskColor.bottom,
     },
 }))
 
@@ -80,7 +80,7 @@ export const Component = memo(function Onboarding() {
     const { classes } = useStyles()
 
     const [params] = useSearchParams()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const isCreate = params.get('isCreate')
     const count = params.get('count')
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
@@ -107,9 +107,9 @@ export const Component = memo(function Onboarding() {
         return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
             if (!hasPassword) return
             retry()
-            showSnackbar(<Trans>Set Payment Password</Trans>, {
+            enqueueSnackbar(<Trans>Set Payment Password</Trans>, {
                 variant: 'success',
-                message: <Trans>Payment password set.</Trans>,
+                detail: <Trans>Payment password set.</Trans>,
             })
         })
     }, [retry])
@@ -136,7 +136,7 @@ export const Component = memo(function Onboarding() {
                 <Typography className={classes.pin}>
                     <Trans>Pin Mask Network to the toolbar for easier access:</Trans>
                 </Typography>
-                <Box mt={2.25} display="flex" alignItems="center">
+                <Box sx={{ mt: 2.25, display: 'flex', alignItems: 'center' }}>
                     <Box className={classes.skeleton} />
                     <Box className={classes.plugins}>
                         <Icons.Plugins size={20} />
@@ -144,7 +144,7 @@ export const Component = memo(function Onboarding() {
                     <Icons.More className={classes.more} size={24} />
                 </Box>
                 <Box className={classes.pinCard}>
-                    <Box display="flex" alignItems="center" columnGap={2.5}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2.5 }}>
                         <Icons.MaskBlue size={32} />
                         {/* There is no need for i18n here. */}
                         <Typography>Mask Network</Typography>
@@ -157,9 +157,9 @@ export const Component = memo(function Onboarding() {
                 <OnboardingWriter
                     sentence={sentence}
                     onFinish={() => {
-                        showSnackbar(<Trans>Creation Completed</Trans>, {
+                        enqueueSnackbar(<Trans>Creation Completed</Trans>, {
                             variant: 'success',
-                            message: t`Your Persona has been successfully created.`,
+                            detail: t`Your Persona has been successfully created.`,
                         })
                     }}
                 />

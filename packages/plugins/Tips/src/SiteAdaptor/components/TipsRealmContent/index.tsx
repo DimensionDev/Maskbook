@@ -36,12 +36,13 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
         alignItems: 'center',
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: theme.palette.maskColor.borderSecondary,
+        borderColor: theme.vars.palette.maskColor.borderSecondary,
         boxSizing: 'border-box',
         verticalAlign: 'top',
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
+            backgroundColor: 'rgba(15,20,25,0.1)',
+            ...theme.applyStyles('dark', { backgroundColor: 'rgba(239,243,244,0.1)' }),
         },
     },
     followTipsButton: {
@@ -105,13 +106,15 @@ export function TipsRealmContent({
                 title={<Trans>Send authors tips by using Mask Network's Tips function.</Trans>}
                 actionText={<Trans>Close</Trans>}>
                 <Stack
-                    display="flex"
-                    width="38px"
-                    height="38px"
-                    position="relative"
-                    top={0}
-                    alignItems="center"
-                    justifyContent="center">
+                    sx={{
+                        display: 'flex',
+                        width: '38px',
+                        height: '38px',
+                        position: 'relative',
+                        top: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
                     {button}
                 </Stack>
             </PluginGuide>

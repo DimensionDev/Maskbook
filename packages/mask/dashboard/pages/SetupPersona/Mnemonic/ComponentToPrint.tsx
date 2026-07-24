@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         flexDirection: 'column',
         padding: theme.spacing(6),
-        backgroundColor: theme.palette.maskColor.white,
+        backgroundColor: theme.vars.palette.maskColor.white,
         width: 630,
     },
     card: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         background: `url(${PrintBackground}) no-repeat`,
         borderRadius: theme.spacing(1),
         padding: theme.spacing(2),
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
         display: 'flex',
         alignItems: 'center',
         backgroundSize: 'cover',
@@ -58,21 +58,21 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 700,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.vars.palette.maskColor.publicMain,
         display: 'flex',
         alignItems: 'center',
         columnGap: 12,
     },
     wordCard: {
-        backgroundColor: theme.palette.maskColor.publicBg,
-        color: theme.palette.maskColor.publicThird,
+        backgroundColor: theme.vars.palette.maskColor.publicBg,
+        color: theme.vars.palette.maskColor.publicThird,
         '&::marker': {
-            backgroundColor: theme.palette.maskColor.publicBg,
-            color: theme.palette.maskColor.publicThird,
+            backgroundColor: theme.vars.palette.maskColor.publicBg,
+            color: theme.vars.palette.maskColor.publicThird,
         },
     },
     text: {
-        color: theme.palette.maskColor.publicMain,
+        color: theme.vars.palette.maskColor.publicMain,
     },
 }))
 
@@ -89,7 +89,7 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
     return (
         <Box className={classes.container} ref={ref}>
             <Box className={classes.card}>
-                <Box flex={1}>
+                <Box sx={{ flex: 1 }}>
                     <Typography className={classes.personaName}>
                         <Trans>Persona: {personaName}</Trans>
                     </Typography>

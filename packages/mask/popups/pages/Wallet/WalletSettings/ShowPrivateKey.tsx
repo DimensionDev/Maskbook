@@ -21,12 +21,12 @@ export const ShowPrivateKey = function ShowPrivateKey({ disabled }: Props) {
                 })
             }}>
             <Box className={classes.itemBox}>
-                <Icons.PublicKey2 size={20} color={theme.palette.maskColor.second} />
+                <Icons.PublicKey2 size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Backup Wallet</Trans>
                 </Typography>
             </Box>
-            <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+            <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
         </ListItem>
     )
 }

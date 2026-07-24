@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, MaskColors, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, MaskColors, makeStyles, useSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     ChainContextProvider,
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         borderRadius: 8,
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
         backgroundColor: MaskColors.light.maskColor.primary,
         cursor: 'pointer',
         margin: theme.spacing(0, 2),
@@ -45,17 +45,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     label: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontWeight: 700,
     },
     error: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         margin: theme.spacing(2, 2, 0),
     },
     actionGroup: {
         display: 'flex',
         justifyContent: 'center',
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(8px)',
         gap: theme.spacing(2),
@@ -154,7 +154,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         account,
         chainId,
     })
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
@@ -169,7 +169,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         } catch (err) {
             let message = (err as Error).message
             message = message.includes('"blockNumber":') ? '' : message
-            showSnackbar(<Trans>Failed to transfer token: {message}</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Failed to transfer token: {message}</Trans>, { variant: 'error' })
         }
     }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, network?.rpcUrl])
 
@@ -212,7 +212,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     if (picked) handleSelectAsset(picked as Web3Helper.FungibleAssetAll)
                 }}>
                 <TokenIcon size={36} chainId={chainId} address={address} logoURL={selectedAsset?.logoURL} />
-                <Box mr="auto" ml={2}>
+                <Box sx={{ mr: 'auto', ml: 2 }}>
                     <ProgressiveText loading={isPending} skeletonWidth={36}>
                         {token?.symbol}
                     </ProgressiveText>
@@ -224,7 +224,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 </Box>
                 <Icons.ArrowDrop size={24} />
             </Box>
-            <Box mt={2} mx={2}>
+            <Box sx={{ mt: 2, mx: 2 }}>
                 <Input
                     fullWidth
                     disableUnderline
@@ -251,7 +251,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     }}
                 />
             </Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} mx={2}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2, mx: 2 }}>
                 <Typography className={classes.label}>
                     <Trans>Gas Fee</Trans>
                 </Typography>

@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
     },
     action: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
         overflow: 'auto',

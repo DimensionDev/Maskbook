@@ -1,10 +1,10 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskThemeProvider, usePalette } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { formatCount, type DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Button, IconButton, ThemeProvider, Typography, type Theme } from '@mui/material'
+import { Avatar, Box, Button, IconButton, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
@@ -14,7 +14,6 @@ interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
     currentSpace: DAOResult<ChainId.Mainnet>
     setSpaceId(id: string): void
-    theme: Theme
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -37,14 +36,14 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 20,
         lineHeight: 1.2,
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
         display: 'flex',
         alignItems: 'center',
         marginRight: 5,
     },
     followersCount: {
         fontSize: 14,
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.vars.palette.maskColor.secondaryDark,
     },
     spaceInfo: {
         marginLeft: 4,
@@ -54,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     arrowIcon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.vars.palette.maskColor.dark,
     },
     joinButton: {
         marginLeft: 'auto',
@@ -63,12 +62,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme }: ProfileSpaceHeaderProps) {
+export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId }: ProfileSpaceHeaderProps) {
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
     const { account } = useChainContext()
     const { data: followedSpaceList } = useCurrentAccountFollowSpaceList()
+    const mode = usePalette()
 
     return (
         <Box className={classes.root}>
@@ -90,7 +90,7 @@ export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme 
                                     onClick={() => setSpaceMenuOpen((v) => !v)}>
                                     <Icons.ArrowDrop size={24} className={classes.arrowIcon} />
                                 </IconButton>
-                                <ThemeProvider theme={theme}>
+                                <MaskThemeProvider palette={mode}>
                                     <SpaceMenu
                                         options={spaceList}
                                         currentOption={currentSpace}
@@ -102,7 +102,7 @@ export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme 
                                         open={spaceMenuOpen}
                                         onClose={() => setSpaceMenuOpen(false)}
                                     />
-                                </ThemeProvider>
+                                </MaskThemeProvider>
                             </>
                         )}
                     </div>

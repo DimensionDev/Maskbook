@@ -1,6 +1,6 @@
-import { makeStyles, MaskTextField } from '@masknet/theme'
+import { alpha, makeStyles, MaskTextField } from '@masknet/theme'
 import { leftShift } from '@masknet/web3-shared-base'
-import { alpha, Button, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { isNumber } from 'lodash-es'
 import { memo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -19,7 +19,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(2),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         padding: theme.spacing(1.5),
         borderRadius: theme.spacing(1.5),
         marginBottom: 'auto',
@@ -30,10 +30,10 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         gap: theme.spacing(0.5),
         padding: theme.spacing(1.5),
         borderRadius: theme.spacing(1.5),
-        border: `1px solid ${theme.palette.maskColor.secondaryMain}`,
+        border: `1px solid ${theme.vars.palette.maskColor.secondaryMain}`,
         cursor: 'pointer',
         [`&.${refs.active}`]: {
-            border: `1px solid ${theme.palette.maskColor.main}`,
+            border: `1px solid ${theme.vars.palette.maskColor.main}`,
         },
     },
     active: {},
@@ -50,25 +50,25 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         lineHeight: '16px',
         padding: theme.spacing(0.5),
         borderRadius: theme.spacing(0.5),
-        backgroundColor: theme.palette.maskColor.bg,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bg,
+        color: theme.vars.palette.maskColor.main,
     },
     boxContent: {
         fontSize: 13,
         fontWeight: 400,
         padding: theme.spacing(0.5),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
     },
     footer: {
         boxSizing: 'content-box',
         display: 'flex',
         gap: theme.spacing(1.5),
-        backgroundColor: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 0px 20px rgba(255, 255, 255, 0.12)'
-            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        backgroundColor: alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        }),
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
@@ -81,7 +81,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         display: 'flex',
         width: '100%',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
@@ -136,19 +136,19 @@ export const Slippage = memo(function Slippage() {
                         </Typography>
                     </Typography>
                     <div className={classes.boxContent}>
-                        <Typography mb={0.5}>
+                        <Typography sx={{ mb: 0.5 }}>
                             The transaction will be executed according to the slippage you set
                         </Typography>
                         <MaskTextField
                             placeholder="0.1-50"
                             type="number"
                             inputRef={inputRef}
-                            InputProps={{
-                                inputProps: {
+                            slotProps={{
+                                htmlInput: {
                                     min: 0.1,
                                     max: 50,
                                 },
-                                endAdornment: <Typography>%</Typography>,
+                                input: { endAdornment: <Typography>%</Typography> },
                             }}
                             value={pendingSlippage}
                             onChange={(e) => {

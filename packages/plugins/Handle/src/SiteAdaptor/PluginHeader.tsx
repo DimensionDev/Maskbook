@@ -1,6 +1,6 @@
 import { PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Link, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
@@ -17,7 +17,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 
     providerBy: {
-        color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
+        ...theme.applyStyles('dark', {
+            color: theme.vars.palette.grey[700],
+        }),
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(0.5),
@@ -40,32 +43,36 @@ export function PluginHeader() {
     const publisher = plugin?.publisher
 
     return (
-        <Stack flexDirection="row" justifyContent="space-between" alignItems="center" className={classes.wrapper}>
-            <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
+        <Stack
+            className={classes.wrapper}
+            sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', gap: 0.5, alignItems: 'center' }}>
                 <Icons.DecentralizedSearch size={24} />
-                <Typography color={theme.palette.maskColor.dark} fontWeight="bolder">
+                <Typography sx={{ color: theme.vars.palette.maskColor.dark, fontWeight: 'bolder' }}>
                     <Trans>DSearch</Trans>
                 </Typography>
             </Stack>
             <Box className={classes.provider}>
                 {publisher ?
-                    <Typography variant="body1" fontSize={14} fontWeight="700" className={classes.providerBy}>
+                    <Typography variant="body1" sx={{ fontSize: 14, fontWeight: '700' }} className={classes.providerBy}>
                         <Trans>
                             Powered by{' '}
                             <Typography
                                 className={classes.publisher}
                                 variant="body1"
-                                fontSize={14}
-                                fontWeight="700"
-                                component="span"
-                                color={MaskColorVar.textPluginColor}>
+                                sx={{
+                                    color: theme.vars.palette.maskColor.textPluginColor,
+                                    fontSize: 14,
+                                    fontWeight: '700',
+                                }}
+                                component="span">
                                 Mask Network
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     href="https://mask.io"
-                                    fontSize={0}
-                                    color={MaskColorVar.textPluginColor}>
+                                    sx={{ fontSize: 0 }}
+                                    color={theme.vars.palette.maskColor.textPluginColor}>
                                     <Icons.LinkOut size={20} />
                                 </Link>
                             </Typography>

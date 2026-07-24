@@ -33,9 +33,9 @@ export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
 
     if (disabled) {
         return (
-            <Stack alignItems="center">
-                <Stack justifyContent="center" alignItems="center" width="100%" boxSizing="border-box">
-                    <Typography fontWeight={400} fontSize={14}>
+            <Stack sx={{ alignItems: 'center' }}>
+                <Stack sx={{ justifyContent: 'center', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
+                    <Typography sx={{ fontWeight: 400, fontSize: 14 }}>
                         <Trans>
                             This function has been turned off in the App settings. Enable plugins to fully access.
                         </Trans>

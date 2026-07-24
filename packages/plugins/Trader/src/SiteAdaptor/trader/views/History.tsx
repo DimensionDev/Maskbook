@@ -30,23 +30,23 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(1.5),
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
         paddingBottom: theme.spacing(1.5),
         contentVisibility: 'auto',
     },
     groupHeader: {
         display: 'flex',
         justifyContent: 'space-between',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     date: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 400,
         lineHeight: '18px',
     },
     time: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 400,
         lineHeight: '18px',
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
     },
     symbol: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         fontSize: 14,
     },
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 13,
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     result: {
         display: 'flex',
@@ -84,13 +84,13 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
     },
     sent: {
         fontSize: 13,
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         textAlign: 'right',
     },
     records: {
@@ -114,16 +114,16 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 4),
     },
     statusIcon: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     statusMessage: {
         fontSize: 18,
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     statusNote: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
 }))
 
@@ -145,7 +145,7 @@ export function HistoryView() {
     if (!history.length) {
         return (
             <Box className={classes.statusBox}>
-                <Icons.EmptySimple className={classes.statusIcon} size={24} color={theme.palette.maskColor.main} />
+                <Icons.EmptySimple className={classes.statusIcon} size={24} color={theme.vars.palette.maskColor.main} />
                 <Typography className={classes.statusMessage}>{t`No recent transactions`}</Typography>
                 <Typography className={classes.statusNote}>
                     {t`Transaction history is only stored locally and will be deleted if you clear your browser data.`}
@@ -193,7 +193,7 @@ export function HistoryView() {
                                         <Icons.CallSend
                                             className={classes.directionIcon}
                                             size={16}
-                                            color={theme.palette.text.secondary}
+                                            color={theme.vars.palette.text.secondary}
                                         />
                                         <Typography className={classes.symbol}>{toToken.symbol}</Typography>
                                     </div>
@@ -216,7 +216,7 @@ export function HistoryView() {
                                         :   '--'}
                                     </Typography>
                                 </div>
-                                <Icons.ArrowRight size={16} color={theme.palette.maskColor.main} />
+                                <Icons.ArrowRight size={16} color={theme.vars.palette.maskColor.main} />
                             </Link>
                         </div>
                     </div>

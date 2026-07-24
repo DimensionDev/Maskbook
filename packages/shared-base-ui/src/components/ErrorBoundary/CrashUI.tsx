@@ -89,36 +89,36 @@ Error stack:
         </Root>
     )
 }
-const Root = styled('div')`
-    overflow-x: auto;
-    flex: 1;
-    width: 100%;
-    contain: paint;
-    padding: 8px;
-`
+const Root = styled('div')({
+    overflowX: 'auto',
+    flex: 1,
+    width: '100%',
+    contain: 'paint',
+    padding: 8,
+})
 
-const ErrorTitle = styled('div')`
-    user-select: text;
-    margin-bottom: 8px;
-`
+const ErrorTitle = styled('div')({
+    userSelect: 'text',
+    marginBottom: 8,
+})
 
-const ErrorStack = styled('div')`
-    user-select: text;
-    overflow-x: auto;
-    margin-top: 16px;
-`
+const ErrorStack = styled('div')({
+    userSelect: 'text',
+    overflowX: 'auto',
+    marginTop: 16,
+})
 
-const ActionArea = styled('div')`
-    display: flex;
-    gap: 8px;
-    @media screen and (max-width: 500px) {
-        flex-direction: column;
-        gap: 8px;
-    }
-`
+const ActionArea = styled('div')({
+    display: 'flex',
+    gap: 8,
+    '@media screen and (max-width: 500px)': {
+        flexDirection: 'column',
+        gap: 8,
+    },
+})
 
-const IconButtonContainer = styled('div')`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
+const IconButtonContainer = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+})

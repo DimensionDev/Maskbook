@@ -9,14 +9,17 @@ import { useMessages } from '@masknet/web3-hooks-base'
 const useStyle = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2, 1.5),
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0,0.80)' : 'rgba(255, 255, 255, 0.80)',
+        backgroundColor: 'rgba(255, 255, 255, 0.80)',
+        ...theme.applyStyles('dark', {
+            backgroundColor: 'rgba(0, 0, 0,0.80)',
+        }),
         width: '100%',
         backdropFilter: 'blur(16px)',
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         borderRadius: '12px 12px 0 0',
     },
     action: {
-        color: theme.palette.maskColor.third,
+        color: theme.vars.palette.maskColor.third,
         height: '100%',
         minWidth: 94,
         padding: 6,
@@ -24,7 +27,7 @@ const useStyle = makeStyles()((theme) => ({
     },
     selected: {
         '& > button': {
-            color: theme.palette.maskColor.highlight,
+            color: theme.vars.palette.maskColor.highlight,
             filter: 'drop-shadow(0px 4px 10px rgba(0, 60, 216, 0.2))',
         },
     },

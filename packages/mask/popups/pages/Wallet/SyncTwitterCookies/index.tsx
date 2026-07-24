@@ -70,7 +70,6 @@ enum DesktopSyncChannelStatus {
 const POLLING_INTERVAL = 2000 // 2 seconds
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         header: {
             display: 'flex',
@@ -85,13 +84,13 @@ const useStyles = makeStyles()((theme) => {
             marginTop: '14px',
         },
         name: {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             fontSize: 18,
             fontWeight: 700,
             lineHeight: '22px',
         },
         address: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             marginTop: theme.spacing(1),
             fontSize: 16,
             height: 30,
@@ -101,7 +100,7 @@ const useStyles = makeStyles()((theme) => {
         qrcode: {
             width: 220,
             height: 220,
-            boxShadow: theme.palette.maskColor.bottomBg,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
             borderRadius: theme.spacing(2),
             overflow: 'hidden',
         },
@@ -118,9 +117,11 @@ const useStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)',
+                }),
             },
             '&:after': {
                 position: 'absolute',
@@ -131,16 +132,18 @@ const useStyles = makeStyles()((theme) => {
                 height: 256,
                 width: 256,
                 backgroundImage:
-                    isDark ?
-                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                    'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)',
+                }),
             },
         },
         qrcodeContainer: {
             width: 252,
             margin: theme.spacing(1, 'auto', 0),
             padding: theme.spacing(2),
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             position: 'relative',
             zIndex: 10,
             borderRadius: '32px',
@@ -149,20 +152,20 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
             marginTop: 8,
             textAlign: 'center',
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
         },
         copyButton: {
             marginLeft: 8,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
         statusMessage: {
             fontSize: 13,
             marginTop: 8,
             fontWeight: 400,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
             padding: '6px',
-            border: `1px solid ${theme.palette.maskColor.line}`,
-            backgroundColor: theme.palette.maskColor.bottom,
+            border: `1px solid ${theme.vars.palette.maskColor.line}`,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             margin: '8px 10px 10px',
             '&:empty': {
                 display: 'none',
@@ -183,7 +186,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'fixed',
             display: 'flex',
             justifyContent: 'center',
-            background: theme.palette.maskColor.secondaryBottom,
+            background: theme.vars.palette.maskColor.secondaryBottom,
             boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
             backdropFilter: 'blur(8px)',
             bottom: 0,
@@ -192,12 +195,12 @@ const useStyles = makeStyles()((theme) => {
             zIndex: 100,
         },
         button: {
-            color: theme.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.second,
             flexGrow: 1,
             minWidth: 0,
             height: theme.spacing(5),
             boxSizing: 'border-box',
-            backgroundColor: theme.palette.maskColor.thirdMain,
+            backgroundColor: theme.vars.palette.maskColor.thirdMain,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -216,8 +219,8 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         confirmButton: {
-            backgroundColor: theme.palette.maskColor.main,
-            color: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.bottom,
             '&:disabled': {
                 opacity: 0.5,
             },
@@ -418,7 +421,7 @@ export const Component = memo(function SyncTwitterCookies() {
                 <Box className={classes.page}>
                     <Box className={classes.header}>
                         <WalletAvatar address={address} size={48} badgeSize={16} />
-                        <Box display="flex" flexDirection="column">
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography className={classes.name}>{walletName}</Typography>
                             <Typography className={classes.address}>
                                 <FormattedAddress address={address} formatter={formatEthereumAddress} size={4} />

@@ -219,6 +219,20 @@ const avoidMistakeRules = {
     'no-template-curly-in-string': 'error', // "${expr}" looks like a bug
     'no-unmodified-loop-condition': 'error', // loop bug
     'no-unreachable-loop': 'error', // loop bug
+    'no-restricted-syntax': [
+        'error',
+        {
+            selector:
+                "MemberExpression[object.type='MemberExpression'][object.object.type='Identifier'][object.object.name='theme'][object.property.type='Identifier'][object.property.name='palette']",
+            message:
+                'Use theme.vars.palette for color values and theme.applyStyles() for color-scheme-specific styles.',
+        },
+        {
+            selector: "JSXAttribute[name.name='style'] ObjectExpression > Property[key.value=/^--/]",
+            message:
+                'Use sx={(theme) => ({ ...theme.applyStyles(...) })} for CSS custom properties that vary by color scheme.',
+        },
+    ],
     // 'array-callback-return': 'error', // .map .some ... calls should have a return value
     eqeqeq: 'error', // ===
     'no-restricted-globals': [
@@ -349,6 +363,11 @@ const moduleSystemRules = {
                     name: 'lodash-es',
                     message: 'Avoid using type unsafe methods.',
                     importNames: ['get'],
+                },
+                {
+                    name: '@mui/material',
+                    importNames: ['alpha'],
+                    message: 'Use theme.vars.palette and alpha from @masknet/theme instead.',
                 },
                 {
                     name: 'viem',

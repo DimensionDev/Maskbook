@@ -10,7 +10,8 @@ import { SettingsContext } from './Context.js'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
-            boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
+            boxShadow: '0px 0px 20px 0px #0000000D',
+            ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px 0px #FFFFFF1F' }),
             backdropFilter: 'blur(16px)',
             borderRadius: 16,
             display: 'flex',

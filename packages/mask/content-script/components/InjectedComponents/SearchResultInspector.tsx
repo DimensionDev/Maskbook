@@ -33,7 +33,7 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
         tabContent: {
             position: 'relative',
             maxHeight: 478,
-            borderBottom: isProfilePage ? 'unset' : `1px solid ${theme.palette.divider}`,
+            borderBottom: isProfilePage ? 'unset' : `1px solid ${theme.vars.palette.divider}`,
             overflow: 'auto',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -114,7 +114,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                         />
                     </div>
                     {tabs.length ?
-                        <Stack px={2}>
+                        <Stack sx={{ px: 2 }}>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
                                     {tabs.map((tab) => (

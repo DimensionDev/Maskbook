@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { alpha, ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { fetchChains } from '@masknet/web3-providers/helpers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType, ZERO_ADDRESS, getRPCConstant } from '@masknet/web3-shared-evm'
-import { Button, Input, Typography, alpha } from '@mui/material'
+import { Button, Input, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -40,24 +40,24 @@ const useStyles = makeStyles()((theme) => ({
     footer: {
         padding: theme.spacing(2),
         borderRadius: 12,
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow: theme.palette.maskColor.bottomBg,
+        background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(2),
     },
     label: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         marginBottom: theme.spacing(0.5),
         marginTop: theme.spacing(2),
     },
     error: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         marginTop: theme.spacing(0.5),
     },
     warn: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         marginTop: theme.spacing(0.5),
     },
 }))
@@ -89,7 +89,7 @@ export const Component = memo(function EditNetwork() {
     }, [chainId, networks])
     // #endregion
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     useTitle(network ? network.name : _(msg`Add Network`))
     const { setExtension } = useContext(PageTitleContext)
 
@@ -109,7 +109,7 @@ export const Component = memo(function EditNetwork() {
                         setChainId(ChainId.Mainnet)
                     }
                     await Network.removeNetwork(id)
-                    showSnackbar(<Trans>Network removed.</Trans>)
+                    enqueueSnackbar(<Trans>Network removed.</Trans>, { variant: 'success' })
                     // Trigger UI update.
                     queryClient.invalidateQueries({ queryKey: QUERY_KEY })
                     navigate(-1)
@@ -118,7 +118,7 @@ export const Component = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, showSnackbar, Network, currentChainId, queryClient])
+    }, [isBuiltIn, id, classes.iconButton, enqueueSnackbar, Network, currentChainId, queryClient])
 
     const schema = useMemo(() => {
         return createSchema(
@@ -206,16 +206,16 @@ export const Component = memo(function EditNetwork() {
                 }
                 if (isEditing) {
                     await Network.updateNetwork(id, network)
-                    showSnackbar(<Trans>Network saved</Trans>)
+                    enqueueSnackbar(<Trans>Network saved</Trans>, { variant: 'success' })
                 } else {
                     await Network.addNetwork(network)
-                    showSnackbar(<Trans>Network added</Trans>)
+                    enqueueSnackbar(<Trans>Network added</Trans>, { variant: 'success' })
                 }
                 navigate(-1)
                 queryClient.invalidateQueries({ queryKey: QUERY_KEY })
             } catch (err) {
                 checkZodError((err as Error).message)
-                showSnackbar(<Trans>Failed to save network</Trans>)
+                enqueueSnackbar(<Trans>Failed to save network</Trans>, { variant: 'error' })
             }
             setIsSubmitting(false)
         },

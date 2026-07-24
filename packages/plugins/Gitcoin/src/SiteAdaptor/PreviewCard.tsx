@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     title: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 24,
         fontWeight: 700,
         lineHeight: '120%',
@@ -40,17 +40,17 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         gap: 8,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     link: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     stats: {
         margin: theme.spacing(1.5, 0),
         padding: theme.spacing(1.5),
         display: 'flex',
         gap: 12,
-        background: theme.palette.maskColor.white,
+        background: theme.vars.palette.maskColor.white,
         borderRadius: 8,
         justifyContent: 'space-between',
     },
@@ -64,10 +64,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         fontWeight: 700,
         lineHeight: '120%',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     statsTitle: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '18px',
     },
@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         fontWeight: 700,
         lineHeight: '22px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     rounds: {
         display: 'flex',
@@ -84,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     round: {
         borderRadius: 12,
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         padding: theme.spacing(1.5),
         display: 'flex',
         flexDirection: 'column',
@@ -93,12 +93,12 @@ const useStyles = makeStyles()((theme) => ({
     roundName: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     roundStatus: {
         padding: theme.spacing(0.75, 1.5),
         borderRadius: 8,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         lineHeight: '18px',
     },
@@ -109,7 +109,7 @@ const useStyles = makeStyles()((theme) => ({
         '& p, & li': {
             margin: 0,
             fontSize: 12,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
         '& p + p': {
             marginTop: theme.spacing(0.5),
@@ -117,13 +117,13 @@ const useStyles = makeStyles()((theme) => ({
         '& h1, & h2, & h3, & h4, & h5, & h6': {
             fontSize: 14,
             fontWeight: 500,
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
         '& img': {
             maxWidth: '100%',
         },
         '& a': {
-            color: theme.palette.maskColor.main,
+            color: theme.vars.palette.maskColor.main,
         },
     },
     placeholder: {
@@ -135,11 +135,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     placeholderTitle: {
         textAlign: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     tabContent: {
         paddingTop: 16,
-        background: theme.palette.maskColor.white,
+        background: theme.vars.palette.maskColor.white,
         borderRadius: '0 0 12px 12px',
     },
     panel: {
@@ -167,13 +167,13 @@ export function PreviewCard(props: PreviewCardProps) {
     if (loading)
         return (
             <article className={classes.card} data-hide-scrollbar>
-                <LoadingStatus height={148} p={1} />
+                <LoadingStatus sx={{ height: 148, p: 1 }} />
             </article>
         )
     if (error)
         return (
             <article className={classes.card} data-hide-scrollbar>
-                <ReloadStatus height={120} message={<Trans>Something went wrong.</Trans>} onRetry={refetch} />
+                <ReloadStatus sx={{ height: 120 }} message={<Trans>Something went wrong.</Trans>} onRetry={refetch} />
             </article>
         )
 
@@ -243,7 +243,7 @@ export function PreviewCard(props: PreviewCardProps) {
 
     return (
         <article className={classes.card} data-hide-scrollbar>
-            <Box display="flex" gap={1.5} justifyContent="space-between" alignItems="center">
+            <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography component="h1" className={classes.title}>
                     {project.metadata.title}
                 </Typography>
@@ -354,7 +354,7 @@ function RoundItem({ round }: { round: Round }) {
         <Box className={classes.round}>
             <Typography className={classes.roundName}>{round.project.name}</Typography>
             <Typography className={classes.roundName}>{round.roundMetadata.name}</Typography>
-            <Box display="flex" justifyContent="space-between" alignItems="flex-end">
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <Typography className={classes.roundName}>
                     {roundType === 'Quadratic funding' ?
                         <span>

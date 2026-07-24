@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Button, DialogActions, DialogContent, inputClasses, useMediaQuery, type Theme } from '@mui/material'
+import { Button, DialogActions, DialogContent, inputClasses } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
@@ -64,10 +64,10 @@ const useStyles = makeStyles<StyleProps, 'container' | 'sidebar' | 'tokenList'>(
         },
     },
     search: {
-        backgroundColor: Sniffings.is_dashboard_page ? 'transparent !important' : theme.palette.maskColor.input,
-        border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
+        backgroundColor: Sniffings.is_dashboard_page ? 'transparent !important' : theme.vars.palette.maskColor.input,
+        border: `solid 1px ${theme.vars.palette.maskColor.twitterBorderLine}`,
         [`&.${inputClasses.focused}`]: {
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
     },
     wrapper: {
@@ -131,7 +131,6 @@ export function SelectFungibleTokenDialog({
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const { classes, cx } = useStyles({ compact })
-    const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isPrivyWallet = !!usePrivyWallet(account)
@@ -144,10 +143,6 @@ export function SelectFungibleTokenDialog({
 
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
-    const FixedSizeListProps = useMemo(
-        () => ({ itemSize: rowSize + 18.5, height: 428, className: classes.wrapper }),
-        [rowSize, isMdScreen, classes.wrapper],
-    )
     const [pendingSelectedTokens, setPendingSelectedTokens] = useState(selectedTokens)
     const enabled = multiple && maxTokens ? pendingSelectedTokens.length < maxTokens : true
     const noChanges = useMemo(() => {
@@ -196,10 +191,8 @@ export function SelectFungibleTokenDialog({
                         selectedTokens={pendingSelectedTokens}
                         onSelectedChange={setPendingSelectedTokens}
                         onSelect={onClose}
-                        FixedSizeListProps={FixedSizeListProps}
-                        SearchTextFieldProps={{
-                            InputProps: { classes: { root: classes.search } },
-                        }}
+                        FixedSizeListProps={{ itemSize: rowSize + 18.5, height: 428, className: classes.wrapper }}
+                        SearchTextFieldProps={{ slotProps: { input: { classes: { root: classes.search } } } }}
                         isHiddenChainIcon={false}
                         enabled={enabled}
                     />

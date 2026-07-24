@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
         button: {
             display: 'flex',
             alignItems: 'center',
-            border: `1px solid ${theme.palette.divider}`,
+            border: `1px solid ${theme.vars.palette.divider}`,
             borderRadius: 99,
             width: 93,
             height: 26,
@@ -93,10 +93,10 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
         },
         estimateGas: {
-            color: theme.palette.text.third,
+            color: theme.vars.palette.text.third,
         },
         menuItemBorder: {
-            borderBottom: `1px solid ${theme.palette.divider}`,
+            borderBottom: `1px solid ${theme.vars.palette.divider}`,
         },
         gasUSDPrice: {
             fontWeight: 700,
@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => {
         },
         edit: {
             lineHeight: '18px',
-            color: theme.palette.maskColor.primary,
+            color: theme.vars.palette.maskColor.primary,
             marginRight: 4,
             fontWeight: 700,
             cursor: 'pointer',
@@ -240,12 +240,19 @@ export function SelectGasSettingsToolbarUI({
                 horizontal: 'right',
                 ...MenuProps?.transformOrigin,
             },
-            PaperProps: {
-                ...MenuProps?.PaperProps,
-                style: {
-                    background: theme.palette.maskColor.bottom,
-                    transform: 'translateY(8px)',
-                    ...MenuProps?.PaperProps?.style,
+            slotProps: {
+                ...MenuProps?.slotProps,
+                paper: (ownerState) => {
+                    const paper = MenuProps?.slotProps?.paper
+                    const existing = typeof paper === 'function' ? paper(ownerState) : paper
+                    return {
+                        ...existing,
+                        style: {
+                            ...existing?.style,
+                            background: theme.vars.palette.maskColor.bottom,
+                            transform: 'translateY(8px)',
+                        },
+                    }
                 },
             },
         },

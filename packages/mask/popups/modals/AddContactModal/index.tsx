@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { alpha } from '@mui/system'
+import { alpha, ActionButton, MaskTextField, makeStyles, useSnackbar } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
@@ -20,17 +19,17 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
     },
     secondaryButton: {
-        backgroundColor: theme.palette.maskColor.thirdMain,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.thirdMain,
+        color: theme.vars.palette.maskColor.main,
         border: 'none!important',
         ['&:hover']: {
-            background: theme.palette.maskColor.thirdMain,
-            boxShadow: `0px 8px 25px ${alpha(theme.palette.maskColor.thirdMain, 0.1)}`,
+            background: theme.vars.palette.maskColor.thirdMain,
+            boxShadow: `0px 8px 25px ${alpha(theme.vars.palette.maskColor.thirdMain, 0.1)}`,
             border: 'none',
         },
         [`&.${buttonClasses.disabled}`]: {
-            color: theme.palette.maskColor.main,
-            background: theme.palette.maskColor.thirdMain,
+            color: theme.vars.palette.maskColor.main,
+            background: theme.vars.palette.maskColor.thirdMain,
             opacity: 0.4,
         },
     },
@@ -47,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 12,
     },
     helperText: {
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         marginTop: 12,
     },
 }))
@@ -68,7 +67,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const contacts = useContacts()
     const wallets = useWallets()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const addressError = Boolean(address) && !isValidAddress(address)
     const nameExistError = Boolean(
@@ -81,7 +80,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await evm.state!.AddressBook?.addContact({ name, address })
-        showSnackbar(<Trans>Contact added.</Trans>)
+        enqueueSnackbar(<Trans>Contact added.</Trans>, { variant: 'success' })
         onConfirm?.()
     }, [name, address, onConfirm])
 
@@ -110,19 +109,21 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             <MaskTextField
                 spellCheck={false}
                 placeholder={t`Address`}
-                wrapperProps={{ className: classes.input }}
+                className={classes.input}
                 value={address}
                 onChange={(ev) => setAddress(ev.target.value)}
                 error={addressError || addressExistError}
-                InputProps={{
-                    endAdornment:
-                        addressError || addressExistError ?
-                            <InputAdornment position="end">
-                                <IconButton onClick={() => setAddress('')} edge="end" size="small">
-                                    <Icons.Close size={18} color={theme.palette.maskColor.danger} />
-                                </IconButton>
-                            </InputAdornment>
-                        :   null,
+                slotProps={{
+                    input: {
+                        endAdornment:
+                            addressError || addressExistError ?
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setAddress('')} edge="end" size="small">
+                                        <Icons.Close size={18} color={theme.vars.palette.maskColor.danger} />
+                                    </IconButton>
+                                </InputAdornment>
+                            :   null,
+                    },
                 }}
             />
             {validationMessage ?

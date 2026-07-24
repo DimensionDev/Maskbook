@@ -24,14 +24,14 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         overflow: 'auto',
     },
     list: {
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         padding: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(1.5),
     },
     day: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '18px',
     },
@@ -76,7 +76,7 @@ export const ActivityList = memo(function ActivityList() {
 
     if (!isPending && !localeTxes.length && !transactions?.length)
         return (
-            <EmptyStatus height="100%">
+            <EmptyStatus sx={{ height: '100%' }}>
                 <Trans>No Data</Trans>
             </EmptyStatus>
         )
@@ -112,7 +112,7 @@ export const ActivityList = memo(function ActivityList() {
                 })}
                 {isFetching ? range(4).map((i) => <ActivityItemSkeleton key={i} />) : null}
             </List>
-            <ElementAnchor callback={() => fetchNextPage()} key={transactions?.length} height={10} />
+            <ElementAnchor callback={() => fetchNextPage()} key={transactions?.length} sx={{ height: 10 }} />
         </div>
     )
 })

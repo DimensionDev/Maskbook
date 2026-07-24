@@ -5,7 +5,7 @@ import { Trans } from '@lingui/react/macro'
 import { PersonaContext } from '@masknet/shared'
 import { PopupRoutes, type PersonaInformation } from '@masknet/shared-base'
 import { useContainer } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Box, Button, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -19,7 +19,7 @@ import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme, _, refs) => ({
     infoBox: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
         borderRadius: 8,
         padding: theme.spacing(1.5),
         display: 'flex',
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme, _, refs) => ({
     tips: {
         fontSize: 14,
         lineHeight: '20px',
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         margin: theme.spacing(0.5, 0),
         wordWrap: 'break-word',
     },
@@ -42,7 +42,7 @@ export const Component = memo(function Logout() {
     const { Provider } = useWeb3State()
 
     const { user } = useContainer(UserContext)
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
         try {
@@ -54,10 +54,10 @@ export const Component = memo(function Logout() {
                 await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
             }
 
-            showSnackbar(<Trans>Logout successfully</Trans>)
+            enqueueSnackbar(<Trans>Logout successfully</Trans>, { variant: 'success' })
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(<Trans>Logout failed</Trans>, { variant: 'error' })
+            enqueueSnackbar(<Trans>Logout failed</Trans>, { variant: 'error' })
         }
     }, [currentPersona, Provider])
 
@@ -131,8 +131,8 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
     }, [backupPassword, password, error, _])
 
     return (
-        <Box flex={1} maxHeight="544px" overflow="auto" data-hide-scrollbar>
-            <Box p={2} pb={11} display="flex" gap={1.5} flexDirection="column">
+        <Box sx={{ flex: 1, maxHeight: '544px', overflow: 'auto' }} data-hide-scrollbar>
+            <Box sx={{ p: 2, pb: 11, display: 'flex', gap: 1.5, flexDirection: 'column' }}>
                 <Box className={classes.infoBox}>
                     <PersonaAvatar
                         size={30}
@@ -140,8 +140,9 @@ const LogoutUI = memo<LogoutUIProps>(function LogoutUI({
                         pubkey={currentPersona?.identifier.publicKeyAsHex || ''}
                     />
                     <Box>
-                        <Typography fontWeight={700}>{currentPersona?.nickname}</Typography>
-                        <Typography fontSize={10} color={theme.palette.maskColor.third} lineHeight="10px">
+                        <Typography sx={{ fontWeight: 700 }}>{currentPersona?.nickname}</Typography>
+                        <Typography
+                            sx={{ color: theme.vars.palette.maskColor.third, fontSize: 10, lineHeight: '10px' }}>
                             {currentPersona?.identifier.rawPublicKey}
                         </Typography>
                     </Box>

@@ -57,7 +57,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
     return (
         <Stack>
             <Stack>
-                <Typography fontSize={14} fontWeight={700} component="h3">
+                <Typography sx={{ fontSize: 14, fontWeight: 700 }} component="h3">
                     <Trans>Price Statistic</Trans>
                 </Typography>
             </Stack>
@@ -133,7 +133,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
     return (
         <Stack>
             <Stack>
-                <Typography fontSize={14} fontWeight={700} component="h3">
+                <Typography sx={{ fontSize: 14, fontWeight: 700 }} component="h3">
                     <Trans>Price Statistic</Trans>
                 </Typography>
             </Stack>

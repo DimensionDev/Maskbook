@@ -1,6 +1,6 @@
 import { useMemo, useState, useTransition } from 'react'
-import { LoadingBase, MaskDarkTheme, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import { CardContent, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
+import { LoadingBase, MaskTabList, MaskThemeProvider, makeStyles, useTabs } from '@masknet/theme'
+import { CardContent, Stack, Tab, Typography } from '@mui/material'
 import { PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 300,
         paddingTop: 0,
         paddingBottom: 0,
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,
     },
     tabListRoot: {
         marginTop: '10px !important',
@@ -48,7 +48,6 @@ interface ProfileViewProps extends withClasses<'content' | 'footer'> {
 export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles()
-    const theme = useTheme()
     const [currentTab, _a, _b, setTab] = useTabs<ContentTabs>(
         ContentTabs.All,
         ContentTabs.Active,
@@ -82,11 +81,11 @@ export function ProfileView(props: ProfileViewProps) {
             <PluginCardFrameMini
                 title={<Trans>Snapshot</Trans>}
                 icon={<Icons.Snapshot className={classes.iconSnapshot} />}>
-                <ThemeProvider theme={MaskLightTheme}>
+                <MaskThemeProvider palette="light">
                     <PluginEnableBoundary pluginID={PluginID.Snapshot}>
                         <PluginDescriptor />
                     </PluginEnableBoundary>
-                </ThemeProvider>
+                </MaskThemeProvider>
             </PluginCardFrameMini>
         )
     }
@@ -94,10 +93,9 @@ export function ProfileView(props: ProfileViewProps) {
     return (
         <ProfileCard {...ProfileCardProps}>
             <Stack className={classes.root}>
-                <ThemeProvider theme={MaskLightTheme}>
+                <MaskThemeProvider palette="light">
                     <PluginDescriptor />
                     <ProfileSpaceHeader
-                        theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}
                         spaceList={spaceList}
                         currentSpace={{
                             ...currentSpace,
@@ -105,9 +103,9 @@ export function ProfileView(props: ProfileViewProps) {
                         }}
                         setSpaceId={setSpaceId}
                     />
-                </ThemeProvider>
+                </MaskThemeProvider>
                 <TabContext value={currentTab}>
-                    <Stack px={2}>
+                    <Stack sx={{ px: 2 }}>
                         <MaskTabList
                             variant="base"
                             classes={{ root: classes.tabListRoot }}
@@ -122,9 +120,9 @@ export function ProfileView(props: ProfileViewProps) {
             </Stack>
             {loadingProposalList || loadingSpaceMemberList || isPending ?
                 <CardContent className={classes.skeletonContent}>
-                    <Stack height="100%" alignItems="center" justifyContent="center">
+                    <Stack sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         <LoadingBase />
-                        <Typography fontSize="14px" mt={1.5}>
+                        <Typography sx={{ fontSize: '14px', mt: 1.5 }}>
                             <Trans>Loading</Trans>
                         </Typography>
                     </Stack>
@@ -132,9 +130,9 @@ export function ProfileView(props: ProfileViewProps) {
             : filteredProposalList.length > 0 ?
                 <ProfileProposalList proposalList={filteredProposalList} />
             :   <CardContent className={classes.skeletonContent}>
-                    <Stack height="100%" alignItems="center" justifyContent="center">
+                    <Stack sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         <Icons.EmptySimple size={36} />
-                        <Typography fontSize="14px" mt={1.5}>
+                        <Typography sx={{ fontSize: '14px', mt: 1.5 }}>
                             <Trans>Oops, we can't find any results.</Trans>
                         </Typography>
                     </Stack>

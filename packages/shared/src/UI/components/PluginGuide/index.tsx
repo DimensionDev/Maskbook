@@ -32,17 +32,17 @@ const useStyles = makeStyles()((theme) => ({
         width: 256,
         padding: theme.spacing(2),
         borderRadius: theme.spacing(2),
-        background: theme.palette.maskColor.tips,
+        background: theme.vars.palette.maskColor.tips,
         boxShadow: '0 4px 8px rgba(0,0,0,.1)',
         boxSizing: 'border-box',
-        color: theme.palette.maskColor.bottom,
+        color: theme.vars.palette.maskColor.bottom,
         '&.arrow-top:after': {
             content: '""',
             display: 'inline-block',
             width: 0,
             height: 0,
             border: 'solid 8px transparent',
-            borderBottomColor: theme.palette.maskColor.tips,
+            borderBottomColor: theme.vars.palette.maskColor.tips,
             borderBottomWidth: '13px',
             borderTopWidth: 0,
             position: 'absolute',
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
             width: 0,
             height: 0,
             border: 'solid 8px transparent',
-            borderTopColor: theme.palette.maskColor.tips,
+            borderTopColor: theme.vars.palette.maskColor.tips,
             borderTopWidth: '13px',
             borderBottomWidth: 0,
             position: 'absolute',
@@ -71,10 +71,10 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         width: '100%',
         borderRadius: '20px',
-        backgroundColor: theme.palette.maskColor.bottom,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
+        color: theme.vars.palette.maskColor.main,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
         },
     },
 }))
@@ -191,9 +191,7 @@ export function PluginGuide({
                                             </div>
                                         )}
                                         <div>
-                                            <Typography fontSize={14} fontWeight={600}>
-                                                {title}
-                                            </Typography>
+                                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{title}</Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
                                             <Button color="primary" className={classes.button} onClick={onNext}>

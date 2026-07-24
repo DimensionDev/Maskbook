@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.text.secondary,
+        color: theme.vars.palette.text.secondary,
         whiteSpace: 'nowrap',
     },
     listParent: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'flex-start',
     },
     mainText: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
     },
 }))
 
@@ -188,7 +188,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             </Box>
                         </div>
                         {profiles.length ?
-                            <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0px' }}>
+                            <Stack sx={{ alignItems: 'center', flexDirection: 'row', padding: '16px 0px' }}>
                                 <Checkbox
                                     sx={{ width: 20, height: 20 }}
                                     onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}

@@ -11,7 +11,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -103,7 +103,7 @@ export function PossiblePluginSuggestionUISingle(props: {
     })
 
     const ButtonIcon = lackHostPermission ? Icons.Approve : Icons.Plugin
-    const wrapperContent = content ?? <FallbackContent disabled={disabled} height={74} />
+    const wrapperContent = content ?? <FallbackContent disabled={disabled} sx={{ height: 74 }} />
     const buttonLabel = lackHostPermission ? <Trans>Approve</Trans> : <Trans>Enable the plugin</Trans>
 
     return (
@@ -124,7 +124,7 @@ export function PossiblePluginSuggestionUISingle(props: {
                     variant="roundedDark"
                     onClick={onClick}
                     sx={{
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.vars.palette.maskColor.dark,
                         color: 'white',
                         width: '254px',
                         height: '36px',
@@ -132,7 +132,7 @@ export function PossiblePluginSuggestionUISingle(props: {
                         fontWeight: 700,
                         lineHeight: 1.5,
                         '&:hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.vars.palette.maskColor.dark,
                         },
                     }}>
                     {buttonLabel}
@@ -143,14 +143,14 @@ export function PossiblePluginSuggestionUISingle(props: {
     )
 }
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
     },
     text: {
-        color: MaskLightTheme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     rectangle: {
         backgroundColor: 'rgba(255,255,255,0.5)',
@@ -172,7 +172,11 @@ function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
             </Box>
         )
     return (
-        <Box component="div" pl={1} {...rest} className={cx(classes.content, rest.className)}>
+        <Box
+            component="div"
+            {...rest}
+            className={cx(classes.content, rest.className)}
+            sx={[{ pl: 1 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={103} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={68} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={48} height={16} />

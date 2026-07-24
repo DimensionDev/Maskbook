@@ -9,13 +9,13 @@ export interface ProvidedByProps {
 
 export const ProvidedBy = memo<ProvidedByProps>(({ providerLink, providerName }) => {
     return (
-        <Stack direction="row" display="inline-flex" gap={0.25} alignItems="center">
-            <Typography variant="h6" fontSize="14px" fontWeight="400" color={(t) => t.palette.text.secondary}>
+        <Stack direction="row" sx={{ display: 'inline-flex', gap: 0.25, alignItems: 'center' }}>
+            <Typography
+                variant="h6"
+                sx={{ fontSize: '14px', fontWeight: '400', color: (t) => t.palette.text.secondary }}>
                 Provided by
             </Typography>
-            <Typography fontSize={14} fontWeight={500}>
-                {providerName}
-            </Typography>
+            <Typography sx={{ fontSize: 14, fontWeight: 500 }}>{providerName}</Typography>
             {providerLink ?
                 <Link
                     href={providerLink}

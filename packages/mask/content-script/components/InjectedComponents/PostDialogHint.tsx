@@ -46,9 +46,7 @@ const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIPro
             title={<Trans>Mask Network</Trans>}
             placement={tooltip?.placement}
             disableHoverListener={tooltip?.disabled}
-            PopperProps={{
-                disablePortal: false,
-            }}
+            slotProps={{ popper: { disablePortal: false } }}
             arrow>
             <IconButton
                 size="large"

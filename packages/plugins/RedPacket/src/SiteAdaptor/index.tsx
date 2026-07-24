@@ -156,12 +156,14 @@ function RedpacketBadge(props: RedpacketBadgeProps) {
         <div style={containerStyle}>
             <Icons.RedPacket size={20} />
             <Typography
-                fontSize="12px"
-                lineHeight="16px"
-                marginLeft="8px"
-                maxWidth="450px"
-                overflow="hidden"
-                textOverflow="ellipsis">
+                sx={{
+                    fontSize: '12px',
+                    lineHeight: '16px',
+                    marginLeft: '8px',
+                    maxWidth: '450px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                }}>
                 {message || fallback}
             </Typography>
         </div>

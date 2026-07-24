@@ -3,7 +3,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { decryptBackup, type BackupSummary } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { formatFileSize, InjectedDialog } from '@masknet/shared'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
@@ -23,9 +23,9 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     box: {
-        background: theme.palette.maskColor.bottom,
+        background: theme.vars.palette.maskColor.bottom,
         borderRadius: 8,
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         padding: theme.spacing(1.5),
         display: 'flex',
@@ -80,7 +80,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
     const [progress, setProgress] = useState(0)
     const [backupPassword, setBackupPassword] = useState('')
     const [backupPasswordError, setBackupPasswordError] = useState<ReactNode>()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
 
     const handleClose = useCallback(() => {
         setBackupPassword('')
@@ -98,11 +98,11 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
             }
             return step.value
         } catch (err) {
-            showSnackbar((err as Error).message, { variant: 'error' })
+            enqueueSnackbar((err as Error).message, { variant: 'error' })
             handleClose()
             throw err
         }
-    }, [open, download, showSnackbar, handleClose])
+    }, [open, download, enqueueSnackbar, handleClose])
 
     const isImport = strategy === 'import'
     const [{ loading }, handleRestore] = useAsyncFn(async () => {
@@ -123,9 +123,9 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                 if (!hasPassword) await Services.Wallet.setDefaultPassword()
             }
             await Services.Backup.restoreBackup(backupJson)
-            showSnackbar(isImport ? <Trans>Restore Completed</Trans> : <Trans>Merge Completed</Trans>, {
+            enqueueSnackbar(isImport ? <Trans>Restore Completed</Trans> : <Trans>Merge Completed</Trans>, {
                 variant: 'success',
-                message:
+                detail:
                     restoreSuccessMessage ||
                     (isImport ?
                         <Trans>Your file has been successfully restore into the browser data.</Trans>
@@ -134,14 +134,14 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
             onClose(backupSummary)
         } catch (err) {
             if (isImport) {
-                showSnackbar(<Trans>Restore Failed</Trans>, {
+                enqueueSnackbar(<Trans>Restore Failed</Trans>, {
                     variant: 'error',
-                    message: restoreErrorMessage || (
+                    detail: restoreErrorMessage || (
                         <Trans>Failed to restore the backup: {(err as Error).message}</Trans>
                     ),
                 })
             } else {
-                showSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
+                enqueueSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
                     variant: 'error',
                 })
             }
@@ -151,7 +151,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
         decryptWithAccount,
         account,
         backupPassword,
-        showSnackbar,
+        enqueueSnackbar,
         isImport,
         restoreSuccessMessage,
         onClose,
@@ -172,31 +172,37 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                 <Typography className={classes.account}>{account}</Typography>
                 <Box className={classes.box}>
                     <Icons.Message size={24} />
-                    <Box flex={1}>
+                    <Box sx={{ flex: 1 }}>
                         <Typography className={classes.fileName}>{fileName}</Typography>
                         <LinearProgress variant="determinate" value={progress} sx={{ my: 0.5 }} />
                         <Typography
-                            color={theme.palette.maskColor.third}
-                            display="flex"
-                            gap={0.5}
-                            fontSize={12}
-                            fontWeight={700}
-                            lineHeight="16px">
+                            sx={{
+                                color: theme.vars.palette.maskColor.third,
+                                display: 'flex',
+                                gap: 0.5,
+                                fontSize: 12,
+                                fontWeight: 700,
+                                lineHeight: '16px',
+                            }}>
                             {progress === 100 ?
                                 <>
                                     <Typography
                                         component="span"
-                                        fontSize={12}
-                                        fontWeight={700}
-                                        lineHeight="16px"
-                                        color={theme.palette.maskColor.main}>
+                                        sx={{
+                                            color: theme.vars.palette.maskColor.main,
+                                            fontSize: 12,
+                                            fontWeight: 700,
+                                            lineHeight: '16px',
+                                        }}>
                                         {formatFileSize(Number(size))}
                                     </Typography>
                                     <Typography
                                         component="span"
-                                        fontSize={12}
-                                        lineHeight="16px"
-                                        color={theme.palette.maskColor.third}>
+                                        sx={{
+                                            color: theme.vars.palette.maskColor.third,
+                                            fontSize: 12,
+                                            lineHeight: '16px',
+                                        }}>
                                         {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
                                     </Typography>
                                 </>

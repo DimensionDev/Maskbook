@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         marginTop: theme.spacing(2),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
     },
     accounts: {
         display: 'grid',
@@ -30,8 +30,8 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 16,
         cursor: 'pointer',
         '&:hover': {
-            background: theme.palette.maskColor.bottom,
-            boxShadow: theme.palette.maskColor.bottomBg,
+            background: theme.vars.palette.maskColor.bottom,
+            boxShadow: theme.vars.palette.maskColor.bottomBg,
             backdropFilter: 'blur(8px)',
         },
     },
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     connect: {
         borderRadius: 16,
-        background: theme.palette.maskColor.bg,
+        background: theme.vars.palette.maskColor.bg,
         padding: theme.spacing(3.25, 0.5),
         display: 'flex',
         flexDirection: 'column',
@@ -103,7 +103,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
             ))}
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.ConnectSocialAccount)}>
                 <Icons.Connect size={16} />
-                <Typography fontSize={12} fontWeight={700} lineHeight="18px">
+                <Typography sx={{ fontSize: 12, fontWeight: 700, lineHeight: '18px' }}>
                     <Trans>Connect</Trans>
                 </Typography>
             </Box>

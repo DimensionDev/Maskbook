@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     cardContainer: {
@@ -57,7 +57,7 @@ export const SearchList = memo<SearchListProps>(function SearchList({ searchResu
                             />
                         )
                     })}
-                    <ElementAnchor callback={() => fetchNextPage()} height={10} />
+                    <ElementAnchor callback={() => fetchNextPage()} sx={{ height: 10 }} />
                 </Box>
             </RestorableScroll>
 })

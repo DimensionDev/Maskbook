@@ -10,15 +10,15 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
     },
     wordCard: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         padding: theme.spacing(1),
         borderRadius: 8,
         listStyleType: 'decimal',
         listStylePosition: 'inside',
         position: 'relative',
         '&::marker': {
-            backgroundColor: theme.palette.maskColor.bg,
-            color: theme.palette.maskColor.third,
+            backgroundColor: theme.vars.palette.maskColor.bg,
+            color: theme.vars.palette.maskColor.third,
             fontSize: 14,
         },
     },
@@ -47,7 +47,7 @@ export function MnemonicReveal(props: MnemonicRevealProps) {
         <Box component="ul" className={classes.container}>
             {words.map((item, index) => (
                 <Box className={classes.wordCard} component="li" key={index}>
-                    <Typography className={classes.text} fontWeight={700} textAlign="center" flex="1 0 0">
+                    <Typography className={classes.text} sx={{ fontWeight: 700, textAlign: 'center', flex: '1 0 0' }}>
                         {item}
                     </Typography>
                 </Box>

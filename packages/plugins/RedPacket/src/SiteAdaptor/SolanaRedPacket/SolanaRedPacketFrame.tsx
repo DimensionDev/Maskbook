@@ -1,6 +1,5 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import { MaskLightTheme } from '@masknet/theme'
-import { ThemeProvider } from '@mui/material'
+import { MaskThemeProvider } from '@masknet/theme'
 import { produce } from 'immer'
 import { useMemo } from 'react'
 import { SolanaRedPacketCard, type SolanaRedPacketCardProps } from './SolanaRedPacketCard.js'
@@ -26,10 +25,10 @@ export function SolanaRedPacketFrame({ payload }: Omit<SolanaRedPacketCardProps,
     const payloadChainId =
         payload.token?.chainId ?? SolanaChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     return (
-        <ThemeProvider theme={MaskLightTheme}>
+        <MaskThemeProvider palette="light">
             <SOLWeb3ContextProvider chainId={payloadChainId}>
                 <SolanaRedPacketCard payload={patchedPayload} currentPluginID={pluginID} />
             </SOLWeb3ContextProvider>
-        </ThemeProvider>
+        </MaskThemeProvider>
     )
 }

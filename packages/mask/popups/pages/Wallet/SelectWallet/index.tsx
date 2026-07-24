@@ -17,7 +17,7 @@ import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     placeholder: {
         flex: 1,
@@ -26,9 +26,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actions: {
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.vars.palette.maskColor.secondaryBottom,
         padding: theme.spacing(2),
-        boxShadow: theme.palette.maskColor.bottomBg,
+        boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         display: 'flex',
         columnGap: theme.spacing(2),
@@ -124,8 +124,24 @@ export const Component = memo(function SelectWallet({ embed, ...props }: SelectW
         )
 
     return (
-        <Box overflow="auto" display="flex" flexGrow={1} flexDirection="column" data-hide-scrollbar {...props}>
-            <Box pt={1} pb={9} px={2} display="flex" flexGrow={1} minHeight={0} flexDirection="column" rowGap="6px">
+        <Box
+            data-hide-scrollbar
+            {...props}
+            sx={[
+                { overflow: 'auto', display: 'flex', flexGrow: 1, flexDirection: 'column' },
+                ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+            ]}>
+            <Box
+                sx={{
+                    pt: 1,
+                    pb: 9,
+                    px: 2,
+                    display: 'flex',
+                    flexGrow: 1,
+                    minHeight: 0,
+                    flexDirection: 'column',
+                    rowGap: '6px',
+                }}>
                 {wallets.map((item) => {
                     return (
                         <WalletItem

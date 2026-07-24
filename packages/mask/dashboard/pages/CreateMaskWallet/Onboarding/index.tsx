@@ -17,14 +17,14 @@ const useStyles = makeStyles()((theme) => ({
         top: 24,
         right: 24,
         padding: theme.spacing(2),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
         borderRadius: 12,
         maxWidth: 360,
     },
     pin: {
         fontSize: 16,
         lineHeight: '20px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     skeleton: {
         background: 'linear-gradient(270deg, #F6F6F6 0%, rgba(217, 217, 217, 0) 94.74%)',
@@ -51,8 +51,8 @@ const useStyles = makeStyles()((theme) => ({
     pinCard: {
         marginTop: 18,
         borderRadius: 8,
-        border: `1px solid ${theme.palette.maskColor.line}`,
-        background: theme.palette.maskColor.bottom,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
+        background: theme.vars.palette.maskColor.bottom,
         padding: 16,
         display: 'flex',
         justifyContent: 'space-between',
@@ -89,7 +89,7 @@ export const Component = memo(function Onboarding() {
                 <Typography className={classes.pin}>
                     <Trans>Pin Mask Network to the toolbar for easier access:</Trans>
                 </Typography>
-                <Box mt={2.25} display="flex" alignItems="center">
+                <Box sx={{ mt: 2.25, display: 'flex', alignItems: 'center' }}>
                     <Box className={classes.skeleton} />
                     <Box className={classes.plugins}>
                         <Icons.Plugins size={20} />
@@ -97,7 +97,7 @@ export const Component = memo(function Onboarding() {
                     <Icons.More className={classes.more} size={24} />
                 </Box>
                 <Box className={classes.pinCard}>
-                    <Box display="flex" alignItems="center" columnGap={2.5}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2.5 }}>
                         <Icons.MaskBlue size={32} />
                         {/* There is no need for i18n here. */}
                         <Typography>Mask Network</Typography>
@@ -111,7 +111,7 @@ export const Component = memo(function Onboarding() {
             </Box>
             <SetupFrameController>
                 <PrimaryButton onClick={onOpenPopupWallet} size="large" width={'228px'}>
-                    <Typography fontWeight={700}>
+                    <Typography sx={{ fontWeight: 700 }}>
                         <Trans>Got it</Trans>
                     </Typography>
                 </PrimaryButton>

@@ -12,13 +12,13 @@ import { useMarkdownStyles } from '../../hooks/useMarkdownStyles.js'
 const useStyles = makeStyles()((theme) => ({
     title: {
         marginTop: theme.spacing(1.5),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
     },
     content: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         whiteSpace: 'pre-wrap',
         maxHeight: '3em',
         display: '-webkit-box',

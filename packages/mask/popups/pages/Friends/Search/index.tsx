@@ -9,18 +9,18 @@ const useStyles = makeStyles()((theme) => ({
     inputRoot: {
         borderRadius: 8,
         width: '100%',
-        background: theme.palette.maskColor.input,
+        background: theme.vars.palette.maskColor.input,
         fontSize: 14,
     },
     input: {
         '&::placeholder': {
-            color: theme.palette.maskColor.third,
+            color: theme.vars.palette.maskColor.third,
         },
         padding: '11px 4px !important',
     },
     inputFocused: {
-        background: theme.palette.maskColor.bottom,
-        borderColor: theme.palette.text.third,
+        background: theme.vars.palette.maskColor.bottom,
+        borderColor: theme.vars.palette.text.third,
     },
     button: {
         background: 'transparent',

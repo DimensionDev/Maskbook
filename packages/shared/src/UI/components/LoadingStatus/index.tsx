@@ -11,10 +11,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     icon: {
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     text: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 400,
         marginTop: theme.spacing(1.5),
@@ -35,7 +35,10 @@ export const LoadingStatus = memo(function LoadingStatus({
 }: Props) {
     const { classes, cx } = useStyles()
     return (
-        <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
+        <Box
+            className={cx(classes.statusBox, className)}
+            {...rest}
+            sx={[{ p: 2 }, ...(Array.isArray(rest.sx) ? rest.sx : [rest.sx])]}>
             <LoadingBase size={iconSize} className={classes.icon} />
             {omitText ? null : <Typography className={classes.text}>{children ?? <Trans>Loading</Trans>}</Typography>}
         </Box>

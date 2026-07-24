@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         minWidth: 24,
         height: 16,
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         '& > *': {
             width: 16,
             height: 16,

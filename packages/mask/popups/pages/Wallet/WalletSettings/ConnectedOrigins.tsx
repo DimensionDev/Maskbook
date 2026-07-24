@@ -15,14 +15,14 @@ export function ConnectedOrigins() {
     return (
         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.ConnectedSites)}>
             <Box className={classes.itemBox}>
-                <Icons.Appendices size={20} color={theme.palette.maskColor.second} />
+                <Icons.Appendices size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
                     <Trans>Connected sites</Trans>
                 </Typography>
             </Box>
             <Box className={classes.itemBox}>
                 <Typography className={classes.itemText}>{origins ? origins.length : 0}</Typography>
-                <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
+                <Icons.ArrowRight color={theme.vars.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>
     )

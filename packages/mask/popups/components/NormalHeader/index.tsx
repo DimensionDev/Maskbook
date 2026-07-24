@@ -8,7 +8,7 @@ import { useHasNavigator } from '../../hooks/useHasNavigator.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.vars.palette.maskColor.modalTitleBg,
     },
     header: {
         padding: theme.spacing(2),
@@ -21,12 +21,12 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         fontSize: 24,
         cursor: 'pointer',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     title: {
         fontSize: 18,
         lineHeight: '22px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontWeight: 700,
         minHeight: 22,
         textAlign: 'center',

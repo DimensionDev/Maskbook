@@ -33,7 +33,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         whiteSpace: 'nowrap',
         display: 'flex',
         gridTemplateColumns: '50px auto 50px',
-        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.modalTitleBg : undefined,
+        background: Sniffings.is_dashboard_page ? theme.vars.palette.maskColor.modalTitleBg : undefined,
     },
 
     dialogTitleEndingContent: {
@@ -55,12 +55,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         `,
     },
     dialogContent: {
-        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.bottom : undefined,
+        background: Sniffings.is_dashboard_page ? theme.vars.palette.maskColor.bottom : undefined,
         overscrollBehavior: 'contain',
     },
     dialogActions: {
-        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.secondaryBottom : undefined,
-        boxShadow: Sniffings.is_dashboard_page ? theme.palette.maskColor.bottomBg : undefined,
+        background: Sniffings.is_dashboard_page ? theme.vars.palette.maskColor.secondaryBottom : undefined,
+        boxShadow: Sniffings.is_dashboard_page ? theme.vars.palette.maskColor.bottomBg : undefined,
         backdropFilter: Sniffings.is_dashboard_page ? 'blur(8px)' : undefined,
     },
     dialogGap: {
@@ -83,7 +83,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         fontWeight: 700,
     },
     dialogCloseButton: {
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         padding: 0,
         width: 24,
         height: 24,
@@ -222,10 +222,12 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     if (props.isOnBack) onClose?.()
                     else closeBothCompositionDialog()
                 }}
-                BackdropProps={{
-                    transitionDuration: 0,
-                    classes: {
-                        root: dialogBackdropRoot,
+                slotProps={{
+                    backdrop: {
+                        transitionDuration: 0,
+                        classes: {
+                            root: dialogBackdropRoot,
+                        },
                     },
                 }}
                 {...omit(rest, 'isOnBack')}
@@ -253,7 +255,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                     }
                                 />
                             </IconButton>
-                            <Typography className={dialogTitleTypography} display="inline" variant="inherit">
+                            <Typography className={dialogTitleTypography} sx={{ display: 'inline' }} variant="inherit">
                                 {title}
                             </Typography>
                             <Stack

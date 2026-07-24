@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
-import { useCustomSnackbar } from '@masknet/theme'
+import { useSnackbar } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog.js'
@@ -13,7 +13,7 @@ const GlobalInjection = createInjectHooksRenderer(
 )
 
 export function PageInspector() {
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()
     const xsMatched = useMatchXS()
 
@@ -25,12 +25,12 @@ export function PageInspector() {
                     closeSnackbar(key)
                 }
                 const timeout = setTimeout(close, 15 * 1000 /** 15 seconds */)
-                showSnackbar(
+                enqueueSnackbar(
                     <>
                         <Typography color="textPrimary">
                             <Trans>Do you need to paste encrypted content manually?</Trans>
                         </Typography>
-                        <Box display="flex" justifyContent="flex-end">
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
                                 color="inherit"
                                 variant="text"

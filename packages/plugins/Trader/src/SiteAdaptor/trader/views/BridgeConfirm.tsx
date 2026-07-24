@@ -9,7 +9,7 @@ import {
     useUnmountedRef,
 } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useSnackbar } from '@masknet/theme'
 import {
     useAccount,
     useNativeTokenPrice,
@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
     },
     pair: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         borderRadius: 12,
         padding: theme.spacing(1.5),
     },
@@ -112,14 +112,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     network: {
         fontSize: 13,
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         lineHeight: '18px',
     },
     toToken: {
         fontSize: 14,
         lineHeight: '18px',
         fontWeight: 400,
-        color: theme.palette.maskColor.success,
+        color: theme.vars.palette.maskColor.success,
     },
     infoList: {
         display: 'flex',
@@ -130,14 +130,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '100%',
         alignItems: 'flex-start',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
         fontSize: 14,
         display: 'flex',
         gap: theme.spacing(0.5),
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         alignItems: 'center',
         flexGrow: 1,
         marginRight: 'auto',
@@ -154,7 +154,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
         marginLeft: -8,
         marginRight: theme.spacing(1),
-        boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
+        boxShadow: `0 0 0 1px ${theme.vars.palette.maskColor.bottom}`,
     },
     link: {
         cursor: 'pointer',
@@ -162,12 +162,12 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'right',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     text: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
     },
     rotate: {
         transform: 'rotate(180deg)',
@@ -177,23 +177,22 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'monospace',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         overflow: 'auto',
         scrollbarWidth: 'none',
     },
     footer: {
         flexShrink: 0,
-        boxShadow:
-            theme.palette.mode === 'light' ?
-                '0px 0px 20px rgba(0, 0, 0, 0.05)'
-            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        ...theme.applyStyles('dark', { boxShadow: '0px 0px 20px rgba(255, 255, 255, 0.12)' }),
     },
 }))
 
 export const BridgeConfirm = memo(function BridgeConfirm() {
     const { t } = useLingui()
     const { classes, cx, theme } = useStyles()
-    const { basePath, showToolTip, showSnackbar } = useRuntime()
+    const { enqueueSnackbar } = useSnackbar()
+    const { basePath, showToolTip } = useRuntime()
     const navigate = useNavigate()
     const {
         mode,
@@ -254,7 +253,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 {targetToken.tokenSymbol}
                 <Icons.Cached
                     size={16}
-                    color={theme.palette.maskColor.main}
+                    color={theme.vars.palette.maskColor.main}
                     onClick={() => setForwardCompare((v) => !v)}
                 />
             </>
@@ -324,8 +323,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
 
             if (!hash) {
-                showSnackbar(t`Bridge`, {
-                    message: <Trans>Transaction rejected</Trans>,
+                enqueueSnackbar(t`Bridge`, {
+                    detail: <Trans>Transaction rejected</Trans>,
                     variant: 'error',
                 })
                 return
@@ -333,8 +332,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
             const receipt = await Web3.getTransactionReceipt(hash)
             if (isTransactionReceiptSuccess(receipt)) {
-                showSnackbar(t`Bridge`, {
-                    message: (
+                enqueueSnackbar(t`Bridge`, {
+                    detail: (
                         <MuiLink
                             sx={{ wordBreak: 'break-word' }}
                             className={classes.link}
@@ -343,7 +342,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                             tabIndex={-1}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Typography color={theme.palette.maskColor.success} component="span">
+                            <Typography sx={{ color: theme.vars.palette.maskColor.success }} component="span">
                                 <Trans>Transaction submitted.</Trans>
                             </Typography>
                             <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
@@ -353,8 +352,9 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     processing: true,
                 })
             } else {
-                showSnackbar(t`Bridge`, {
-                    message: <Trans>Failed to bridge</Trans>,
+                enqueueSnackbar(t`Bridge`, {
+                    detail: <Trans>Failed to bridge</Trans>,
+                    variant: 'error',
                 })
             }
             await addTransaction(account, {
@@ -399,8 +399,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
             navigate(url, { replace: true })
         } catch (err) {
-            showSnackbar(t`Bridge`, {
-                message: (err as Error).message,
+            enqueueSnackbar(t`Bridge`, {
+                detail: (err as Error).message,
                 variant: 'error',
             })
         }
@@ -414,7 +414,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         spender,
         bridge,
         sendBridge,
-        showSnackbar,
+        enqueueSnackbar,
         fromChainId,
         toChainId,
         gasFee,
@@ -516,7 +516,7 @@ than estimated, and any unused funds will remain in the original address.`
                         <Link
                             className={cx(classes.rowValue, classes.link)}
                             to={{ pathname: basePath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
-                            <Box display="flex" flexDirection="column">
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${fromNetwork?.nativeCurrency.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
                                 </Typography>
@@ -549,7 +549,7 @@ than estimated, and any unused funds will remain in the original address.`
                                 />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Typography className={classes.rowValue} textAlign="right">
+                        <Typography className={classes.rowValue} sx={{ textAlign: 'right' }}>
                             {toChainNetworkFee ?
                                 <>
                                     {formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)}{' '}
@@ -575,7 +575,7 @@ than estimated, and any unused funds will remain in the original address.`
                                 />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Typography className={classes.rowValue} textAlign="right">
+                        <Typography className={classes.rowValue} sx={{ textAlign: 'right' }}>
                             {router?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'}
                             <br />
                             (${bridgeFeeValue})
@@ -586,10 +586,10 @@ than estimated, and any unused funds will remain in the original address.`
                             <Trans>Wallet</Trans>
                         </Typography>
                         <Typography className={classes.rowValue} component="div">
-                            <Box maxWidth="175px" sx={{ wordBreak: 'break-all', textAlign: 'right' }}>
+                            <Box sx={{ maxWidth: '175px', wordBreak: 'break-all', textAlign: 'right' }}>
                                 {reversedName || formatEthereumAddress(account, 4)}
                             </Box>
-                            <CopyButton text={account} size={16} display="flex" />
+                            <CopyButton text={account} size={16} sx={{ display: 'flex' }} />
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>

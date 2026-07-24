@@ -15,7 +15,7 @@ import {
 import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { GasSettingProps } from './types.js'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -37,7 +37,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         overflowX: 'scroll',
         '& > *': {
-            backgroundColor: theme.palette.mode === 'dark' ? '#212442' : '#f7f9fa',
+            backgroundColor: '#f7f9fa',
+            ...theme.applyStyles('dark', { backgroundColor: '#212442' }),
             borderRadius: 8,
             padding: 10,
             display: 'flex',
@@ -57,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'break-all',
     },
     label: {
-        color: theme.palette.primary.main,
+        color: theme.vars.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
@@ -66,9 +67,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     selected: {
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.vars.palette.primary.main,
         '& > *': {
-            color: theme.palette.primary.contrastText,
+            color: theme.vars.palette.primary.contrastText,
         },
     },
     button: {
@@ -79,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
     price: {
         fontSize: 12,
         lineHeight: '16px',
-        color: MaskColorVar.normalText,
+        color: theme.vars.palette.maskColor.normalText,
     },
 }))
 

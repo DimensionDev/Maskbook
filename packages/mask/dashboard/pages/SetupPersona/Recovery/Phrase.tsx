@@ -16,7 +16,7 @@ import { SignUpRoutePath } from '../../SignUp/routePath.js'
 const useStyles = makeStyles()((theme) => ({
     error: {
         marginTop: theme.spacing(2),
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
     },
 }))
 

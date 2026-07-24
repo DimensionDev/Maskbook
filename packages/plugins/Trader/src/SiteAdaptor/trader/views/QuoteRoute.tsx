@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         padding: theme.spacing(1.5),
         borderRadius: theme.spacing(1.5),
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        border: `1px solid ${theme.vars.palette.maskColor.line}`,
     },
     boxTitle: {
         display: 'flex',
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '100%',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         justifyContent: 'space-between',
     },
     rowName: {
@@ -64,12 +64,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     highlight: {
-        backgroundColor: theme.palette.maskColor.success,
+        backgroundColor: theme.vars.palette.maskColor.success,
         lineHeight: '20px',
         fontSize: 16,
         fontWeight: 700,
         padding: theme.spacing(0.5, 1),
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
         borderRadius: theme.spacing(0.5),
     },
     tooSmall: {
@@ -78,16 +78,16 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 400,
         padding: theme.spacing(0.5, 1),
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
         borderRadius: theme.spacing(0.5),
     },
     normal: {
-        backgroundColor: theme.palette.maskColor.bg,
+        backgroundColor: theme.vars.palette.maskColor.bg,
         lineHeight: '20px',
         fontSize: 16,
         fontWeight: 400,
         padding: theme.spacing(0.5, 1),
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         borderRadius: theme.spacing(0.5),
     },
     tags: {
@@ -102,8 +102,8 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         padding: theme.spacing(0.5),
         borderRadius: theme.spacing(0.5),
-        backgroundColor: theme.palette.maskColor.bg,
-        color: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.bg,
+        color: theme.vars.palette.maskColor.main,
         textDecoration: 'none',
     },
 }))
@@ -146,7 +146,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
     const compareList = useCompareList(quote, chainId)
     if (!quote)
         return (
-            <Box className={classes.container} justifyContent="center">
+            <Box className={classes.container} sx={{ justifyContent: 'center' }}>
                 <EmptyStatus />
             </Box>
         )
@@ -163,7 +163,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
     )
     return (
         <div className={classes.container}>
-            <Box className={classes.infoRow} py={0.5}>
+            <Box className={classes.infoRow} sx={{ py: 0.5 }}>
                 <Typography className={classes.rowName}>
                     <Trans>Dex/Est received ({quote?.toToken.tokenSymbol})</Trans>
                 </Typography>
@@ -172,7 +172,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
                     <ShadowRootTooltip title={rankTooltip}>
                         <Icons.Questions
                             size={16}
-                            color={theme.palette.maskColor.second}
+                            color={theme.vars.palette.maskColor.second}
                             onClick={() => {
                                 showToolTip({
                                     title: t`Rank`,
@@ -210,7 +210,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
                         </Typography>
 
                         <div className={classes.infoRow}>
-                            <Typography className={classes.rowName} fontWeight={700}>
+                            <Typography className={classes.rowName} sx={{ fontWeight: 700 }}>
                                 {new BigNumber(compare.amountOut).toFixed(4)}
                             </Typography>
                             {isBest ?

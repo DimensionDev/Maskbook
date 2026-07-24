@@ -15,11 +15,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 24,
         width: 320,
         height: 316,
-        background: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
-            :   '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+        background: theme.vars.palette.maskColor.bottom,
+        boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+        ...theme.applyStyles('dark', {
+            boxShadow: '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
+        }),
     },
     list: {
         maxHeight: 240,
@@ -109,7 +109,9 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                 autoFocus
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={t`Search Area`}
-                InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
+                slotProps={{
+                    input: { disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' },
+                }}
                 sx={{ marginBottom: 0.5 }}
             />
             {regions.length ?

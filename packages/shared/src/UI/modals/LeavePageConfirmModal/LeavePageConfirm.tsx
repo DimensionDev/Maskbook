@@ -17,7 +17,7 @@ const useStyles = makeStyles<{
     return {
         root: {
             width: 384,
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
             position: props.positionStyle.position,
             top: props.positionStyle.top,
             right: props.positionStyle.right,
@@ -31,7 +31,7 @@ const useStyles = makeStyles<{
             },
         },
         header: {
-            background: theme.palette.maskColor.bottom,
+            background: theme.vars.palette.maskColor.bottom,
         },
         actions: {
             padding: theme.spacing(1, 2, 2, 2),
@@ -99,7 +99,7 @@ export function LeavePageConfirm(props: LeavePageConfirmProps) {
                     </Stack>
                 </DialogContent>
                 <DialogActions classes={{ root: classes.actions }}>
-                    <Stack width="100%">
+                    <Stack sx={{ width: '100%' }}>
                         <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
                             {info?.actionHint}
                         </Button>

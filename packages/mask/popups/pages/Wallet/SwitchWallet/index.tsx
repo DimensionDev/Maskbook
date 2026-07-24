@@ -22,7 +22,7 @@ import { WalletItem } from '../../../components/WalletItem/index.js'
 const useStyles = makeStyles()((theme) => ({
     content: {
         overflow: 'auto',
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -100,7 +100,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 onClick={() => {
                     navigate(PopupRoutes.CreateWallet)
                 }}>
-                <Icons.Wallet size={20} color={theme.palette.maskColor.second} />
+                <Icons.Wallet size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     <Trans>Add Wallet</Trans>
                 </Typography>
@@ -111,7 +111,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 size="small"
                 variant="outlined"
                 onClick={handleImport}>
-                <Icons.Download2 size={20} color={theme.palette.maskColor.second} />
+                <Icons.Download2 size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     <Trans>Import Wallet</Trans>
                 </Typography>
@@ -122,7 +122,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 size="small"
                 variant="outlined"
                 onClick={handleLock}>
-                <Icons.Lock size={20} color={theme.palette.maskColor.second} />
+                <Icons.Lock size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     <Trans>Lock Wallet</Trans>
                 </Typography>
@@ -133,7 +133,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 size="small"
                 variant="outlined"
                 onClick={handleClickSettings}>
-                <Icons.WalletSetting size={20} color={theme.palette.maskColor.second} />
+                <Icons.WalletSetting size={20} color={theme.vars.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     <Trans>Wallet Settings</Trans>
                 </Typography>

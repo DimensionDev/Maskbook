@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px',
         borderRadius: '8px',
         ':hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+            backgroundColor: theme.vars.palette.maskColor.bg,
             cursor: 'pointer',
         },
     },
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     bridgeIntro: {
         fontSize: '12px',
         fontWeight: 400,
-        color: theme.palette.grey[700],
+        color: theme.vars.palette.grey[700],
     },
     officialTag: {
         width: '39px',
@@ -52,7 +52,7 @@ export function BridgeStack() {
     const { classes } = useStyles()
 
     return (
-        <Stack height="100%" spacing={2}>
+        <Stack sx={{ height: '100%' }} spacing={2}>
             {crossChainBridge.map((bridge) => (
                 <div className={classes.bridgeItem} key={bridge.ID} onClick={() => openWindow(bridge.link)}>
                     {bridge.icon}

@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     dot: {
         width: 3,
         height: 3,
-        backgroundColor: theme.palette.maskColor.main,
+        backgroundColor: theme.vars.palette.maskColor.main,
     },
 }))
 export function DotLoading() {

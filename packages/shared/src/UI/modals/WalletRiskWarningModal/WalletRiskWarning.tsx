@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
-import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
+import { makeStyles, useSnackbar, ActionButton } from '@masknet/theme'
 import { InjectedDialog, ActionButtonPromise, WalletStatusBox } from '@masknet/shared'
 import { Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
@@ -9,7 +9,7 @@ import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
-        color: getMaskColor(theme).redMain,
+        color: theme.vars.palette.maskColor.redMain,
         paddingBottom: 0,
         paddingLeft: 16,
         paddingRight: 16,
@@ -22,7 +22,8 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            ...theme.applyStyles('dark', { backgroundColor: 'rgba(250, 250, 250, 0.2)' }),
             backgroundClip: 'padding-box',
         },
     },
@@ -42,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         fontWeight: 700,
         lineHeight: '28.8px',
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
     },
     icon: {
         display: 'flex',
@@ -53,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         fontWeight: 400,
         marginBottom: theme.spacing(2),
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
     },
 }))
 
@@ -65,13 +66,13 @@ interface WalletRiskWarningProps {
 
 export function WalletRiskWarning({ account, open, onClose }: WalletRiskWarningProps) {
     const { classes, cx } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const isMobile = useMatchXS()
 
     const onConfirm = useCallback(async () => {
         try {
             if (!account) {
-                showSnackbar(<Trans>No wallet selected.</Trans>, {
+                enqueueSnackbar(<Trans>No wallet selected.</Trans>, {
                     variant: 'error',
                     preventDuplicate: true,
                 })
@@ -81,7 +82,7 @@ export function WalletRiskWarning({ account, open, onClose }: WalletRiskWarningP
         } catch {
             // do nothing
         }
-    }, [showSnackbar, account, onClose])
+    }, [enqueueSnackbar, account, onClose])
 
     return (
         <InjectedDialog title={isMobile ? undefined : <Trans>Risk Warning</Trans>} open={open} onClose={onClose}>

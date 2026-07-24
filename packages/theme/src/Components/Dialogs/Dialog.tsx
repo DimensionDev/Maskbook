@@ -23,7 +23,7 @@ export interface MaskDialogProps
 export const MaskDialog = memo((props: MaskDialogProps) => {
     const { title, onBack, onClose, open, children, DialogProps, isOpenFromApplicationBoard, ...inferredDialogProps } =
         props
-    const dialogProps: DialogProps = { onBackdropClick: onClose, onClose, open, ...inferredDialogProps, ...DialogProps }
+    const dialogProps: DialogProps = { onClose, open, ...inferredDialogProps, ...DialogProps }
     const { extraProps, shouldReplaceExitWithBack, TrackDialogHierarchy } = useDialogStackActor(open)
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {

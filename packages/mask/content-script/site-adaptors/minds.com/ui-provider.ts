@@ -15,7 +15,7 @@ import getSearchedKeywordAtMinds from './collecting/getSearchedKeyword.js'
 import { IdentityProviderMinds } from './collecting/identity.js'
 import { ThemeSettingsProviderMinds } from './collecting/theme.js'
 import { PostProviderMinds } from './collecting/post.js'
-import { useThemeMindsVariant } from './customization/custom.js'
+import { getThemeMindsVariant } from './customization/custom.js'
 import injectCommentBoxAtMinds from './injection/CommentBox.js'
 import { injectPostBoxComposed } from './injection/inject.js'
 import { injectPostInspectorAtMinds } from './injection/PostInspector.js'
@@ -71,7 +71,7 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.maskColor.modalTitleBg,
+            background: theme.vars.palette.maskColor.modalTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -90,7 +90,7 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -100,7 +100,7 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             },
         },
         dialogActions: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             padding: '6px 16px',
             [smallQuery]: {
                 display: 'flex',
@@ -112,7 +112,8 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
             },
         },
         dialogBackdropRoot: {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            ...theme.applyStyles('dark', { backgroundColor: 'rgba(110, 118, 125, 0.4)' }),
         },
     }
 })
@@ -147,7 +148,7 @@ const mindsUI: SiteAdaptorUI.Definition = {
         componentOverwrite: {
             RenderFragments: MindsRenderFragments,
         },
-        useTheme: useThemeMindsVariant,
+        getTheme: getThemeMindsVariant,
     },
     init(signal) {
         const profiles = stateCreator.profiles()

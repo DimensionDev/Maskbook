@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 16,
         height: 16,
-        backgroundColor: theme.palette.common.white,
+        backgroundColor: theme.vars.palette.common.white,
         margin: 0,
     },
 }))

@@ -1,9 +1,9 @@
-import { alpha, Box, type BoxProps } from '@mui/material'
+import { Box, type BoxProps } from '@mui/material'
 import { memo } from 'react'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { Icons } from '@masknet/icons'
 import { MAX_CUSTOM_THEMES, RoutePaths } from '../../constants.js'
-import { makeStyles } from '@masknet/theme'
+import { alpha, makeStyles } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,8 +18,8 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: theme.palette.maskColor.bottom,
-        backgroundColor: alpha(theme.palette.maskColor.main, 0.8),
+        color: theme.vars.palette.maskColor.bottom,
+        backgroundColor: alpha(theme.vars.palette.maskColor.main, 0.8),
         borderRadius: 4,
         padding: 0,
         border: 0,
@@ -42,10 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: theme.palette.maskColor.thirdMain,
+        backgroundColor: theme.vars.palette.maskColor.thirdMain,
     },
     selectedCover: {
-        boxShadow: `0 0 0 2px ${theme.palette.maskColor.main}`,
+        boxShadow: `0 0 0 2px ${theme.vars.palette.maskColor.main}`,
     },
 }))
 
@@ -55,7 +55,12 @@ export const ThemePicker = memo<BoxProps>(function ThemePicker(props) {
     const { theme: selectedTheme, themes: redpacketThemes, customThemes, setCustomThemes, setTheme } = useRedPacket()
 
     return (
-        <Box display="flex" flexDirection="row" gap={1} ml="auto" {...props}>
+        <Box
+            {...props}
+            sx={[
+                { display: 'flex', flexDirection: 'row', gap: 1, ml: 'auto' },
+                ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+            ]}>
             {redpacketThemes.map((theme) => (
                 <div
                     key={theme.tid}

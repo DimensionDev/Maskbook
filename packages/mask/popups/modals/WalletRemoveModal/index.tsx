@@ -61,20 +61,24 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
     return (
         <BottomDrawer {...rest}>
             <Typography
-                fontWeight={700}
-                textAlign="center"
-                color={theme.palette.maskColor.third}
-                sx={{ marginTop: '12px' }}>
+                sx={{
+                    color: theme.vars.palette.maskColor.third,
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    marginTop: '12px',
+                }}>
                 <Trans>Are you sure to remove this wallet?</Trans>
             </Typography>
             <Typography
-                fontWeight={700}
-                textAlign="center"
-                color={theme.palette.maskColor.main}
-                sx={{ marginTop: '0px' }}>
+                sx={{
+                    color: theme.vars.palette.maskColor.main,
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    marginTop: '0px',
+                }}>
                 {wallet?.address}
             </Typography>
-            <Box display="flex" justifyContent="center" mx={0.5}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mx: 0.5 }}>
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
@@ -89,7 +93,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 />
             </Box>
             {error ?
-                <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1}>
+                <Typography sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, mt: 1 }}>
                     {error}
                 </Typography>
             :   null}

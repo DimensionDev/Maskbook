@@ -1,4 +1,5 @@
-import { alpha, useTheme } from '@mui/material'
+import { useTheme } from '@mui/material'
+import { alpha } from '@masknet/theme'
 import * as d3 from 'd3'
 import { format } from 'date-fns'
 import { useEffect, type RefObject } from 'react'
@@ -73,7 +74,7 @@ export function useLineChart(
             .append('text')
             .style('font-size', 14)
             .style('font-weight', 700)
-            .attr('fill', theme.palette.text.secondary)
+            .attr('fill', theme.vars.palette.text.secondary)
             .text(formatTooltip(min))
         const minTextNode = minTextSelection.node()
         const minTextRect = minTextNode?.getBoundingClientRect()
@@ -91,7 +92,7 @@ export function useLineChart(
             .append('text')
             .style('font-size', 14)
             .style('font-weight', 700)
-            .attr('fill', theme.palette.text.secondary)
+            .attr('fill', theme.vars.palette.text.secondary)
             .text(formatTooltip(max))
         const maxTextNode = maxTextSelection.node()
         const maxTextRect = maxTextNode?.getBoundingClientRect()
@@ -167,7 +168,11 @@ export function useLineChart(
 
             g.style('display', null).style('pointer-events', 'none').style('font', '12px sans-serif')
 
-            const path = g.selectAll('path').data([null]).join('path').attr('fill', theme.palette.background.tipMask)
+            const path = g
+                .selectAll('path')
+                .data([null])
+                .join('path')
+                .attr('fill', theme.vars.palette.background.tipMask)
 
             const text = g
                 .selectAll('text')
@@ -181,7 +186,7 @@ export function useLineChart(
                         .attr('x', 0)
                         .attr('y', (d, i) => `${i * 1.2}em`)
                         .style('font-weight', (_, i) => (i ? null : 'bold'))
-                        .attr('fill', theme.palette.maskColor.bottom)
+                        .attr('fill', theme.vars.palette.maskColor.bottom)
                         .text((d) => d),
                 )
 
@@ -204,7 +209,7 @@ export function useLineChart(
                         `M-${boxArrowX} -54h105s4 0 4 4v38s0 4 -4 4h-120s-4 0 -4 -4v-38s0 -4 4 -4 ${
                             isFirstIndex ? 'M -35 0 L -42 -10 L 11 -10 L -28 -10 Z' : 'M0 0L-7 -10L12 -10L7 -10Z'
                         }`,
-                    ).attr('fill', alpha(theme.palette.background.tipMask, 0.9))
+                    ).attr('fill', alpha(theme.vars.palette.background.tipMask, 0.9))
                 } else {
                     text.attr('transform', `translate(${-boxHalfWidth + offset},${18 - yValue})`)
 
@@ -213,7 +218,7 @@ export function useLineChart(
                         `M-${boxArrowX} 10h105s4 0 4 4v38s0 4 -4 4h-120s-4 0 -4 -4v-38s0 -4 4 -4 ${
                             isFirstIndex ? 'M -35 2 L -41 10 L 12 10 L -23 16 Z' : 'M0 2L-7 10L12 10L7 10Z'
                         } `,
-                    ).attr('fill', alpha(theme.palette.background.tipMask, 0.9))
+                    ).attr('fill', alpha(theme.vars.palette.background.tipMask, 0.9))
                 }
             }
         }

@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.main,
         fontSize: 16,
         fontFamily: 'Helvetica',
         fontWeight: '400',
@@ -26,15 +26,15 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         width: '28px !important',
         height: '28px !important',
-        border: `0.5px ${theme.palette.maskColor.line} solid`,
+        border: `0.5px ${theme.vars.palette.maskColor.line} solid`,
         cursor: 'pointer',
     },
     isActive: {
-        border: `0.5px ${theme.palette.maskColor.main} solid`,
+        border: `0.5px ${theme.vars.palette.maskColor.main} solid`,
         fontWeight: '700',
     },
     disabled: {
-        color: theme.palette.maskColor.second,
+        color: theme.vars.palette.maskColor.second,
         cursor: 'default',
     },
 }))

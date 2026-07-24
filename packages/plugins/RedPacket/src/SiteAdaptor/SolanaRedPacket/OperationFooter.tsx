@@ -82,11 +82,11 @@ export function OperationFooter({
         return (
             <ActionButton
                 sx={{
-                    backgroundColor: theme.palette.maskColor.dark,
+                    backgroundColor: theme.vars.palette.maskColor.dark,
                     width: '100%',
                     color: 'white',
                     '&:hover': {
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.vars.palette.maskColor.dark,
                     },
                 }}
                 variant="roundedDark"

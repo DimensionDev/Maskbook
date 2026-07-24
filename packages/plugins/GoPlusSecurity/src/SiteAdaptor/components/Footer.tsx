@@ -5,23 +5,27 @@ import { GoPlusLabLogo } from '../icons/Logo.js'
 
 export function Footer() {
     return (
-        <Stack justifyContent="flex-end" direction="row">
-            <Box display="flex" justifyContent="center">
+        <Stack direction="row" sx={{ justifyContent: 'flex-end' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Link href={PLUGIN_OFFICIAL_WEBSITE} target="_blank" underline="none" rel="noopener noreferrer">
-                    <Stack direction="row" justifyContent="center">
+                    <Stack direction="row" sx={{ justifyContent: 'center' }}>
                         <Trans>
                             <Typography
-                                fontSize="14px"
-                                color={(theme) => theme.palette.maskColor.second}
-                                fontWeight="700"
-                                marginRight="4px">
+                                sx={{
+                                    fontSize: '14px',
+                                    color: (theme) => theme.vars.palette.maskColor.second,
+                                    fontWeight: '700',
+                                    marginRight: '4px',
+                                }}>
                                 Powered by
                             </Typography>
                             <Typography
-                                fontSize="14px"
-                                color={(theme) => theme.palette.maskColor.main}
-                                fontWeight="700"
-                                marginRight="12px">
+                                sx={{
+                                    fontSize: '14px',
+                                    color: (theme) => theme.vars.palette.maskColor.main,
+                                    fontWeight: '700',
+                                    marginRight: '12px',
+                                }}>
                                 Go+
                             </Typography>
                         </Trans>

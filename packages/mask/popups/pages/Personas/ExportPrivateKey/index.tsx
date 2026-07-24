@@ -8,7 +8,7 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, useSnackbar } from '@masknet/theme'
 import { Trans } from '@lingui/react/macro'
 
 export const Component = memo(function ExportPrivateKey() {
@@ -16,7 +16,7 @@ export const Component = memo(function ExportPrivateKey() {
     const navigate = useNavigate()
     const { currentPersona } = PersonaContext.useContainer()
 
-    const { showSnackbar } = usePopupCustomSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [, copyToClipboard] = useCopyToClipboard()
     const { value } = useAsync(async () => {
         if (!currentPersona) return
@@ -31,21 +31,25 @@ export const Component = memo(function ExportPrivateKey() {
         if (!value) return
         copyToClipboard(value)
 
-        showSnackbar(<Trans>Copied</Trans>)
+        enqueueSnackbar(<Trans>Copied</Trans>, { variant: 'success' })
     }, [value])
 
     useTitle(currentPersona?.nickname ?? '')
 
     return (
         <Box>
-            <Box p={2} display="flex" flexDirection="column" rowGap={2}>
-                <Typography fontWeight={700}>
+            <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', rowGap: 2 }}>
+                <Typography sx={{ fontWeight: 700 }}>
                     <Trans>Private Key</Trans>
                 </Typography>
                 {value ?
                     <Typography
-                        p={1.5}
-                        style={{ background: theme.palette.maskColor.input, wordWrap: 'break-word', borderRadius: 8 }}>
+                        sx={{ p: 1.5 }}
+                        style={{
+                            background: theme.vars.palette.maskColor.input,
+                            wordWrap: 'break-word',
+                            borderRadius: 8,
+                        }}>
                         {value}
                     </Typography>
                 :   null}

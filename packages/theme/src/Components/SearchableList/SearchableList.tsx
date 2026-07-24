@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, type HTMLProps } from 'react'
 import { FixedSizeList, type FixedSizeListProps, type ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { Box, Stack, Typography, useTheme } from '@mui/material'
+import { Box, mergeSlotProps, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '../../UIHelper/index.js'
 import { MaskTextField, type MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundColor: theme.vars.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
         },
         '& > div > div': {
@@ -43,9 +43,9 @@ const useStyles = makeStyles()((theme) => ({
         scrollbarWidth: 'none',
     },
     error: {
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.vars.palette.maskColor.bottom,
         fontSize: 14,
-        color: theme.palette.maskColor.danger,
+        color: theme.vars.palette.maskColor.danger,
     },
 }))
 
@@ -109,7 +109,7 @@ export function SearchableList<T extends object>({
     const theme = useTheme()
     const { classes, cx } = useStyles(undefined, { props })
     const { height = 300, itemSize, ...rest } = FixedSizeListProps || {}
-    const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
+    const { slotProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
     const fuse = useMemo(() => {
         return new Fuse(data, {
@@ -166,25 +166,31 @@ export function SearchableList<T extends object>({
                         placeholder="Search"
                         autoFocus
                         fullWidth
-                        InputProps={{
-                            style: { height: 40 },
-                            inputProps: { style: { paddingLeft: 4 } },
-                            startAdornment: <Icons.Search size={18} />,
-                            endAdornment:
-                                keyword ?
-                                    <Icons.Close
-                                        size={18}
-                                        onClick={handleClear}
-                                        color={textFieldPropsRest.error ? theme.palette.maskColor.danger : undefined}
-                                    />
-                                :   null,
-                            ...InputProps,
+                        slotProps={{
+                            ...slotProps,
+                            input: mergeSlotProps(slotProps?.input, {
+                                style: { height: 40 },
+                                startAdornment: <Icons.Search size={18} />,
+                                endAdornment:
+                                    keyword ?
+                                        <Icons.Close
+                                            size={18}
+                                            onClick={handleClear}
+                                            color={
+                                                textFieldPropsRest.error ?
+                                                    theme.vars.palette.maskColor.danger
+                                                :   undefined
+                                            }
+                                        />
+                                    :   null,
+                            }),
+                            htmlInput: mergeSlotProps(slotProps?.htmlInput, { style: { paddingLeft: 4 } }),
                         }}
                         onChange={handleChange}
                         {...textFieldPropsRest}
                     />
                     {textFieldPropsRest.error ?
-                        <Typography className={classes.error} mt={0.5}>
+                        <Typography className={classes.error} sx={{ mt: 0.5 }}>
                             {textFieldPropsRest.helperText}
                         </Typography>
                     :   null}
@@ -192,22 +198,26 @@ export function SearchableList<T extends object>({
             )}
             {loading ?
                 <Stack
-                    height={windowHeight}
-                    justifyContent="center"
-                    alignItems="center"
-                    width="100%"
-                    alignContent="center"
-                    marginTop="18px"
-                    marginBottom="48px">
+                    sx={{
+                        height: windowHeight,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '100%',
+                        alignContent: 'center',
+                        marginTop: '18px',
+                        marginBottom: '48px',
+                    }}>
                     <LoadingBase />
                 </Stack>
             : readyToRenderData.length === 0 ?
                 <Stack
-                    height={windowHeight}
-                    justifyContent="center"
-                    alignContent="center"
-                    marginTop="18px"
-                    marginBottom="48px">
+                    sx={{
+                        height: windowHeight,
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                        marginTop: '18px',
+                        marginBottom: '48px',
+                    }}>
                     <EmptyResult />
                 </Stack>
             :   <div className={classes.listBox}>

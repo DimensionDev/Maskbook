@@ -17,25 +17,14 @@ import {
     type SocialIdentity,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
+import { MaskColors, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import {
-    Avatar,
-    Box,
-    Button,
-    CardContent,
-    IconButton,
-    Paper,
-    Stack,
-    ThemeProvider,
-    Typography,
-    useTheme,
-} from '@mui/material'
+import { Avatar, Box, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { first } from 'lodash-es'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ContentTab, type Currency } from '../../types/index.js'
@@ -83,12 +72,12 @@ const useStyles = makeStyles<{
             overflow: 'hidden',
             fontSize: 18,
             fontWeight: 700,
-            color: theme.palette.maskColor.dark,
+            color: theme.vars.palette.maskColor.dark,
         },
         symbol: {
             fontWeight: 700,
             fontSize: 18,
-            color: theme.palette.maskColor.dark,
+            color: theme.vars.palette.maskColor.dark,
             marginLeft: theme.spacing(0.5),
             marginRight: theme.spacing(0.5),
             display: 'flex',
@@ -106,17 +95,17 @@ const useStyles = makeStyles<{
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
-            color: theme.palette.maskColor.white,
+            color: theme.vars.palette.maskColor.white,
             fontWeight: 400,
             fontSize: 10,
-            background: theme.palette.maskColor.dark,
+            background: theme.vars.palette.maskColor.dark,
             borderRadius: theme.spacing(0.5),
         },
         avatar: {
             width: 24,
             height: 24,
             fontSize: 10,
-            backgroundColor: theme.palette.common.white,
+            backgroundColor: theme.vars.palette.common.white,
         },
         buttons: {
             marginLeft: 'auto',
@@ -136,7 +125,7 @@ const useStyles = makeStyles<{
             right: 0,
             display: 'flex',
             alignItems: 'center',
-            background: theme.palette.maskColor.bg,
+            background: theme.vars.palette.maskColor.bg,
             backdropFilter: 'blur(5px)',
             boxSizing: 'border-box',
             borderBottomRightRadius: '16px',
@@ -258,9 +247,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                 )}
                 <Stack className={classes.headline}>
-                    <Stack gap={2} flexGrow={1}>
+                    <Stack sx={{ gap: 2, flexGrow: 1 }}>
                         <Stack>
-                            <Stack component="div" flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
+                            <Stack
+                                component="div"
+                                ref={titleRef}
+                                sx={{ flexDirection: 'row', alignItems: 'center', gap: 0.5 }}>
                                 <Linking LinkProps={{ className: classes.link }} href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
@@ -319,7 +311,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     </>
                                 :   null}
                                 <Box className={classes.buttons}>
-                                    <ThemeProvider theme={MaskLightTheme}>
+                                    <MaskThemeProvider palette="light">
                                         {isSwappable ?
                                             <Button
                                                 color="primary"
@@ -340,20 +332,22 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 <Trans>Buy Now</Trans>
                                             </Button>
                                         :   null}
-                                    </ThemeProvider>
+                                    </MaskThemeProvider>
                                 </Box>
                             </Stack>
-                            <Stack direction="row" justifyContent="space-between" marginTop={2}>
-                                <Stack direction="row" gap={1} alignItems="center">
+                            <Stack direction="row" sx={{ justifyContent: 'space-between', marginTop: 2 }}>
+                                <Stack direction="row" sx={{ gap: 1, alignItems: 'center' }}>
                                     {market ?
                                         <Typography
-                                            fontSize={18}
-                                            fontWeight={500}
-                                            lineHeight="24px"
-                                            color={theme.palette.maskColor.dark}>
+                                            sx={{
+                                                color: theme.vars.palette.maskColor.dark,
+                                                fontSize: 18,
+                                                fontWeight: 500,
+                                                lineHeight: '24px',
+                                            }}>
                                             {floorPrice ? formatCurrency(floorPrice, 'USD') : '--'}
                                         </Typography>
-                                    :   <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                    :   <Typography sx={{ fontSize: 14, fontWeight: 500, lineHeight: '24px' }}>
                                             <Trans>No Data</Trans>
                                         </Typography>
                                     }
@@ -379,7 +373,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                     {isTokenTagPopper && currentTab === ContentTab.Market ?
-                        <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
+                        <Stack style={{ height: 48, width: '100%', background: theme.vars.palette.maskColor.bottom }} />
                     :   null}
                 </Paper>
                 {isTokenTagPopper ?

@@ -1,14 +1,6 @@
-import {
-    Box,
-    Button,
-    ButtonGroup,
-    type ButtonGroupProps,
-    styled,
-    Tab,
-    alpha,
-    type ButtonGroupClasses,
-} from '@mui/material'
+import { Box, Button, ButtonGroup, type ButtonGroupProps, styled, Tab, type ButtonGroupClasses } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab'
+import { alpha } from '../../Theme/colors.js'
 import {
     Children,
     isValidElement,
@@ -47,14 +39,14 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     height: defaultTabSize,
     width: defaultTabSize,
     minWidth: `${defaultTabSize}px !important`,
-    background: theme.palette.background.input,
+    background: theme.vars.palette.background.input,
     '&:hover': {
-        background: theme.palette.background.input,
+        background: theme.vars.palette.background.input,
     },
 }))
 
 const ArrowBackIosNewIconWrap = styled(ArrowBackIosNewIcon)(({ theme }) => ({
-    color: theme.palette.text.primary,
+    color: theme.vars.palette.text.primary,
     width: 16,
     borderRadius: '0 8px 8px 0',
 }))
@@ -71,12 +63,10 @@ const FlexibleButtonGroupPanel = styled(Box, {
     padding: theme.spacing(1.5),
     maxWidth: 'calc(100% - 24px)',
     width: 'calc(100% - 24px)',
-    boxShadow:
-        isOpen ?
-            `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
-        :   'none',
+    boxShadow: isOpen ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
+    ...theme.applyStyles('dark', { boxShadow: isOpen ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : 'none' }),
     backdropFilter: 'blur(20px)',
-    background: alpha(theme.palette.maskColor.bottom, 0.8),
+    background: alpha(theme.vars.palette.maskColor.bottom, 0.8),
     boxSizing: 'content-box',
 }))
 
@@ -95,7 +85,7 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     ...(maskVariant === 'round' ?
         {
             padding: theme.spacing(0.5),
-            background: theme.palette.maskColor.input,
+            background: theme.vars.palette.maskColor.input,
             borderRadius: 18,
         }
     : maskVariant === 'flexible' ?
@@ -130,10 +120,14 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
     borderRadius: 0,
     background:
         !isOpen && isOverflow ?
-            theme.palette.mode === 'light' ?
-                `linear-gradient(270deg, rgba(255,255,255,1) ${defaultTabSize}px, rgba(223, 229, 244, 0.8) ${defaultTabSize}px, rgba(244, 247, 254, 0) 72px)`
-            :   `linear-gradient(270deg, transparent ${defaultTabSize}px, rgba(49, 49, 49, 0.8) ${defaultTabSize}px, rgba(23, 23, 23, 0) 72px)`
+            `linear-gradient(270deg, rgba(255,255,255,1) ${defaultTabSize}px, rgba(223, 229, 244, 0.8) ${defaultTabSize}px, rgba(244, 247, 254, 0) 72px)`
         :   'transparent',
+    ...theme.applyStyles('dark', {
+        background:
+            !isOpen && isOverflow ?
+                `linear-gradient(270deg, transparent ${defaultTabSize}px, rgba(49, 49, 49, 0.8) ${defaultTabSize}px, rgba(23, 23, 23, 0) 72px)`
+            :   'transparent',
+    }),
 }))
 
 const tabMapping: {
@@ -266,7 +260,7 @@ export function MaskTabList(props: MaskTabListProps) {
 
     if (variant === 'flexible') {
         return (
-            <Box position="relative">
+            <Box sx={{ position: 'relative' }}>
                 <ButtonGroupWrap
                     maskVariant={variant}
                     ref={anchorRef}

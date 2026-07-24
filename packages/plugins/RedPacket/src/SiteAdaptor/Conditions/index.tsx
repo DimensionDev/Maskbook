@@ -36,7 +36,7 @@ const useStyles = makeStyles<void, 'assetName'>()((theme) => ({
     },
     closeButton: {
         position: 'absolute',
-        color: theme.palette.common.white,
+        color: theme.vars.palette.common.white,
         padding: 0,
         right: -15,
         top: -15,
@@ -75,7 +75,7 @@ const useStyles = makeStyles<void, 'assetName'>()((theme) => ({
         fontSize: 16,
         fontWeight: 400,
         lineHeight: '20px',
-        color: theme.palette.common.white,
+        color: theme.vars.palette.common.white,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         display: '-webkit-box',
@@ -100,7 +100,7 @@ const useStyles = makeStyles<void, 'assetName'>()((theme) => ({
         },
     },
     unsatisfied: {
-        color: theme.palette.maskColor.white,
+        color: theme.vars.palette.maskColor.white,
         fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',

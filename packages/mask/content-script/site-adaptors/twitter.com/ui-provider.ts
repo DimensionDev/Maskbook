@@ -15,7 +15,7 @@ import { publishPostTwitter } from './automation/publishPost.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
 import { PostProviderTwitter, getPostIdFromNewPostToast } from './collecting/post.js'
-import { useThemeTwitterVariant } from './customization/custom.js'
+import { getThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
 import { injectSearchResultInspectorAtTwitter } from './injection/SearchResultInspector.js'
@@ -74,7 +74,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.maskColor.modalTitleBg,
+            background: theme.vars.palette.maskColor.modalTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -95,7 +95,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -106,7 +106,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogActions: {
-            backgroundColor: theme.palette.maskColor.bottom,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             padding: '6px 16px',
             [smallQuery]: {
                 display: 'flex',
@@ -118,7 +118,8 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogBackdropRoot: {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            ...theme.applyStyles('dark', { backgroundColor: 'rgba(110, 118, 125, 0.4)' }),
         },
     }
 })
@@ -157,7 +158,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
         componentOverwrite: {
             RenderFragments: TwitterRenderFragments,
         },
-        useTheme: useThemeTwitterVariant,
+        getTheme: getThemeTwitterVariant,
         i18nOverwrite: i18NOverwriteTwitter,
     },
     init(signal) {
@@ -204,7 +205,6 @@ const twitterUI: SiteAdaptorUI.Definition = {
             color: ThemeColor.Blue,
             size: FontSize.Normal,
             mode: ThemeMode.Light,
-            isDim: false,
         },
         steganography: {
             // ! Change this is a breaking change !

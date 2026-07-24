@@ -23,7 +23,7 @@ export function SocialTooltip<T extends object>({ children, platform }: SocialTo
     const ref = useRef<HTMLElement>(null)
     const title =
         platform ?
-            <Typography className={classes.title} fontSize={14}>
+            <Typography className={classes.title} sx={{ fontSize: 14 }}>
                 <Trans>Data source is retrieved from {resolveNextIDPlatformName(platform) || platform}.</Trans>
             </Typography>
         :   null
@@ -50,7 +50,7 @@ export function SocialTooltip<T extends object>({ children, platform }: SocialTo
 
     return (
         <ShadowRootTooltip
-            PopperProps={{ sx: { display: inView ? 'block' : 'none' } }}
+            slotProps={{ popper: { sx: { display: inView ? 'block' : 'none' } } }}
             disableInteractive
             arrow
             placement="top"

@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 4,
         verticalAlign: 'bottom',
         '& > a': {
-            color: theme.palette.maskColor.danger,
+            color: theme.vars.palette.maskColor.danger,
         },
     },
     address: {
@@ -51,7 +51,7 @@ export const LinkModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['LinkModi
             return (
                 <span className={classes.link}>
                     <AddressTag className={classes.address} address={data!.address!} nested text="" />
-                    <Link href={props.href} target="_blank" rel="noopener noreferrer" fontSize="inherit">
+                    <Link href={props.href} target="_blank" rel="noopener noreferrer" sx={{ fontSize: 'inherit' }}>
                         {props.children}
                         {props.suggestedPostImage}
                     </Link>
@@ -79,7 +79,7 @@ export const LinkModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['LinkModi
                     onClick={(e) => e.stopPropagation()}
                 />
             </ShadowRootPopper>
-            <Link href={props.href} target="_blank" rel="noopener noreferrer" fontSize="inherit">
+            <Link href={props.href} target="_blank" rel="noopener noreferrer" sx={{ fontSize: 'inherit' }}>
                 {props.children}
                 {props.suggestedPostImage}
             </Link>
