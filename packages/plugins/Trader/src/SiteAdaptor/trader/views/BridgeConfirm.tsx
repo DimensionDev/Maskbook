@@ -9,7 +9,7 @@ import {
     useUnmountedRef,
 } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useSnackbar  } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useSnackbar } from '@masknet/theme'
 import {
     useAccount,
     useNativeTokenPrice,
