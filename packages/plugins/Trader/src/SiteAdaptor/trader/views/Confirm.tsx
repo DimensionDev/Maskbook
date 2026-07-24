@@ -3,7 +3,7 @@ import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon, useUnmountedRef } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useSnackbar  } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
@@ -32,7 +32,6 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
-import { useSnackbar } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

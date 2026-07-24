@@ -9,7 +9,7 @@ import {
     useUnmountedRef,
 } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useSnackbar  } from '@masknet/theme'
 import {
     useAccount,
     useNativeTokenPrice,
@@ -53,7 +53,6 @@ import { useBridgable } from '../hooks/useBridgable.js'
 import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
-import { useSnackbar } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
