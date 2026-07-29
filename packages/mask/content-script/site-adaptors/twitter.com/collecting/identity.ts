@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { delay } from '@masknet/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
@@ -94,6 +94,11 @@ function getFirstSlug() {
     return first(slugs)
 }
 
+function getCurrentProfileBio(handle: string) {
+    if (getFirstSlug()?.toLowerCase() !== handle.toLowerCase()) return
+    return document.querySelector<HTMLElement>('[data-testid="primaryColumn"] [data-testid="UserDescription"]')
+}
+
 function resolveCurrentVisitingIdentityInner(
     ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     ownerRef: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
@@ -118,7 +123,10 @@ function resolveCurrentVisitingIdentityInner(
         const domAvatar = document.querySelector(`a[href="/${CSS.escape(handle)}/photo"] img`)
         // DOM avatar is more accurate, avatar from api could be outdate
         const avatar = domAvatar?.getAttribute('src') || legacy.profile_image_url_https
-        const bio = legacy.description
+        const domBio = getCurrentProfileBio(handle)
+        // The Twitter API response can lag behind profile edits. Prefer the visible profile bio
+        // for the current route so name-service identities refresh with the page.
+        const bio = domBio ? domBio.textContent?.trim() || '' : legacy.description
         const homepage = legacy.entities.url?.urls?.[0]?.expanded_url
 
         ref.value = {
@@ -151,6 +159,27 @@ function resolveCurrentVisitingIdentityInner(
         },
         { signal: cancel },
     )
+
+    const bioSelector = new LiveSelector()
+        .querySelector<HTMLElement>(':scope [data-testid="primaryColumn"] [data-testid="UserDescription"]')
+        .enableSingleMode()
+    new MutationObserverWatcher(bioSelector)
+        .addListener('onAdd', () => {
+            const currentSlug = getFirstSlug()
+            if (currentSlug) void update(currentSlug)
+        })
+        .addListener('onChange', () => {
+            const currentSlug = getFirstSlug()
+            if (currentSlug) void update(currentSlug)
+        })
+        .startWatch(
+            {
+                childList: true,
+                subtree: true,
+                characterData: true,
+            },
+            cancel,
+        )
 }
 
 export const IdentityProviderTwitter: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {

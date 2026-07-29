@@ -1,31 +1,36 @@
 import { first } from 'lodash-es'
-import { getSnsDomainsForAddress } from '@solana-name-service/sns-sdk-kit/address'
-import { resolve } from '@solana-name-service/sns-sdk-kit/domain'
-import { address as toAddress, createSolanaRpc, mainnet } from '@solana/kit'
+import defer * as SolanaWeb3 from '@solana/web3.js'
+import { resolve } from '@bonfida/spl-name-service/resolve'
+import { getAllDomains, performReverseLookup } from '@bonfida/spl-name-service/utils'
 import { NameServiceID } from '@masknet/shared-base'
-import { ChainId, createClientEndpoint } from '@masknet/web3-shared-solana'
+import { ChainId, createClient } from '@masknet/web3-shared-solana'
 import type { NameServiceAPI } from '../../../entry-types.js'
 
+const SNS_TLD_PATTERN = /\.(?:sns|sol)$/u
+
 class SolanaDomainAPI implements NameServiceAPI.Provider {
-    private client = createSolanaRpc(mainnet(createClientEndpoint(ChainId.Mainnet)))
+    private client = createClient(ChainId.Mainnet)
 
     id = NameServiceID.SOL
 
     async lookup(name: string): Promise<string | undefined> {
         try {
-            const domain = name.endsWith('.sol') || name.endsWith('.sns') ? name : `${name}.sns`
-            return await resolve({ rpc: this.client, domain })
+            // Version 0.1.50 predates the `.sns` spelling and treats an untrimmed
+            // `name.sns` as a subdomain. Both suffixes refer to the same root account.
+            const domain = name.trim().toLowerCase().replace(SNS_TLD_PATTERN, '')
+            return (await resolve(this.client, domain)).toBase58()
         } catch {
             return ''
         }
     }
     async reverse(address: string): Promise<string | undefined> {
-        const domains = await getSnsDomainsForAddress({ rpc: this.client, address: toAddress(address) })
-        // resolve the first domain
-        const domain = first(domains)
-        if (!domain) return
+        const owner = new SolanaWeb3.PublicKey(address)
+        const keys = await getAllDomains(this.client, owner)
+        const key = first(keys)
+        if (!key) return
 
-        return `${domain.domain}.sns`
+        const domain = await performReverseLookup(this.client, key)
+        return `${domain}.sns`
     }
 }
 export const SolanaDomain = new SolanaDomainAPI()
