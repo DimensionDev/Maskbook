@@ -65,14 +65,17 @@ function renderPostDialogHintTo<T extends HTMLElement>(
         if (padding) tag.style.setProperty('--icon-padding', `${padding}px`)
         if (size) tag.style.setProperty('--icon-size', `${size}px`)
     }
-    watcher.addListener('onChange', setTagProperties)
+    function scheduleSetTagProperties() {
+        requestAnimationFrame(setTagProperties)
+    }
+    watcher.addListener('onChange', scheduleSetTagProperties)
 
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, {
         signal: options.signal,
         tag: () => {
             // Vertical center the button when font size of Twitter is set to `large` or `very large`
             tag = document.createElement('span')
-            setTagProperties()
+            scheduleSetTagProperties()
             return tag
         },
     }).render(<PostDialogHintAtTwitter reason={reason} />)
