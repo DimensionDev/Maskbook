@@ -135,8 +135,8 @@ importers:
         specifier: 0.0.0-experimental-58af67a8f8-20240628
         version: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
       ses:
-        specifier: 1.14.0
-        version: 1.14.0
+        specifier: 2.2.0
+        version: 2.2.0
       ts-results-es:
         specifier: ^4.2.0
         version: 4.2.0(patch_hash=efb4c75ca619c8208ffd509a8b9c655e82fdceb165aa156647b03260525f9bcd)
@@ -1700,8 +1700,8 @@ importers:
   packages/polyfills:
     dependencies:
       core-js:
-        specifier: 3.48.0
-        version: 3.48.0
+        specifier: 3.49.0
+        version: 3.49.0
       tslib:
         specifier: ^2.6.3
         version: 2.8.1
@@ -1725,8 +1725,8 @@ importers:
         specifier: ^0.10.7
         version: 0.10.7
       core-js-compat:
-        specifier: 3.48.0
-        version: 3.48.0
+        specifier: 3.49.0
+        version: 3.49.0
       regenerator-runtime:
         specifier: ^0.14.1
         version: 0.14.1
@@ -2150,8 +2150,8 @@ importers:
   packages/vitest-setup:
     dependencies:
       core-js:
-        specifier: 3.48.0
-        version: 3.48.0
+        specifier: 3.49.0
+        version: 3.49.0
       msw:
         specifier: 2.3.1
         version: 2.3.1(typescript@5.9.2)
@@ -3526,9 +3526,6 @@ packages:
 
   '@endo/env-options@1.1.11':
     resolution: {integrity: sha512-p9OnAPsdqoX4YJsE98e3NBVhIr2iW9gNZxHhAI2/Ul5TdRfoOViItzHzTqrgUVopw6XxA1u1uS6CykLMDUxarA==}
-
-  '@endo/env-options@1.1.8':
-    resolution: {integrity: sha512-Xtxw9n33I4guo8q0sDyZiRuxlfaopM454AKiELgU7l3tqsylCut6IBZ0fPy4ltSHsBib7M3yF7OEMoIuLwzWVg==}
 
   '@endo/immutable-arraybuffer@1.1.2':
     resolution: {integrity: sha512-u+NaYB2aqEugQ3u7w3c5QNkPogf8q/xGgsPaqdY6pUiGWtYiTiFspKFcha6+oeZhWXWQ23rf0KrUq0kfuzqYyQ==}
@@ -7231,11 +7228,6 @@ packages:
   browserify-sign@4.2.1:
     resolution: {integrity: sha512-/vrA5fguVAKKAVTNJjgSm1tRQDHUU6DbwO9IROu/0WAzC8PKhucDSh18J0RMvVeHAn5puMd+QHC2erPRNf8lmg==}
 
-  browserslist@4.25.1:
-    resolution: {integrity: sha512-KGj0KoOMXLpSNkkEI6Z6mShmQy0bc1I+T7K9N81k4WWMrfz+6fQ6es80B/YLAeRoKvjYE1YSHHOW1qe9xIVzHw==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-
   browserslist@4.28.1:
     resolution: {integrity: sha512-ZC5Bd0LgJXgwGqUknZY/vkUQ04r8NXnJZ3yYi4vDmSiZmC/pdSN0NbNRPxZpbtO4uAfDUAFffO8IZoM3Gj8IkA==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -7672,9 +7664,6 @@ packages:
     peerDependencies:
       webpack: ^5.1.0
 
-  core-js-compat@3.48.0:
-    resolution: {integrity: sha512-OM4cAF3D6VtH/WkLtWvyNC56EZVXsZdU3iqaMG2B4WvYrlqU831pc4UtG5yp0sE9z8Y02wVN7PjW5Zf9Gt0f1Q==}
-
   core-js-compat@3.49.0:
     resolution: {integrity: sha512-VQXt1jr9cBz03b331DFDCCP90b3fanciLkgiOoy8SBHy06gNf+vQ1A3WFLqG7I8TipYIKeYK9wxd0tUrvHcOZA==}
 
@@ -7685,8 +7674,8 @@ packages:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
     deprecated: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
 
-  core-js@3.48.0:
-    resolution: {integrity: sha512-zpEHTy1fjTMZCKLHUZoVeylt9XrzaIN2rbPXEt0k+q7JE5CkCZdo6bNq55bn24a69CH7ErAVLKijxJja4fw+UQ==}
+  core-js@3.49.0:
+    resolution: {integrity: sha512-es1U2+YTtzpwkxVLwAFdSpaIMyQaq0PBgm3YD1W3Qpsn1NAmO3KSgZfu+oGSWVu6NvLHoHCV/aYcsE5wiB7ALg==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -11455,8 +11444,8 @@ packages:
   ses@1.10.0:
     resolution: {integrity: sha512-HXmJbNEgY/4hsQfaz5dna39vVKNyvlElRmJYk+bjTqSXSElT0Hr6NKwWVg4j0TxP6IuHp/PNMoWJKIRXzmLbAQ==}
 
-  ses@1.14.0:
-    resolution: {integrity: sha512-T07hNgOfVRTLZGwSS50RnhqrG3foWP+rM+Q5Du4KUQyMLFI3A8YA4RKl0jjZzhihC1ZvDGrWi/JMn4vqbgr/Jg==}
+  ses@2.2.0:
+    resolution: {integrity: sha512-mXZfO9O2bhE9E3INX5Dbqq+eo1Dj6Yeo+r7jas7GYTXRS6fzcZFYf0UbSHcXO7xJuPbhztBskSuSqJLMMoYMVQ==}
 
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -13408,7 +13397,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.26.2
       '@babel/helper-validator-option': 7.25.9
-      browserslist: 4.28.1
+      browserslist: 4.28.5
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -13416,7 +13405,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.27.2
       '@babel/helper-validator-option': 7.27.1
-      browserslist: 4.25.1
+      browserslist: 4.28.5
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -14412,8 +14401,6 @@ snapshots:
   '@endo/cache-map@1.1.0': {}
 
   '@endo/env-options@1.1.11': {}
-
-  '@endo/env-options@1.1.8': {}
 
   '@endo/immutable-arraybuffer@1.1.2': {}
 
@@ -18493,7 +18480,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.27.1
       '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.27.1)
-      core-js-compat: 3.48.0
+      core-js-compat: 3.49.0
     transitivePeerDependencies:
       - supports-color
 
@@ -18698,13 +18685,6 @@ snapshots:
       parse-asn1: 5.1.6
       readable-stream: 3.6.2
       safe-buffer: 5.2.1
-
-  browserslist@4.25.1:
-    dependencies:
-      caniuse-lite: 1.0.30001761
-      electron-to-chromium: 1.5.267
-      node-releases: 2.0.27
-      update-browserslist-db: 1.2.3(browserslist@4.25.1)
 
   browserslist@4.28.1:
     dependencies:
@@ -19115,19 +19095,15 @@ snapshots:
       tinyglobby: 0.2.12
       webpack: 5.108.4(@swc/core@1.15.43)(webpack-cli@7.2.1)
 
-  core-js-compat@3.48.0:
-    dependencies:
-      browserslist: 4.28.1
-
   core-js-compat@3.49.0:
     dependencies:
-      browserslist: 4.28.1
+      browserslist: 4.28.5
 
   core-js-pure@3.32.1: {}
 
   core-js@2.6.12: {}
 
-  core-js@3.48.0: {}
+  core-js@3.49.0: {}
 
   core-util-is@1.0.3: {}
 
@@ -23553,9 +23529,9 @@ snapshots:
 
   ses@1.10.0:
     dependencies:
-      '@endo/env-options': 1.1.8
+      '@endo/env-options': 1.1.11
 
-  ses@1.14.0:
+  ses@2.2.0:
     dependencies:
       '@endo/cache-map': 1.1.0
       '@endo/env-options': 1.1.11
@@ -24300,12 +24276,6 @@ snapshots:
       citty: 0.1.4
       consola: 3.2.3
       pathe: 1.1.2
-
-  update-browserslist-db@1.2.3(browserslist@4.25.1):
-    dependencies:
-      browserslist: 4.25.1
-      escalade: 3.2.0
-      picocolors: 1.1.1
 
   update-browserslist-db@1.2.3(browserslist@4.28.1):
     dependencies:

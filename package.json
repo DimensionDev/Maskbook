@@ -55,7 +55,7 @@
     "lodash-es": "^4.17.23",
     "react": "0.0.0-experimental-58af67a8f8-20240628",
     "react-dom": "0.0.0-experimental-58af67a8f8-20240628",
-    "ses": "1.14.0",
+    "ses": "2.2.0",
     "ts-results-es": "^4.2.0"
   },
   "devDependencies": {

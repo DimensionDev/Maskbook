@@ -216,7 +216,7 @@ export const Component = memo(function SetPaymentPassword() {
                     navigate({ pathname: from || PopupRoutes.Wallet, search: params.toString() }, { replace: true })
                 }
             } catch (error) {
-                if (Error.isError(error)) {
+                if (error instanceof Error) {
                     setError('password', { message: error.message })
                 }
             }

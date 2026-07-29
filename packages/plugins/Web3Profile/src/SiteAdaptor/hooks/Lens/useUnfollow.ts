@@ -45,7 +45,7 @@ export function useUnfollow({ accountAddress, onSuccess, onFailed }: UnfollowOpt
             }
             onSuccess?.()
         } catch (error) {
-            if (!Error.isError(error)) return
+            if (!(error instanceof Error)) return
             const message = error.message
             if (
                 !message.includes('Transaction was rejected') &&

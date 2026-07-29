@@ -46,6 +46,8 @@ const disabledRules = {
     // WebExtension: in Firefox content scripts, window !== globalThis (instanceof SandBox).
     'unicorn/no-unnecessary-global-this': 'off',
     'unicorn/prefer-global-this': 'off',
+    // ses not up to date to allow Error.isError
+    'unicorn/prefer-error-is-error': 'off',
     // with Prettier
     'unicorn/number-literal-case': 'off',
 
@@ -284,7 +286,6 @@ const codeStyleRules = {
     // Prefer modern things
     'prefer-object-has-own': 'warn',
     'unicorn/prefer-dispose': 'warn',
-    'unicorn/prefer-error-is-error': 'warn',
     'unicorn/prefer-import-meta-properties': 'warn',
     'unicorn/prefer-uint8array-base64': 'warn',
     'prefer-exponentiation-operator': 'warn', // **

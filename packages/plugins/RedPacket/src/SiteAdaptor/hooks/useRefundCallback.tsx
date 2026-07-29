@@ -135,7 +135,7 @@ export function useSolanaRefundCallback({ rpid, chainId, tokenSymbol, tokenDecim
                 { variant: 'success' },
             )
         } catch (error) {
-            if (Error.isError(error)) {
+            if (error instanceof Error) {
                 enqueueSnackbar(error.message, { variant: 'error' })
             }
             throw error

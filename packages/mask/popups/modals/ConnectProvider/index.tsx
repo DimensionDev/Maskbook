@@ -113,7 +113,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 replace: true,
             })
         } catch (error) {
-            if (Error.isError(error)) {
+            if (error instanceof Error) {
                 if (error.message === 'timeout') throw error
                 if (error.message.includes('reject') || error.message.includes('cancel')) {
                     enqueueSnackbar(<Trans>Connecting operation cancelled in third-party wallet.</Trans>, {

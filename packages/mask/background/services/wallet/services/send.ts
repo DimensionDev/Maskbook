@@ -105,7 +105,7 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
                 )
                 return createJsonRpcResponse(pid, result)
             } catch (error) {
-                throw Error.isError(error) ? error : new Error('Failed to send request.')
+                throw error instanceof Error ? error : new Error('Failed to send request.')
             }
     }
 }
