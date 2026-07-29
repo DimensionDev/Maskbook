@@ -13,6 +13,7 @@
     { "path": "./packages/base/tests/tsconfig.json" },
     { "path": "./packages/backup-format/tests/tsconfig.json" },
     { "path": "./packages/encryption/tests/tsconfig.json" },
+    { "path": "./packages/theme/tests/tsconfig.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
     { "path": "./packages/shared-base/tests/tsconfig.json" },
     { "path": "./packages/web3-shared/base/tests/tsconfig.json" },

@@ -122,9 +122,11 @@ interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'>
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
-        <ScopedDomainsContainer>
-            <Content {...props} />
-        </ScopedDomainsContainer>
+        <MaskThemeProvider palette="light">
+            <ScopedDomainsContainer>
+                <Content {...props} />
+            </ScopedDomainsContainer>
+        </MaskThemeProvider>
     )
 }
 
