@@ -10,7 +10,7 @@ import {
 import { MaskIconPaletteContext } from '@masknet/icons'
 import { MaskTheme } from './theme.js'
 import type { Localization } from '@mui/material/locale'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 export interface MaskThemeProviderProps extends React.PropsWithChildren {
     theme?: Theme
@@ -57,16 +57,51 @@ export function MaskThemeProvider(props: MaskThemeProviderProps) {
         return unstable_createMuiStrictModeTheme(theme, localization)
     }, [theme, localization])
 
+    if (hasDifferentOuterPalette) {
+        return (
+            <ScopedColorSchemeProvider
+                theme={themeWithLocalization}
+                storageManager={storageManager}
+                palette={palette}>
+                {children}
+            </ScopedColorSchemeProvider>
+        )
+    }
+
     return (
-        <ThemeProvider
-            theme={themeWithLocalization}
-            storageManager={storageManager}
-            disableNestedContext={hasDifferentOuterPalette}>
+        <ThemeProvider theme={themeWithLocalization} storageManager={storageManager}>
             <MaskIconPaletteContext value={palette}>
                 <CssBaseline />
                 {children}
             </MaskIconPaletteContext>
         </ThemeProvider>
+    )
+}
+
+interface ScopedColorSchemeProviderProps extends React.PropsWithChildren {
+    theme: Theme
+    storageManager: StorageManager
+    palette: PaletteMode
+}
+
+function ScopedColorSchemeProvider({ children, theme, storageManager, palette }: ScopedColorSchemeProviderProps) {
+    const [colorSchemeNode, setColorSchemeNode] = useState<HTMLSpanElement | null>(null)
+
+    return (
+        <span ref={setColorSchemeNode} style={{ display: 'contents' }}>
+            {colorSchemeNode ?
+                <ThemeProvider
+                    theme={theme}
+                    storageManager={storageManager}
+                    colorSchemeNode={colorSchemeNode}
+                    disableNestedContext>
+                    <MaskIconPaletteContext value={palette}>
+                        <CssBaseline />
+                        {children}
+                    </MaskIconPaletteContext>
+                </ThemeProvider>
+            :   null}
+        </span>
     )
 }
 export function usePalette(): PaletteMode {
