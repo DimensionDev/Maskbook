@@ -47,8 +47,7 @@ function useStorageManager(palette: PaletteMode): StorageManager {
 export function MaskThemeProvider(props: MaskThemeProviderProps) {
     const { children, theme = MaskTheme, palette, localization, supportsDimPalette } = props
     const outerColorScheme = useColorScheme()
-    const outerPalette =
-        outerColorScheme.mode === 'system' ? outerColorScheme.systemMode : outerColorScheme.mode
+    const outerPalette = outerColorScheme.mode === 'system' ? outerColorScheme.systemMode : outerColorScheme.mode
     const hasDifferentOuterPalette =
         outerColorScheme.allColorSchemes.length > 0 && outerPalette !== undefined && outerPalette !== palette
     const storageManager = useStorageManager(palette)

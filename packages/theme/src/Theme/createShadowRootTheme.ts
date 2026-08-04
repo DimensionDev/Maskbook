@@ -21,7 +21,9 @@ function toThemeOptions(theme: Theme) {
     // back into createTheme duplicates variables and lets stale root values overwrite
     // a site adaptor's changes under colorSchemes.
     const defaultScheme = defaultColorScheme ? colorSchemes?.[defaultColorScheme] : undefined
-    const options = Object.fromEntries(Object.entries(theme).filter(([key]) => !defaultScheme || !(key in defaultScheme)))
+    const options = Object.fromEntries(
+        Object.entries(theme).filter(([key]) => !defaultScheme || !(key in defaultScheme)),
+    )
     return options as ThemeOptions
 }
 

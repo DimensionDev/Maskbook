@@ -6,7 +6,10 @@ describe('isValidDomain', () => {
         expect(isValidDomain(domain)).toBe(true)
     })
 
-    it.each([undefined, '', '.sol', '.sns', 'alice.eth', 'alice.sns.test'])('rejects a non-SNS domain: %s', (domain) => {
-        expect(isValidDomain(domain)).toBe(false)
-    })
+    it.each([undefined, '', '.sol', '.sns', 'alice.eth', 'alice.sns.test'])(
+        'rejects a non-SNS domain: %s',
+        (domain) => {
+            expect(isValidDomain(domain)).toBe(false)
+        },
+    )
 })
