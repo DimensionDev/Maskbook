@@ -59,10 +59,7 @@ export function MaskThemeProvider(props: MaskThemeProviderProps) {
 
     if (hasDifferentOuterPalette) {
         return (
-            <ScopedColorSchemeProvider
-                theme={themeWithLocalization}
-                storageManager={storageManager}
-                palette={palette}>
+            <ScopedColorSchemeProvider theme={themeWithLocalization} storageManager={storageManager} palette={palette}>
                 {children}
             </ScopedColorSchemeProvider>
         )
