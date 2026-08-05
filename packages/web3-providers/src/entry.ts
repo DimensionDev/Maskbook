@@ -64,6 +64,7 @@ export { ENS } from './ENS/index.js'
 // Debank
 export { DeBankHistory } from './DeBank/index.js'
 export { OKX } from './OKX/index.js'
+export { getOKXTokenApproveAddress } from './OKX/contracts.js'
 
 // Chainbase
 export { ChainbaseHistory } from './Chainbase/index.js'

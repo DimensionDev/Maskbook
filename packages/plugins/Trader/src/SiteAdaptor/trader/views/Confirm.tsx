@@ -5,6 +5,7 @@ import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon, useUn
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { EVMWeb3Readonly } from '@masknet/web3-providers'
 import {
     dividedBy,
     formatBalance,
@@ -32,6 +33,7 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { assertOKXContractTarget, assertOKXTransaction } from '../helpers/validateTransaction.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -240,31 +242,34 @@ export const Confirm = memo(function Confirm() {
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const gas = gasConfig.gas ?? transaction?.gas ?? gasLimit
     const [{ loading: isSending }, sendSwap] = useAsyncFn(async () => {
-        if (!transaction?.data) return
-        return Web3.sendTransaction(
-            {
-                data: transaction.data,
-                to: transaction.to,
-                from: account,
-                value: transaction.value,
-                gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-                gas: gas ? addGasMargin(gas, chainId === ChainId.Arbitrum ? 1 : 0.3) : undefined,
-                maxPriorityFeePerGas:
-                    'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
-                        gasConfig.maxFeePerGas
-                    :   transaction.maxPriorityFeePerGas,
-                _disableSnackbar: true,
-            },
-            {
-                silent: Sniffings.is_popup_page,
-            },
-        )
-    }, [transaction, chainId, account, gasConfig, Web3, gas])
+        if (!transaction?.data || !fromToken) return
+        assertOKXTransaction(transaction, {
+            account,
+            fromTokenAddress: fromToken.address,
+            inputAmount: amount,
+            requireZeroValueForERC20: true,
+        })
+        assertOKXContractTarget(await EVMWeb3Readonly.getCode(transaction.to, { chainId }))
+        return Web3.sendTransaction({
+            data: transaction.data,
+            to: transaction.to,
+            from: account,
+            value: transaction.value,
+            gas: gas ? addGasMargin(gas, chainId === ChainId.Arbitrum ? 1 : 0.3) : undefined,
+            ...('maxFeePerGas' in gasConfig ?
+                {
+                    maxFeePerGas: gasConfig.maxFeePerGas,
+                    maxPriorityFeePerGas: gasConfig.maxPriorityFeePerGas,
+                }
+            :   { gasPrice: gasConfig.gasPrice }),
+            _disableSnackbar: true,
+        })
+    }, [transaction, fromToken, account, amount, Web3, gas, chainId, gasConfig])
 
-    const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
+    const [{ isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
 
     const isApproving = approveMutation.isPending
-    const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
+    const isCheckingApprove = isLoadingSpender || isLoadingAllowance
 
     const unmountedRef = useUnmountedRef()
     const queryClient = useQueryClient()

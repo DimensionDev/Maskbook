@@ -9,7 +9,7 @@ import { useSpender } from './useSpender.js'
 export function useSwappable(): [result: boolean, message?: string] {
     const { inputAmount, fromToken, quote } = useTrade()
     const chainId = fromToken?.chainId as ChainId
-    const { data: spender, isLoading: isLoadingSpender } = useSpender('swap')
+    const { data: spender, isLoading: isLoadingSpender } = useSpender()
     const { data: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, { chainId })
 
     if (!spender && !isLoadingSpender) return [false, t`Missing dex contract address`]

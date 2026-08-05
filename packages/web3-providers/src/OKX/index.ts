@@ -100,13 +100,6 @@ export const OKX = {
         }
     },
 
-    async getApproveTx(options: ApproveTransactionOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', options)
-        const res = await fetchFromOKX<ApproveTransactionResponse>(url)
-        if (res.code === 0) return res.data[0]
-        throw new Error('Failed to get approve transaction')
-    },
-
     async getQuotes(options: GetQuotesOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/quote', {
             ...options,
@@ -208,20 +201,6 @@ export const OKX = {
             })
         })
         return res
-    },
-
-    async getBridgeSupportedChains(chainId?: number) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/chain', {
-            chainId,
-        })
-        const res = await fetchFromOKX<SupportedChainResponse>(url)
-        if (res.code === 0) {
-            res.data.forEach((item) => {
-                item.chainId = +item.chainId
-            })
-            return res.data
-        }
-        throw new Error('Failed to get supported chains')
     },
 
     async bridge(options: BridgeOptions) {

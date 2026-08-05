@@ -8,7 +8,7 @@ import { useSpender } from './useSpender.js'
 
 export function useBridgable(): [result: boolean, message?: string] {
     const { inputAmount, fromToken, toToken, bridgeQuote, isBridgeQuoteLoading, bridgeQuoteErrorMessage } = useTrade()
-    const { data: spender, isLoading: isLoadingSpender } = useSpender('bridge')
+    const { data: spender, isLoading: isLoadingSpender } = useSpender()
 
     const chainId = fromToken?.chainId as ChainId
     const { data: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, {

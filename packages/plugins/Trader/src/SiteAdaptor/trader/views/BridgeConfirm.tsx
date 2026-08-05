@@ -18,6 +18,7 @@ import {
     useWeb3Connection,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
+import { EVMWeb3Readonly } from '@masknet/web3-providers'
 import {
     dividedBy,
     formatBalance,
@@ -53,6 +54,7 @@ import { useBridgable } from '../hooks/useBridgable.js'
 import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
+import { assertOKXContractTarget, assertOKXTransaction } from '../helpers/validateTransaction.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -263,33 +265,34 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
     const gas = gasConfig.gas ?? transaction?.gasLimit ?? gasLimit
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
-        if (!transaction?.data) return
-        return Web3.sendTransaction(
-            {
-                data: transaction.data,
-                to: transaction.to,
-                from: account,
-                value: transaction.value,
-                gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-                gas: gas ? addGasMargin(gas, fromChainId === ChainId.Arbitrum ? 1 : 0.3) : undefined,
-                maxPriorityFeePerGas:
-                    'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
-                        gasConfig.maxFeePerGas
-                    :   transaction.maxPriorityFeePerGas,
-                _disableSnackbar: true,
-            },
-            {
-                silent: Sniffings.is_popup_page,
-            },
-        )
-    }, [transaction, fromChainId, account, gasConfig, Web3, gas])
+        if (!transaction?.data || !fromToken) return
+        assertOKXTransaction(transaction, {
+            account,
+            fromTokenAddress: fromToken.address,
+        })
+        assertOKXContractTarget(await EVMWeb3Readonly.getCode(transaction.to, { chainId: fromChainId }))
+        return Web3.sendTransaction({
+            data: transaction.data,
+            to: transaction.to,
+            from: account,
+            value: transaction.value,
+            gas: gas ? addGasMargin(gas, fromChainId === ChainId.Arbitrum ? 1 : 0.3) : undefined,
+            ...('maxFeePerGas' in gasConfig ?
+                {
+                    maxFeePerGas: gasConfig.maxFeePerGas,
+                    maxPriorityFeePerGas: gasConfig.maxPriorityFeePerGas,
+                }
+            :   { gasPrice: gasConfig.gasPrice }),
+            _disableSnackbar: true,
+        })
+    }, [transaction, fromToken, account, Web3, gas, fromChainId, gasConfig])
 
     const [isBridgable, errorMessage] = useBridgable()
 
-    const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
+    const [{ isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
 
     const isApproving = approveMutation.isPending
-    const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
+    const isCheckingApprove = isLoadingSpender || isLoadingAllowance
 
     const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: toChainId,
