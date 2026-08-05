@@ -11,6 +11,9 @@
     { "path": "../../shared/tsconfig.json" },
     { "path": "../../theme/tsconfig.json" },
     { "path": "../../web3-providers/tsconfig.json" },
-    { "path": "../../typed-message/base/tsconfig.json" }
+    { "path": "../../typed-message/base/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../web3-shared/evm/tsconfig.json" },
+    { "path": "../../web3-shared/solana/src/tsconfig.json" }
   ]
 }

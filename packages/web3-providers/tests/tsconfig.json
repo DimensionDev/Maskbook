@@ -4,5 +4,9 @@
     "tsBuildInfoFile": "../dist/tests.tsbuildinfo"
   },
   "include": ["./"],
-  "references": [{ "path": "../tsconfig.json" }]
+  "references": [
+    { "path": "../tsconfig.json" },
+    { "path": "../../web3-shared/base/tsconfig.json" },
+    { "path": "../../base/tsconfig.json" }
+  ]
 }

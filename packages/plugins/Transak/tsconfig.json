@@ -9,6 +9,9 @@
   "references": [
     { "path": "../../plugin-infra/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },
-    { "path": "../../shared/tsconfig.json" }
+    { "path": "../../shared/tsconfig.json" },
+    { "path": "../../shared-base-ui/tsconfig.json" },
+    { "path": "../../theme/tsconfig.json" },
+    { "path": "../../web3-shared/evm/tsconfig.json" }
   ]
 }

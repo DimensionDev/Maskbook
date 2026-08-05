@@ -5,5 +5,12 @@
     "outDir": "dist"
   },
   "include": ["src", "src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra/tsconfig.json" }, { "path": "../../shared/tsconfig.json" }]
+  "references": [
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../shared/tsconfig.json" },
+    { "path": "../../shared-base-ui/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../theme/tsconfig.json" },
+    { "path": "../../web3-telemetry/tsconfig.json" }
+  ]
 }

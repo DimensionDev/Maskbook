@@ -172,8 +172,8 @@ importers:
         specifier: workspace:^
         version: link:packages/config
       '@masknet/eslint-plugin':
-        specifier: ^0.5.3
-        version: 0.5.3(eslint@10.7.0(jiti@2.7.0))
+        specifier: ^0.5.4
+        version: 0.5.4(eslint@10.7.0(jiti@2.7.0))
       '@masknet/typescript-plugin':
         specifier: workspace:^
         version: link:packages/typescript-plugin
@@ -4213,8 +4213,8 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@masknet/eslint-plugin@0.5.3':
-    resolution: {integrity: sha512-TrtLWBOHuzQRpH6QF295sY8167rvW7zVRPs3J6Bm5Nvt8Z3l02s7TAAGykYJnANMJWcCqMhCLRN+JJdBEGMZhA==}
+  '@masknet/eslint-plugin@0.5.4':
+    resolution: {integrity: sha512-/JxCjS9nERpZ4QvhDQes8gXAHfBatLjX2WxRNhOc/1F988Mi9HvAwfxOzQ3O/tfvYNf63J4LdBadFS0Vk7IIQg==}
     engines: {node: '>= 22'}
     peerDependencies:
       eslint: '>= 10'
@@ -14749,7 +14749,7 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@masknet/eslint-plugin@0.5.3(eslint@10.7.0(jiti@2.7.0))':
+  '@masknet/eslint-plugin@0.5.4(eslint@10.7.0(jiti@2.7.0))':
     dependencies:
       eslint: 10.7.0(jiti@2.7.0)
 

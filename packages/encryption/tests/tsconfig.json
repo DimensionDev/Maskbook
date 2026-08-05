@@ -5,5 +5,5 @@
     "tsBuildInfoFile": "../dist/tests.tsbuildinfo"
   },
   "include": ["./"],
-  "references": [{ "path": "../tsconfig.json" }]
+  "references": [{ "path": "../tsconfig.json" }, { "path": "../../base" }, { "path": "../../typed-message/base" }]
 }
