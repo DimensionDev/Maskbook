@@ -7,6 +7,7 @@ const PREFER_TOKENS = ['usdt', 'usdc', 'dai', 'm.usdt', 'm.usdc']
 /**
  * default token to trade
  */
+/** @internal */
 export function useDefaultToken(chainId: ChainId, exclude?: string) {
     const { data: tokens } = useOKXTokenList(chainId)
     const excludeAddr = exclude?.toLowerCase()

@@ -461,6 +461,10 @@ const moduleSystemRules = {
     'import/no-self-import': 'error',
     // 'import/no-unassigned-import': 'error', // bans `import 'x'`. side-effect only imports should be explicitly marked.
     '@typescript-eslint/no-import-type-side-effects': 'warn',
+    '@masknet/require-project-reference': [
+        'error',
+        { ignore: ['@masknet/web3-contracts', '@bonfida/spl-name-service', '@masknet/icons', '@scamsniffer/detector'] },
+    ],
 
     // performance
     '@masknet/prefer-defer-import': [

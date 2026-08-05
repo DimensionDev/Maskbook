@@ -1,4 +1,5 @@
 import { attemptUntil, SourceType } from '@masknet/web3-shared-base'
+import type { AuthorizationAPI, TokenIconAPI, TokenListAPI, FungibleTokenAPI, PriceAPI  } from '../../../entry-types.js'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-solana'
 import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
@@ -6,7 +7,6 @@ import { SolanaConnectionAPI } from './ConnectionAPI.js'
 import type { SolanaHubOptions } from '../types/index.js'
 import defer * as CoinGeckoPriceSolana from '../../../CoinGecko/index.js'
 import { SolanaFungible } from './FungibleTokenAPI.js'
-import type { FungibleTokenAPI, PriceAPI } from '../../../entry-types.js'
 import { solana } from '../../../Manager/registry.js'
 
 export class SolanaHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
@@ -14,7 +14,15 @@ export class SolanaHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
 
     protected override HubOptions = new SolanaHubOptionsAPI(this.options)
 
-    protected override getProvidersFungible(initial?: SolanaHubOptions) {
+    protected override getProvidersFungible(
+        initial?: SolanaHubOptions,
+    ): Array<
+        AuthorizationAPI.Provider<ChainId> &
+            FungibleTokenAPI.Provider<ChainId, SchemaType> &
+            TokenListAPI.Provider<ChainId, SchemaType> &
+            TokenIconAPI.Provider<ChainId> &
+            PriceAPI.Provider<ChainId>
+    > {
         const options = this.HubOptions.fill(initial)
 
         // only the first page is available

@@ -1,7 +1,12 @@
 import { SnapshotSearch } from '@masknet/web3-providers'
+import type { DAOResult } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
 
-export function useSnapshotSpacesByTwitterHandle(handle: string) {
+export function useSnapshotSpacesByTwitterHandle(
+    handle: string,
+): UseQueryResult<Array<DAOResult<ChainId.Mainnet>> | null> {
     return useQuery({
         queryKey: ['snapshot-spaces', 'by-twitter-handle', handle],
         queryFn: async () => {

@@ -13,6 +13,7 @@ import {
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { EVMConnectionOptions } from '../types/index.js'
+import type { GasOptionType } from '@masknet/web3-shared-base'
 
 let pid = 0
 
@@ -143,7 +144,7 @@ export class ConnectionContext {
         return this._options?.paymentToken
     }
 
-    get gasOptionType() {
+    get gasOptionType(): GasOptionType | undefined {
         return this._options?.gasOptionType
     }
 

@@ -7,6 +7,7 @@ import { PluginTraderRPC } from '../messages.js'
 import type { Currency } from '../types/index.js'
 import { useQuery } from '@tanstack/react-query'
 
+/** @internal */
 export function usePriceStats({
     chainId: expectedChainId,
     coinId,

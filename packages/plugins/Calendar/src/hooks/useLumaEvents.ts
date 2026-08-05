@@ -3,6 +3,7 @@ import { Calendar } from '@masknet/web3-providers'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { addDays, startOfDay } from 'date-fns'
 
+/** @internal */
 export function useLumaEvents(date: Date) {
     const startTime = startOfDay(date).getTime()
     const endTime = addDays(startTime, 14).getTime()

@@ -12,7 +12,9 @@ export class FlowHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
 
     protected override HubOptions = new FlowHubOptionsAPI(this.options)
 
-    protected override getProvidersFungible(initial?: BaseHubOptions<ChainId>) {
+    protected override getProvidersFungible(
+        initial?: BaseHubOptions<ChainId>,
+    ): Array<FungibleTokenAPI.Provider<ChainId, SchemaType>> {
         return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
                 [SourceType.Flow]: FlowFungible,

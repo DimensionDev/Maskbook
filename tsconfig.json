@@ -9,7 +9,6 @@
     { "path": "./packages/mask-sdk/main/tsconfig.json" },
     { "path": "./packages/mask-sdk/public-api/tsconfig.json" },
     // Tests
-    // @masknet/scripts: insert-here 1
     { "path": "./packages/base/tests/tsconfig.json" },
     { "path": "./packages/backup-format/tests/tsconfig.json" },
     { "path": "./packages/encryption/tests/tsconfig.json" },
@@ -32,107 +31,7 @@
     "libReplacement": true,
     "module": "preserve",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "paths": {
-      // # Why?
-      // TypeScript project reference requires manually declaring all referenced projects.
-
-      // For example, we have 2 projects A and B under /projects/a and /projects/b and B depends on A,
-      // if we do not list A in the references, when we write
-
-      // > /packages/b/src/index.ts
-
-      // ```ts
-      // import { something } from '../../a'
-      // ```
-
-      // If there is no "reference": [{ "path": "../a/tsconfig.json" }] in /packages/b/tsconfig.json,
-      // TypeScript will complain TS6307: "File '/packages/b/src/index.ts' is not listed within the file list of the project '/packages/b/tsconfig.json'. Projects must list all files or use an 'include' pattern."
-
-      // This is error is GOOD because it means TypeScript _can_ automatically detect the missing references.
-
-      // # What about monorepo?
-      // But TypeScript cannot detect the missing references when we install them as monorepo packages.
-      // Still the project structure above, but A is installed as "@masknet/a" in /packages/b/node_modules/@masknet/a,
-      // TypeScript will accept the missing reference to the A project,
-      // because it will go through the "moduleResolution": "Node" resolution, if `.d.ts` file is found,
-      // the project will _accidentally_ compiles, but TypeScript does DON'T know those packages has dependencies in the project reference graph.
-      // This will cause the project to randomly fail to be type-checked.
-
-      // # Solution
-      // We use "paths" to map the Node-style import path back to the relative style,
-      // therefore TypeScript can check the missing dependencies again.
-
-      // This will not introduce problems like mapping "@src/" to "/packages/a/src/index.ts" which is problematic,
-      // because those projects (if they're correctly configured) is installed in the node_modules,
-      // so if any toolchain does not support the "paths" feature, it will still work.
-
-      // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
-      // which is unwanted. We need to take care of this.
-
-      "@masknet/backup-format": ["./packages/backup-format/src/index.ts"],
-      "@masknet/base": ["./packages/base/src/index.ts"],
-      "@masknet/encryption": ["./packages/encryption/src/index.ts"],
-      "@masknet/flags": ["./packages/flags/src/index.ts"],
-      "@masknet/flags/build-info": ["./packages/flags/src/flags/buildInfo.ts"],
-      "@masknet/gun-utils": ["./packages/gun-utils/src/index.ts"],
-      "@masknet/injected-script": ["./packages/injected-script/sdk/index.ts"],
-      "@masknet/sdk": ["./packages/mask-sdk/server/index.ts"],
-      "@masknet/plugin-infra/dom": ["./packages/plugin-infra/src/entry-dom.ts"],
-      "@masknet/plugin-infra/dom/context": ["./packages/plugin-infra/src/dom/context.ts"],
-      "@masknet/plugin-infra/background-worker": ["./packages/plugin-infra/src/entry-background-worker.ts"],
-      "@masknet/plugin-infra/content-script/context": ["./packages/plugin-infra/src/site-adaptor/context.ts"],
-      "@masknet/plugin-infra/content-script": ["./packages/plugin-infra/src/entry-content-script.ts"],
-      "@masknet/plugin-infra": ["./packages/plugin-infra/src/entry.ts"],
-      "@masknet/global-types/*": ["./packages/polyfills/types/*"],
-      "@masknet/public-api": ["./packages/public-api/src/index.ts"],
-      "@masknet/shared": ["./packages/shared/src/index.ts"],
-      "@masknet/shared-base": ["./packages/shared-base/src/index.ts"],
-      "@masknet/shared-base-ui": ["./packages/shared-base-ui/src/index.ts"],
-      "@masknet/theme": ["./packages/theme/src/index.ts"],
-      "@masknet/typed-message": ["./packages/typed-message/base/src/index.ts"],
-      "@masknet/typed-message-react": ["./packages/typed-message/react/src/index.ts"],
-      "@masknet/types": ["./packages/types/src/index.ts"],
-      "@masknet/web3-helpers": ["./packages/web3-helpers/src/index.ts"],
-      "@masknet/web3-hooks-base": ["./packages/web3-hooks/base/src/index.ts"],
-      "@masknet/web3-hooks-evm": ["./packages/web3-hooks/evm/src/index.ts"],
-      "@masknet/web3-providers": ["./packages/web3-providers/src/entry.ts"],
-      "@masknet/web3-providers/helpers": ["./packages/web3-providers/src/entry-helpers.ts"],
-      "@masknet/web3-providers/types": ["./packages/web3-providers/src/entry-types.ts"],
-      "@masknet/web3-shared-base": ["./packages/web3-shared/base/src/index.ts"],
-      "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src/index.ts"],
-      "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src/index.ts"],
-      "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src/index.ts"],
-      "@masknet/web3-telemetry": ["./packages/web3-telemetry/src/entry.ts"],
-      "@masknet/web3-telemetry/helpers": ["./packages/web3-telemetry/src/entry-helpers.ts"],
-      "@masknet/web3-telemetry/types": ["./packages/web3-telemetry/src/entry-types.ts"],
-      // @masknet/scripts: insert-here
-
-      // Plugins
-      "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src/index.ts"],
-      "@masknet/plugin-file-service": ["./packages/plugins/FileService/src/index.ts"],
-      "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src/index.ts"],
-      "@masknet/plugin-template": ["./packages/plugins/template/src/index.ts"],
-      "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src/index.ts"],
-      "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src/index.ts"],
-      "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src/index.ts"],
-      "@masknet/plugin-handle": ["./packages/plugins/Handle/src/index.ts"],
-      "@masknet/plugin-approval": ["./packages/plugins/Approval/src/index.ts"],
-      "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src/index.ts"],
-      "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src/index.ts"],
-      "@masknet/plugin-redpacket": ["./packages/plugins/RedPacket/src/index.ts"],
-      "@masknet/plugin-transak": ["./packages/plugins/Transak/src/index.ts"],
-      "@masknet/plugin-vcent": ["./packages/plugins/VCent/src/index.ts"],
-      "@masknet/plugin-tips": ["./packages/plugins/Tips/src/index.ts"],
-      "@masknet/plugin-nextid": ["./packages/plugins/NextID/src/index.ts"],
-      "@masknet/plugin-trader": ["./packages/plugins/Trader/src/index.ts"],
-      "@masknet/plugin-profilecard": ["./packages/plugins/ProfileCard/src/index.ts"],
-      "@masknet/plugin-savings": ["./packages/plugins/Savings/src/index.ts"],
-      "@masknet/plugin-snapshot": ["./packages/plugins/Snapshot/src/index.ts"],
-      // @masknet/scripts: insert-here 3
-      "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src/index.ts"],
-      "@masknet/plugin-calendar": ["./packages/plugins/Calendar/src/index.ts"]
-    }
+    "allowImportingTsExtensions": true
   },
   "files": []
 }

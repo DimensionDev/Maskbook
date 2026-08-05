@@ -2,6 +2,7 @@ import type { ChainId, NetworkType, ProviderType, Transaction } from '@masknet/w
 import { getDefaultChainId, getDefaultProviderType } from '@masknet/web3-shared-solana'
 import { solana } from '../../../Manager/registry.js'
 import { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
+import type { ProviderState } from '@masknet/web3-shared-base'
 
 export class SolanaConnectionOptionsAPI extends ConnectionOptionsProvider<
     ChainId,
@@ -12,7 +13,7 @@ export class SolanaConnectionOptionsAPI extends ConnectionOptionsProvider<
     protected override getDefaultChainId = getDefaultChainId
     protected override getDefaultProviderType = getDefaultProviderType
 
-    protected override getProvider() {
+    protected override getProvider(): ProviderState<ChainId, ProviderType, NetworkType> | undefined {
         return solana.state?.Provider
     }
 }
