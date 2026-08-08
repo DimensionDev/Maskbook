@@ -16,6 +16,7 @@
     { "path": "../../plugin-infra/tsconfig.json" },
     { "path": "../../backup-format/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },
-    { "path": "../../shared-base-ui/tsconfig.json" }
+    { "path": "../../shared-base-ui/tsconfig.json" },
+    { "path": "../../shared/tsconfig.json" }
   ]
 }

@@ -31,6 +31,10 @@
     { "path": "../shared/tsconfig.json" },
     { "path": "../shared-ui/tsconfig.json" },
     { "path": "../../types/tsconfig.json" },
-    { "path": "../entry-sdk/tsconfig.json" }
+    { "path": "../entry-sdk/tsconfig.json" },
+    { "path": "../../encryption/tsconfig.json" },
+    { "path": "../../flags/tsconfig.json" },
+    { "path": "../../web3-helpers/tsconfig.json" },
+    { "path": "../../injected-script/shared/tsconfig.json" }
   ]
 }

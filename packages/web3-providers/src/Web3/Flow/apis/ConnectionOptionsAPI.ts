@@ -6,6 +6,7 @@ import { createConnectionCreator } from '../../Base/apis/ConnectionCreator.js'
 import { FlowConnectionAPI } from './ConnectionAPI.js'
 import { FlowUtils } from './Utils.js'
 import { flow } from '../../../Manager/registry.js'
+import type { ProviderState } from '@masknet/web3-shared-base'
 
 export class FlowConnectionOptionsAPI extends ConnectionOptionsProvider<
     ChainId,
@@ -16,7 +17,7 @@ export class FlowConnectionOptionsAPI extends ConnectionOptionsProvider<
     protected override getDefaultChainId = getDefaultChainId
     protected override getDefaultProviderType = getDefaultProviderType
 
-    protected override getProvider() {
+    protected override getProvider(): ProviderState<ChainId, ProviderType, NetworkType> | undefined {
         return flow.state?.Provider
     }
 }

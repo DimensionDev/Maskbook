@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { COUNTRIES } from '@masknet/shared-base-ui'
+import { COUNTRIES, type COUNTRY } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Button, TextField, Typography, type FilledTextFieldProps, type InputBaseProps } from '@mui/material'
 import { useMemo, useState } from 'react'
@@ -26,7 +26,7 @@ export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFie
 
     const countryIcon = useMemo(() => {
         if (!code) return
-        const country = COUNTRIES.find((x) => x.dialing_code === code)
+        const country = (COUNTRIES as COUNTRY[]).find((x) => x.dialing_code === code)
         if (!country) return
         return getCountryFlag(country.iso_code)
     }, [code])

@@ -8,6 +8,7 @@
   "include": ["./", "./**/*.json"],
   "references": [
     { "path": "../../../web3-shared/base/tsconfig.json" },
-    { "path": "../../../web3-shared/evm/tsconfig.json" }
+    { "path": "../../../web3-shared/evm/tsconfig.json" },
+    { "path": "../../../shared-base/tsconfig.json" }
   ]
 }

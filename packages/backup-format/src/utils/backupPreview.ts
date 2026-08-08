@@ -1,5 +1,5 @@
-import type { NormalizedBackup } from '@masknet/backup-format'
 import { compact, flatten, sumBy } from 'lodash-es'
+import type { NormalizedBackup } from '../normalize/index.ts'
 
 export interface BackupSummary {
     personas: string[]

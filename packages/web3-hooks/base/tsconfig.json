@@ -14,6 +14,7 @@
     { "path": "../../web3-shared/flow/tsconfig.json" },
     { "path": "../../web3-shared/solana/src/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },
-    { "path": "../../shared-base-ui/tsconfig.json" }
+    { "path": "../../shared-base-ui/tsconfig.json" },
+    { "path": "../../web3-shared/evm/tsconfig.json" }
   ]
 }

@@ -17,7 +17,15 @@ import defer * as Rabby from '../../../Rabby/index.js'
 export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
 
-    protected override getProvidersFungible(initial?: BaseHubOptions<ChainId>) {
+    protected override getProvidersFungible(
+        initial?: BaseHubOptions<ChainId>,
+    ): Array<
+        AuthorizationAPI.Provider<ChainId> &
+            FungibleTokenAPI.Provider<ChainId, SchemaType> &
+            TokenListAPI.Provider<ChainId, SchemaType> &
+            TokenIconAPI.Provider<ChainId> &
+            PriceAPI.Provider<ChainId>
+    > {
         const { indicator } = this.HubOptions.fill(initial)
 
         // only the first page is available

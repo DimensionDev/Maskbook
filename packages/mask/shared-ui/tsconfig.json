@@ -12,6 +12,11 @@
     { "path": "../../shared-base/tsconfig.json" },
     { "path": "../../typed-message/base/tsconfig.json" },
     { "path": "../../typed-message/react/tsconfig.json" },
-    { "path": "../../plugin-infra/tsconfig.json" }
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../flags/tsconfig.json" },
+    { "path": "../../public-api/tsconfig.json" },
+    { "path": "../../shared-base-ui/tsconfig.json" },
+    { "path": "../../theme/tsconfig.json" },
+    { "path": "../../web3-providers/tsconfig.json" }
   ]
 }

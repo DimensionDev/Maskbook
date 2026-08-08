@@ -1,8 +1,9 @@
-import { skipToken, useQuery } from '@tanstack/react-query'
+import { skipToken, useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { FireflyConfig, FireflyTwitter } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 
-export function useFireflyFarcasterAccounts(identity?: string) {
+export function useFireflyFarcasterAccounts(identity?: string): UseQueryResult<FireflyConfigAPI.FarcasterProfile[]> {
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', identity],
         staleTime: 3_600_000,

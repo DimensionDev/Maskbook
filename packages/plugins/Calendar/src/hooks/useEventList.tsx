@@ -4,6 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { addDays, startOfDay } from 'date-fns'
 import { uniqBy } from 'lodash-es'
 
+/** @internal */
 export function useNewsList(date: Date) {
     const startTime = startOfDay(date).getTime()
     const endTime = addDays(startTime, 14).getTime()

@@ -6,5 +6,9 @@
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
-  "references": [{ "path": "../../shared-base/tsconfig.json" }, { "path": "../../injected-script/sdk/tsconfig.json" }]
+  "references": [
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../injected-script/sdk/tsconfig.json" },
+    { "path": "../../public-api/tsconfig.json" }
+  ]
 }

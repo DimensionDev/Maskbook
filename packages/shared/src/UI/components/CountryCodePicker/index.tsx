@@ -3,7 +3,7 @@ import { memo, useDeferredValue, useMemo, useState } from 'react'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { COUNTRIES, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { COUNTRIES, useRenderPhraseCallbackOnDepsChange, type COUNTRY } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
 import { EmptyStatus } from '../../../index.js'
@@ -69,7 +69,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
     const [query, setQuery] = useState<string>()
     const deferredQuery = useDeferredValue(query)
 
-    const regions = useMemo(() => {
+    const regions: COUNTRY[] = useMemo(() => {
         if (!deferredQuery) return COUNTRIES
         const fuse = new Fuse(COUNTRIES, {
             isCaseSensitive: false,

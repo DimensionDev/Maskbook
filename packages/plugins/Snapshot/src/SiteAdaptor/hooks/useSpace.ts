@@ -1,6 +1,7 @@
 import { Snapshot } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 
+/** @internal */
 export function useSpace(spaceId: string) {
     return useQuery({
         queryKey: ['space', spaceId],

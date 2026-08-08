@@ -172,8 +172,8 @@ importers:
         specifier: workspace:^
         version: link:packages/config
       '@masknet/eslint-plugin':
-        specifier: ^0.4.1
-        version: 0.4.1(eslint@10.7.0(jiti@2.7.0))
+        specifier: ^0.5.4
+        version: 0.5.4(eslint@10.7.0(jiti@2.7.0))
       '@masknet/typescript-plugin':
         specifier: workspace:^
         version: link:packages/typescript-plugin
@@ -2298,6 +2298,9 @@ importers:
       '@lens-protocol/client':
         specifier: 0.0.0-canary-20250408064617
         version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.45.0(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))
+      '@masknet/base':
+        specifier: workspace:^
+        version: link:../base
       '@masknet/flags':
         specifier: workspace:^
         version: link:../flags
@@ -4210,11 +4213,11 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@masknet/eslint-plugin@0.4.1':
-    resolution: {integrity: sha512-Bl0e0ZC2iZn+pvQcDA+kP9XZU5cuNRA6je9q7VxaaJrURpMGC/P7+DsqlqCDbZ5IF0Q4OZwivi75YDfXJuDjBw==}
+  '@masknet/eslint-plugin@0.5.4':
+    resolution: {integrity: sha512-/JxCjS9nERpZ4QvhDQes8gXAHfBatLjX2WxRNhOc/1F988Mi9HvAwfxOzQ3O/tfvYNf63J4LdBadFS0Vk7IIQg==}
     engines: {node: '>= 22'}
     peerDependencies:
-      eslint: '>= 9'
+      eslint: '>= 10'
 
   '@masknet/kit@0.4.1':
     resolution: {integrity: sha512-Wc2QPj0+55sGDP4j+rGfVggFnDN2h0gscAJChdbJrBpYCdYYNXBLRsgJwXR7268ynLLVpYXZ3uGYMH/N9+okLA==}
@@ -10542,6 +10545,10 @@ packages:
     resolution: {integrity: sha512-KTqnxsgGiQ6ZAzZCVlJH5eOjSnvlyEgx1m8bkRJfOhmGRqfo5KLvmAlACQkrjEtOQ4B7wF9TdSLIs9O90MX9xA==}
     engines: {node: '>=16.0.0'}
 
+  pvutils@1.2.0:
+    resolution: {integrity: sha512-BbubeCEyTuQjVMakvJQ/Sxbc93F2pwmbsxONT/ZRrwU7Ua38d8unYTwXpTVLAKJ4BDuH9IGztCjQcd/N/39Dvg==}
+    engines: {node: '>=16.0.0'}
+
   qrcode-generator@1.4.4:
     resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==}
 
@@ -13836,9 +13843,10 @@ snapshots:
   '@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)':
     dependencies:
       '@servie/events': 3.0.0
-      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.18.1
       tslib: 2.8.1
+    optionalDependencies:
+      '@types/webextension-polyfill': 0.10.7
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.6.5)':
     dependencies:
@@ -14741,7 +14749,7 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@masknet/eslint-plugin@0.4.1(eslint@10.7.0(jiti@2.7.0))':
+  '@masknet/eslint-plugin@0.5.4(eslint@10.7.0(jiti@2.7.0))':
     dependencies:
       eslint: 10.7.0(jiti@2.7.0)
 
@@ -17525,7 +17533,7 @@ snapshots:
 
   asn1js@2.2.0:
     dependencies:
-      pvutils: 1.1.5
+      pvutils: 1.2.0
     optional: true
 
   asn1js@3.0.10:
@@ -22024,6 +22032,9 @@ snapshots:
       tslib: 2.8.1
 
   pvutils@1.1.5: {}
+
+  pvutils@1.2.0:
+    optional: true
 
   qrcode-generator@1.4.4: {}
 
