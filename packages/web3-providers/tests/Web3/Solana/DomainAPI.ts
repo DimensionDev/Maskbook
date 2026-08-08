@@ -55,9 +55,7 @@ describe('SolanaDomain', () => {
     it('returns undefined when an address owns no directly registered domain', async () => {
         mocks.getAllDomains.mockResolvedValue([])
 
-        await expect(
-            SolanaDomain.reverse('Fw1ETanDZafof7xEULsnq9UY6o71Tpds89tNwPkWLb1v'),
-        ).resolves.toBeUndefined()
+        await expect(SolanaDomain.reverse('Fw1ETanDZafof7xEULsnq9UY6o71Tpds89tNwPkWLb1v')).resolves.toBeUndefined()
         expect(mocks.performReverseLookup).not.toHaveBeenCalled()
     })
 })

@@ -1,5 +1,5 @@
 import { attemptUntil, SourceType } from '@masknet/web3-shared-base'
-import type { AuthorizationAPI, TokenIconAPI, TokenListAPI, FungibleTokenAPI, PriceAPI  } from '../../../entry-types.js'
+import type { AuthorizationAPI, TokenIconAPI, TokenListAPI, FungibleTokenAPI, PriceAPI } from '../../../entry-types.js'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-solana'
 import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
