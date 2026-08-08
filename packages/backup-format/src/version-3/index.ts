@@ -2,17 +2,22 @@ import { decode, encode } from '@msgpack/msgpack'
 import { createContainer, parseEncryptedJSONContainer, SupportedVersions } from '../container/index.js'
 import { BackupErrors } from '../BackupErrors.js'
 
+const PBKDF2_ITERATIONS = {
+    [SupportedVersions.Version0]: 10_000,
+    [SupportedVersions.Version1]: 10_000_000,
+} as const
+
 export async function encryptBackup(password: Uint8Array<ArrayBuffer>, binaryBackup: Uint8Array<ArrayBuffer>) {
     const [pbkdf2IV, AESKey] = await createAESFromPassword(password)
     const AESParam: AesGcmParams = { name: 'AES-GCM', iv: crypto.getRandomValues(new Uint8Array(16)) }
 
     const encrypted = new Uint8Array(await crypto.subtle.encrypt(AESParam, AESKey, binaryBackup))
     const container = encode([pbkdf2IV, AESParam.iv, encrypted]) as Uint8Array<ArrayBuffer>
-    return createContainer(SupportedVersions.Version0, container)
+    return createContainer(container)
 }
 
 export async function decryptBackup(password: Uint8Array<ArrayBuffer>, data: ArrayBuffer | ArrayLike<number>) {
-    const container = await parseEncryptedJSONContainer(SupportedVersions.Version0, data)
+    const { data: container, version } = await parseEncryptedJSONContainer(data)
 
     const payloadTuple = decode(container)
     if (!Array.isArray(payloadTuple) || payloadTuple.length !== 3) throw new TypeError(BackupErrors.UnknownFormat)
@@ -20,7 +25,7 @@ export async function decryptBackup(password: Uint8Array<ArrayBuffer>, data: Arr
         throw new TypeError(BackupErrors.UnknownFormat)
     const [pbkdf2IV, encryptIV, encrypted] = payloadTuple as Array<Uint8Array<ArrayBuffer>>
 
-    const aes = await getAESFromPassword(password, pbkdf2IV)
+    const aes = await getAESFromPassword(password, pbkdf2IV, PBKDF2_ITERATIONS[version])
 
     const AESParam: AesGcmParams = { name: 'AES-GCM', iv: encryptIV }
     const decryptedBackup = await crypto.subtle.decrypt(AESParam, aes, encrypted)
@@ -31,22 +36,22 @@ async function createAESFromPassword(password: Uint8Array<ArrayBuffer>) {
     const pbkdf = await crypto.subtle.importKey('raw', password, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: iv, iterations: 10_000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: iv, iterations: PBKDF2_ITERATIONS[SupportedVersions.Version1], hash: 'SHA-256' },
         pbkdf,
         { name: 'AES-GCM', length: 256 },
-        true,
+        false,
         ['encrypt', 'decrypt'],
     )
     return [iv, aes] as const
 }
 
-async function getAESFromPassword(password: Uint8Array<ArrayBuffer>, iv: Uint8Array<ArrayBuffer>) {
+async function getAESFromPassword(password: Uint8Array<ArrayBuffer>, iv: Uint8Array<ArrayBuffer>, iterations: number) {
     const pbkdf = await crypto.subtle.importKey('raw', password, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
     const aes = await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: iv, iterations: 10_000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: iv, iterations, hash: 'SHA-256' },
         pbkdf,
         { name: 'AES-GCM', length: 256 },
-        true,
+        false,
         ['encrypt', 'decrypt'],
     )
     return aes
