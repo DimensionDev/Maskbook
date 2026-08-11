@@ -616,8 +616,8 @@ msgid "A blacklist is found. Some addresses may not be able to trade normally, w
 msgstr ""
 
 #: packages/plugins/EFP/src/SiteAdaptor/index.tsx
-msgid "A native Ethereum protocol for following and tagging Ethereum accounts."
-msgstr ""
+#~ msgid "A native Ethereum protocol for following and tagging Ethereum accounts."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 msgid "a token"
@@ -2373,16 +2373,16 @@ msgid "Editor"
 msgstr "編集者"
 
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "EFP list"
-msgstr ""
+#~ msgid "EFP list"
+#~ msgstr ""
 
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "EFP profile"
-msgstr ""
+#~ msgid "EFP profile"
+#~ msgstr ""
 
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "EFP Top 8"
-msgstr ""
+#~ msgid "EFP Top 8"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -2554,8 +2554,8 @@ msgstr ""
 
 #: packages/plugins/EFP/src/SiteAdaptor/index.tsx
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "Ethereum Follow Protocol"
-msgstr ""
+#~ msgid "Ethereum Follow Protocol"
+#~ msgstr ""
 
 #: packages/plugins/Calendar/src/SiteAdaptor/CalendarContent.tsx
 msgid "Events"
@@ -2888,10 +2888,9 @@ msgid "Follow User"
 msgstr ""
 
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "Followers"
-msgstr "フォロワー"
+#~ msgid "Followers"
+#~ msgstr "フォロワー"
 
-#: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: packages/shared/src/UI/components/SocialAccountList/SocialListItem.tsx
@@ -3616,8 +3615,8 @@ msgid "Link"
 msgstr "リンク"
 
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "List"
-msgstr ""
+#~ msgid "List"
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Listed"
@@ -4877,8 +4876,8 @@ msgstr "価格統計"
 #~ msgstr "価格:"
 
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "Primary List"
-msgstr ""
+#~ msgid "Primary List"
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Priority fee"
@@ -6725,8 +6724,8 @@ msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon a
 msgstr "タイムラインのアバターやトークンタグの隅にあるミニMaskアイコンに合わせると、複数のアカウントのWeb3プロフィールが表示されます。"
 
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
-msgid "View on EFP"
-msgstr ""
+#~ msgid "View on EFP"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx

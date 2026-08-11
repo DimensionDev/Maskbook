@@ -4156,11 +4156,6 @@ export const DecentralizedSearch = /*#__PURE__*/ __createIcon('DecentralizedSear
         u: () => new URL('./plugins/DecentralizedSearch.svg', import.meta.url).href,
     },
 ])
-export const EFP = /*#__PURE__*/ __createIcon('EFP', [
-    {
-        u: () => new URL('./plugins/EFP.svg', import.meta.url).href,
-    },
-])
 export const ENS = /*#__PURE__*/ __createIcon('ENS', [
     {
         u: () => new URL('./plugins/ENS.png', import.meta.url).href,
