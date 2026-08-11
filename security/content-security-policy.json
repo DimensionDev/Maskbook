@@ -34,7 +34,6 @@
         "https://dsearch.mask.r2d2.to/",
         "https://twitter-handler-proxy.r2d2.to",
         "https://nftscan-proxy.r2d2.to",
-        "https://alchemy-proxy.r2d2.to",
         "https://opensea-proxy.r2d2.to",
         // !!! if they don't have a whitelist, our CSP will be bypassed
         "https://cors-next.r2d2.to/",
