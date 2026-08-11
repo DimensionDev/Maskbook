@@ -5,7 +5,6 @@
     { "path": "./Calendar/tsconfig.json" },
     { "path": "./CrossChainBridge/tsconfig.json" },
     { "path": "./Debugger/tsconfig.json" },
-    { "path": "./EFP/tsconfig.json" },
     { "path": "./FileService/tsconfig.json" },
     { "path": "./Gitcoin/tsconfig.json" },
     { "path": "./GoPlusSecurity/tsconfig.json" },

@@ -394,9 +394,6 @@ importers:
       '@masknet/plugin-debugger':
         specifier: workspace:^
         version: link:../plugins/Debugger
-      '@masknet/plugin-efp':
-        specifier: workspace:^
-        version: link:../plugins/EFP
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
@@ -923,24 +920,6 @@ importers:
       '@masknet/web3-telemetry':
         specifier: workspace:^
         version: link:../../web3-telemetry
-
-  packages/plugins/EFP:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/typed-message':
-        specifier: workspace:^
-        version: link:../../typed-message/base
 
   packages/plugins/FileService:
     dependencies:
