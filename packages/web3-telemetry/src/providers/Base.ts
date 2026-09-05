@@ -14,7 +14,7 @@ export abstract class TelemetryProvider {
         telemetrySettings.addListener((x) => (x ? this.enable() : this.disable()))
     }
 
-    // The sentry needs to be opened at the runtime.
+    // telemetry providers must be opened at runtime.
     protected status: 'on' | 'off' = 'off'
     private userOptions?: UserOptions
     private deviceOptions?: DeviceOptions

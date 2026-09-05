@@ -31,9 +31,6 @@ const config: KnipConfig = {
             ignore: ['main/debugger.ts'],
             entry: ['main/index.ts'],
         },
-        'packages/sentry': {
-            ignoreDependencies: ['@sentry/browser'],
-        },
     },
     ignoreWorkspaces: ['packages/polyfills'],
     ignoreDependencies: ['buffer', 'https-browserify', 'punycode'],

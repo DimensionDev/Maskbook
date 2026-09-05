@@ -22,8 +22,6 @@ export const contentScriptList = [
     '/js/polyfill/ecmascript.js',
     '/js/polyfill/dom.js',
     '/js/polyfill/browser-polyfill.js',
-    '/js/sentry.js',
-    '/js/sentry-patch.js',
     '/js/polyfill/lockdown.js',
     '/js/trusted-types.js',
     '/js/lockdown.js',

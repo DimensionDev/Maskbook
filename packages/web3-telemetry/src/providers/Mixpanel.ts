@@ -36,8 +36,8 @@ export class MixpanelAPI extends TelemetryProvider {
 
     override captureEvent(options: EventOptions) {
         if (this.status === 'off') return
-        if (!Flags.sentry_enabled) return
-        if (!Flags.sentry_event_enabled) return
+        if (!Flags.mixpanel_enabled) return
+        if (!Flags.mixpanel_event_enabled) return
         if (!this.shouldRecord()) return
 
         if (process.env.NODE_ENV === 'development') {

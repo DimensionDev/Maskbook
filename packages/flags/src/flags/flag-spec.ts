@@ -17,14 +17,6 @@ const FlagSpec = z.object({
 
     twitter_token: str,
 
-    sentry_earliest_version: str.optional(),
-    sentry_sample_rate: num,
-    sentry_enabled: bool,
-    sentry_event_enabled: bool,
-    sentry_exception_enabled: bool,
-    sentry_fetch_transaction_enabled: bool,
-    sentry_async_transaction_enabled: bool,
-
     mixpanel_earliest_version: str.optional(),
     mixpanel_sample_rate: num,
     mixpanel_enabled: bool,

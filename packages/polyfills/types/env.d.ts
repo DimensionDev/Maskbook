@@ -1,8 +1,6 @@
 declare module NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production' | 'test'
-        readonly MASK_SENTRY_DSN: string
-        readonly MASK_SENTRY: 'enabled' | 'disabled'
         readonly MASK_MIXPANEL: 'enabled' | 'disabled'
         readonly FIREFLY_X_CLIENT_ID: string
         readonly FIREFLY_X_CLIENT_SECRET: string

@@ -353,7 +353,6 @@ const moduleSystemRules = {
         {
             paths: [
                 { name: 'uuid', message: 'Use crypto.randomUUID() instead.' },
-                { name: '@sentry/browser', message: 'Use Sentry.* global object instead.', allowTypeImports: true },
                 { name: 'async-call-rpc', message: 'Please use async-call-rpc/full instead.', allowTypeImports: true },
                 { name: '@masknet/typed-message/base', message: 'Please use @masknet/typed-message instead.' },
                 {

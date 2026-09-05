@@ -23,8 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
-      MASK_SENTRY_DSN: ${{ secrets.MASK_SENTRY_DSN }}
-      MASK_SENTRY: ${{ secrets.MASK_SENTRY }}
       MASK_MIXPANEL: ${{ secrets.MASK_MIXPANEL }}
       PRIVY_APP_ID: ${{ secrets.PRIVY_APP_ID }}
       FIREFLY_X_CLIENT_ID: ${{ secrets.FIREFLY_X_CLIENT_ID }}
@@ -34,7 +32,6 @@ jobs:
         id: get-date
         run: echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_STATE
         shell: bash
-      # note: required by sentry
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
@@ -54,25 +51,6 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=8192
         run: pnpm exec gulp build-ci
-      # See https://github.com/getsentry/action-release/issues/187
-      - name: Change git configuration
-        shell: bash
-        run: |
-          if [ -n "$(git config --get extensions.worktreeconfig)" ]; then
-            git config --unset-all extensions.worktreeconfig
-          fi
-      - name: Create Sentry release
-        uses: getsentry/action-release@v1
-        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/released'
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: mask-network
-          SENTRY_PROJECT: mask-network
-        with:
-          environment: production
-          sourcemaps: ./build
-          version_prefix: mask-
-          ignore_missing: true
       - name: Upload `MaskNetwork.chromium-beta.zip`
         uses: actions/upload-artifact@v7
         with:
