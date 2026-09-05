@@ -1,4 +1,3 @@
-// cspell:disable
 /**
  * All integrated name service IDs
  */

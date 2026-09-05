@@ -392,7 +392,6 @@ export namespace RSS3BaseAPI {
     export type Platform =
         | '1inch'
         | 'AAVE'
-        // cspell:disable-next-line
         | 'Aavegotchi'
         | 'Crossbell'
         | 'Curve'

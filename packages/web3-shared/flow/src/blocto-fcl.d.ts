@@ -1,5 +1,3 @@
-// cspell:disable
-
 // https://github.com/louisguitton/DefinitelyTyped/pull/1
 
 declare module '@blocto/fcl' {

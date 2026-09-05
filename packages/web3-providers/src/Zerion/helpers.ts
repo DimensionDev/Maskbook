@@ -111,7 +111,6 @@ export function formatRestTransaction(transaction: RestTransaction): Transaction
 
 export const zerionChainIdResolver = createLookupTableResolver<string, ChainId | undefined>(
     {
-        // cspell: ignore okbchain
         arbitrum: ChainId.Arbitrum,
         aurora: ChainId.Aurora,
         avalanche: ChainId.Avalanche,

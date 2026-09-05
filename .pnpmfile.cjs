@@ -2,7 +2,6 @@
 // !!! 2. Open a new issue to the library author.
 // !!! 3. Add a pnpm/resolution in package.json if the package specifier does not include git hash to pin the version.
 
-/* cspell:disable */
 /** @type {Map<string, RegExp | string | (string | RegExp)[]>} */
 const approvedList = new Map()
 
@@ -38,8 +37,6 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
     If you want to approve this new unusual dependency, please edit .pnpmfile.cjs.`,
     )
 }
-
-/* cspell:enable */
 
 function validatePackage({ dependencies, optionalDependencies, peerDependencies, name, exports }) {
     if (

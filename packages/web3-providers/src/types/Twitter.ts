@@ -1,4 +1,3 @@
-/* cspell:disable */
 export namespace TwitterBaseAPI {
     export interface UserUrl {
         display_url: string
@@ -71,7 +70,6 @@ export namespace TwitterBaseAPI {
             is_quote_status: boolean
             retweet_count: number
             favorite_count: number
-            /* cspell:disable-next-line */
             favorited: boolean
             retweeted: boolean
             lang: 'en'
@@ -167,7 +165,6 @@ export namespace TwitterBaseAPI {
         autoShowNewTweets?: boolean
         highContrastEnabled?: boolean
         loginPromptLastShown?: number
-        /* cspell:disable-next-line */
         nextPushCheckin?: number
         preciseLocationEnabled?: boolean
         pushNotificationsPermission?: 'granted'

@@ -1,5 +1,3 @@
-<!-- cspell:disable -->
-
 # Upstream issue/PRs
 
 ## SES compatibility

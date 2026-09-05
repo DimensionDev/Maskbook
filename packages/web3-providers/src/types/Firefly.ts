@@ -543,7 +543,6 @@ export namespace FireflyTwitterAPI {
                 icon_name: string
             }>
         }
-        // cspell:disable-next-line
         tipjar_settings: {
             is_enabled: boolean
             ethereum_handle: string

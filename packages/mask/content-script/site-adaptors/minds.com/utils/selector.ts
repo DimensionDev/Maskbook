@@ -1,4 +1,3 @@
-// cspell:disable
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 
 type E = HTMLElement

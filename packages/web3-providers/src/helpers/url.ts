@@ -1,5 +1,3 @@
-/* cspell:disable */
-
 /**
  * Parses the input URL string and returns a URL object.
  * If the input URL is invalid, it tries prepending "https://" and parses again.

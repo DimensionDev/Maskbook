@@ -52,7 +52,6 @@ function createGun() {
     const _ = new Gun({
         peers: [...gunServers],
         localStorage: false,
-        // cspell:disable-next-line
         radisk: true,
         WebSocket,
     })

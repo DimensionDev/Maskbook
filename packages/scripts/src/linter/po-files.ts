@@ -6,7 +6,6 @@ const pattern = 'packages/**/locale/*.po'
 
 export async function cleanPo() {
     const { glob } = await import('tinyglobby')
-    /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true, ignore: ['**/node_modules/**'] })
 
     await Promise.all(

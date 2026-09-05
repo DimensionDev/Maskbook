@@ -20,7 +20,6 @@ function pushState(this: History, data: any, unused: string, url?: string | URL 
 }
 function replaceState(this: History, data: any, unused: string, url?: string | URL | null) {
     const val = $.apply($.replaceState, this, arguments)
-    // cspell:ignore replacestate
     $.dispatchEvent(window, new $.Event('replacestate'))
     if (currentLocationHref !== window.location.href) {
         currentLocationHref = window.location.href

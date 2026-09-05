@@ -1,6 +1,5 @@
 import punycode from 'punycode'
 
-// cspell:ignore binanceus klever kresus taiko
 const NAME_SERVICE_RE =
     /\.(eth|bnb|arb|lens|zeta|mode|taiko|mint|x|polygon|nft|crypto|blockchain|bitcoin|dao|888|wallet|binanceus|hi|klever|kresus|anime|manga|go|zil)$/u
 const DOMAIN_RE = /^(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+[a-z0-9][-a-z0-9]*[a-z0-9]$/u

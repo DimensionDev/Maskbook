@@ -2,7 +2,6 @@ import { http, HttpResponse } from 'msw'
 
 const baseURL = 'https://dsearch.mask.r2d2.to'
 
-/* cspell:disable */
 export const DSearchHandlers = [
     http.get(`${baseURL}/fungible-tokens/specific-list.json`, () => {
         return HttpResponse.json(

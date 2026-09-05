@@ -137,7 +137,6 @@ function editManifest(manifest: ManifestV3, flags: ModifyAcceptFlags, csp: CSP) 
     manifest.content_security_policy = { extension_pages: csp.mv3 }
 }
 
-// cspell: disable-next-line
 // Note: with this key you cannot upload it to the extension store
 function fixTheExtensionID(manifest: ManifestV3) {
     manifest.key =

@@ -16,7 +16,6 @@ import defer * as MaskX from '../../../MaskX/index.js'
 import defer * as RSS3 from '../../../RSS3/index.js'
 import defer * as SpaceID from '../../../SpaceID/index.js'
 
-// cspell:disable-next-line
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/giu
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/giu
 const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/giu

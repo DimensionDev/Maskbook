@@ -1,4 +1,3 @@
-/* cspell:disable */
 import { test } from 'vitest'
 import type { AESCryptoKey, EC_Private_CryptoKey, EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/base'
 import { type EC_Key, EC_KeyCurve, importEC_Key } from '../src/index.js'

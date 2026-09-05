@@ -1,7 +1,6 @@
 import { describe, expect, it, test } from 'vitest'
 import { SearchResultType } from '@masknet/web3-shared-base'
 
-/* cspell:disable */
 describe('DSearch test', async () => {
     if (Math.random()) return it('', () => {}) // TODO: disabled test: this test should import masknet/shared-base-ui
     const { DSearch } = await import('../../src/DSearch/index.js')

@@ -1,6 +1,5 @@
 import { Sniffings } from '@masknet/shared-base'
 
-/* cspell:disable-next-line */
 const DB_NAME = 'localforage'
 const DB_VERSION = 2
 

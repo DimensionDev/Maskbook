@@ -4,7 +4,6 @@ export { buildCloudflare } from './cloudflare/index.ts'
 
 // Tools
 export { clean, syncDevelop, changesetRelease } from './commands/index.ts'
-export { reorderSpellcheck } from './spellcheck/index.ts'
 
 // Sub-projects build commands
 export { buildInjectedScript, watchInjectedScript } from './projects/injected-scripts.ts'

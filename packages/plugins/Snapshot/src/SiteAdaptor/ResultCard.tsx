@@ -7,7 +7,6 @@ import { useProposal } from './hooks/useProposal.js'
 import { useVotes } from './hooks/useVotes.js'
 import { useResults } from './hooks/useResults.js'
 import { SnapshotCard } from './SnapshotCard.js'
-// cspell: disable-next-line
 import { Parser } from '@json2csv/plainjs'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { formatCount } from '@masknet/web3-shared-base'

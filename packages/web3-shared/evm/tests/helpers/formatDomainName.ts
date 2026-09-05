@@ -7,7 +7,6 @@ describe('EVM formatter utilities', () => {
         result: string
         resultOfCustomSize: string
     }>([
-        /* cspell:disable */
         {
             domain: 'short.eth',
             result: 'short.eth',
@@ -23,7 +22,6 @@ describe('EVM formatter utilities', () => {
             result: '[9db6...b747].maskxx.eth',
             resultOfCustomSize: '[9db6...b747].maskxx.eth',
         },
-        /* cspell:enable */
     ])('formatDomainName', ({ domain, result, resultOfCustomSize }) => {
         expect(formatDomainName(domain)).toBe(result)
         expect(formatDomainName(domain, 16)).toBe(resultOfCustomSize)

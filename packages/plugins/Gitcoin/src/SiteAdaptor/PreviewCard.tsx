@@ -336,7 +336,6 @@ export function PreviewCard(props: PreviewCardProps) {
 function RoundItem({ round }: { round: Round }) {
     const { classes } = useStyles()
 
-    /* cspell:ignore allov */
     const roundType =
         (
             round.strategyName === 'allov1.Direct' ||

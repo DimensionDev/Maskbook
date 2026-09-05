@@ -2,12 +2,10 @@ import { expect, test } from 'vitest'
 import { encodePayload, parsePayload } from '../src/index.js'
 import { PayloadException } from '../src/types/index.js'
 
-/* cspell:disable */
 const oldInfraOutput =
     '\u{1F3BC}2/4|avkwBKqMpCKznGclvChuuh2AEExV0J14xI/KANhwiKJfVyfm2ObWb432E3aAOa7ImRoCd7/JK1d' +
     'DQWk4rt9NqajTEaajARMc9hJ9GmR8lorBNRNHlgj/h1KJYk5th7Nsr04PWO0nJUKiDH2CJwieSxW2YqxC' +
     'I1ceYKUYcZOsVJEZOrJ/IB8WUmU0|BjPbfiSAXCvc/2nqKv2nzQ==|Og1u5pLG9GiWsZbxQwHAGtL6Jqo=:||'
-/* cspell:enable */
 
 test('Parse v39 payload', async () => {
     const out = (await parsePayload(oldInfraOutput)).unwrap()

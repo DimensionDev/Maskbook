@@ -1,4 +1,3 @@
-// cspell:words kubo
 import urlcat from 'urlcat'
 import { isEmpty } from 'lodash-es'
 import { Attachment } from '@dimensiondev/common-protocols'

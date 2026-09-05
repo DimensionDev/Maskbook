@@ -7,10 +7,8 @@ const files = await Promise.all(
         require.resolve('gun/gun.js'),
         require.resolve('gun/sea'),
         require.resolve('gun/lib/radix'),
-        // cspell: disable-next-line
         require.resolve('gun/lib/radisk'),
         require.resolve('gun/lib/store'),
-        // cspell: disable-next-line
         require.resolve('gun/lib/rindexed'),
     ].map((path) => readFile(path, 'utf8')),
 )

@@ -111,7 +111,6 @@ export enum ChainId {
     Moonriver = 1285,
 
     Cronos = 25,
-    // cspell:disable-next-line
     Brise = 32_520,
 
     Canto = 7700,

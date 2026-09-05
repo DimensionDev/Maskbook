@@ -7,7 +7,7 @@
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
     "explorer.fileNesting.patterns": {
-        "README.md": ".commitlintrc*, .ecrc, .node-version, .npm*, .prettier*, .unlock*, .ignore, CNAME, gulp*, LICENSE, lint-staged*, cspell*, svgo*, *.ts, crowdin*",
+        "README.md": ".commitlintrc*, .ecrc, .node-version, .npm*, .prettier*, .unlock*, .ignore, CNAME, gulp*, LICENSE, lint-staged*, svgo*, *.ts, crowdin*",
         "package.json": "pnpm-*.yaml, .pnpmfile.cjs"
     },
     "editor.tabSize": 4,
