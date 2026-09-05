@@ -8,9 +8,7 @@ const initializer = {
         return providerType === ProviderType.Firefly ? '' : evm.state?.Provider?.account?.getCurrentValue()
     },
     getDefaultChainId(providerType: ProviderType) {
-        return providerType === ProviderType.Firefly ?
-                ChainId.Mainnet
-            :   evm.state?.Provider?.chainId?.getCurrentValue()
+        return providerType === ProviderType.Firefly ? ChainId.Mainnet : evm.state?.Provider?.chainId?.getCurrentValue()
     },
     getDefaultProviderType() {
         return evm.state?.Provider?.providerType?.getCurrentValue()

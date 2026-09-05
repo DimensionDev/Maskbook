@@ -44,33 +44,30 @@ export const SelectProvider = memo(function SelectProvider() {
     const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
     const modalNavigate = useModalNavigate()
 
-    const onClick = useCallback(
-        async (providerType: ProviderType) => {
-            if (providerType === ProviderType.WalletConnect) {
-                const account = await EVMWeb3.connect({ providerType })
+    const onClick = useCallback(async (providerType: ProviderType) => {
+        if (providerType === ProviderType.WalletConnect) {
+            const account = await EVMWeb3.connect({ providerType })
 
-                // wallet connect has been connected
-                if (account) {
-                    navigate(PopupRoutes.ConnectWallet)
-                    return
-                }
-            } else {
-                if (await Services.Helper.hasPopupWindowOpened()) {
-                    modalNavigate(PopupModalRoutes.ConnectProvider, { providerType })
-                    return
-                }
-
-                await Services.Helper.openPopupWindow(
-                    PopupRoutes.Personas,
-                    { providerType, from: PopupModalRoutes.SelectProvider, tab: PopupHomeTabType.ConnectedWallets },
-                    { bypassWalletLock: true },
-                )
-
+            // wallet connect has been connected
+            if (account) {
+                navigate(PopupRoutes.ConnectWallet)
                 return
             }
-        },
-        [],
-    )
+        } else {
+            if (await Services.Helper.hasPopupWindowOpened()) {
+                modalNavigate(PopupModalRoutes.ConnectProvider, { providerType })
+                return
+            }
+
+            await Services.Helper.openPopupWindow(
+                PopupRoutes.Personas,
+                { providerType, from: PopupModalRoutes.SelectProvider, tab: PopupHomeTabType.ConnectedWallets },
+                { bypassWalletLock: true },
+            )
+
+            return
+        }
+    }, [])
 
     return (
         <Box className={classes.container}>

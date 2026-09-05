@@ -61,11 +61,9 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
             const msg = { type, data: message }
             return signWithPersona(msg, identifier)
         }
-        return (
-            type === SignType.TypedData ?
+        return type === SignType.TypedData ?
                 requestFirefly(EthereumMethodType.eth_signTypedData_v4, payload.params)
             :   requestFirefly(EthereumMethodType.personal_sign, [message])
-        )
     }
 
     switch (payload.method) {

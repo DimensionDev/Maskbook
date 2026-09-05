@@ -24,19 +24,13 @@ export function buildRspackFlag(name: string, args: BuildFlagsExtended) {
     return f
 }
 export function buildExtensionFlag(name: string, args: BuildFlagsExtended): TaskFunction {
-    const f = series(
-        parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry),
-        buildWebpackFlag(name, args),
-    )
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry), buildWebpackFlag(name, args))
     const desc = 'Build extension for ' + name
     task(f, desc, desc)
     return f
 }
 export function buildExtensionFlagRspack(name: string, args: BuildFlagsExtended): TaskFunction {
-    const f = series(
-        parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry),
-        buildRspackFlag(name, args),
-    )
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry), buildRspackFlag(name, args))
     const desc = 'Build extension for ' + name + ' with rspack'
     task(f, desc, desc)
     return f

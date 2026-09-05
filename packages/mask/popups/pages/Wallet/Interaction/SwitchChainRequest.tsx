@@ -1,7 +1,14 @@
 import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Alert, IconButton, Link, Typography } from '@mui/material'
-import { useAccount, useChainId, useChainContext, useNetwork, usePrivyWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useChainId,
+    useChainContext,
+    useNetwork,
+    usePrivyWallet,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from 'react-use'
 import { NetworkIcon } from '@masknet/shared'
