@@ -28,7 +28,9 @@ function DemoView({ entry }: { entry: DemoEntry }) {
                         <>
                             <header className="book-main-header">
                                 <h1>{mod.meta?.title ?? entry.name}</h1>
-                                {description ? <p>{description}</p> : null}
+                                {description ?
+                                    <p>{description}</p>
+                                :   null}
                             </header>
                             <div className="book-canvas">
                                 <Demo />

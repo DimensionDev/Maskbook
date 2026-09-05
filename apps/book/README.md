@@ -29,7 +29,7 @@ import { ActionButton } from '@masknet/theme'
 export const meta = { title: 'ActionButton', description: 'optional one-liner' }
 
 export default function Demo() {
-    return <ActionButton variant="contained">Confirm</ActionButton>
+  return <ActionButton variant="contained">Confirm</ActionButton>
 }
 ```
 
