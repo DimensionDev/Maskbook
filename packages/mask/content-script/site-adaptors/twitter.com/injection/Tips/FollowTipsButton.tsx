@@ -28,6 +28,10 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
             const run = async () => {
                 const userId = getUserId(ele)
                 if (!userId) return
+                // onNodeMutation/onTargetChanged re-run this for the same `ele`. A fresh DOMProxy()
+                // here creates a brand-new shadow-root sibling every time, so the previous one must
+                // be torn down first or it leaks a live React tree on every mutation of this cell.
+                remove()
                 const proxy = DOMProxy({
                     afterShadowRootInit: Flags.shadowRootInit,
                 })
