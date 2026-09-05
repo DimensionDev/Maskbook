@@ -33,7 +33,7 @@ export const enum RoutePaths {
 }
 
 export const MAX_FILE_SIZE = 1.5 * 1024 * 1024
-export const DURATION = 60 * 60 * 24
+export const DURATION = DEFAULT_DURATION
 
 function createTheme(themeId: string, cover: string): FireflyRedPacketAPI.ThemeGroupSettings {
     return {
