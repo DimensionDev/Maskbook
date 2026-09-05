@@ -1,4 +1,4 @@
-export { MaskColors, alpha, DarkMaskColors, LightMaskColors } from './colors.js'
+export { MaskColors, alpha, DarkMaskColors, lighten, LightMaskColors } from './colors.js'
 export { MaskThemeProvider, type MaskThemeProviderProps, usePalette } from './Provider.js'
 export { MaskTheme } from './theme.js'
 export { createShadowRootTheme } from './createShadowRootTheme.js'

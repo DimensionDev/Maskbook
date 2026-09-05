@@ -96,6 +96,9 @@ declare module '@mui/material/styles' {
 export const alpha = (color: string, opacity: number) =>
     `color-mix(in srgb, ${color}, transparent ${(1 - opacity) * 100}%)`
 
+export const lighten = (color: string, coefficient: number) =>
+    `color-mix(in srgb, ${color}, white ${coefficient * 100}%)`
+
 export const LightMaskColors = {
     mode: 'light',
     primary: { main: '#1c68f3' },
