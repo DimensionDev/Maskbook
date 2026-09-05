@@ -8,7 +8,7 @@ import {
 import { MessageStateType, type TransferableMessage, isSameURL } from '@masknet/web3-shared-base'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { MaskWalletProviderInstance } from '../providers/index.js'
+import { FireflyEmbeddedWalletProviderInstance } from '../providers/index.js'
 
 export class Popups implements Middleware<ConnectionContext> {
     private get networks() {
@@ -23,11 +23,11 @@ export class Popups implements Middleware<ConnectionContext> {
         }
 
         try {
-            const MaskProvider = MaskWalletProviderInstance
-            const currentChainId = MaskProvider.subscription.chainId.getCurrentValue()
+            const fireflyProvider = FireflyEmbeddedWalletProviderInstance
+            const currentChainId = fireflyProvider.subscription.chainId.getCurrentValue()
 
             if (context.method === EthereumMethodType.eth_sendTransaction && currentChainId !== context.chainId) {
-                await MaskProvider.switchChain(context.chainId)
+                await fireflyProvider.switchChain(context.chainId)
 
                 // if send risky requests to a custom network, the providerURL must be provided.
                 const matchNetworkByProviderURL = this.networks?.find(

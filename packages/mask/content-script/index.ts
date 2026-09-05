@@ -12,7 +12,5 @@ if (!Reflect.get(globalThis, loaded)) {
         const { activateSiteAdaptorUI } = await import('./site-adaptor-infra/define.js')
         await activateSiteAdaptorUI()
     }
-    const { startMaskSDK } = await import(/* webpackMode: 'eager' */ '../entry-sdk/index.js')
-    startMaskSDK()
 }
 export {}

@@ -37,10 +37,10 @@ class NonceAPI implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        // set a nonce for Mask wallets
+        // set a nonce for Firefly embedded wallets
         if (
             context.account &&
-            context.providerType === ProviderType.MaskWallet &&
+            context.providerType === ProviderType.Firefly &&
             context.method === EthereumMethodType.eth_sendTransaction
         ) {
             context.requestArguments = {

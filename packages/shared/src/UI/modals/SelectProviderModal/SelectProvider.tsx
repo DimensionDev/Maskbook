@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import { getRegisteredWeb3Providers, MaskWalletProvider } from '@masknet/web3-providers'
+import { getRegisteredWeb3Providers } from '@masknet/web3-providers'
 import { ConnectWalletModal, InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskTabList } from '@masknet/theme'
@@ -34,10 +34,9 @@ interface SelectProviderProps {
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
     onConnect?: () => void
     onClose: () => void
-    createWallet(): void
 }
 export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
-    const { open, pluginID, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose, createWallet } = props
+    const { open, pluginID, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose } = props
     const { classes } = useStyles()
     // Guiding provider
     const [provider, setProvider] = useState<Web3Helper.ProviderDescriptorAll>()
@@ -45,14 +44,6 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     const handleSelect = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
             setProvider(undefined)
-            // Create wallet first if no wallets yet.
-            if (
-                provider.type === ProviderType.MaskWallet &&
-                !MaskWalletProvider.subscription.wallets.getCurrentValue().length
-            ) {
-                createWallet()
-                return
-            }
             // Do not close the dialog for WalletConnect until the wallet gets connected
             const isNotWalletConnect = provider.type !== ProviderType.WalletConnect
 

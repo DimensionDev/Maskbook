@@ -7,14 +7,12 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useNativeToken,
-    useWallet,
     useWeb3Connection,
     useBalance,
     useChainIdValid,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, WalletIcon, SelectProviderModal, WalletStatusModal, CopyButton } from '@masknet/shared'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
@@ -115,10 +113,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
         contentBackground: providerDescriptor?.backgroundGradient ?? theme.vars.palette.maskColor.publicBg,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
-        textColor:
-            providerDescriptor?.type === ProviderType.MaskWallet ?
-                theme.vars.palette.maskColor.dark
-            :   theme.vars.palette.text.primary,
+        textColor: theme.vars.palette.text.primary,
     })
 
     const Web3 = useWeb3Connection()
@@ -126,7 +121,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { account, chainId } = useChainContext()
 
     const chainIdValid = useChainIdValid()
-    const wallet = useWallet()
     const { data: balance = '0', isPending: loadingBalance } = useBalance()
     const { data: nativeToken, isPending: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
@@ -163,9 +157,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
                 />
                 <div className={classes.accountInfo}>
-                    {ProviderType.MaskWallet === providerDescriptor?.type ?
-                        <Typography className={classes.accountName}>{wallet?.name}</Typography>
-                    :   null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.accountName}>
                             {domain ?

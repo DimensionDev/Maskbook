@@ -118,10 +118,6 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
             }
             const backupSummary = summary.unwrapOr(undefined)
             if (!backupSummary) return
-            if (backupSummary.countOfWallets) {
-                const hasPassword = await Services.Wallet.hasPassword()
-                if (!hasPassword) await Services.Wallet.setDefaultPassword()
-            }
             await Services.Backup.restoreBackup(backupJson)
             enqueueSnackbar(isImport ? <Trans>Restore Completed</Trans> : <Trans>Merge Completed</Trans>, {
                 variant: 'success',

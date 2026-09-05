@@ -15,7 +15,7 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
         try {
             // add gas margin
             if (config.gas) {
-                if (context.providerType === ProviderType.MaskWallet) {
+                if (context.providerType === ProviderType.Firefly) {
                     config.gas = toHex(config.gas)
                 } else {
                     const gas = toHex(

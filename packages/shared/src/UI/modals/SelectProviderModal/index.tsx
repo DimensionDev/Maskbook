@@ -13,11 +13,9 @@ export type SelectProviderModalOpenProps = void | {
 export type SelectProviderModalCloseProps = boolean
 
 interface SelectProviderModalProps
-    extends SingletonModalProps<SelectProviderModalOpenProps, SelectProviderModalCloseProps> {
-    createWallet(): void
-}
+    extends SingletonModalProps<SelectProviderModalOpenProps, SelectProviderModalCloseProps> {}
 
-export function SelectProviderModal({ createWallet, ref }: SelectProviderModalProps) {
+export function SelectProviderModal({ ref }: SelectProviderModalProps) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID>()
     const [requiredSupportChainIds, setRequiredSupportChainIds] = useState<Web3Helper.ChainIdAll[]>()
@@ -39,7 +37,6 @@ export function SelectProviderModal({ createWallet, ref }: SelectProviderModalPr
     return (
         <SelectProvider
             open
-            createWallet={createWallet}
             pluginID={pluginID}
             requiredSupportPluginID={requiredSupportPluginID}
             requiredSupportChainIds={requiredSupportChainIds}

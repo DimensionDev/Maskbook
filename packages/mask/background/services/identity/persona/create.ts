@@ -12,6 +12,10 @@ import { omit } from 'lodash-es'
 import { queryPersonasDB } from '../../../database/persona/db.js'
 import { deriveLocalKeyFromECDHKey, recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils.js'
 
+export async function createMnemonicWords(): Promise<string[]> {
+    return bip39.generateMnemonic().split(' ')
+}
+
 export async function createPersonaByPrivateKey(
     privateKeyString: string,
     nickname: string,

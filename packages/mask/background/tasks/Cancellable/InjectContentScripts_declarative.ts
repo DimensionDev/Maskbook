@@ -1,7 +1,7 @@
 import { noop } from 'lodash-es'
 import { hmr } from '../../../utils-pure/index.js'
 import type { Scripting } from 'webextension-polyfill'
-import { injectedScriptURL, maskSDK_URL, contentScriptList } from '../../utils/injectScript.js'
+import { injectedScriptURL, contentScriptList } from '../../utils/injectScript.js'
 import { Sniffings } from '@masknet/shared-base'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 
@@ -11,7 +11,6 @@ if (typeof browser.scripting?.registerContentScripts === 'function') {
     ;(async () => {
         await unregisterExistingScripts()
         await browser.scripting.registerContentScripts([
-            ...prepareMainWorldScript('sdk', ['<all_urls>'], maskSDK_URL),
             ...prepareMainWorldScript(
                 'script',
                 Array.from(definedSiteAdaptors.values(), (x) => x.declarativePermissions.origins).flat(),

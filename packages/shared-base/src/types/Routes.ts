@@ -24,18 +24,12 @@ export enum DashboardRoutes {
     SignIn = '/sign-in',
     Personas = '/personas',
     CreateMaskWallet = '/create-mask-wallet',
-    CreateMaskWalletForm = '/create-mask-wallet/form',
     CreateFireflyWallet = '/create-mask-wallet/firefly',
-    RecoveryMaskWallet = '/create-mask-wallet/recovery',
-    CreateMaskWalletMnemonic = '/create-mask-wallet/mnemonic',
-    AddDeriveWallet = '/create-mask-wallet/add-derive-wallet',
-    SignUpMaskWalletOnboarding = '/create-mask-wallet/onboarding',
 }
 
 export enum PopupModalRoutes {
     ChooseCurrency = '/choose-currency',
     ChooseNetwork = '/choose-network',
-    SwitchWallet = '/switch-wallet',
     ConnectSocialAccount = '/connect-social-account',
     SelectProvider = '/select-provider',
     ConnectProvider = '/connect-provider',
@@ -45,7 +39,6 @@ export enum PopupModalRoutes {
     PersonaRename = '/persona-rename',
     SetBackupPassword = '/set-backup-password',
     verifyBackupPassword = '/verify-backup-password',
-    WalletAccount = '/wallet-accounts',
     SelectLanguage = '/select-language',
     SelectAppearance = '/select-appearance',
     SupportedSitesModal = '/supported-sites',
@@ -54,27 +47,16 @@ export enum PopupModalRoutes {
 
 export enum PopupRoutes {
     Wallet = '/wallet',
-    WalletUnlock = '/wallet/unlock',
-    WalletStartUp = '/wallet/startup',
-    WalletSettings = '/wallet/settings',
-    CreateWallet = '/wallet/create',
-    DeriveWallet = '/wallet/derive',
-    SelectWallet = '/wallet/select',
     AddToken = '/wallet/addToken',
-    GasSetting = '/wallet/gas',
     TokenDetail = '/wallet/token-detail',
     TransactionDetail = '/wallet/transaction-detail',
     ContractInteraction = '/wallet/contract-interaction',
-    ResetWallet = '/wallet/reset-wallet',
     Transfer = '/wallet/transfer',
     Contacts = '/wallet/contacts',
-    SetPaymentPassword = '/wallet/password',
     NetworkManagement = '/wallet/network-management',
     EditNetwork = '/wallet/edit-network',
     AddNetwork = '/wallet/add-network',
     Receive = '/wallet/receive',
-    ExportWalletPrivateKey = '/wallet/export-private-key',
-    ConnectedSites = '/wallet/connected-sites',
     SyncTwitterCookies = '/wallet/sync-twitter-cookies',
     Personas = '/personas',
     Logout = '/personas/logout',
@@ -98,30 +80,10 @@ export interface PopupRoutesParamsMap {
         identifier: string | undefined
         source: string | undefined
     }
-    [PopupRoutes.SelectWallet]: {
-        chainId?: number
-        address?: string
-        source?: string
-    }
     [PopupRoutes.Personas]: {
         providerType?: string
         tab: string
         from?: PopupModalRoutes
     }
-    [PopupRoutes.SetPaymentPassword]: {
-        isCreating?: boolean
-        source?: string
-    }
-    [PopupRoutes.Wallet]: {
-        isCreating?: boolean
-        // Unlock
-        close_after_unlock?: boolean
-        from?: string | null
-    }
-    [PopupRoutes.WalletUnlock]: {
-        close_after_unlock?: boolean
-        from?: string | null
-    }
     [PopupRoutes.Contacts]: { selectedToken: string | undefined }
-    [PopupRoutes.CreateWallet]: { creatingFireflyWallet?: boolean }
 }

@@ -1,7 +1,6 @@
 import Services from '#services'
 import { initWallet } from '@masknet/web3-providers'
-import { allPersonas } from '../initUIContext.js'
-import { CrossIsolationMessages, EMPTY_LIST, Sniffings, createSubscriptionFromAsync } from '@masknet/shared-base'
+import { CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import defer * as shared from '@masknet/shared'
 import { delay } from '@masknet/kit'
 import { openPopupWindow } from '../utils/openPopup.js'
@@ -35,20 +34,5 @@ await initWallet({
     MessageContext: {
         openPopupWindow,
         send: Services.Wallet.send,
-        hasPaymentPassword: Services.Wallet.hasPassword,
-    },
-    MaskWalletContext: {
-        wallets: createSubscriptionFromAsync(
-            () => Services.Wallet.getWallets(),
-            EMPTY_LIST,
-            CrossIsolationMessages.events.walletsUpdated.on,
-        ),
-        allPersonas,
-        resetAllWallets: Services.Wallet.resetAllWallets,
-        removeWallet: Services.Wallet.removeWallet,
-        renameWallet: Services.Wallet.renameWallet,
-        addWallet: Services.Wallet.addWallet,
-        selectMaskWalletAccount: Services.Wallet.selectMaskAccount,
-        disconnectAllWalletsFromOrigin: Services.Wallet.disconnectAllWalletsFromOrigin,
     },
 })

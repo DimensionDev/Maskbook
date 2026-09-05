@@ -6,10 +6,10 @@ import { Box, Typography } from '@mui/material'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
-import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { EVMWeb3, evm } from '@masknet/web3-providers'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { evm } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useContacts, useWallets } from '@masknet/web3-hooks-base'
+import { useContacts } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { ContactType } from '../../pages/Wallet/type.js'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -96,13 +96,11 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const { classes, cx } = useStyles()
 
     const contacts = useContacts()
-    const wallets = useWallets()
 
     const { enqueueSnackbar } = useSnackbar()
 
     const nameAlreadyExist = Boolean(
-        contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)) ||
-            wallets?.find((wallet) => wallet.name === name),
+        contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)),
     )
 
     const validationMessage = useMemo(() => {
@@ -114,8 +112,6 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
         const _name = name.trim()
         if (type === ContactType.Recipient) {
             await evm.state!.AddressBook?.renameContact({ name: _name, address })
-        } else if (type === ContactType.Owned) {
-            await EVMWeb3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
         enqueueSnackbar(<Trans>Contact edited.</Trans>, { variant: 'success' })

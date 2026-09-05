@@ -1,4 +1,4 @@
-import { memo, lazy, Suspense } from 'react'
+import { memo } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -57,15 +57,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const PATTERNS = [
-    PopupRoutes.Personas,
-    PopupRoutes.Wallet,
-    PopupRoutes.Friends,
-    PopupRoutes.Settings,
-    PopupRoutes.SetPaymentPassword,
-]
-
-const LoadMaskSDK = lazy(() => import('./LoadMaskSDK.js'))
+const PATTERNS = [PopupRoutes.Personas, PopupRoutes.Wallet, PopupRoutes.Friends, PopupRoutes.Settings]
 
 export const PopupLayout = memo(function PopupLayout() {
     const { classes } = useStyles()
@@ -81,11 +73,6 @@ export const PopupLayout = memo(function PopupLayout() {
                     <div className={classes.body} data-hide-scrollbar>
                         <Outlet />
                     </div>
-                    <Suspense fallback={null}>
-                        {matched ?
-                            <LoadMaskSDK />
-                        :   null}
-                    </Suspense>
                     {matched ?
                         <Navigator className={classes.navigator} />
                     :   null}

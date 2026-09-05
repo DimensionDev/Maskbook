@@ -153,10 +153,6 @@ export interface redpacketDialogEvent {
     fireflyContext?: FireflyContext
 }
 
-export interface SmartPayDialogEvent {
-    open: boolean
-}
-
 export interface RenameWalletEvent {
     address?: string
 }
@@ -201,10 +197,6 @@ export interface SwitchLogoDialogEvent {
     open: boolean
 }
 
-export interface WalletSettingsDialogEvent {
-    pluginID?: string
-}
-
 /** This is a subset of browser.permissions.Permission */
 export type PossiblyUsedWebExtensionPermission = 'clipboardRead'
 
@@ -225,14 +217,6 @@ export interface PersonaSignRequestEvent {
     requestID: string
     selectedPersona?: PersonaIdentifier
 }
-
-export interface RequestsUpdatedEvent {
-    hasRequest: boolean
-}
-
-export type WalletLockStatusUpdatedEvent = boolean
-
-export type PasswordStatusUpdatedEvent = boolean
 
 export interface PopupWalletConnectEvent {
     open: boolean

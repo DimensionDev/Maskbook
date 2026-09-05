@@ -9,11 +9,10 @@ import {
     useNetworkContext,
     useProviderDescriptor,
     useReverseAddress,
-    useWallet,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { LensV3 } from '@masknet/web3-providers'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
 import { ProfilePopup } from '../ProfilePopup.js'
@@ -67,8 +66,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(function Handler
 }) {
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
-    const wallet = useWallet()
-    const { account, providerType } = useChainContext()
+    const { account } = useChainContext()
     const Utils = useWeb3Utils()
 
     const providerDescriptor = useProviderDescriptor()
@@ -78,9 +76,8 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(function Handler
 
     const walletName = useMemo(() => {
         if (domain) return domain
-        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
         return providerDescriptor?.name
-    }, [domain, providerType, wallet?.name, providerDescriptor?.name])
+    }, [domain, providerDescriptor?.name])
 
     if (!accounts?.length || !currentAccount) {
         return (

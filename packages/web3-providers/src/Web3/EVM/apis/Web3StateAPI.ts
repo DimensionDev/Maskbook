@@ -29,7 +29,7 @@ import {
     tokenStorage,
     settingsStorage,
     providerStorage,
-    MaskWalletStorage,
+    FireflyWalletStorage,
 } from '../../Base/storage.js'
 
 // If you use defer loading you will miss the subscription time.
@@ -57,7 +57,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         tokenStorage(NetworkPluginID.PLUGIN_EVM),
         settingsStorage(NetworkPluginID.PLUGIN_EVM),
         providerStorage(NetworkPluginID.PLUGIN_EVM, getDefaultChainId(), getDefaultProviderType()),
-        MaskWalletStorage(),
+        FireflyWalletStorage(),
 
         nameService.initializedPromise,
         transaction.initializedPromise,

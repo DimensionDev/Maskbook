@@ -2,9 +2,10 @@ import { type RefAttributes, useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
-import { MaskWallet, PrintBackground } from '../../../assets/index.js'
+import { PrintBackground } from '../../../assets/index.js'
 import { Words } from './Words.js'
 import { Icons } from '@masknet/icons'
+import { mask_blue_url } from '@masknet/icons/url'
 import { Trans } from '@lingui/react/macro'
 
 interface ComponentToPrintProps extends RefAttributes<unknown> {
@@ -107,7 +108,7 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
                     ecLevel="L"
                     size={136}
                     quietZone={6}
-                    logoImage={MaskWallet}
+                    logoImage={mask_blue_url()}
                     logoWidth={28}
                     logoHeight={28}
                 />

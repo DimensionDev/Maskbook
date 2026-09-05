@@ -8,7 +8,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
 import { evm } from '@masknet/web3-providers'
-import { useContacts, useWallets } from '@masknet/web3-hooks-base'
+import { useContacts } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
@@ -65,14 +65,11 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const theme = useTheme()
 
     const contacts = useContacts()
-    const wallets = useWallets()
 
     const { enqueueSnackbar } = useSnackbar()
 
     const addressError = Boolean(address) && !isValidAddress(address)
-    const nameExistError = Boolean(
-        contacts?.find((contact) => contact.name === name) || wallets.some((wallet) => wallet.name === name),
-    )
+    const nameExistError = Boolean(contacts?.find((contact) => contact.name === name))
     const addressExistError = useMemo(
         () => contacts.some((contact) => isSameAddress(address, contact.address)),
         [contacts, address],

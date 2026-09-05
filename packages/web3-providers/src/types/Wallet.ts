@@ -6,13 +6,10 @@ import type {
     Wallet,
     PopupRoutes,
     PopupRoutesParamsMap,
-    PersonaInformation,
-    ImportSource,
     SignMessage,
 } from '@masknet/shared-base'
 import type { JsonRpcRequest, JsonRpcResponse } from '@masknet/web3-shared-base'
-import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
+import type { TransactionOptions } from '@masknet/web3-shared-evm'
 
 export namespace WalletAPI {
     export interface ProviderEvents<ChainId, ProviderType> {
@@ -37,35 +34,6 @@ export namespace WalletAPI {
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void
     }
-    export interface MaskWalletIOContext {
-        /** Get all wallets */
-        wallets: Subscription<Wallet[]>
-        allPersonas: Subscription<readonly PersonaInformation[]>
-        resetAllWallets(): Promise<void>
-        /** Remove a old wallet */
-        removeWallet(id: string, password?: string): Promise<void>
-        renameWallet(address: string, name: string): Promise<void>
-        /** Add a new wallet */
-        addWallet(
-            source: ImportSource,
-            id: string,
-            updates?: {
-                name?: string
-                derivationPath?: string
-                storedKeyInfo?: api.IStoredKeyInfo
-            },
-        ): Promise<string>
-
-        /** Select a Mask Wallet account */
-        selectMaskWalletAccount(
-            chainId: ChainId,
-            defaultAccount?: string,
-            source?: string,
-        ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
-
-        /** Disconnect origin from Mask wallet */
-        disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
-    }
     export type SignWithPersona = (
         message: SignMessage,
         identifier?: ECKeyIdentifier,
@@ -79,10 +47,8 @@ export namespace WalletAPI {
             route: T,
             params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
         ): Promise<void>
-        hasPaymentPassword(): Promise<boolean>
     }
     export interface IOContext {
-        MaskWalletContext: MaskWalletIOContext
         MessageContext: MessageIOContext
         WalletConnectContext: WalletConnectIOContext
     }

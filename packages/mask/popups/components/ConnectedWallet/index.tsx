@@ -1,11 +1,11 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { FormattedAddress, ProgressiveText } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import { type NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
-import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { memo } from 'react'
 import { useModalNavigate } from '../ActionModal/index.js'
@@ -39,15 +39,6 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: '0px 4px 10px 0px rgba(0, 60, 216, 0.20)',
         borderRadius: 12,
     },
-    walletName: {
-        fontSize: 12,
-        fontWeight: 700,
-        lineHeight: '16px',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        maxWidth: 100,
-        overflow: 'hidden',
-    },
     address: {
         fontSize: 12,
         fontWeight: 400,
@@ -72,46 +63,30 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
     const theme = useTheme()
     const { classes } = useStyles()
 
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const localWallets = useWallets()
+    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const modalNavigate = useModalNavigate()
 
     return (
         <Box className={classes.walletList}>
-            {localWallets.map((wallet, index) => {
-                return (
-                    <Box className={classes.wallet} key={index}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <WalletAvatar size={24} className={classes.walletIcon} address={wallet.address} />
-                            <Typography className={classes.walletInfo} component="div">
-                                <ProgressiveText
-                                    className={classes.walletName}
-                                    component="span"
-                                    skeletonWidth={60}
-                                    skeletonHeight={16}
-                                    loading={false}>
-                                    {formatDomainName(wallet.name || '', 13)}
-                                </ProgressiveText>
-
-                                <Typography component="span" className={classes.address}>
-                                    <FormattedAddress
-                                        address={wallet.address}
-                                        size={4}
-                                        formatter={formatEthereumAddress}
-                                    />
-                                    <Link
-                                        style={{ width: 14, height: 14, color: theme.vars.palette.maskColor.main }}
-                                        href={EVMExplorerResolver.addressLink(chainId, wallet.address ?? '')}
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        <Icons.LinkOut size={14} sx={{ ml: 0.25 }} />
-                                    </Link>
-                                </Typography>
+            {account ?
+                <Box className={classes.wallet}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <WalletAvatar size={24} className={classes.walletIcon} address={account} />
+                        <Typography className={classes.walletInfo} component="div">
+                            <Typography component="span" className={classes.address}>
+                                <FormattedAddress address={account} size={4} formatter={formatEthereumAddress} />
+                                <Link
+                                    style={{ width: 14, height: 14, color: theme.vars.palette.maskColor.main }}
+                                    href={EVMExplorerResolver.addressLink(chainId, account)}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.LinkOut size={14} sx={{ ml: 0.25 }} />
+                                </Link>
                             </Typography>
-                        </Box>
+                        </Typography>
                     </Box>
-                )
-            })}
+                </Box>
+            :   null}
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.SelectProvider)}>
                 <Icons.Connect size={16} />
                 <Typography sx={{ fontSize: 12, fontWeight: 700, lineHeight: '16px' }}>

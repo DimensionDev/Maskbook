@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { EVMWeb3, PRIVY_SUPPORTED_CHAINS } from '@masknet/web3-providers'
 import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base'
-import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { Trans } from '@lingui/react/macro'
@@ -80,6 +80,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId, disab
     const chainId = network.chainId
     const selected = network.ID === currentNetworkId
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const providerURL = network.isCustomized ? network.rpcUrl : undefined
     const { data: balance, isPending: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, {
@@ -104,7 +105,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId, disab
                 if (disabled) return
                 await Network?.switchNetwork(network.ID)
                 await EVMWeb3.switchChain?.(chainId, {
-                    providerType: ProviderType.MaskWallet,
+                    providerType,
                 })
                 closeModal()
             }}>

@@ -84,7 +84,6 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
         userInput,
         setUserInput,
         contacts,
-        wallets,
         inputValidationMessage: addressValidationMessage,
         inputWarningMessage,
     } = ContactsContext.useContainer()
@@ -100,10 +99,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
         })
     }, [address, userInput])
 
-    const isAdded = useMemo(
-        () => [...contacts, ...wallets].some((x) => isSameAddress(address, x.address)),
-        [contacts, wallets, address],
-    )
+    const isAdded = useMemo(() => contacts.some((x) => isSameAddress(address, x.address)), [contacts, address])
 
     const addable = !addressValidationMessage && (address || userInput) && !isAdded
     const shouldShowAddress = !!address && address !== userInput

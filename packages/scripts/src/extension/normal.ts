@@ -1,7 +1,6 @@
 import { compact } from 'lodash-es'
 import { awaitChildProcess, cleanupWhenExit, PKG_PATH, shell, task, watchTask } from '../utils/index.ts'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.ts'
-import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.ts'
 import { buildPolyfill } from '../projects/polyfill.ts'
 import { buildGun } from '../projects/gun.ts'
 import { parallel, series, type TaskFunction } from 'gulp'
@@ -25,19 +24,13 @@ export function buildRspackFlag(name: string, args: BuildFlagsExtended) {
     return f
 }
 export function buildExtensionFlag(name: string, args: BuildFlagsExtended): TaskFunction {
-    const f = series(
-        parallel(buildPolyfill, buildInjectedScript, buildGun, buildMaskSDK, buildSentry),
-        buildWebpackFlag(name, args),
-    )
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry), buildWebpackFlag(name, args))
     const desc = 'Build extension for ' + name
     task(f, desc, desc)
     return f
 }
 export function buildExtensionFlagRspack(name: string, args: BuildFlagsExtended): TaskFunction {
-    const f = series(
-        parallel(buildPolyfill, buildInjectedScript, buildGun, buildMaskSDK, buildSentry),
-        buildRspackFlag(name, args),
-    )
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry), buildRspackFlag(name, args))
     const desc = 'Build extension for ' + name + ' with rspack'
     task(f, desc, desc)
     return f
@@ -58,7 +51,6 @@ function preTask() {
     buildPolyfill()
     buildGun()
     watchInjectedScript()
-    watchMaskSDK()
     buildSentry()
 }
 export async function extensionWatch(f: (() => void) | BuildFlagsExtended) {

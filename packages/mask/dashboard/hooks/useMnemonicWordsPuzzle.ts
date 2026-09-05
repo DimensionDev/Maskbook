@@ -17,7 +17,7 @@ export interface PuzzleWord {
 
 export function useMnemonicWordsPuzzle() {
     const { value: words = EMPTY_LIST, retry: wordsRetry } = useAsyncRetry(
-        () => Services.Wallet.createMnemonicWords(),
+        () => Services.Identity.createMnemonicWords(),
         [],
     )
 

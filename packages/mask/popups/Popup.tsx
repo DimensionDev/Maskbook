@@ -5,7 +5,6 @@ import { EVMWeb3ContextProvider, RootWeb3ContextProvider } from '@masknet/web3-h
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import React, { Suspense, cloneElement, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { useIdleTimer } from 'react-idle-timer'
 import {
     createHashRouter,
     Navigate,
@@ -107,11 +106,6 @@ export default function Popups() {
         [title, extension, customBackHandler],
     )
 
-    useIdleTimer({
-        onAction: () => Services.Wallet.setAutoLockTimer(),
-        throttle: 10_000,
-    })
-
     return jsxCompose(
         <Suspense />,
 
@@ -127,7 +121,7 @@ export default function Popups() {
         <RootWeb3ContextProvider />,
         <SharedContextProvider />,
         <PopupSnackbarProvider />,
-        <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,
+        <EVMWeb3ContextProvider providerType={ProviderType.None} />,
         <PopupContext />,
         <PageTitleContext value={titleContext} />,
     )(

@@ -13,9 +13,9 @@ import { format } from 'date-fns'
 import { memo, useCallback, useMemo, useRef } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { useAsyncFn, useUpdateEffect } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../shared-ui/index.js'
-import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/BackupPreview/index.js'
+import { PersonasBackupPreview } from '../../components/BackupPreview/index.js'
 import PasswordField from '../../components/PasswordField/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
 import { useBackupPreviewInfo } from '../../hooks/useBackupPreviewInfo.js'
@@ -85,10 +85,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
     const {
-        hasPassword,
-        backupWallets,
-        setBackupWallets,
-        formState: { clearErrors, setError, control, handleSubmit, resetField, formState },
+        formState: { clearErrors, control, handleSubmit, formState },
     } = useBackupFormState()
     const { errors, isDirty, isValid } = formState
     const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
@@ -98,17 +95,8 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const [{ loading: uploadLoading, value }, handleUploadBackup] = useAsyncFn(
         async (data: BackupFormInputs) => {
             try {
-                if (backupWallets && hasPassword) {
-                    const verified = await Services.Wallet.verifyPassword(data.paymentPassword || '')
-                    if (!verified) {
-                        setError('paymentPassword', { type: 'custom', message: _(msg`Incorrect Password`) })
-                        return
-                    }
-                }
-
                 const { file } = await Services.Backup.createBackupFile({
                     excludeBase: false,
-                    excludeWallet: !backupWallets,
                 })
 
                 const password = encryptWithAccount ? account + data.backupPassword : data.backupPassword
@@ -131,18 +119,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 if ((error as any).status === 400) navigate(DashboardRoutes.BackupCloud, { replace: true })
             }
         },
-        [
-            backupWallets,
-            hasPassword,
-            encryptWithAccount,
-            account,
-            onUpload,
-            enqueueSnackbar,
-            onClose,
-            setError,
-            _,
-            navigate,
-        ],
+        [encryptWithAccount, account, onUpload, enqueueSnackbar, onClose, navigate],
     )
 
     const handleClose = useCallback(() => {
@@ -150,10 +127,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         if (uploadLoading && controllerRef.current) controllerRef.current.abort()
         onClose()
     }, [uploadLoading, onClose])
-
-    useUpdateEffect(() => {
-        resetField('paymentPassword')
-    }, [backupWallets, resetField])
 
     const content = useMemo(() => {
         if (uploadLoading)
@@ -184,29 +157,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         name="backupPassword"
                     />
 
-                    <WalletsBackupPreview
-                        wallets={previewInfo.wallets}
-                        selectable
-                        selected={backupWallets}
-                        onChange={setBackupWallets}
-                    />
-
-                    {backupWallets && hasPassword ?
-                        <Controller
-                            control={control}
-                            render={({ field }) => (
-                                <PasswordField
-                                    {...field}
-                                    onFocus={() => clearErrors('paymentPassword')}
-                                    sx={{ mb: 2 }}
-                                    placeholder={_(msg`Payment Password`)}
-                                    error={!!errors.paymentPassword?.message}
-                                    helperText={errors.paymentPassword?.message}
-                                />
-                            )}
-                            name="paymentPassword"
-                        />
-                    :   null}
                     {isUpload ?
                         <Typography
                             sx={{ color: theme.vars.palette.maskColor.danger, fontSize: 14, lineHeight: '18px' }}>
@@ -224,14 +174,10 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         loading,
         previewInfo,
         control,
-        backupWallets,
-        setBackupWallets,
-        hasPassword,
         isUpload,
         theme.vars.palette.maskColor.danger,
         _,
         errors.backupPassword?.message,
-        errors.paymentPassword?.message,
         clearErrors,
     ])
 

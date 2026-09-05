@@ -2,9 +2,8 @@ import { Icons } from '@masknet/icons'
 import { FormattedAddress, PopupHomeTabType } from '@masknet/shared'
 import { PopupModalRoutes, PopupRoutes, type NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useReverseAddress } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, EVMProviderResolver, EVMWeb3 } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Button, Link, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
@@ -61,40 +60,24 @@ export const Component = memo(function ConnectWalletPage() {
     const { pluginID } = useNetworkContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const wallets = useWallets()
 
     const { data: domain } = useReverseAddress(pluginID, account)
 
     const walletAlias = (() => {
         if (domain) return formatDomainName(domain)
-        if (providerType !== ProviderType.MaskWallet) return `${EVMProviderResolver.providerName(providerType)} Wallet`
-        return wallets.find((x) => isSameAddress(x.address, account))?.name ?? formatEthereumAddress(account, 4)
+        return `${EVMProviderResolver.providerName(providerType)} Wallet`
     })()
 
-    const handleCancel = useCallback(async () => {
-        if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
-            navigate(-1)
-            return
-        }
-        // reset to MaskWallet after cancellation
-        const maskAccount = wallets.some((x) => isSameAddress(x.address, account)) ? account : wallets[0].address
-        await EVMWeb3.connect({
-            providerType: ProviderType.MaskWallet,
-            account: maskAccount,
-        })
-        await Services.Helper.removePopupWindow()
-    }, [wallets, account, navigate, providerType])
+    const handleCancel = useCallback(() => {
+        navigate(-1)
+    }, [navigate])
 
     const handleChooseAnotherWallet = useCallback(() => {
         modalNavigate(PopupModalRoutes.SelectProvider)
     }, [modalNavigate])
 
     const handleDone = useCallback(async () => {
-        if (providerType !== ProviderType.MaskWallet) await EVMWeb3.disconnect({ providerType })
-        if (providerType === ProviderType.MaskWallet) {
-            navigate(-1)
-            return
-        }
+        await EVMWeb3.disconnect({ providerType })
         if (providerType === ProviderType.WalletConnect) {
             navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }), {
                 replace: true,

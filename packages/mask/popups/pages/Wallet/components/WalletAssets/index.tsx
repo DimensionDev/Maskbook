@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { RestorableScroll, useParamTab } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { Boundary, makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback } from 'react'
@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
-import { Component as SelectWallet } from '../../SelectWallet/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -96,18 +95,13 @@ const StyledTabList = styled(TabList)({
 export const Component = memo(function WalletAssets() {
     const navigate = useNavigate()
     const { chainId } = useChainContext()
-    const wallet = useWallet()
 
     const handleAdd = useCallback(
         (assetTab: WalletAssetTabs) => navigate(`${PopupRoutes.AddToken}/${chainId}/${assetTab}`),
         [chainId, navigate],
     )
 
-    return wallet ?
-            <WalletAssetsUI onAddToken={handleAdd} />
-        :   <Box sx={{ pb: '72px', display: 'flex', flexGrow: 1, minHeight: 0 }}>
-                <SelectWallet sx={{ flexGrow: 1 }} embed />
-            </Box>
+    return <WalletAssetsUI onAddToken={handleAdd} />
 })
 
 interface WalletAssetsUIProps {

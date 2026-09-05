@@ -398,11 +398,6 @@ export const MaskTextNightly = /*#__PURE__*/ __createIcon('MaskTextNightly', [
         u: () => new URL('./brands/MaskTextNightly.svg', import.meta.url).href,
     },
 ])
-export const MaskWallet = /*#__PURE__*/ __createIcon('MaskWallet', [
-    {
-        u: () => new URL('./brands/MaskWallet.png', import.meta.url).href,
-    },
-])
 export const Medium = /*#__PURE__*/ __createIcon('Medium', [
     {
         u: () => new URL('./brands/Medium.svg', import.meta.url).href,

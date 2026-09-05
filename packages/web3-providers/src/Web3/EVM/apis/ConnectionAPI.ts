@@ -48,36 +48,6 @@ export class ConnectionAPI
     protected override Contract = new EVMContractAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
-    override async renameWallet(address: string, name: string, initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_RENAME_WALLET,
-                params: [address, name],
-            },
-            initial,
-        )
-    }
-
-    override async removeWallet(address: string, password?: string, initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_REMOVE_WALLET,
-                params: [address, password],
-            },
-            initial,
-        )
-    }
-
-    override async resetAllWallets(initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_RESET_ALL_WALLETS,
-                params: [],
-            },
-            initial,
-        )
-    }
-
     override async approveFungibleToken(
         address: string,
         recipient: string,

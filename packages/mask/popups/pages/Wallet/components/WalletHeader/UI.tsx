@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
-import { PersistentStorages, PopupRoutes, type Wallet } from '@masknet/shared-base'
+import { PersistentStorages, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress, type ReasonableNetwork } from '@masknet/web3-shared-base'
@@ -131,7 +131,7 @@ interface WalletHeaderUIProps {
     chainId: ChainId
     onOpenNetworkSelector: (event: MouseEvent<HTMLDivElement>) => void
     onActionClick: () => void
-    wallet: Wallet
+    address: string
     disabled?: boolean
     disableCopy?: boolean
 }
@@ -141,7 +141,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     chainId,
     onOpenNetworkSelector,
     onActionClick,
-    wallet,
+    address,
     disabled = false,
     disableCopy = false,
     origin,
@@ -149,16 +149,16 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     const { classes, cx } = useStyles({ disabled })
     const { data: connectedWallets, isPending } = useConnectedWallets(origin)
     const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
-    const connected = connectedWallets?.has(wallet.address)
+    const connected = connectedWallets?.has(address)
     const isFireflyWallet = useMemo(
-        () => fireflyWallets.some((w) => isSameAddress(w.address, wallet.address)),
-        [fireflyWallets, wallet.address],
+        () => fireflyWallets.some((w) => isSameAddress(w.address, address)),
+        [fireflyWallets, address],
     )
     const fireflyAccount = useSubscription(PersistentStorages.Settings.storage.firefly_account.subscription)
-    const addressLink = EVMExplorerResolver.addressLink(chainId, wallet.address)
+    const addressLink = EVMExplorerResolver.addressLink(chainId, address)
 
     const networkName = currentNetwork?.name || currentNetwork?.fullName
-    const walletName = wallet.name || (isFireflyWallet ? fireflyAccount.displayName : wallet.name)
+    const walletName = (isFireflyWallet ? fireflyAccount.displayName : undefined) || formatEthereumAddress(address, 4)
 
     const navigate = useNavigate()
 
@@ -213,16 +213,14 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         if (disabled) return
                         onActionClick()
                     }}>
-                    <WalletAvatar address={wallet.address} size={30} />
+                    <WalletAvatar address={address} size={30} />
                     <Box sx={{ ml: 0.5, overflow: 'hidden' }}>
-                        <TextOverflowTooltip title={wallet.name}>
+                        <TextOverflowTooltip title={walletName}>
                             <Typography className={classes.nickname}>{walletName}</Typography>
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
-                            <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            {disableCopy ? null : (
-                                <CopyButton text={wallet.address} className={classes.icon} size={12} />
-                            )}
+                            <FormattedAddress address={address} formatter={formatEthereumAddress} size={4} />
+                            {disableCopy ? null : <CopyButton text={address} className={classes.icon} size={12} />}
                             {addressLink ?
                                 <Link
                                     className={classes.icon}
@@ -242,7 +240,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 e.stopPropagation()
                                 navigate(
                                     urlcat(PopupRoutes.SyncTwitterCookies, {
-                                        address: wallet.address,
+                                        address,
                                         name: walletName,
                                     }),
                                 )

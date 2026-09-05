@@ -282,7 +282,6 @@ export async function createConfiguration(
                         to: nonWebpackJSFiles,
                     },
                     { from: join(import.meta.dirname, '../../gun-utils/gun.js'), to: nonWebpackJSFiles },
-                    { from: join(import.meta.dirname, '../../mask-sdk/dist/mask-sdk.js'), to: nonWebpackJSFiles },
                     {
                         context: join(import.meta.dirname, '../../polyfills/dist/'),
                         from: '*.js',

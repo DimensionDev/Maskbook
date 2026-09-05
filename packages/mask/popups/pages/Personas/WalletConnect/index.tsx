@@ -107,7 +107,7 @@ export const Component = memo(function WalletConnect() {
                     <Icons.ArrowBack onClick={() => navigate(-1)} />
                 </Box>
                 <Box className={classes.icon}>
-                    <Icons.MaskWallet size={64} />
+                    <Icons.MaskBlue size={64} />
                 </Box>
             </Box>
             <Typography className={classes.title}>

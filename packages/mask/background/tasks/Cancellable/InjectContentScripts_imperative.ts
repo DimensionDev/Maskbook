@@ -1,6 +1,6 @@
 import { hmr } from '../../../utils-pure/hmr.js'
 import type { WebNavigation } from 'webextension-polyfill'
-import { evaluateContentScript, ignoreInjectError, injectedScriptURL, maskSDK_URL } from '../../utils/injectScript.js'
+import { evaluateContentScript, ignoreInjectError, injectedScriptURL } from '../../utils/injectScript.js'
 import { Sniffings } from '@masknet/shared-base'
 import { matchesAnySiteAdaptor } from '../../../shared/site-adaptors/definitions.js'
 
@@ -29,7 +29,6 @@ async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): P
         // don't add await here. we don't want this to block the content script
         executeScript([injectedScriptURL]).catch(err)
     }
-    executeScript([maskSDK_URL]).catch(err)
 
     evaluateContentScript(arg.tabId, arg.frameId).catch(err)
 }

@@ -1,6 +1,11 @@
 import type { JsonRpcRequest } from '@masknet/web3-shared-base'
 import { ECKeyIdentifier, SignType } from '@masknet/shared-base'
-import { EVMRequestReadonly, EVMWalletProviders, EVMWeb3Readonly } from '@masknet/web3-providers'
+import {
+    createFireflyEmbeddedWallet,
+    EVMRequestReadonly,
+    EVMWalletProviders,
+    EVMWeb3Readonly,
+} from '@masknet/web3-providers'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -9,12 +14,14 @@ import {
     PayloadEditor,
     type TransactionOptions,
 } from '@masknet/web3-shared-evm'
-import { signWithWallet } from './wallet/index.js'
 import { signWithPersona } from '../../identity/persona/sign.js'
 import type { TransactionSerializable } from 'viem'
 
 /**
- * The entrance of all RPC requests to MaskWallet.
+ * The entrance of all RPC requests that must be signed in the background
+ * (silent requests bypass the popup approval UI and land here directly).
+ * Requests are signed either by a persona identity or by the currently
+ * active Firefly embedded wallet — Mask no longer manages local key material.
  */
 export async function send(payload: JsonRpcRequest, options?: TransactionOptions) {
     const { owner, providerURL } = options ?? {}
@@ -35,15 +42,28 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
         :   undefined
     const requestChainId = providerChainId ?? chainId
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
+    const address = owner || from!
+
+    const requestFirefly = async (method: string, params: object | unknown[] | undefined) => {
+        const provider = await createFireflyEmbeddedWallet(address).getEthereumProvider()
+        return provider.request({ method, params })
+    }
+
     const signTransaction = async (transaction: TransactionSerializable) => {
-        const message = { type: SignType.Transaction as const, data: transaction }
-        return identifier ?
-                signWithPersona(message, identifier, undefined, false, providerChainId)
-            :   signWithWallet(message, owner || from!, providerChainId)
+        if (identifier) {
+            const message = { type: SignType.Transaction as const, data: transaction }
+            return signWithPersona(message, identifier, undefined, false, providerChainId)
+        }
+        return requestFirefly(EthereumMethodType.eth_signTransaction, payload.params)
     }
     const signMessageOrTypedData = async (type: SignType.Message | SignType.TypedData, message: string) => {
-        const msg = { type, data: message }
-        return identifier ? signWithPersona(msg, identifier) : signWithWallet(msg, owner || from!)
+        if (identifier) {
+            const msg = { type, data: message }
+            return signWithPersona(msg, identifier)
+        }
+        return type === SignType.TypedData ?
+                requestFirefly(EthereumMethodType.eth_signTypedData_v4, payload.params)
+            :   requestFirefly(EthereumMethodType.personal_sign, [message])
     }
 
     switch (payload.method) {
@@ -59,13 +79,18 @@ export async function send(payload: JsonRpcRequest, options?: TransactionOptions
             }
 
             try {
-                return createJsonRpcResponse(
-                    pid,
-                    await EVMWeb3Readonly.sendSignedTransaction(await signTransaction(signableTransaction), {
-                        chainId: requestChainId,
-                        providerURL,
-                    }),
-                )
+                if (identifier) {
+                    return createJsonRpcResponse(
+                        pid,
+                        await EVMWeb3Readonly.sendSignedTransaction(await signTransaction(signableTransaction), {
+                            chainId: requestChainId,
+                            providerURL,
+                        }),
+                    )
+                }
+                // Firefly's backend signs and broadcasts in a single call.
+                const hash = await requestFirefly(EthereumMethodType.eth_sendTransaction, payload.params)
+                return createJsonRpcResponse(pid, hash)
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to send transaction.').error
             }

@@ -9,18 +9,13 @@ import type {
     SwapDialogEvent,
     ProfileCardEvent,
     SettingsDialogEvent,
-    WalletSettingsDialogEvent,
     AvatarSettingsDialogEvent,
     redpacketDialogEvent,
     PersonaBindFinishEvent,
-    SmartPayDialogEvent,
     RenameWalletEvent,
     FollowLensDialogEvent,
-    RequestsUpdatedEvent,
-    WalletLockStatusUpdatedEvent,
     PopupWalletConnectEvent,
     SwitchLogoDialogEvent,
-    PasswordStatusUpdatedEvent,
 } from './Events.js'
 
 /**
@@ -49,17 +44,11 @@ export interface CrossIsolationEvents {
     settingsDialogEvent: SettingsDialogEvent
     profileCardEvent: ProfileCardEvent
     renameWallet: RenameWalletEvent
-    walletSettingsDialogEvent: WalletSettingsDialogEvent
     avatarSettingsDialogEvent: AvatarSettingsDialogEvent
     redpacketDialogEvent: redpacketDialogEvent
-    smartPayDialogEvent: SmartPayDialogEvent
     followLensDialogEvent: FollowLensDialogEvent
     popupWalletConnectEvent: PopupWalletConnectEvent
     walletsUpdated: void
-    requestsUpdated: RequestsUpdatedEvent
-    walletLockStatusUpdated: WalletLockStatusUpdatedEvent
-    passwordStatusUpdated: PasswordStatusUpdatedEvent
-    walletLockTimeUpdated: void
     switchLogoDialogUpdated: SwitchLogoDialogEvent
 }
 

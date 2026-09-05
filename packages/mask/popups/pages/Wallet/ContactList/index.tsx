@@ -4,7 +4,7 @@ import urlcat from 'urlcat'
 import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
 import { type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
@@ -146,7 +146,6 @@ const ContactListUI = memo(function ContactListUI() {
         | undefined
     const isManage = state?.type === 'manage'
 
-    const wallets = useWallets()
     const { userInput, address, contacts, inputValidationMessage, inputWarningMessage } = ContactsContext.useContainer()
     const { classes } = useStyles({ isManage, hasError: !!inputValidationMessage || !!inputWarningMessage })
     const [params] = useSearchParams()
@@ -205,22 +204,6 @@ const ContactListUI = memo(function ContactListUI() {
                                     address={contact.address}
                                     name={contact.name}
                                     contactType={ContactType.Recipient}
-                                    onSelectContact={handleSelectContact}
-                                />
-                            )
-                        })}
-                    </List>
-                    <Typography className={classes.contactTitle}>
-                        <Trans>My Wallets</Trans>
-                    </Typography>
-                    <List className={classes.contactsList}>
-                        {wallets.map((wallet, index) => {
-                            return (
-                                <ContactListItem
-                                    key={index}
-                                    address={wallet.address}
-                                    name={wallet.name}
-                                    contactType={ContactType.Owned}
                                     onSelectContact={handleSelectContact}
                                 />
                             )

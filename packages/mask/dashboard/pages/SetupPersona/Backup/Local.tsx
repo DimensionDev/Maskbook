@@ -11,7 +11,7 @@ import { memo } from 'react'
 import { Controller } from 'react-hook-form'
 import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../shared-ui/index.js'
-import { PersonasBackupPreview, WalletsBackupPreview } from '../../../components/BackupPreview/index.js'
+import { PersonasBackupPreview } from '../../../components/BackupPreview/index.js'
 import { OutletPortal } from '../../../components/OutletPortal.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -21,28 +21,17 @@ import { downloadBackup } from '../../../utils/api.js'
 
 export const Component = memo(function LocalBackup() {
     const { t } = useLingui()
-    const { user, updateUser } = UserContext.useContainer()
+    const { updateUser } = UserContext.useContainer()
     const {
-        hasPassword,
-        backupWallets,
-        setBackupWallets,
-        formState: { setError, control, handleSubmit, clearErrors, formState },
+        formState: { control, handleSubmit, clearErrors, formState },
     } = useBackupFormState()
     const { errors, isDirty, isValid } = formState
     const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
 
     const [{ loading: downloadLoading }, handleFormSubmit] = useAsyncFn(
         async (data: BackupFormInputs) => {
-            if (backupWallets && hasPassword) {
-                const verified = await Services.Wallet.verifyPassword(data.paymentPassword || '')
-                if (!verified) {
-                    setError('paymentPassword', { type: 'custom', message: t`Incorrect Password` })
-                    return
-                }
-            }
             const { file } = await Services.Backup.createBackupFile({
                 excludeBase: false,
-                excludeWallet: !backupWallets,
             })
 
             const encrypted = await encryptBackup(
@@ -60,7 +49,7 @@ export const Component = memo(function LocalBackup() {
 
             window.close()
         },
-        [backupWallets, hasPassword, setError, updateUser, user],
+        [updateUser],
     )
 
     return (
@@ -83,30 +72,6 @@ export const Component = memo(function LocalBackup() {
                         )}
                         name="backupPassword"
                     />
-
-                    <WalletsBackupPreview
-                        wallets={previewInfo.wallets}
-                        selectable
-                        selected={backupWallets}
-                        onChange={setBackupWallets}
-                    />
-
-                    {backupWallets ?
-                        <Controller
-                            control={control}
-                            render={({ field }) => (
-                                <PasswordField
-                                    {...field}
-                                    onFocus={() => clearErrors()}
-                                    sx={{ mb: 2 }}
-                                    placeholder={t`Payment Password`}
-                                    error={!!errors.paymentPassword?.message}
-                                    helperText={errors.paymentPassword?.message}
-                                />
-                            )}
-                            name="paymentPassword"
-                        />
-                    :   null}
                 </Box>
             :   <LoadingStatus sx={{ minHeight: 320 }} />}
             <OutletPortal>

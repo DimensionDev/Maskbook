@@ -1,4 +1,4 @@
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { createContainer, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
@@ -9,7 +9,7 @@ import { createContainer, useRenderPhraseCallbackOnDepsChange } from '@masknet/s
  */
 export const { Provider: InteractionWalletContext, useContainer: useInteractionWalletContext } = createContainer(
     function () {
-        const wallet = useWallet()
+        const account = useAccount()
         const [interactionWallet, setInteractionWallet] = useState<string | undefined>()
 
         function useInteractionWallet(currentInteractingWallet: string | undefined) {
@@ -20,7 +20,7 @@ export const { Provider: InteractionWalletContext, useContainer: useInteractionW
         }
 
         return {
-            interactionWallet: interactionWallet || wallet?.address,
+            interactionWallet: interactionWallet || account,
             useInteractionWallet,
         }
     },

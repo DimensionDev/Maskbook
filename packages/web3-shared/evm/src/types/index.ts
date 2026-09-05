@@ -279,17 +279,9 @@ export enum EthereumMethodType {
     eth_supportedEntryPoints = 'eth_supportedEntryPoints',
 
     // Mask Network
-    MASK_ADD_WALLET = 'MASK_ADD_WALLET',
     MASK_LOGIN = 'MASK_LOGIN',
     MASK_LOGOUT = 'MASK_LOGOUT',
-    MASK_REMOVE_WALLET = 'MASK_REMOVE_WALLET',
-    MASK_REMOVE_WALLETS = 'MASK_REMOVE_WALLETS',
-    MASK_RENAME_WALLET = 'MASK_RENAME_WALLET',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
-    MASK_RESET_ALL_WALLETS = 'MASK_RESET_ALL_WALLETS',
-    MASK_UPDATE_WALLET = 'MASK_UPDATE_WALLET',
-    MASK_UPDATE_WALLETS = 'MASK_UPDATE_WALLETS',
-    MASK_WALLETS = 'MASK_WALLETS',
 }
 
 export enum TransactionEventType {
@@ -328,7 +320,7 @@ export enum NetworkType {
 export enum ProviderType {
     None = 'None',
     Browser = 'Browser',
-    MaskWallet = 'Maskbook',
+    Firefly = 'Firefly',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
     Coin98 = 'Coin98',

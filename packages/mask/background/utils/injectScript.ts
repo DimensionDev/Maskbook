@@ -1,7 +1,6 @@
 import { Sniffings } from '@masknet/shared-base'
 
 export const injectedScriptURL = '/js/injected-script.js'
-export const maskSDK_URL = '/js/mask-sdk.js'
 
 export async function evaluateContentScript(tabId: number | undefined, frameId?: number) {
     if (tabId === undefined) {

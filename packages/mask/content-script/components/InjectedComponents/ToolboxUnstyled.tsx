@@ -15,7 +15,6 @@ import {
     type Theme,
 } from '@mui/material'
 import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     useProviderDescriptor,
@@ -129,7 +128,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
             <Container {...rest}>
                 <ListItemButton onClick={onClickToolbox}>
                     <ListItemIcon>
-                        {account && provider && provider.type !== ProviderType.MaskWallet ?
+                        {account && provider ?
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}

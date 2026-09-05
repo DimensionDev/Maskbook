@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { SelectGasSettingsToolbar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useGasPrice, useNativeTokenPrice, useNetwork, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasPrice, useNativeTokenPrice, useNetwork } from '@masknet/web3-hooks-base'
 import { type GasConfig, isNativeTokenAddress, GasEditor } from '@masknet/web3-shared-evm'
 import { useGasLimit } from './useGasLimit.js'
 import { useTip } from '../../contexts/index.js'
@@ -10,7 +10,6 @@ const ETH_GAS_LIMIT = 21_000
 const ERC20_GAS_LIMIT = 50_000
 
 export function GasSettingsBar() {
-    const wallet = useWallet()
     const { token, setGasOption, gasOption } = useTip()
 
     const isNativeToken = isNativeTokenAddress(token?.address)
