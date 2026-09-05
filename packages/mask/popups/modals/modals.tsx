@@ -14,8 +14,6 @@ import { SetBackupPasswordModal } from './SetBackupPasswordModal/index.js'
 import { SupportedSitesModal } from './SupportedSitesModal/index.js'
 import { SwitchPersonaModal } from './SwitchPersonaModal/index.js'
 import { VerifyBackupPasswordModal } from './VerifyBackupPasswordModal/index.js'
-import { WalletGroupModal } from './WalletGroupModal/index.js'
-import SwitchWallet from '../pages/Wallet/SwitchWallet/index.js'
 import { SelectProviderModal } from './SelectProviderModal/index.js'
 import { UpdatePermissionModal } from './UpdatePermissionModal/index.js'
 
@@ -30,11 +28,9 @@ export default function RoutedModals(props: { path: string }) {
             <Route path={PopupModalRoutes.SwitchPersona} element={wrapModal(<SwitchPersonaModal />)} />
             <Route path={PopupModalRoutes.ChooseCurrency} element={wrapModal(<ChooseCurrencyModal />)} />
             <Route path={PopupModalRoutes.ChooseNetwork} element={wrapModal(<ChooseNetworkModal />)} />
-            <Route path={PopupModalRoutes.SwitchWallet} element={wrapModal(<SwitchWallet />)} />
             <Route path={PopupModalRoutes.ConnectSocialAccount} element={wrapModal(<ConnectSocialAccountModal />)} />
             <Route path={PopupModalRoutes.SelectProvider} element={wrapModal(<SelectProviderModal />)} />
             <Route path={PopupModalRoutes.ConnectProvider} element={wrapModal(<ConnectProviderModal />)} />
-            <Route path={PopupModalRoutes.WalletAccount} element={wrapModal(<WalletGroupModal />)} />
             <Route path={PopupModalRoutes.SelectLanguage} element={wrapModal(<SelectLanguageModal />)} />
             <Route path={PopupModalRoutes.SelectAppearance} element={wrapModal(<SelectAppearanceModal />)} />
             <Route path={PopupModalRoutes.SupportedSitesModal} element={wrapModal(<SupportedSitesModal />)} />

@@ -1,13 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Alert, IconButton, Link, Typography } from '@mui/material'
-import { useChainId, useNetwork, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAccount, useChainId, useChainContext, useNetwork, usePrivyWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from 'react-use'
 import { NetworkIcon } from '@masknet/shared'
 import { KeyboardArrowRightRounded } from '@mui/icons-material'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { useEffect } from 'react'
 import { Trans, useLingui } from '@lingui/react/macro'
 
@@ -28,8 +27,9 @@ const useStyle = makeStyles()({
 })
 export function SwitchChainRequest(props: InteractionItemProps) {
     const { t } = useLingui()
-    const wallet = useWallet()
-    const privyWallet = usePrivyWallet(wallet?.address)
+    const account = useAccount()
+    const { providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const privyWallet = usePrivyWallet(account)
     const { setConfirmAction } = props
     const { classes } = useStyle()
     const origin = props.currentRequest.origin
@@ -54,7 +54,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
         }
         await Network!.switchNetwork(nextNetwork.ID)
         await EVMWeb3.switchChain(nextNetwork.chainId, {
-            providerType: ProviderType.MaskWallet,
+            providerType,
         })
 
         await Message!.approveRequestWithResult(props.currentRequest.ID, { result: null, jsonrpc: '2.0', id: 0 })

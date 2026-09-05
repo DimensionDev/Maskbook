@@ -13,7 +13,6 @@
     { "path": "../shared/tsconfig.json" },
     { "path": "../utils-pure/tsconfig.json" },
     { "path": "../../encryption/tsconfig.json" },
-    { "path": "../../mask-sdk/server/tsconfig.json" },
     { "path": "../../backup-format/tsconfig.json" },
     { "path": "../../gun-utils/tsconfig.json" },
     { "path": "../../flags/tsconfig.json" },

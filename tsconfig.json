@@ -6,8 +6,6 @@
     { "path": "./packages/polyfills/tsconfig.json" },
     { "path": "./packages/mask/tsconfig.json" },
     { "path": "./packages/injected-script/main/tsconfig.json" },
-    { "path": "./packages/mask-sdk/main/tsconfig.json" },
-    { "path": "./packages/mask-sdk/public-api/tsconfig.json" },
     // Tests
     { "path": "./packages/base/tests/tsconfig.json" },
     { "path": "./packages/backup-format/tests/tsconfig.json" },

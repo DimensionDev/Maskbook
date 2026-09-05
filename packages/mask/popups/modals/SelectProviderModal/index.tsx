@@ -2,19 +2,13 @@ import { memo } from 'react'
 import { Box, Typography, useTheme } from '@mui/material'
 import { type ActionModalBaseProps, ActionModal } from '../../components/index.js'
 import { SelectProvider } from '../../components/SelectProvider/index.js'
-import { useSearchParams } from 'react-router-dom'
 import { Trans } from '@lingui/react/macro'
 
 export const SelectProviderModal = memo<ActionModalBaseProps>(function SelectProviderModal(props) {
     const theme = useTheme()
-    const [params] = useSearchParams()
-    const onlyMask = params.get('onlyMask')
 
     return (
-        <ActionModal
-            header={onlyMask ? <Trans>Connect your wallet</Trans> : <Trans>Connect</Trans>}
-            keepMounted
-            {...props}>
+        <ActionModal header={<Trans>Connect</Trans>} keepMounted {...props}>
             <Typography
                 sx={{
                     color: theme.vars.palette.maskColor.third,
@@ -23,9 +17,7 @@ export const SelectProviderModal = memo<ActionModalBaseProps>(function SelectPro
                     fontWeight: 700,
                     lineHeight: '18px',
                 }}>
-                {onlyMask ?
-                    <Trans>Select and Connect to your wallet</Trans>
-                :   <Trans>Connect Mask Network Account using your wallet.</Trans>}
+                <Trans>Connect Mask Network Account using your wallet.</Trans>
             </Typography>
             <Box sx={{ mt: 4 }}>
                 <SelectProvider />

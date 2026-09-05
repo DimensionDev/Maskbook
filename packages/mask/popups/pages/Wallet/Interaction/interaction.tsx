@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { AddChainRequest } from './AddChainRequest.js'
-import { PermissionRequest } from './PermissionRequest.js'
 import { SwitchChainRequest } from './SwitchChainRequest.js'
 import { TransactionRequest } from './TransactionRequest.js'
 import { WalletSignRequest } from './WalletSignRequest.js'
@@ -133,9 +132,6 @@ export const Interaction = memo(function Interaction(props: InteractionProps) {
     switch (props.currentRequest.request.arguments.method) {
         case EthereumMethodType.wallet_watchAsset:
             InteractionComponent = WatchTokenRequest
-            break
-        case EthereumMethodType.wallet_requestPermissions:
-            InteractionComponent = PermissionRequest
             break
         case EthereumMethodType.wallet_addEthereumChain:
             InteractionComponent = AddChainRequest

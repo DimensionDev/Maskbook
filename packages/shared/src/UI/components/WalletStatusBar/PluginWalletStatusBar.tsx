@@ -7,7 +7,6 @@ import {
     useProviderDescriptor,
     useRecentTransactions,
     useNetworkDescriptor,
-    useWallet,
     useReverseAddress,
     useWeb3Utils,
     useChainContext,
@@ -17,7 +16,6 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
 import { SelectProviderModal, WalletStatusModal } from '../../../index.js'
@@ -83,8 +81,7 @@ const PluginWalletStatusBarWithoutContext = memo<PluginWalletStatusBarWithoutCon
         const { classes, cx } = useStyles()
 
         const { pluginID } = useNetworkContext()
-        const { account, chainId, providerType } = useChainContext()
-        const wallet = useWallet()
+        const { account, chainId } = useChainContext()
         const providerDescriptor = useProviderDescriptor()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
@@ -102,9 +99,8 @@ const PluginWalletStatusBarWithoutContext = memo<PluginWalletStatusBarWithoutCon
 
         const walletName = useMemo(() => {
             if (domain) return domain
-            if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet.name
             return providerDescriptor?.name || Utils.formatAddress(account, 4)
-        }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Utils.formatAddress])
+        }, [account, domain, providerDescriptor?.name, Utils.formatAddress])
 
         if (!account) {
             return (

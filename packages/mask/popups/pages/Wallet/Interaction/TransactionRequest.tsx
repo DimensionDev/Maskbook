@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID, toHex } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, usePrivyWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionType, MessageStateType, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -79,8 +79,8 @@ const approveParametersType = [
 
 let mockingPrivyPid = Date.now() // Use unix timestamp as pid to avoid duplicate mocking
 export function TransactionRequest(props: InteractionItemProps) {
-    const wallet = useWallet()
-    const privyWallet = usePrivyWallet(wallet?.address)
+    const account = useAccount()
+    const privyWallet = usePrivyWallet(account)
     const { currentRequest: request, setConfirmAction } = props
     const { classes, cx } = useStyles()
     const [gasConfig, _setGasConfig] = useState<GasConfig | undefined>()

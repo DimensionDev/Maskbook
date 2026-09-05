@@ -1,35 +1,31 @@
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { usePersistSubscription } from '@masknet/shared-base-ui'
 import { useAccount, useChainContext, useFireflyEmbeddedWallets } from '@masknet/web3-hooks-base'
-import { EVMWeb3, MaskWalletProvider } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { memo } from 'react'
 import { useAsync } from 'react-use'
 
 /**
- * Syncs Firefly embedded wallets into the Mask wallet list. Replaces the former
- * Privy setup (no more JWT sync to Privy — auth is now a single Firefly token).
+ * Once a Firefly embedded wallet is discovered for the signed-in Firefly
+ * account, connects it as the active provider (auto-selecting the primary
+ * wallet) — but only if nothing else is already connected, so it never
+ * overrides an explicitly-connected external wallet.
  */
 export const PrivySetup = memo(function PrivySetup() {
     const { wallets, ready } = useFireflyEmbeddedWallets()
     const account = useAccount()
-
-    const existedWallets = usePersistSubscription('@@mask-wallets', MaskWalletProvider.subscription.wallets)
     const { providerType } = useChainContext()
+
     useAsync(async () => {
-        const newWallets = wallets.filter((x) => existedWallets.every((y) => !isSameAddress(y.address, x.address)))
-        if (!newWallets.length) return
-        CrossIsolationMessages.events.walletsUpdated.sendToAll()
-        if (providerType !== ProviderType.MaskWallet) return
-        if (!existedWallets || !account) {
-            await EVMWeb3.connect({
-                account: newWallets[0].address,
-                providerType: ProviderType.MaskWallet,
-                silent: true,
-            })
-        }
-    }, [ready, wallets])
+        if (!ready || !wallets.length) return
+        if (providerType !== ProviderType.None && providerType !== ProviderType.Firefly) return
+        if (providerType === ProviderType.Firefly && account) return
+
+        await EVMWeb3.connect({
+            account: wallets[0].address,
+            providerType: ProviderType.Firefly,
+            silent: true,
+        })
+    }, [ready, wallets, providerType, account])
 
     return null
 })

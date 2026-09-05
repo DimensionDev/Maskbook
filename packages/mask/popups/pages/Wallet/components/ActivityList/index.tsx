@@ -1,7 +1,8 @@
 import { Trans } from '@lingui/react/macro'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
+import { type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { RecentTransaction, Transaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Typography } from '@mui/material'
@@ -41,6 +42,7 @@ export const ActivityList = memo(function ActivityList() {
     const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
+    const { providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [{ transactions, localeTxes }, { isPending, isFetching, fetchNextPage }] = useTransactions()
 
     const transactionGroups = useMemo(
@@ -52,13 +54,19 @@ export const ActivityList = memo(function ActivityList() {
         [localeTxes],
     )
 
-    const handleSpeedup = useCallback(async (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
-        modifyTransaction(transaction, ReplaceType.SPEED_UP)
-    }, [])
+    const handleSpeedup = useCallback(
+        async (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
+            modifyTransaction(transaction, ReplaceType.SPEED_UP, providerType)
+        },
+        [providerType],
+    )
 
-    const handleCancel = useCallback((transaction: RecentTransaction<ChainId, EvmTransaction>) => {
-        modifyTransaction(transaction, ReplaceType.CANCEL)
-    }, [])
+    const handleCancel = useCallback(
+        (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
+            modifyTransaction(transaction, ReplaceType.CANCEL, providerType)
+        },
+        [providerType],
+    )
 
     const handleView = useCallback(
         (

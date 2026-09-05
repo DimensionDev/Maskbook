@@ -1,6 +1,6 @@
 import { isUndefined, omitBy } from 'lodash-es'
 import { MessageStateType, type JsonRpcResponse, type ReasonableMessage } from '@masknet/web3-shared-base'
-import { EMPTY_OBJECT, PopupRoutes, Sniffings, type StorageItem } from '@masknet/shared-base'
+import { PopupRoutes, type StorageItem } from '@masknet/shared-base'
 import {
     createJsonRpcRequest,
     PayloadEditor,
@@ -79,21 +79,8 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         if (request.options.silent) {
             await this.approveAndSendRequest(id)
         } else {
-            // TODO: make this for Mask Wallet only
-            const hasPassword = await this.context.hasPaymentPassword()
-            const route = hasPassword ? PopupRoutes.ContractInteraction : PopupRoutes.SetPaymentPassword
-
-            const fromState =
-                route === PopupRoutes.ContractInteraction ? EMPTY_OBJECT : { from: PopupRoutes.ContractInteraction }
-
-            if (Sniffings.is_popup_page) {
-                await this.context.openPopupWindow(route, fromState as any)
-            } else {
-                // open the popups window and wait for approval from the user.
-                await this.context.openPopupWindow(route, {
-                    source: location.origin,
-                })
-            }
+            // open the popup window (or navigate within it) and wait for approval from the user.
+            await this.context.openPopupWindow(PopupRoutes.ContractInteraction, undefined)
         }
 
         return super.waitForApprovingRequest(id)

@@ -133,11 +133,6 @@ export const Component = memo(function RecoveryLocalBackup() {
     const restoreDB = useCallback(async () => {
         try {
             setProcessing(true)
-            // If json has wallets, restore in popup.
-            if (summary?.countOfWallets) {
-                const hasPassword = await Services.Wallet.hasPassword()
-                if (!hasPassword) await Services.Wallet.setDefaultPassword()
-            }
             await Services.Backup.restoreBackup(backupValue)
 
             await onRestore(summary?.countOfWallets)

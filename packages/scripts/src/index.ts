@@ -8,7 +8,6 @@ export { reorderSpellcheck } from './spellcheck/index.ts'
 
 // Sub-projects build commands
 export { buildInjectedScript, watchInjectedScript } from './projects/injected-scripts.ts'
-export { buildMaskSDK, watchMaskSDK } from './projects/mask-sdk.ts'
 export { buildPolyfill } from './projects/polyfill.ts'
 export { buildGun } from './projects/gun.ts'
 export { buildConstants } from './projects/build-constants.ts'

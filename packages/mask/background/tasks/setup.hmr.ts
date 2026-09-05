@@ -4,6 +4,5 @@ import './Cancellable/FetchRemoteFlags.js'
 import './Cancellable/CleanProfileAndAvatar.js'
 import './Cancellable/SettingsListener.js'
 import './Cancellable/StartPluginHost.js'
-import './Cancellable/WalletAutoLock.js'
 
 import.meta.webpackHot?.accept()

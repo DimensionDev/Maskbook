@@ -13,11 +13,9 @@
     "./content-script/index.ts",
     "./dashboard/initialization/**",
     "./devtools/**",
-    "./entry-sdk/**",
     "./popups/initialization/**",
     "./shared/plugin-infra/register.js",
-    "./shared-ui/initialization/**",
-    "./web-workers/**"
+    "./shared-ui/initialization/**"
   ],
   "license": "AGPL-3.0-or-later",
   "type": "module",
@@ -31,7 +29,6 @@
     ".": null
   },
   "dependencies": {
-    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@ethereumjs/util": "^9.0.3",
     "@hookform/resolvers": "^3.6.0",
     "@masknet/backup-format": "workspace:^",
@@ -62,7 +59,6 @@
     "@masknet/plugin-vcent": "workspace:^",
     "@masknet/plugin-web3-profile": "workspace:^",
     "@masknet/public-api": "workspace:^",
-    "@masknet/sdk": "workspace:^",
     "@masknet/secp256k1-webcrypto": "1.0.0",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",

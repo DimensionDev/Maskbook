@@ -1,14 +1,11 @@
 import { createContext, useContext, useState, useMemo, memo, type PropsWithChildren } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
-import { usePersistSubscription, useValueRef } from '@masknet/shared-base-ui'
-import { Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings, PopupRoutes } from '@masknet/shared-base'
-import { MaskWalletProvider } from '@masknet/web3-providers'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useProviderType } from './useProviderType.js'
-import { useLocation } from 'react-use'
 
 interface NetworkContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -70,26 +67,13 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
     const globalProviderType = useProviderType(pluginID)
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
 
-    // The initial value of subscription.account could be empty string
-    const maskAccount = usePersistSubscription('@@mask-account', MaskWalletProvider.subscription.account, (x) => !!x)
-    const maskChainId = usePersistSubscription('@@mask-chain-id', MaskWalletProvider.subscription.chainId)
-
     const [_account, setAccount] = useState<string>()
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
-    const location = useLocation()
-    const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes(PopupRoutes.Wallet)
-    const account =
-        controlled ? props.account : (_account ?? props.account ?? (is_popup_wallet_page ? maskAccount : globalAccount))
-    const chainId =
-        controlled ? props.chainId : (_chainId ?? props.chainId ?? (is_popup_wallet_page ? maskChainId : globalChainId))
-    const providerType =
-        controlled ?
-            props.providerType
-        :   (_providerType ??
-            props.providerType ??
-            (is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType))
+    const account = controlled ? props.account : (_account ?? props.account ?? globalAccount)
+    const chainId = controlled ? props.chainId : (_chainId ?? props.chainId ?? globalChainId)
+    const providerType = controlled ? props.providerType : (_providerType ?? props.providerType ?? globalProviderType)
 
     const context = useMemo(
         () => ({

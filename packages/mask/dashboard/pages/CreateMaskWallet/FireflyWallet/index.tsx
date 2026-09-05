@@ -1,8 +1,8 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useSnackbar } from '@masknet/theme'
+import { FireflyEmbeddedWalletClient } from '@masknet/web3-providers'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { memo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
@@ -147,9 +147,7 @@ export const Component = memo(function CreateWalletForm() {
                 console.error('Failed to login firefly', err)
             }
         }
-        await Services.Helper.openPopupWindow(PopupRoutes.CreateWallet, {
-            creatingFireflyWallet: true,
-        })
+        await FireflyEmbeddedWalletClient.ensureEmbeddedWallet()
         window.close()
     }, [hasPermission])
 

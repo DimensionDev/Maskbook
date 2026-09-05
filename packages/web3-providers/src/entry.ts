@@ -19,7 +19,10 @@ export { RedPacket } from './RedPacket/index.js'
 export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 
-export { EVMWalletProviders, MaskWalletProviderInstance as MaskWalletProvider } from './Web3/EVM/providers/index.js'
+export {
+    EVMWalletProviders,
+    FireflyEmbeddedWalletProviderInstance as FireflyEmbeddedWalletProvider,
+} from './Web3/EVM/providers/index.js'
 
 // Web3
 export { getConnection } from './Web3/Router/apis/getConnection.js'

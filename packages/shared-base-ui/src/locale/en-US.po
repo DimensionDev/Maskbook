@@ -35,8 +35,8 @@ msgstr ""
 
 #. placeholder {0}: millisecondsToHours(value)
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
-msgid "{0, plural, one {# Hour} other {# Hours}}"
-msgstr ""
+#~ msgid "{0, plural, one {# Hour} other {# Hours}}"
+#~ msgstr ""
 
 #. placeholder {0}: feed.actions.length
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
@@ -156,8 +156,8 @@ msgstr ""
 
 #. placeholder {0}: wallet?.name || 'Your wallet'
 #: packages/mask/popups/pages/Wallet/ConnectedSites/index.tsx
-msgid "{0} is connected to these sites, they can view your account address."
-msgstr ""
+#~ msgid "{0} is connected to these sites, they can view your account address."
+#~ msgstr ""
 
 #. placeholder {0}: formatCount(currentSpace.followersCount, 1)
 #: packages/plugins/Snapshot/src/SiteAdaptor/ProfileSpaceHeader.tsx
@@ -166,8 +166,8 @@ msgstr ""
 
 #. placeholder {0}: millisecondsToMinutes(value)
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
-msgid "{0} Mins"
-msgstr ""
+#~ msgid "{0} Mins"
+#~ msgstr ""
 
 #. placeholder {0}: fromNetwork?.name
 #. placeholder {0}: toNetwork?.name
@@ -292,8 +292,8 @@ msgid "{context, select, mint {<0>{to}</0> minted <1>{value} {symbol}</1>} send 
 msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "{count, plural, one {You have recovered **# Wallet 🚀**} other {You have recovered **# Wallets 🚀**}}"
-msgstr ""
+#~ msgid "{count, plural, one {You have recovered **# Wallet 🚀**} other {You have recovered **# Wallets 🚀**}}"
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Confirm.tsx
@@ -497,8 +497,8 @@ msgid "<0>Latest offer at </0><1>${0}</1>"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/DisablePermit.tsx
-msgid "<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"
-msgstr ""
+#~ msgid "<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
@@ -535,8 +535,8 @@ msgid "<0>Results not found now. it might be chain network error, on-chain data 
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "<0>Service Agreement</0> and <1>Privacy Policy</1>"
-msgstr ""
+#~ msgid "<0>Service Agreement</0> and <1>Privacy Policy</1>"
+#~ msgstr ""
 
 #: packages/mask/popups/components/TransactionPreview/index.tsx
 msgid "<0>To</0>: <1>{to}</1>"
@@ -632,8 +632,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/DisablePermit.tsx
-msgid "About Permit"
-msgstr ""
+#~ msgid "About Permit"
+#~ msgstr ""
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Above 10% may be considered a high tax rate. More than 50% tax rate means may not be tradable."
@@ -657,7 +657,6 @@ msgstr ""
 
 #: packages/mask/popups/modals/SwitchPersonaModal/index.tsx
 #: packages/mask/popups/pages/Friends/ContactCard/index.tsx
-#: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
 msgid "Add"
 msgstr ""
 
@@ -694,8 +693,8 @@ msgid "Add Network"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
-msgid "Add new address to an existing group"
-msgstr ""
+#~ msgid "Add new address to an existing group"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/AddCollectibles/index.tsx
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
@@ -718,8 +717,8 @@ msgstr ""
 #: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
-msgid "Add Wallet"
-msgstr ""
+#~ msgid "Add Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/components/TokenPicker/TokenItem.tsx
 #: packages/mask/popups/pages/Wallet/components/AssetsList/index.tsx
@@ -741,13 +740,12 @@ msgstr ""
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/shared/src/UI/components/TokenWithSocialGroupMenu/index.tsx
-#: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
 msgid "Address"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
-msgid "Address: <0>{address}</0>"
-msgstr ""
+#~ msgid "Address: <0>{address}</0>"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Adjust Selection"
@@ -886,8 +884,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
-msgid "Are you sure to remove this wallet?"
-msgstr ""
+#~ msgid "Are you sure to remove this wallet?"
+#~ msgstr ""
 
 #: packages/shared/src/hooks/useReportSpam.tsx
 #~ msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT} other {this NFT}}? After confirmed, this NFT will be marked as spam."
@@ -898,8 +896,8 @@ msgid "Are you sure?"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
-msgid "Are your sure you want to disconnect? You may lose part of functionalities of this website."
-msgstr ""
+#~ msgid "Are your sure you want to disconnect? You may lose part of functionalities of this website."
+#~ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/index.tsx
 #~ msgid "Artblocks"
@@ -928,8 +926,8 @@ msgstr ""
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "At least 6 characters"
-msgstr ""
+#~ msgid "At least 6 characters"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 msgid "At most {RED_PACKET_MAX_SHARES} recipients"
@@ -956,12 +954,12 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
-msgid "Auto-lock"
-msgstr ""
+#~ msgid "Auto-lock"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/AutoLock.tsx
-msgid "Auto-lock Time"
-msgstr ""
+#~ msgid "Auto-lock Time"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -980,7 +978,6 @@ msgid "Average"
 msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: packages/mask/popups/pages/Personas/AccountDetail/UI.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
@@ -1056,8 +1053,8 @@ msgid "Backup to the Cloud"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
-msgid "Backup Wallet"
-msgstr ""
+#~ msgid "Backup Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TokenDetail/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenInput/UI.tsx
@@ -1073,8 +1070,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
-msgid "Balance({symbol})"
-msgstr ""
+#~ msgid "Balance({symbol})"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Base"
@@ -1201,8 +1198,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "By proceeding you agree to the"
-msgstr ""
+#~ msgid "By proceeding you agree to the"
+#~ msgstr ""
 
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
 msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
@@ -1238,11 +1235,8 @@ msgstr ""
 #: packages/mask/popups/pages/Personas/PersonaSignRequest/index.tsx
 #: packages/mask/popups/pages/RequestPermission/RequestPermission.tsx
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
-#: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
-#: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
-#: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
@@ -1306,8 +1300,8 @@ msgid "Change Backup Password"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangeNetwork.tsx
-msgid "Change Network"
-msgstr ""
+#~ msgid "Change Network"
+#~ msgstr ""
 
 #: packages/plugins/Collectible/src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 #~ msgid "Change NFT PFP"
@@ -1318,8 +1312,8 @@ msgid "Change Owner"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
-msgid "Change Payment Password"
-msgstr ""
+#~ msgid "Change Payment Password"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Change to EVM Wallet"
@@ -1381,8 +1375,8 @@ msgid "Choose Token"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
-msgid "Chrome - external extension"
-msgstr ""
+#~ msgid "Chrome - external extension"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Circulating Supply"
@@ -1484,8 +1478,8 @@ msgid "Click on <0/> at the top-right of your browser."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-msgid "Click on the down-arrow to see the private key."
-msgstr ""
+#~ msgid "Click on the down-arrow to see the private key."
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to hide in the App list."
@@ -1545,7 +1539,6 @@ msgstr ""
 msgid "Complete"
 msgstr ""
 
-#: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Completed"
 msgstr ""
@@ -1553,24 +1546,14 @@ msgstr ""
 #: packages/mask/dashboard/modals/ConfirmModal/index.tsx
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
-#: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/modals/ConfirmModal/index.tsx
 #: packages/mask/popups/modals/EditContactModal/index.tsx
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
-#: packages/mask/popups/modals/ShowPrivateKeyModal/index.tsx
-#: packages/mask/popups/modals/WalletAutoLockSettingModal/index.tsx
-#: packages/mask/popups/modals/WalletRenameModal/index.tsx
 #: packages/mask/popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/mask/popups/pages/Wallet/EditNetwork/index.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/interaction.tsx
-#: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
-#: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
-#: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/FileBrowser.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Terms.tsx
@@ -1599,12 +1582,12 @@ msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "Confirm Password"
-msgstr ""
+#~ msgid "Confirm Password"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-msgid "Confirm Payment Password"
-msgstr ""
+#~ msgid "Confirm Payment Password"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
@@ -1667,6 +1650,10 @@ msgstr ""
 msgid "Connect {0}"
 msgstr ""
 
+#: packages/mask/popups/pages/Wallet/components/ConnectWalletEmptyState/index.tsx
+msgid "Connect a wallet to view your assets and activity."
+msgstr ""
+
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Connect and switch between your wallets."
 msgstr ""
@@ -1702,6 +1689,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
+#: packages/mask/popups/pages/Wallet/components/ConnectWalletEmptyState/index.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -1719,7 +1707,6 @@ msgid "Connect with {providerName}"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/AddChainRequest.tsx
-#: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
 #: packages/mask/popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Connect with Mask Wallet"
 msgstr ""
@@ -1733,8 +1720,8 @@ msgid "Connect your social platform accounts."
 msgstr ""
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
-msgid "Connect your wallet"
-msgstr ""
+#~ msgid "Connect your wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
 msgid "Connected"
@@ -1746,8 +1733,8 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ConnectedSites/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
-msgid "Connected sites"
-msgstr ""
+#~ msgid "Connected sites"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Connected successfully."
@@ -1788,15 +1775,11 @@ msgstr ""
 #: packages/mask/dashboard/components/BackupPreview/index.tsx
 #: packages/mask/popups/pages/Friends/Home/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
-#: packages/mask/popups/pages/Wallet/WalletSettings/Contacts.tsx
 msgid "Contacts"
 msgstr ""
 
 #: packages/mask/dashboard/components/Restore/RestoreFromMnemonic.tsx
 #: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
-#: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
-#: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -1859,7 +1842,6 @@ msgstr ""
 msgid "Cookie permission denied"
 msgstr ""
 
-#: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copied"
 msgstr ""
@@ -1882,8 +1864,8 @@ msgid "Copy image"
 msgstr ""
 
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
-msgid "Copy private key"
-msgstr ""
+#~ msgid "Copy private key"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Copy text"
@@ -1899,8 +1881,6 @@ msgid "Cover"
 msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
 msgstr ""
 
@@ -1913,16 +1893,16 @@ msgid "Create a Firefly.social wallet using an X account"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Create a New Wallet"
-msgstr ""
+#~ msgid "Create a New Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Create a Privy Wallet"
-msgstr ""
+#~ msgid "Create a Privy Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Create a Privy wallet using an X account"
-msgstr ""
+#~ msgid "Create a Privy wallet using an X account"
+#~ msgstr ""
 
 #: packages/shared/src/UI/translate.ts
 msgid "Create Lucky Drop"
@@ -1937,8 +1917,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "Create Password"
-msgstr ""
+#~ msgid "Create Password"
+#~ msgstr ""
 
 #: packages/shared/src/hooks/useCurrentPersonaConnectStatus.ts
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
@@ -1990,16 +1970,16 @@ msgid "Created on: {0}"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
-msgstr ""
+#~ msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Creating your **identity**"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Creating your **wallet**"
-msgstr ""
+#~ msgid "Creating your **wallet**"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Creation Completed"
@@ -2015,7 +1995,6 @@ msgid "Crypto Holder"
 msgstr ""
 
 #: packages/mask/popups/modals/ChooseCurrencyModal/index.tsx
-#: packages/mask/popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 msgid "Currency"
 msgstr ""
 
@@ -2210,17 +2189,16 @@ msgid "Dex/Est received ({0})"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/DisablePermit.tsx
-msgid "Disable Permit"
-msgstr ""
+#~ msgid "Disable Permit"
+#~ msgstr ""
 
-#: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBox/index.tsx
 msgid "Disconnect"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
-msgid "Disconnect all accounts"
-msgstr ""
+#~ msgid "Disconnect all accounts"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect failed."
@@ -2235,8 +2213,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/DisconnectModal/index.tsx
-msgid "Disconnected successfully."
-msgstr ""
+#~ msgid "Disconnected successfully."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnected."
@@ -2430,7 +2408,6 @@ msgstr ""
 msgid "Encrypted Post"
 msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Encrypting your **data**"
 msgstr ""
@@ -2467,27 +2444,22 @@ msgstr ""
 msgid "ENS or Wallet Address"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max fee"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max priority fee"
@@ -2521,8 +2493,8 @@ msgid "Enter Number of Winners"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
-msgid "Enter Payment Password"
-msgstr ""
+#~ msgid "Enter Payment Password"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -2530,8 +2502,8 @@ msgid "Enter Total Amount"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-msgid "Entered passwords are inconsistent."
-msgstr ""
+#~ msgid "Entered passwords are inconsistent."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -2544,8 +2516,8 @@ msgid "Error: {0}"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
-msgstr ""
+#~ msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
+#~ msgstr ""
 
 #: packages/plugins/EFP/src/SiteAdaptor/index.tsx
 #: packages/plugins/EFP/src/SiteAdaptor/ProfileCard.tsx
@@ -2600,7 +2572,6 @@ msgid "Explore multi-chain dApps."
 msgstr ""
 
 #: packages/mask/popups/modals/VerifyBackupPasswordModal/index.tsx
-#: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Export"
 msgstr ""
 
@@ -2897,8 +2868,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
-msgid "Forgot payment password?"
-msgstr ""
+#~ msgid "Forgot payment password?"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/plugins/RSS3/src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
@@ -2940,18 +2911,15 @@ msgstr ""
 msgid "Gas Fee"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSettingModal.tsx
 msgid "Gas fee settings"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/GasSetting/index.tsx
-msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
-msgstr ""
+#~ msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
@@ -2963,10 +2931,7 @@ msgstr ""
 msgid "Gas Limit (Units)"
 msgstr ""
 
-#. placeholder {0}: String(minGasLimit)
 #. placeholder {0}: minGasLimit.toFixed()
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
@@ -2989,7 +2954,6 @@ msgid "Gas limit too low will cause the transaction to fail."
 msgstr ""
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasSection.tsx
@@ -3040,10 +3004,9 @@ msgid "Generate a new persona"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Generate a new wallet address"
-msgstr ""
+#~ msgid "Generate a new wallet address"
+#~ msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Generating your **accounts**"
 msgstr ""
@@ -3097,8 +3060,8 @@ msgid "Google Drive"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Got it"
-msgstr ""
+#~ msgid "Got it"
+#~ msgstr ""
 
 #. placeholder {0}: token.symbol
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/CreateTokenRedPacket.tsx
@@ -3171,21 +3134,19 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/components/MnemonicDisplay/index.tsx
-msgid "Hide mnemonic words"
-msgstr ""
+#~ msgid "Hide mnemonic words"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/AssetsList/MoreBar.tsx
 msgid "Hide tokens with value less than $1"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/HidingScamTx.tsx
-msgid "Hiding Scam Transactions"
-msgstr ""
+#~ msgid "Hiding Scam Transactions"
+#~ msgstr ""
 
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/components/SettingsBoard/Context.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
@@ -3302,8 +3263,8 @@ msgid "If you decide to close [Check Security], you will no longer see security 
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
-msgid "If you forget payment password, you can type 'RESET' to reset your wallet. <0>Remember, this action will erase all your previous wallets.</0>"
-msgstr ""
+#~ msgid "If you forget payment password, you can type 'RESET' to reset your wallet. <0>Remember, this action will erase all your previous wallets.</0>"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Image"
@@ -3313,7 +3274,6 @@ msgstr ""
 msgid "Image copied!"
 msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Import"
 msgstr ""
@@ -3323,20 +3283,20 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
-msgid "Import Wallet"
-msgstr ""
+#~ msgid "Import Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Import Wallets"
-msgstr ""
+#~ msgid "Import Wallets"
+#~ msgstr ""
 
 #: packages/mask/popups/components/WalletItem/index.tsx
-msgid "Imported"
-msgstr ""
+#~ msgid "Imported"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
-msgid "Imported Wallets"
-msgstr ""
+#~ msgid "Imported Wallets"
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
@@ -3370,30 +3330,26 @@ msgid "Incorrect contract address."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
-msgid "Incorrect Keystore Password."
-msgstr ""
+#~ msgid "Incorrect Keystore Password."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
-msgid "Incorrect Mnemonic Words."
-msgstr ""
+#~ msgid "Incorrect Mnemonic Words."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
-#: packages/mask/popups/pages/Wallet/Unlock/index.tsx
 msgid "Incorrect password"
 msgstr ""
 
 #: packages/mask/dashboard/hooks/useBackupFormState.ts
-#: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: packages/mask/dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Incorrect Password"
 msgstr ""
 
 #: packages/mask/popups/modals/ShowPrivateKeyModal/index.tsx
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
-msgid "Incorrect Payment Password."
-msgstr ""
+#~ msgid "Incorrect Payment Password."
+#~ msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Incorrect Private Key"
 msgstr ""
@@ -3408,8 +3364,8 @@ msgid "Incorrect wallet address."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Incorrect words selected. Please try again!"
-msgstr ""
+#~ msgid "Incorrect words selected. Please try again!"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "Infinite"
@@ -3547,17 +3503,17 @@ msgid "Just Selected Contacts"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Kept safely"
-msgstr ""
+#~ msgid "Kept safely"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-msgid "Keystore"
-msgstr ""
+#~ msgid "Keystore"
+#~ msgstr ""
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
-msgid "Keystore password"
-msgstr ""
+#~ msgid "Keystore password"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
@@ -3667,8 +3623,8 @@ msgid "Locale Backup"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
-msgid "Lock Wallet"
-msgstr ""
+#~ msgid "Lock Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/PersonaSettingModal/index.tsx
 #: packages/mask/popups/pages/Personas/Logout/index.tsx
@@ -3697,8 +3653,6 @@ msgstr ""
 msgid "Logout successfully"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Low"
@@ -3819,7 +3773,6 @@ msgid "Max fee"
 msgstr ""
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Fee"
 msgstr ""
@@ -3828,7 +3781,6 @@ msgstr ""
 msgid "Max Fee (GWEI)"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee cannot be lower than max priority fee"
 msgstr ""
@@ -3838,14 +3790,13 @@ msgid "Max fee cannot be lower than max priority fee."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-msgid "Max fee is higher than necessary"
-msgstr ""
+#~ msgid "Max fee is higher than necessary"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is higher than necessary."
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is too low for network conditions."
 msgstr ""
@@ -3860,12 +3811,10 @@ msgid "Max priority fee"
 msgstr ""
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Priority Fee"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is higher than necessary. You may pay more than needed."
 msgstr ""
@@ -3875,15 +3824,14 @@ msgid "Max priority fee is too high for network conditions."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-msgid "Max priority fee is too low for network conditions"
-msgstr ""
+#~ msgid "Max priority fee is too low for network conditions"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: packages/shared/src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is too low for network conditions."
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max priority fee must be greater than 0 GWEI"
 msgstr ""
@@ -3898,8 +3846,6 @@ msgstr ""
 
 #: packages/mask/popups/components/GasSettingMenu/index.tsx
 #: packages/mask/popups/hooks/useGasOptionsMenu.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: packages/mask/popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: packages/shared/src/UI/components/SettingsBoard/Context.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: packages/shared/src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
@@ -3967,12 +3913,12 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-msgid "Mnemonic"
-msgstr ""
+#~ msgid "Mnemonic"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
-msgid "Mnemonic word"
-msgstr ""
+#~ msgid "Mnemonic word"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/TokenSecurity/index.tsx
 msgid "More"
@@ -4001,8 +3947,8 @@ msgid "My wallet"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
-msgid "My Wallets"
-msgstr ""
+#~ msgid "My Wallets"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CollectibleDetail/index.tsx
 #~ msgid "N/A"
@@ -4076,8 +4022,8 @@ msgid "Network saved"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Never share 12-word secret mnemonic with anyone!"
-msgstr ""
+#~ msgid "Never share 12-word secret mnemonic with anyone!"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Never share the 12-word secret mnemonic words with anyone!"
@@ -4096,15 +4042,14 @@ msgid "New password cannot be the same as your current password."
 msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
-msgid "New Payment Password"
-msgstr ""
+#~ msgid "New Payment Password"
+#~ msgstr ""
 
 #: packages/plugins/Calendar/src/SiteAdaptor/CalendarContent.tsx
 msgid "News"
 msgstr ""
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
-#: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Next"
@@ -4346,8 +4291,8 @@ msgid "No wallet selected."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ConnectedSites/index.tsx
-msgid "No websites connected to this wallet"
-msgstr ""
+#~ msgid "No websites connected to this wallet"
+#~ msgstr ""
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "No whitelist"
@@ -4393,8 +4338,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
-msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
-msgstr ""
+#~ msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/DefaultPlaceholder.tsx
 msgid "Note: Scams detections might not be 100% guaranteed."
@@ -4417,16 +4362,16 @@ msgid "OK"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/DisablePermit.tsx
-msgid "Okay"
-msgstr ""
+#~ msgid "Okay"
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
-msgid "Old Payment Password"
-msgstr ""
+#~ msgid "Old Payment Password"
+#~ msgstr ""
 
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "on {fromNetworkName}"
@@ -4462,11 +4407,10 @@ msgid "Open in a new tab"
 msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "Open Mask Wallet"
-msgstr ""
+#~ msgid "Open Mask Wallet"
+#~ msgstr ""
 
 #: packages/plugins/Savings/src/SiteAdaptor/SavingsTable/index.tsx
-#: packages/shared/src/UI/wallet/DeriveWalletTable.tsx
 msgid "Operation"
 msgstr ""
 
@@ -4491,8 +4435,8 @@ msgid "Or"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
-msgid "Or create a new wallet group"
-msgstr ""
+#~ msgid "Or create a new wallet group"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #~ msgid "or Holding NFT"
@@ -4554,30 +4498,30 @@ msgstr ""
 #: packages/mask/popups/modals/ShowPrivateKeyModal/index.tsx
 #: packages/mask/popups/modals/WalletRemoveModal/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "Payment Password"
-msgstr ""
+#~ msgid "Payment Password"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
-msgid "Payment password changed."
-msgstr ""
+#~ msgid "Payment password changed."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
 #: packages/mask/popups/pages/Wallet/hooks/usePasswordForm.ts
-msgid "Payment password must be 6 to 20 characters."
-msgstr ""
+#~ msgid "Payment password must be 6 to 20 characters."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "Payment password set."
-msgstr ""
+#~ msgid "Payment password set."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-msgid "Payment Password should be between 6 and 20 characters."
-msgstr ""
+#~ msgid "Payment Password should be between 6 and 20 characters."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
-msgid "Payment password stored locally and you could try as many as you want to unlock your wallet."
-msgstr ""
+#~ msgid "Payment password stored locally and you could try as many as you want to unlock your wallet."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/TransactionDetail/index.tsx
 #: packages/shared/src/UI/components/WalletStatusBar/WalletDescription.tsx
@@ -4641,7 +4585,6 @@ msgstr ""
 msgid "Phone Number"
 msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Pin Mask Network to the toolbar for easier access:"
@@ -4722,8 +4665,8 @@ msgid "Please enter cloud backup password to download file."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
-msgid "Please enter the correct mnemonic words, private key, or upload the correct keystore file."
-msgstr ""
+#~ msgid "Please enter the correct mnemonic words, private key, or upload the correct keystore file."
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SearchBox.tsx
 msgid "Please enter token contract address."
@@ -4742,8 +4685,8 @@ msgid "Please select the appropriate method to restore your personal data."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Please select the correct words in the correct order."
-msgstr ""
+#~ msgid "Please select the correct words in the correct order."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
@@ -4758,8 +4701,8 @@ msgid "Please set up backup password to export private key."
 msgstr ""
 
 #: packages/mask/popups/modals/WalletAutoLockSettingModal/index.tsx
-msgid "Please set up the amount of time before we automatically lock your wallet."
-msgstr ""
+#~ msgid "Please set up the amount of time before we automatically lock your wallet."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Please sign up or login {siteName} to connect Mask Network."
@@ -4786,12 +4729,12 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Please write down or copy these words and save them in a secure place."
-msgstr ""
+#~ msgid "Please write down or copy these words and save them in a secure place."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-msgid "Please write down the following words in correct order. Keep it safe and do not share with anyone!"
-msgstr ""
+#~ msgid "Please write down the following words in correct order. Keep it safe and do not share with anyone!"
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -4842,8 +4785,8 @@ msgid "Powered by Celer Network. Support $MASK!"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-msgid "Previous"
-msgstr ""
+#~ msgid "Previous"
+#~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
@@ -4894,10 +4837,8 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/index.tsx
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
-#: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
 msgstr ""
 
@@ -5025,8 +4966,8 @@ msgid "Recover your data"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
-msgid "Recover your wallet"
-msgstr ""
+#~ msgid "Recover your wallet"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
@@ -5038,7 +4979,6 @@ msgstr ""
 msgid "Recovery Phrase"
 msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Refresh"
 msgstr ""
@@ -5079,19 +5019,15 @@ msgstr ""
 msgid "Reload"
 msgstr ""
 
-#: packages/mask/popups/modals/WalletRemoveModal/index.tsx
-#: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
 #: packages/shared/src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Remove"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Remove Wallet"
-msgstr ""
+#~ msgid "Remove Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/PersonaRenameModal/index.tsx
-#: packages/mask/popups/pages/Wallet/CreateWallet/Derive.tsx
-#: packages/mask/popups/pages/Wallet/WalletSettings/Rename.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Rename"
@@ -5153,8 +5089,8 @@ msgid "Reset"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ResetWallet/index.tsx
-msgid "Reset Wallet"
-msgstr ""
+#~ msgid "Reset Wallet"
+#~ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "Resource"
@@ -5316,8 +5252,8 @@ msgid "Select a Token"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-msgid "Select Address"
-msgstr ""
+#~ msgid "Select Address"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
@@ -5337,8 +5273,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/modals/SelectProviderModal/index.tsx
-msgid "Select and Connect to your wallet"
-msgstr ""
+#~ msgid "Select and Connect to your wallet"
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #~ msgid "Select Collection"
@@ -5363,12 +5299,12 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
-msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
-msgstr ""
+#~ msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
-msgid "Select Wallet"
-msgstr ""
+#~ msgid "Select Wallet"
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/RouterDialog.tsx
 #~ msgid "Selecting NFTs"
@@ -5453,12 +5389,12 @@ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "Set Payment Password"
-msgstr ""
+#~ msgid "Set Payment Password"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SetPaymentPassword/index.tsx
-msgid "Set payment password successfully."
-msgstr ""
+#~ msgid "Set payment password successfully."
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/NFTInfo.tsx
 #~ msgid "Set up NFT PFP successfully"
@@ -5473,8 +5409,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-msgid "Set Your Payment Password"
-msgstr ""
+#~ msgid "Set Your Payment Password"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Set Your Persona Name"
@@ -5684,22 +5620,21 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Recovery/index.tsx
-msgid "Step {step}/{step}"
-msgstr ""
+#~ msgid "Step {step}/{step}"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Step {step}/{totalSteps}"
-msgstr ""
+#~ msgid "Step {step}/{totalSteps}"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Step 1/2"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-msgid "Step 1/3"
-msgstr ""
+#~ msgid "Step 1/3"
+#~ msgstr ""
 
-#: packages/mask/dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Step 2/2"
 msgstr ""
@@ -5715,8 +5650,8 @@ msgid "Successful"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
-msgid "Suggest to send transactions and sign messages"
-msgstr ""
+#~ msgid "Suggest to send transactions and sign messages"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Support"
@@ -5727,8 +5662,8 @@ msgid "Support Identity code, private key, local backups or cloud backups to acc
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Support mnemonic phrase, private key or keystore file."
-msgstr ""
+#~ msgid "Support mnemonic phrase, private key or keystore file."
+#~ msgstr ""
 
 #: packages/plugins/RedPacket/src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Supported contracts"
@@ -5745,8 +5680,8 @@ msgid "Supported Sites"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/StartUp/index.tsx
-msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
-msgstr ""
+#~ msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Trader/Header.tsx
 #: packages/mask/popups/pages/Wallet/components/ActionGroup/index.tsx
@@ -5826,12 +5761,12 @@ msgid "Switch X Logo"
 msgstr ""
 
 #: packages/mask/popups/components/MnemonicDisplay/index.tsx
-msgid "Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"
-msgstr ""
+#~ msgid "Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"
+#~ msgstr ""
 
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
-msgid "Tap to view the private key <0/> Make sure no one is looking at your screen"
-msgstr ""
+#~ msgid "Tap to view the private key <0/> Make sure no one is looking at your screen"
+#~ msgstr ""
 
 #: packages/web3-providers/src/GoPlusLabs/rules.ts
 msgid "Tax can be modified"
@@ -5930,8 +5865,8 @@ msgid "The minimum amount for each share is {0} {1}"
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "The mnemonic word has been copied, please keep it in a safe place."
-msgstr ""
+#~ msgid "The mnemonic word has been copied, please keep it in a safe place."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "The mnemonic words has been copied, please keep it in a safe place."
@@ -5943,8 +5878,8 @@ msgid "The network with chain ID {formChainId} may use a different currency symb
 msgstr ""
 
 #: packages/mask/popups/modals/ChangePaymentPasswordModal/index.tsx
-msgid "The new passwords don't match"
-msgstr ""
+#~ msgid "The new passwords don't match"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/shared/SelectRecipients/ProfileInList.tsx
 #~ msgid "The Persona is connected to the account @${0}."
@@ -6002,13 +5937,12 @@ msgstr ""
 
 #: packages/mask/popups/modals/AddContactModal/index.tsx
 #: packages/mask/popups/modals/EditContactModal/index.tsx
-#: packages/mask/popups/modals/WalletRenameModal/index.tsx
 msgid "The wallet name already exists."
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
-msgid "The web site can"
-msgstr ""
+#~ msgid "The web site can"
+#~ msgstr ""
 
 #. placeholder {0}: message.domain
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
@@ -6096,8 +6030,8 @@ msgid "This is unlikely to be an airdrop scam. Many scams attract users through 
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-msgid "This JSON file is encrypted with your current payment password. The same password is required for decryption when importing this wallet."
-msgstr ""
+#~ msgid "This JSON file is encrypted with your current payment password. The same password is required for decryption when importing this wallet."
+#~ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "This message contains a invalid EIP-4361 message. It is better to reject this request."
@@ -6137,8 +6071,8 @@ msgid "This QR includes your identity, please keep it safely."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
-msgid "This QR includes your mnemonic words, please keep it safely."
-msgstr ""
+#~ msgid "This QR includes your mnemonic words, please keep it safely."
+#~ msgstr ""
 
 #: packages/mask/popups/components/SignRequestInfo/index.tsx
 msgid "This request has been expired."
@@ -6448,7 +6382,6 @@ msgstr ""
 msgid "Try"
 msgstr ""
 
-#: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Try Again"
 msgstr ""
@@ -6478,7 +6411,6 @@ msgid "Two entered passwords are different."
 msgstr ""
 
 #: packages/mask/popups/modals/SetBackupPasswordModal/index.tsx
-#: packages/mask/popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Two entered passwords are not the same."
 msgstr ""
 
@@ -6516,8 +6448,8 @@ msgid "Unlisted"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
-msgid "Unlock"
-msgstr ""
+#~ msgid "Unlock"
+#~ msgstr ""
 
 #. placeholder {0}: token.symbol
 #: packages/shared/src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
@@ -6558,7 +6490,6 @@ msgstr ""
 msgid "Unnamed"
 msgstr ""
 
-#: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Unpacking"
 msgstr ""
@@ -6568,16 +6499,16 @@ msgid "Unsupported data backup"
 msgstr ""
 
 #: packages/mask/dashboard/components/Restore/RestoreWalletFromLocal.tsx
-msgid "Unsupported key store data"
-msgstr ""
+#~ msgid "Unsupported key store data"
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
 #~ msgid "Unsupported Network"
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SelectWallet/index.tsx
-msgid "Unsupported network type"
-msgstr ""
+#~ msgid "Unsupported network type"
+#~ msgstr ""
 
 #. placeholder {0}: formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), '')
 #: packages/shared/src/UI/components/SettingsBoard/GasOption.tsx
@@ -6677,8 +6608,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Verify"
-msgstr ""
+#~ msgid "Verify"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 #~ msgid "Verify {0}"
@@ -6745,20 +6676,20 @@ msgid "View user's Web3 footprints, including social media posts and other trans
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
-msgid "View your account balance and history"
-msgstr ""
+#~ msgid "View your account balance and history"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
-msgid "View your address"
-msgstr ""
+#~ msgid "View your address"
+#~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "View your profile in firefly"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Interaction/PermissionRequest.tsx
-msgid "View your Tokens and NFTs"
-msgstr ""
+#~ msgid "View your Tokens and NFTs"
+#~ msgstr ""
 
 #: packages/mask/content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Visible To"
@@ -6794,8 +6725,6 @@ msgstr ""
 msgid "Wallet"
 msgstr ""
 
-#: packages/mask/popups/modals/WalletGroupModal/index.tsx
-#: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/shared/src/UI/modals/WalletStatusModal/WalletStatusDialog.tsx
 msgid "Wallet Account"
 msgstr ""
@@ -6807,12 +6736,12 @@ msgstr ""
 #. placeholder {0}: String(index + 1)
 #: packages/mask/popups/modals/WalletGroupModal/index.tsx
 #: packages/mask/popups/pages/Wallet/CreateWallet/index.tsx
-msgid "Wallet Group #{0}"
-msgstr ""
+#~ msgid "Wallet Group #{0}"
+#~ msgstr ""
 
 #: packages/mask/popups/modals/WalletRenameModal/index.tsx
-msgid "Wallet name must between 3 to 18 characters."
-msgstr ""
+#~ msgid "Wallet name must between 3 to 18 characters."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ConnectProvider/index.tsx
 msgid "Wallet request timed out"
@@ -6820,8 +6749,8 @@ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SwitchWallet/index.tsx
 #: packages/mask/popups/pages/Wallet/WalletSettings/index.tsx
-msgid "Wallet Settings"
-msgstr ""
+#~ msgid "Wallet Settings"
+#~ msgstr ""
 
 #: packages/plugins/NextID/src/components/BindDialog.tsx
 #: packages/plugins/NextID/src/components/BindPanelUI.tsx
@@ -6888,14 +6817,13 @@ msgid "Web3 Profile Card"
 msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
-#: packages/mask/popups/pages/Wallet/components/OriginCard/index.tsx
 #: packages/shared/src/UI/components/CoinMetadataTable/index.tsx
 msgid "Website"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/Unlock/index.tsx
-msgid "Welcome Back"
-msgstr ""
+#~ msgid "Welcome Back"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/Home/UI.tsx
 msgid "Welcome to Mask Network"
@@ -6962,12 +6890,12 @@ msgid "Withdraw token"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/ExportPrivateKey/index.tsx
-msgid "Write down mnemonic words"
-msgstr ""
+#~ msgid "Write down mnemonic words"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-msgid "Write down recovery phrase"
-msgstr ""
+#~ msgid "Write down recovery phrase"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Wrong Network"
@@ -7120,8 +7048,8 @@ msgid "Your file has been successfully restore into the browser data."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-msgid "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
-msgstr ""
+#~ msgid "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Your Persona has been successfully created."
@@ -7156,9 +7084,9 @@ msgid "Your wallet does not meet the eligibility criteria for claiming."
 msgstr ""
 
 #: packages/mask/dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Your Wallet is on **ready 🚀**"
-msgstr ""
+#~ msgid "Your Wallet is on **ready 🚀**"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/ImportCreateWallet/index.tsx
-msgid "Your X account authorization has timed out. Please try again."
-msgstr ""
+#~ msgid "Your X account authorization has timed out. Please try again."
+#~ msgstr ""

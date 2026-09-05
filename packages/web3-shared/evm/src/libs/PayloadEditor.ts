@@ -1,6 +1,5 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import type { JsonRpcRequest } from '@masknet/web3-shared-base'
-import type { Wallet } from '@masknet/shared-base'
 import { parseChainId } from '../helpers/parseChainId.js'
 import { createJsonRpcRequest } from '../helpers/createJsonRpcRequest.js'
 import {
@@ -94,18 +93,6 @@ export class PayloadEditor {
             },
             isUndefined,
         )
-    }
-
-    get wallet() {
-        const { method, params } = this.payload
-        switch (method) {
-            case EthereumMethodType.MASK_ADD_WALLET: {
-                const [wallet] = params as [Wallet]
-                return wallet
-            }
-            default:
-                return
-        }
     }
 
     get proof() {

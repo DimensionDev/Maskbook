@@ -21,17 +21,14 @@ import { WalletRiskWarningModal } from './WalletRiskWarningModal/index.js'
 import { WalletStatusModal } from './WalletStatusModal/index.js'
 export * from './modals.js'
 
-export interface ModalProps {
-    createWallet(): void
-}
-export const Modals = memo(function Modals(props: ModalProps) {
+export const Modals = memo(function Modals() {
     return (
         <RootWeb3ContextProvider>
             <PrivySetup />
             <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
             <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
             <ConfirmDialogComponent ref={modals.ConfirmDialog.register} />
-            <SelectProviderModal createWallet={props.createWallet} ref={modals.SelectProviderModal.register} />
+            <SelectProviderModal ref={modals.SelectProviderModal.register} />
             <WalletStatusModal ref={modals.WalletStatusModal.register} />
             <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
             <LeavePageConfirmModal ref={modals.LeavePageConfirmModal.register} />

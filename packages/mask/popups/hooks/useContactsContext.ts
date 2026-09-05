@@ -1,5 +1,5 @@
-import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
-import { useAddressType, useChainContext, useContacts, useLookupAddress, useWallets } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useAddressType, useChainContext, useContacts, useLookupAddress } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { isSameAddress, type Contact } from '@masknet/web3-shared-base'
 import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
@@ -21,7 +21,6 @@ function useContactsContext(option?: ContextOptions) {
     const { t } = useLingui()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const contacts = useContacts()
-    const wallets = useWallets()
     const [userInput, setUserInput] = useState(defaultName || defaultAddress)
     const { value: registeredAddress, error: resolveDomainError } = useLookupAddress(
         NetworkPluginID.PLUGIN_EVM,
@@ -34,16 +33,16 @@ function useContactsContext(option?: ContextOptions) {
             return registeredAddress
         }
         if (isValidAddress(userInput)) return userInput
-        // UserInput is wallet name
-        const matches = [...wallets, ...contacts].filter((x) => x.name === userInput)
+        // UserInput is a contact name
+        const matches = contacts.filter((x) => x.name === userInput)
         if (!matches.length) return defaultAddress
-        const contact: Wallet | Contact =
+        const contact: Contact =
             matches.length > 1 ?
-                // There might be wallets or contacts with the same name
+                // There might be multiple contacts with the same name
                 matches.find((x) => isSameAddress(x.address, defaultAddress)) || matches[0]
             :   matches[0]
         return contact.address
-    }, [userInput, defaultAddress, registeredAddress, contacts, wallets])
+    }, [userInput, defaultAddress, registeredAddress, contacts])
 
     const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, address, {
         chainId,
@@ -75,7 +74,6 @@ function useContactsContext(option?: ContextOptions) {
 
     return {
         contacts,
-        wallets,
         address,
         userInput,
         setUserInput,

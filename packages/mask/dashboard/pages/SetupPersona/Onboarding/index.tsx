@@ -1,19 +1,14 @@
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, EnhanceableSite, PopupRoutes, userGuideStatus } from '@masknet/shared-base'
+import { EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
 import { makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Trend } from '../../../assets/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
-import Services from '#services'
-import { plural } from '@lingui/core/macro'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { delay } from '@masknet/kit'
-import { isZero } from '@masknet/web3-shared-base'
-import { useSearchParams } from 'react-router-dom'
-import { useAsyncRetry } from 'react-use'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
@@ -79,11 +74,7 @@ export const Component = memo(function Onboarding() {
     const { t } = useLingui()
     const { classes } = useStyles()
 
-    const [params] = useSearchParams()
     const { enqueueSnackbar } = useSnackbar()
-    const isCreate = params.get('isCreate')
-    const count = params.get('count')
-    const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
 
     const onSetupTwitter = useCallback(async () => {
         if (!(await requestPermissionFromExtensionPage(EnhanceableSite.Twitter))) return
@@ -96,39 +87,14 @@ export const Component = memo(function Onboarding() {
         window.close()
     }, [])
 
-    const onSetupPaymentPassword = useCallback(async () => {
-        await Services.Helper.openPopupWindow(
-            hasPaymentPassword ? PopupRoutes.Wallet : PopupRoutes.SetPaymentPassword,
-            { isCreating: true },
-        )
-    }, [hasPaymentPassword])
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
-            if (!hasPassword) return
-            retry()
-            enqueueSnackbar(<Trans>Set Payment Password</Trans>, {
-                variant: 'success',
-                detail: <Trans>Payment password set.</Trans>,
-            })
-        })
-    }, [retry])
-
     const sentence: Array<string | undefined> = useMemo(() => {
-        const count = params.get('count')
         return [
             t`Creating your **identity**`,
             t`Generating your **accounts**`,
             t`Encrypting your **data**`,
             t`Your Persona is on **ready 🚀**`,
-            count && !isZero(count) ?
-                plural(count, {
-                    one: 'You have recovered **# Wallet 🚀**',
-                    other: 'You have recovered **# Wallets 🚀**',
-                })
-            :   undefined,
         ]
-    }, [t, count])
+    }, [t])
 
     return (
         <>
@@ -171,19 +137,6 @@ export const Component = memo(function Onboarding() {
                     startIcon={<Icons.TwitterX className={classes.twitter} size={20} />}>
                     <Trans>Experience in X</Trans>
                 </PrimaryButton>
-                {!isCreate && count && !isZero(count) ?
-                    <PrimaryButton
-                        loading={loading}
-                        disabled={loading}
-                        onClick={onSetupPaymentPassword}
-                        size="large"
-                        sx={{ ml: 1.5 }}
-                        startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
-                        {hasPaymentPassword ?
-                            <Trans>Open Mask Wallet</Trans>
-                        :   <Trans>Set Payment Password</Trans>}
-                    </PrimaryButton>
-                :   null}
             </SetupFrameController>
         </>
     )

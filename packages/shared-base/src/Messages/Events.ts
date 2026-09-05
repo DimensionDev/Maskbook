@@ -226,14 +226,6 @@ export interface PersonaSignRequestEvent {
     selectedPersona?: PersonaIdentifier
 }
 
-export interface RequestsUpdatedEvent {
-    hasRequest: boolean
-}
-
-export type WalletLockStatusUpdatedEvent = boolean
-
-export type PasswordStatusUpdatedEvent = boolean
-
 export interface PopupWalletConnectEvent {
     open: boolean
     uri?: string

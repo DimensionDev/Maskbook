@@ -4,9 +4,9 @@ import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
 import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
 import {
     decodeFunctionParams,
-    ProviderType,
     formatWeiToGwei,
     type ChainId,
+    type ProviderType,
     type Transaction as EvmTransaction,
 } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from './type.js'
@@ -18,6 +18,7 @@ const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffff
 export async function modifyTransaction(
     transaction: RecentTransaction<ChainId, EvmTransaction>,
     replaceType: ReplaceType,
+    providerType: ProviderType,
 ) {
     const candidate = transaction.candidates[transaction.indexId]
     if (!candidate) return
@@ -42,11 +43,11 @@ export async function modifyTransaction(
     }
     if (replaceType === ReplaceType.CANCEL) {
         await EVMWeb3.cancelTransaction(transaction.id, newConfig, {
-            providerType: ProviderType.MaskWallet,
+            providerType,
         })
     } else {
         await EVMWeb3.replaceTransaction(transaction.id, newConfig, {
-            providerType: ProviderType.MaskWallet,
+            providerType,
         })
     }
 }

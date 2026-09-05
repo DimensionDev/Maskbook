@@ -1,6 +1,5 @@
 import urlcat, { type ParamMap } from 'urlcat'
 import { type DashboardRoutes, PopupRoutes, MaskMessages, type PopupRoutesParamsMap } from '@masknet/shared-base'
-import { isLocked } from '../wallet/services/index.js'
 
 let currentPopupWindowIdPromise: Promise<number | undefined> | undefined
 
@@ -68,31 +67,18 @@ async function openOrUpdatePopupWindow(route: PopupRoutes, params: ParamMap) {
     )
 }
 
-const noWalletUnlockNeeded = new Set<PopupRoutes>([
-    PopupRoutes.PersonaSignRequest,
-    PopupRoutes.Personas,
-    PopupRoutes.WalletUnlock,
-])
-
 export interface OpenPopupWindowOptions {
     bypassWalletLock?: boolean
 }
 export async function openPopupWindow<T extends PopupRoutes>(
     route: T,
     params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
-    options?: OpenPopupWindowOptions,
+    _options?: OpenPopupWindowOptions,
 ): Promise<void> {
-    const noUnlock = noWalletUnlockNeeded.has(route) || options?.bypassWalletLock || !(await isLocked())
-    if (noUnlock) {
-        return openOrUpdatePopupWindow(route, {
-            close_after_unlock: true,
-            ...params,
-        })
-    }
-    return openOrUpdatePopupWindow(PopupRoutes.Wallet, {
+    return openOrUpdatePopupWindow(route, {
         close_after_unlock: true,
-        from: urlcat(route, params as ParamMap),
-    } satisfies PopupRoutesParamsMap[PopupRoutes.Wallet])
+        ...params,
+    })
 }
 
 export async function hasPopupWindowOpened(): Promise<boolean | undefined> {

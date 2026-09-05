@@ -5,10 +5,10 @@ import type { EVMConnectionOptions } from '../types/index.js'
 
 const initializer = {
     getDefaultAccount(providerType: ProviderType) {
-        return providerType === ProviderType.MaskWallet ? '' : evm.state?.Provider?.account?.getCurrentValue()
+        return providerType === ProviderType.Firefly ? '' : evm.state?.Provider?.account?.getCurrentValue()
     },
     getDefaultChainId(providerType: ProviderType) {
-        return providerType === ProviderType.MaskWallet ?
+        return providerType === ProviderType.Firefly ?
                 ChainId.Mainnet
             :   evm.state?.Provider?.chainId?.getCurrentValue()
     },

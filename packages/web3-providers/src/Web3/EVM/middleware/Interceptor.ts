@@ -1,7 +1,6 @@
 import { Composer, type Middleware, ProviderType } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { NoneWallet } from '../interceptors/None.js'
-import { MaskWallet } from '../interceptors/MaskWallet.js'
 import { WalletConnect } from '../interceptors/WalletConnect.js'
 import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
 import { Popups } from '../interceptors/Popups.js'
@@ -14,7 +13,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
             [ProviderType.BitGet]: Composer.from(new MetaMaskLike(ProviderType.BitGet)),
             [ProviderType.Browser]: null,
             [ProviderType.Coinbase]: null,
-            [ProviderType.MaskWallet]: Composer.from(new Popups(), CustomNetwork, new MaskWallet()),
+            [ProviderType.Firefly]: Composer.from(new Popups(), CustomNetwork),
             [ProviderType.CustomEvent]: Composer.from(new MetaMaskLike(ProviderType.CustomEvent)),
             [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
             [ProviderType.OKX]: Composer.from(new MetaMaskLike(ProviderType.OKX)),

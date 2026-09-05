@@ -14,7 +14,7 @@ import { RabbyProvider } from './Rabby.js'
 import { CloverProvider } from './Clover.js'
 import { OperaProvider } from './Opera.js'
 import { ZerionProvider } from './Zerion.js'
-import { MaskWalletProvider, setMaskWalletProviderInstance } from './MaskWallet.js'
+import { FireflyEmbeddedWalletProvider, setFireflyEmbeddedWalletProviderInstance } from './FireflyEmbedded.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
@@ -27,12 +27,12 @@ export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderT
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider
 }
 
-export { MaskWalletProviderInstance } from './MaskWallet.js'
+export { FireflyEmbeddedWalletProviderInstance } from './FireflyEmbedded.js'
 export let EVMWalletProviders: ReturnType<typeof createEVMWalletProviders>
 export function createEVMWalletProviders(context: WalletAPI.IOContext, hostStorage: BaseHostedStorage) {
     const p = {
         [ProviderType.None]: new EVMNoneProvider(),
-        [ProviderType.MaskWallet]: new MaskWalletProvider(context.MaskWalletContext, hostStorage),
+        [ProviderType.Firefly]: new FireflyEmbeddedWalletProvider(hostStorage),
         [ProviderType.Browser]: new BrowserProvider(),
         [ProviderType.MetaMask]: new MetaMaskProvider(),
         [ProviderType.WalletConnect]:
@@ -53,6 +53,6 @@ export function createEVMWalletProviders(context: WalletAPI.IOContext, hostStora
         [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
     } satisfies Record<ProviderType, EVMWalletProvider>
     EVMWalletProviders = p
-    setMaskWalletProviderInstance(p[ProviderType.MaskWallet])
+    setFireflyEmbeddedWalletProviderInstance(p[ProviderType.Firefly])
     return p
 }

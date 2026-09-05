@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { TokenDetailUI } from '../TokenDetail/index.js'
@@ -25,7 +25,7 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
     const { currentRequest: request, setConfirmAction } = props
     const { classes } = useStyles()
     const { Message, Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const wallet = useWallet()
+    const account = useAccount()
 
     const { params } = request.request.arguments
     setConfirmAction(async () => {
@@ -33,7 +33,7 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
         const address = params[0].options.address
         if (type === 'ERC21') {
             // TODO: custom name currently are ignored
-            await Token!.addToken!(wallet!.address, {
+            await Token!.addToken!(account, {
                 address,
                 chainId,
                 schema: SchemaType.ERC20,
@@ -44,8 +44,8 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
         } else if (type === 'ERC721' || type === 'ERC1155') {
             const { tokenId, symbol, name = 'NFT' } = params[0].options
             const schema = type === 'ERC21' ? SchemaType.ERC721 : SchemaType.ERC1155
-            await Token!.addNonFungibleTokens!(wallet!.address, { address, chainId, name, schema, symbol }, [tokenId])
-            await Token!.addToken!(wallet!.address, {
+            await Token!.addNonFungibleTokens!(account, { address, chainId, name, schema, symbol }, [tokenId])
+            await Token!.addToken!(account, {
                 id: `${chainId}.${address}.${tokenId}`,
                 chainId,
                 tokenId,
@@ -67,7 +67,7 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
         options: { address: string; symbol: string; image: string; tokenId?: string }
         type: 'ERC20' | 'ERC721' | 'ERC1155'
     }
-    const asset = useAsset(chainId, address, useWallet()?.address)
+    const asset = useAsset(chainId, address, account)
 
     const isTrustedName = !!asset?.name
 

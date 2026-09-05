@@ -9,7 +9,6 @@ export async function generateBackupPreviewInfo(): Promise<BackupSummary> {
 }
 
 export interface BackupOptions {
-    excludeWallet?: boolean
     /** Includes persona, relations, posts and profiles. */
     excludeBase?: boolean
 }
@@ -17,12 +16,11 @@ export async function createBackupFile(options: BackupOptions): Promise<{
     file: unknown
     personaNickNames: string[]
 }> {
-    const { excludeBase, excludeWallet } = options
+    const { excludeBase } = options
     const backup = await createNewBackup({
         noPersonas: excludeBase,
         noPosts: excludeBase,
         noProfiles: excludeBase,
-        noWallets: excludeWallet,
         maskVersion: env.VERSION,
     })
     const file = generateBackupRAW(backup)

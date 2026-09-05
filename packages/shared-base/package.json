@@ -16,10 +16,8 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@masknet/base": "workspace:^",
     "@masknet/public-api": "workspace:^",
-    "@masknet/sdk": "workspace:^",
     "@masknet/typed-message": "workspace:^",
     "@servie/events": "^3.0.0",
     "@types/json-stable-stringify": "^1.0.36",

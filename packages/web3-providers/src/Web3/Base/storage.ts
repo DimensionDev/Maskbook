@@ -68,10 +68,9 @@ export function providerStorage<ChainId extends number, ProviderType extends str
         () => storage,
     )
 }
-export async function MaskWalletStorage() {
+export async function FireflyWalletStorage() {
     const baseHostedStorage = PersistentStorages.Web3.createSubScope(
-        // if you change this (don't, unless you have migration), please also be aware of packages/mask/background/services/wallet/services/sdk.ts
-        `${NetworkPluginID.PLUGIN_EVM}_${ProviderType.MaskWallet}_hosted`,
+        `${NetworkPluginID.PLUGIN_EVM}_${ProviderType.Firefly}_hosted`,
         {
             account: '',
             chainId: getDefaultChainId(),

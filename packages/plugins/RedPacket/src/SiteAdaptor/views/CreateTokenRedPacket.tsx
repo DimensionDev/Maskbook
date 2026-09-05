@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
-import { useChainContext, useEnvironmentContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useEnvironmentContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import {
@@ -166,7 +166,6 @@ export function CreateTokenRedPacket() {
         creator,
     } = useRedPacket()
     // context
-    const wallet = useWallet()
     const { pluginID } = useEnvironmentContext()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 

@@ -5,13 +5,11 @@ import { activatedPluginsWorker, type Plugin } from '@masknet/plugin-infra/backg
 import { createEmptyNormalizedBackup, type NormalizedBackup } from '@masknet/backup-format'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db.js'
 import { queryPostsDB } from '../../database/post/index.js'
-import { internal_wallet_backup } from './internal_wallet_backup.js'
 
 /** @internal */
 interface InternalBackupOptions {
     hasPrivateKeyOnly?: boolean
     noPosts?: boolean
-    noWallets?: boolean
     noPersonas?: boolean
     noProfiles?: boolean
     onlyForPersona?: PersonaIdentifier
@@ -24,7 +22,7 @@ interface InternalBackupOptions {
  */
 // TODO: use a single readonly transaction in this operation.
 export async function createNewBackup(options: InternalBackupOptions): Promise<NormalizedBackup.Data> {
-    const { noPersonas, noPosts, noProfiles, noWallets, onlyForPersona, allProfile } = options
+    const { noPersonas, noPosts, noProfiles, onlyForPersona, allProfile } = options
     const file = createEmptyNormalizedBackup()
     const { meta, personas, posts, profiles, relations, settings } = file
 
@@ -34,12 +32,12 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
 
     settings.grantedHostPermissions = (await browser.permissions.getAll()).origins || []
 
+    // Mask no longer manages local wallet key material, so backups never include wallets.
     await Promise.allSettled([
         noPersonas || backupPersonas(onlyForPersona ? [onlyForPersona] : undefined),
         noProfiles || backupProfiles(onlyForPersona, allProfile),
         (noPersonas && noProfiles) || backupAllRelations(),
         noPosts || backupPosts(),
-        noWallets || internal_wallet_backup().then((w) => (file.wallets = w)),
         backupPlugins().then((p) => (file.plugins = p)),
     ])
 

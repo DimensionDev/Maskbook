@@ -406,27 +406,6 @@ export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaTyp
 
 export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = [
     {
-        ID: `${PLUGIN_ID}_maskwallet`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.MaskWallet,
-        name: 'Mask Network',
-        icon: new URL('../assets/maskwallet.png', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: difference(EnhanceableSiteList, [
-                EnhanceableSite.Localhost,
-                EnhanceableSite.Firefly,
-            ]),
-            supportedExtensionSites: ExtensionSiteList,
-        },
-        homeLink: 'https://mask.io',
-        shortenLink: 'mask.io',
-        downloadLink: 'https://mask.io/download-links',
-        iconFilterColor: 'rgba(28, 104, 243, 0.2)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
         ID: `${PLUGIN_ID}_browser`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Browser,

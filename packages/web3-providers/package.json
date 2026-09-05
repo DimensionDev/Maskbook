@@ -35,7 +35,6 @@
     "@aws-sdk/client-s3": "^3.658.1",
     "@aws-sdk/lib-storage": "^3.658.1",
     "@bonfida/spl-name-service": "workspace:^",
-    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@lens-protocol/client": "0.0.0-canary-20250408064617",
     "@masknet/base": "workspace:^",
     "@masknet/flags": "workspace:^",

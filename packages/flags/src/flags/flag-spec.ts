@@ -5,7 +5,6 @@ const str = z.string()
 const num = z.number()
 
 const FlagSpec = z.object({
-    mask_sdk_enabled: bool,
     support_testnet_switch: bool,
 
     shadowRootInit: z.object({

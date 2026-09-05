@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAccount, usePrivyWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { MessageStateType, parseEIP4361Message, type EIP4361Message } from '@masknet/web3-shared-base'
 import { ErrorEditor, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { useEffect, useMemo } from 'react'
@@ -21,8 +21,8 @@ type ParsedSigningMessage = string | EIP4361Message | undefined
 
 export function WalletSignRequest(props: InteractionItemProps) {
     const { setConfirmAction, setConfirmVerb, setIsDanger, currentRequest } = props
-    const wallet = useWallet()
-    const privyWallet = usePrivyWallet(wallet?.address)
+    const account = useAccount()
+    const privyWallet = usePrivyWallet(account)
     const { origin, ID: id } = currentRequest
     const request = currentRequest.request.arguments
 

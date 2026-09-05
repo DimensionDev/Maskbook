@@ -4,12 +4,11 @@ import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { type Plugin, startPluginSiteAdaptor, __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script'
-import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier, type ModalProps } from '@masknet/shared'
+import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
     createSubscriptionFromValueRef,
     currentPersonaIdentifier,
     currentSetupGuideStatus,
-    DashboardRoutes,
     ECKeyIdentifier,
     type SetupGuideContext,
     SetupGuideStep,
@@ -167,12 +166,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             Services.Helper.hasHostPermission,
         ),
     )
-    attachReactTreeWithoutContainer(
-        'Modals',
-        createElement(Modals, {
-            createWallet: () => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm),
-        } satisfies ModalProps),
-    )
+    attachReactTreeWithoutContainer('Modals', createElement(Modals))
 
     function $unknownIdentityResolution() {
         const provider = ui.collecting.identityProvider

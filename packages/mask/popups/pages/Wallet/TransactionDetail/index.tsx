@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { CopyButton, FormattedCurrency, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { alpha, ActionButton, MaskColors, makeStyles } from '@masknet/theme'
-import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import {
@@ -151,6 +151,7 @@ export const Component = memo(function TransactionDetail() {
     const isRecentTx = transactionState && 'candidates' in transactionState
     const transaction = isRecentTx ? transactionState.candidates[transactionState.id] : transactionState
     const account = useAccount()
+    const { providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainId = transactionState?.chainId
     const transactionId = transactionState?.id
     const blockNumber = transaction && 'blockNumber' in transaction ? transaction.blockNumber : undefined
@@ -182,13 +183,13 @@ export const Component = memo(function TransactionDetail() {
 
     const handleSpeedup = useCallback(() => {
         if (!isRecentTx) return
-        return modifyTransaction(transactionState, ReplaceType.SPEED_UP)
-    }, [isRecentTx, transactionState])
+        return modifyTransaction(transactionState, ReplaceType.SPEED_UP, providerType)
+    }, [isRecentTx, transactionState, providerType])
 
     const handleCancel = useCallback(() => {
         if (!isRecentTx) return
-        modifyTransaction(transactionState, ReplaceType.CANCEL)
-    }, [isRecentTx, transactionState])
+        modifyTransaction(transactionState, ReplaceType.CANCEL, providerType)
+    }, [isRecentTx, transactionState, providerType])
 
     const logs = useTransactionLogs(transactionState)
     if (!transaction) {

@@ -6,7 +6,7 @@ import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { fetchChains } from '@masknet/web3-providers/helpers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, ProviderType, SchemaType, ZERO_ADDRESS, getRPCConstant } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, SchemaType, ZERO_ADDRESS, getRPCConstant } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
@@ -70,7 +70,7 @@ export const Component = memo(function EditNetwork() {
     const id = useParams<{ id: string }>().id
     const chainId = id?.match(/^\d+$/u) ? Number.parseInt(id, 10) : undefined
     const isEditing = !!id && !chainId
-    const { chainId: currentChainId, setChainId } = useChainContext()
+    const { chainId: currentChainId, setChainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region Get network
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -104,7 +104,7 @@ export const Component = memo(function EditNetwork() {
                 onClick={async () => {
                     if (currentChainId === network?.chainId) {
                         await EVMWeb3.switchChain(ChainId.Mainnet, {
-                            providerType: ProviderType.MaskWallet,
+                            providerType,
                         })
                         setChainId(ChainId.Mainnet)
                     }
@@ -118,7 +118,7 @@ export const Component = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, enqueueSnackbar, Network, currentChainId, queryClient])
+    }, [isBuiltIn, id, classes.iconButton, enqueueSnackbar, Network, currentChainId, providerType, queryClient])
 
     const schema = useMemo(() => {
         return createSchema(

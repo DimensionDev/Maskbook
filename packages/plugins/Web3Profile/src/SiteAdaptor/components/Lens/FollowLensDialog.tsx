@@ -12,7 +12,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
@@ -111,10 +111,9 @@ interface Props {
 let task: Promise<void> | undefined
 
 export function FollowLensDialog({ handle, onClose }: Props) {
-    const wallet = useWallet()
     const [isHovering, setIsHovering] = useState(false)
-    const { classes } = useStyles({ account: !!wallet })
     const { account: walletAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { classes } = useStyles({ account: !!walletAccount })
     const { pluginID } = useNetworkContext()
 
     const { enqueueSnackbar } = useSnackbar()

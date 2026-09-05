@@ -6,7 +6,7 @@ import { MaskSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from 
 import { LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { DashboardRoutes, jsxCompose } from '@masknet/shared-base'
+import { jsxCompose } from '@masknet/shared-base'
 
 import { Pages } from './pages/routes.js'
 import { UserContext, usePageThemePalette, useThemeLanguage } from '../shared-ui/index.js'
@@ -55,7 +55,7 @@ export default function Dashboard() {
             {process.env.NODE_ENV === 'development' ?
                 <ReactQueryDevtools buttonPosition="bottom-right" />
             :   null}
-            <Modals createWallet={() => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)} />
+            <Modals />
             <Pages />
         </>,
     )

@@ -16,7 +16,6 @@ export enum ProfilePhotoType {
 }
 
 export enum ContactType {
-    Owned = 'Owned',
     Recipient = 'Recipient',
 }
 

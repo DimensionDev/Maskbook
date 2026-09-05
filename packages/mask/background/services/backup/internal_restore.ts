@@ -17,16 +17,14 @@ import {
     updatePostDB,
 } from '../../database/post/index.js'
 import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType.js'
-import { internal_wallet_restore } from './internal_wallet_restore.js'
 
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
-    const { plugins, posts, wallets } = backup
+    const { plugins, posts } = backup
 
+    // Mask no longer manages local wallet key material, so `backup.wallets` (if present in an
+    // older backup file) is intentionally not restored.
     await restorePersonas(backup)
     await restorePosts(posts.values())
-    if (wallets.length) {
-        await internal_wallet_restore(wallets)
-    }
     await restorePlugins(plugins)
 
     // Note: it looks like the restore will not immediately available to the dashboard, maybe due to
