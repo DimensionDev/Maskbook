@@ -1,19 +1,10 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { alpha, makeStyles } from '@masknet/theme'
+import { alpha, lighten, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
-import {
-    Box,
-    Chip,
-    chipClasses,
-    InputBase,
-    inputBaseClasses,
-    lighten,
-    Typography,
-    type InputBaseProps,
-} from '@mui/material'
+import { Box, Chip, chipClasses, InputBase, inputBaseClasses, Typography, type InputBaseProps } from '@mui/material'
 import { memo } from 'react'
 import { FormattedBalance, TokenIcon } from '../../../index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
