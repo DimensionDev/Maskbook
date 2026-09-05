@@ -1783,8 +1783,6 @@ msgstr ""
 msgid "Contacts"
 msgstr "联系人"
 
-#: packages/mask/dashboard/components/Restore/RestoreFromMnemonic.tsx
-#: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -3396,7 +3394,6 @@ msgstr "输入金额低于最低金额"
 #~ msgid "Input contract address"
 #~ msgstr "输入合约地址"
 
-#: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Input your Private Key"
 msgstr "输入您的私钥"
