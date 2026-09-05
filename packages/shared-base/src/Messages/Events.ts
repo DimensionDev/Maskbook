@@ -153,10 +153,6 @@ export interface redpacketDialogEvent {
     fireflyContext?: FireflyContext
 }
 
-export interface SmartPayDialogEvent {
-    open: boolean
-}
-
 export interface RenameWalletEvent {
     address?: string
 }
@@ -199,10 +195,6 @@ export interface SwapDialogEvent {
 
 export interface SwitchLogoDialogEvent {
     open: boolean
-}
-
-export interface WalletSettingsDialogEvent {
-    pluginID?: string
 }
 
 /** This is a subset of browser.permissions.Permission */
