@@ -1,1 +1,0 @@
-{"version":3,"file":"dotenv.d.ts","sourceRoot":"","sources":["dotenv.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,UAAU,EAAE,MAAM,YAAY,CAAA;AAC5C,OAAO,EAAE,YAAY,EAAE,MAAM,iCAAiC,CAAA;AAE9D,wBAAgB,WAAW,CAAC,KAAK,EAAE,UAAU,QA2B5C;AACD,wBAAgB,aAAa,CAAC,QAAQ,EAAE,CAAC,GAAG,SAAS,GAAG,YAAY,UAInE"}

@@ -1,5 +1,5 @@
 import urlcat, { type ParamMap } from 'urlcat'
-import { type DashboardRoutes, PopupRoutes, MaskMessages, type PopupRoutesParamsMap } from '@masknet/shared-base'
+import { type DashboardRoutes, type PopupRoutes, MaskMessages, type PopupRoutesParamsMap } from '@masknet/shared-base'
 
 let currentPopupWindowIdPromise: Promise<number | undefined> | undefined
 
