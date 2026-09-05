@@ -33,6 +33,9 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 )
             const base = {
                 display: 'inline-block',
+                // To align icon center: zero out the strut so the svg child fills the span.
+                fontSize: 0,
+                lineHeight: 0,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 flexShrink: 0,
@@ -56,8 +59,6 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             ref,
             'data-icon': name,
             sx: Array.isArray(sx) ? [iconStyle, ...sx] : [iconStyle, sx],
-            // To align icon center.
-            fontSize: 0,
         }
         // background image can't be correctly resolved on Firefly in ShadowDOM.
         // This is a workaround.
