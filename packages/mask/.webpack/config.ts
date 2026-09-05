@@ -148,6 +148,10 @@ export async function createConfiguration(
                     test: /\.[mc]?[jt]sx?$/i,
                     parser: { worker: ['OnDemandWorker', '...'] },
                     include: join(import.meta.dirname, '../../'),
+                    // prebuilt output (e.g. the vendored @bonfida/spl-name-service) must not
+                    // run through swc/react-refresh: mixing the refresh preamble (ESM import)
+                    // into CJS files breaks webpack's module detection
+                    exclude: /[/\\]dist[/\\]/,
                     use: [
                         {
                             loader: rspack ? 'builtin:swc-loader' : require.resolve('swc-loader'),
@@ -269,6 +273,10 @@ export async function createConfiguration(
                 :   (await import('@pmmmwh/react-refresh-webpack-plugin')).default)({
                     overlay: false,
                     esModule: true,
+                    // the refresh loader prepends an ESM import preamble, which breaks
+                    // prebuilt CJS output (e.g. the vendored @bonfida/spl-name-service);
+                    // keep the plugin default node_modules exclusion
+                    exclude: [/node_modules/i, /[/\\]dist[/\\]/],
                 }),
             flags.profiling && new ProfilingPlugin(),
             // TODO: crashes rspack
