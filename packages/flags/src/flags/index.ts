@@ -31,15 +31,6 @@ export const flags: FlagSpec = {
     twitter_token:
         'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
 
-    // sentry
-    sentry_earliest_version: env.VERSION,
-    sentry_sample_rate: 0.05,
-    sentry_enabled: isProd,
-    sentry_event_enabled: isProd,
-    sentry_exception_enabled: isProd,
-    sentry_fetch_transaction_enabled: isProd,
-    sentry_async_transaction_enabled: isDev,
-
     // mixpanel
     mixpanel_earliest_version: env.VERSION,
     mixpanel_sample_rate: 1,

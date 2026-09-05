@@ -4,7 +4,6 @@ import { buildInjectedScript, watchInjectedScript } from '../projects/injected-s
 import { buildPolyfill } from '../projects/polyfill.ts'
 import { buildGun } from '../projects/gun.ts'
 import { parallel, series, type TaskFunction } from 'gulp'
-import { buildSentry } from '../projects/sentry.ts'
 import type { BuildFlags, BuildFlagsExtended } from './flags.ts'
 import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 import { applyDotEnv } from './dotenv.ts'
@@ -24,13 +23,13 @@ export function buildRspackFlag(name: string, args: BuildFlagsExtended) {
     return f
 }
 export function buildExtensionFlag(name: string, args: BuildFlagsExtended): TaskFunction {
-    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry), buildWebpackFlag(name, args))
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun), buildWebpackFlag(name, args))
     const desc = 'Build extension for ' + name
     task(f, desc, desc)
     return f
 }
 export function buildExtensionFlagRspack(name: string, args: BuildFlagsExtended): TaskFunction {
-    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry), buildRspackFlag(name, args))
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun), buildRspackFlag(name, args))
     const desc = 'Build extension for ' + name + ' with rspack'
     task(f, desc, desc)
     return f
@@ -51,7 +50,6 @@ function preTask() {
     buildPolyfill()
     buildGun()
     watchInjectedScript()
-    buildSentry()
 }
 export async function extensionWatch(f: (() => void) | BuildFlagsExtended) {
     preTask()
