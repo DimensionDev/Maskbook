@@ -24,8 +24,19 @@ function Icon(props: { size: number }) {
 function _(main: () => LiveSelector<HTMLElement, true>, size: number, options: WatchOptions) {
     const watcher = new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
         let remover = noop
-        const remove = () => remover()
+        let attached = false
+        const remove = () => {
+            remover()
+            remover = noop
+            attached = false
+        }
         const check = () => {
+            // onNodeMutation/onTargetChanged re-run check() for the same element, and the floating
+            // bio card mutates on every hover. attachReactTreeWithContainer refuses a second root
+            // under the same shadow key (it logs a console.error and returns a no-op), so attach
+            // only once; remove()/onRemove reset this so a genuinely re-added element re-attaches.
+            if (attached) return
+            attached = true
             ifUsingMask(
                 ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(null),
             ).then(() => {
@@ -57,14 +68,17 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     const ls = new LiveSelector([post.rootElement])
         .map((x) => x.current.querySelector<HTMLDivElement>('[data-testid=User-Name]'))
         .enableSingleMode()
-    ifUsingMask(post.author.getCurrentValue()).then(add, remove)
-    post.author.subscribe(() => ifUsingMask(post.author.getCurrentValue()).then(add, remove))
+    // post.author refines several times as post parsing completes (and re-fires on every
+    // onNodeMutation of the tweet). Each add() used to attach a brand-new DOMProxy shadow sibling
+    // + React root without tearing down the previous one, leaving stacked Mask icons on the post.
+    // Reuse a single proxy and keep at most one live tree.
+    const proxy = DOMProxy({ afterShadowRootInit: Flags.shadowRootInit })
     let remover = noop
     function add() {
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: Flags.shadowRootInit })
+        remover()
         proxy.realCurrent = node
         const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
         root.render(<Icon size={24} />)
@@ -72,7 +86,11 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     }
     function remove() {
         remover()
+        remover = noop
     }
+    ifUsingMask(post.author.getCurrentValue()).then(add, remove)
+    const unsubscribe = post.author.subscribe(() => ifUsingMask(post.author.getCurrentValue()).then(add, remove))
+    signal.addEventListener('abort', unsubscribe, { once: true })
 }
 const ifUsingMask = memoizePromise(
     memoize,

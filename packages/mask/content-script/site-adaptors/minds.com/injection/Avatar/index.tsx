@@ -14,6 +14,13 @@ export async function injectAvatar(signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
+                // onNodeMutation/onTargetChanged re-run this for the same `ele` (lazy image src
+                // swaps, hover states, feed virtualization reusing nodes). A fresh DOMProxy() here
+                // attaches a brand-new shadow-root sibling every time, so the previous one must be
+                // torn down first or it leaks a live React tree per mutation. Mirrors the fix on
+                // twitter.com/injection/Avatar.
+                remove()
+
                 const proxy = DOMProxy({
                     afterShadowRootInit: Flags.shadowRootInit,
                 })
