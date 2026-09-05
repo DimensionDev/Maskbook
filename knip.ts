@@ -19,7 +19,6 @@ const config: KnipConfig = {
                 'dashboard/initialization/index.ts',
                 'popups/initialization/index.ts',
                 'content-script/index.ts',
-                'web-workers/wallet.ts',
                 'devtools/content-script/index.ts',
                 'devtools/panels/index.tsx',
             ],
