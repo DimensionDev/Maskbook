@@ -1783,8 +1783,6 @@ msgstr ""
 msgid "Contacts"
 msgstr "연락처"
 
-#: packages/mask/dashboard/components/Restore/RestoreFromMnemonic.tsx
-#: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: packages/mask/dashboard/pages/CreateMaskWallet/FireflyWallet/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/Local.tsx
@@ -3396,7 +3394,6 @@ msgstr "입력 금액은 최소 금액 이하입니다."
 #~ msgid "Input contract address"
 #~ msgstr "컨트랙트 주소 입력"
 
-#: packages/mask/dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Input your Private Key"
 msgstr "개인 키 입력하기"
