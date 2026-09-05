@@ -36,6 +36,11 @@ export async function injectAvatar(signal: AbortSignal) {
             const run = async () => {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
+                // onNodeMutation/onTargetChanged re-run this for the same `ele` (X mutates avatar
+                // containers often: lazy image src swaps, hover states, virtualization reuse). A
+                // fresh DOMProxy() here creates a brand-new shadow-root sibling every time, so the
+                // previous one must be torn down first or it leaks a live React tree per mutation.
+                remove()
 
                 const proxy = DOMProxy({
                     afterShadowRootInit: Flags.shadowRootInit,

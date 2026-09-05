@@ -175,6 +175,24 @@ export function collectVerificationPost(keyword: string) {
     return null
 }
 
+// A tweet's DOM node fires onNodeMutation repeatedly (view counters, hover cards, lazy-loaded
+// media swapping placeholder -> real src, etc.) which re-invokes collectPostInfo for the same
+// tweetNode many times. Without caching, each invocation spun up a brand-new polling watcher
+// (untilElementAvailable) and re-parsed the images from scratch, stacking up redundant work per
+// tweet while scrolling. The image set for a given tweetNode is stable, so it's safe to compute
+// it once and reuse the promise on subsequent mutations.
+const postImagesCache = new WeakMap<HTMLElement, ReturnType<typeof postImagesParser>>()
+function getPostImages(tweetNode: HTMLElement) {
+    let cached = postImagesCache.get(tweetNode)
+    if (!cached) {
+        cached = untilElementAvailable(postsImageSelector(tweetNode), 10_000)
+            .then(() => postImagesParser(tweetNode))
+            .catch(() => [])
+        postImagesCache.set(tweetNode, cached)
+    }
+    return cached
+}
+
 function collectPostInfo(
     tweetNode: HTMLDivElement | null,
     info: ReturnType<typeof createRefsForCreatePostContext>,
@@ -193,8 +211,7 @@ function collectPostInfo(
 
     // decode stenographic image
     // don't add await on this
-    const images = untilElementAvailable(postsImageSelector(tweetNode), 10_000)
-        .then(() => postImagesParser(tweetNode))
+    const images = getPostImages(tweetNode)
         .then((images) => {
             for (const image of images) {
                 if (typeof image.image === 'string') info.postMetadataImages.add(image.image)
@@ -208,6 +225,28 @@ function collectPostInfo(
     info.postMessage.value = FlattenTypedMessage.NoContext(
         makeTypedMessageTuple([messages, makeTypedMessagePromise(images)]),
     )
+}
+
+// Same tweetNode mutating repeatedly also re-ran collectLinks over and over, which re-requested
+// resolveTCOLink for the same href every time. The background resolver already memoizes by URL,
+// but each call still pays for a full cross-context message round trip. t.co redirects are
+// static, so caching the in-flight/resolved promise by href here is safe and cuts that traffic
+// (it also dedupes the same link appearing across different tweets, e.g. popular/retweeted links).
+const tcoLinkCache = new Map<string, Promise<string | null>>()
+function resolveTCOLinkCached(href: string) {
+    let cached = tcoLinkCache.get(href)
+    if (!cached) {
+        cached = Services.Helper.resolveTCOLink(href).catch((error: unknown) => {
+            // Don't let a transient failure permanently poison this href for the rest of the
+            // session (mirrors the eviction-on-failure behavior of the background's own
+            // memoizePromise-wrapped resolver) — allow the next occurrence to retry. A
+            // resolved `null` (e.g. not a t.co link) is a legitimate answer and stays cached.
+            tcoLinkCache.delete(href)
+            throw error
+        })
+        tcoLinkCache.set(href, cached)
+    }
+    return cached
 }
 
 function collectLinks(
@@ -229,7 +268,7 @@ function collectLinks(
         if (seen.has(x.href)) continue
         seen.add(x.href)
         info.postMetadataMentionedLinks.set(x, x.href)
-        Services.Helper.resolveTCOLink(x.href)
+        resolveTCOLinkCached(x.href)
             .then((val) => {
                 if (cancel?.aborted) return
                 if (!val) return
