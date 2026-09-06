@@ -24,13 +24,12 @@ export function useGuideStepState({ step, total, onComplete }: UseGuideStepState
     const onSkip = () => {
         // eslint-disable-next-line react-compiler/react-compiler
         sayHelloShowed[networkIdentifier].value = true
-         
+
         userGuideFinished[networkIdentifier].value = true
     }
 
     const onNext = () => {
         if (step !== total) {
-             
             userGuideStatus[networkIdentifier].value = String(step + 1)
         }
         if (step === total - 1) {
@@ -39,7 +38,6 @@ export function useGuideStepState({ step, total, onComplete }: UseGuideStepState
     }
 
     const onTry = () => {
-         
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
     }
