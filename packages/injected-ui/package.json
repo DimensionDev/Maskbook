@@ -60,6 +60,11 @@
       "types": "./dist/AutoPasteFailedDialog.d.ts",
       "mask-src": "./src/AutoPasteFailedDialog.tsx",
       "default": "./dist/AutoPasteFailedDialog.js"
+    },
+    "./AccountConnectStatus": {
+      "types": "./dist/AccountConnectStatus.d.ts",
+      "mask-src": "./src/AccountConnectStatus.tsx",
+      "default": "./dist/AccountConnectStatus.js"
     }
   },
   "dependencies": {

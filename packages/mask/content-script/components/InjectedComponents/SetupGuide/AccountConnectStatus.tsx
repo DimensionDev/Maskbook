@@ -2,10 +2,11 @@ import { Icons } from '@masknet/icons'
 import { BindingDialog, LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING, type BindingDialogProps } from '@masknet/shared'
 import { Sniffings, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
+import { AccountConnectStatus as AccountConnectStatusUI } from '@masknet/injected-ui/AccountConnectStatus'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
@@ -33,10 +34,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-        },
-        text: {
-            fontSize: 16,
-            textAlign: 'center',
         },
     }
 })
@@ -86,67 +83,17 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
             </Frame>
         )
 
-    if (isFirstConnection) {
-        return Sniffings.is_twitter_page ?
-                <Frame {...rest}>
-                    <Typography className={classes.text}>
-                        <Trans>Sent verification post successfully.</Trans>
-                    </Typography>
-                    <Typography className={classes.text} sx={{ mt: '1.5em' }}>
-                        <Trans>
-                            You could check the verification result on Mask Pop-up after few minutes. If failed, try
-                            sending verification post again.
-                        </Trans>
-                    </Typography>
-                </Frame>
-            :   <Frame {...rest}>
-                    <Typography className={classes.text}>
-                        <Trans>Connected successfully.</Trans>
-                    </Typography>
-                    <Typography className={classes.text} sx={{ mt: '1.5em' }}>
-                        <Trans>Trying exploring more features powered by Mask Network.</Trans>
-                    </Typography>
-                </Frame>
-    }
-
-    if (connected)
-        return (
-            <Frame {...rest}>
-                <Typography className={classes.text}>
-                    <Trans>
-                        <b>@{currentUserId}</b> connected already.
-                    </Trans>
-                </Typography>
-                <Typography className={classes.text} sx={{ mt: '1.5em' }}>
-                    <Trans>Change another account and try again.</Trans>
-                </Typography>
-                <Box sx={{ mt: 'auto', width: '100%' }}>
-                    <Button fullWidth onClick={rest.onClose}>
-                        <Trans>Done</Trans>
-                    </Button>
-                </Box>
-            </Frame>
-        )
-
-    if (currentUserId)
-        return (
-            <Frame {...rest}>
-                <Typography className={classes.text}>
-                    <Trans>Current account is not the verifying account.</Trans>
-                </Typography>
-                <Typography className={classes.text} sx={{ mt: '1.5em' }}>
-                    <Trans>
-                        Please switch to <b>@{expectAccount}</b> to continue the account verification progress.
-                    </Trans>
-                </Typography>
-            </Frame>
-        )
-
     return (
         <Frame {...rest}>
-            <Typography className={classes.text}>
-                <Trans>Please sign up or login {siteName} to connect Mask Network.</Trans>
-            </Typography>
+            <AccountConnectStatusUI
+                connected={connected}
+                isFirstConnection={isFirstConnection}
+                isTwitterPage={Sniffings.is_twitter_page}
+                expectAccount={expectAccount}
+                currentUserId={currentUserId}
+                siteName={siteName}
+                onDone={rest.onClose}
+            />
         </Frame>
     )
 })
