@@ -35,10 +35,18 @@
       "types": "./dist/MaskBadgeIcon.d.ts",
       "mask-src": "./src/MaskBadgeIcon.tsx",
       "default": "./dist/MaskBadgeIcon.js"
+    },
+    "./ProfileTab": {
+      "types": "./dist/ProfileTab.d.ts",
+      "mask-src": "./src/ProfileTab.tsx",
+      "default": "./dist/ProfileTab.js"
     }
   },
   "dependencies": {
     "@masknet/icons": "workspace:^",
-    "@masknet/theme": "workspace:^"
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/shared-base-ui": "workspace:^",
+    "@masknet/theme": "workspace:^",
+    "react-use": "^17.5.0"
   }
 }

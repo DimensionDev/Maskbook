@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { MaskMessages, ProfileTabs, Sniffings } from '@masknet/shared-base'
 import { useMatchXS, useLocationChange } from '@masknet/shared-base-ui'
 
-interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren {
+export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren {
     clear(): void
     reset(): void
     // Required! This component don't have it own style.
@@ -14,6 +14,11 @@ interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, Pr
     icon?: React.ReactNode
 }
 
+/**
+ * The extra "Web3"/DAO tab button injected next to a profile's own tabs on Twitter, Facebook, and
+ * Instagram. Genuinely platform-independent already — only styling and reset/clear behavior differ
+ * per site, supplied by the caller (see site-adaptors/{twitter,facebook,instagram}.com/injection/ProfileTab.tsx).
+ */
 export function ProfileTab(props: ProfileTabProps) {
     const { reset, clear, children, classes, title, type = ProfileTabs.WEB3 } = props
     const [active, setActive] = useState(false)

@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
-import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
+import { ProfileTab } from '@masknet/injected-ui/ProfileTab'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import {
     searchProfileActiveTabSelector,
