@@ -203,10 +203,8 @@ export function encrypted_files_url() { return new URL("./general/EncryptedFiles
 export function eth_symbol_url() { return new URL("./general/ETHSymbol.svg", import.meta.url).href }
 export function europe_url() { return new URL("./general/Europe.svg", import.meta.url).href }
 export function eye_dark_url() { return new URL("./general/Eye.dark.svg", import.meta.url).href }
-export function eye_light_url() { return new URL("./general/Eye.light.svg", import.meta.url).href }
 export function eye_color_url() { return new URL("./general/EyeColor.svg", import.meta.url).href }
 export function eye_off_dark_url() { return new URL("./general/EyeOff.dark.svg", import.meta.url).href }
-export function eye_off_light_url() { return new URL("./general/EyeOff.light.svg", import.meta.url).href }
 export function facebook_url() { return new URL("./general/Facebook.svg", import.meta.url).href }
 export function file_url() { return new URL("./general/File.svg", import.meta.url).href }
 export function file_message_url() { return new URL("./general/FileMessage.svg", import.meta.url).href }
@@ -228,7 +226,6 @@ export function history_url() { return new URL("./general/History.svg", import.m
 export function hkd_url() { return new URL("./general/HKD.svg", import.meta.url).href }
 export function hong_kong_url() { return new URL("./general/HongKong.svg", import.meta.url).href }
 export function identity_dark_url() { return new URL("./general/Identity.dark.svg", import.meta.url).href }
-export function identity_light_url() { return new URL("./general/Identity.light.svg", import.meta.url).href }
 export function info_dark_url() { return new URL("./general/Info.dark.svg", import.meta.url).href }
 export function info_light_url() { return new URL("./general/Info.light.svg", import.meta.url).href }
 export function interaction_url() { return new URL("./general/Interaction.svg", import.meta.url).href }
@@ -239,7 +236,6 @@ export function key_square_url() { return new URL("./general/KeySquare.svg", imp
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url).href }
 export function like_url() { return new URL("./general/Like.svg", import.meta.url).href }
 export function linear_calendar_dark_url() { return new URL("./general/LinearCalendar.dark.svg", import.meta.url).href }
-export function linear_calendar_light_url() { return new URL("./general/LinearCalendar.light.svg", import.meta.url).href }
 export function link_url() { return new URL("./general/Link.svg", import.meta.url).href }
 export function link_out_url() { return new URL("./general/LinkOut.svg", import.meta.url).href }
 export function loader_url() { return new URL("./general/Loader.svg", import.meta.url).href }
@@ -265,7 +261,6 @@ export function nft_holder_url() { return new URL("./general/NFTHolder.svg", imp
 export function outlined_mask_url() { return new URL("./general/OutlinedMask.svg", import.meta.url).href }
 export function personas_outline_url() { return new URL("./general/PersonasOutline.svg", import.meta.url).href }
 export function pin_dark_url() { return new URL("./general/Pin.dark.svg", import.meta.url).href }
-export function pin_light_url() { return new URL("./general/Pin.light.svg", import.meta.url).href }
 export function play_dark_url() { return new URL("./general/Play.dark.svg", import.meta.url).href }
 export function play_url() { return new URL("./general/Play.svg", import.meta.url).href }
 export function plugin_url() { return new URL("./general/Plugin.svg", import.meta.url).href }
@@ -278,7 +273,6 @@ export function popup_trash_url() { return new URL("./general/PopupTrash.svg", i
 export function primary_info_url() { return new URL("./general/PrimaryInfo.svg", import.meta.url).href }
 export function provider_url() { return new URL("./general/Provider.svg", import.meta.url).href }
 export function public_key_dark_url() { return new URL("./general/PublicKey.dark.svg", import.meta.url).href }
-export function public_key_light_url() { return new URL("./general/PublicKey.light.svg", import.meta.url).href }
 export function public_key_2_url() { return new URL("./general/PublicKey2.svg", import.meta.url).href }
 export function qrcode_icon_url() { return new URL("./general/QrcodeIcon.svg", import.meta.url).href }
 export function questions_url() { return new URL("./general/Questions.svg", import.meta.url).href }
@@ -435,19 +429,12 @@ export function email_url() { return new URL("./settings/Email.svg", import.meta
 export function jp_url() { return new URL("./settings/JP.svg", import.meta.url).href }
 export function kr_url() { return new URL("./settings/KR.svg", import.meta.url).href }
 export function settings_appearance_dark_url() { return new URL("./settings/SettingsAppearance.dark.svg", import.meta.url).href }
-export function settings_appearance_light_url() { return new URL("./settings/SettingsAppearance.light.svg", import.meta.url).href }
 export function settings_backup_dark_url() { return new URL("./settings/SettingsBackup.dark.svg", import.meta.url).href }
-export function settings_backup_light_url() { return new URL("./settings/SettingsBackup.light.svg", import.meta.url).href }
 export function settings_email_dark_url() { return new URL("./settings/SettingsEmail.dark.svg", import.meta.url).href }
-export function settings_email_light_url() { return new URL("./settings/SettingsEmail.light.svg", import.meta.url).href }
 export function settings_language_dark_url() { return new URL("./settings/SettingsLanguage.dark.svg", import.meta.url).href }
 export function settings_language_light_url() { return new URL("./settings/SettingsLanguage.light.svg", import.meta.url).href }
 export function settings_password_dark_url() { return new URL("./settings/SettingsPassword.dark.svg", import.meta.url).href }
-export function settings_password_light_url() { return new URL("./settings/SettingsPassword.light.svg", import.meta.url).href }
 export function settings_phone_dark_url() { return new URL("./settings/SettingsPhone.dark.svg", import.meta.url).href }
-export function settings_phone_light_url() { return new URL("./settings/SettingsPhone.light.svg", import.meta.url).href }
 export function settings_restore_dark_url() { return new URL("./settings/SettingsRestore.dark.svg", import.meta.url).href }
-export function settings_restore_light_url() { return new URL("./settings/SettingsRestore.light.svg", import.meta.url).href }
 export function settings_sync_dark_url() { return new URL("./settings/SettingsSync.dark.svg", import.meta.url).href }
-export function settings_sync_light_url() { return new URL("./settings/SettingsSync.light.svg", import.meta.url).href }
 export function uk_url() { return new URL("./settings/UK.svg", import.meta.url).href }

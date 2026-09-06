@@ -2337,31 +2337,6 @@ export const Eye = /*#__PURE__*/ __createIcon('Eye', [
             }),
         s: true,
     },
-    {
-        c: ['light'],
-        u: () => new URL('./general/Eye.light.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 20 20',
-                children: /*#__PURE__*/ _jsxs('g', {
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '1.25',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M2 10s2.91-5.818 8-5.818S18 10 18 10s-2.91 5.818-8 5.818S2 10 2 10',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M10 12.182a2.182 2.182 0 1 0 0-4.364 2.182 2.182 0 0 0 0 4.364',
-                        }),
-                    ],
-                }),
-            }),
-        s: true,
-    },
 ])
 export const EyeColor = /*#__PURE__*/ __createIcon('EyeColor', [
     {
@@ -2392,21 +2367,6 @@ export const EyeOff = /*#__PURE__*/ __createIcon('EyeOff', [
     {
         c: ['dark'],
         u: () => new URL('./general/EyeOff.dark.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                fill: 'none',
-                viewBox: '0 0 18 18',
-                children: /*#__PURE__*/ _jsx('path', {
-                    fill: 'currentColor',
-                    d: 'm16.393 5.708.015.01-.335.452q-1.04 1.406-2.168 2.356l1.501 2.6a1.125 1.125 0 0 1-1.537-.411L13 9.207a7.8 7.8 0 0 1-2.063.982l.426 2.417a1.125 1.125 0 0 1-1.303-.912l-.224-1.27a7 7 0 0 1-2.201-.06l-.43 2.443-.02-.003a1.125 1.125 0 0 1-.896-1.282l.003-.018.253-1.438a8 8 0 0 1-1.973-1.053l-.083.147-1.46 2.529-.016-.01c-.52-.311-.7-.98-.405-1.51l.009-.017.894-1.548.173-.307a14 14 0 0 1-1.842-2.041l-.064-.086-.335-.451a1.14 1.14 0 0 1 1.58.216l.068.087.048.061.044.056.04.05.035.043.023.028.02.025.009.009C5.052 8.35 6.92 9.358 8.925 9.358c1.99 0 3.846-.992 5.578-3.018l.059-.07.018-.022.025-.03.023-.029.03-.038.046-.057.065-.083.059-.075a1.14 1.14 0 0 1 1.55-.239z',
-                }),
-            }),
-        s: true,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./general/EyeOff.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2770,30 +2730,6 @@ export const Identity = /*#__PURE__*/ __createIcon('Identity', [
             }),
         s: true,
     },
-    {
-        c: ['light'],
-        u: () => new URL('./general/Identity.light.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 20 20',
-                children: /*#__PURE__*/ _jsxs('g', {
-                    fill: 'currentColor',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M15 12.158a.6.6 0 0 1 .6.6v4.062a.6.6 0 1 1-1.2 0v-4.062a.6.6 0 0 1 .6-.6',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M17.632 14.79a.6.6 0 0 1-.6.6h-4.065a.6.6 0 1 1 0-1.2h4.065a.6.6 0 0 1 .6.6M8.798 2.41a2.992 2.992 0 1 0 0 5.984 2.992 2.992 0 0 0 0-5.984M4.606 5.402a4.192 4.192 0 1 1 8.384 0 4.192 4.192 0 0 1-8.384 0',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M6.019 8.987a7.8 7.8 0 0 1 8.498 1.69.6.6 0 1 1-.849.849A6.597 6.597 0 0 0 2.406 16.19a.6.6 0 0 1-1.2 0 7.8 7.8 0 0 1 4.813-7.204z',
-                        }),
-                    ],
-                }),
-            }),
-        s: true,
-    },
 ])
 export const Info = /*#__PURE__*/ __createIcon('Info', [
     {
@@ -2952,34 +2888,6 @@ export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
     {
         c: ['dark'],
         u: () => new URL('./general/LinearCalendar.dark.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsxs('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                fill: 'none',
-                viewBox: '0 0 24 24',
-                children: [
-                    /*#__PURE__*/ _jsx('path', {
-                        stroke: 'currentColor',
-                        strokeLinecap: 'round',
-                        strokeLinejoin: 'round',
-                        strokeMiterlimit: '10',
-                        strokeWidth: '1.5',
-                        d: 'M8 2v3m8-3v3M3.5 9.09h17m.5-.59V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5',
-                    }),
-                    /*#__PURE__*/ _jsx('path', {
-                        stroke: 'currentColor',
-                        strokeLinecap: 'round',
-                        strokeLinejoin: 'round',
-                        strokeWidth: '2',
-                        d: 'M15.695 13.7h.009m-.009 3h.009m-3.709-3h.01m-.01 3h.01m-3.711-3h.01m-.01 3h.01',
-                    }),
-                ],
-            }),
-        s: true,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./general/LinearCalendar.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3387,20 +3295,6 @@ export const Pin = /*#__PURE__*/ __createIcon('Pin', [
             }),
         s: true,
     },
-    {
-        c: ['light'],
-        u: () => new URL('./general/Pin.light.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                fill: 'currentColor',
-                viewBox: '0 0 22 22',
-                children: /*#__PURE__*/ _jsx('path', {
-                    d: 'M16.5 2.75v1.833h-.917v5.5l1.834 2.75v1.834h-5.5v6.416h-1.834v-6.416h-5.5v-1.834l1.834-2.75v-5.5H5.5V2.75zM8.25 4.583v6.056l-1.463 2.194h8.426L13.75 10.64V4.583z',
-                }),
-            }),
-        s: true,
-    },
 ])
 export const Play = /*#__PURE__*/ __createIcon('Play', [
     {
@@ -3658,24 +3552,6 @@ export const PublicKey = /*#__PURE__*/ __createIcon('PublicKey', [
     {
         c: ['dark'],
         u: () => new URL('./general/PublicKey.dark.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 20 20',
-                children: /*#__PURE__*/ _jsx('path', {
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '1.25',
-                    d: 'm12.916 6.25 2.917-2.917m1.666-1.666-1.666 1.666zM9.491 9.675a4.583 4.583 0 1 1-6.482 6.482A4.583 4.583 0 0 1 9.49 9.676zm0 0 3.425-3.425zm3.425-3.425 2.5 2.5 2.917-2.917-2.5-2.5z',
-                }),
-            }),
-        s: true,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./general/PublicKey.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -5261,55 +5137,6 @@ export const SettingsAppearance = /*#__PURE__*/ __createIcon('SettingsAppearance
             }),
         s: true,
     },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsAppearance.light.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsxs('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
-                children: [
-                    /*#__PURE__*/ _jsx('path', {
-                        fill: 'currentColor',
-                        d: 'M10.89 20.789h-.75a.75.75 0 0 0 .785.75zm9.248-7.728-.745-.09zM7.215 17.114l-.235.712.01.003zM7.8 4.774l.378.647zm3.125 16.764c1.45-.067 3.715-.56 5.73-1.822 2.037-1.276 3.841-3.358 4.227-6.566l-1.489-.179c-.321 2.667-1.797 4.386-3.535 5.474-1.76 1.103-3.765 1.537-5.003 1.595zM6.989 17.83c1.281.405 2.073 1.057 2.542 1.656.49.624.609 1.16.609 1.304h1.5c0-.568-.294-1.42-.929-2.23-.656-.836-1.701-1.665-3.27-2.16zm13.893-4.679c.527-4.373-1.536-7.429-4.402-8.973-2.812-1.517-6.42-1.588-9.057-.052l.755 1.296c2.136-1.244 5.184-1.222 7.59.076 2.355 1.269 4.074 3.747 3.625 7.474zM7.422 4.125C4.848 5.625 2.89 8.35 2.477 11.06c-.209 1.37-.026 2.767.714 3.986.742 1.222 1.996 2.189 3.79 2.78l.47-1.425c-1.524-.502-2.456-1.274-2.978-2.133-.523-.863-.68-1.89-.513-2.982.337-2.213 1.99-4.566 4.219-5.865l-.755-1.296z',
-                    }),
-                    /*#__PURE__*/ _jsxs('g', {
-                        stroke: 'currentColor',
-                        children: [
-                            /*#__PURE__*/ _jsx('circle', {
-                                cx: '12.581',
-                                cy: '15.292',
-                                r: '1.131',
-                                fill: 'none',
-                            }),
-                            /*#__PURE__*/ _jsx('circle', {
-                                cx: '8.944',
-                                cy: '7.754',
-                                r: '.531',
-                                fill: 'currentColor',
-                            }),
-                            /*#__PURE__*/ _jsx('path', {
-                                fill: 'currentColor',
-                                d: 'M12.211 7.042a.531.531 0 1 1-1.062 0 .531.531 0 0 1 1.062 0z',
-                            }),
-                            /*#__PURE__*/ _jsx('circle', {
-                                cx: '14.212',
-                                cy: '7.754',
-                                r: '.531',
-                                fill: 'currentColor',
-                            }),
-                            /*#__PURE__*/ _jsx('circle', {
-                                cx: '16.575',
-                                cy: '9.367',
-                                r: '.531',
-                                fill: 'currentColor',
-                            }),
-                        ],
-                    }),
-                ],
-            }),
-        s: true,
-    },
 ])
 export const SettingsBackup = /*#__PURE__*/ __createIcon('SettingsBackup', [
     {
@@ -5337,61 +5164,11 @@ export const SettingsBackup = /*#__PURE__*/ __createIcon('SettingsBackup', [
             }),
         s: true,
     },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsBackup.light.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
-                children: /*#__PURE__*/ _jsxs('g', {
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '1.5',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M17 21v-8H7v8M7 3v5h8',
-                        }),
-                    ],
-                }),
-            }),
-        s: true,
-    },
 ])
 export const SettingsEmail = /*#__PURE__*/ __createIcon('SettingsEmail', [
     {
         c: ['dark'],
         u: () => new URL('./settings/SettingsEmail.dark.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
-                children: /*#__PURE__*/ _jsxs('g', {
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '1.25',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'm22 6-10 7L2 6',
-                        }),
-                    ],
-                }),
-            }),
-        s: true,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsEmail.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -5529,47 +5306,11 @@ export const SettingsPassword = /*#__PURE__*/ __createIcon('SettingsPassword', [
             }),
         s: true,
     },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsPassword.light.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
-                children: /*#__PURE__*/ _jsx('path', {
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '1.25',
-                    d: 'M15.5 7.5 19 4m2-2-2 2zm-9.61 9.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5zM15.5 7.5l3 3L22 7l-3-3z',
-                }),
-            }),
-        s: true,
-    },
 ])
 export const SettingsPhone = /*#__PURE__*/ __createIcon('SettingsPhone', [
     {
         c: ['dark'],
         u: () => new URL('./settings/SettingsPhone.dark.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
-                children: /*#__PURE__*/ _jsx('path', {
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '1.25',
-                    d: 'M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2m-5 16h.01',
-                }),
-            }),
-        s: true,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsPhone.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -5605,52 +5346,11 @@ export const SettingsRestore = /*#__PURE__*/ __createIcon('SettingsRestore', [
             }),
         s: true,
     },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsRestore.light.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
-                children: /*#__PURE__*/ _jsx('path', {
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    strokeWidth: '1.25',
-                    d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5 5 5 5-5m-5 5V3',
-                }),
-            }),
-        s: true,
-    },
 ])
 export const SettingsSync = /*#__PURE__*/ __createIcon('SettingsSync', [
     {
         c: ['dark'],
         u: () => new URL('./settings/SettingsSync.dark.svg', import.meta.url).href,
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
-                children: /*#__PURE__*/ _jsxs('g', {
-                    fill: 'currentColor',
-                    fillRule: 'evenodd',
-                    clipRule: 'evenodd',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M3 4.8a.6.6 0 0 1 .6.6v4.2h4.2a.6.6 0 1 1 0 1.2H3a.6.6 0 0 1-.6-.6V5.4a.6.6 0 0 1 .6-.6m12.6 9a.6.6 0 0 1 .6-.6H21a.6.6 0 0 1 .6.6v4.8a.6.6 0 0 1-1.2 0v-4.2h-4.2a.6.6 0 0 1-.6-.6',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M9.791 3.93a7.57 7.57 0 0 1 3.971-.123 7.8 7.8 0 0 1 3.535 1.915 8.44 8.44 0 0 1 2.217 3.477c.113.337-.054.706-.373.825a.605.605 0 0 1-.782-.394 7.14 7.14 0 0 0-1.877-2.942 6.6 6.6 0 0 0-2.99-1.62 6.4 6.4 0 0 0-3.36.105A6.7 6.7 0 0 0 7.223 6.99l-3.79 3.758a.59.59 0 0 1-.867-.029.67.67 0 0 1 .027-.914l3.784-3.75a7.9 7.9 0 0 1 3.414-2.124zm11.643 9.35c.231.261.22.67-.027.915l-3.784 3.75a7.9 7.9 0 0 1-3.414 2.124 7.57 7.57 0 0 1-3.972.124 7.8 7.8 0 0 1-3.534-1.915A8.44 8.44 0 0 1 4.486 14.8c-.113-.337.054-.706.373-.825a.605.605 0 0 1 .782.394 7.14 7.14 0 0 0 1.876 2.942 6.6 6.6 0 0 0 2.99 1.62 6.4 6.4 0 0 0 3.361-.105 6.7 6.7 0 0 0 2.909-1.817l3.79-3.758a.59.59 0 0 1 .867.029',
-                        }),
-                    ],
-                }),
-            }),
-        s: true,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsSync.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
