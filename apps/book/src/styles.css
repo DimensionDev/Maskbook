@@ -44,6 +44,14 @@ body {
     height: 100%;
 }
 
+.book-menu-button {
+    display: none;
+}
+
+.book-backdrop {
+    display: none;
+}
+
 .book-sidebar {
     background: var(--book-sidebar-bg);
     border-right: 1px solid var(--book-border);
@@ -173,4 +181,80 @@ body {
     color: var(--book-muted);
     font-size: 11px;
     word-break: break-all;
+}
+
+@media (max-width: 768px) {
+    .book-shell {
+        grid-template-columns: 1fr;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .book-menu-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 10px;
+        left: 12px;
+        z-index: 30;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid var(--book-border);
+        background: var(--book-sidebar-bg);
+        color: var(--book-fg);
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .book-sidebar {
+        position: fixed;
+        inset: 0 20% 0 0;
+        max-width: 280px;
+        z-index: 25;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .book-shell[data-nav-open='true'] .book-sidebar {
+        transform: translateX(0);
+    }
+
+    .book-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 20;
+    }
+
+    .book-brand {
+        padding-left: 52px;
+    }
+
+    .book-nav-link {
+        padding: 10px 8px;
+        font-size: 14px;
+    }
+
+    .book-main-header {
+        padding: 60px 16px 12px;
+    }
+
+    .book-canvas {
+        padding: 16px;
+        overflow-x: auto;
+    }
+
+    .book-demo-grid {
+        gap: 12px;
+    }
+
+    .book-swatch {
+        width: calc(50% - 6px);
+        min-width: 130px;
+    }
 }
