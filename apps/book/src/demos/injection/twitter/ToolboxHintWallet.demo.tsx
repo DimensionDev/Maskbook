@@ -28,11 +28,7 @@ export default function ToolboxHintWalletTwitterDemo() {
             <div>Clicked {clicked} time(s)</div>
             <ToolboxHint
                 onClick={() => setClicked((c) => c + 1)}
-                icon={
-                    connected ?
-                        <Avatar sx={{ width: 24, height: 24 }}>W</Avatar>
-                    :   <Icons.Wallet size={24} />
-                }
+                icon={connected ? <Avatar sx={{ width: 24, height: 24 }}>W</Avatar> : <Icons.Wallet size={24} />}
                 title={connected ? '0x1234…5678' : 'Connect Wallet'}
                 extra={
                     wrongNetwork && connected ?
