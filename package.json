@@ -14,6 +14,8 @@
     "start": "dev",
     "start-rspack": "dev-rspack",
     "start:fx": "dev --manifest firefox-mv3",
+    "book": "pnpm --filter @masknet/book dev",
+    "book:build": "pnpm --filter @masknet/book build",
     "codegen": "gulp codegen-watch",
     "build": "build",
     "build-rspack": "build-rspack",
