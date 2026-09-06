@@ -36,6 +36,8 @@ test('V1 data can be decrypted', async () => {
     expect(new Uint8Array(decrypted)).toEqual(rawData)
 })
 
+// Two KDF-bound operations (encrypt + decrypt) can exceed vitest's 5s default
+// on CI runners where bigint-buffer falls back to pure JS.
 test('decrypt(password, encrypt(password, data)) === data', async () => {
     const password = Uint8Array.from('password'.split('').map((x) => x.codePointAt(0)))
     const data = new Uint8Array([4, 5, 6])
@@ -43,7 +45,7 @@ test('decrypt(password, encrypt(password, data)) === data', async () => {
     const result = await encryptBackup(password, data)
     const decrypted = await decryptBackup(password, result)
     expect(new Uint8Array(decrypted)).toEqual(data)
-})
+}, 20_000)
 
 test('New data uses the V1 container', async () => {
     const password = Uint8Array.from('password'.split('').map((x) => x.codePointAt(0)))

@@ -53,10 +53,12 @@ function ProfileCardHolder() {
         select: (user) => {
             if (!user) return null
             const legacy = user.legacy
+            const domAvatar = document.querySelector(`a[href="/${CSS.escape(legacy.screen_name)}/photo"] img`)
             return {
                 identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, legacy.screen_name).unwrapOr(undefined),
                 nickname: legacy.name,
-                avatar: legacy.profile_image_url_https,
+                // DOM avatar is more accurate, avatar from api could be outdate
+                avatar: domAvatar?.getAttribute('src') || legacy.profile_image_url_https,
                 bio: legacy.description,
                 homepage: legacy.entities.url?.urls?.[0]?.expanded_url,
             } as SocialIdentity
