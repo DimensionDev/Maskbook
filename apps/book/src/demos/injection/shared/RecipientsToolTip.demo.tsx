@@ -13,12 +13,7 @@ function makeRecipient(userId: string): ProfileInformation {
 }
 
 const FEW_RECIPIENTS = [makeRecipient('alice'), makeRecipient('bob')]
-const MANY_RECIPIENTS = [
-    makeRecipient('alice'),
-    makeRecipient('bob'),
-    makeRecipient('carol'),
-    makeRecipient('dave'),
-]
+const MANY_RECIPIENTS = [makeRecipient('alice'), makeRecipient('bob'), makeRecipient('carol'), makeRecipient('dave')]
 
 export default function RecipientsToolTipDemo() {
     return (

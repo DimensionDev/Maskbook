@@ -63,8 +63,8 @@ msgstr ""
 msgid "{0, select, create {<0>{user}</0> created a profile on <1>{platform}</1>} update {<2>{user}</2> updated a profile on <3>{platform}</3>} other {}}"
 msgstr ""
 
-#. placeholder {0}: decryptProgress || ''
-#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
+#. placeholder {0}: progress.progress || ''
+#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPost.tsx
 msgid "{0, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
 msgstr ""
 
@@ -2620,7 +2620,7 @@ msgstr ""
 msgid "Failed to create theme."
 msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx
+#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPost.tsx
 msgid "Failed to decrypt."
 msgstr ""
 
