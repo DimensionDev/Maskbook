@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar } from '@mui/material'
-import { EmojiAvatar } from '@masknet/shared'
+import { EmojiAvatar } from './EmojiAvatar.js'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -9,7 +9,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-interface PersonaAvatarProps extends withClasses<'root'> {
+export interface PersonaAvatarProps extends withClasses<'root'> {
     pubkey: string
     avatar?: string | null
     size: number

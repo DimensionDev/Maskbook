@@ -17,7 +17,7 @@ import {
 import { RestorableScrollContext } from '@masknet/shared'
 import { memo, Suspense, type PropsWithChildren } from 'react'
 import { Outlet, type RouteObject } from 'react-router-dom'
-import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
+import { LoadingPlaceholder } from '@masknet/injected-ui/LoadingPlaceholder'
 import { Header } from './Header.js'
 import { useImplementRuntime } from './useImplementRuntime.js'
 

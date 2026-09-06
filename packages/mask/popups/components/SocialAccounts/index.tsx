@@ -1,12 +1,14 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
+import { PopupModalRoutes, SOCIAL_MEDIA_NAME, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
+import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
 import { useModalNavigate } from '../ActionModal/index.js'
-import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
+import { ConnectSocialAccounts } from '@masknet/injected-ui/ConnectSocialAccounts'
+import { SOCIAL_MEDIA_ICON_FILTER_COLOR } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     tips: {
@@ -75,11 +77,33 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
 }) {
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
+    const resolvedNetworks = useMemo(
+        () =>
+            networks.map((networkIdentifier) => {
+                const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier]
+                return {
+                    networkIdentifier,
+                    icon:
+                        Icon ?
+                            <Icon
+                                size={24}
+                                style={{
+                                    filter: SOCIAL_MEDIA_ICON_FILTER_COLOR[networkIdentifier],
+                                    backdropFilter: 'blur(8px)',
+                                    borderRadius: 99,
+                                }}
+                            />
+                        :   null,
+                    name: SOCIAL_MEDIA_NAME[networkIdentifier] || '',
+                }
+            }),
+        [networks],
+    )
 
     if (!accounts.length)
         return (
             <Box>
-                <ConnectSocialAccounts networks={networks} onConnect={onConnect} />
+                <ConnectSocialAccounts networks={resolvedNetworks} onConnect={onConnect} />
                 <Typography className={classes.tips}>
                     <Trans>Connect your social platform accounts.</Trans>
                 </Typography>

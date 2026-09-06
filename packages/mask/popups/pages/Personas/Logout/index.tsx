@@ -14,7 +14,7 @@ import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../shared-ui/index.js'
 import { BottomController } from '@masknet/injected-ui/BottomController'
 import { PasswordField } from '@masknet/injected-ui/PasswordField'
-import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
+import { PersonaAvatar } from '@masknet/injected-ui/PersonaAvatar'
 import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme, _, refs) => ({
