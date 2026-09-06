@@ -7,7 +7,7 @@ import { CommentBox, type CommentBoxProps } from '@masknet/injected-ui/CommentBo
 import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { activatedSiteAdaptorUI } from '../../ui.js'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 async function defaultOnPasteToCommentBox(
     encryptedComment: string,
