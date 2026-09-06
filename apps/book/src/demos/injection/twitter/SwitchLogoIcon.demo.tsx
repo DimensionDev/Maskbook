@@ -5,7 +5,7 @@ import { SwitchLogoIcon } from '@masknet/injected-ui/SwitchLogoIcon'
 export const meta = {
     title: 'SwitchLogoIcon',
     description:
-        'The click target overlaid on top of X\'s own logo that opens the switch-logo dialog (packages/injected-ui/src/SwitchLogoIcon.tsx). Hover the box below to reveal it.',
+        "The click target overlaid on top of X's own logo that opens the switch-logo dialog (packages/injected-ui/src/SwitchLogoIcon.tsx). Hover the box below to reveal it.",
 }
 
 export default function SwitchLogoIconDemo() {

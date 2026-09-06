@@ -4053,6 +4053,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
 #: packages/mask/content-script/components/InjectedComponents/PostDialogHint.tsx
+#: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: packages/mask/popups/pages/Wallet/ContactList/index.tsx
 #: packages/mask/popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Next"
@@ -5501,6 +5502,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
 #: packages/mask/content-script/components/InjectedComponents/PostDialogHint.tsx
+#: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: packages/mask/dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Skip"
 msgstr "跳過"
@@ -6384,6 +6386,7 @@ msgstr ""
 
 #: packages/mask/content-script/components/GuideStep/index.tsx
 #: packages/mask/content-script/components/InjectedComponents/PostDialogHint.tsx
+#: packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Try"
 msgstr "試一下"
 
