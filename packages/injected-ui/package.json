@@ -1,0 +1,29 @@
+{
+  "name": "@masknet/injected-ui",
+  "version": "0.0.0",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "description": "Pure, prop-driven UI pieces used by the site-adaptor injections (packages/mask/content-script) and demoed by the component book (apps/book). No barrel index on purpose: each component has its own export entry so importing one never pulls in the others.",
+  "exports": {
+    "./GuideStep": {
+      "types": "./dist/GuideStep.d.ts",
+      "mask-src": "./src/GuideStep.tsx",
+      "default": "./dist/GuideStep.js"
+    },
+    "./Banner": {
+      "types": "./dist/Banner.d.ts",
+      "mask-src": "./src/Banner.tsx",
+      "default": "./dist/Banner.js"
+    },
+    "./PostDialogHint": {
+      "types": "./dist/PostDialogHint.d.ts",
+      "mask-src": "./src/PostDialogHint.tsx",
+      "default": "./dist/PostDialogHint.js"
+    }
+  },
+  "dependencies": {
+    "@masknet/icons": "workspace:^",
+    "@masknet/theme": "workspace:^"
+  }
+}
