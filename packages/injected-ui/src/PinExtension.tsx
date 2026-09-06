@@ -1,7 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { SetupGuideStep } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
 import { WizardDialog } from './WizardDialog.js'
 
