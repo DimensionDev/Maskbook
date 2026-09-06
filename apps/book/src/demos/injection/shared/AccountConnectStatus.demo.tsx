@@ -5,7 +5,7 @@ import { AccountConnectStatus } from '@masknet/injected-ui/AccountConnectStatus'
 export const meta = {
     title: 'AccountConnectStatus',
     description:
-        "The status message shown inside the setup guide's \"connect persona\" step, after creating a persona and verifying the linked social account (packages/injected-ui/src/AccountConnectStatus.tsx). The container wraps this in BindingDialog chrome and handles the loading state - only the state-dependent message is shown here.",
+        'The status message shown inside the setup guide\'s "connect persona" step, after creating a persona and verifying the linked social account (packages/injected-ui/src/AccountConnectStatus.tsx). The container wraps this in BindingDialog chrome and handles the loading state - only the state-dependent message is shown here.',
 }
 
 type Scenario = 'first-connection' | 'first-connection-twitter' | 'connected' | 'wrong-account' | 'not-signed-in'
@@ -48,11 +48,7 @@ export default function AccountConnectStatusDemo() {
             </Select>
             <div>Done clicked {doneClicked} time(s)</div>
             <Stack sx={{ border: '1px solid rgba(0,0,0,0.1)', borderRadius: 2, p: 2, width: '100%' }}>
-                <AccountConnectStatus
-                    siteName="Twitter"
-                    {...props}
-                    onDone={() => setDoneClicked((c) => c + 1)}
-                />
+                <AccountConnectStatus siteName="Twitter" {...props} onDone={() => setDoneClicked((c) => c + 1)} />
             </Stack>
         </Stack>
     )

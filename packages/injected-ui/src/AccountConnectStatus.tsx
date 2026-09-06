@@ -38,8 +38,8 @@ export function AccountConnectStatus(props: AccountConnectStatusProps) {
                 <>
                     <Typography className={classes.text}>Sent verification post successfully.</Typography>
                     <Typography className={classes.text} sx={{ mt: '1.5em' }}>
-                        You could check the verification result on Mask Pop-up after few minutes. If failed, try
-                        sending verification post again.
+                        You could check the verification result on Mask Pop-up after few minutes. If failed, try sending
+                        verification post again.
                     </Typography>
                 </>
             :   <>

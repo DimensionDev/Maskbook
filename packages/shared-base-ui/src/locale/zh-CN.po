@@ -476,8 +476,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "<0>@{currentUserId}</0> connected already."
-msgstr ""
+#~ msgid "<0>@{currentUserId}</0> connected already."
+#~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "<0>0</0> Followers <1>0</1> Following"
@@ -1296,8 +1296,8 @@ msgid "Change"
 msgstr "切换"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Change another account and try again."
-msgstr ""
+#~ msgid "Change another account and try again."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
@@ -1742,8 +1742,8 @@ msgstr ""
 #~ msgstr "已连接的网站"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Connected successfully."
-msgstr ""
+#~ msgid "Connected successfully."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #~ msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
@@ -2010,8 +2010,8 @@ msgstr "货币符号(可选)"
 #~ msgstr "当前"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Current account is not the verifying account."
-msgstr ""
+#~ msgid "Current account is not the verifying account."
+#~ msgstr ""
 
 #. placeholder {0}: formatCurrency(formatWeiToGwei(baseFeePerGas), '')
 #. placeholder {0}: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP)
@@ -2282,7 +2282,6 @@ msgid "Donate"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
@@ -4708,12 +4707,12 @@ msgstr "请在导出私钥之前设置您的备份密码。"
 #~ msgstr "请在自动锁定您的钱包之前设置时间。"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Please sign up or login {siteName} to connect Mask Network."
-msgstr ""
+#~ msgid "Please sign up or login {siteName} to connect Mask Network."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Please switch to <0>@{expectAccount}</0> to continue the account verification progress."
-msgstr ""
+#~ msgid "Please switch to <0>@{expectAccount}</0> to continue the account verification progress."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Please switch to this network in the mobile application wallet you are connected to."
@@ -5363,8 +5362,8 @@ msgstr "发送中..."
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Sent verification post successfully."
-msgstr ""
+#~ msgid "Sent verification post successfully."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Service Agreement"
@@ -6402,8 +6401,8 @@ msgid "Try token from different chains"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Trying exploring more features powered by Mask Network."
-msgstr ""
+#~ msgid "Trying exploring more features powered by Mask Network."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 msgid "Twitter cookies synced successfully"
@@ -6938,8 +6937,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
-msgstr ""
+#~ msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+#~ msgstr ""
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
