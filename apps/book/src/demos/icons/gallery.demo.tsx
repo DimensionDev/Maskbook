@@ -42,7 +42,7 @@ export default function IconGalleryDemo() {
             <div
                 style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))',
+                    gridTemplateColumns: 'repeat(10, 1fr)',
                     gap: 8,
                 }}>
                 {list.map((name) => {
@@ -60,8 +60,8 @@ export default function IconGalleryDemo() {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
-                                gap: 6,
-                                padding: '12px 6px',
+                                gap: 8,
+                                padding: '16px 8px',
                                 border: '1px solid var(--book-border)',
                                 borderRadius: 10,
                                 background: 'transparent',
@@ -69,7 +69,7 @@ export default function IconGalleryDemo() {
                                 cursor: 'pointer',
                                 overflow: 'hidden',
                             }}>
-                            <Icon size={24} />
+                            <Icon size={36} />
                             <span
                                 style={{
                                     fontSize: 10,
