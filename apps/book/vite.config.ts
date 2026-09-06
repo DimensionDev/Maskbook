@@ -32,6 +32,11 @@ export default defineConfig({
         outDir: 'dist',
         emptyOutDir: true,
         sourcemap: true,
+        // @masknet/icons renders most icons as `background-image: url(<icon>)` with an
+        // UNQUOTED url(). Vite's inlined `data:image/svg+xml,<url-encoded>` URIs contain
+        // characters that break an unquoted url(), so most icons vanish in the prod build
+        // (dev is fine — files are served raw). Emit every icon as its own file instead.
+        assetsInlineLimit: 0,
     },
     define: {
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
