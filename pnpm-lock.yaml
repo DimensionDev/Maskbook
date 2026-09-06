@@ -422,6 +422,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:^
         version: link:../theme
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)

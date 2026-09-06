@@ -3,9 +3,11 @@ import { type PostInfo, PostInfoContext, usePostInfoEncryptComment } from '@mask
 import { type DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
-import { CommentBox, type CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
+import { CommentBox, type CommentBoxProps } from '@masknet/injected-ui/CommentBox'
 import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { activatedSiteAdaptorUI } from '../../ui.js'
+import { useLingui } from '@lingui/react'
 
 async function defaultOnPasteToCommentBox(
     encryptedComment: string,
@@ -29,6 +31,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const info = useContext(PostInfoContext)
         const encryptComment = usePostInfoEncryptComment()
         const { classes } = useCustomStyles()
+        const { t } = useLingui()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
             async (content: string) => {
@@ -40,7 +43,14 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         )
 
         if (!encryptComment) return null
-        return <CommentBox onSubmit={onCallback} {...props} />
+        return (
+            <CommentBox
+                onSubmit={onCallback}
+                site={activatedSiteAdaptorUI!.networkIdentifier}
+                placeholder={t`Add an encrypted comment...`}
+                {...props}
+            />
+        )
     })
     return (signal: AbortSignal, current: PostInfo) => {
         if (!current.comment?.commentBoxSelector) return

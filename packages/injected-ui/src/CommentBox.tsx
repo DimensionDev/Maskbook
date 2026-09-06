@@ -1,11 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
-import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { useLingui } from '@lingui/react/macro'
 
 interface StyleProps {
-    site: EnhanceableSite
+    site?: EnhanceableSite
 }
 
 const useStyles = makeStyles<StyleProps>()((_theme, { site }) => ({
@@ -35,16 +33,18 @@ const useStyles = makeStyles<StyleProps>()((_theme, { site }) => ({
 export interface CommentBoxProps {
     onSubmit: (newVal: string) => void
     inputProps?: Partial<PropsOf<typeof InputBase>>
+    /** Only Minds gets a slightly narrower box; every other site adaptor uses the default width. */
+    site?: EnhanceableSite
+    placeholder?: string
 }
 export function CommentBox(props: CommentBoxProps) {
-    const { t } = useLingui()
-    const { classes } = useStyles({ site: activatedSiteAdaptorUI!.networkIdentifier })
+    const { classes } = useStyles({ site: props.site })
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
             <InputBase
                 className={classes.root}
                 inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
-                placeholder={t`Add an encrypted comment...`}
+                placeholder={props.placeholder ?? 'Add an encrypted comment...'}
                 onKeyDown={(event) => {
                     const node = event.target as HTMLInputElement
                     if (!node.value) return

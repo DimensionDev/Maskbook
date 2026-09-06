@@ -50,6 +50,16 @@
       "types": "./dist/PinExtension.d.ts",
       "mask-src": "./src/PinExtension.tsx",
       "default": "./dist/PinExtension.js"
+    },
+    "./CommentBox": {
+      "types": "./dist/CommentBox.d.ts",
+      "mask-src": "./src/CommentBox.tsx",
+      "default": "./dist/CommentBox.js"
+    },
+    "./AutoPasteFailedDialog": {
+      "types": "./dist/AutoPasteFailedDialog.d.ts",
+      "mask-src": "./src/AutoPasteFailedDialog.tsx",
+      "default": "./dist/AutoPasteFailedDialog.js"
     }
   },
   "dependencies": {
@@ -57,6 +67,7 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",
     "@masknet/theme": "workspace:^",
+    "date-fns": "^3.6.0",
     "react-use": "^17.5.0"
   }
 }
