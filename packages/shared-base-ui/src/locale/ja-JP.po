@@ -669,9 +669,9 @@ msgstr "追加"
 msgid "Add a Custom Cover"
 msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/CommentBox.tsx
-#~ msgid "Add an encrypted comment..."
-#~ msgstr ""
+#: packages/mask/content-script/site-adaptor-infra/defaults/inject/CommentBox.tsx
+msgid "Add an encrypted comment..."
+msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 msgid "Add Assets"
