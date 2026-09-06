@@ -13,7 +13,6 @@ const import_AES_GCM_256 = CheckedError.withErr(importAES, CryptoException.Inval
 const v38PublicSharedJwk: JsonWebKey = {
     alg: 'A256GCM',
     ext: true,
-    /* cspell:disable-next-line */
     k: '3Bf8BJ3ZPSMUM2jg2ThODeLuRRD_-_iwQEaeLdcQXpg',
     key_ops: ['encrypt', 'decrypt'],
     kty: 'oct',

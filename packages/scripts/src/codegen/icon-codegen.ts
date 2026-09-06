@@ -78,7 +78,6 @@ async function generateIcons() {
     }
 
     const relativePrefix = iconRoot.href.length
-    /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true })
 
     const variants: {

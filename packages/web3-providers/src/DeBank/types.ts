@@ -1,4 +1,3 @@
-// cspell:disable
 export enum DebankTransactionDirection {
     SEND = 'send',
     RECEIVE = 'receive',

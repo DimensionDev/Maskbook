@@ -21,7 +21,6 @@ export async function pasteTextToCompositionFacebook(
     )(scrolling.scrollTop)
 
     const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
-        // cspell:disable-next-line
         ':scope div[role=presentation] .notranslate[role=textbox]',
     )
 

@@ -51,7 +51,6 @@ namespace Version38Or39 {
         const minePublicKeyJWK = await CryptoKeyToJsonWebKey(minePublicKey)
         const { keyHash, postHash } = await calculatePostKeyPartition(version, network, iv, minePublicKeyJWK)
 
-        /* cspell:disable-next-line */
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
         console.log(
             `[@masknet/encryption] Reading key partition [${postHash[0]}][${keyHash}] and [${postHash[1]}][${keyHash}]`,
@@ -217,7 +216,6 @@ namespace Version37 {
         const minePublicKeyJWK = await CryptoKeyToJsonWebKey(minePublicKey)
         const { keyHash, postHash, networkHint } = await calculatePostKeyPartition(network, iv, minePublicKeyJWK)
 
-        /* cspell:disable-next-line */
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
         const keyPartition = `${networkHint}-${postHash}-${keyHash}`
         console.log(`[@masknet/encryption] Reading key partition [${keyPartition}]`)

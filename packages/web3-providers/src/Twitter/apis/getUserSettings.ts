@@ -2,9 +2,7 @@ import { hexToRgb } from '@mui/material'
 import { getObjectStore } from './getObjectStore.js'
 import { TwitterBaseAPI } from '../../entry-types.js'
 
-/* cspell:disable-next-line */
 const STORE_NAME = 'keyvaluepairs'
-/* cspell:disable-next-line */
 const KEY_NAME = 'device:rweb.settings'
 
 export async function getUserSettings() {

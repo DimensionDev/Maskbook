@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-// cspell:disable-next-line
 import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
 import type { IntermediateRepresentation, Opts } from 'linkifyjs'
 import { useState, type ComponentProps } from 'react'

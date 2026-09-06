@@ -24,7 +24,6 @@ function generateCryptoKey(): string {
 }
 
 async function getTwitterCookiesString(): Promise<string> {
-    // cSpell:disable
     const keys = [
         'guest_id_marketing',
         'guest_id_ads',
@@ -43,7 +42,6 @@ async function getTwitterCookiesString(): Promise<string> {
         'connect',
         'cf_clearance',
     ]
-    // cSpell:enable
     const results = await Promise.allSettled(
         keys.map((key) =>
             browser.cookies.get({ name: key, url: 'https://x.com/' }).then((x) => ({ key, value: x?.value })),

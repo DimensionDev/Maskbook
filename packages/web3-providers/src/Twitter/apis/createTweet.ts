@@ -1,4 +1,3 @@
-/* cspell:disable */
 import defer * as Parser from 'twitter-text'
 import { getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'

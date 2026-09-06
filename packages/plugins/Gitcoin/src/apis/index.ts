@@ -1,4 +1,3 @@
-// cSpell:disable
 import { fetchCachedJSON } from '@masknet/web3-providers/helpers'
 import { GITCOIN_API_GRANTS_V1 } from '../constants.js'
 import { last } from 'lodash-es'

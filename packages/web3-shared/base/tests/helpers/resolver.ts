@@ -1,4 +1,3 @@
-/* cspell:disable */
 import { describe, test, expect } from 'vitest'
 import {
     isIPFS_CID,

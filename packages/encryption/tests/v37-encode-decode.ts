@@ -58,7 +58,6 @@ async function getAESKey(): Promise<PayloadWellFormed.PublicEncryption['AESKey']
 const testKey = {
     alg: 'A256GCM',
     ext: true,
-    /* cspell:disable-next-line */
     k: 'JRhrRKykmnm3SbuNw6OcXF_jiw0gIlW3QiWNV01jeaE',
     key_ops: ['encrypt', 'decrypt'],
     kty: 'oct',

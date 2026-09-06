@@ -18,7 +18,6 @@ function hasSpecificLeftRailStartBar() {
 }
 
 function isNormalLeftRailStartBar() {
-    // cspell:disable-next-line
     return !!document.querySelector('[data-pagelet="LeftRail"]')
 }
 
@@ -27,7 +26,6 @@ export function injectToolboxHintAtFacebook(signal: AbortSignal, category: 'wall
         isNormalLeftRailStartBar() ? toolboxInSidebarSelector() : toolboxInSpecialSidebarSelector(),
     )
     startWatch(watcher, signal)
-    // cspell:disable-next-line
     const hasTopNavBar = !!document.querySelector<HTMLElement>('#ssrb_top_nav_start ~ [role="banner"]')
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxAtFacebook

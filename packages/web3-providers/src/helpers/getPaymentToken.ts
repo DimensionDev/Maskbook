@@ -5,7 +5,6 @@ import {
     DAI,
     HUSD,
     RARI,
-    // cspell:disable-next-line
     TATR,
     USDC,
     USDT,
@@ -16,7 +15,6 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
-/* cspell:disable-next-line */
 const tokens = [APE, USDC, USDT, DAI, HUSD, BUSD, WBTC, WNATIVE, TATR, RARI]
 
 export function getPaymentToken(

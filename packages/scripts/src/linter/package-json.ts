@@ -5,7 +5,6 @@ import { ROOT_PATH } from '../utils/paths.ts'
 const pattern = 'packages/**/package.json'
 export async function lintPackageJson() {
     const { glob } = await import('tinyglobby')
-    /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true, ignore: ['**/node_modules/**'] })
 
     const sideEffects: string[] = []

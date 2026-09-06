@@ -87,7 +87,6 @@ export function createMaskPayloadTransform(options: MaskPayloadTransformOptions)
 }
 // match the link version payload
 
-/* cspell:disable-next-line */
 const linkPayload = /^https?:\/\/mask(\.io|book\.com)\/\?postdata_v/iu
 // match the text version payload
 const textPayload = /(\u{1F3BC}[\w+/=|]+:\|\|)/giu

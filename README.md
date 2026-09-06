@@ -1,4 +1,3 @@
-<!-- cspell:disable -->
 <a href="https://mask.io">
   <img src="https://dimensiondev.github.io/Mask-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">

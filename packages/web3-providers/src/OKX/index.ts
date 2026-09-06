@@ -85,7 +85,6 @@ export const OKX = {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/get-liquidity', {
             chainId,
         })
-        // cspell: disable-next-line
         // XXX Suspect this is private API of OKX, according to `pri(vate)api`, which provides dex logo
         const privateUrl = urlcat('https://www.okx.com/priapi/v1/dx/trade/multi/liquidityList', { chainId })
         const [res, resWithLogo] = await Promise.all([

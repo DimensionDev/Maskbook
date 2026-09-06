@@ -132,7 +132,6 @@ function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
 function getPostID(node: DOMProxy, root: HTMLElement): null | string {
     if (node.destroyed) return null
     // In single url
-    // cspell:disable-next-line
     if (/plugins.+(perma.+story_fbid%3D|posts%2F)?/u.test(location.href)) {
         const url = new URL(location.href)
         return url.searchParams.get('id')

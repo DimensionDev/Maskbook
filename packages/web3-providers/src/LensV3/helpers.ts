@@ -1,4 +1,3 @@
-// cspell:ignore ment,agment,ment,Multirecipient
 import type {
     Account,
     AccountMention,

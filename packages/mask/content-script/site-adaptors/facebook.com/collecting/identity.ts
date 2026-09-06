@@ -102,7 +102,6 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
 // Try to resolve my identities
 const myUsernameLiveSelector = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
-        // cspell:disable-next-line
         ':scope [data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
     )
 

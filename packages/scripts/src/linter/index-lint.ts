@@ -6,7 +6,6 @@ import ts from 'typescript'
 const pattern = 'packages/**/index.ts'
 export async function lintIndex() {
     const { glob } = await import('tinyglobby')
-    /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, onlyFiles: true, ignore: ['**/node_modules/**'] })
 
     const hasSideEffect: string[] = []

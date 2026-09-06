@@ -1,4 +1,3 @@
-/* cspell:disable */
 import * as RegeneratorRuntime from 'regenerator-runtime'
 import * as tslib from 'tslib'
 import * as ReflectMetadata from './reflect-metadata.js'
