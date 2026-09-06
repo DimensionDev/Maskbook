@@ -4,7 +4,8 @@ import { StyledInput } from '../../../../../packages/mask/popups/components/Styl
 
 export const meta = {
     title: 'StyledInput',
-    description: 'The underline-less MUI TextField used throughout the popups UI (packages/mask/popups/components/StyledInput).',
+    description:
+        'The underline-less MUI TextField used throughout the popups UI (packages/mask/popups/components/StyledInput).',
 }
 
 export default function StyledInputDemo() {

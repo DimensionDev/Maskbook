@@ -1,4 +1,12 @@
-import { cloneElement, useRef, useState, type ReactElement, useLayoutEffect, type RefObject, type ReactNode } from 'react'
+import {
+    cloneElement,
+    useRef,
+    useState,
+    type ReactElement,
+    useLayoutEffect,
+    type RefObject,
+    type ReactNode,
+} from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
 

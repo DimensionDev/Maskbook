@@ -64,9 +64,7 @@ const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintProps
         </ShadowRootTooltip>
     )
 
-    return guide ?
-            <GuideStep {...guide}>{Entry}</GuideStep>
-        :   Entry
+    return guide ? <GuideStep {...guide}>{Entry}</GuideStep> : Entry
 })
 
 /**

@@ -4,7 +4,8 @@ import { BottomDrawer } from '../../../../../packages/mask/popups/components/Bot
 
 export const meta = {
     title: 'BottomDrawer',
-    description: 'The bottom sheet used for in-place pickers and confirmations in popups (packages/mask/popups/components/BottomDrawer).',
+    description:
+        'The bottom sheet used for in-place pickers and confirmations in popups (packages/mask/popups/components/BottomDrawer).',
 }
 
 export default function BottomDrawerDemo() {
