@@ -5,11 +5,6 @@ import {
     type ListItemIconProps,
     type ListItemTextProps,
     type TypographyProps,
-    Typography as MuiTypography,
-    ListItemButton as MuiListItemButton,
-    ListItemIcon as MuiListItemIcon,
-    ListItemText as MuiListItemText,
-    Box,
     useTheme,
     type SxProps,
     type Theme,
@@ -30,15 +25,11 @@ import { WalletIcon, SelectProviderModal, WalletStatusModal } from '@masknet/sha
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { ToolboxHint as ToolboxHintUI } from '@masknet/injected-ui/ToolboxHint'
-import GuideStep, { useGuideStepState } from '../GuideStep/index.js'
+import { useGuideStepState } from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()(() => ({
-    title: {
-        display: 'flex',
-        alignItems: 'center',
-    },
     chainIcon: {
         fontSize: 18,
         width: 18,
@@ -87,61 +78,44 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 }
 
 function ToolboxHintForWallet(props: ToolboxHintProps) {
-    const {
-        ListItemButton = MuiListItemButton,
-        ListItemText = MuiListItemText,
-        ListItemIcon = MuiListItemIcon,
-        Container = 'div',
-        Typography = MuiTypography,
-        iconSize = 24,
-        badgeSize = 12,
-        mini,
-        ...rest
-    } = props
+    const { category, iconSize = 24, badgeSize = 12, ...rest } = props
     const { classes } = useStyles()
     const { onClickToolbox, title, chainColor, shouldDisplayChainIndicator, account, provider } = useToolbox()
+    const guideState = useGuideStepState({ step: 2, total: 4 })
 
     const theme = useTheme()
 
     return (
-        <GuideStep step={2} total={4} tip={<Trans>Connect and switch between your wallets.</Trans>}>
-            <Container {...rest}>
-                <ListItemButton onClick={onClickToolbox}>
-                    <ListItemIcon>
-                        {account && provider ?
-                            <WalletIcon
-                                size={iconSize}
-                                badgeSize={badgeSize}
-                                mainIcon={provider.icon}
-                                badgeIconBorderColor={theme.vars.palette.background.paper}
-                            />
-                        :   <Icons.Wallet size={iconSize} />}
-                    </ListItemIcon>
-                    {mini ? null : (
-                        <ListItemText
-                            primary={
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                    }}>
-                                    <Typography className={classes.title}>{title}</Typography>
-                                    {shouldDisplayChainIndicator ?
-                                        <FiberManualRecordIcon
-                                            className={classes.chainIcon}
-                                            style={{
-                                                color: chainColor,
-                                            }}
-                                        />
-                                    :   null}
-                                </Box>
-                            }
-                        />
-                    )}
-                </ListItemButton>
-            </Container>
-        </GuideStep>
+        <ToolboxHintUI
+            {...rest}
+            iconSize={iconSize}
+            onClick={onClickToolbox}
+            title={title}
+            icon={
+                account && provider ?
+                    <WalletIcon
+                        size={iconSize}
+                        badgeSize={badgeSize}
+                        mainIcon={provider.icon}
+                        badgeIconBorderColor={theme.vars.palette.background.paper}
+                    />
+                :   <Icons.Wallet size={iconSize} />
+            }
+            extra={
+                shouldDisplayChainIndicator ?
+                    <FiberManualRecordIcon className={classes.chainIcon} style={{ color: chainColor }} />
+                :   null
+            }
+            guide={{
+                step: 2,
+                total: 4,
+                tip: <Trans>Connect and switch between your wallets.</Trans>,
+                skipLabel: <Trans>Skip</Trans>,
+                nextLabel: <Trans>Next</Trans>,
+                tryLabel: <Trans>Try</Trans>,
+                ...guideState,
+            }}
+        />
     )
 }
 

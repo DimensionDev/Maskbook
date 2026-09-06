@@ -39,15 +39,19 @@ export interface ToolboxHintProps {
     iconSize?: number
     mini?: boolean
     onClick?: () => void
+    /** Defaults to the Mask logo (the application slot); the wallet slot passes its own connected-wallet/chain icon. */
+    icon?: ReactNode
     title?: ReactNode
+    /** Rendered right after the title, e.g. the wallet slot's "wrong network" indicator dot. */
+    extra?: ReactNode
     /** Renders the onboarding tooltip around the entry when provided; omit to skip it entirely. */
     guide?: ToolboxHintGuideProps
 }
 
 /**
- * The "Mask Network" entry injected into a platform's own toolbox/sidebar (the application slot —
- * the wallet slot needs live chain state and isn't decoupled here).
- * Pure UI: the click handler and guide-tour state are resolved by the caller, see
+ * The entry injected into a platform's own toolbox/sidebar — either the "Mask Network"
+ * (application) slot or the connected-wallet (wallet) slot; both platforms register one of each.
+ * Pure UI: the icon, click handler, and guide-tour state are all resolved by the caller, see
  * packages/mask/content-script/components/InjectedComponents/ToolboxUnstyled.tsx.
  */
 export function ToolboxHint(props: ToolboxHintProps) {
@@ -60,7 +64,9 @@ export function ToolboxHint(props: ToolboxHintProps) {
         mini,
         ListItemText = MuiListItemText,
         onClick,
+        icon = <Icons.MaskBlue size={iconSize} />,
         title = 'Mask Network',
+        extra,
         guide,
         ...rest
     } = props
@@ -69,9 +75,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const Entry = (
         <Container {...rest}>
             <ListItemButton onClick={onClick}>
-                <ListItemIcon>
-                    <Icons.MaskBlue size={iconSize} />
-                </ListItemIcon>
+                <ListItemIcon>{icon}</ListItemIcon>
                 {mini ? null : (
                     <ListItemText
                         primary={
@@ -82,6 +86,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
                                     alignItems: 'center',
                                 }}>
                                 <Typography className={classes.title}>{title}</Typography>
+                                {extra}
                             </Box>
                         }
                     />
