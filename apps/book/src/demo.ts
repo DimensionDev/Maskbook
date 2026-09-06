@@ -15,11 +15,13 @@ export interface DemoModule {
 }
 
 export interface DemoEntry {
-    /** e.g. "components/ActionButton" */
+    /** e.g. "injection/twitter/Banner" */
     id: string
-    /** e.g. "components" */
+    /** e.g. "injection" */
     section: string
-    /** e.g. "ActionButton" */
+    /** e.g. "twitter", for demos nested one level under a section */
+    group?: string
+    /** e.g. "Banner" */
     name: string
     title: string
     description?: string

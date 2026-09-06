@@ -1,55 +1,13 @@
-import { useCallback, useState, type JSX } from 'react'
+import { useCallback, useState } from 'react'
 import { useMount } from 'react-use'
-import { IconButton } from '@mui/material'
-import { Icons } from '@masknet/icons'
+import { Banner as BannerUI, type BannerProps as BannerUIProps } from '@masknet/injected-ui/Banner'
 import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { DashboardRoutes, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { MaskColors, makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
-
-interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | 'buttonText'> {
-    description?: string
-    nextStep:
-        | 'hidden'
-        | {
-              onClick(): void
-          }
-    username?:
-        | 'hidden'
-        | {
-              isValid(username: string): boolean
-              value: string
-              defaultValue: string
-              onChange(nextValue: string): void
-          }
-    iconType?: string
-}
-
-const ICON_MAP: { [property: string]: JSX.Element } = {
-    minds: <Icons.MaskInMinds size={18} />,
-    default: <Icons.SharpMask size={17} color={MaskColors.light.maskColor.publicTwitter} />,
-}
-const useStyles = makeStyles()({
-    buttonText: {
-        width: 38,
-        height: 38,
-        margin: '10px 0',
-    },
-})
-
-function BannerUI(props: BannerUIProps) {
-    const { classes } = useStyles(undefined, { props })
-
-    return props.nextStep === 'hidden' ?
-            null
-        :   <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-                {ICON_MAP[props.iconType ?? 'default']}
-            </IconButton>
-}
 
 interface BannerProps extends Partial<BannerUIProps> {}
 

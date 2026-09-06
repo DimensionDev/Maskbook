@@ -15,6 +15,12 @@ export default defineConfig({
         // Mirror packages/mask/.webpack/config.ts `conditionNames: ['mask-src', '...']`.
         // Without this, `@masknet/theme` resolves to its dist entry, which is a `.d.ts` file.
         conditions: ['mask-src', ...defaultClientConditions],
+        // Mirror packages/mask/.webpack/config.ts `resolve.extensionAlias`. packages/mask source
+        // files import siblings with a `.js` specifier even though the file on disk is `.ts`/`.tsx`
+        // (TS `moduleResolution: bundler`); popups/injection demos pull those files in directly.
+        extensionAlias: {
+            '.js': ['.js', '.tsx', '.ts'],
+        },
         // The monorepo is symlink-heavy; keep a single copy of these.
         dedupe: ['react', 'react-dom', '@emotion/react', '@emotion/styled', '@mui/material', '@mui/system'],
     },
@@ -26,7 +32,7 @@ export default defineConfig({
     },
     optimizeDeps: {
         // consume these from source, don't pre-bundle
-        exclude: ['@masknet/icons', '@masknet/shared-base', '@masknet/theme'],
+        exclude: ['@masknet/icons', '@masknet/injected-ui', '@masknet/shared-base', '@masknet/theme'],
     },
     build: {
         outDir: 'dist',

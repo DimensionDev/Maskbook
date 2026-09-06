@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@masknet/icons": "workspace:*",
+    "@masknet/injected-ui": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@mui/icons-material": "9.2.0",
