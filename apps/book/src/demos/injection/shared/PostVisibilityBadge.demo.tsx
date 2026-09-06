@@ -13,7 +13,11 @@ export default function PostVisibilityBadgeDemo() {
 
     return (
         <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-            <PostVisibilityBadge variant="onlyYou" label="Only visible to yourself" onClick={() => setClicked((c) => c + 1)} />
+            <PostVisibilityBadge
+                variant="onlyYou"
+                label="Only visible to yourself"
+                onClick={() => setClicked((c) => c + 1)}
+            />
             <PostVisibilityBadge variant="everyone" label="All Mask Network users" />
             <div>Clicked {clicked} time(s)</div>
         </Stack>

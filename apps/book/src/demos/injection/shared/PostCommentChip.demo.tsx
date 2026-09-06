@@ -4,7 +4,7 @@ import { PostCommentChip } from '@masknet/injected-ui/PostCommentChip'
 export const meta = {
     title: 'PostCommentChip',
     description:
-        "The chip shown under a post once Mask decrypts an encrypted comment (packages/injected-ui/src/PostCommentChip.tsx). The container (PostComments.tsx) owns the actual decryption and only renders this once it resolves.",
+        'The chip shown under a post once Mask decrypts an encrypted comment (packages/injected-ui/src/PostCommentChip.tsx). The container (PostComments.tsx) owns the actual decryption and only renders this once it resolves.',
 }
 
 export default function PostCommentChipDemo() {
