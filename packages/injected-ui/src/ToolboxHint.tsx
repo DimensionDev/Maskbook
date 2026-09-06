@@ -64,7 +64,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
         mini,
         ListItemText = MuiListItemText,
         onClick,
-        icon = <Icons.MaskBlue size={iconSize} />,
+        icon,
         title = 'Mask Network',
         extra,
         guide,
@@ -75,7 +75,7 @@ export function ToolboxHint(props: ToolboxHintProps) {
     const Entry = (
         <Container {...rest}>
             <ListItemButton onClick={onClick}>
-                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemIcon>{icon ?? <Icons.MaskBlue size={iconSize} />}</ListItemIcon>
                 {mini ? null : (
                     <ListItemText
                         primary={
