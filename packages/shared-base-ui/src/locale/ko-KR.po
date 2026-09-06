@@ -670,8 +670,8 @@ msgid "Add a Custom Cover"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/CommentBox.tsx
-msgid "Add an encrypted comment..."
-msgstr ""
+#~ msgid "Add an encrypted comment..."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 msgid "Add Assets"
@@ -1863,16 +1863,16 @@ msgid "Copy Address"
 msgstr "주소 복사"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Copy image"
-msgstr "이미지 복사"
+#~ msgid "Copy image"
+#~ msgstr "이미지 복사"
 
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #~ msgid "Copy private key"
 #~ msgstr "개인 키 복사"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Copy text"
-msgstr "문자 복사"
+#~ msgid "Copy text"
+#~ msgstr "문자 복사"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
@@ -2291,7 +2291,6 @@ msgstr ""
 msgid "Done"
 msgstr "완료"
 
-#: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
@@ -3274,8 +3273,8 @@ msgid "Image"
 msgstr "이미지"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Image copied!"
-msgstr ""
+#~ msgid "Image copied!"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Import"
@@ -4407,8 +4406,8 @@ msgstr "해당한 결과가 없습니다."
 #~ msgstr "열기"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Open in a new tab"
-msgstr "새로운 탭에서 열기"
+#~ msgid "Open in a new tab"
+#~ msgstr "새로운 탭에서 열기"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #~ msgid "Open Mask Wallet"
@@ -4490,8 +4489,8 @@ msgid "Past rounds"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Paste manually"
-msgstr "수동으로 붙여넣기"
+#~ msgid "Paste manually"
+#~ msgstr "수동으로 붙여넣기"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 #~ msgid "Paused"
@@ -4641,8 +4640,8 @@ msgid "Please connect your wallet"
 msgstr "월렛을 연결하세요"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Please copy the following text and image (if there is one) and publish it."
-msgstr ""
+#~ msgid "Please copy the following text and image (if there is one) and publish it."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
@@ -5791,8 +5790,8 @@ msgid "Text"
 msgstr "텍스트"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Text copied!"
-msgstr ""
+#~ msgid "Text copied!"
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."

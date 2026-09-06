@@ -665,8 +665,8 @@ msgid "Add a Custom Cover"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/CommentBox.tsx
-msgid "Add an encrypted comment..."
-msgstr ""
+#~ msgid "Add an encrypted comment..."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/AddToken/index.tsx
 msgid "Add Assets"
@@ -1858,16 +1858,16 @@ msgid "Copy Address"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Copy image"
-msgstr ""
+#~ msgid "Copy image"
+#~ msgstr ""
 
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #~ msgid "Copy private key"
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Copy text"
-msgstr ""
+#~ msgid "Copy text"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
@@ -2286,7 +2286,6 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
@@ -3269,8 +3268,8 @@ msgid "Image"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Image copied!"
-msgstr ""
+#~ msgid "Image copied!"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Import"
@@ -4402,8 +4401,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Open in a new tab"
-msgstr ""
+#~ msgid "Open in a new tab"
+#~ msgstr ""
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #~ msgid "Open Mask Wallet"
@@ -4485,8 +4484,8 @@ msgid "Past rounds"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Paste manually"
-msgstr ""
+#~ msgid "Paste manually"
+#~ msgstr ""
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 #~ msgid "Paused"
@@ -4636,8 +4635,8 @@ msgid "Please connect your wallet"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Please copy the following text and image (if there is one) and publish it."
-msgstr ""
+#~ msgid "Please copy the following text and image (if there is one) and publish it."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
@@ -5786,8 +5785,8 @@ msgid "Text"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Text copied!"
-msgstr ""
+#~ msgid "Text copied!"
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."
