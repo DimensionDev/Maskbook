@@ -10,7 +10,7 @@ import {
     searchProfileTabSelector,
     web3TabSelector,
 } from '../utils/selector.js'
-import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
+import { ProfileTab } from '@masknet/injected-ui/ProfileTab'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration

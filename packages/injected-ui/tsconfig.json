@@ -6,5 +6,9 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src"],
-  "references": [{ "path": "../theme/tsconfig.json" }]
+  "references": [
+    { "path": "../shared-base/tsconfig.json" },
+    { "path": "../shared-base-ui/tsconfig.json" },
+    { "path": "../theme/tsconfig.json" }
+  ]
 }
