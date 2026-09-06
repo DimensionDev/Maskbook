@@ -65,6 +65,21 @@
       "types": "./dist/AccountConnectStatus.d.ts",
       "mask-src": "./src/AccountConnectStatus.tsx",
       "default": "./dist/AccountConnectStatus.js"
+    },
+    "./AdditionalContent": {
+      "types": "./dist/AdditionalContent.d.ts",
+      "mask-src": "./src/AdditionalContent.tsx",
+      "default": "./dist/AdditionalContent.js"
+    },
+    "./ContactAvatar": {
+      "types": "./dist/ContactAvatar.d.ts",
+      "mask-src": "./src/ContactAvatar.tsx",
+      "default": "./dist/ContactAvatar.js"
+    },
+    "./RecipientsToolTip": {
+      "types": "./dist/RecipientsToolTip.d.ts",
+      "mask-src": "./src/RecipientsToolTip.tsx",
+      "default": "./dist/RecipientsToolTip.js"
     }
   },
   "dependencies": {

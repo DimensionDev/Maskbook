@@ -5,8 +5,8 @@ import { RedPacketMetaKey, SolanaRedPacketMetaKey, type ProfileIdentifier } from
 import Services, { GeneratorServices } from '#services'
 import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types.js'
 import { DecryptPostSuccess } from './DecryptedPostSuccess.js'
-import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'
-import { DecryptPostFailed } from './DecryptPostFailed.js'
+import { getAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { AdditionalContent } from '@masknet/injected-ui/AdditionalContent'
 import { encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
@@ -20,6 +20,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results-es'
 import { uniqWith } from 'lodash-es'
+import { Select, Trans } from '@lingui/react/macro'
 
 type PossibleProgress = SuccessDecryption | FailureDecryption | DecryptionProgress
 type EncodedPayload =
@@ -199,6 +200,7 @@ export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
     )
 
     function renderProgress(progress: SuccessDecryption | FailureDecryption | DecryptionProgress) {
+        const headerActions = getAuthorDifferentMessage(authorInPayload, currentPostBy, void 0)
         switch (progress.type) {
             case 'success':
                 return (
@@ -211,14 +213,28 @@ export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
                 )
             case 'error':
                 return (
-                    <DecryptPostFailed
-                        error={new Error(progress.error)}
-                        author={authorInPayload}
-                        postedBy={currentPostBy}
+                    <AdditionalContent
+                        title={<Trans>Failed to decrypt.</Trans>}
+                        titleIcon="error"
+                        message={progress.error}
+                        headerActions={headerActions}
                     />
                 )
             case 'progress':
-                return <DecryptPostAwaiting type={progress} author={authorInPayload} postedBy={currentPostBy} />
+                return (
+                    <AdditionalContent
+                        title={
+                            <Select
+                                value={progress.progress || ''}
+                                _finding_post_key="Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you."
+                                _finding_person_public_key="Mask is looking for the public key of the author..."
+                                other="Mask is decrypting..."
+                            />
+                        }
+                        progress
+                        headerActions={headerActions}
+                    />
+                )
             default:
                 return null
         }

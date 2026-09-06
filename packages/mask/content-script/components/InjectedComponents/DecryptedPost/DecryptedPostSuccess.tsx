@@ -22,7 +22,7 @@ import { AdditionalContent } from '../AdditionalPostContent.js'
 import { DecryptedUIPluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { getAuthorDifferentMessage } from './authorDifferentMessage.js'
-import { RecipientsToolTip } from './RecipientsToolTip.js'
+import { RecipientsToolTip } from '@masknet/injected-ui/RecipientsToolTip'
 
 interface DecryptPostSuccessBaseProps {
     message: TypedMessage

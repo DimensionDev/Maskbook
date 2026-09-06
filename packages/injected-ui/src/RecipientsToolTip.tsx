@@ -1,8 +1,8 @@
 import type { ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material'
-import { Avatar } from '../../../../shared-ui/components/Avatar.js'
 import { Icons } from '@masknet/icons'
+import { ContactAvatar } from './ContactAvatar.js'
 
 const useStyles = makeStyles<{ isMore: boolean }>()((theme, { isMore }) => {
     return {
@@ -48,7 +48,7 @@ const useStyles = makeStyles<{ isMore: boolean }>()((theme, { isMore }) => {
     }
 })
 
-interface RecipientsToolTipProps {
+export interface RecipientsToolTipProps {
     recipients: ProfileInformation[]
     openDialog(): void
 }
@@ -61,7 +61,7 @@ export function RecipientsToolTip({ recipients, openDialog }: RecipientsToolTipP
     return (
         <div className={classes.iconStack} onClick={openDialog}>
             {recipients.slice(0, 3).map((recipient) => (
-                <Avatar key={recipient.identifier.userId} classes={{ root: classes.icon }} person={recipient} />
+                <ContactAvatar key={recipient.identifier.userId} classes={{ root: classes.icon }} person={recipient} />
             ))}
             {isMore ?
                 <Icons.More size={13} className={classes.iconMore} color={theme.vars.palette.text.primary} />
