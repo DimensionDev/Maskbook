@@ -50,6 +50,36 @@
       "types": "./dist/PinExtension.d.ts",
       "mask-src": "./src/PinExtension.tsx",
       "default": "./dist/PinExtension.js"
+    },
+    "./CommentBox": {
+      "types": "./dist/CommentBox.d.ts",
+      "mask-src": "./src/CommentBox.tsx",
+      "default": "./dist/CommentBox.js"
+    },
+    "./AutoPasteFailedDialog": {
+      "types": "./dist/AutoPasteFailedDialog.d.ts",
+      "mask-src": "./src/AutoPasteFailedDialog.tsx",
+      "default": "./dist/AutoPasteFailedDialog.js"
+    },
+    "./AccountConnectStatus": {
+      "types": "./dist/AccountConnectStatus.d.ts",
+      "mask-src": "./src/AccountConnectStatus.tsx",
+      "default": "./dist/AccountConnectStatus.js"
+    },
+    "./AdditionalContent": {
+      "types": "./dist/AdditionalContent.d.ts",
+      "mask-src": "./src/AdditionalContent.tsx",
+      "default": "./dist/AdditionalContent.js"
+    },
+    "./ContactAvatar": {
+      "types": "./dist/ContactAvatar.d.ts",
+      "mask-src": "./src/ContactAvatar.tsx",
+      "default": "./dist/ContactAvatar.js"
+    },
+    "./RecipientsToolTip": {
+      "types": "./dist/RecipientsToolTip.d.ts",
+      "mask-src": "./src/RecipientsToolTip.tsx",
+      "default": "./dist/RecipientsToolTip.js"
     }
   },
   "dependencies": {
@@ -57,6 +87,7 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",
     "@masknet/theme": "workspace:^",
+    "date-fns": "^3.6.0",
     "react-use": "^17.5.0"
   }
 }

@@ -63,8 +63,8 @@ msgstr ""
 msgid "{0, select, create {<0>{user}</0> created a profile on <1>{platform}</1>} update {<2>{user}</2> updated a profile on <3>{platform}</3>} other {}}"
 msgstr ""
 
-#. placeholder {0}: decryptProgress || ''
-#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
+#. placeholder {0}: progress.progress || ''
+#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPost.tsx
 msgid "{0, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
 msgstr ""
 
@@ -476,8 +476,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "<0>@{currentUserId}</0> connected already."
-msgstr ""
+#~ msgid "<0>@{currentUserId}</0> connected already."
+#~ msgstr ""
 
 #: packages/plugins/Web3Profile/src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "<0>0</0> Followers <1>0</1> Following"
@@ -669,7 +669,7 @@ msgstr "追加"
 msgid "Add a Custom Cover"
 msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/CommentBox.tsx
+#: packages/mask/content-script/site-adaptor-infra/defaults/inject/CommentBox.tsx
 msgid "Add an encrypted comment..."
 msgstr ""
 
@@ -1296,8 +1296,8 @@ msgid "Change"
 msgstr "変更"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Change another account and try again."
-msgstr ""
+#~ msgid "Change another account and try again."
+#~ msgstr ""
 
 #: packages/mask/popups/modals/ChangeBackupPasswordModal/index.tsx
 #: packages/mask/popups/pages/Settings/index.tsx
@@ -1742,8 +1742,8 @@ msgstr ""
 #~ msgstr "接続されたサイト"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Connected successfully."
-msgstr ""
+#~ msgid "Connected successfully."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/VerifyNextIDDialog/index.tsx
 #~ msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
@@ -1863,16 +1863,16 @@ msgid "Copy Address"
 msgstr "アドレスをコピー"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Copy image"
-msgstr "画像をコピー"
+#~ msgid "Copy image"
+#~ msgstr "画像をコピー"
 
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #~ msgid "Copy private key"
 #~ msgstr "秘密鍵をコピーする"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Copy text"
-msgstr "テキストをコピー"
+#~ msgid "Copy text"
+#~ msgstr "テキストをコピー"
 
 #: packages/mask/popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
@@ -2010,8 +2010,8 @@ msgstr "通貨記号（オプション）"
 #~ msgstr "現在"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Current account is not the verifying account."
-msgstr ""
+#~ msgid "Current account is not the verifying account."
+#~ msgstr ""
 
 #. placeholder {0}: formatCurrency(formatWeiToGwei(baseFeePerGas), '')
 #. placeholder {0}: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP)
@@ -2282,7 +2282,6 @@ msgid "Donate"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SelectPeopleDialog.tsx
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 #: packages/mask/content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: packages/mask/dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
@@ -2291,7 +2290,6 @@ msgstr ""
 msgid "Done"
 msgstr "完了!"
 
-#: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #: packages/mask/dashboard/components/GoogleDriveFileTable.tsx
 #: packages/mask/dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: packages/plugins/FileService/src/SiteAdaptor/components/Files/ManageableFile.tsx
@@ -2622,7 +2620,7 @@ msgstr ""
 msgid "Failed to create theme."
 msgstr ""
 
-#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx
+#: packages/mask/content-script/components/InjectedComponents/DecryptedPost/DecryptedPost.tsx
 msgid "Failed to decrypt."
 msgstr ""
 
@@ -3274,8 +3272,8 @@ msgid "Image"
 msgstr "画像"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Image copied!"
-msgstr ""
+#~ msgid "Image copied!"
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Import"
@@ -4407,8 +4405,8 @@ msgstr "おっと、結果が見つかりません"
 #~ msgstr "オープン"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Open in a new tab"
-msgstr "新しいタブで開く"
+#~ msgid "Open in a new tab"
+#~ msgstr "新しいタブで開く"
 
 #: packages/mask/dashboard/pages/SetupPersona/Onboarding/index.tsx
 #~ msgid "Open Mask Wallet"
@@ -4490,8 +4488,8 @@ msgid "Past rounds"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Paste manually"
-msgstr "手動でペーストする"
+#~ msgid "Paste manually"
+#~ msgstr "手動でペーストする"
 
 #: packages/plugins/ArtBlocks/src/SiteAdaptor/ActionBar.tsx
 #~ msgid "Paused"
@@ -4641,8 +4639,8 @@ msgid "Please connect your wallet"
 msgstr "ウォレットに接続してください"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Please copy the following text and image (if there is one) and publish it."
-msgstr ""
+#~ msgid "Please copy the following text and image (if there is one) and publish it."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
@@ -4709,12 +4707,12 @@ msgstr "秘密鍵をエクスポートするには、バックアップパスワ
 #~ msgstr "ウォレットを自動ロックするまでの時間を設定してください。"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Please sign up or login {siteName} to connect Mask Network."
-msgstr ""
+#~ msgid "Please sign up or login {siteName} to connect Mask Network."
+#~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Please switch to <0>@{expectAccount}</0> to continue the account verification progress."
-msgstr ""
+#~ msgid "Please switch to <0>@{expectAccount}</0> to continue the account verification progress."
+#~ msgstr ""
 
 #: packages/shared/src/UI/components/ChainBoundary/index.tsx
 msgid "Please switch to this network in the mobile application wallet you are connected to."
@@ -5364,8 +5362,8 @@ msgstr "送信中…"
 #~ msgstr "送信"
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Sent verification post successfully."
-msgstr ""
+#~ msgid "Sent verification post successfully."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Settings/index.tsx
 msgid "Service Agreement"
@@ -5791,8 +5789,8 @@ msgid "Text"
 msgstr "テキスト"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-msgid "Text copied!"
-msgstr ""
+#~ msgid "Text copied!"
+#~ msgstr ""
 
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."
@@ -6403,8 +6401,8 @@ msgid "Try token from different chains"
 msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "Trying exploring more features powered by Mask Network."
-msgstr ""
+#~ msgid "Trying exploring more features powered by Mask Network."
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/SyncTwitterCookies/index.tsx
 msgid "Twitter cookies synced successfully"
@@ -6939,8 +6937,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
-msgstr ""
+#~ msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+#~ msgstr ""
 
 #. placeholder {0}: message.symbol
 #: packages/shared/src/UI/translate.ts
