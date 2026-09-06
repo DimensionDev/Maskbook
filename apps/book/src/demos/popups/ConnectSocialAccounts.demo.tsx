@@ -13,7 +13,11 @@ const NETWORKS = [
     { networkIdentifier: EnhanceableSite.Twitter, icon: <Icons.TwitterXRound size={24} />, name: 'Twitter' },
     { networkIdentifier: EnhanceableSite.Facebook, icon: <Icons.FacebookRound size={24} />, name: 'Facebook' },
     { networkIdentifier: EnhanceableSite.Minds, icon: <Icons.MindsRound size={24} />, name: 'Minds' },
-    { networkIdentifier: EnhanceableSite.Instagram, icon: <Icons.InstagramRoundColored size={24} />, name: 'Instagram' },
+    {
+        networkIdentifier: EnhanceableSite.Instagram,
+        icon: <Icons.InstagramRoundColored size={24} />,
+        name: 'Instagram',
+    },
 ]
 
 export default function ConnectSocialAccountsDemo() {
