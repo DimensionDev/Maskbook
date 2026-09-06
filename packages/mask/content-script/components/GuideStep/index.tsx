@@ -1,4 +1,4 @@
-import { useCallback, type ReactElement, type RefObject } from 'react'
+import type { ReactElement, RefObject } from 'react'
 import { GuideStep as GuideStepUI, type GuideStepProps as GuideStepUIProps } from '@masknet/injected-ui/GuideStep'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -18,24 +18,24 @@ export function useGuideStepState({ step, total, onComplete }: UseGuideStepState
     const finished = useValueRef(userGuideFinished[networkIdentifier])
     const visible = +currentStep === step && !finished
 
-    const onSkip = useCallback(() => {
+    const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
         userGuideFinished[networkIdentifier].value = true
-    }, [networkIdentifier])
+    }
 
-    const onNext = useCallback(() => {
+    const onNext = () => {
         if (step !== total) {
             userGuideStatus[networkIdentifier].value = String(step + 1)
         }
         if (step === total - 1) {
             document.body.scrollIntoView()
         }
-    }, [networkIdentifier, step, total])
+    }
 
-    const onTry = useCallback(() => {
+    const onTry = () => {
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
-    }, [networkIdentifier, onComplete])
+    }
 
     return { visible, onSkip, onNext, onTry }
 }
