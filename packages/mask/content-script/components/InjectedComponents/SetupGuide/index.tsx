@@ -10,13 +10,16 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
+import { Icons } from '@masknet/icons'
+import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { memo, useCallback } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
-import { PinExtension } from './PinExtension.js'
+import { PinExtension } from '@masknet/injected-ui/PinExtension'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { CheckConnection } from './CheckConnection.js'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
 
 // #region setup guide ui
 
@@ -67,7 +70,39 @@ function SetupGuideUI() {
         case SetupGuideStep.CheckConnection:
             return <CheckConnection onClose={onClose} />
         case SetupGuideStep.PinExtension:
-            return <PinExtension onDone={onPinDone} onClose={onPinClose} />
+            return (
+                <PinExtension
+                    onDone={onPinDone}
+                    onClose={onPinClose}
+                    startLabel={<Trans>Start</Trans>}
+                    tip={
+                        <>
+                            <div>
+                                <Trans>
+                                    Don't forget to pin Mask Network in the browser toolbar to access Web3 easily.
+                                </Trans>
+                            </div>
+                            <ol style={{ paddingLeft: '24px' }}>
+                                <li>
+                                    <Trans>
+                                        Click on <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} /> at the
+                                        top-right of your browser.
+                                    </Trans>
+                                </li>
+                                <li>
+                                    <Trans>
+                                        Find Mask Network in the extension list and click the <Icons.Pin size={16} />{' '}
+                                        button.
+                                    </Trans>
+                                </li>
+                                <li>
+                                    <Trans>Pinned successfully.</Trans>
+                                </li>
+                            </ol>
+                        </>
+                    }
+                />
+            )
         default:
             return null
     }

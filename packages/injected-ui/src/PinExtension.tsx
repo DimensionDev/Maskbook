@@ -1,14 +1,16 @@
 import { Icons } from '@masknet/icons'
 import { SetupGuideStep } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
 import { WizardDialog } from './WizardDialog.js'
-import { Trans } from '@lingui/react/macro'
 
-interface PinExtensionProps {
+export interface PinExtensionProps {
     onDone?: () => void
     onClose?: () => void
+    /** Rendered right before the numbered pin-the-extension steps, e.g. localized copy. */
+    tip?: React.ReactNode
+    /** Rendered as the confirm button label. */
+    startLabel?: React.ReactNode
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,8 +60,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function PinExtension({ onDone, onClose }: PinExtensionProps) {
-    const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).href
+export function PinExtension(props: PinExtensionProps) {
+    const { onDone, onClose, tip, startLabel = 'Start' } = props
+    const pinImg = new URL('./resources/extensionPinned.png', import.meta.url).href
     const { classes } = useStyles()
 
     return (
@@ -85,30 +88,12 @@ export function PinExtension({ onDone, onClose }: PinExtensionProps) {
             }
             tip={
                 <Typography className={classes.tip} component="div">
-                    <div>
-                        <Trans>Don't forget to pin Mask Network in the browser toolbar to access Web3 easily.</Trans>
-                    </div>
-                    <ol style={{ paddingLeft: '24px' }}>
-                        <li>
-                            <Trans>
-                                Click on <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} /> at the top-right of
-                                your browser.
-                            </Trans>
-                        </li>
-                        <li>
-                            <Trans>
-                                Find Mask Network in the extension list and click the <Icons.Pin size={16} /> button.
-                            </Trans>
-                        </li>
-                        <li>
-                            <Trans>Pinned successfully.</Trans>
-                        </li>
-                    </ol>
+                    {tip}
                 </Typography>
             }
             footer={
                 <Button className={classes.button} variant="contained" onClick={onDone}>
-                    <Trans>Start</Trans>
+                    {startLabel}
                 </Button>
             }
             onClose={onClose}

@@ -91,7 +91,7 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
     footer: {},
 }))
 
-interface WizardDialogProps {
+export interface WizardDialogProps {
     small?: boolean
     title?: string
     dialogType: SetupGuideStep

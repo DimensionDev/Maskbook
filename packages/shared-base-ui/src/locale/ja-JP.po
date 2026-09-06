@@ -1478,7 +1478,7 @@ msgstr "すべて消去"
 msgid "Click here to have a quick start."
 msgstr "ここをクリックしてクイックスタートを切りましょう。"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Click on <0/> at the top-right of your browser."
 msgstr ""
 
@@ -2269,7 +2269,7 @@ msgstr "ドメイン"
 msgid "Domain Request"
 msgstr "ドメインリクエスト"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."
 msgstr ""
 
@@ -2803,7 +2803,7 @@ msgstr ""
 msgid "File Service"
 msgstr "ファイルサービス"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Find Mask Network in the extension list and click the <0/> button."
 msgstr ""
 
@@ -4594,7 +4594,7 @@ msgstr ""
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr "Mask Networkをツールバーにピン留めすると、アクセスしやすくなります。"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Pinned successfully."
 msgstr "ピン留めが完了しました"
 
@@ -5596,7 +5596,7 @@ msgstr "以前の取引をキャンセルするために、取引手数料を増
 msgid "Split Mode"
 msgstr "分割モード"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Start"
 msgstr "スタート"
 

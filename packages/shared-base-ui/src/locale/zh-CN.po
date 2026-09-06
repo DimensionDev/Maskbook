@@ -1478,7 +1478,7 @@ msgstr "全部清除"
 msgid "Click here to have a quick start."
 msgstr "点击这里快速开始。"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Click on <0/> at the top-right of your browser."
 msgstr ""
 
@@ -2269,7 +2269,7 @@ msgstr ""
 msgid "Domain Request"
 msgstr "域名请求"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."
 msgstr ""
 
@@ -2803,7 +2803,7 @@ msgstr ""
 msgid "File Service"
 msgstr "文件服务"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Find Mask Network in the extension list and click the <0/> button."
 msgstr ""
 
@@ -4594,7 +4594,7 @@ msgstr ""
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr "将 Mask Network 固定到工具栏以便更容易访问："
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Pinned successfully."
 msgstr "固定成功。"
 
@@ -5596,7 +5596,7 @@ msgstr "花费更多的交易费用来取消以前的交易。"
 msgid "Split Mode"
 msgstr "拆分模式"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Start"
 msgstr "开始"
 
