@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material'
 import { ActionButton, useSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { UserContext } from '../../../shared-ui/index.js'
-import { PasswordField } from '../../components/PasswordField/index.js'
+import { PasswordField } from '@masknet/injected-ui/PasswordField'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { Trans, useLingui } from '@lingui/react/macro'
 

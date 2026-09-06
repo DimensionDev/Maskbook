@@ -6,7 +6,7 @@ import { memo, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../../../shared-ui/index.js'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { PasswordField } from '../../components/PasswordField/index.js'
+import { PasswordField } from '@masknet/injected-ui/PasswordField'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 
 export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function VerifyBackupPasswordModal() {

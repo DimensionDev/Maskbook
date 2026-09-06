@@ -4,7 +4,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
-import { BottomDrawer } from '../../components/index.js'
+import { BottomDrawer } from '@masknet/injected-ui/BottomDrawer'
 import { Trans } from '@lingui/react/macro'
 
 export interface GasSettingModalOpenProps {

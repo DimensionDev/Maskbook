@@ -90,6 +90,26 @@
       "types": "./dist/PostVisibilityBadge.d.ts",
       "mask-src": "./src/PostVisibilityBadge.tsx",
       "default": "./dist/PostVisibilityBadge.js"
+    },
+    "./StyledInput": {
+      "types": "./dist/StyledInput.d.ts",
+      "mask-src": "./src/StyledInput.tsx",
+      "default": "./dist/StyledInput.js"
+    },
+    "./PasswordField": {
+      "types": "./dist/PasswordField.d.ts",
+      "mask-src": "./src/PasswordField.tsx",
+      "default": "./dist/PasswordField.js"
+    },
+    "./BottomDrawer": {
+      "types": "./dist/BottomDrawer.d.ts",
+      "mask-src": "./src/BottomDrawer.tsx",
+      "default": "./dist/BottomDrawer.js"
+    },
+    "./BottomController": {
+      "types": "./dist/BottomController.d.ts",
+      "mask-src": "./src/BottomController.tsx",
+      "default": "./dist/BottomController.js"
     }
   },
   "dependencies": {

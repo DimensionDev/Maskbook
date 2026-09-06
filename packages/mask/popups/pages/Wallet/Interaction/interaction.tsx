@@ -11,7 +11,7 @@ import { Box, Dialog, DialogActions, DialogContent, DialogContentText, IconButto
 import React, { memo, startTransition, useCallback, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { BottomController } from '../../../components/BottomController/index.js'
+import { BottomController } from '@masknet/injected-ui/BottomController'
 import { AddChainRequest } from './AddChainRequest.js'
 import { SwitchChainRequest } from './SwitchChainRequest.js'
 import { TransactionRequest } from './TransactionRequest.js'

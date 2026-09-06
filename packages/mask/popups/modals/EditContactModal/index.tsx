@@ -10,7 +10,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { evm } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useContacts } from '@masknet/web3-hooks-base'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { BottomDrawer, type BottomDrawerProps } from '@masknet/injected-ui/BottomDrawer'
 import { ContactType } from '../../pages/Wallet/type.js'
 import { Trans, useLingui } from '@lingui/react/macro'
 

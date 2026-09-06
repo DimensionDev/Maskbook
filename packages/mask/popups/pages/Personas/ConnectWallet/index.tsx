@@ -12,7 +12,7 @@ import urlcat from 'urlcat'
 
 import Services from '#services'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { BottomController } from '../../../components/BottomController/index.js'
+import { BottomController } from '@masknet/injected-ui/BottomController'
 import { useModalNavigate } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAvatar } from '../../../components/WalletAvatar/index.js'

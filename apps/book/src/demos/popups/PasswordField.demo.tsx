@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Stack } from '@mui/material'
-import { PasswordField } from '../../../../../packages/mask/popups/components/PasswordField/index.js'
+import { PasswordField } from '@masknet/injected-ui/PasswordField'
 
 export const meta = {
     title: 'PasswordField',
     description:
-        'StyledInput with a show/hide adornment, used for backup and wallet passwords (packages/mask/popups/components/PasswordField).',
+        'StyledInput with a show/hide adornment, used for backup and wallet passwords (packages/injected-ui/src/PasswordField.tsx).',
 }
 
 export default function PasswordFieldDemo() {

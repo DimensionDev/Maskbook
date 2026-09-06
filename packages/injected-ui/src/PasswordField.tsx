@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { IconButton, InputAdornment, mergeSlotProps } from '@mui/material'
-import { StyledInput, type StyledInputProps } from '../StyledInput/index.js'
+import { StyledInput, type StyledInputProps } from './StyledInput.js'
 import { Icons } from '@masknet/icons'
 
 export const PasswordField = memo(function PasswordField({
