@@ -2,7 +2,7 @@ import { RestorableScrollContext } from '@masknet/shared'
 import { PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { memo, Suspense, useEffect } from 'react'
 import { Navigate, Outlet, useMatch, useSearchParams, type RouteObject } from 'react-router-dom'
-import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
+import { LoadingPlaceholder } from '@masknet/injected-ui/LoadingPlaceholder'
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
 
 const r = relativeRouteOf(PopupRoutes.Friends)

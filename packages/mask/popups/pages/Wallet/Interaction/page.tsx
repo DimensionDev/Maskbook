@@ -2,7 +2,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useMessages } from '@masknet/web3-hooks-base'
 import { memo, useState, Suspense, useEffect, use, useDeferredValue } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
+import { LoadingPlaceholder } from '@masknet/injected-ui/LoadingPlaceholder'
 import { Interaction } from './interaction.js'
 
 export const Component = memo(function InteractionPage() {

@@ -1,8 +1,8 @@
-import { CopyButton } from '@masknet/shared'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
+import { CopyIconButton } from './CopyIconButton.js'
 
 const useStyles = makeStyles<{ iconSize: number }>()((theme, { iconSize }) => ({
     text: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles<{ iconSize: number }>()((theme, { iconSize }) => ({
     },
 }))
 
-interface PersonaPublicKeyProps extends withClasses<'text' | 'icon'> {
+export interface PersonaPublicKeyProps extends withClasses<'text' | 'icon'> {
     rawPublicKey: string
     publicHexString: string
     iconSize: number
@@ -40,7 +40,7 @@ export const PersonaPublicKey = memo<PersonaPublicKeyProps>(function PersonaPubl
     return (
         <Typography className={classes.text}>
             {formatPersonaFingerprint(rawPublicKey, 4)}
-            <CopyButton text={rawPublicKey} className={classes.icon} size={iconSize} />
+            <CopyIconButton text={rawPublicKey} className={classes.icon} size={iconSize} />
         </Typography>
     )
 })

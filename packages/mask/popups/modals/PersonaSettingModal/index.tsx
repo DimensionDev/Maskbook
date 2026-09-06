@@ -5,10 +5,10 @@ import { Box, Typography } from '@mui/material'
 import { PersonaContext } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
-import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
+import { PersonaAvatar } from '@masknet/injected-ui/PersonaAvatar'
 import { ActionModal, useModalNavigate, type ActionModalBaseProps } from '../../components/index.js'
 import { UserContext } from '../../../shared-ui/index.js'
-import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
+import { PersonaPublicKey } from '@masknet/injected-ui/PersonaPublicKey'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({

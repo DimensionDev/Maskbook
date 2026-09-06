@@ -15,7 +15,7 @@ import {
     useRouteError,
 } from 'react-router-dom'
 import Services from '#services'
-import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
+import { LoadingPlaceholder } from '@masknet/injected-ui/LoadingPlaceholder'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { PopupContext, PageTitleContext } from './hooks/index.js'
 import { Modals } from './modals/index.js'

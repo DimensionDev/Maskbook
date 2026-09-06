@@ -110,6 +110,36 @@
       "types": "./dist/BottomController.d.ts",
       "mask-src": "./src/BottomController.tsx",
       "default": "./dist/BottomController.js"
+    },
+    "./ConnectSocialAccounts": {
+      "types": "./dist/ConnectSocialAccounts.d.ts",
+      "mask-src": "./src/ConnectSocialAccounts.tsx",
+      "default": "./dist/ConnectSocialAccounts.js"
+    },
+    "./EmojiAvatar": {
+      "types": "./dist/EmojiAvatar.d.ts",
+      "mask-src": "./src/EmojiAvatar.tsx",
+      "default": "./dist/EmojiAvatar.js"
+    },
+    "./PersonaAvatar": {
+      "types": "./dist/PersonaAvatar.d.ts",
+      "mask-src": "./src/PersonaAvatar.tsx",
+      "default": "./dist/PersonaAvatar.js"
+    },
+    "./CopyIconButton": {
+      "types": "./dist/CopyIconButton.d.ts",
+      "mask-src": "./src/CopyIconButton.tsx",
+      "default": "./dist/CopyIconButton.js"
+    },
+    "./PersonaPublicKey": {
+      "types": "./dist/PersonaPublicKey.d.ts",
+      "mask-src": "./src/PersonaPublicKey.tsx",
+      "default": "./dist/PersonaPublicKey.js"
+    },
+    "./LoadingPlaceholder": {
+      "types": "./dist/LoadingPlaceholder.d.ts",
+      "mask-src": "./src/LoadingPlaceholder.tsx",
+      "default": "./dist/LoadingPlaceholder.js"
     }
   },
   "dependencies": {

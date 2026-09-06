@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { Navigate, Outlet, type RouteObject } from 'react-router-dom'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { RestorableScrollContext } from '@masknet/shared'
-import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
+import { LoadingPlaceholder } from '@masknet/injected-ui/LoadingPlaceholder'
 import { WalletGuard } from './WalletGuard/index.js'
 import { NoWalletGuard } from './NoWalletGuard/index.js'
 
