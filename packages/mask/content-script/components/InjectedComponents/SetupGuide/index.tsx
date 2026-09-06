@@ -91,8 +91,8 @@ function SetupGuideUI() {
                                 </li>
                                 <li>
                                     <Trans>
-                                        Find Mask Network in the extension list and click the{' '}
-                                        <Icons.Pin size={16} /> button.
+                                        Find Mask Network in the extension list and click the <Icons.Pin size={16} />{' '}
+                                        button.
                                     </Trans>
                                 </li>
                                 <li>

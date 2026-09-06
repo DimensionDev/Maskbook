@@ -1478,7 +1478,7 @@ msgstr "모두 지우기"
 msgid "Click here to have a quick start."
 msgstr "퀵 스타트"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Click on <0/> at the top-right of your browser."
 msgstr ""
 
@@ -2269,7 +2269,7 @@ msgstr ""
 msgid "Domain Request"
 msgstr "도메인 요청"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."
 msgstr ""
 
@@ -2803,7 +2803,7 @@ msgstr ""
 msgid "File Service"
 msgstr "파일 서비스"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Find Mask Network in the extension list and click the <0/> button."
 msgstr ""
 
@@ -4594,7 +4594,7 @@ msgstr ""
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr "Mask Network를 툴바에 고정하여 보다 쉽게 액세스할 수 있습니다:"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Pinned successfully."
 msgstr "고정됩니다."
 
@@ -5596,7 +5596,7 @@ msgstr "더 많은 기스비를 지불하여 지난 거래를 최소합니다."
 msgid "Split Mode"
 msgstr "스플릿 모드"
 
-#: packages/mask/content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
+#: packages/mask/content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Start"
 msgstr "시작"
 
