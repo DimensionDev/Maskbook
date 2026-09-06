@@ -1,6 +1,6 @@
 import { memoize, noop } from 'lodash-es'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { Icons } from '@masknet/icons'
+import { MaskBadgeIcon as Icon } from '@masknet/injected-ui/MaskBadgeIcon'
 import { memoizePromise } from '@masknet/kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
@@ -10,17 +10,6 @@ import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { bioPageUserIDSelector, bioPageUserNickNameSelector, floatingBioCardSelector } from '../utils/selector.js'
 
-function Icon(props: { size: number }) {
-    return (
-        <Icons.MaskBlue
-            size={props.size}
-            style={{
-                verticalAlign: 'text-bottom',
-                marginLeft: 6,
-            }}
-        />
-    )
-}
 function _(main: () => LiveSelector<HTMLElement, true>, size: number, options: WatchOptions) {
     const watcher = new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
         let remover = noop

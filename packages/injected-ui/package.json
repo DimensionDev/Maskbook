@@ -20,6 +20,21 @@
       "types": "./dist/PostDialogHint.d.ts",
       "mask-src": "./src/PostDialogHint.tsx",
       "default": "./dist/PostDialogHint.js"
+    },
+    "./ToolboxHint": {
+      "types": "./dist/ToolboxHint.d.ts",
+      "mask-src": "./src/ToolboxHint.tsx",
+      "default": "./dist/ToolboxHint.js"
+    },
+    "./SwitchLogoIcon": {
+      "types": "./dist/SwitchLogoIcon.d.ts",
+      "mask-src": "./src/SwitchLogoIcon.tsx",
+      "default": "./dist/SwitchLogoIcon.js"
+    },
+    "./MaskBadgeIcon": {
+      "types": "./dist/MaskBadgeIcon.d.ts",
+      "mask-src": "./src/MaskBadgeIcon.tsx",
+      "default": "./dist/MaskBadgeIcon.js"
     }
   },
   "dependencies": {

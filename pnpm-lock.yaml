@@ -1447,6 +1447,9 @@ importers:
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
+      '@masknet/injected-ui':
+        specifier: workspace:^
+        version: link:../../injected-ui
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../../plugin-infra

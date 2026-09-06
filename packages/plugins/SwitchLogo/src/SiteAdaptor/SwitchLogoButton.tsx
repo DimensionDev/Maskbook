@@ -1,7 +1,6 @@
 import { useCallback, useLayoutEffect } from 'react'
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { SwitchLogoIcon } from '@masknet/injected-ui/SwitchLogoIcon'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { CrossIsolationMessages, PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
 import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
@@ -25,39 +24,7 @@ const defaultXIcon = `
 `
 const LetterHTML = LogoSelector.evaluate()?.innerHTML
 
-const useStyles = makeStyles()(() => ({
-    switchIcon: {
-        position: 'absolute',
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        left: 0,
-        top: 0,
-    },
-    iconBox: {
-        position: 'relative',
-        flex: 1,
-    },
-    icon: {
-        position: 'absolute',
-        right: 5,
-        bottom: 5,
-        width: 20,
-        height: 20,
-    },
-    hover: {
-        opacity: 0,
-        '&:hover': {
-            opacity: 1,
-        },
-    },
-    hidden: {
-        opacity: 0,
-    },
-}))
-
 export function SwitchLogoButton() {
-    const { classes, cx } = useStyles()
     const current = useLastRecognizedIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
     const isMinimalMode = useIsMinimalMode(PluginID.SwitchLogo)
@@ -80,11 +47,5 @@ export function SwitchLogoButton() {
         CrossIsolationMessages.events.switchLogoDialogUpdated.sendToLocal({ open: true })
     }, [isMinimalMode])
 
-    return (
-        <div className={classes.switchIcon}>
-            <div className={cx(classes.iconBox, isMinimalMode ? classes.hidden : classes.hover)}>
-                <Icons.SwitchLogo className={classes.icon} onClickCapture={onClick} />
-            </div>
-        </div>
-    )
+    return <SwitchLogoIcon minimal={isMinimalMode} onClick={onClick} />
 }

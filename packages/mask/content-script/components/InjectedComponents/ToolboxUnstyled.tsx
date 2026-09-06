@@ -29,7 +29,8 @@ import {
 import { WalletIcon, SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import GuideStep from '../GuideStep/index.js'
+import { ToolboxHint as ToolboxHintUI } from '@masknet/injected-ui/ToolboxHint'
+import GuideStep, { useGuideStepState } from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
 import { Trans } from '@lingui/react/macro'
 
@@ -63,46 +64,25 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 }
 
 function ToolboxHintForApplication(props: ToolboxHintProps) {
-    const {
-        ListItemButton = MuiListItemButton,
-        ListItemIcon = MuiListItemIcon,
-        Container = 'div',
-        Typography = MuiTypography,
-        iconSize = 24,
-        mini,
-        ListItemText = MuiListItemText,
-        ...rest
-    } = props
-    const { classes } = useStyles()
-
+    const { category, ...rest } = props
     const openApplicationBoardDialog = useOpenApplicationBoardDialog()
+    const guideState = useGuideStepState({ step: 1, total: 4 })
 
     return (
-        <GuideStep step={1} total={4} tip={<Trans>Explore multi-chain dApps.</Trans>}>
-            <Container {...rest}>
-                <ListItemButton onClick={openApplicationBoardDialog}>
-                    <ListItemIcon>
-                        <Icons.MaskBlue size={iconSize} />
-                    </ListItemIcon>
-                    {mini ? null : (
-                        <ListItemText
-                            primary={
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                    }}>
-                                    <Typography className={classes.title}>
-                                        <Trans>Mask Network</Trans>
-                                    </Typography>
-                                </Box>
-                            }
-                        />
-                    )}
-                </ListItemButton>
-            </Container>
-        </GuideStep>
+        <ToolboxHintUI
+            {...rest}
+            onClick={openApplicationBoardDialog}
+            title={<Trans>Mask Network</Trans>}
+            guide={{
+                step: 1,
+                total: 4,
+                tip: <Trans>Explore multi-chain dApps.</Trans>,
+                skipLabel: <Trans>Skip</Trans>,
+                nextLabel: <Trans>Next</Trans>,
+                tryLabel: <Trans>Try</Trans>,
+                ...guideState,
+            }}
+        />
     )
 }
 
