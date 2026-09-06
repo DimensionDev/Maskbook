@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@masknet/icons": "workspace:^",
+    "@masknet/injected-ui": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",
