@@ -18,13 +18,19 @@ export function useGuideStepState({ step, total, onComplete }: UseGuideStepState
     const finished = useValueRef(userGuideFinished[networkIdentifier])
     const visible = +currentStep === step && !finished
 
+    // These are event handlers (Skip/Next/Try button clicks), not render-time writes; they
+    // persist guide progress into shared-base's ValueRefs, same as before this was pulled out
+    // into its own hook.
     const onSkip = () => {
+        // eslint-disable-next-line react-compiler/react-compiler
         sayHelloShowed[networkIdentifier].value = true
+        // eslint-disable-next-line react-compiler/react-compiler
         userGuideFinished[networkIdentifier].value = true
     }
 
     const onNext = () => {
         if (step !== total) {
+            // eslint-disable-next-line react-compiler/react-compiler
             userGuideStatus[networkIdentifier].value = String(step + 1)
         }
         if (step === total - 1) {
@@ -33,6 +39,7 @@ export function useGuideStepState({ step, total, onComplete }: UseGuideStepState
     }
 
     const onTry = () => {
+        // eslint-disable-next-line react-compiler/react-compiler
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
     }
