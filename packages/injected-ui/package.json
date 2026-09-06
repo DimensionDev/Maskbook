@@ -40,6 +40,16 @@
       "types": "./dist/ProfileTab.d.ts",
       "mask-src": "./src/ProfileTab.tsx",
       "default": "./dist/ProfileTab.js"
+    },
+    "./WizardDialog": {
+      "types": "./dist/WizardDialog.d.ts",
+      "mask-src": "./src/WizardDialog.tsx",
+      "default": "./dist/WizardDialog.js"
+    },
+    "./PinExtension": {
+      "types": "./dist/PinExtension.d.ts",
+      "mask-src": "./src/PinExtension.tsx",
+      "default": "./dist/PinExtension.js"
     }
   },
   "dependencies": {
