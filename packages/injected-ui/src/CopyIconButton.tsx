@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CopyIconButtonProps
-    extends Omit<LinkProps<'button'>, 'color'>,
+    extends Omit<LinkProps<'button'>, 'color' | 'title'>,
         Pick<GeneratedIconProps, 'size' | 'color'> {
     text: string
     /** Tooltip shown before copying. Defaults to 'Copy'. */

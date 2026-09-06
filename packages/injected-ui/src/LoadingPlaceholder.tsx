@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface LoadingPlaceholderProps extends HTMLProps<HTMLDivElement> {
+interface LoadingPlaceholderProps extends Omit<HTMLProps<HTMLDivElement>, 'title'> {
     title?: ReactNode
 }
 
