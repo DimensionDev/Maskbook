@@ -432,9 +432,7 @@ export function settings_appearance_dark_url() { return new URL("./settings/Sett
 export function settings_backup_dark_url() { return new URL("./settings/SettingsBackup.dark.svg", import.meta.url).href }
 export function settings_email_dark_url() { return new URL("./settings/SettingsEmail.dark.svg", import.meta.url).href }
 export function settings_language_dark_url() { return new URL("./settings/SettingsLanguage.dark.svg", import.meta.url).href }
-export function settings_language_light_url() { return new URL("./settings/SettingsLanguage.light.svg", import.meta.url).href }
 export function settings_password_dark_url() { return new URL("./settings/SettingsPassword.dark.svg", import.meta.url).href }
 export function settings_phone_dark_url() { return new URL("./settings/SettingsPhone.dark.svg", import.meta.url).href }
 export function settings_restore_dark_url() { return new URL("./settings/SettingsRestore.dark.svg", import.meta.url).href }
-export function settings_sync_dark_url() { return new URL("./settings/SettingsSync.dark.svg", import.meta.url).href }
 export function uk_url() { return new URL("./settings/UK.svg", import.meta.url).href }
