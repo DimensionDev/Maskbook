@@ -264,6 +264,9 @@ importers:
       '@masknet/icons':
         specifier: workspace:*
         version: link:../../packages/icons
+      '@masknet/injected-ui':
+        specifier: workspace:*
+        version: link:../../packages/injected-ui
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../../packages/shared-base
@@ -405,6 +408,15 @@ importers:
         specifier: ^0.12.1
         version: 0.12.1(@swc/core@1.15.43)(rollup@4.34.9)
 
+  packages/injected-ui:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../icons
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../theme
+
   packages/mask:
     dependencies:
       '@ethereumjs/util':
@@ -431,6 +443,9 @@ importers:
       '@masknet/injected-script':
         specifier: workspace:^
         version: link:../injected-script
+      '@masknet/injected-ui':
+        specifier: workspace:^
+        version: link:../injected-ui
       '@masknet/plugin-approval':
         specifier: workspace:^
         version: link:../plugins/Approval
