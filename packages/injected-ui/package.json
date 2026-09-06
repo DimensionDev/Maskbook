@@ -80,6 +80,16 @@
       "types": "./dist/RecipientsToolTip.d.ts",
       "mask-src": "./src/RecipientsToolTip.tsx",
       "default": "./dist/RecipientsToolTip.js"
+    },
+    "./PostCommentChip": {
+      "types": "./dist/PostCommentChip.d.ts",
+      "mask-src": "./src/PostCommentChip.tsx",
+      "default": "./dist/PostCommentChip.js"
+    },
+    "./PostVisibilityBadge": {
+      "types": "./dist/PostVisibilityBadge.d.ts",
+      "mask-src": "./src/PostVisibilityBadge.tsx",
+      "default": "./dist/PostVisibilityBadge.js"
     }
   },
   "dependencies": {

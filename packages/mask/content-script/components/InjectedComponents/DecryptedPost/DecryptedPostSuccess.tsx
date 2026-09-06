@@ -1,6 +1,5 @@
 import Services from '#services'
 import { Trans } from '@lingui/react/macro'
-import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import {
     PostInfoContext,
@@ -10,9 +9,7 @@ import {
     usePostInfoVersion,
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, MaskMessages, type ProfileIdentifier, type ProfileInformation } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
-import { Typography, useTheme } from '@mui/material'
 import { memo, useContext, useEffect, useState } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
@@ -23,6 +20,7 @@ import { DecryptedUIPluginRendererWithSuggestion } from '../DecryptedPostMetadat
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { getAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { RecipientsToolTip } from '@masknet/injected-ui/RecipientsToolTip'
+import { PostVisibilityBadge } from '@masknet/injected-ui/PostVisibilityBadge'
 
 interface DecryptPostSuccessBaseProps {
     message: TypedMessage
@@ -72,34 +70,9 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     )
 })
 
-const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canAppendShareTarget }) => {
-    return {
-        visibilityBox: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: theme.spacing(0.5, 1),
-            background: theme.vars.palette.maskColor.bg,
-            borderRadius: '999px',
-            cursor: canAppendShareTarget ? 'pointer' : 'default',
-        },
-        iconAdd: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginLeft: 8,
-            background: theme.vars.palette.maskColor.primary,
-            borderRadius: '50%',
-            height: 16,
-            width: 16,
-        },
-    }
-})
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
-    const { classes } = useStyles({ canAppendShareTarget })
     const [showDialog, setShowDialog] = useState(false)
-    const theme = useTheme()
     const recipients = useRecipientsList()
     const { value: selectedRecipients = EMPTY_LIST, retry } = useSelectedRecipientsList()
 
@@ -109,14 +82,11 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                 <>
                     {selectedRecipients.length ?
                         <RecipientsToolTip recipients={selectedRecipients} openDialog={() => setShowDialog(true)} />
-                    :   <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
-                            <Typography color="textPrimary" sx={{ fontSize: 12, fontWeight: 500 }}>
-                                <Trans>Only visible to yourself</Trans>
-                            </Typography>
-                            <div className={classes.iconAdd}>
-                                <Icons.Plus size={12} color={theme.vars.palette.maskColor.white} />
-                            </div>
-                        </section>
+                    :   <PostVisibilityBadge
+                            variant="onlyYou"
+                            label={<Trans>Only visible to yourself</Trans>}
+                            onClick={() => setShowDialog(true)}
+                        />
                     }
 
                     {showDialog ?
@@ -129,11 +99,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                         />
                     :   null}
                 </>
-            :   <section className={classes.visibilityBox}>
-                    <Typography color="textPrimary" sx={{ fontSize: 12, fontWeight: 500 }}>
-                        <Trans>All Mask Network users</Trans>
-                    </Typography>
-                </section>
+            :   <PostVisibilityBadge variant="everyone" label={<Trans>All Mask Network users</Trans>} />
         :   null
     return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>
 })
