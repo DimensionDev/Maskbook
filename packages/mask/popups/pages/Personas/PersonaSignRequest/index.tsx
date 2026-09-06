@@ -6,7 +6,7 @@ import { ActionButton } from '@masknet/theme'
 import { type PersonaInformation, PopupRoutes, MaskMessages } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../shared-ui/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
-import { BottomController } from '../../../components/BottomController/index.js'
+import { BottomController } from '@masknet/injected-ui/BottomController'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { Trans } from '@lingui/react/macro'
 

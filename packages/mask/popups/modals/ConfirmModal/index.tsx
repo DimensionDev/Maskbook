@@ -4,7 +4,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography, type TypographyProps } from '@mui/material'
 import { useState, type ReactNode } from 'react'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { BottomDrawer, type BottomDrawerProps } from '@masknet/injected-ui/BottomDrawer'
 
 const useStyles = makeStyles()((theme) => ({
     message: {

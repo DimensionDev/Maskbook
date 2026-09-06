@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Stack } from '@mui/material'
-import { StyledInput } from '../../../../../packages/mask/popups/components/StyledInput/index.js'
+import { StyledInput } from '@masknet/injected-ui/StyledInput'
 
 export const meta = {
     title: 'StyledInput',
     description:
-        'The underline-less MUI TextField used throughout the popups UI (packages/mask/popups/components/StyledInput).',
+        'The underline-less MUI TextField used throughout the popups UI (packages/injected-ui/src/StyledInput.tsx).',
 }
 
 export default function StyledInputDemo() {

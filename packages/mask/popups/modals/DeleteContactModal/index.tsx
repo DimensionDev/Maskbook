@@ -8,7 +8,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { evm } from '@masknet/web3-providers'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { BottomDrawer, type BottomDrawerProps } from '@masknet/injected-ui/BottomDrawer'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({

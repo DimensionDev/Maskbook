@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Button, Typography } from '@mui/material'
-import { BottomDrawer } from '../../../../../packages/mask/popups/components/BottomDrawer/index.js'
+import { BottomDrawer } from '@masknet/injected-ui/BottomDrawer'
 
 export const meta = {
     title: 'BottomDrawer',
     description:
-        'The bottom sheet used for in-place pickers and confirmations in popups (packages/mask/popups/components/BottomDrawer).',
+        'The bottom sheet used for in-place pickers and confirmations in popups (packages/injected-ui/src/BottomDrawer.tsx).',
 }
 
 export default function BottomDrawerDemo() {

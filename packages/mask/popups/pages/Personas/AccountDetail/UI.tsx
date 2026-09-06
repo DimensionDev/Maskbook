@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BottomController } from '../../../components/BottomController/index.js'
+import { BottomController } from '@masknet/injected-ui/BottomController'
 import { WalletList } from '../../../components/WalletSettingList/index.js'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
 
