@@ -19,7 +19,6 @@ import {
     nextTabListSelector,
     searchAppBarBackSelector,
     searchNameTag,
-    searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
@@ -28,16 +27,21 @@ import {
     searchProfileTabSelector,
 } from '../utils/selector.js'
 
+const TWITTER_TAB_INDICATOR_SELECTOR = ':scope > div > div[dir] > div:last-child'
+
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector(':scope div > div')
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const paddingEle = searchProfileTabSelector().evaluate()
     const paddingCss = paddingEle ? window.getComputedStyle(paddingEle) : EMPTY_STYLE
-    const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
-    const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
     const eleBackButton = searchAppBarBackSelector().evaluate()
     const backButtonColorStyle = eleBackButton ? window.getComputedStyle(eleBackButton) : EMPTY_STYLE
+    const selectedTab = searchProfileTabListSelector()
+        .evaluate()
+        .find((tab) => tab.getAttribute('aria-selected') === 'true')
+    const selectedTabIndicator = selectedTab?.querySelector(TWITTER_TAB_INDICATOR_SELECTOR)
+    const selectedTabIndicatorStyle = selectedTabIndicator ? window.getComputedStyle(selectedTabIndicator) : EMPTY_STYLE
 
     return {
         color: style.color,
@@ -47,7 +51,7 @@ function getStyleProps() {
         paddingX: paddingCss.paddingLeft || '16px',
         height: style.height || '53px',
         hover: backButtonColorStyle.color,
-        line: newTweetButtonColorStyle.backgroundColor,
+        line: selectedTabIndicatorStyle.backgroundColor,
     }
 }
 
@@ -146,7 +150,9 @@ async function hideTwitterActivatedContent() {
         const tabLabel = tab.querySelector<HTMLDivElement>(':scope div > div > span')
         if (tabLabel) tabLabel.style.color = style.color
 
-        const indicator = tab.querySelector<HTMLDivElement>(':scope div > div > div')
+        // The selected tab has an extra wrapper around its label. Keep every combinator anchored so
+        // that wrapper is not mistaken for the indicator when X changes the selected tab's markup.
+        const indicator = tab.querySelector<HTMLDivElement>(TWITTER_TAB_INDICATOR_SELECTOR)
         if (indicator) indicator.style.display = 'none'
         tab.addEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
@@ -179,7 +185,7 @@ function resetTwitterActivatedContent() {
     tabList.forEach((tab) => {
         const tabLabel = tab.querySelector<HTMLDivElement>(':scope div > div > span')
         if (tabLabel) tabLabel.style.color = ''
-        const indicator = tab.querySelector<HTMLDivElement>(':scope div > div > div')
+        const indicator = tab.querySelector<HTMLDivElement>(TWITTER_TAB_INDICATOR_SELECTOR)
         if (indicator) indicator.style.display = ''
         tab.removeEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
