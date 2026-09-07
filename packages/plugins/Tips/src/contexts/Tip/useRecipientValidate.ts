@@ -2,7 +2,7 @@ import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useAddressType, useChainContext } from '@masknet/web3-hooks-base'
-import { GoPlusLabs } from '@masknet/web3-providers'
+import { GoPlusLabs, isMaliciousAddress } from '@masknet/web3-providers'
 import { AddressType, type ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -30,8 +30,8 @@ export function useRecipientValidate(recipientAddress: string): {
         if (!isEvm) return [true]
         if (addressType === AddressType.Contract)
             return [false, _(msg`The receiving address is a contract address. Please check again.`)]
-        const isMaliciousAddress = security && Object.values(security).includes('1')
-        if (isMaliciousAddress) return [false, _(msg`The receiving address may be a malicious address.`)]
+        if (security && isMaliciousAddress(security))
+            return [false, _(msg`The receiving address may be a malicious address.`)]
         return [true]
     }, [isEvm, addressType, security, _])
     return {

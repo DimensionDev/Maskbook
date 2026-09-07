@@ -10,6 +10,9 @@ import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { AuthorizationAPI, PhishingSiteResponse, SecurityAPI } from '../entry-types.js'
+import { isMaliciousAddress } from './isMaliciousAddress.js'
+
+export { isMaliciousAddress } from './isMaliciousAddress.js'
 
 function checkInWhitelist(chainId: ChainId, address: string) {
     const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)
@@ -127,8 +130,7 @@ export const GoPlusLabs = {
     async checkIfAddressIsScam(chainId: ChainId | 'solana' | 'tron', address: string): Promise<boolean> {
         const security = await GoPlusLabs.getAddressSecurity(chainId, address)
         if (!security) return false
-        const values: string[] = Object.values(security)
-        return values.includes('1')
+        return isMaliciousAddress(security)
     },
 
     async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
