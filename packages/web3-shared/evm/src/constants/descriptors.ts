@@ -36,6 +36,18 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_robinhood`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Robinhood,
+        type: NetworkType.Robinhood,
+        name: 'Robinhood',
+        shortName: 'Robinhood',
+        icon: new URL('../assets/robinhood.png', import.meta.url).href,
+        iconColor: 'rgb(0, 200, 5)',
+        averageBlockDelay: 1,
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_ropsten`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Ropsten,
@@ -362,18 +374,6 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         // Won't list in network list
         isMainnet: false,
         averageBlockDelay: 10,
-    },
-    {
-        ID: `${PLUGIN_ID}_robinhood`,
-        networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Robinhood,
-        type: NetworkType.Robinhood,
-        name: 'Robinhood',
-        shortName: 'Robinhood',
-        icon: new URL('../assets/robinhood.png', import.meta.url).href,
-        iconColor: 'rgb(0, 200, 5)',
-        averageBlockDelay: 1,
-        isMainnet: true,
     },
 ]
 
