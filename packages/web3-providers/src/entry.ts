@@ -53,7 +53,7 @@ export { SOLWeb3 } from './Web3/Solana/apis/ConnectionAPI.js'
 export { Web3Bio } from './Web3Bio/index.js'
 
 // GoPlusLabs
-export { GoPlusLabs } from './GoPlusLabs/index.js'
+export { GoPlusLabs, isMaliciousAddress } from './GoPlusLabs/index.js'
 
 // CoinGecko
 export { CoinGeckoTrending } from './CoinGecko/index.js'
