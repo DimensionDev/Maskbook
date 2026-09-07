@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => {
         calendar: {
             display: 'flex',
             flexDirection: 'column',
-            backgroundColor: theme.vars.palette.background.default,
+            backgroundColor: theme.vars.palette.maskColor.bottom,
             borderRadius: '12px',
             border: `1px solid ${theme.vars.palette.maskColor.line}`,
             position: 'relative',
