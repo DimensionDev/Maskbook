@@ -39,9 +39,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     section: {
         height: '100%',
-        paddingTop: theme.spacing(2),
+        padding: theme.spacing(2, 2, 0),
         boxSizing: 'border-box',
-        padding: theme.spacing(0, 2),
         overflow: 'auto',
     },
 }))
