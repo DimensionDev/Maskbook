@@ -128,3 +128,4 @@ quick-lint-js.config
 .claude
 .pnpm-store/
 .gstack/
+.claude-snapshots/
