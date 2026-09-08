@@ -69,6 +69,7 @@ export async function* subscribeGunMapData<T>(path: string[], isT: (x: unknown) 
             queue.stop()
             listenerClosed = true
             OnCloseEvent.delete(stop)
+            abortSignal.removeEventListener('abort', stop)
         }
         abortSignal.addEventListener('abort', stop)
         OnCloseEvent.add(stop)
@@ -79,5 +80,9 @@ export async function* subscribeGunMapData<T>(path: string[], isT: (x: unknown) 
             if (listenerClosed) return
             if (isT(data)) queue.push(data)
         })
+
+        // Returning stop lets event-iterator clean up when the consumer
+        // finishes iterating (e.g. after a successful decrypt).
+        return stop
     })
 }
