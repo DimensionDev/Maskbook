@@ -272,11 +272,11 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 value: transaction.value,
                 gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
                 gas: gas ? addGasMargin(gas, fromChainId === ChainId.Arbitrum ? 1 : 0.3) : undefined,
-                maxFeePerGas: 'maxFeePerGas' in gasConfig ? gasConfig.maxFeePerGas : undefined,
-                maxPriorityFeePerGas:
-                    'maxPriorityFeePerGas' in gasConfig && gasConfig.maxPriorityFeePerGas ?
-                        gasConfig.maxPriorityFeePerGas
-                    :   transaction.maxPriorityFeePerGas,
+                maxFeePerGas: ('maxFeePerGas' in gasConfig && gasConfig.maxFeePerGas) || undefined,
+                maxPriorityFeePerGas: ('maxPriorityFeePerGas' in gasConfig && gasConfig.maxPriorityFeePerGas ?
+                    gasConfig
+                :   transaction
+                ).maxPriorityFeePerGas,
                 _disableSnackbar: true,
             },
             {
