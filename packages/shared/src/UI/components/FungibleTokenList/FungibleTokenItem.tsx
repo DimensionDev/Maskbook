@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         maxHeight: '100%',
         padding: theme.spacing(1.5),
+        columnGap: theme.spacing(2.5),
         marginBottom: theme.spacing(0.5),
         borderRadius: theme.spacing(1),
         backdropFilter: 'blur(16px)',
