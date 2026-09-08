@@ -65,8 +65,7 @@ const { initialStateReady, allStatesReady } = initWallet(
         },
     },
     {
-        deferNonEVM:
-            Sniffings.is_popup_page && !persistedNonEVMPlugin && !requestsConnectProviderModal(),
+        deferNonEVM: Sniffings.is_popup_page && !persistedNonEVMPlugin && !requestsConnectProviderModal(),
     },
 )
 
