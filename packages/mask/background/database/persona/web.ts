@@ -71,7 +71,7 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     await update(persona)
                     await update(profile)
                     async function update(q: typeof persona | typeof profile) {
-                        type LocalKeyRecord = {
+                        interface LocalKeyRecord {
                             value: { localKey?: unknown; identifier: string }
                             update(value: unknown): Promise<unknown>
                         }
