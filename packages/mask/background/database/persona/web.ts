@@ -71,7 +71,11 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                     await update(persona)
                     await update(profile)
                     async function update(q: typeof persona | typeof profile) {
-                        for await (const rec of persona) {
+                        type LocalKeyRecord = {
+                            value: { localKey?: unknown; identifier: string }
+                            update(value: unknown): Promise<unknown>
+                        }
+                        for await (const rec of q as unknown as AsyncIterable<LocalKeyRecord>) {
                             if (!rec.value.localKey) continue
                             const jwk = knowledge?.data.get(rec.value.identifier)
                             if (!jwk) {
