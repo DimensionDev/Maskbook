@@ -1844,6 +1844,7 @@ msgstr ""
 msgid "Copied"
 msgstr ""
 
+#: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 #: packages/shared/src/UI/components/CopyButton/index.tsx
 msgid "Copied!"
 msgstr ""
@@ -1864,6 +1865,10 @@ msgstr ""
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #~ msgid "Copy private key"
 #~ msgstr ""
+
+#: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
+msgid "Copy report"
+msgstr ""
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #~ msgid "Copy text"

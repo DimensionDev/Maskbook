@@ -1849,9 +1849,10 @@ msgstr ""
 msgid "Copied"
 msgstr "已复制"
 
+#: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 #: packages/shared/src/UI/components/CopyButton/index.tsx
 msgid "Copied!"
-msgstr "已复制"
+msgstr "已复制！"
 
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 #: packages/shared/src/UI/components/CopyButton/index.tsx
@@ -1869,6 +1870,10 @@ msgstr "复制地址"
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #~ msgid "Copy private key"
 #~ msgstr "复制私钥"
+
+#: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
+msgid "Copy report"
+msgstr "复制报告"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #~ msgid "Copy text"
