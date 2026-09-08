@@ -112,41 +112,44 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
             ])
             setUploadProgress(id, 0)
 
-            const payloadTxID = await PluginFileServiceRPC.makeAttachment(provider, {
-                key,
-                name: file.name,
-                type: file.type,
-                block: buffer,
-            })
-            // Uploading
-            for await (const progress of PluginFileServiceRPCGenerator.upload(provider, payloadTxID)) {
-                setUploadProgress(id, progress)
+            try {
+                const payloadTxID = await PluginFileServiceRPC.makeAttachment(provider, {
+                    key,
+                    name: file.name,
+                    type: file.type,
+                    block: buffer,
+                })
+                // Uploading
+                for await (const progress of PluginFileServiceRPCGenerator.upload(provider, payloadTxID)) {
+                    setUploadProgress(id, progress)
+                }
+
+                const landingTxID = await PluginFileServiceRPC.uploadLandingPage(provider, {
+                    name: file.name,
+                    size: file.size,
+                    txId: payloadTxID,
+                    type: file.type,
+                    key,
+                })
+
+                const fileInfo: FileInfo = {
+                    type: 'file',
+                    provider,
+                    id,
+                    name: file.name,
+                    size: file.size,
+                    createdAt,
+                    key,
+                    payloadTxID,
+                    landingTxID,
+                }
+
+                await PluginFileServiceRPC.setFileInfo(fileInfo)
+                return fileInfo
+            } finally {
+                removeUnloadingFile(id)
+                refetchFiles()
             }
-
-            const landingTxID = await PluginFileServiceRPC.uploadLandingPage(provider, {
-                name: file.name,
-                size: file.size,
-                txId: payloadTxID,
-                type: file.type,
-                key,
-            })
-
-            const fileInfo: FileInfo = {
-                type: 'file',
-                provider,
-                id,
-                name: file.name,
-                size: file.size,
-                createdAt,
-                key,
-                payloadTxID,
-                landingTxID,
-            }
-
-            await PluginFileServiceRPC.setFileInfo(fileInfo)
-            removeUnloadingFile(id)
-            refetchFiles()
-            return fileInfo
         },
         [refetchFiles],
     )
