@@ -284,20 +284,57 @@ export class EVMConnectionReadonlyAPI
         const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
 
         if (listOfNonNativeAddress.length) {
-            const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS)
-            const balances = (await this.Contract.readContract(
-                contract,
-                'balances',
-                [[options.account as Address], listOfNonNativeAddress as Address[]],
-                // cannot check the sender's balance in the same contract
-                { ...options, from: undefined },
-            )) as readonly bigint[] | undefined
-
+            const balances = await this.getBalancesInChunks(
+                BALANCE_CHECKER_ADDRESS,
+                options.account as Address,
+                listOfNonNativeAddress as Address[],
+                options,
+            )
             listOfNonNativeAddress.forEach((x, i) => {
-                entities.push([x, balances?.[i]?.toString() ?? '0'])
+                entities.push([x, balances[i]?.toString() ?? '0'])
             })
         }
         return Object.fromEntries(entities)
+    }
+
+    /**
+     * The balance checker reverts as a whole when a single token reverts (dead
+     * contracts are common on long token lists), and oversized batches can hit
+     * the node's eth_call gas cap. Query in chunks and bisect failing chunks,
+     * zeroing out individually reverting tokens.
+     */
+    private async getBalancesInChunks(
+        balanceCheckerAddress: string,
+        account: Address,
+        tokens: Address[],
+        options: EVMConnectionOptions,
+    ): Promise<readonly bigint[]> {
+        const contract = this.Contract.getBalanceCheckerContract(balanceCheckerAddress)
+        const readBalances = async (chunk: Address[]): Promise<readonly bigint[]> => {
+            if (!chunk.length) return []
+            try {
+                return ((await this.Contract.readContract(
+                    contract,
+                    'balances',
+                    [[account], chunk],
+                    // cannot check the sender's balance in the same contract
+                    { ...options, from: undefined },
+                )) ?? []) as readonly bigint[]
+            } catch {
+                if (chunk.length === 1) return [0n]
+                const mid = Math.floor(chunk.length / 2)
+                const [left, right] = await Promise.all([
+                    readBalances(chunk.slice(0, mid)),
+                    readBalances(chunk.slice(mid)),
+                ])
+                return [...left, ...right]
+            }
+        }
+        const CHUNK_SIZE = 100
+        const chunks = Array.from({ length: Math.ceil(tokens.length / CHUNK_SIZE) }, (_, i) =>
+            tokens.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE),
+        )
+        return (await Promise.all(chunks.map(readBalances))).flat()
     }
 
     getNativeToken(initial?: EVMConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
