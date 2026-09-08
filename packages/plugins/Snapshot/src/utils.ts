@@ -15,7 +15,9 @@ interface VoteTypes {
 
 export function formatChoice(defType: 'uint32' | 'string' | 'uint32[]', choiceIndexes: number[]) {
     if (defType === 'uint32') return choiceIndexes[0]
-    if (defType === 'string') return choiceIndexes[0].toString()
+    // weighted / quadratic / shutter proposals carry the choice as a JSON map of
+    // option index to weight, e.g. {"1": 1, "3": 1}
+    if (defType === 'string') return JSON.stringify(Object.fromEntries(choiceIndexes.map((i) => [i, 1])))
 
     return choiceIndexes
 }
