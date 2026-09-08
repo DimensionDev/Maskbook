@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import { EVMContract } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { toBigInt, type NetworkPluginID } from '@masknet/shared-base'
-import { TokenType } from '@masknet/web3-shared-base'
+import { rightShift, TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { Address } from 'viem'
 import { useTip } from '../../contexts/index.js'
@@ -25,7 +25,10 @@ export function useGasLimit(fallback = DEFAULT_GAS_LIMIT) {
         const estimated = await EVMContract.estimateContractGas(
             contract,
             'transfer',
-            [recipientAddress as Address, toBigInt(amount)],
+            [
+                recipientAddress as Address,
+                amount ? toBigInt(rightShift(amount, token.decimals).toFixed()) : 0n,
+            ],
             {
                 chainId,
                 from: account,
