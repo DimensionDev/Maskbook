@@ -1,9 +1,10 @@
-import { useTimeoutFn } from 'react-use'
-import { useMemo, useState } from 'react'
-import { Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
+import { useCopyToClipboard, useTimeoutFn } from 'react-use'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Button, IconButton, Typography, Alert, AlertTitle, styled, type TypographyProps } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useBuildInfoMarkdown, type ErrorBoundaryError } from './context.js'
 import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
@@ -48,6 +49,15 @@ Error stack:
 
 <pre>${error.stack}</pre>\n\n${context || ''}`
 
+    // a clean text version of the report (no GitHub template comments/placeholders) for one-click copy
+    const fullReport = `${reportTitle}
+
+Error stack:
+
+${error.stack}
+
+${context || ''}`.trim()
+
     const githubLink = useMemo(() => {
         const url = new URLSearchParams()
         url.set('title', reportTitle)
@@ -64,12 +74,13 @@ Error stack:
                     {error.type}: {error.message}
                 </ErrorTitle>
                 <ActionArea>
-                    <Button variant="contained" color="primary" onClick={onRetry}>
+                    <Button variant="contained" color="primary" size="small" onClick={onRetry}>
                         <Trans>Try to recover</Trans>
                     </Button>
-                    <Button href={githubLink} color="primary" target="_blank">
+                    <Button href={githubLink} color="primary" size="small" target="_blank">
                         <Trans>Report on GitHub</Trans>
                     </Button>
+                    <CopyReportButton text={fullReport} />
                     <IconButtonContainer>
                         <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
                             {showStack ?
@@ -79,10 +90,8 @@ Error stack:
                     </IconButtonContainer>
                 </ActionArea>
                 {showStack ?
-                    <ErrorStack>
-                        <Typography component="pre">
-                            <code>{error.stack}</code>
-                        </Typography>
+                    <ErrorStack component="pre">
+                        <code>{error.stack}</code>
                     </ErrorStack>
                 :   null}
             </Alert>
@@ -100,12 +109,24 @@ const Root = styled('div')({
 const ErrorTitle = styled('div')({
     userSelect: 'text',
     marginBottom: 8,
+    fontSize: 14,
+    lineHeight: 1.5,
+    wordBreak: 'break-word',
 })
 
-const ErrorStack = styled('div')({
+// TypographyProps (rather than the inferred props of Typography) keeps the polymorphic
+// `component` prop, which plain styled(Typography) would drop from the type.
+const ErrorStack = styled(Typography)<TypographyProps>({
     userSelect: 'text',
-    overflowX: 'auto',
+    margin: 0,
     marginTop: 16,
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace',
+    fontSize: 12,
+    lineHeight: 1.5,
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-all',
+    maxHeight: 360,
+    overflowY: 'auto',
 })
 
 const ActionArea = styled('div')({
@@ -122,3 +143,31 @@ const IconButtonContainer = styled('div')({
     justifyContent: 'center',
     alignItems: 'center',
 })
+
+// Local copy button (cf. packages/injected-ui/src/CopyIconButton.tsx): importing CopyButton from
+// @masknet/shared would create a circular dependency (shared depends on shared-base-ui).
+function CopyReportButton(props: { text: string }) {
+    const [, copyToClipboard] = useCopyToClipboard()
+    const [copied, setCopied] = useState(false)
+    const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+    useEffect(() => () => clearTimeout(timerRef.current), [])
+
+    const handleCopy = useCallback(() => {
+        copyToClipboard(props.text)
+        setCopied(true)
+        clearTimeout(timerRef.current)
+        timerRef.current = setTimeout(setCopied, 1500, false)
+    }, [props.text])
+
+    return (
+        <Button
+            color="primary"
+            size="small"
+            onClick={handleCopy}
+            startIcon={copied ? <Icons.Check size={16} /> : <Icons.Copy size={16} />}>
+            {copied ?
+                <Trans>Copied!</Trans>
+            :   <Trans>Copy report</Trans>}
+        </Button>
+    )
+}

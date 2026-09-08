@@ -1849,9 +1849,10 @@ msgstr ""
 msgid "Copied"
 msgstr "복사됨"
 
+#: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
 #: packages/shared/src/UI/components/CopyButton/index.tsx
 msgid "Copied!"
-msgstr "복사됨"
+msgstr "복사됨!"
 
 #: packages/mask/popups/pages/Personas/ExportPrivateKey/index.tsx
 #: packages/shared/src/UI/components/CopyButton/index.tsx
@@ -1869,6 +1870,10 @@ msgstr "주소 복사"
 #: packages/mask/popups/components/PrivateKeyDisplay/index.tsx
 #~ msgid "Copy private key"
 #~ msgstr "개인 키 복사"
+
+#: packages/shared-base-ui/src/components/ErrorBoundary/CrashUI.tsx
+msgid "Copy report"
+msgstr "보고서 복사"
 
 #: packages/mask/content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #~ msgid "Copy text"

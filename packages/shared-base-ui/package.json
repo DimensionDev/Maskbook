@@ -14,6 +14,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/flags": "workspace:^",
+    "@masknet/icons": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/theme": "workspace:^",
     "@tanstack/react-query": "^5.49.2",
