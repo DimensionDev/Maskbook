@@ -76,7 +76,7 @@ export function HistoryDetail() {
                     duration: DURATION,
                 }
             :   null
-    }, [history])
+    }, [history, info])
     return (
         <div className={classes.container}>
             {patchedHistory ?
