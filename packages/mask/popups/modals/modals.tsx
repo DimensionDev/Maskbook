@@ -1,6 +1,8 @@
 import { PopupModalRoutes } from '@masknet/shared-base'
+import { use, type PropsWithChildren } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { wrapModal } from '../components/index.js'
+import { allStatesReadySettled } from '../../shared-ui/initialization/walletSetup.js'
 import { ChangeBackupPasswordModal } from './ChangeBackupPasswordModal/index.js'
 import { ChooseCurrencyModal } from './ChooseCurrencyModal/index.js'
 import { ChooseNetworkModal } from './ChooseNetworkModal/index.js'
@@ -17,6 +19,11 @@ import { VerifyBackupPasswordModal } from './VerifyBackupPasswordModal/index.js'
 import { SelectProviderModal } from './SelectProviderModal/index.js'
 import { UpdatePermissionModal } from './UpdatePermissionModal/index.js'
 
+function AllWalletStatesReady(props: PropsWithChildren) {
+    use(allStatesReadySettled)
+    return props.children
+}
+
 export default function RoutedModals(props: { path: string }) {
     return (
         <Routes location={props.path}>
@@ -29,8 +36,22 @@ export default function RoutedModals(props: { path: string }) {
             <Route path={PopupModalRoutes.ChooseCurrency} element={wrapModal(<ChooseCurrencyModal />)} />
             <Route path={PopupModalRoutes.ChooseNetwork} element={wrapModal(<ChooseNetworkModal />)} />
             <Route path={PopupModalRoutes.ConnectSocialAccount} element={wrapModal(<ConnectSocialAccountModal />)} />
-            <Route path={PopupModalRoutes.SelectProvider} element={wrapModal(<SelectProviderModal />)} />
-            <Route path={PopupModalRoutes.ConnectProvider} element={wrapModal(<ConnectProviderModal />)} />
+            <Route
+                path={PopupModalRoutes.SelectProvider}
+                element={wrapModal(
+                    <AllWalletStatesReady>
+                        <SelectProviderModal />
+                    </AllWalletStatesReady>,
+                )}
+            />
+            <Route
+                path={PopupModalRoutes.ConnectProvider}
+                element={wrapModal(
+                    <AllWalletStatesReady>
+                        <ConnectProviderModal />
+                    </AllWalletStatesReady>,
+                )}
+            />
             <Route path={PopupModalRoutes.SelectLanguage} element={wrapModal(<SelectLanguageModal />)} />
             <Route path={PopupModalRoutes.SelectAppearance} element={wrapModal(<SelectAppearanceModal />)} />
             <Route path={PopupModalRoutes.SupportedSitesModal} element={wrapModal(<SupportedSitesModal />)} />

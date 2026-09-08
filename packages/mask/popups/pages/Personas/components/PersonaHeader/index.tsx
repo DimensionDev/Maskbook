@@ -3,7 +3,7 @@ import { useUpdateEffect } from '@react-hookz/web'
 import { PopupRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { useLocation, useMatch } from 'react-router-dom'
-import { NormalHeader } from '../../../../components/index.js'
+import { NormalHeader } from '../../../../components/NormalHeader/index.js'
 import { PageTitleContext } from '../../../../hooks/index.js'
 import { PersonaHeaderUI } from './UI.js'
 

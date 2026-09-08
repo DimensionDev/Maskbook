@@ -18,16 +18,15 @@ import Services from '#services'
 import { LoadingPlaceholder } from '@masknet/injected-ui/LoadingPlaceholder'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { PopupContext, PageTitleContext } from './hooks/index.js'
-import { Modals } from './modals/index.js'
 import { UserContext, queryPersistOptions, usePageThemePalette, useThemeLanguage } from '../shared-ui/index.js'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Modals } from './modals/index.js'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { queryClient, ErrorBoundary } from '@masknet/shared-base-ui'
 import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
-import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
-import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
+import { walletRoutes } from './pages/Wallet/routes.js'
+import { contactsRoutes } from './pages/Friends/routes.js'
+import { traderRoutes } from './pages/Trader/routes.js'
 import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
-import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
 import { StyledEngineProvider } from '@mui/material/styles'
 import { i18n } from '@lingui/core'
 import { PopupSnackbarProvider } from './components/PopupSnackbarProvider/index.js'
@@ -43,7 +42,17 @@ const pending = (
         <LoadingPlaceholder />
     </Box>
 )
+// Modals hosts the imperative SingletonModal targets; it must mount with the
+// first commit; otherwise openAndWaitForClose callers hang when the host has
+// not registered yet.
 const RoutedModals = lazy(() => import('./modals/modals.js'))
+const ReactQueryDevtools = lazy(async () => {
+    const { ReactQueryDevtools } = await import('@tanstack/react-query-devtools')
+    return { default: ReactQueryDevtools }
+})
+const loadTrader = () => import('./pages/Trader/index.js')
+const loadWallet = () => import('./pages/Wallet/index.js')
+const loadContacts = () => import('./pages/Friends/index.js')
 const PopupShell = memo(function PopupShell() {
     const [searchParams] = useSearchParams()
     const modal = searchParams.get('modal')
@@ -66,7 +75,9 @@ const PopupShell = memo(function PopupShell() {
                 <Modals />
                 <Suspense>
                     {modal ?
-                        <RoutedModals path={modal} />
+                        <ErrorBoundary>
+                            <RoutedModals path={modal} />
+                        </ErrorBoundary>
                     :   null}
                 </Suspense>
             </UserContext>
@@ -84,10 +95,22 @@ const router = createHashRouter([
                 element: <PopupLayout />,
                 children: [
                     { path: PopupRoutes.Personas, element: <PersonaFrame />, children: personaRoute },
-                    { path: PopupRoutes.Wallet, element: <WalletFrame />, children: walletRoutes },
-                    { path: PopupRoutes.Friends, element: <ContactsFrame />, children: contactsRoutes },
+                    {
+                        path: PopupRoutes.Wallet,
+                        lazy: async () => ({ Component: (await loadWallet()).WalletFrame }),
+                        children: walletRoutes,
+                    },
+                    {
+                        path: PopupRoutes.Friends,
+                        lazy: async () => ({ Component: (await loadContacts()).ContactsFrame }),
+                        children: contactsRoutes,
+                    },
                     { path: PopupRoutes.Settings, lazy: () => import('./pages/Settings/index.js') },
-                    { path: PopupRoutes.Trader, element: <TraderFrame />, children: traderRoutes },
+                    {
+                        path: PopupRoutes.Trader,
+                        lazy: async () => ({ Component: (await loadTrader()).TraderFrame }),
+                        children: traderRoutes,
+                    },
                 ],
             },
             { path: PopupRoutes.RequestPermission, lazy: () => import('./pages/RequestPermission/index.js') },
@@ -130,7 +153,9 @@ export default function Popups() {
             <PrivySetup />
             {/* https://github.com/TanStack/query/issues/5417 */}
             {process.env.NODE_ENV === 'development' ?
-                <ReactQueryDevtools buttonPosition="bottom-right" />
+                <Suspense fallback={null}>
+                    <ReactQueryDevtools buttonPosition="bottom-right" />
+                </Suspense>
             :   null}
             <RouterProvider router={router} />
         </>,

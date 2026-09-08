@@ -434,7 +434,9 @@ export async function createConfiguration(
 
     const entries = (baseConfig.entry = {
         dashboard: withReactDevTools(join(import.meta.dirname, '../dashboard/initialization/index.ts')),
-        popups: withReactDevTools(join(import.meta.dirname, '../popups/initialization/index.ts')),
+        // Browser-action popups are short-lived and particularly sensitive to startup cost.
+        // Keep React DevTools on long-lived extension surfaces instead of loading it before the popup can open.
+        popups: normalizeEntryDescription(join(import.meta.dirname, '../popups/initialization/index.ts')),
         contentScript: withReactDevTools(join(import.meta.dirname, '../content-script/index.ts')),
         background: normalizeEntryDescription(join(import.meta.dirname, '../background/initialization/mv3-entry.ts')),
         backgroundWorker: normalizeEntryDescription(
