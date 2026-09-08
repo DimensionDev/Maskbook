@@ -3,13 +3,12 @@ import { useAccount } from '@masknet/web3-hooks-base'
 import { RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { minus } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { getRpProgram } from '../../helpers/getRpProgram.js'
 import { useClaimRecord } from './useClaimRecord.js'
 
 export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chainId: number) {
     const account = useAccount(NetworkPluginID.PLUGIN_SOLANA)
-    const [now, setNow] = useState(() => Date.now())
 
     const { data, refetch: checkAvailability } = useQuery({
         queryKey: ['red-packet', 'solana-availability', payload.rpid, payload.network],
@@ -24,7 +23,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
             if (!data) return 30_000
             const isExpired = data.duration.add(data.createTime).muln(1000).ltn(Date.now())
             const balance = minus(data.totalAmount.toString(), data.claimedAmount.toString()).toString()
-            if (isExpired || !balance) return false
+            if (isExpired || !balance || balance === '0') return false
             return 30_000
         },
     })
@@ -51,7 +50,8 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
         }
     }
     const ms = data.duration.add(data.createTime).muln(1000)
-    const isExpired = ms.toNumber() < now
+    // eslint-disable-next-line @eslint-react/purity -- refreshed on every availability refetch
+    const isExpired = ms.toNumber() < Date.now()
     const isEmpty = data.claimedAmount.gte(data.totalAmount)
     const isClaimed = !!claimRecord
 
