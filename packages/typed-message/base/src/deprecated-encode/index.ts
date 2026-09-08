@@ -15,21 +15,22 @@ export function decodeTypedMessageV38ToV40Format(raw: Uint8Array, version: -38 |
     if (text.isErr()) return text
 
     if (version === -38) {
+        const separator = '\u{1F9E9}'
         const maybeMetadata = (() => {
-            if (!text.value.includes('\u{1F9E9}')) return None
-            const [maybeJSON] = text.value.split('\u{1F9E9}')
+            if (!text.value.includes(separator)) return None
+            const [maybeJSON] = text.value.split(separator)
             return Result.wrap(() => JSON.parse(maybeJSON))
                 .toOption()
-                .map((val) => {
-                    if (typeof val !== 'object' || Array.isArray(val)) return new Map()
+                .map((val): Map<string, unknown> | undefined => {
+                    if (typeof val !== 'object' || val === null || Array.isArray(val)) return undefined
                     return new Map(Object.entries(val))
                 })
         })()
-        return Ok(
-            maybeMetadata.isSome() ?
-                makeTypedMessageText(text.value.replace(/.+\u{1F9E9}/u, ''), maybeMetadata.value)
-            :   makeTypedMessageText(text.value),
-        )
+        if (maybeMetadata.isNone() || maybeMetadata.value === undefined) return Ok(makeTypedMessageText(text.value))
+        // Encode inserts exactly one separator after the metadata; only the first
+        // one separates metadata from content, the content may contain more.
+        const [, ...contentParts] = text.value.split(separator)
+        return Ok(makeTypedMessageText(contentParts.join(separator), maybeMetadata.value))
     }
     return Ok(makeTypedMessageText(text.value))
 }
