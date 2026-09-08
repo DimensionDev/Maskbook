@@ -63,14 +63,10 @@ function attachReactTreeToMountedRoot(
         )
     }
 
-    signal.addEventListener(
-        'abort',
-        () => {
-            shadowEnvironmentMountingRoots.delete(instanceKey)
-            container.remove()
-        },
-        { signal },
-    )
+    signal.addEventListener('abort', () => {
+        shadowEnvironmentMountingRoots.delete(instanceKey)
+        container.remove()
+    })
     options.signal?.addEventListener('abort', () => controller.abort(), { signal })
     AttachPointComponent.displayName = `ShadowRootAttachPoint (${key})`
 
@@ -110,7 +106,7 @@ function observe(element: Element, key: string, callback: () => void, signal: Ab
     )
 
     observer.observe(element)
-    signal.addEventListener('abort', () => observer.unobserve(element), { signal })
+    signal.addEventListener('abort', () => observer.unobserve(element))
     callbacks.set(element, { ...callbacks.get(element), [key]: callback })
 }
 function isElementPartiallyInViewport(element: Element) {
