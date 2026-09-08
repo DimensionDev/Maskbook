@@ -149,7 +149,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
         token,
         sender: payload.sender.name,
         message: payload.sender.message,
-        claimedAmount: availability?.claimed_amount,
+        claimedAmount: availability ? minus(payload.total, availability.balance).toFixed() : undefined,
         claimed: availability?.claimed,
     })
 
