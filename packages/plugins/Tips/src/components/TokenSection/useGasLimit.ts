@@ -25,10 +25,7 @@ export function useGasLimit(fallback = DEFAULT_GAS_LIMIT) {
         const estimated = await EVMContract.estimateContractGas(
             contract,
             'transfer',
-            [
-                recipientAddress as Address,
-                amount ? toBigInt(rightShift(amount, token.decimals).toFixed()) : 0n,
-            ],
+            [recipientAddress as Address, amount ? toBigInt(rightShift(amount, token.decimals).toFixed()) : 0n],
             {
                 chainId,
                 from: account,

@@ -23,11 +23,14 @@ function createGun() {
             const abort = this.abort
             this.keepAlive = () => {
                 if (this.timer) clearTimeout(this.timer)
-                this.timer = setTimeout(() => {
-                    // A closed or replaced socket must not kill the current (healthy) gun instance.
-                    if (this.readyState === WebSocket.CLOSING || this.readyState === WebSocket.CLOSED) return
-                    abort()
-                }, 3 * 60 * 1000)
+                this.timer = setTimeout(
+                    () => {
+                        // A closed or replaced socket must not kill the current (healthy) gun instance.
+                        if (this.readyState === WebSocket.CLOSING || this.readyState === WebSocket.CLOSED) return
+                        abort()
+                    },
+                    3 * 60 * 1000,
+                )
             }
             const keepAlive = this.keepAlive
             this.addEventListener(
