@@ -244,7 +244,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         const toAmount = leftShift(toTokenAmount || 0, toToken.decimals)
         if (fromAmount.isZero() || toAmount.isZero()) return null
         return forwardCompare ? dividedBy(toAmount, fromAmount) : dividedBy(fromAmount, toAmount)
-    }, [quote])
+    }, [quote, forwardCompare])
 
     const rateNode =
         baseToken && targetToken && rate ?

@@ -48,7 +48,7 @@ export function GasManager({ children }: PropsWithChildren) {
     const gasFee = useMemo(() => {
         const price = gasConfig.gasPrice ?? (gasConfig as EIP1559GasConfig).maxFeePerGas ?? '1'
         return multipliedBy(gasLimit ?? '1', price)
-    }, [gasLimit, gasConfig.gasPrice])
+    }, [gasLimit, gasConfig])
 
     const gasCost = useMemo(() => {
         if (!price) return ''

@@ -8,13 +8,14 @@ export function useNativeTokenBalance<T extends NetworkPluginID = NetworkPluginI
     pluginID?: T,
     options?: ConnectionOptions<T>,
 ) {
-    const { account } = useChainContext({ account: options?.account })
+    const { account, chainId } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const Web3 = useWeb3Connection(pluginID, {
         account,
+        chainId,
         ...options,
     } as ConnectionOptions<T>)
 
     return useAsyncRetry(async () => {
         return Web3.getNativeTokenBalance()
-    }, [account, Web3])
+    }, [account, chainId, Web3])
 }

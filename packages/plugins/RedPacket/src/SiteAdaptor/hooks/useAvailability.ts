@@ -59,7 +59,7 @@ export function useAvailability(
         refetchInterval(query) {
             const { data } = query.state
             if (!data) return 30_000
-            if (data.expired || !data.balance) return false
+            if (data.expired || !data.balance || data.balance === '0') return false
             return 30_000
         },
     })

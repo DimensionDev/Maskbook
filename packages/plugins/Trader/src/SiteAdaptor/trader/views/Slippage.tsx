@@ -1,9 +1,11 @@
 import { alpha, makeStyles, MaskTextField } from '@masknet/theme'
 import { leftShift } from '@masknet/web3-shared-base'
 import { Button, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { isNumber } from 'lodash-es'
 import { memo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { DEFAULT_SLIPPAGE } from '../../constants.js'
 import { useTrade } from '../contexts/index.js'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
@@ -165,7 +167,15 @@ export const Slippage = memo(function Slippage() {
                     <Typography className={classes.rowName}>Minimum received</Typography>
                     {quote && mode === 'swap' ?
                         <Typography className={classes.rowValue}>
-                            {leftShift(quote.toTokenAmount, quote.toToken.decimals).toFixed(4)}
+                            {leftShift(quote.toTokenAmount, quote.toToken.decimals)
+                                .times(
+                                    new BigNumber(1).minus(
+                                        new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(
+                                            100,
+                                        ),
+                                    ),
+                                )
+                                .toFixed(4)}
                             {quote.toToken.tokenSymbol}
                         </Typography>
                     : bridgeQuote && mode === 'bridge' ?

@@ -20,10 +20,8 @@ const worker: Plugin.Worker.Definition = {
             return result
         },
         onRestore: async (files: FileInfo[]) => {
-            return Result.wrap(() => {
-                files.map(async (file) => {
-                    await setFileInfo(file)
-                })
+            return Result.wrapAsync(async () => {
+                await Promise.all(files.map((file) => setFileInfo(file)))
             })
         },
     },

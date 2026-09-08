@@ -222,7 +222,7 @@ export const Confirm = memo(function Confirm() {
         const toAmount = leftShift(toTokenAmount || 0, toToken?.decimals || 1)
         if (fromAmount.isZero() || toAmount.isZero()) return null
         return forwardCompare ? dividedBy(toAmount, fromAmount) : dividedBy(fromAmount, toAmount)
-    }, [fromTokenAmount, toToken, fromToken, toToken])
+    }, [forwardCompare, fromTokenAmount, toTokenAmount, fromToken, toToken])
 
     const rateNode =
         baseToken && targetToken && rate ?
