@@ -10,7 +10,7 @@ import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3ProviderFromURL } from '../../../helpers/createWeb3ProviderFromURL.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
-import { createViemClientFromURL } from '../../../helpers/createViemClient.js'
+import { createViemClientFromURL, type ViemClient } from '../../../helpers/createViemClient.js'
 
 export class EVMRequestReadonlyAPI {
     static Default = new EVMRequestReadonlyAPI()
@@ -27,7 +27,7 @@ export class EVMRequestReadonlyAPI {
         }
     }
 
-    getViem(initial?: EVMConnectionOptions) {
+    getViem(initial?: EVMConnectionOptions): ViemClient {
         const options = this.ConnectionOptions.fill(initial)
         return createViemClientFromURL(options.chainId, options.providerURL ?? ProviderURL.from(options.chainId))
     }

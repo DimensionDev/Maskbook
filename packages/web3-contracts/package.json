@@ -7,6 +7,6 @@
     "start": "gulp build-contracts"
   },
   "dependencies": {
-    "viem": "^2.45.0"
+    "viem": "^2.56.3"
   }
 }

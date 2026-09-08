@@ -53,7 +53,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "use-subscription": "^1.8.0",
-    "viem": "^2.45.0",
+    "viem": "^2.56.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {

@@ -72,7 +72,7 @@
     "twitter-text": "^3.1.0",
     "urlcat": "^3.1.0",
     "uuid": "^9.0.0",
-    "viem": "^2.45.0",
+    "viem": "^2.56.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {

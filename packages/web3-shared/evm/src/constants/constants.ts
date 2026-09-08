@@ -14,7 +14,6 @@ import Lido from '@masknet/web3-constants/evm/lido.json' with { type: 'json' }
 import OpenOcean from '@masknet/web3-constants/evm/openocean.json' with { type: 'json' }
 import Pet from '@masknet/web3-constants/evm/pet.json' with { type: 'json' }
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json' with { type: 'json' }
-import BUILTIN_RPC from '@masknet/web3-constants/evm/rpc.json' with { type: 'json' }
 
 import SpaceId from '@masknet/web3-constants/evm/space-id.json' with { type: 'json' }
 import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json' with { type: 'json' }
@@ -25,16 +24,6 @@ import Trending from '@masknet/web3-constants/evm/trending.json' with { type: 'j
 import { getEnumAsArray } from '@masknet/kit'
 import { transform, transformAll, transformAllHook, transformHook } from '@masknet/web3-shared-base'
 import { ChainId } from '../types/index.js'
-
-function getRPC() {
-    try {
-        return JSON.parse(process.env.WEB3_CONSTANTS_RPC!) as typeof BUILTIN_RPC
-    } catch {
-        return BUILTIN_RPC
-    }
-}
-
-const RPC = getRPC()
 
 export const ChainIdList = getEnumAsArray(ChainId).map((x) => x.value)
 
@@ -72,11 +61,6 @@ export const getTrendingConstant = transform(ChainId, Trending)
 export const getTrendingConstants = transformAll(ChainId, Trending)
 export const useTrendingConstant = transformHook(getTrendingConstants)
 export const useTrendingConstants = transformAllHook(getTrendingConstants)
-
-export const getRPCConstant = transform(ChainId, RPC)
-export const getRPCConstants = transformAll(ChainId, RPC)
-export const useRPCConstant = transformHook(getRPCConstants)
-export const useRPCConstants = transformAllHook(getRPCConstants)
 
 export const getEtherscanConstant = transform(ChainId, Etherscan)
 export const getEtherscanConstants = transformAll(ChainId, Etherscan)
