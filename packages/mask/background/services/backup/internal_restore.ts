@@ -16,7 +16,6 @@ import {
     queryPostDB,
     updatePostDB,
 } from '../../database/post/index.js'
-import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType.js'
 
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts } = backup
@@ -146,12 +145,12 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
                 const { value } = post.recipients
                 if (value.type === 'public') rec.recipients = 'everyone'
                 else {
-                    const map = new Map<ProfileIdentifier, LatestRecipientDetailDB>()
-                    for (const [id, detail] of value.receivers) {
-                        map.set(id, {
-                            reason: detail.map((x): LatestRecipientReasonDB => ({ at: x.at, type: 'direct' })),
-                        })
+                    const map = new Map<ProfileIdentifier, Date>()
+                    for (const [id, reasons] of value.receivers) {
+                        const at = reasons[0]?.at
+                        if (at) map.set(id, at)
                     }
+                    rec.recipients = map
                 }
             }
 
@@ -166,7 +165,7 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
     })
 }
 async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
-    const plugins = Iterator.from(activatedPluginsWorker)
+    const plugins = [...activatedPluginsWorker]
     const works = new Set<Promise<void>>()
     for (const [pluginID, item] of Object.entries(backup)) {
         const plugin = plugins.find((x) => x.ID === pluginID)
