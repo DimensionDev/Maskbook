@@ -8,6 +8,7 @@
   "references": [
     { "path": "../shared/tsconfig.json" },
     { "path": "../shared-ui/tsconfig.json" },
+    { "path": "../../injected-ui/tsconfig.json" },
     { "path": "../../plugins/Trader/tsconfig.json" },
     { "path": "../../flags/tsconfig.json" },
     { "path": "../../public-api/tsconfig.json" },

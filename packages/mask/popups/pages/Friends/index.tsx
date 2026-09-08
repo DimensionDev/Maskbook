@@ -1,17 +1,9 @@
 import { RestorableScrollContext } from '@masknet/shared'
-import { PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { memo, Suspense, useEffect } from 'react'
-import { Navigate, Outlet, useMatch, useSearchParams, type RouteObject } from 'react-router-dom'
+import { Outlet, useMatch, useSearchParams } from 'react-router-dom'
 import { LoadingPlaceholder } from '@masknet/injected-ui/LoadingPlaceholder'
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
-
-const r = relativeRouteOf(PopupRoutes.Friends)
-
-export const contactsRoutes: RouteObject[] = [
-    { index: true, lazy: () => import('./Home/index.js') },
-    { path: `${r(PopupRoutes.FriendsDetail)}/:id?`, lazy: () => import('./Detail/index.js') },
-    { path: '*', element: <Navigate to={PopupRoutes.Contacts} /> },
-]
 
 export const ContactsFrame = memo(function Contacts() {
     const modalNavigate = useModalNavigate()
