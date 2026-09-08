@@ -84,7 +84,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
         const toAmount = leftShift(toTokenAmount || 0, toToken.decimals)
         if (fromAmount.isZero() || toAmount.isZero()) return null
         return forwardCompare ? dividedBy(toAmount, fromAmount) : dividedBy(fromAmount, toAmount)
-    }, [quote])
+    }, [quote, forwardCompare])
     const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
