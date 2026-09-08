@@ -115,6 +115,8 @@ function resolveCurrentVisitingIdentityInner(
             console.assert(user, `Can't get get user by screen name ${screenName}`)
         }
         if (!user) return
+        // A slow response for a previous profile must not overwrite the current one.
+        if (getFirstSlug()?.toLowerCase() !== user.legacy.screen_name.toLowerCase()) return
 
         const legacy = user.legacy
         const handle = legacy.screen_name
