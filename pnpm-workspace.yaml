@@ -76,6 +76,7 @@ patchedDependencies:
   ts-results-es: patches/ts-results-es.patch
   '@lingui/cli': patches/@lingui__cli.patch
   notistack@3.0.2: patches/notistack@3.0.2.patch
+  viem@2.56.3: patches/viem@2.56.3.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:

@@ -4,6 +4,12 @@
 
 - reflect-metadata: try to overwrite `Reflect` methods. We use `ReflectMetadata` global object for them.
   - bloom-filters
+- viem (2.56.x): token/tempo actions assign an own `call` property onto exported functions
+  (`approve.call = call`). Under SES lockdown `Function.prototype.call` is non-writable, so the
+  assignment throws at module init. The patch replaces those assignments with
+  `Object.defineProperty(fn, 'call', ...)`, which defines an own property without walking the
+  prototype chain. Regenerate on viem upgrades with:
+  `perl -pi -e "s/^(\s*)([A-Za-z_\$][A-Za-z0-9_\$]*)\.call = call;\$/\$1Object.defineProperty(\$2, 'call', { value: call, writable: true, configurable: true });/" $(grep -rl "\.call = call;" _esm/)`
 
 ## ESM-CJS compatibility
 

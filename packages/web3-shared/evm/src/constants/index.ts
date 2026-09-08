@@ -1,4 +1,5 @@
 export * from './constants.js'
 export * from './descriptors.js'
+export * from './viem-chains.js'
 export * from './primitives.js'
 export * from './tokens.js'

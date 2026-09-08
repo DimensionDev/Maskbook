@@ -8,7 +8,7 @@ import { createConnectionContext } from '../helpers/createContext.js'
 import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
-import { chainIdToChain, createViemClient } from '../../../helpers/createViemClient.js'
+import { chainIdToChain, createViemClient, type ViemClient } from '../../../helpers/createViemClient.js'
 
 function assertTransactionChainId(transaction: TransactionSerializable | undefined, chainId: ChainId | undefined) {
     if (chainId === undefined) return
@@ -100,7 +100,7 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
         }
     }
 
-    override getViem(initial?: EVMConnectionOptions) {
+    override getViem(initial?: EVMConnectionOptions): ViemClient {
         const options = this.ConnectionOptions.fill(initial)
         if (options.readonly) return this.Request.getViem(options)
         return createViemClient(chainIdToChain(options.chainId), (requestArguments) =>

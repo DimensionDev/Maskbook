@@ -1,4 +1,12 @@
-import { createWalletClient, defineChain, type Chain, custom, publicActions } from 'viem'
+import {
+    createWalletClient,
+    defineChain,
+    type Chain,
+    custom,
+    publicActions,
+    type PublicActions,
+    type WalletClient,
+} from 'viem'
 import {
     CHAIN_DESCRIPTORS,
     ChainId,
@@ -9,7 +17,15 @@ import {
 import { fetchJsonRpcResponse } from './fetchJsonRpcResponse.js'
 import * as chains from 'viem/chains'
 
-export function createViemClient(chain: Chain | undefined, request: (arg: RequestArguments) => Promise<any>) {
+/** Wallet client extended with public actions. */
+export type ViemClient = WalletClient & PublicActions
+
+// The explicit return type keeps the emitted declaration portable (TS2742): viem >= 2.5x
+// pulls deep token/siwe action types into the inferred client type.
+export function createViemClient(
+    chain: Chain | undefined,
+    request: (arg: RequestArguments) => Promise<any>,
+): ViemClient {
     const client = createWalletClient({
         chain,
         transport: custom({ request }),
@@ -18,7 +34,7 @@ export function createViemClient(chain: Chain | undefined, request: (arg: Reques
     return client
 }
 
-export function createViemClientFromURL(chain: ChainId, url: string) {
+export function createViemClientFromURL(chain: ChainId, url: string): ViemClient {
     return createViemClient(chainIdToChain(chain), async (requestArguments) => {
         const response = await fetchJsonRpcResponse(url, createJsonRpcRequest(0, requestArguments))
         const editor = ErrorEditor.from(null, response)

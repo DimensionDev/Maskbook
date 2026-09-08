@@ -6,7 +6,7 @@ import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { fetchChains } from '@masknet/web3-providers/helpers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, SchemaType, ZERO_ADDRESS, getRPCConstant } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, SchemaType, ZERO_ADDRESS, getPublicRPCUrls } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
@@ -81,7 +81,7 @@ export const Component = memo(function EditNetwork() {
         return {
             name: network.name,
             chainId: network.chainId,
-            rpc: network.isCustomized ? network.rpcUrl : getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
+            rpc: network.isCustomized ? network.rpcUrl : getPublicRPCUrls(network.chainId)[0],
             currencySymbol: network.nativeCurrency.symbol,
             explorer: network.explorerUrl.url,
             isCustomized: network.isCustomized,

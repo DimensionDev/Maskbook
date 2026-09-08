@@ -1,6 +1,6 @@
 import { fetchChainId } from '@masknet/web3-providers/helpers'
 import { isSameURL, type ReasonableNetwork } from '@masknet/web3-shared-base'
-import { getRPCConstant, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
+import { getPublicRPCUrls, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { z } from 'zod'
 import { msg } from '@lingui/core/macro'
 import type { I18nContext } from '@lingui/react'
@@ -86,7 +86,7 @@ export function createSchema(
                 return false
             } else {
                 networks.some((network) => {
-                    if (getRPCConstant(network.chainId, 'RPC_URLS')?.includes(rpc)) {
+                    if (getPublicRPCUrls(network.chainId).includes(rpc)) {
                         context.addIssue({
                             code: z.ZodIssueCode.custom,
                             path: ['rpc'],
