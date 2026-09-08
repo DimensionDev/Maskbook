@@ -62,7 +62,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
         claimed: data.claimedNumber.toString(),
         expired: isExpired,
         isEmpty,
-        claimed_amount: data.claimedAmount.toString(),
+        claimed_amount: claimRecord?.amount.toString() ?? '0',
         publicKey: data.pubkeyForClaimSignature,
         isClaimed,
     }
