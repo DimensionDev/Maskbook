@@ -43,7 +43,7 @@ function createGun() {
                 {},
             )
             this.addEventListener('close', () => {
-                if (this.timer) clearTimeout(this.timer)
+                if (!(this.timer)) return;clearTimeout(this.timer)
             })
         }
         declare private abort: () => void
