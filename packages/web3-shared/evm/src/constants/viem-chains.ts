@@ -73,13 +73,13 @@ const RPC_URL_OVERRIDES: Partial<Record<ChainId, string[]>> = {
     // no viem preset; official endpoint first, then a community mirror
     [ChainId.Robinhood]: ['https://rpc.mainnet.chain.robinhood.com', 'https://robinhood-rpc.publicnode.com'],
     // viem's preset mixes in unreachable (hypersync), quota-exhausted (blockeden)
-    // and CORS-less (blastapi) endpoints; keep the browser-working subset
+    // and CORS-less (blastapi) endpoints; keep the browser-working subset.
+    // OnFinality dropped: stale blocks, eth_getLogs needs an api key
     [ChainId.Metis]: [
-        'https://metis-pokt.nodies.app',
-        'https://metis-andromeda.rpc.thirdweb.com',
-        'https://metis-andromeda.gateway.tenderly.co',
-        'https://metis.api.onfinality.io/public',
         'https://andromeda.metis.io/?owner=1088',
+        'https://metis-pokt.nodies.app',
+        'https://metis-andromeda.gateway.tenderly.co',
+        'https://metis-andromeda.rpc.thirdweb.com',
     ],
 }
 
