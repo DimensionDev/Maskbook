@@ -63,16 +63,27 @@ const VIEM_CHAINS: Partial<Record<ChainId, Chain>> = {
 // These lists replace viem's preset when it includes dead or browser-unfriendly
 // endpoints, or covers a chain viem has no preset for.
 const RPC_URL_OVERRIDES: Partial<Record<ChainId, string[]>> = {
+    // viem 2.45's preset (eth.merkle.io) persistently 429s anonymous traffic
+    [ChainId.Mainnet]: ['https://ethereum-rpc.publicnode.com', 'https://eth.drpc.org', 'https://cloudflare-eth.com'],
+    // viem 2.45's preset (polygon-rpc.com) rejects anonymous traffic (401/403)
+    [ChainId.Polygon]: ['https://polygon-bor-rpc.publicnode.com', 'https://polygon.drpc.org', 'https://1rpc.io/matic'],
+    // viem 2.45's preset is a single thirdweb free-tier endpoint
+    [ChainId.BSC]: [
+        'https://bsc-rpc.publicnode.com',
+        'https://bsc-dataseed.bnbchain.org',
+        'https://56.rpc.thirdweb.com',
+    ],
+    [ChainId.Fantom]: ['https://rpc.fantom.network', 'https://fantom.drpc.org', 'https://250.rpc.thirdweb.com'],
     // no viem preset; official endpoint first, then a community mirror
     [ChainId.Robinhood]: ['https://rpc.mainnet.chain.robinhood.com', 'https://robinhood-rpc.publicnode.com'],
     // viem's preset mixes in unreachable (hypersync), quota-exhausted (blockeden)
-    // and CORS-less (blastapi) endpoints; keep the browser-working subset
+    // and CORS-less (blastapi) endpoints; keep the browser-working subset.
+    // OnFinality dropped: stale blocks, eth_getLogs needs an api key
     [ChainId.Metis]: [
-        'https://metis-pokt.nodies.app',
-        'https://metis-andromeda.rpc.thirdweb.com',
-        'https://metis-andromeda.gateway.tenderly.co',
-        'https://metis.api.onfinality.io/public',
         'https://andromeda.metis.io/?owner=1088',
+        'https://metis-pokt.nodies.app',
+        'https://metis-andromeda.gateway.tenderly.co',
+        'https://metis-andromeda.rpc.thirdweb.com',
     ],
 }
 
