@@ -16,7 +16,6 @@ export class TelemetryAPI {
         })
     }
 
-    // no-op: exception reporting had no provider left after Sentry was removed.
     captureException(
         exceptionType: ExceptionType,
         exceptionID: ExceptionID,
