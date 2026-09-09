@@ -37,6 +37,7 @@ import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateParams } from '../hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from '../hooks/useDefaultCreateGas.js'
+import { useRedPacketSupportedChains } from '../hooks/useRedPacketSupportedChains.js'
 import { ThemePicker } from '../components/ThemePicker.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -168,6 +169,7 @@ export function CreateTokenRedPacket() {
     // context
     const { pluginID } = useEnvironmentContext()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
+    const chains = useRedPacketSupportedChains()
 
     // #region select token
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
@@ -178,13 +180,14 @@ export function CreateTokenRedPacket() {
             selectedTokens: token ? [token] : [],
             chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
+            chains,
         })
         if (!picked || Array.isArray(picked)) return
         if (chainId !== picked.chainId) {
             setChainId(picked.chainId as ChainId)
         }
         setToken(picked as FungibleToken<ChainId, SchemaType>)
-    }, [token?.address, chainId])
+    }, [token?.address, chainId, chains])
     // #endregion
 
     // shares

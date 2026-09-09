@@ -1,5 +1,6 @@
 import { PluginID } from '@masknet/shared-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 /**
  * !! This ID is used to identify the stored plugin data. Change it will cause data lost.
@@ -12,6 +13,12 @@ export const RED_PACKET_MAX_SHARES = 500
 export const SOL_REDPACKET_MAX_SHARES = 200
 export const SOL_REDPACKET_CREATE_DEFAULT_GAS = '10000000'
 export const DEFAULT_DURATION = 60 * 60 * 24 // 24 hours
+/**
+ * Chains hidden from the red packet token pickers.
+ * The Robinhood chain is not claimable yet (the backend does not support claiming),
+ * so creating a lucky drop there is disabled until it is.
+ */
+export const RED_PACKET_UNSUPPORTED_CHAINS = [ChainId.Robinhood]
 export const enum RoutePaths {
     Create = '/create',
     CreateTokenRedPacket = '/create/token',
