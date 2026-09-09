@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
+import { ChainIcon, CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
 import { PersistentStorages, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
@@ -12,7 +12,6 @@ import { memo, useMemo, type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSubscription } from 'use-subscription'
 import { WalletAvatar } from '../../../../components/WalletAvatar/index.js'
-import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
 import urlcat from 'urlcat'
@@ -106,9 +105,6 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             height: 7,
             borderRadius: 99,
         },
-        connectedDot: {
-            backgroundColor: theme.vars.palette.maskColor.success,
-        },
         unconnectedDot: {
             backgroundColor: theme.vars.palette.maskColor.third,
         },
@@ -147,9 +143,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     origin,
 }) {
     const { classes, cx } = useStyles({ disabled })
-    const { data: connectedWallets, isPending } = useConnectedWallets(origin)
     const { wallets: fireflyWallets } = useFireflyEmbeddedWallets()
-    const connected = connectedWallets?.has(address)
     const isFireflyWallet = useMemo(
         () => fireflyWallets.some((w) => isSameAddress(w.address, address)),
         [fireflyWallets, address],
@@ -190,21 +184,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 />
                             )}
                         </Box>
-                        {isPending ? null : (
-                            <ProgressiveText className={classes.connected} loading={isPending} skeletonWidth={50}>
-                                <span
-                                    className={cx(
-                                        classes.dot,
-                                        connected ? classes.connectedDot : classes.unconnectedDot,
-                                    )}
-                                />
-                                <span>
-                                    {connected ?
-                                        <Trans>Connected</Trans>
-                                    :   <Trans>Not Connected</Trans>}
-                                </span>
-                            </ProgressiveText>
-                        )}
+                        <Typography className={classes.connected}>
+                            <span className={cx(classes.dot, classes.unconnectedDot)} />
+                            <span>
+                                <Trans>Not Connected</Trans>
+                            </span>
+                        </Typography>
                     </Box>
                 </div>
                 <div
