@@ -23,6 +23,7 @@
         "https://service.r2d2.to/arweave-remote-signing",
         "https://vcent-agent.r2d2.to/data/tweet-txn",
         "https://gitcoin-agent.r2d2.to/grants/v1/api/grant/",
+        "https://coingecko-agent.r2d2.to",
         "https://gun.r2d2.to",
         "https://kv.r2d2.to/api/",
         "https://mixpanel.r2d2.to/import",
@@ -49,7 +50,6 @@
         "https://arql3twjl4.execute-api.us-east-1.amazonaws.com/prod/records",
         "https://a8fq5hs9nk.execute-api.us-east-1.amazonaws.com",
 
-        "https://nftapi.firefly.land/",
         "https://store.firefly.land",
         "https://mask-network-dev.firefly.land",
         "https://api.firefly.land",
