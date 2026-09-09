@@ -8,8 +8,6 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 import { Web3Bio } from '../Web3Bio/index.js'
 import { FIREFLY_BASE_URL } from './constants.js'
 
-const TWITTER_HANDLER_VERIFY_URL = 'https://twitter-handler-proxy.r2d2.to'
-
 function toLensAccount(profile: Web3BioProfile): FireflyConfigAPI.LensAccount {
     return {
         address: profile.address,
@@ -26,17 +24,6 @@ export const FireflyConfig = {
         if (!twitterHandle) return EMPTY_LIST
         const profiles = await Web3Bio.getAllLens(twitterHandle)
         return profiles.map(toLensAccount)
-    },
-
-    async getVerifiedHandles(address: string) {
-        const response = await fetchJSON<FireflyConfigAPI.VerifyTwitterResult>(
-            urlcat(TWITTER_HANDLER_VERIFY_URL, '/v1/relation/handles', {
-                wallet: address.toLowerCase(),
-                isVerified: true,
-            }),
-        )
-        if ('error' in response) return []
-        return response.data
     },
 
     /**
