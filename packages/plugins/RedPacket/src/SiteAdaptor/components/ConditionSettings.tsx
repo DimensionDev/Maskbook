@@ -9,6 +9,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { ClickAwayListener, InputBase, Typography, type PopperProps } from '@mui/material'
 import { useState, type HTMLProps } from 'react'
 import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
+import { useRedPacketSupportedChains } from '../hooks/useRedPacketSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -137,6 +138,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
         useRedPacket()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chains = useRedPacketSupportedChains()
 
     return (
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
@@ -259,6 +261,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                                 selectedTokens: requiredTokens,
                                                 pluginID: NetworkPluginID.PLUGIN_EVM,
                                                 chainId,
+                                                chains,
                                                 multiple: true,
                                                 maxTokens: 4,
                                             })
