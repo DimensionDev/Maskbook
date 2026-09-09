@@ -193,10 +193,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         posts.event.on('set', async (key, value) => {
             await unmount(key)
             const abort = new AbortController()
-            // Tie the per-post controller to page teardown, but drop this listener once the post
-            // itself is unmounted — otherwise every post scrolled past on an infinite timeline
-            // leaves a permanent listener (and its retained AbortController) on the page-lifetime
-            // signal.
             signal.addEventListener('abort', () => abort.abort(), { signal: abort.signal })
             abortSignals.set(key, abort)
             const { signal: postSignal } = abort

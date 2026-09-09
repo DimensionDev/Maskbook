@@ -20,10 +20,6 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, options: W
             attached = false
         }
         const check = () => {
-            // onNodeMutation/onTargetChanged re-run check() for the same element, and the floating
-            // bio card mutates on every hover. attachReactTreeWithContainer refuses a second root
-            // under the same shadow key (it logs a console.error and returns a no-op), so attach
-            // only once; remove()/onRemove reset this so a genuinely re-added element re-attaches.
             if (attached) return
             attached = true
             ifUsingMask(
@@ -57,10 +53,6 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     const ls = new LiveSelector([post.rootElement])
         .map((x) => x.current.querySelector<HTMLDivElement>('[data-testid=User-Name]'))
         .enableSingleMode()
-    // post.author refines several times as post parsing completes (and re-fires on every
-    // onNodeMutation of the tweet). Each add() used to attach a brand-new DOMProxy shadow sibling
-    // + React root without tearing down the previous one, leaving stacked Mask icons on the post.
-    // Reuse a single proxy and keep at most one live tree.
     const proxy = DOMProxy({ afterShadowRootInit: Flags.shadowRootInit })
     let remover = noop
     function add() {
