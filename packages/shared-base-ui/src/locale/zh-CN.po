@@ -1729,8 +1729,8 @@ msgstr "连接您的社交媒体帐户。"
 #~ msgstr "连接您的钱包"
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
-msgid "Connected"
-msgstr ""
+#~ msgid "Connected"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #~ msgid "Connected {0} with {walletName}."

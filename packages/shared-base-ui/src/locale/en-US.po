@@ -1724,8 +1724,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
-msgid "Connected"
-msgstr ""
+#~ msgid "Connected"
+#~ msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #~ msgid "Connected {0} with {walletName}."
