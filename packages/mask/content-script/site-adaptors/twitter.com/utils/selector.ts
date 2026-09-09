@@ -205,13 +205,6 @@ export function postsContentSelector() {
     )
 }
 
-export function postAvatarSelector() {
-    return querySelectorAll('[data-testid=tweet] [data-testid^=UserAvatar-Container-]')
-}
-export function followUserAvatarSelector() {
-    return querySelectorAll('[data-testid=UserCell] [data-testid^=UserAvatar-Container-]')
-}
-
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/u
 const name = /"name":"(.*?)"/u
@@ -266,36 +259,6 @@ export function searchSelfAvatarSelector() {
     )
 }
 // #endregion
-
-// #region twitter nft avatar
-export function searchProfileAvatarSelector() {
-    return querySelector<E>('[data-testid="Profile_Save_Button"]')
-        .closest<E>(8)
-        .querySelector('[data-testid="UserAvatar-Container-unknown"]')
-        .closest<E>(3)
-}
-
-export function searchProfileSaveSelector() {
-    return querySelector<E>('[data-testid="Profile_Save_Button"]')
-}
-
-// #region avatar selector
-export function searchTwitterAvatarLinkSelector() {
-    return querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector(':scope div a')
-}
-
-export function searchTwitterAvatarSelector() {
-    return querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
-}
-// #endregion
-
-export function searchTweetAvatarSelector() {
-    return querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
-}
-
-export function searchRetweetAvatarSelector() {
-    return querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
-}
 
 export function searchReplyToolbarSelector() {
     return querySelector<E>(
