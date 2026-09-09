@@ -64,17 +64,9 @@ const VIEM_CHAINS: Partial<Record<ChainId, Chain>> = {
 // endpoints, or covers a chain viem has no preset for.
 const RPC_URL_OVERRIDES: Partial<Record<ChainId, string[]>> = {
     // viem 2.45's preset (eth.merkle.io) persistently 429s anonymous traffic
-    [ChainId.Mainnet]: [
-        'https://ethereum-rpc.publicnode.com',
-        'https://eth.drpc.org',
-        'https://cloudflare-eth.com',
-    ],
+    [ChainId.Mainnet]: ['https://ethereum-rpc.publicnode.com', 'https://eth.drpc.org', 'https://cloudflare-eth.com'],
     // viem 2.45's preset (polygon-rpc.com) rejects anonymous traffic (401/403)
-    [ChainId.Polygon]: [
-        'https://polygon-bor-rpc.publicnode.com',
-        'https://polygon.drpc.org',
-        'https://1rpc.io/matic',
-    ],
+    [ChainId.Polygon]: ['https://polygon-bor-rpc.publicnode.com', 'https://polygon.drpc.org', 'https://1rpc.io/matic'],
     // viem 2.45's preset is a single thirdweb free-tier endpoint
     [ChainId.BSC]: [
         'https://bsc-rpc.publicnode.com',
