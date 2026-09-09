@@ -103,7 +103,7 @@ const crossChainBridge = [
         ID: `${PLUGIN_ID}_polygon_bridge`,
         isOfficial: true,
         icon: <PolygonBridgeIcon />,
-        link: 'https://wallet.polygon.technology/polygon/bridge/',
+        link: 'https://portal.polygon.technology/bridge',
     },
     {
         name: 'Rainbow Bridge',
