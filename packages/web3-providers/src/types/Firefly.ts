@@ -29,8 +29,6 @@ export namespace FireflyConfigAPI {
 
     export type LensResult = Result<LensAccount[]>
 
-    export type VerifyTwitterResult = { error: string } | { data: string[] }
-
     export interface UnionProfileOptions {
         twitterId?: string
         walletAddress?: string

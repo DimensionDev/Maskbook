@@ -11,7 +11,6 @@ import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 import { BaseMaskX } from '../../../entry-types.js'
 import defer * as ARBID from '../../../ARBID/index.js'
 import defer * as ENS from '../../../ENS/index.js'
-import defer * as Firefly from '../../../Firefly/index.js'
 import defer * as MaskX from '../../../MaskX/index.js'
 import defer * as RSS3 from '../../../RSS3/index.js'
 import defer * as SpaceID from '../../../SpaceID/index.js'
@@ -182,6 +181,21 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
+    /** Collect wallet addresses verified by MaskX under a Twitter identity. */
+    private async getVerifiedAddressesFromMaskX(userId: string) {
+        try {
+            const { records } = await MaskX.MaskX.getIdentitiesExact(userId, BaseMaskX.PlatformType.Twitter)
+            return new Set(
+                records
+                    .filter((x) => x.is_verified && isValidAddress(x.web3_addr) && !isZeroAddress(x.web3_addr))
+                    .map((x) => x.web3_addr.toLowerCase()),
+            )
+        } catch {
+            // degrade to unverified on fetch failure
+            return new Set<string>()
+        }
+    }
+
     override async getFromRemote(identity: SocialIdentity) {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const allSettled = await Promise.allSettled([
@@ -195,30 +209,14 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         const identities = uniqBy(mergedIdentities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
 
-        const handle = identity.identifier?.userId
-        if (!handle) return []
-        // Identity is address type, will check if it's verified by Firefly
-        const verifiedHandleMap = new Map<string, string[]>()
-        const verifiedResult = await Promise.allSettled(
-            uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
-                const address = x.address.toLowerCase()
-                if (x.verified) return address
-                const verifiedHandles = await Firefly.FireflyConfig.getVerifiedHandles(address)
-                verifiedHandleMap.set(address, verifiedHandles)
-                return verifiedHandles.includes(handle) ? address : null
-            }),
-        )
-        const trustedAddresses = compact(verifiedResult.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+        const userId = identity.identifier?.userId
+        if (!userId) return []
+        // MaskX is the source of truth telling if a wallet address is verified by the Twitter identity
+        const verifiedAddresses = await this.getVerifiedAddressesFromMaskX(userId)
 
-        const result = identities.filter((x) => {
-            const address = x.address.toLowerCase()
-            if (trustedAddresses.includes(address)) return true
-            if (x.type === SocialAddressType.Address) {
-                const handles = verifiedHandleMap.get(address) || []
-                return handles.length ? handles.includes(handle) : true
-            }
-            return false
+        return identities.filter((x) => {
+            if (verifiedAddresses.has(x.address.toLowerCase())) return true
+            return x.type === SocialAddressType.Address
         })
-        return result
     }
 }
