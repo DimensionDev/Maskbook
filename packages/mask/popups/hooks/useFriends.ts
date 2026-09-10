@@ -4,6 +4,8 @@ import { isProfileIdentifier } from '@masknet/shared'
 import { EMPTY_LIST, type ECKeyIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import Services from '#services'
 import { useCurrentPersona } from '../../shared-ui/hooks/index.js'
+// eslint-disable-next-line import/no-restricted-paths
+import type { RelationRecord } from '../../background/database/persona/type.js'
 import { first } from 'lodash-es'
 
 export interface Friend {
@@ -76,4 +78,31 @@ export function useFriendsPaged() {
         relationQuery,
         friendsQuery,
     ] as const
+}
+
+export function useFriendFromList(searchedRecords: RelationRecord[]) {
+    const currentPersona = useCurrentPersona()
+    return useQuery({
+        queryKey: ['search-local', searchedRecords, currentPersona?.identifier.publicKeyAsHex],
+        queryFn: async () => {
+            return (
+                await Promise.all(
+                    searchedRecords.map<Promise<Friend | undefined>>(async (x) => {
+                        if (!isProfileIdentifier(x.profile)) return
+                        const profile = first(await Services.Identity.queryProfileInformation(x.profile))
+                        if (
+                            profile?.linkedPersona !== undefined &&
+                            profile.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
+                        )
+                            return {
+                                persona: profile.linkedPersona,
+                                profile: x.profile,
+                                avatar: profile.avatar,
+                            }
+                        return
+                    }),
+                )
+            ).filter((x): x is Friend => x !== undefined && Object.hasOwn(x, 'persona'))
+        },
+    })
 }

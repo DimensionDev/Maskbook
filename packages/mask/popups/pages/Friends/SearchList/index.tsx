@@ -54,6 +54,7 @@ export const SearchList = memo<SearchListProps>(function SearchList({ searchResu
                                 friend={friend}
                                 refetch={refetch}
                                 avatar={friend.avatar}
+                                isLocal
                             />
                         )
                     })}

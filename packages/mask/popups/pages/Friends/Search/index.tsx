@@ -81,7 +81,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
                     </button>
                 :   null
             }
-            placeholder={t`Search Next.ID, X, Lens, ENS or Address`}
+            placeholder={t`Search contacts`}
         />
     )
 })

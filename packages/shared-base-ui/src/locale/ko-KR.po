@@ -5225,8 +5225,12 @@ msgid "Search Area"
 msgstr "지역 찾기"
 
 #: packages/mask/popups/pages/Friends/Search/index.tsx
-msgid "Search Next.ID, X, Lens, ENS or Address"
-msgstr ""
+msgid "Search contacts"
+msgstr "연락처 검색"
+
+#: packages/mask/popups/pages/Friends/Search/index.tsx
+#~ msgid "Search Next.ID, X, Lens, ENS or Address"
+#~ msgstr ""
 
 #: packages/shared/src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Search with an ENS domain or wallet address to get optimized results."
