@@ -9,7 +9,9 @@ import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { Trans } from '@lingui/react/macro'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{
+    isTokenTagPopper: boolean
+}>()((theme, props) => {
     return {
         source: {
             display: 'flex',
@@ -26,10 +28,10 @@ const useStyles = makeStyles()((theme) => {
         },
         selectedOption: {
             fontWeight: 700,
-            color: theme.vars.palette.maskColor.publicMain,
+            color: props.isTokenTagPopper ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.publicMain,
         },
         arrowDropIcon: {
-            color: theme.vars.palette.maskColor.publicMain,
+            color: props.isTokenTagPopper ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.publicMain,
         },
     }
 })
@@ -44,7 +46,7 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
     const { result, resultList, setResult } = props
     const { isProfilePage, isTokenTagPopper } = useContext(TrendingViewContext)
 
-    const { classes } = useStyles()
+    const { classes } = useStyles({ isTokenTagPopper })
 
     const displayList = uniqBy(
         resultList.filter((x) => x.type === result.type),
