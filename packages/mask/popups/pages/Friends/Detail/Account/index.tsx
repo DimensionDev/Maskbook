@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { PlatformIconMap, PlatformUrlMap, type SupportedPlatforms } from '../../common.js'
+import { PlatformIconMap, getPlatformProfileUrl, type SupportedPlatforms } from '../../common.js'
 
 interface AccountProps {
     platform: SupportedPlatforms
@@ -70,7 +70,7 @@ export const Account = memo<AccountProps>(function Account({ userId, displayName
                     underline="none"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={PlatformUrlMap[platform] + userId}
+                    href={getPlatformProfileUrl(platform, userId)}
                     className={classes.iconBlack}>
                     <Icons.LinkOut size={16} />
                 </Link>

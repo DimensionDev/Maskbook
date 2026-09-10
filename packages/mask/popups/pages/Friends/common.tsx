@@ -28,6 +28,11 @@ export const PlatformUrlMap: Record<SupportedPlatforms, string> = {
     [NextIDPlatform.Keybase]: 'https://keybase.io/',
 }
 
+export function getPlatformProfileUrl(platform: SupportedPlatforms, userId: string) {
+    if (platform === NextIDPlatform.LENS) return `${PlatformUrlMap[platform]}${userId.replace(/\.lens$/u, '')}`
+    return PlatformUrlMap[platform] + userId
+}
+
 export const PlatformIconMap: Record<SupportedPlatforms, GeneratedIcon> = {
     [NextIDPlatform.LENS]: Icons.Lens,
     [NextIDPlatform.Ethereum]: Icons.ETH,
