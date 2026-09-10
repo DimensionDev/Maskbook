@@ -263,9 +263,14 @@ export const Transaction = memo(function Transaction() {
         refetchInterval: 5000,
     })
 
+    const bridgeId = tx?.kind === 'bridge' ? tx.bridgeId : undefined
     const { data: bridgeStatus } = useQuery({
-        queryKey: ['okx-bridge', 'transaction-status', chainId, hash],
-        queryFn: hash && tx?.kind === 'bridge' ? () => OKX.getBridgeStatus({ chainId, hash }) : skipToken,
+        queryKey: ['okx-bridge', 'transaction-status', chainId, hash, bridgeId],
+        // The v6 status API requires chainIndex/hash/bridgeId, legacy bridge records without a bridgeId fall back to the on-chain status
+        queryFn:
+            hash && bridgeId && chainId ?
+                () => OKX.getBridgeStatus({ chainIndex: chainId, hash, bridgeId })
+            :   skipToken,
         refetchInterval: 10_000,
     })
     const detailStatus = bridgeStatus?.detailStatus

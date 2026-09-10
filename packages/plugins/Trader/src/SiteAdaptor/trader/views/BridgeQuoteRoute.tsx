@@ -109,7 +109,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
     const { classes, theme, cx } = useStyles()
     const { basePath } = useRuntime()
     const { bridgeQuote, fromToken, toToken, mode } = useTrade()
-    const [bridgeId = bridgeQuote?.routerList[0].router.bridgeId, setBridgeId] = useState<number>()
+    const [bridgeId = bridgeQuote?.routerList[0]?.bridgeId, setBridgeId] = useState<number>()
     const chainId = fromToken?.chainId as ChainId
     const price = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -126,22 +126,25 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
     return (
         <div className={classes.container}>
             {bridgeQuote.routerList.map((router) => {
-                const currBridgeId = router.router.bridgeId
+                const currBridgeId = router.bridgeId
                 const logoUrl = bridges.find((x) => x.id === currBridgeId)?.logoUrl
 
-                const gasValue = leftShift(router.fromChainNetworkFee, nativeToken?.decimals || 18)
+                const gasValue = leftShift(
+                    router.otherNativeFee || router.estimateGasFee || '0',
+                    nativeToken?.decimals || 18,
+                )
                     .times(price)
                     .toFixed(2)
                 return (
                     <div
                         className={cx(classes.box, bridgeId === currBridgeId ? classes.active : null)}
-                        key={router.router.bridgeId}
+                        key={router.bridgeId}
                         onClick={() => {
                             setBridgeId(currBridgeId)
                         }}>
                         <Typography className={classes.boxTitle}>
                             <img src={logoUrl} width={16} height={16} />
-                            {router.router.bridgeName}
+                            {router.bridgeName}
                             <Radio
                                 className={classes.radio}
                                 classes={{ root: classes.control }}

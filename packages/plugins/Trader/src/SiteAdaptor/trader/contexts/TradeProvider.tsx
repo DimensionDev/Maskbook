@@ -138,7 +138,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
     } = useQuotes(
         {
             amount,
-            chainId: chainId.toString(),
+            chainIndex: chainId.toString(),
             fromTokenAddress: fromToken?.address,
             dexIds: dexIds?.length ? dexIds.join(',') : undefined,
             toTokenAddress: toToken?.address,
@@ -159,10 +159,10 @@ export function TradeProvider({ children }: PropsWithChildren) {
         refetch: updateBridgeQuote,
     } = useBridgeQuotes(
         {
-            fromChainId: fromToken?.chainId.toString(),
+            fromChainIndex: fromToken?.chainId.toString(),
             fromTokenAddress: fromToken?.address,
             amount,
-            toChainId: toToken?.chainId.toString(),
+            toChainIndex: toToken?.chainId.toString(),
             toTokenAddress: toToken?.address,
             slippage: dividedBy(slippage, 100).toFixed(),
         },

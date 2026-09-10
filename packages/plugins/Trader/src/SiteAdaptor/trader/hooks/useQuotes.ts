@@ -6,7 +6,10 @@ import { QUOTE_STALE_DURATION, REFETCH_INTERVAL } from '../../constants.js'
 
 export function useQuotes(options: Partial<GetQuotesOptions>, enabled = true) {
     const valid =
-        options.chainId && options.fromTokenAddress && options.toTokenAddress && isGreaterThan(options.amount ?? 0, 0)
+        options.chainIndex &&
+        options.fromTokenAddress &&
+        options.toTokenAddress &&
+        isGreaterThan(options.amount ?? 0, 0)
     return useQuery({
         enabled: !!valid && enabled,
         queryKey: ['okx-swap', 'get-quotes', options],

@@ -2,7 +2,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatCompact, leftShift, TokenType, trimZero } from '@masknet/web3-shared-base'
 import type { Token } from '../../types/trader.js'
 import { SchemaType } from '@masknet/web3-shared-evm'
-import type { RouterListItem } from '@masknet/web3-providers/types'
+import type { OKXBridgeQuote } from '@masknet/web3-providers/types'
 import { BigNumber } from 'bignumber.js'
 
 const MINIMUM_AMOUNT_RE = /((?:Minimum|Maximum) amount is\s+)(\d+)/u
@@ -31,12 +31,16 @@ export function okxTokenToFungibleToken(token: Token): Web3Helper.FungibleTokenA
     }
 }
 
-export function getBridgeLeftSideToken(bridge: RouterListItem) {
-    return bridge.fromDexRouterList.at(-1)?.subRouterList.at(-1)?.toToken
+// The v6 bridge quote API no longer exposes per-segment dex route details,
+// so the side tokens are derived from the quote tokens directly.
+export function getBridgeLeftSideToken(quote: OKXBridgeQuote | undefined) {
+    if (!quote?.fromToken) return
+    return { ...quote.fromToken, chainId: quote.fromChainIndex }
 }
 
-export function getBridgeRightSideToken(bridge: RouterListItem) {
-    return bridge.toDexRouterList[0]?.subRouterList[0]?.toToken
+export function getBridgeRightSideToken(quote: OKXBridgeQuote | undefined) {
+    if (!quote?.toToken) return
+    return { ...quote.toToken, chainId: quote.toChainIndex }
 }
 
 export function formatTokenBalance(raw: BigNumber.Value, decimals = 0) {

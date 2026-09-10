@@ -4,8 +4,8 @@ import { skipToken, useQuery } from '@tanstack/react-query'
 
 export function useBridgeData(opts: Partial<BridgeOptions>) {
     const enabled =
-        opts.fromChainId &&
-        opts.toChainId &&
+        opts.fromChainIndex &&
+        opts.toChainIndex &&
         opts.fromTokenAddress &&
         opts.toTokenAddress &&
         opts.amount &&

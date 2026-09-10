@@ -4,11 +4,11 @@ import { skipToken, useQuery } from '@tanstack/react-query'
 
 export function useSwapData(opts: Partial<SwapOptions>) {
     const enabled =
-        opts.chainId &&
+        opts.chainIndex &&
         opts.amount &&
         opts.fromTokenAddress &&
         opts.toTokenAddress &&
-        opts.slippage !== undefined &&
+        opts.slippagePercent !== undefined &&
         opts.userWalletAddress &&
         (!opts.dexIds || opts.dexIds.length > 0)
 

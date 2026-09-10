@@ -10,14 +10,7 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useSnackbar } from '@masknet/theme'
-import {
-    useAccount,
-    useNativeTokenPrice,
-    useNetwork,
-    useReverseAddress,
-    useWeb3Connection,
-    useWeb3Utils,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useNetwork, useReverseAddress, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
     formatBalance,
@@ -217,8 +210,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         [inputAmount, decimals],
     )
     const { data: bridgeData, isLoading } = useBridgeData({
-        fromChainId,
-        toChainId,
+        fromChainIndex: fromChainId,
+        toChainIndex: toChainId,
         amount,
         fromTokenAddress: fromToken?.address,
         toTokenAddress: toToken?.address,
@@ -292,19 +285,11 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
 
-    const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
-        chainId: toChainId,
-    })
-    const toChainNetworkFee = quote?.routerList[0]?.toChainNetworkFee
-    const toNetworkFeeValue = leftShift(toChainNetworkFee ?? 0, toNetwork?.nativeCurrency.decimals ?? 0)
-        .times(toChainNativeTokenPrice ?? 0)
-        .toFixed(2)
     const bridge = quote?.routerList[0]
 
-    const router = bridge?.router
-    const bridgeFee = router?.crossChainFee
-    const bridgeFeeToken = useToken(fromChainId, router?.crossChainFeeTokenAddress)
-    const { data: bridgeFeeTokenPrice } = useTokenPrice(fromChainId, router?.crossChainFeeTokenAddress)
+    const bridgeFee = bridge?.crossChainFee
+    const bridgeFeeToken = useToken(fromChainId, bridge?.crossChainFeeTokenAddress)
+    const { data: bridgeFeeTokenPrice } = useTokenPrice(fromChainId, bridge?.crossChainFeeTokenAddress)
     const bridgeFeeValue = multipliedBy(bridgeFee ?? 0, bridgeFeeTokenPrice ?? 0).toFixed(2)
 
     const showStale = isQuoteStale && !isSending && !isApproving
@@ -386,10 +371,10 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
                 gasLimit: gas!,
                 gasPrice: gasConfig.gasPrice || '0',
-                leftSideToken: getBridgeLeftSideToken(bridge),
-                rightSideToken: getBridgeRightSideToken(bridge),
-                bridgeId: router?.bridgeId,
-                bridgeName: router?.bridgeName,
+                leftSideToken: getBridgeLeftSideToken(quote),
+                rightSideToken: getBridgeRightSideToken(quote),
+                bridgeId: bridge?.bridgeId,
+                bridgeName: bridge?.bridgeName,
             })
             if (unmountedRef.current) return
             const url = urlcat(basePath, RoutePaths.Transaction, {
@@ -420,7 +405,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         toChainId,
         gasFee,
         gasConfig.gasPrice,
-        router,
         mode,
         Web3,
     ])
@@ -428,9 +412,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isBridgable || loading
     const fromNetworkFeeTooltip = t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`
-    const toNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
-The actual cost may be lower
-than estimated, and any unused funds will remain in the original address.`
     const bridgeNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
 The actual cost may be lower
 than estimated, and any unused funds will remain in the original address.`
@@ -537,33 +518,7 @@ than estimated, and any unused funds will remain in the original address.`
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{toNetwork?.name} Network fee</Trans>
-                            <ShadowRootTooltip placement="top" title={toNetworkFeeTooltip}>
-                                <Icons.Questions
-                                    size={16}
-                                    onClick={() => {
-                                        showToolTip({
-                                            title: t`Network fee`,
-                                            message: toNetworkFeeTooltip,
-                                        })
-                                    }}
-                                />
-                            </ShadowRootTooltip>
-                        </Typography>
-                        <Typography className={classes.rowValue} sx={{ textAlign: 'right' }}>
-                            {toChainNetworkFee ?
-                                <>
-                                    {formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)}{' '}
-                                    {toNetwork?.nativeCurrency.symbol ?? 'ETH'}
-                                    <br />
-                                    (${toNetworkFeeValue})
-                                </>
-                            :   '--'}
-                        </Typography>
-                    </div>
-                    <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>
-                            <Trans>{bridge?.router.bridgeName} Bridge Network fee</Trans>
+                            <Trans>{bridge?.bridgeName} Bridge Network fee</Trans>
                             <ShadowRootTooltip placement="top" title={bridgeNetworkFeeTooltip}>
                                 <Icons.Questions
                                     size={16}
@@ -577,7 +532,7 @@ than estimated, and any unused funds will remain in the original address.`
                             </ShadowRootTooltip>
                         </Typography>
                         <Typography className={classes.rowValue} sx={{ textAlign: 'right' }}>
-                            {router?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'}
+                            {bridge?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'}
                             <br />
                             (${bridgeFeeValue})
                         </Typography>
