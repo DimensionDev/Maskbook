@@ -132,7 +132,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.RSS3:
             return `https://rss3.io/result?search=${identifier}`
         case NextIDPlatform.LENS:
-            return `https://firefly.social/profile/lens/${identifier}`
+            return `https://firefly.social/profile/lens/${identifier.replace(/\.lens$/u, '')}`
         case NextIDPlatform.REDDIT:
             return `https://www.reddit.com/user/${identifier}`
         case NextIDPlatform.SYBIL:
