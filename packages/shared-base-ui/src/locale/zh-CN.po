@@ -134,7 +134,7 @@ msgstr "{0} 个需要关注的因素"
 msgid "{0} available"
 msgstr "{0} 可用"
 
-#. placeholder {0}: bridge?.router.bridgeName
+#. placeholder {0}: bridge?.bridgeName
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} Bridge Network fee"
 msgstr ""
@@ -175,7 +175,6 @@ msgstr "{0} 位成员"
 #~ msgstr "{0} 分钟"
 
 #. placeholder {0}: fromNetwork?.name
-#. placeholder {0}: toNetwork?.name
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} Network fee"
 msgstr ""
@@ -217,8 +216,8 @@ msgstr ""
 #. placeholder {0}: fromNetwork?.name || ''
 #. placeholder {0}: toNetwork?.name || ''
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/TradingRoute.tsx
-msgid "{0} Pool"
-msgstr ""
+#~ msgid "{0} Pool"
+#~ msgstr ""
 
 #. placeholder {0}: riskyFactors.toString()
 #: packages/plugins/GoPlusSecurity/src/SiteAdaptor/components/SecurityPanel.tsx
@@ -1135,7 +1134,6 @@ msgstr "Blocto 只支持 Flow 链。"
 #: packages/plugins/Trader/src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Trade/index.tsx
-#: packages/plugins/Trader/src/SiteAdaptor/trader/views/TradingRoute.tsx
 #: packages/plugins/Trader/src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridge"
 msgstr ""

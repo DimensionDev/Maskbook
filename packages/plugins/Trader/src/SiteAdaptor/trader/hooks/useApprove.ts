@@ -20,7 +20,7 @@ export function useApprove() {
             if (!tokenAddress || isZero(amount)) return null
             if (isNativeTokenAddress(tokenAddress)) return null
             const approveInfo = await OKX.getApproveTx({
-                chainId,
+                chainIndex: chainId,
                 tokenContractAddress: tokenAddress,
                 approveAmount: amount,
             })

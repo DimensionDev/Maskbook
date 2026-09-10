@@ -5,9 +5,9 @@ import { QUOTE_STALE_DURATION, REFETCH_INTERVAL } from '../../constants.js'
 
 export function useBridgeQuotes(options: Partial<GetBridgeQuoteOptions>, enabled = true) {
     const valid =
-        options.fromChainId &&
-        options.toChainId &&
-        options.fromChainId !== options.toChainId &&
+        options.fromChainIndex &&
+        options.toChainIndex &&
+        options.fromChainIndex !== options.toChainIndex &&
         options.amount &&
         options.amount !== '0' &&
         options.fromTokenAddress &&

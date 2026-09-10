@@ -16,7 +16,6 @@ import {
 import { addGasMargin, ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
-import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
@@ -196,11 +195,11 @@ export const Confirm = memo(function Confirm() {
         disabledDexIds.length ? liquidityList.filter((x) => !disabledDexIds.includes(x.id)) : liquidityList
     const dexIdsCount = remainLiquidityList.length
     const { data: swap, isLoading } = useSwapData({
-        chainId: chainId.toString(),
+        chainIndex: chainId.toString(),
         amount,
         fromTokenAddress: fromToken?.address,
         toTokenAddress: toToken?.address,
-        slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toString(),
+        slippagePercent: isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage,
         userWalletAddress: account,
         dexIds: remainLiquidityList === liquidityList ? undefined : remainLiquidityList.map((x) => x.id).join(','),
     })

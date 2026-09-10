@@ -103,10 +103,10 @@ export function Quote({ quote, ...props }: QuoteProps) {
     )
 
     const bestRouter = isSwap ? undefined : bridgeQuote?.routerList[0]
-    const { data: crossChainFeeTokenPrice } = useTokenPrice(chainId, bestRouter?.router.crossChainFeeTokenAddress)
+    const { data: crossChainFeeTokenPrice } = useTokenPrice(chainId, bestRouter?.crossChainFeeTokenAddress)
     const totalNetworkFee = useMemo(() => {
         if (!bestRouter || !crossChainFeeTokenPrice) return gasCost
-        return multipliedBy(bestRouter.router.crossChainFee, crossChainFeeTokenPrice).plus(gasCost).toFixed(2)
+        return multipliedBy(bestRouter.crossChainFee, crossChainFeeTokenPrice).plus(gasCost).toFixed(2)
     }, [gasCost, bestRouter, crossChainFeeTokenPrice])
     const { t } = useLingui()
 
@@ -211,12 +211,12 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             {!isSwap && bestRouter ?
                                 <span className={classes.bestRoute}>
                                     <img
-                                        src={bridges.find((x) => x.id === bestRouter.router.bridgeId)?.logoUrl}
+                                        src={bridges.find((x) => x.id === bestRouter.bridgeId)?.logoUrl}
                                         width={16}
                                         height={16}
                                     />
                                     <Typography component="span" className={classes.bridgeName}>
-                                        {bestRouter.router.bridgeName}
+                                        {bestRouter.bridgeName}
                                     </Typography>
                                     <Typography component="span" className={classes.bestTag}>
                                         <Trans>Overall Best</Trans>

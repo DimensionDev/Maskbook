@@ -2,9 +2,8 @@ import { msg } from '@lingui/core/macro'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EmptyStatus } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useGasPrice, useNativeToken } from '@masknet/web3-hooks-base'
 import type { OKXSwapQuote } from '@masknet/web3-providers/types'
 import { isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
 import { type ChainId, formatAmount } from '@masknet/web3-shared-evm'
@@ -108,32 +107,37 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const calcValue = (compare: OKXSwapQuote['quoteCompareList'][number], tokenPrice: string) => {
+interface CompareItem {
+    amountOut: string
+    dexLogo: string
+    dexName: string
+    /** Estimated network fee (USD) of the quote route */
+    tradeFee: string
+}
+
+const calcValue = (compare: CompareItem, tokenPrice: string) => {
     return multipliedBy(compare.amountOut, tokenPrice).minus(compare.tradeFee)
 }
 
 /**
- * QuoteCompareList might be missed.
+ * The v6 quote API removed quoteCompareList, we synthesize it from the quote route.
  */
 function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
-    const { data: dexes = EMPTY_LIST } = useLiquidityResources(chainId, quote?.quoteCompareList?.length === 0)
-    const [gasPrice] = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: dexes = EMPTY_LIST } = useLiquidityResources(chainId)
 
     const compareList = useMemo(() => {
         if (!quote) return EMPTY_LIST
-        if (quote.quoteCompareList.length) return quote.quoteCompareList
-        const firstSubRouterDex = quote.dexRouterList[0].subRouterList[0].dexProtocol[0].dexName
-        const compareList: OKXSwapQuote['quoteCompareList'] = [
+        const dexName = quote.dexRouterList[0]?.dexProtocol.dexName || 'OKX DEX'
+        const compareList: CompareItem[] = [
             {
                 amountOut: formatAmount(quote.toTokenAmount, -quote.toToken.decimals),
-                dexLogo: dexes.find((x) => x.name === firstSubRouterDex)?.logo || '',
-                dexName: firstSubRouterDex,
-                tradeFee: '0',
+                dexLogo: dexes.find((x) => x.name === dexName)?.logo || '',
+                dexName,
+                tradeFee: quote.tradeFee || '0',
             },
         ]
         return compareList
-    }, [quote, dexes, gasPrice, nativeToken])
+    }, [quote, dexes])
     return compareList
 }
 

@@ -36,7 +36,7 @@ export const OKX = {
      * @docs https://www.okx.com/web3/build/docs/waas/dex-get-aggregator-supported-chains
      */
     async getSupportedChains() {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/supported/chain')
+        const url = urlcat(OKX_HOST, '/api/v6/dex/aggregator/supported/chain')
         const res = await fetchFromOKX<SupportedChainResponse>(url)
         if (res.code === 0) return res.data
         throw new Error('Failed to get supported chains')
@@ -45,7 +45,7 @@ export const OKX = {
     async baseGetTokens(chainId: ChainId, apiRoute: string) {
         if (!chainId) return null
         const url = urlcat(OKX_HOST, apiRoute, {
-            chainId,
+            chainIndex: chainId,
         })
         const res = await fetchFromOKX<GetTokensResponse>(url)
         if (res.code !== 0) throw new Error('Failed to get tokens')
@@ -66,7 +66,7 @@ export const OKX = {
                         chainId,
                         name: x.tokenName,
                         symbol: x.tokenSymbol,
-                        // string to number for /api/v5/dex/aggregator/all-tokens
+                        // string to number for /api/v6/dex/aggregator/all-tokens
                         decimals: +x.decimals,
                         logoURL: x.tokenLogoUrl,
                         address,
@@ -78,36 +78,27 @@ export const OKX = {
     },
 
     async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | null> {
-        return OKX.baseGetTokens(chainId, '/api/v5/dex/aggregator/all-tokens')
+        return OKX.baseGetTokens(chainId, '/api/v6/dex/aggregator/all-tokens')
     },
 
     async getLiquidity(chainId: string) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/get-liquidity', {
-            chainId,
+        const url = urlcat(OKX_HOST, '/api/v6/dex/aggregator/get-liquidity', {
+            chainIndex: chainId,
         })
-        // XXX Suspect this is private API of OKX, according to `pri(vate)api`, which provides dex logo
-        const privateUrl = urlcat('https://www.okx.com/priapi/v1/dx/trade/multi/liquidityList', { chainId })
-        const [res, resWithLogo] = await Promise.all([
-            fetchFromOKX<GetLiquidityResponse>(url),
-            fetchJSON<GetLiquidityResponse>(privateUrl),
-        ])
-        if (res.code !== 0 || resWithLogo.code !== 0) throw new Error('Failed to get liquidity')
-        const dexLogoMap = new Map(resWithLogo.data.map((x) => [x.id, x.logo]))
-        return {
-            ...res,
-            data: res.data.map((dex) => ({ ...dex, logo: dexLogoMap.get(dex.id) })),
-        }
+        const res = await fetchFromOKX<GetLiquidityResponse>(url)
+        if (res.code !== 0) throw new Error('Failed to get liquidity')
+        return res
     },
 
     async getApproveTx(options: ApproveTransactionOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', options)
+        const url = urlcat(OKX_HOST, '/api/v6/dex/aggregator/approve-transaction', options)
         const res = await fetchFromOKX<ApproveTransactionResponse>(url)
         if (res.code === 0) return res.data[0]
         throw new Error('Failed to get approve transaction')
     },
 
     async getQuotes(options: GetQuotesOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/quote', {
+        const url = urlcat(OKX_HOST, '/api/v6/dex/aggregator/quote', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
             toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
@@ -120,10 +111,8 @@ export const OKX = {
                 quote.fromToken = fixToken(quote.fromToken)
                 quote.toToken = fixToken(quote.toToken)
                 quote.dexRouterList.forEach((router) => {
-                    router.subRouterList.forEach((subRouter) => {
-                        subRouter.fromToken = fixToken(subRouter.fromToken)
-                        subRouter.toToken = fixToken(subRouter.toToken)
-                    })
+                    router.fromToken = fixToken(router.fromToken)
+                    router.toToken = fixToken(router.toToken)
                 })
             })
         }
@@ -136,7 +125,7 @@ export const OKX = {
      * @returns The response from the swap API.
      */
     async getSwap(options: SwapOptions): Promise<SwapResponse> {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/swap', {
+        const url = urlcat(OKX_HOST, '/api/v6/dex/aggregator/swap', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
             toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
@@ -149,7 +138,7 @@ export const OKX = {
         const intChainId = +chainId
         const tokens = await queryClient.fetchQuery({
             queryKey: ['okx-tokens', intChainId],
-            queryFn: () => OKX.baseGetTokens(intChainId, '/api/v5/dex/aggregator/all-tokens'),
+            queryFn: () => OKX.baseGetTokens(intChainId, '/api/v6/dex/aggregator/all-tokens'),
         })
         if (!tokens?.length) return
         const isNativeToken = isNativeTokenAddress(fromOkxNativeAddress(address))
@@ -164,7 +153,7 @@ export const OKX = {
         const options = {
             amount: rightShift(1, fromToken?.decimals ?? 18).toFixed(),
             fromTokenAddress: fromToken?.address ?? NATIVE_TOKEN_ADDRESS,
-            chainId,
+            chainIndex: chainId,
             toTokenAddress: toOkxNativeAddress(address),
         }
         const quoteRes = await queryClient.fetchQuery({
@@ -177,7 +166,7 @@ export const OKX = {
     },
 
     async getBridgeQuote(options: GetBridgeQuoteOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/quote', {
+        const url = urlcat(OKX_HOST, '/api/v6/dex/cross-chain/quote', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
             toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
@@ -185,34 +174,27 @@ export const OKX = {
         const res = await fetchFromOKX<GetBridgeQuoteResponse>(url)
         if (res.code !== 0) throw new Error('Failed to get bridge quote')
         const [fromTokenPrice = '0', toTokenPrice = '0'] = await Promise.all([
-            OKX.getTokenPrice(options.fromTokenAddress, options.fromChainId),
-            OKX.getTokenPrice(options.toTokenAddress, options.toChainId),
+            OKX.getTokenPrice(options.fromTokenAddress, options.fromChainIndex),
+            OKX.getTokenPrice(options.toTokenAddress, options.toChainIndex),
         ])
         // Patch data
         res.data.forEach((quote) => {
             quote.fromToken.tokenUnitPrice = fromTokenPrice
             quote.toToken.tokenUnitPrice = toTokenPrice
             quote.toTokenAmount = quote.routerList[0]?.toTokenAmount
-            quote.fromChainId = +quote.fromChainId
-            quote.toChainId = +quote.toChainId
+            quote.fromChainIndex = +quote.fromChainIndex
+            quote.toChainIndex = +quote.toChainIndex
             quote.routerList.forEach((router) => {
-                router.router.crossChainFeeTokenAddress = fromOkxNativeAddress(router.router.crossChainFeeTokenAddress)
-                ;[...router.fromDexRouterList, ...router.toDexRouterList].forEach((dexRouter) => {
-                    dexRouter.subRouterList.forEach((subRouter) => {
-                        subRouter.fromToken.tokenContractAddress = fromOkxNativeAddress(
-                            subRouter.fromToken.tokenContractAddress,
-                        )
-                    })
-                })
+                router.crossChainFeeTokenAddress = fromOkxNativeAddress(router.crossChainFeeTokenAddress)
             })
         })
         return res
     },
 
-    async getBridgeSupportedChains(chainId?: number) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/chain', {
-            chainId,
-        })
+    async getBridgeSupportedChains() {
+        // The dedicated cross-chain supported chains endpoint was removed in v6,
+        // the aggregator supported chains serve both swap and bridge modes now.
+        const url = urlcat(OKX_HOST, '/api/v6/dex/aggregator/supported/chain')
         const res = await fetchFromOKX<SupportedChainResponse>(url)
         if (res.code === 0) {
             res.data.forEach((item) => {
@@ -224,7 +206,7 @@ export const OKX = {
     },
 
     async bridge(options: BridgeOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/build-tx', {
+        const url = urlcat(OKX_HOST, '/api/v6/dex/cross-chain/swap', {
             ...options,
             fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
             toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
@@ -234,21 +216,29 @@ export const OKX = {
     },
 
     async getBridgeStatus(options: GetBridgeStatusOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/status', options)
+        const url = urlcat(OKX_HOST, '/api/v6/dex/cross-chain/status', options)
         const res = await fetchFromOKX<GetBridgeStatusResponse>(url)
         if (res.code !== 0) throw new Error('Failed to get bridge status')
         // Patch data
         if (res.data.length) {
-            res.data.forEach((record) => {
-                record.fromChainId = +record.fromChainId
-                record.toChainId = record.toChainId ? +record.toChainId : 0
-            })
-            return res.data[0]
+            const record = res.data[0]
+            // The v6 states differ from v5 (e.g. NOT_FOUND for orders not indexed yet),
+            // normalize them to the v5-style states the UI relies on, any non-final state is PENDING
+            const rawStatus = record.status as string
+            const failureStates = ['FAIL', 'FAILED', 'FAILURE', 'REFUND', 'FROM_FAILURE']
+            record.status =
+                rawStatus === 'SUCCESS' ? 'SUCCESS'
+                : failureStates.includes(rawStatus) ? 'FAILURE'
+                : 'PENDING'
+            // v6 renamed fromTxHash to txHash, keep the v5-style field for the UI
+            record.fromTxHash ??= record.txHash
+            return record
         }
         return
     },
 
     async getUserTokenBalances(chainId: ChainId | ChainId[], account: string) {
+        // The wallet APIs are still served by v5, which is not affected by the dex v5 sunset.
         const url = urlcat(OKX_HOST, '/api/v5/wallet/asset/all-token-balances-by-address', {
             chains: chainId,
             address: account,

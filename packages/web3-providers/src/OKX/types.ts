@@ -12,8 +12,9 @@ interface OKXResponse<T> {
 }
 
 export interface ChainDex {
-    /** API response string, we convert to number */
     chainId: number
+    /** Unique chain index, equals to chainId for most chains */
+    chainIndex: number
     chainName: string
     /** would be empty string for non-ethereum chains */
     dexTokenApproveAddress: string
@@ -25,9 +26,8 @@ export type GetTokensResponse = OKXResponse<
     Array<{
         /**
          * @example "18"
-         * /api/v5/dex/aggregator/all-tokens responses decimals in string,
-         * but we will convert it to number as
-         * /api/v5/dex/cross-chain/supported/tokens responses in number
+         * /api/v6/dex/aggregator/all-tokens responses decimals in string,
+         * but we will convert it to number as the bridge APIs respond in number
          * */
         decimals: number
         /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
@@ -53,7 +53,7 @@ export type GetLiquidityResponse = OKXResponse<
 >
 
 export interface ApproveTransactionOptions {
-    chainId: number
+    chainIndex: number
     tokenContractAddress: string
     approveAmount: string
 }
@@ -75,8 +75,8 @@ export type ApproveTransactionResponse = OKXResponse<
 >
 
 export interface GetQuotesOptions {
-    /** Chain ID (e.g., 1 for Ethereum) */
-    chainId: string
+    /** Chain index (e.g., 1 for Ethereum) */
+    chainIndex: string
     /** The input amount of a token to be sold (in minimal divisible units) */
     amount: string
     /** The contract address of a token to be sold */
@@ -119,41 +119,73 @@ export interface SwapToken {
      * Bridge quote API has no tokenUnitPrice, we get it in favor of swap quote API, see OKX.getTokenPrice
      * */
     tokenUnitPrice: string
+    /** Whether the token is a honeypot, swap quote API only */
+    isHoneyPot?: boolean
+    /** Swap quote API only */
+    latestMultiplier?: string
+    /** Swap quote API only */
+    taxRate?: string
+}
+
+interface DexProtocol {
+    /** @example "Uniswap V3" */
+    dexName: string
+    percent: string
+}
+
+/** A hop of the quote path */
+export interface DexRouter {
+    /** Liquidity protocol used on the hop */
+    dexProtocol: DexProtocol
+    /** The information of a token to be sold */
+    fromToken: SwapToken
+    /** The information of a token to be bought */
+    toToken: SwapToken
+    fromTokenIndex: string
+    toTokenIndex: string
 }
 
 export interface OKXSwapQuote {
-    chainId: string
+    chainIndex: string
     dexRouterList: DexRouter[]
     /** It's gas limit actually */
     estimateGasFee: string
     fromToken: SwapToken
     /** Amount of fromToken */
     fromTokenAmount: string
-    quoteCompareList: Array<{
-        amountOut: string
-        dexLogo: string
-        dexName: string
-        /** Estimated network fee (USD) of the quote route */
-        tradeFee: string
-    }>
     toToken: SwapToken
     /** Amount of toToken */
     toTokenAmount: string
+    /** Estimated network fee (USD) of the quote route */
+    tradeFee: string
+    /** Percentage difference between the received value and the paid value */
+    priceImpactPercent: string
+    /** Main path for the token swap */
+    router: string
+    /** A unique identifier for this quote */
+    quoteId?: string
+    /** The routing mode used for this quote (dex, intent, auto) */
+    mode?: string
+    swapMode: string
+    /** The blockchain slot number at the time the quote was generated, Solana only */
+    contextSlot?: number
+    /** Signing data required for intent orders */
+    signData?: unknown
 }
 
 export type GetQuotesResponse = OKXResponse<OKXSwapQuote[]>
 
 export interface SwapOptions {
-    /** Chain ID */
-    chainId: string
+    /** Chain index */
+    chainIndex: string
     /** The input amount of a token to be sold */
     amount: string
     /** The contract address of a token you want to send */
     fromTokenAddress: string
     /** The contract address of a token you want to receive */
     toTokenAddress: string
-    /** The slippage you are willing to accept */
-    slippage: string
+    /** The slippage percentage you are willing to accept (e.g., 0.5 for 0.5%) */
+    slippagePercent: string
     /** The user's wallet address */
     userWalletAddress: string
     /** The referrer's address (optional) */
@@ -187,49 +219,15 @@ export interface OkxTx {
     value: string
     minReceiveAmount: string
     data: string
-}
-interface DexProtocol {
-    /** @example "Uniswap V3" */
-    dexName: string
-    percent: string
+    maxSpendAmount?: string
+    /** Solana only */
+    signatureData?: unknown
+    slippagePercent?: string
 }
 
 export type SwapResponse = OKXResponse<
     Array<{
-        routerResult: {
-            chainId: string
-            /** the input amount of a token to be sold */
-            fromTokenAmount: string
-            /** the output amount of a token to be received */
-            toTokenAmount: string
-            /** It's gas limit actually */
-            estimateGasFee: string
-            /** The list of DEX routers */
-            dexRouterList: Array<{
-                /** The router address */
-                router: string
-                /**
-                 * The percentage of assets handled by the main path
-                 * @example "5"
-                 */
-                routerPercent: string
-                /** Quote path sub data set */
-                subRouterList: Array<{
-                    /** Liquidity protocols used on the main path */
-                    dexProtocol: DexProtocol[]
-                    fromToken: SwapToken
-                    toToken: SwapToken
-                }>
-            }>
-            fromToken: SwapToken
-            toToken: SwapToken
-            quoteCompareList: Array<{
-                dexName: string
-                dexLogo: string
-                tradeFee: string
-                receiveAmount: string
-            }>
-        }
+        routerResult: OKXSwapQuote
         tx: OkxTx
     }>
 >
@@ -238,11 +236,11 @@ export type SwapResponse = OKXResponse<
  * Options for getting a cross-chain quote
  */
 export interface GetBridgeQuoteOptions {
-    /** Source chain ID (e.g., '1' for Ethereum) */
-    fromChainId: string
+    /** Source chain index (e.g., '1' for Ethereum) */
+    fromChainIndex: string
 
-    /** Destination chain ID (e.g., '1' for Ethereum) */
-    toChainId: string
+    /** Destination chain index (e.g., '1' for Ethereum) */
+    toChainIndex: string
 
     /** The contract address of the token to be sold */
     fromTokenAddress: string
@@ -291,8 +289,8 @@ export interface GetBridgeQuoteOptions {
     priceImpactProtectionPercentage?: string
 }
 
-/** Represents bridge information */
-interface Router {
+/** Represents an item in the router list, v6 flattened the nested `router` and dex router lists */
+export interface RouterListItem {
     /** Bridge ID (e.g., 211) */
     bridgeId: number
     /** Name of bridge (e.g., cBridge) */
@@ -303,56 +301,29 @@ interface Router {
     crossChainFee: string
     /** The cross-chain bridge fee token information */
     crossChainFeeTokenAddress: string
-}
-
-/** Represents DEX Router information */
-export interface SubRouter {
-    /** The information of a token to be sold */
-    fromToken: SwapToken
-    /** The information of a token to be bought */
-    toToken: SwapToken
-    dexProtocol: DexProtocol[]
-}
-
-/** Represents a DEX router with sub-routers */
-interface DexRouter {
-    /** One of the main paths for the token swap */
-    router: string
-    /** The percentage of assets handled by the protocol */
-    routerPercent: string
-    /** DEX Router information */
-    subRouterList: SubRouter[]
-}
-
-/** Represents an item in the router list */
-export interface RouterListItem {
     /** The recommended gas limit for calling the contract */
     estimateGasFee: string
     /** time in seconds (It's wrongly wrote as estimatedTime) */
     estimateTime: string
-    fromChainNetworkFee: string
+    /** The minimum amount of a token to buy when the price reaches maximum slippage */
     minimumReceived: string
-    needApprove: number
-    /** Bridge information */
-    router: Router
-    /** Source chain swap information */
-    fromDexRouterList: DexRouter[]
-    toChainNetworkFee: string
-    /** Destination chain's swap route information */
-    toDexRouterList: DexRouter[]
+    needApprove: boolean
+    needCancelApprove: boolean
+    priceImpactPercentage: string
     toTokenAmount: string
+    warningMessage: string
 }
 export interface OKXBridgeQuote {
     /**
-     * Destination chain ID (e.g., 1 for Ethereum)
+     * Source chain index (e.g., 1 for Ethereum)
      * API response string, we convert to number
      */
-    fromChainId: number
+    fromChainIndex: number
     /**
-     * Destination chain ID (e.g., 1 for Ethereum)
+     * Destination chain index (e.g., 1 for Ethereum)
      * API response string, we convert to number
      */
-    toChainId: number
+    toChainIndex: number
     /** The input amount of a token to be sold */
     fromTokenAmount: string
     /** The information of a token to be sold */
@@ -361,18 +332,18 @@ export interface OKXBridgeQuote {
     toToken: SwapToken
     /** Quote path data set */
     routerList: RouterListItem[]
-    /** The resulting amount of a token to be bought */
+    /** The resulting amount of a token to be bought, we patch it from the first router */
     toTokenAmount: string
 }
 /** Response type for getting a cross-chain quote */
 export type GetBridgeQuoteResponse = OKXResponse<OKXBridgeQuote[]>
 
 export interface BridgeOptions {
-    /** Source chain ID (e.g., `1` for Ethereum) */
-    fromChainId: ChainId
+    /** Source chain index (e.g., `1` for Ethereum) */
+    fromChainIndex: ChainId
 
-    /** Destination chain ID (e.g., `1` for Ethereum) */
-    toChainId: ChainId
+    /** Destination chain index (e.g., `1` for Ethereum) */
+    toChainIndex: ChainId
 
     /** The contract address of a token to be sold */
     fromTokenAddress: string
@@ -403,7 +374,7 @@ export interface BridgeOptions {
     /** Specify bridges that should be included in routes */
     allowBridge?: number[]
 
-    /** Specify bridges that should be excluded in routes */
+    /** Specify bridges that should be excluded from routes */
     denyBridge?: number[]
 
     /**
@@ -434,7 +405,7 @@ export interface BridgeOptions {
     onlyBridge?: boolean
 
     /**
-     * Custom parameters carried in /build-tx (128-character 64-byte hexadecimal string)
+     * Custom parameters carried in the swap API (128-character 64-byte hexadecimal string)
      */
     memo?: string
 }
@@ -470,6 +441,8 @@ interface Transaction {
     /** EIP-1559: Recommended priority cost of gas per unit (e.g., 500000000) */
     maxPriorityFeePerGas: string
     randomKeyAccount: any[]
+    /** Solana only */
+    signatureData?: unknown
 }
 
 /** Response type for getting a cross-chain swap */
@@ -480,7 +453,7 @@ export type GetBridgeResponse = OKXResponse<
         /** The resulting amount of a token to be bought (Quantity needs to include accuracy. e.g., 1.00 USDT set as 1000000) */
         toTokenAmount: string
         /** The minimum amount of a token to buy when the price reaches maximum slippage */
-        minmumReceive: string
+        minimumReceived: string
         /** Bridge information */
         router: BridgeRouter
         /** On chain transaction data */
@@ -495,48 +468,46 @@ export type GetBridgeResponse = OKXResponse<
 >
 
 export interface GetBridgeStatusOptions {
-    chainId?: number
+    chainIndex: number
     hash: string
+    /** Bridge ID used for the cross-chain swap */
+    bridgeId: number
 }
 
+/** The v6 status response, verified against the live API */
 export interface BridgeStatus {
-    bridgeHash: string
-    crossChainFee: {
-        symbol: string
-        address: string
-        amount: string
-    } | null
-    crossChainInfo: {
-        memo?: string
-    } | null
+    /** e.g. 639 */
+    bridgeId: number
+    /** Source chain index */
+    chainIndex: string
+    /**
+     * PENDING (Order pending)
+     * SUCCESS (Order success)
+     * FAILURE (Order failure)
+     *
+     * The raw v6 states differ from v5 (e.g. NOT_FOUND for unindexed orders),
+     * the provider normalizes them to the v5-style states above.
+     */
+    status: 'PENDING' | 'SUCCESS' | 'FAILURE'
+    toAmount: string
+    /** Destination chain index, could be empty string */
+    toChainIndex: string
+    toTokenAddress: string
+    /** Destination chain tx hash, empty until the destination leg completes */
+    toTxHash: string
+    /** Source chain tx hash */
+    txHash: string
+    /** Source chain tx hash, kept for v5-style richer states if the API still returns it */
+    fromTxHash?: string
     /**
      * WAITING (Order processing)
      * FROM_SUCCESS (Source swap success)
      * FROM_FAILURE (Source swap failure)
      * BRIDGE_PENDING (Bridge pending)
-     * BRIDGE_SUCCESS (Bridge success)
      * SUCCESS (Order success)
      * REFUND (Order failure, refund)
      */
-    detailStatus: 'WAITING' | 'FROM_SUCCESS' | 'FROM_FAILURE' | 'BRIDGE_PENDING' | 'SUCCESS' | 'REFUND'
-    errorMsg: string
-    fromAmount: string
-    /** API response string, we convert to number */
-    fromChainId: number
-    fromTokenAddress: string
-    fromTxHash: string
-    refundTokenAddress: string
-    /**
-     * PENDING (Order pending)
-     * SUCCESS (Order success)
-     * FAILURE (Order failure)
-     */
-    status: 'PENDING' | 'SUCCESS' | 'FAILURE'
-    toAmount: string
-    /** API response string(could be empty string), we convert to number */
-    toChainId: number
-    toTokenAddress: string
-    toTxHash: string
+    detailStatus?: 'WAITING' | 'FROM_SUCCESS' | 'FROM_FAILURE' | 'BRIDGE_PENDING' | 'SUCCESS' | 'REFUND'
 }
 
 export type GetBridgeStatusResponse = OKXResponse<BridgeStatus[]>
