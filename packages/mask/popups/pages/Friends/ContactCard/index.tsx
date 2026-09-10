@@ -1,14 +1,15 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, useSnackbar } from '@masknet/theme'
 import { Box, Typography, Avatar, ButtonBase as Button } from '@mui/material'
-import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import Services from '#services'
 import type { Friend } from '../../../hooks/index.js'
+import type { Profile } from '../common.js'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,10 +45,11 @@ const useStyles = makeStyles()((theme) => ({
 interface ContactCardProps {
     friend: Friend
     avatar?: string
+    isLocal?: boolean
     refetch?: () => void
 }
 
-export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend, avatar, refetch }) {
+export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend, avatar, isLocal, refetch }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar()
@@ -57,6 +59,19 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend,
     const publicKey = friend.persona.publicKeyAsHex
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
+    const profiles = useMemo<Profile[]>(() => {
+        if (!friend.profile) return EMPTY_LIST
+        return [
+            {
+                platform: friend.profile.network as Profile['platform'],
+                identity: friend.profile.userId,
+                name: friend.profile.userId,
+                is_valid: true,
+                created_at: '',
+                last_checked_at: '',
+            },
+        ]
+    }, [friend.profile])
 
     const handleAddFriend = useCallback(async () => {
         if (!currentPersona) return
@@ -114,13 +129,17 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({ friend,
                         </Typography>
                     </Box>
                 </Box>
-                {local ?
+                {isLocal || local ?
                     <Button
                         onClick={() =>
                             navigate(`${PopupRoutes.FriendsDetail}/${publicKey}`, {
                                 state: {
                                     avatar,
-                                    friend,
+                                    publicKey,
+                                    nextId: publicKey,
+                                    profiles,
+                                    isLocal,
+                                    localProfile: friend.profile,
                                 },
                             })
                         }
