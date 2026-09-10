@@ -168,12 +168,13 @@ export function SocialAccountListItem({
             const client = new LensV3(account, (message) => EVMWeb3.signMessage('message', message))
             const profile = await client.getAccountByHandle(identity)
             if (!profile?.address) return null
-            const isFollowing = await client.getFollowStatus([
+            const followStatus = await client.getFollowStatus([
                 { account: profile.address, follower: evmAddress(myAccountAddress) },
             ])
+            const status = followStatus[0]?.isFollowing
             return {
                 ownedBy: profile?.username?.ownedBy as string,
-                isFollowing,
+                isFollowing: status?.optimistic || status?.onChain,
             }
         },
     })
