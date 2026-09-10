@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js'
 import { AaveLendingPoolAbi } from '@masknet/web3-contracts/types/AaveLendingPool.js'
 import { AaveLendingPoolAddressProviderAbi } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
+import { AaveProtocolDataProviderAbi } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import { ZERO, pow10, type FungibleToken } from '@masknet/web3-shared-base'
 import { type ChainId, type SchemaType, getAaveConstant } from '@masknet/web3-shared-evm'
@@ -34,49 +34,24 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async getApr(chainId: ChainId) {
         try {
-            const subgraphUrl = getAaveConstant(chainId, 'AAVE_SUBGRAPHS')
-            if (!subgraphUrl) {
+            const contract = this.getDataProviderContract(chainId)
+            if (!contract) {
                 return '0.00'
             }
 
-            const body = JSON.stringify({
-                query: /* GraphQL */ `
-                    query GET_APR($address: String, $pool: String) {
-                        reserves(where: { underlyingAsset: $address, pool: $pool }) {
-                            id
-                            name
-                            underlyingAsset
-                            liquidityRate
-                        }
-                    }
-                `,
-                variables: {
-                    address: this.bareToken.address,
-                    pool: '0xb53c1a33016b2dc2ff3653530bff1848a515c8c5',
-                },
+            const data = await EVMContract.readContract(contract, 'getReserveData', [this.bareToken.address as Address], {
+                chainId,
             })
-            const response = await fetchJSON<{
-                data: {
-                    reserves: Array<{
-                        id: string
-                        name: string
-                        decimals: number
-                        underlyingAsset: string
-                        liquidityRate: number
-                    }>
-                }
-            }>(subgraphUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body,
-            })
+            if (!data) return '0.00'
 
-            const liquidityRate = +response.data.reserves[0].liquidityRate
+            // viem returns multi-output reads as positional arrays,
+            // the 4th output of getReserveData is the liquidity rate in RAY
+            const liquidityRate = data[3]
 
             const RAY = pow10(27) // 10 to the power 27
 
             // APY and APR are returned here as decimals, multiply by 100 to get the percents
-            return new BigNumber(liquidityRate).times(100).div(RAY).toFixed(2)
+            return new BigNumber(liquidityRate.toString()).times(100).div(RAY).toFixed(2)
         } catch (error) {
             console.error('AAVE: Apr Error:', error)
             return AAVEProtocol.DEFAULT_APR
@@ -85,48 +60,25 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async getBalance(chainId: ChainId, account: string) {
         try {
-            const subgraphUrl = getAaveConstant(chainId, 'AAVE_SUBGRAPHS')
-
-            if (!subgraphUrl) {
+            const contract = this.getDataProviderContract(chainId)
+            if (!contract) {
                 return ZERO
             }
 
-            const body = JSON.stringify({
-                query: /* GraphQL */ `
-                    query GET_BALANCE($address: String, $pool: String) {
-                        reserves(where: { underlyingAsset: $address, pool: $pool }) {
-                            id
-                            aToken {
-                                id
-                            }
-                        }
-                    }
-                `,
-                variables: {
-                    address: this.bareToken.address,
-                    pool: '0xb53c1a33016b2dc2ff3653530bff1848a515c8c5',
-                },
-            })
+            const tokens = await EVMContract.readContract(
+                contract,
+                'getReserveTokensAddresses',
+                [this.bareToken.address as Address],
+                { chainId },
+            )
+            if (!tokens) return ZERO
 
-            const response = await fetchJSON<{
-                data: {
-                    reserves: Array<{
-                        aToken: {
-                            id: string
-                        }
-                    }>
-                }
-            }>(subgraphUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body,
-            })
-
-            const aTokenId = response.data.reserves[0].aToken.id
-            const contract = EVMContract.getContract(aTokenId, ERC20Abi)
+            // the 1st output of getReserveTokensAddresses is the aToken address
+            const [aTokenAddress] = tokens
+            const aTokenContract = EVMContract.getContract(aTokenAddress, ERC20Abi)
             return new BigNumber(
                 (
-                    await EVMContract.readContract(contract, 'balanceOf', [account as Address], { chainId })
+                    await EVMContract.readContract(aTokenContract, 'balanceOf', [account as Address], { chainId })
                 )?.toString() ?? '0',
             )
         } catch (error) {
@@ -166,6 +118,11 @@ export class AAVEProtocol implements SavingsProtocol {
         return EVMContract.readContract(lPoolAddressProviderContract, 'getLendingPool', [], {
             chainId,
         })
+    }
+
+    private getDataProviderContract(chainId: ChainId) {
+        const address = getAaveConstant(chainId, 'AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS')
+        return EVMContract.getContract(address, AaveProtocolDataProviderAbi)
     }
 
     public async deposit(account: string, chainId: ChainId, value: BigNumber.Value) {
