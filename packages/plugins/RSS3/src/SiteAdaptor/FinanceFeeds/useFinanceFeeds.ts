@@ -1,7 +1,7 @@
 import { t } from '@lingui/core/macro'
 import { timeout } from '@masknet/kit'
 import type { PageIndicator } from '@masknet/shared-base'
-import { Zerion } from '@masknet/web3-providers'
+import { FireflyWalletHistory } from '@masknet/web3-providers'
 import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
 
 interface Options {
@@ -11,12 +11,12 @@ interface Options {
 export function useFinanceFeeds({ address }: Options) {
     return useInfiniteQuery({
         initialPageParam: undefined as PageIndicator | undefined,
-        queryKey: ['zerion', 'history-list', address],
+        queryKey: ['firefly', 'wallet-history', address],
         queryFn:
             address ?
                 async ({ pageParam }) => {
                     return timeout(
-                        Zerion.getTransactions(address, { indicator: pageParam }),
+                        FireflyWalletHistory.getTransactions(address, { indicator: pageParam }),
                         30_000,
                         t`Request timed out`,
                     )
