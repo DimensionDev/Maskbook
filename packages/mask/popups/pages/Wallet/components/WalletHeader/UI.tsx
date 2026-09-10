@@ -105,8 +105,8 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             height: 7,
             borderRadius: 99,
         },
-        unconnectedDot: {
-            backgroundColor: theme.vars.palette.maskColor.third,
+        connectedDot: {
+            backgroundColor: theme.vars.palette.maskColor.success,
         },
         balance: {
             fontSize: 36,
@@ -176,18 +176,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     {networkName}
                                 </Typography>
                             </TextOverflowTooltip>
-                            {disabled ? null : (
-                                <Icons.ArrowDrop
-                                    size={20}
-                                    className={classes.arrow}
-                                    style={{ transform: status ? 'rotate(-180deg)' : undefined }}
-                                />
-                            )}
+                            {disabled ? null : <Icons.ArrowDrop size={20} className={classes.arrow} />}
                         </Box>
                         <Typography className={classes.connected}>
-                            <span className={cx(classes.dot, classes.unconnectedDot)} />
+                            <span className={cx(classes.dot, classes.connectedDot)} />
                             <span>
-                                <Trans>Not Connected</Trans>
+                                <Trans>Connected</Trans>
                             </span>
                         </Typography>
                     </Box>
