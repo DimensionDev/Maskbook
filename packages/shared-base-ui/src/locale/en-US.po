@@ -1722,8 +1722,8 @@ msgstr ""
 #~ msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
-#~ msgid "Connected"
-#~ msgstr ""
+msgid "Connected"
+msgstr ""
 
 #: packages/mask/popups/pages/Personas/ConnectWallet/index.tsx
 #~ msgid "Connected {0} with {walletName}."
@@ -4313,8 +4313,8 @@ msgid "Not connected"
 msgstr ""
 
 #: packages/mask/popups/pages/Wallet/components/WalletHeader/UI.tsx
-msgid "Not Connected"
-msgstr ""
+#~ msgid "Not Connected"
+#~ msgstr ""
 
 #: packages/plugins/Avatar/src/Application/PersonaItem.tsx
 #~ msgid "Not current account. Please switch to this account to set up NFTs Profile."
