@@ -70,11 +70,6 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: theme.vars.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
     },
-    item: {
-        '& > *': {
-            padding: theme.spacing(0, 1.5),
-        },
-    },
     list: {
         padding: 0,
     },
@@ -132,7 +127,6 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                 horizontal: 'right',
             },
             classes: { paper: classes.menu, list: classes.list },
-            slotProps: { list: { classes: { root: classes.item } } },
         },
     )
 
