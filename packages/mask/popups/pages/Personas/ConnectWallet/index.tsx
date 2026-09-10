@@ -3,7 +3,7 @@ import { FormattedAddress, PopupHomeTabType } from '@masknet/shared'
 import { PopupModalRoutes, PopupRoutes, type NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useReverseAddress } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver, EVMProviderResolver, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMExplorerResolver, EVMProviderResolver } from '@masknet/web3-providers'
 import { formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Button, Link, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
@@ -77,7 +77,6 @@ export const Component = memo(function ConnectWalletPage() {
     }, [modalNavigate])
 
     const handleDone = useCallback(async () => {
-        await EVMWeb3.disconnect({ providerType })
         if (providerType === ProviderType.WalletConnect) {
             navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }), {
                 replace: true,
