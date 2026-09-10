@@ -90,6 +90,7 @@ export {
     FIREFLY_BASE_URL,
     FIREFLY_SITE_URL,
     FireflyDomain,
+    FireflyWalletHistory,
     // Embedded wallet (replaces @privy-io/react-auth)
     FireflyEmbeddedWalletClient,
     FireflyEmbeddedProvider,
