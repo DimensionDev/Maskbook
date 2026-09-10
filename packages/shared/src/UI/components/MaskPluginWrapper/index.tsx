@@ -75,7 +75,7 @@ const useStyles = makeStyles<{
             marginRight: theme.spacing(0.5),
             fontSize: 14,
             fontWeight: 700,
-            color: theme.vars.palette.maskColor.second,
+            color: theme.vars.palette.maskColor.publicSecond,
         },
     }
 })
@@ -131,7 +131,12 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 )}
                 <Typography
                     variant="body1"
-                    sx={{ color: theme.vars.palette.maskColor.main, fontSize: 16, fontWeight: 700, marginLeft: 0.5 }}
+                    sx={{
+                        color: theme.vars.palette.maskColor.publicMain,
+                        fontSize: 16,
+                        fontWeight: 700,
+                        marginLeft: 0.5,
+                    }}
                     component="div">
                     {wrapperProps?.title ?? title ?? <Trans>Default</Trans>}
                 </Typography>

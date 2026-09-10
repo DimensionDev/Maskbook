@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         alignItems: 'center',
         height: theme.spacing(4),
-        padding: theme.spacing(0.5, 0),
+        padding: theme.spacing(0.5, 1.5),
         boxSizing: 'border-box',
         ':not(:last-of-type)': {
             borderBottom: `1px solid ${theme.vars.palette.maskColor.line}`,

@@ -9,14 +9,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: theme.vars.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.publicMain,
     },
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
         minHeight: '196px',
         justifyContent: 'space-between',
-        color: theme.vars.palette.maskColor.main,
+        color: theme.vars.palette.maskColor.publicMain,
     },
     web3Icon: {
         marginRight: 6,
@@ -52,7 +52,7 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
     const PluginName = (
         <Stack className={classes.title} direction="row">
             {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
-            <Typography sx={{ color: theme.vars.palette.maskColor.main, fontSize: 16, fontWeight: 700 }}>
+            <Typography sx={{ color: theme.vars.palette.maskColor.publicMain, fontSize: 16, fontWeight: 700 }}>
                 {title ?? <Trans>Web3 Profile</Trans>}
             </Typography>
         </Stack>
@@ -85,7 +85,7 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
             </Stack>
             <Stack sx={{ flex: 1, justifyContent: 'center', alignItems: 'center', p: 1.5 }}>
                 {children ?? (
-                    <LoadingStatus iconSize={24} color={theme.vars.palette.maskColor.main}>
+                    <LoadingStatus iconSize={24} color={theme.vars.palette.maskColor.publicMain}>
                         <Trans>Loading....</Trans>
                     </LoadingStatus>
                 )}
