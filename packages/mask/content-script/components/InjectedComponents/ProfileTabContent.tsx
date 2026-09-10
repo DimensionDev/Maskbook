@@ -326,7 +326,7 @@ function Content(props: ProfileTabContentProps) {
             <MaskThemeProvider palette="light">
                 <div className={classes.root}>
                     <PluginCardFrameMini>
-                        <LoadingStatus iconSize={24} color={theme.vars.palette.maskColor.main}>
+                        <LoadingStatus iconSize={24} color={theme.vars.palette.maskColor.publicMain}>
                             <Trans>Loading account information...</Trans>
                         </LoadingStatus>
                     </PluginCardFrameMini>

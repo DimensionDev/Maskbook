@@ -32,8 +32,7 @@ export function PluginDescriptor({ children, isProfilePage, isTokenTagPopper }: 
                     sx={{
                         fontWeight: 'bolder',
                         fontSize: 16,
-                        color: (theme) =>
-                            isTokenTagPopper ? theme.vars.palette.maskColor.main : theme.vars.palette.maskColor.dark,
+                        color: (theme) => theme.vars.palette.maskColor.publicMain,
                     }}>
                     {isTokenTagPopper ?
                         <Trans>Web3 Profile Card</Trans>

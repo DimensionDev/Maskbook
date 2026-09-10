@@ -7,7 +7,7 @@ import { Box } from '@mui/system'
 import { FootnoteMenu } from '../FootnoteMenu/index.js'
 import { SourceProviderIcon } from '../SourceProviderIcon/index.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles()(() => {
     return {
         source: {
             justifyContent: 'space-between',
@@ -18,8 +18,6 @@ const useStyles = makeStyles()((theme) => {
         },
         sourceName: {
             fontWeight: 700,
-            color: theme.vars.palette.maskColor.publicMain,
-            ...theme.applyStyles('dark', { color: '' }),
         },
     }
 })
