@@ -3,7 +3,7 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { EVMWeb3, EVMContract, EVMChainResolver } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, ProviderType, ProviderURL } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
@@ -35,7 +35,7 @@ export function ConnectionContent() {
             name: 'Mainnet',
             network: 'mainnet',
             nativeCurrency: EVMChainResolver.nativeCurrency(ChainId.Mainnet),
-            rpcUrl: 'https://cloudflare-eth.com',
+            rpcUrl: ProviderURL.fromOfficial(ChainId.Mainnet),
             explorerUrl: {
                 url: 'https://etherscan.io/',
             },
