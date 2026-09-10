@@ -39,9 +39,14 @@ export class AAVEProtocol implements SavingsProtocol {
                 return '0.00'
             }
 
-            const data = await EVMContract.readContract(contract, 'getReserveData', [this.bareToken.address as Address], {
-                chainId,
-            })
+            const data = await EVMContract.readContract(
+                contract,
+                'getReserveData',
+                [this.bareToken.address as Address],
+                {
+                    chainId,
+                },
+            )
             if (!data) return '0.00'
 
             // viem returns multi-output reads as positional arrays,
