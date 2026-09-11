@@ -786,6 +786,7 @@ export const InputBase = {
                     },
                     style: {
                         fontSize: 14,
+                        minHeight: 40,
                         [`& .${inputBaseClasses.input}`]: {
                             padding: '11px 12px',
                             height: 18,
