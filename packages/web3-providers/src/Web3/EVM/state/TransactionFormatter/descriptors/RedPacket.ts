@@ -106,7 +106,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                         method: method.name,
                     },
                 }
-            } else {
+            } else if (method?.name === 'refund') {
                 const tokenAmountDescription = await this.getRefundTokenInfo(context.chainId, context.to, context.hash)
                 return {
                     chainId: context.chainId,

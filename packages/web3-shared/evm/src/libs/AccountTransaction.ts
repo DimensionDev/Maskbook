@@ -39,7 +39,8 @@ export class AccountTransaction {
     }
 
     get functionParameters() {
-        return this.data?.slice(10)
+        const data = this.data
+        return data ? `0x${data.slice(10)}` : undefined
     }
 
     fill(overrides?: Transaction): Transaction {
