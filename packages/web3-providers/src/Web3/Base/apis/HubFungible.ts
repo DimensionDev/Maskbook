@@ -100,7 +100,7 @@ export abstract class BaseHubFungible<ChainId, SchemaType> extends AbstractBaseH
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, account })
         const providers = this.getProvidersFungible(initial)
-        return attemptUntil(
+        return attemptUntil<Pageable<FungibleAsset<ChainId, SchemaType>>>(
             providers.map((x) => () => x.getAssets?.(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
