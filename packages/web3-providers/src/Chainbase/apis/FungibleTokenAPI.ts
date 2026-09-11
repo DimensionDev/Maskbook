@@ -46,7 +46,7 @@ class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Sc
     async getAssets(
         address: string,
         { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, PageIndicator>> {
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, PageIndicator> | undefined> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const tokens = await fetchFromChainbase<FT[]>(
             urlcat('/v1/account/tokens', {
@@ -56,7 +56,9 @@ class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Sc
             }),
         )
 
-        if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        // an upstream error must not surface as a valid empty page,
+        // or the caller's attemptUntil would stop falling back to other providers
+        if (!tokens) return
         const assets = tokens.map((x) => this.createFungibleAssetFromFT(chainId, x))
         return createPageable(
             assets,
