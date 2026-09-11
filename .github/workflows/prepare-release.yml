@@ -1,0 +1,75 @@
+name: Prepare Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine base branch
+        id: base
+        run: |
+          if [ "${{ inputs.bump }}" = "patch" ]; then
+            echo "branch=released" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch=develop" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.base.outputs.branch }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: ".node-version"
+
+      - name: Bump version
+        id: version
+        run: |
+          NEW_VERSION=$(npm version "${{ inputs.bump }}" --no-git-tag-version | sed 's/^v//')
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Determine release branch name
+        id: branch
+        run: |
+          if [ "${{ inputs.bump }}" = "patch" ]; then
+            echo "name=hotfix/${{ steps.version.outputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=release/${{ steps.version.outputs.version }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${{ steps.branch.outputs.name }}"
+          git add package.json
+          git commit -m "chore: bump version ${{ steps.version.outputs.version }}"
+          git push origin "${{ steps.branch.outputs.name }}"
+
+      - name: Open release PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --repo "${{ github.repository }}" \
+            --base "${{ steps.base.outputs.branch }}" \
+            --head "${{ steps.branch.outputs.name }}" \
+            --title "[Release] New release ${{ steps.version.outputs.version }} (${{ inputs.bump }})" \
+            --body "Automated version bump to \`${{ steps.version.outputs.version }}\` (${{ inputs.bump }}). Merging this into \`${{ steps.base.outputs.branch }}\`$( [ "${{ steps.base.outputs.branch }}" = "released" ] && echo " will automatically tag and publish the release." || echo "; promoting develop to released still needs to be done separately.")"
