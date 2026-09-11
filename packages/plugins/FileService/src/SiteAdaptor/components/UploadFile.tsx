@@ -92,10 +92,6 @@ export function UploadFile() {
             provider: Provider.Arweave,
             name: <Trans>Arweave</Trans>,
         },
-        {
-            provider: Provider.IPFS,
-            name: <Trans>IPFS</Trans>,
-        },
     ]
 
     const onSelectFile = useCallback(

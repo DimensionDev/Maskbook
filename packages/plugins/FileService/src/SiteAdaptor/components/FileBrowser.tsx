@@ -119,13 +119,11 @@ const useStyles = makeStyles()((theme) => ({
 
 enum ProviderTabs {
     All = 'All',
-    IPFS = 'IPFS',
     Arweave = 'Arweave',
 }
 
 const TabToProviderMap: Record<ProviderTabs, Provider | null> = {
     [ProviderTabs.All]: null,
-    [ProviderTabs.IPFS]: Provider.IPFS,
     [ProviderTabs.Arweave]: Provider.Arweave,
 }
 
