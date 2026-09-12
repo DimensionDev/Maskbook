@@ -65,7 +65,10 @@
         "https://api.thegraph.com",
         "https://mainnet.infura.io",
         "https://polygon-mainnet.infura.io",
-        "https://solana-mainnet.phantom.app",
+        "https://public.rpc.solanavibestation.com",
+        "https://solana-rpc.publicnode.com",
+        "https://solana.api.pocket.network",
+        "https://solana.leorpc.com",
         "https://api.testnet.solana.com",
         "https://api.devnet.solana.com",
         "https://li.quest"
