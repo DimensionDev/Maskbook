@@ -6,11 +6,11 @@ import {
     multipliedBy,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { type ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
+import { type ChainId, fetchWithFailover, SchemaType } from '@masknet/web3-shared-solana'
 import type { RpcOptions } from '../types/index.js'
 
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
-    const response = await globalThis.fetch(createClientEndpoint(chainId), {
+    const response = await fetchWithFailover(chainId, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOpti
         }),
     })
     const json = await response.json()
-    if (json.error) throw new Error(json.message || 'Fails in requesting RPC')
+    if (json.error) throw new Error(json.error?.message || 'Fails in requesting RPC')
     return json
 }
 

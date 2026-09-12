@@ -3,10 +3,11 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { getHub } from '@masknet/web3-providers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { attemptUntil } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useChainContext, useNetworkContext } from './useContext.js'
 import { useNetworks } from './useNetworks.js'
+import { useWeb3Utils } from './useWeb3Utils.js'
 
 export function useFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -17,10 +18,13 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const { chainId } = useChainContext({ chainId: options?.chainId })
     const { pluginID: contextPluginID } = useNetworkContext(pluginID)
     const networks = useNetworks(contextPluginID)
+    const Utils = useWeb3Utils(pluginID)
 
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     return useQuery({
-        enabled: !!address && isValidAddress(address),
+        // the EVM isAddress gate rejects Solana base58 addresses and disabled the
+        // query forever, so validate with the utils of the actual network plugin
+        enabled: !!address && Utils.isValidAddress(address),
         queryKey: ['fungible-token', contextPluginID, address, chainId, options],
         queryFn: async (): Promise<Web3Helper.FungibleTokenScope<S, T> | null> => {
             return (
