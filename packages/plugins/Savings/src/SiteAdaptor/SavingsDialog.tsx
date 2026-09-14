@@ -1,21 +1,22 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { chunk, compact, flatten } from 'lodash-es'
+import { compact } from 'lodash-es'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
     Web3ContextProvider,
-    useFungibleTokens,
     ChainContextProvider,
     useChainContext,
     RevokeChainContextProvider,
 } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, toHex } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { ChainId, getAaveConstant } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Token, getAaveConstant, parseStringOrBytes32 } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
 import { EVMContract } from '@masknet/web3-providers'
 import { AaveProtocolDataProviderAbi } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
+import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
+import { ERC20Bytes32Abi } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
@@ -60,6 +61,13 @@ interface SavingsDialogProps {
 
 const chains = [ChainId.Mainnet]
 
+interface AaveReserve {
+    address: string
+    symbol: string
+    aTokenAddress?: string
+    aTokenSymbol?: string
+}
+
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { classes } = useStyles()
 
@@ -68,12 +76,12 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
-    const { data: aaveTokens, isPending: loadingAAve } = useQuery({
+    const { data: aaveReserves, isPending: loadingAAve } = useQuery({
         enabled: open && chainId === ChainId.Mainnet,
         queryKey: ['savings', 'aave', 'tokens', chainId],
-        queryFn: async () => {
+        queryFn: async (): Promise<AaveReserve[]> => {
             const address = getAaveConstant(chainId, 'AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS')
-            if (!address) return EMPTY_LIST
+            if (!address) return []
 
             const protocolDataContract = EVMContract.getContract(address, AaveProtocolDataProviderAbi)
 
@@ -82,33 +90,60 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                 EVMContract.readContract(protocolDataContract, 'getAllATokens', [], { chainId }),
             ])
 
-            if (!tokens?.length) return EMPTY_LIST
+            if (!tokens?.length) return []
             return tokens.map((token) => {
-                return [
-                    token.tokenAddress,
-                    aTokens?.find((f) => f.symbol.toUpperCase() === `a${token.symbol}`.toUpperCase())?.tokenAddress,
-                ]
+                const aToken = aTokens?.find((f) => f.symbol.toUpperCase() === `a${token.symbol}`.toUpperCase())
+                return {
+                    address: token.tokenAddress,
+                    symbol: token.symbol,
+                    aTokenAddress: aToken?.tokenAddress,
+                    aTokenSymbol: aToken?.symbol,
+                }
             })
         },
         staleTime: 3_600_000,
     })
 
-    const { value: detailedAaveTokens = EMPTY_LIST, loading: loadingAAveDetails } = useFungibleTokens(
-        NetworkPluginID.PLUGIN_EVM,
-        compact(flatten(aaveTokens ?? [])),
-        {
-            chainId,
-        },
-    )
+    // symbols come from the data provider above, only name and decimals need extra ERC20 reads
+    const { data: aavePairs = EMPTY_LIST, isPending: loadingAAvePairs } = useQuery({
+        enabled: !!aaveReserves?.length,
+        queryKey: ['savings', 'aave', 'pairs', chainId, aaveReserves],
+        staleTime: 600_000,
+        queryFn: () =>
+            Promise.all(
+                (aaveReserves ?? []).map(async ({ address, symbol, aTokenAddress, aTokenSymbol }) => {
+                    // a pair needs the aToken; reserves without one cannot be saved into
+                    if (!aTokenAddress) return
+                    const erc20 = EVMContract.getContract(address, ERC20Abi)
+                    const erc20Bytes32 = EVMContract.getContract(address, ERC20Bytes32Abi)
+                    const [name, nameBytes32, decimals] = await Promise.allSettled([
+                        EVMContract.readContract(erc20, 'name', [], { chainId }),
+                        EVMContract.readContract(erc20Bytes32, 'name', [], { chainId }),
+                        EVMContract.readContract(erc20, 'decimals', [], { chainId }),
+                    ])
+                    const tokenName = parseStringOrBytes32(
+                        name.status === 'fulfilled' ? name.value : '',
+                        nameBytes32.status === 'fulfilled' && nameBytes32.value ? toHex(nameBytes32.value) : undefined,
+                        symbol, // fall back to the provider symbol rather than "Unknown Token"
+                    )
+                    const tokenDecimals = decimals.status === 'fulfilled' ? Number(decimals.value ?? 0) : 0
+                    const bare = createERC20Token(chainId, address, tokenName, symbol, tokenDecimals)
+                    // aTokens share the decimals of their underlying reserve
+                    const stakeSymbol = aTokenSymbol ?? `a${symbol}`
+                    const stake = createERC20Token(chainId, aTokenAddress, stakeSymbol, stakeSymbol, tokenDecimals)
+                    return [bare, stake] as TokenPair
+                }),
+            ).then((pairs) => compact(pairs)),
+    })
 
-    const loadingProtocols = loadingAAve || loadingAAveDetails || !detailedAaveTokens.length
+    const loadingProtocols = loadingAAve || loadingAAvePairs || !aavePairs.length
 
     const protocols = useMemo(
         () => [
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
-            ...chunk(detailedAaveTokens, 2).map((pair) => new AAVEProtocol(pair as TokenPair)),
+            ...aavePairs.map((pair) => new AAVEProtocol(pair)),
         ],
-        [chainId, detailedAaveTokens],
+        [chainId, aavePairs],
     )
 
     const [currentTab, onChange, tabs] = useTabs(TabType.Deposit, TabType.Withdraw)
