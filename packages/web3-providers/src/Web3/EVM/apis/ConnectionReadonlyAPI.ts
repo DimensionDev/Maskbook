@@ -1,5 +1,6 @@
 import { toHex, type Account } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
+import { ERC20Abi } from '@masknet/web3-contracts/types/ERC20.js'
 import {
     createNonFungibleTokenContract,
     type FungibleToken,
@@ -32,7 +33,15 @@ import {
     type TransactionSignature,
 } from '@masknet/web3-shared-evm'
 import { first, omit } from 'lodash-es'
-import type { Address, BlockTag, Hash, GetFeeHistoryParameters } from 'viem'
+import {
+    decodeFunctionResult,
+    encodeFunctionData,
+    multicall3Abi,
+    type Address,
+    type BlockTag,
+    type Hash,
+    type GetFeeHistoryParameters,
+} from 'viem'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
@@ -41,6 +50,9 @@ import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { EVMChainResolver } from './ResolverAPI.js'
+
+/** Canonical Multicall3 deployment, same address on every chain it exists on. */
+const MULTICALL3_ADDRESS = '0xcA11bde05977b3631167028862bE2a173976CA11'
 
 export class EVMConnectionReadonlyAPI
     implements
@@ -270,26 +282,21 @@ export class EVMConnectionReadonlyAPI
         if (listOfAddress.some(isNativeTokenAddress)) {
             entities.push([NATIVE_TOKEN_ADDRESS ?? '', await this.getBalance(options.account, options)])
         }
-        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
-        if (!BALANCE_CHECKER_ADDRESS) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error(
-                    `BALANCE_CHECKER_ADDRESS for chain ${options.chainId} is not provided, do you forget to update packages/web3-constants/evm/ethereum.json ?`,
-                    BALANCE_CHECKER_ADDRESS,
-                )
-            }
-            return Object.fromEntries(entities)
-        }
-
         const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
 
         if (listOfNonNativeAddress.length) {
-            const balances = await this.getBalancesInChunks(
-                BALANCE_CHECKER_ADDRESS,
-                options.account as Address,
-                listOfNonNativeAddress as Address[],
-                options,
-            )
+            // the balance checker is not deployed on every chain (Robinhood, Zora,
+            // Pulse, ...): fall back to batched balanceOf reads through Multicall3
+            const balances =
+                BALANCE_CHECKER_ADDRESS ?
+                    await this.getBalancesInChunks(
+                        BALANCE_CHECKER_ADDRESS,
+                        options.account as Address,
+                        listOfNonNativeAddress as Address[],
+                        options,
+                    )
+                :   await this.getBalancesWithMulticall3(options.account, listOfNonNativeAddress, options)
             listOfNonNativeAddress.forEach((x, i) => {
                 entities.push([x, balances[i]?.toString() ?? '0'])
             })
@@ -329,6 +336,57 @@ export class EVMConnectionReadonlyAPI
                 ])
                 return [...left, ...right]
             }
+        }
+        const CHUNK_SIZE = 100
+        const chunks = Array.from({ length: Math.ceil(tokens.length / CHUNK_SIZE) }, (_, i) =>
+            tokens.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE),
+        )
+        return (await Promise.all(chunks.map(readBalances))).flat()
+    }
+
+    /**
+     * Fallback for chains without a deployed balance checker: batch balanceOf
+     * reads through the canonical Multicall3 contract. Individual token calls
+     * may fail, but RPC and Multicall3 failures must propagate to the caller.
+     */
+    private async getBalancesWithMulticall3(
+        account: string,
+        tokens: string[],
+        options: EVMConnectionOptions,
+    ): Promise<readonly bigint[]> {
+        const readBalances = async (chunk: string[]): Promise<readonly bigint[]> => {
+            if (!chunk.length) return []
+            const callData = encodeFunctionData({
+                abi: ERC20Abi,
+                functionName: 'balanceOf',
+                args: [account as Address],
+            })
+            const results = await this.Request.getViem(options).readContract({
+                // descriptor-built chains are absent from viem's chain registry, resolve Multicall3 ourselves
+                address: MULTICALL3_ADDRESS,
+                abi: multicall3Abi,
+                functionName: 'aggregate3',
+                args: [
+                    chunk.map((target) => ({
+                        target: target as Address,
+                        allowFailure: true,
+                        callData,
+                    })),
+                ],
+            })
+            return results.map(({ success, returnData }) => {
+                if (!success) return 0n
+                try {
+                    return decodeFunctionResult({
+                        abi: ERC20Abi,
+                        functionName: 'balanceOf',
+                        data: returnData,
+                    })
+                } catch {
+                    // Non-standard tokens may return malformed data even when the low-level call succeeds.
+                    return 0n
+                }
+            })
         }
         const CHUNK_SIZE = 100
         const chunks = Array.from({ length: Math.ceil(tokens.length / CHUNK_SIZE) }, (_, i) =>

@@ -29,10 +29,13 @@ class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Schem
             )
         )?.filter((x) => x.is_verified)
 
+        // Preserve an upstream failure so the hub can try the next asset provider.
+        if (!result) return
+
         return createPageable(
             unionWith(
                 formatAssets(
-                    (result ?? []).map((x) => {
+                    result.map((x) => {
                         const isEther = ['arb', 'aurora'].includes(x.chain) && ['ETH', 'AETH'].includes(x.name)
                         return {
                             ...x,

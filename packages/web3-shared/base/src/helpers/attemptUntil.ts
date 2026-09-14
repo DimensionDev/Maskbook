@@ -5,7 +5,7 @@ export function createPredicate<T>(candidates: T[]) {
 }
 
 export async function attemptUntil<T>(
-    funcs: Array<() => Promise<T> | undefined>,
+    funcs: Array<() => Promise<T | undefined> | undefined>,
     fallback: T,
     predicator: (result: Awaited<T> | undefined) => boolean = isUndefined,
 ) {

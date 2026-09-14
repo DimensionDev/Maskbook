@@ -7,6 +7,7 @@
   "references": [
     { "path": "../tsconfig.json" },
     { "path": "../../web3-shared/base/tsconfig.json" },
+    { "path": "../../web3-shared/evm/tsconfig.json" },
     { "path": "../../base/tsconfig.json" }
   ]
 }

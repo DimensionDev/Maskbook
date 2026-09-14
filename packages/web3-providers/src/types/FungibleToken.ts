@@ -15,7 +15,7 @@ export namespace FungibleTokenAPI {
         getAssets?: (
             address: string,
             options?: BaseHubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
+        ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator> | undefined>
         /** Get trusted fungible assets. */
         getTrustedAssets?: (
             address: string,
