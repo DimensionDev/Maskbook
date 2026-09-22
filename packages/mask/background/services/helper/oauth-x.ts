@@ -182,8 +182,34 @@ async function getAccessToken(client: OAuth, options: { oauth_verifier: string; 
 }
 
 const client = new OAuth(process.env.FIREFLY_X_CLIENT_ID, process.env.FIREFLY_X_CLIENT_SECRET)
-let pendingOAuth: PromiseWithResolvers<{ oauth_verifier: string; oauth_token: string }> | undefined
+interface OAuthCallback {
+    oauth_verifier: string
+    oauth_token: string
+}
+interface PendingOAuth {
+    expectedToken: string
+    resolver: PromiseWithResolvers<OAuthCallback>
+}
+
+let pendingOAuth: PendingOAuth | undefined
+let oauthRequestInProgress = false
+
 export async function requestXOAuthToken(): Promise<{ user_id: string | null; screen_name: string | null } | null> {
+    if (oauthRequestInProgress) throw new Error('X OAuth flow is already in progress')
+    oauthRequestInProgress = true
+
+    try {
+        return await requestXOAuthTokenInternal()
+    } finally {
+        pendingOAuth = undefined
+        oauthRequestInProgress = false
+    }
+}
+
+async function requestXOAuthTokenInternal(): Promise<{
+    user_id: string | null
+    screen_name: string | null
+} | null> {
     await requestExtensionPermissionFromContentScript({
         origins: XOAuthRequestOrigins,
     })
@@ -194,11 +220,17 @@ export async function requestXOAuthToken(): Promise<{ user_id: string | null; sc
     const step1 = await getRequestToken(client)
     const step1_oauth_token = step1.get('oauth_token')
     if (!step1_oauth_token) return null
-    pendingOAuth = Promise.withResolvers()
+
+    const pending = {
+        expectedToken: step1_oauth_token,
+        resolver: Promise.withResolvers<OAuthCallback>(),
+    }
+    pendingOAuth = pending
+
     await browser.tabs.create({
         url: 'https://api.twitter.com/oauth/authenticate?oauth_token=' + step1_oauth_token,
     })
-    const step2 = await getAccessToken(client, await timeout(pendingOAuth.promise, 1000 * 60))
+    const step2 = await getAccessToken(client, await timeout(pending.resolver.promise, 1000 * 60))
     {
         const oauth_token = step2.get('oauth_token')
         const oauth_token_secret = step2.get('oauth_token_secret')
@@ -218,11 +250,11 @@ export async function requestXOAuthToken(): Promise<{ user_id: string | null; sc
 }
 
 export async function resolveXOAuth(oauth_verifier: string | null, oauth_token: string | null) {
-    if (!oauth_verifier || !oauth_token) {
-        pendingOAuth?.reject(new Error('Invalid OAuth parameters'))
-        return
-    }
-    pendingOAuth?.resolve({ oauth_verifier, oauth_token })
+    const pending = pendingOAuth
+    if (!pending || !oauth_verifier || !oauth_token) return
+    if (oauth_token !== pending.expectedToken) return
+
+    pending.resolver.resolve({ oauth_verifier, oauth_token })
 }
 
 export function resetXOAuth() {
