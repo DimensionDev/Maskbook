@@ -22,7 +22,6 @@ export const walletRoutes: RouteObject[] = [
             { path: r(PopupRoutes.AddNetwork), lazy: () => import('./EditNetwork/index.js') },
             { path: r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes), lazy: () => import('./EditNetwork/index.js') },
             { path: r(PopupRoutes.Receive), lazy: () => import('./Receive/index.js') },
-            { path: r(PopupRoutes.SyncTwitterCookies), lazy: () => import('./SyncTwitterCookies/index.js') },
         ],
     },
     {

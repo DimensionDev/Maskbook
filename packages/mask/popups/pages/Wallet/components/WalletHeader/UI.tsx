@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { ChainIcon, CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
-import { PersistentStorages, PopupRoutes } from '@masknet/shared-base'
+import { PersistentStorages } from '@masknet/shared-base'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress, type ReasonableNetwork } from '@masknet/web3-shared-base'
@@ -14,7 +14,6 @@ import { useSubscription } from 'use-subscription'
 import { WalletAvatar } from '../../../../components/WalletAvatar/index.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
     return {
@@ -212,20 +211,6 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                             :   null}
                         </Typography>
                     </Box>
-                    {isFireflyWallet ?
-                        <Icons.QrcodeIcon
-                            size={20}
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                navigate(
-                                    urlcat(PopupRoutes.SyncTwitterCookies, {
-                                        address,
-                                        name: walletName,
-                                    }),
-                                )
-                            }}
-                        />
-                    :   null}
                     {disabled ? null : <Icons.ArrowDrop className={classes.arrow} />}
                 </div>
             </div>
