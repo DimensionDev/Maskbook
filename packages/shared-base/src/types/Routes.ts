@@ -57,7 +57,6 @@ export enum PopupRoutes {
     EditNetwork = '/wallet/edit-network',
     AddNetwork = '/wallet/add-network',
     Receive = '/wallet/receive',
-    SyncTwitterCookies = '/wallet/sync-twitter-cookies',
     Personas = '/personas',
     Logout = '/personas/logout',
     AccountDetail = '/personas/accounts/detail',
