@@ -44,6 +44,7 @@ export const base = {
                     ChainId.Metis,
                     ChainId.XLayer,
                     ChainId.Sei,
+                    ChainId.Robinhood,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
