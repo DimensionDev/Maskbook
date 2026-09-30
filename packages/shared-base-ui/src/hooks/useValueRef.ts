@@ -7,8 +7,12 @@ function getServerSnapshot(): never {
 }
 export function useValueRef<T>(ref: ValueRef<T>): T {
     if ('readyPromise' in ref) {
-        const ref2 = ref as ValueRefWithReady<T>
-        if (!ref2.ready) use(ref2.readyPromise)
+        // Must NOT be conditional on `ref.ready`. When a component suspends here and is replayed
+        // after the promise resolves, React only switches from the update dispatcher back to the
+        // mount dispatcher inside `use`. Skipping `use` on replay (because `ready` flipped to true)
+        // makes the following hooks throw "Update hook called on initial render" (React #467).
+        // `use` on an already-resolved promise returns synchronously once React has tracked it.
+        use((ref as ValueRefWithReady<T>).readyPromise)
     }
     return useSyncExternalStore(
         (f) => ref.addListener(f),
