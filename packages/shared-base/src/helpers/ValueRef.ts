@@ -36,7 +36,10 @@ export class ValueRefWithReady<T> extends ValueRef<T> {
         // this is unsafe. we assigned T | undefined to T
         super(value!, isEqual)
         const { promise, resolve } = Promise.withResolvers<void>()
-        this.readyPromise = promise.then(() => this.value)
+        const readyPromise = promise.then(() => this.value)
+        // Follow React's thenable protocol so `use(readyPromise)` returns synchronously once ready.
+        readyPromise.then((value) => Object.assign(readyPromise, { status: 'fulfilled', value }))
+        this.readyPromise = readyPromise
         this.#nowReady = resolve
     }
 
