@@ -31,7 +31,6 @@ function getUserId(ele: HTMLElement) {
 function createRootElement() {
     const root = document.createElement('div')
     Object.assign(root.style, {
-        height: '100%',
         display: 'flex',
         alignItems: 'center',
     })
@@ -59,6 +58,12 @@ export function injectTipsButtonOnPost(signal: AbortSignal) {
                 // with the tree orphaned off-DOM. Remount only when the author changes.
                 if (userId === mountedUserId) return
                 root?.destroy()
+                // Center the slot in the action bar on its own instead of stretching to the
+                // row height and re-centering the content: X varies the row geometry between
+                // the main post and compact replies, and the stretch + height:100% chain used
+                // to leave the coin hanging below the icon line on some of them. The spacing
+                // lives on PostTipsSlot's span (below) so it collapses with the hidden button.
+                proxy.after.style.alignSelf = 'center'
                 root = attachReactTreeWithContainer(proxy.afterShadow, {
                     signal,
                     tag: createRootElement,
@@ -82,6 +87,13 @@ const useStyles = makeStyles()(() => ({
     disabled: {
         display: 'none',
     },
+    // Spacing must sit on this span — it is display:none while the button resolves, so
+    // tips-less posts keep the stock action-bar layout. The left margin mirrors X's own
+    // ~12px gap between action icons; no right margin — the coin's right edge then lines
+    // up with where the share glyph ends on tips-less posts.
+    slot: {
+        marginLeft: 12,
+    },
 }))
 
 interface Props {
@@ -95,7 +107,7 @@ const Component = createInjectHooksRenderer(
 const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
     const themeSetting = useThemeSettings()
     const tipStyle = TipButtonStyle[themeSetting.size]
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const identity = useUserIdentity(userId)
 
     const [disabled, setDisabled] = useState(true)
@@ -103,7 +115,7 @@ const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
     if (!identity?.identifier) return null
 
     return (
-        <span className={disabled ? classes.disabled : undefined}>
+        <span className={disabled ? cx(classes.slot, classes.disabled) : classes.slot}>
             <Component
                 identity={identity?.identifier}
                 buttonSize={tipStyle.buttonSize}
