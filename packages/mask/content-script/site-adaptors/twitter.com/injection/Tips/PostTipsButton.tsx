@@ -51,7 +51,9 @@ export function injectTipsButtonOnPost(signal: AbortSignal) {
                     afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = ele
-                ele.style.flex = '1'
+                // Don't set flex on the share wrapper: X sizes it to its content, flush right.
+                // flex:1 turns it into an extra growing item, left-aligning the share icon and
+                // leaving dead space at the right end of the action bar (mf-6844).
 
                 const root = attachReactTreeWithContainer(proxy.afterShadow, {
                     signal,
