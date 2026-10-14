@@ -531,7 +531,8 @@ export namespace FireflyTwitterAPI {
         has_graduated_access: boolean
         is_blue_verified: boolean
         profile_image_shape: string
-        legacy: LegacyUserInfo
+        /** Absent on degraded `User` results (see TwitterUserInfoResponse). */
+        legacy?: LegacyUserInfo
         professional?: {
             rest_id: string
             professional_type: string
@@ -562,7 +563,12 @@ export namespace FireflyTwitterAPI {
         creator_subscriptions_count: number
     }
 
-    export type TwitterUserInfoResponse = FireflyResponse<{ data: { user: { result: TwitterUserInfo } } }>
+    /**
+     * The proxied GraphQL payload degrades: the backend replies `{code: 0, data: {}}` when the
+     * live fetch fails with no cached snapshot, and suspended/rate-limited lookups can come back
+     * as a `User` result without `legacy`. Every hop is therefore optional on the wire.
+     */
+    export type TwitterUserInfoResponse = FireflyResponse<{ data?: { user?: { result?: TwitterUserInfo } } }>
 
     export type TwitterUserV2Response = FireflyResponse<{ result: { legacy: LegacyUserInfo } }>
 }

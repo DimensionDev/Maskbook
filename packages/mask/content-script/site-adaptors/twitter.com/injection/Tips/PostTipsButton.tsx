@@ -1,8 +1,6 @@
-import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { Flags } from '@masknet/flags'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin, createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { makeStyles } from '@masknet/theme'
-import { noop } from 'lodash-es'
+import { makeStyles, type ReactRootShadowed } from '@masknet/theme'
 import { memo, useState } from 'react'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
@@ -12,7 +10,14 @@ import { querySelectorAll } from '../../utils/selector.js'
 import { useUserIdentity } from './hooks.js'
 
 function postShareButtonSelector() {
-    return querySelectorAll('article[data-testid="tweet"] [role="group"] > div:has([aria-haspopup="menu"]):last-child')
+    // The share wrapper is the action-bar cell whose menu button carries no data-testid (the
+    // retweet button also has aria-haspopup="menu" but data-testid="retweet").
+    // Never match by :last-child here: the injected tips span is appended right after the
+    // wrapper, which un-matches a :last-child selector and makes the watcher add/remove the
+    // slot forever — the button flickers in/out at MutationObserver cadence.
+    return querySelectorAll(
+        'article[data-testid="tweet"] [role="group"] > div:has(button[aria-haspopup="menu"]:not([data-testid]))',
+    )
 }
 
 function getUserId(ele: HTMLElement) {
@@ -26,7 +31,6 @@ function getUserId(ele: HTMLElement) {
 function createRootElement() {
     const root = document.createElement('div')
     Object.assign(root.style, {
-        height: '100%',
         display: 'flex',
         alignItems: 'center',
     })
@@ -36,36 +40,43 @@ function createRootElement() {
 export function injectTipsButtonOnPost(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(postShareButtonSelector())
     startWatch(
-        watcher.useForeach((ele) => {
-            let remover = noop
-            const remove = () => remover()
+        watcher.useForeach((ele, _, proxy) => {
+            let root: ReactRootShadowed | undefined
+            let mountedUserId: string | undefined
 
-            const run = async () => {
+            const run = () => {
+                // `ele` is the watcher proxy's live node: reads follow the current DOM even
+                // after X replaces the action bar, and the proxy re-anchors itself then.
                 const userId = getUserId(ele)
+                // The avatar may not exist yet when the action bar first matches; retry on
+                // the next mutation.
                 if (!userId) return
-                // onNodeMutation/onTargetChanged re-run this for the same `ele`. A fresh DOMProxy()
-                // here creates a brand-new shadow-root sibling every time, so the previous one must
-                // be torn down first or it leaks a live React tree on every mutation of this post.
-                remove()
-                const proxy = DOMProxy({
-                    afterShadowRootInit: Flags.shadowRootInit,
-                })
-                proxy.realCurrent = ele
-                ele.style.flex = '1'
-
-                const root = attachReactTreeWithContainer(proxy.afterShadow, {
+                // Tweets mutate constantly (counters, virtualization, hover states) and every
+                // mutation used to tear the whole React tree down and remount it, so the
+                // rendered button vanished while the fresh tree re-resolved identity/accounts
+                // — and a teardown racing a node replacement could leave the live slot empty
+                // with the tree orphaned off-DOM. Remount only when the author changes.
+                if (userId === mountedUserId) return
+                root?.destroy()
+                // Center the slot in the action bar on its own instead of stretching to the
+                // row height and re-centering the content: X varies the row geometry between
+                // the main post and compact replies, and the stretch + height:100% chain used
+                // to leave the coin hanging below the icon line on some of them. The spacing
+                // lives on PostTipsSlot's span (below) so it collapses with the hidden button.
+                proxy.after.style.alignSelf = 'center'
+                root = attachReactTreeWithContainer(proxy.afterShadow, {
                     signal,
                     tag: createRootElement,
                 })
                 root.render(<PostTipsSlot userId={userId} />)
-                remover = root.destroy
+                mountedUserId = userId
             }
 
             run()
             return {
                 onNodeMutation: run,
                 onTargetChanged: run,
-                onRemove: remove,
+                onRemove: () => root?.destroy(),
             }
         }),
         signal,
@@ -75,6 +86,13 @@ export function injectTipsButtonOnPost(signal: AbortSignal) {
 const useStyles = makeStyles()(() => ({
     disabled: {
         display: 'none',
+    },
+    // Spacing must sit on this span — it is display:none while the button resolves, so
+    // tips-less posts keep the stock action-bar layout. The left margin mirrors X's own
+    // ~12px gap between action icons; no right margin — the coin's right edge then lines
+    // up with where the share glyph ends on tips-less posts.
+    slot: {
+        marginLeft: 12,
     },
 }))
 
@@ -89,7 +107,7 @@ const Component = createInjectHooksRenderer(
 const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
     const themeSetting = useThemeSettings()
     const tipStyle = TipButtonStyle[themeSetting.size]
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const identity = useUserIdentity(userId)
 
     const [disabled, setDisabled] = useState(true)
@@ -97,7 +115,7 @@ const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
     if (!identity?.identifier) return null
 
     return (
-        <span className={disabled ? classes.disabled : undefined}>
+        <span className={disabled ? cx(classes.slot, classes.disabled) : classes.slot}>
             <Component
                 identity={identity?.identifier}
                 buttonSize={tipStyle.buttonSize}
