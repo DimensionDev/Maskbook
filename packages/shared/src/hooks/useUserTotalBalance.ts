@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getWalletPortfolioTotalValue } from '../../../web3-providers/src/Firefly/Portfolio.js'
+import { getWalletPortfolioTotalValue } from '@masknet/web3-providers'
 
 export function useUserTotalBalance(address: string | undefined) {
     return useQuery({

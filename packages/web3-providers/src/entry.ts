@@ -91,6 +91,7 @@ export {
     FIREFLY_SITE_URL,
     FireflyDomain,
     FireflyWalletHistory,
+    getWalletPortfolioTotalValue,
     // Embedded wallet (replaces @privy-io/react-auth)
     FireflyEmbeddedWalletClient,
     FireflyEmbeddedProvider,
