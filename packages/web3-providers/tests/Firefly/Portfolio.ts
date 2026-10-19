@@ -33,6 +33,16 @@ describe('getWalletPortfolioTotalValue', () => {
         )
     })
 
+    it('keeps a Solana base58 address as-is', async () => {
+        mocks.fetchJSON.mockResolvedValue({ code: 0, data: { total_assets: { usd_value: '1.5' } } })
+        const solana = '7EYnhQoR9YM3N7UoaKRoA44Uy8JeaZV3qyouov87awMs'
+
+        await expect(getWalletPortfolioTotalValue(solana)).resolves.toBe(1.5)
+        expect(mocks.fetchJSON).toHaveBeenCalledWith(
+            `https://api.firefly.land/v1/wallet/portfolio/summary?address=${solana}`,
+        )
+    })
+
     it('throws when the backend reports an error', async () => {
         mocks.fetchJSON.mockResolvedValue({ code: 1, error: ['boom'] })
 
