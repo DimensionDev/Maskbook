@@ -13,7 +13,6 @@ packages:
   - packages/web3-shared/solana
   # forked dependency
   - patches/scamsniffer-detector
-'@dimensiondev:registry': https://npm.pkg.github.com/
 ignoreScripts: true
 blockExoticSubdeps: true
 trustPolicy: no-downgrade
@@ -23,26 +22,40 @@ trustPolicyIgnoreAfter: 43200
 minimumReleaseAge: 0
 # minimumReleaseAgeExclude:
 #   - package-name
-allowBuilds: []
+allowBuilds: {}
+catalog:
+  react: 0.0.0-experimental-58af67a8f8-20240628
+  react-dom: 0.0.0-experimental-58af67a8f8-20240628
+  '@types/react': ^19.2.10
+  '@types/react-dom': ^19.2.3
+  '@swc/core': 1.15.43
+  '@emotion/react': 11.14.0
+  '@emotion/styled': 11.14.1
+  '@mui/icons-material': 9.2.0
+  '@mui/material': 9.2.0
+  '@mui/private-theming': 9.2.0
+  '@mui/styled-engine': 9.1.1
+  '@mui/system': 9.2.0
+  '@mui/utils': 9.2.0
 overrides:
-  '@emotion/styled': $@emotion/styled
-  '@emotion/react': $@emotion/react
-  '@mui/icons-material': $@mui/icons-material
-  '@mui/material': $@mui/material
-  '@mui/private-theming': $@mui/private-theming
-  '@mui/styled-engine': $@mui/styled-engine
-  '@mui/system': $@mui/system
-  '@mui/utils': $@mui/utils
-  '@swc/core': $@swc/core
+  '@emotion/styled': 'catalog:'
+  '@emotion/react': 'catalog:'
+  '@mui/icons-material': 'catalog:'
+  '@mui/material': 'catalog:'
+  '@mui/private-theming': 'catalog:'
+  '@mui/styled-engine': 'catalog:'
+  '@mui/system': 'catalog:'
+  '@mui/utils': 'catalog:'
+  '@swc/core': 'catalog:'
   '@splinetool/runtime': 0.9.342
   '@tanstack/react-query': ^5.49.2
   '@types/node': 22.13.9
-  '@types/react': $@types/react
-  '@types/react-dom': $@types/react-dom
+  '@types/react': 'catalog:'
+  '@types/react-dom': 'catalog:'
   elliptic: 6.6.1
   glob-stream: 7.0.0
-  react: $react
-  react-dom: $react-dom
+  react: 'catalog:'
+  react-dom: 'catalog:'
   tss-react: 4.9.21
   reflect-metadata: 0.1.13
   # unused
