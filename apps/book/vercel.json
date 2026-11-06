@@ -1,6 +1,6 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "buildCommand": "cd ../.. && pnpm --filter @masknet/book build",
-    "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+    "installCommand": "cd ../.. && printf '%s\\n' \"$NPM_RC\" >> .npmrc && pnpm install --frozen-lockfile",
     "outputDirectory": "dist"
 }
