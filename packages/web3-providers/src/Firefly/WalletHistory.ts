@@ -9,30 +9,14 @@ import {
     type TransactionAsset,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { ChainId, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-es'
 import urlcat from 'urlcat'
 import type { BaseHubOptions } from '../entry-types.js'
-import { FIREFLY_BASE_URL } from './constants.js'
+import { FIREFLY_BASE_URL, FIREFLY_WALLET_HISTORY_CHAINS } from './constants.js'
 import { resolveFireflyResponseData } from './helpers.js'
 
-// Chains previously served by the Zerion proxy.
-const SUPPORTED_CHAINS = [
-    ChainId.Mainnet,
-    ChainId.Optimism,
-    ChainId.BSC,
-    ChainId.xDai,
-    ChainId.Fantom,
-    ChainId.Polygon,
-    ChainId.Arbitrum,
-    ChainId.Avalanche,
-    ChainId.Celo,
-    ChainId.Base,
-    ChainId.Scroll,
-    ChainId.XLayer,
-    ChainId.Aurora,
-    ChainId.Zora,
-].join(',')
+const SUPPORTED_CHAINS = FIREFLY_WALLET_HISTORY_CHAINS.join(',')
 
 // Firefly marks native currencies with this sentinel address.
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -132,7 +116,7 @@ const cateTypeMap: Partial<Record<FireflyWalletHistoryAPI.Category, 'send' | 're
     [FireflyWalletHistoryAPI.Category.NftReceive]: 'receive',
     [FireflyWalletHistoryAPI.Category.TokenSend]: 'send',
     [FireflyWalletHistoryAPI.Category.NftSend]: 'send',
-    [FireflyWalletHistoryAPI.Category.TokenBridge]: 'send',
+    // TokenBridge is resolved per transaction: outbound (has sends) vs inbound.
 }
 const cateNameMap: Record<FireflyWalletHistoryAPI.Category, string> = {
     [FireflyWalletHistoryAPI.Category.TokenReceive]: 'Receive',
@@ -236,10 +220,9 @@ export function formatWalletHistoryTransaction(
     const chainId = item.chain_id
     if (!isValidChainId(chainId)) return null
     const { category } = item
-    const type =
-        category === FireflyWalletHistoryAPI.Category.TokenBridge && !item.token_sends?.length ?
-            'receive'
-        :   (typeMap[category] ?? 'contract interaction')
+    const isBridge = category === FireflyWalletHistoryAPI.Category.TokenBridge
+    const isInboundBridge = isBridge && !item.token_sends?.length
+    const type = isInboundBridge ? 'receive' : (typeMap[category] ?? 'contract interaction')
     const assets = compact([
         ...(item.token_receives ?? []).map((x) => formatTokenAsset(x, chainId, 'receive')),
         ...(item.token_sends ?? []).map((x) => formatTokenAsset(x, chainId, 'send')),
@@ -248,7 +231,15 @@ export function formatWalletHistoryTransaction(
     ])
     // Prefer the real counterparty over the executed contract address (`to_address`),
     // so the UI shows the actual recipient without an extra Chainbase lookup.
-    const sendRecipient = item.token_sends?.[0]?.recipient || item.nft_sends?.[0]?.recipient
+    // Only for plain sends: for swaps/mints/interactions the first outgoing transfer
+    // usually goes to a pool or mint contract, and `to_address` is the more useful contract.
+    const sendRecipient =
+        (
+            category === FireflyWalletHistoryAPI.Category.TokenSend ||
+            category === FireflyWalletHistoryAPI.Category.NftSend
+        ) ?
+            item.token_sends?.[0]?.recipient || item.nft_sends?.[0]?.recipient
+        :   undefined
     const approveSpender =
         (
             category === FireflyWalletHistoryAPI.Category.TokenApprove ||
@@ -262,7 +253,11 @@ export function formatWalletHistoryTransaction(
         hash: item.hash,
         chainId,
         type,
-        cateType: cateTypeMap[category],
+        cateType:
+            isBridge ?
+                isInboundBridge ? 'receive'
+                :   'send'
+            :   cateTypeMap[category],
         cateName: cateNameMap[category],
         from: item.from_address,
         to,

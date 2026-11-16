@@ -1035,7 +1035,7 @@ index ff31184..ca192b5 100644
 diff --git a/_esm/clients/createClient.js b/_esm/clients/createClient.js
 --- a/_esm/clients/createClient.js
 +++ b/_esm/clients/createClient.js
-@@ -89,20 +89,26 @@
+@@ -89,20 +89,27 @@
      ])
          if (Object.hasOwn(action, key)) {
              const helper = action[key];
@@ -1063,13 +1063,14 @@ diff --git a/_esm/clients/createClient.js b/_esm/clients/createClient.js
 +                    return helper(client, args);
 +                },
 +                writable: true,
++                enumerable: true,
 +                configurable: true,
 +            });
          }
      for (const key of ['extractEvent', 'extractEvents'])
          if (Object.hasOwn(action, key))
 -            wrapped[key] = action[key];
-+            Object.defineProperty(wrapped, key, { value: action[key], writable: true, configurable: true });
++            Object.defineProperty(wrapped, key, { value: action[key], writable: true, enumerable: true, configurable: true });
      return wrapped;
  }
  /**

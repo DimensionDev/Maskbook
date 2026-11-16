@@ -17,6 +17,33 @@ export const PRIVY_SUPPORTED_CHAINS = [
     ChainId.Celo,
 ]
 
+/**
+ * EVM chains covered by the Firefly wallet endpoints (Zerion-backed upstream).
+ * Used by `/v1/wallet_history/transactions`.
+ */
+export const FIREFLY_WALLET_HISTORY_CHAINS = [
+    ChainId.Mainnet,
+    ChainId.Optimism,
+    ChainId.BSC,
+    ChainId.xDai,
+    ChainId.Fantom,
+    ChainId.Polygon,
+    ChainId.Arbitrum,
+    ChainId.Avalanche,
+    ChainId.Celo,
+    ChainId.Base,
+    ChainId.Scroll,
+    ChainId.XLayer,
+    ChainId.Aurora,
+    ChainId.Zora,
+]
+
+/**
+ * EVM chains covered by `/v1/misc/all_token_list`. Balances on other chains
+ * must be fetched over RPC instead.
+ */
+export const FIREFLY_ASSETS_SUPPORTED_CHAINS = [...FIREFLY_WALLET_HISTORY_CHAINS, ChainId.Robinhood]
+
 export const EMAIL_REGEX =
     /(([^\s"(),./:;<>@[\\\]]+(\.[^\s"(),./:;<>@[\\\]]+)*)|(".+"))@((\[(?:\d{1,3}\.){3}\d{1,3}\])|(([\dA-Za-z-]+\.)+[A-Za-z]{2,}))$/u
 

@@ -1,4 +1,5 @@
 import { EMPTY_LIST, hidingScamSettings, type PageIndicator } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { FireflyWalletHistory } from '@masknet/web3-providers'
 import type { RecentTransaction } from '@masknet/web3-shared-base'
@@ -13,18 +14,19 @@ import { useEffect, useMemo } from 'react'
  */
 export function useTransactions() {
     const { account } = useChainContext()
+    const filterSpam = useValueRef(hidingScamSettings)
     const response = useInfiniteQuery({
-        queryKey: ['firefly', 'wallet-history', account, hidingScamSettings.value],
+        queryKey: ['firefly', 'wallet-history', account, filterSpam],
         initialPageParam: undefined as PageIndicator | undefined,
         queryFn: async ({ pageParam }) => {
             return FireflyWalletHistory.getTransactions(account, {
                 indicator: pageParam,
-                filterSpam: hidingScamSettings.value,
+                filterSpam,
             })
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator as PageIndicator | undefined,
-        select: (data) =>
-            data.pages.flatMap((page) => page.data).filter((t) => !hidingScamSettings.value || !t.isScam) || EMPTY_LIST,
+        // Spam is filtered server-side via `filter_spam`.
+        select: (data) => data.pages.flatMap((page) => page.data) || EMPTY_LIST,
     })
 
     const networks = useNetworks()
