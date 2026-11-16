@@ -62,7 +62,12 @@ A section can have sub-categories one level deep: `demos/<section>/<group>/<name
 - Root Directory: `apps/book`
 - Build / install commands come from `apps/book/vercel.json` (they `cd` to the repo root so
   the pnpm workspace resolves). Enable "Include source files outside of the Root Directory".
-- Environment variable `NPM_RC` (required, set for **both Production and Preview**):
+- Only `develop` and `released` are deployed (`git.deploymentEnabled` in `vercel.json`). Other
+  branches and PRs are skipped. This is **not** a security boundary for fork PRs, because a PR can
+  edit `vercel.json` itself, so keep **Git Fork Protection** enabled in Project Settings → Git.
+- Environment variable `NPM_RC` (required). Scope it to the environments that `develop` and
+  `released` deploy to: Production, plus Preview limited to the `released` branch if that
+  branch is not the Production branch. Don't expose it to all Preview branches:
 
   ```
   //npm.pkg.github.com/:_authToken=<GitHub token with read:packages>

@@ -2,5 +2,12 @@
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "buildCommand": "cd ../.. && pnpm --filter @masknet/book build",
     "installCommand": "cd ../.. && printf '%s\\n' \"${NPM_RC:?NPM_RC env var is required (GitHub Packages auth, see apps/book/README.md)}\" >> .npmrc && pnpm install --frozen-lockfile",
-    "outputDirectory": "dist"
+    "outputDirectory": "dist",
+    "git": {
+        "deploymentEnabled": {
+            "**": false,
+            "develop": true,
+            "released": true
+        }
+    }
 }
