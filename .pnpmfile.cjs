@@ -69,7 +69,7 @@ module.exports = {
 function* notNormativeInstall(deps) {
     for (const key in deps) {
         const val = deps[key]
-        if (val.startsWith('workspace:')) continue
+        if (val.startsWith('workspace:') || val.startsWith('catalog:')) continue
         if (val.includes(':') || val.includes('/')) {
             yield [key, val]
         }
