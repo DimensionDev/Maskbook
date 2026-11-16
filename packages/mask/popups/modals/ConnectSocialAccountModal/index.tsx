@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { EMPTY_LIST, SOCIAL_MEDIA_NAME, type EnhanceableSite } from '@masknet/shared-base'
+import { SOCIAL_MEDIA_NAME, type EnhanceableSite } from '@masknet/shared-base'
 import { PersonaContext, SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
@@ -13,7 +13,7 @@ import { EventMap } from '../../../shared/definitions/event.js'
 import { Trans } from '@lingui/react/macro'
 
 export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal(props) {
-    const { data: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
+    const { data: definedSocialNetworks } = useSupportSocialNetworks()
     const networks = useMemo(
         () =>
             definedSocialNetworks.map((networkIdentifier) => {

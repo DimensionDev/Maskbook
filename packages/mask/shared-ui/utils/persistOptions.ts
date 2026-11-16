@@ -40,9 +40,16 @@ const asyncStoragePersister = createAsyncStoragePersister({
     deserialize: (_data) => {
         const data = _data as unknown as PersistedClient
         data.clientState.queries.forEach((query) => {
+            const state: Record<string, unknown> = {}
             for (const key in query.state) {
-                ;(query.state as any)[key] = simpleEncoder.decode((query.state as any)[key])
+                try {
+                    state[key] = simpleEncoder.decode((query.state as any)[key])
+                } catch {
+                    // A single corrupted entry must not fail the whole restore,
+                    // which would make the persister discard the entire cache (mf-6846).
+                }
             }
+            query.state = state as unknown as typeof query.state
         })
         return data
     },
