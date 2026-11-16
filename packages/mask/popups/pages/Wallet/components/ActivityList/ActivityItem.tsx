@@ -13,7 +13,6 @@ import {
 } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, EVMWeb3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
-import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import {
     TransactionStatusType,
     isLessThan,
@@ -196,8 +195,8 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const blockNumber = transaction?.blockNumber
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { data: tx, isPending: loadingTx } = useQuery({
-        // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
-        // This also could be an ERC20 transfer, which Debank returns the token contract rather than receiver as `to_address`.
+        // This could be a transaction of SmartPay which the Firefly history doesn't provide detailed info for.
+        // This also could be an ERC20 approve, whose input data is needed to decode the approved amount.
         // So we fetch via Chainbase
         enabled: (!transaction.to || transaction.type === 'transfer' || transaction.type === 'approve') && seen,
         queryKey: ['chainbase', 'transaction', transaction.chainId, transaction.id, blockNumber],
@@ -299,7 +298,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 </Typography>
             :   <div className={classes.assets}>
                     {transaction.assets.map((token, i) => {
-                        const isSend = token.direction === DebankTransactionDirection.SEND
+                        const isSend = token.direction === 'send'
                         const amount =
                             isLessThan(token.amount, '0.0001') ? '<0.0001' : trimZero(toFixed(token.amount, 4))
                         return (

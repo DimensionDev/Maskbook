@@ -1,6 +1,6 @@
 import { EMPTY_LIST, hidingScamSettings, type PageIndicator } from '@masknet/shared-base'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import { DeBankHistory } from '@masknet/web3-providers'
+import { FireflyWalletHistory } from '@masknet/web3-providers'
 import type { RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
 import { useInfiniteQuery, useQueries, useQueryClient } from '@tanstack/react-query'
@@ -8,16 +8,19 @@ import { sortBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 
 /**
- * Get locale transitions and merge them with ones from debank history.
- * Transactions from debank are fetching page by page.
+ * Get locale transitions and merge them with ones from the Firefly wallet history.
+ * Transactions from Firefly are fetching page by page.
  */
 export function useTransactions() {
     const { account } = useChainContext()
     const response = useInfiniteQuery({
-        queryKey: ['debank', 'all-history', account],
+        queryKey: ['firefly', 'wallet-history', account, hidingScamSettings.value],
         initialPageParam: undefined as PageIndicator | undefined,
         queryFn: async ({ pageParam }) => {
-            return DeBankHistory.getAllTransactions(account, { indicator: pageParam })
+            return FireflyWalletHistory.getTransactions(account, {
+                indicator: pageParam,
+                filterSpam: hidingScamSettings.value,
+            })
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator as PageIndicator | undefined,
         select: (data) =>
@@ -52,7 +55,7 @@ export function useTransactions() {
         // eslint-disable-next-line @tanstack/query/no-unstable-deps
     }, [queries])
 
-    // Some are already in debank history
+    // Some are already in the Firefly history
     const localeTxes = useMemo(() => {
         const now = Date.now()
         const duration = 1_800_000

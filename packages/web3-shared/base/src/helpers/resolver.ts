@@ -31,7 +31,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
 
 export const resolveSourceTypeName = createLookupTableResolver<SourceType, string>(
     {
-        [SourceType.DeBank]: 'DeBank',
+        [SourceType.Firefly]: 'Firefly',
         [SourceType.Zerion]: 'Zerion',
         [SourceType.UniswapInfo]: 'UniswapInfo',
         [SourceType.Flow]: 'Flow',

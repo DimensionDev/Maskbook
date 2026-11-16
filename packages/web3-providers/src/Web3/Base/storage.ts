@@ -42,8 +42,8 @@ export function settingsStorage(plugin: NetworkPluginID) {
     const { storage: settings } = PersistentStorages.Web3.createSubScope(`${plugin}_Settings`, {
         currencyType: CurrencyType.USD,
         gasOptionType: GasOptionType.NORMAL,
-        fungibleAssetSourceType: SourceType.DeBank,
-        nonFungibleAssetSourceType: SourceType.DeBank,
+        fungibleAssetSourceType: SourceType.Firefly,
+        nonFungibleAssetSourceType: SourceType.Firefly,
     })
     return Promise.all([
         settings.currencyType.initializedPromise,
