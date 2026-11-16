@@ -62,3 +62,17 @@ A section can have sub-categories one level deep: `demos/<section>/<group>/<name
 - Root Directory: `apps/book`
 - Build / install commands come from `apps/book/vercel.json` (they `cd` to the repo root so
   the pnpm workspace resolves). Enable "Include source files outside of the Root Directory".
+- Environment variable `NPM_RC` (required, set for **both Production and Preview**):
+
+  ```
+  //npm.pkg.github.com/:_authToken=<GitHub token with read:packages>
+  ```
+
+  `@dimensiondev/*` packages come from GitHub Packages, and pnpm 12's supply-chain policy check
+  fetches their registry metadata during install, so it needs this token. Vercel writes `NPM_RC`
+  to the Root Directory (`apps/book/.npmrc`), but pnpm only reads the **workspace-root** `.npmrc`,
+  so `installCommand` appends `$NPM_RC` to the repo-root `.npmrc`. The command stops with a clear
+  error if the variable is missing, instead of failing later with a 401/404 from the registry.
+
+- Don't run `installCommand` locally with a real token set: it writes the token into the tracked
+  repo-root `.npmrc`. If you do, run `git checkout .npmrc` afterwards so the token never gets committed.
