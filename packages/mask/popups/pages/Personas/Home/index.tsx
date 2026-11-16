@@ -1,13 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PersonaContext } from '@masknet/shared'
-import {
-    DashboardRoutes,
-    EMPTY_LIST,
-    PopupRoutes,
-    type EnhanceableSite,
-    type ProfileAccount,
-} from '@masknet/shared-base'
+import { DashboardRoutes, PopupRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
 import { PersonaHomeUI } from './UI.js'
 import Services from '#services'
 import { useSupportSocialNetworks } from '../../../hooks/index.js'
@@ -17,7 +11,7 @@ export const Component = memo(function PersonaHome() {
     const navigate = useNavigate()
     const { avatar, currentPersona, setSelectedAccount, personas, accounts } = PersonaContext.useContainer()
 
-    const { data: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
+    const { data: definedSocialNetworks } = useSupportSocialNetworks()
 
     const onCreatePersona = useCallback(() => {
         browser.tabs.create({

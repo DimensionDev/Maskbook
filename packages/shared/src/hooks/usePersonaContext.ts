@@ -18,13 +18,17 @@ function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    const { data: personas = EMPTY_LIST, refetch } = useQuery({
+    const { data, refetch } = useQuery({
         queryKey: ['@@my-own-persona-info'],
         queryFn: async () => (await queryOwnedPersonaInformation?.(false)) || null,
         refetchOnMount: true,
         networkMode: 'always',
     })
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
+
+    // The persisted react-query cache may hold a corrupted non-array value (mf-6846).
+    // Guard it so a bad cache crashes nothing and refetchOnMount heals the cache.
+    const personas = Array.isArray(data) ? data : EMPTY_LIST
 
     return { personas }
 }
