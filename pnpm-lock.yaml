@@ -215,7 +215,7 @@ patchedDependencies:
   reflect-metadata@0.1.13: 3c19db0a577da75ff3c875a0fa4ef586a0ca002a6f7935687a9cd524fea56f79
   ts-results-es: efb4c75ca619c8208ffd509a8b9c655e82fdceb165aa156647b03260525f9bcd
   urlcat@3.1.0: aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf
-  viem@2.56.3: 867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6
+  viem@2.56.3: f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e
 
 importers:
 
@@ -877,7 +877,7 @@ importers:
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
@@ -1473,7 +1473,7 @@ importers:
         version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
 
   packages/plugins/Savings:
     dependencies:
@@ -1521,7 +1521,7 @@ importers:
         version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
 
   packages/plugins/ScamWarning:
     dependencies:
@@ -1689,7 +1689,7 @@ importers:
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
 
   packages/plugins/Trader:
     dependencies:
@@ -1837,7 +1837,7 @@ importers:
     dependencies:
       '@lens-protocol/client':
         specifier: 0.0.0-canary-20250408064617
-        version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2))
+        version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2))
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -2002,7 +2002,7 @@ importers:
         version: 3.6.0(react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628))
       '@lens-protocol/client':
         specifier: 0.0.0-canary-20250408064617
-        version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))
+        version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -2122,7 +2122,7 @@ importers:
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       zod:
         specifier: ^3.24.2
         version: 3.24.4
@@ -2180,7 +2180,7 @@ importers:
         version: 11.1.1
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
     devDependencies:
       '@types/use-subscription':
         specifier: ^1.0.2
@@ -2357,7 +2357,7 @@ importers:
     dependencies:
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
 
   packages/web3-helpers:
     dependencies:
@@ -2456,7 +2456,7 @@ importers:
         version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
 
   packages/web3-providers:
     dependencies:
@@ -2471,7 +2471,7 @@ importers:
         version: link:../spl-name-service
       '@lens-protocol/client':
         specifier: 0.0.0-canary-20250408064617
-        version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))
+        version: 0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))
       '@masknet/base':
         specifier: workspace:^
         version: link:../base
@@ -2582,7 +2582,7 @@ importers:
         version: 9.0.1
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       zod:
         specifier: ^3.24.2
         version: 3.24.4
@@ -2668,7 +2668,7 @@ importers:
         version: 2.3.1
       viem:
         specifier: ^2.56.3
-        version: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)
+        version: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)
 
   packages/web3-shared/flow:
     dependencies:
@@ -13860,7 +13860,7 @@ snapshots:
 
   '@leichtgewicht/ip-codec@2.0.5': {}
 
-  '@lens-protocol/client@0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2))':
+  '@lens-protocol/client@0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2))':
     dependencies:
       '@lens-protocol/env': 0.0.0-canary-20250408064617
       '@lens-protocol/graphql': 0.0.0-canary-20250408064617(typescript@5.9.2)
@@ -13872,13 +13872,13 @@ snapshots:
       jwt-decode: 4.0.0
       loglevel: 1.9.2
     optionalDependencies:
-      viem: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+      viem: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2)
     transitivePeerDependencies:
       - '@gql.tada/svelte-support'
       - '@gql.tada/vue-support'
       - typescript
 
-  '@lens-protocol/client@0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))':
+  '@lens-protocol/client@0.0.0-canary-20250408064617(typescript@5.9.2)(viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4))':
     dependencies:
       '@lens-protocol/env': 0.0.0-canary-20250408064617
       '@lens-protocol/graphql': 0.0.0-canary-20250408064617(typescript@5.9.2)
@@ -13890,7 +13890,7 @@ snapshots:
       jwt-decode: 4.0.0
       loglevel: 1.9.2
     optionalDependencies:
-      viem: 2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+      viem: 2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
     transitivePeerDependencies:
       - '@gql.tada/svelte-support'
       - '@gql.tada/vue-support'
@@ -22387,7 +22387,7 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2):
+  viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.2):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
@@ -22404,7 +22404,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4):
+  viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
@@ -22421,7 +22421,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.56.3(patch_hash=867ac718c254a6d22ca73e8e1a8f05766f9d17ab3a1099f5ed3c04766ab656e6)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14):
+  viem@2.56.3(patch_hash=f0f389d2f41ab2ea709772163e5a101c9ef5b71aa5b2a9dead27f36208020a7e)(bufferutil@4.0.8)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0

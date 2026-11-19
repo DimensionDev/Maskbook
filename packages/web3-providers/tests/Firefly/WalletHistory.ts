@@ -144,8 +144,65 @@ describe('formatWalletHistoryTransaction', () => {
         )!
 
         expect(tx.type).toBe('receive')
-        expect(tx.cateType).toBe('send')
+        expect(tx.cateType).toBe('receive')
         expect(tx.cateName).toBe('Bridge')
+    })
+
+    it('keeps cateType send for an outbound bridge', () => {
+        const tx = formatWalletHistoryTransaction(
+            baseItem({
+                category: FireflyWalletHistoryAPI.Category.TokenBridge,
+                token_sends: [
+                    {
+                        chain_id: 1,
+                        amount: '1',
+                        user_address: OWNER,
+                        recipient: RECEIVER,
+                        sender: OWNER,
+                        token: {
+                            address: TOKEN_CONTRACT,
+                            logo: null,
+                            symbol: 'MASK',
+                            name: 'Mask Network',
+                            decimal: 18,
+                            price: '3',
+                        },
+                    },
+                ],
+            }),
+        )!
+
+        expect(tx.type).toBe('send')
+        expect(tx.cateType).toBe('send')
+        // bridges keep the executed contract as counterparty
+        expect(tx.to).toBe(TOKEN_CONTRACT)
+    })
+
+    it('keeps to_address for a swap instead of the first outgoing transfer recipient', () => {
+        const tx = formatWalletHistoryTransaction(
+            baseItem({
+                category: FireflyWalletHistoryAPI.Category.TokenSwap,
+                token_sends: [
+                    {
+                        chain_id: 1,
+                        amount: '1',
+                        user_address: OWNER,
+                        recipient: RECEIVER,
+                        sender: OWNER,
+                        token: {
+                            address: TOKEN_CONTRACT,
+                            logo: null,
+                            symbol: 'MASK',
+                            name: 'Mask Network',
+                            decimal: 18,
+                            price: '3',
+                        },
+                    },
+                ],
+            }),
+        )!
+
+        expect(tx.to).toBe(TOKEN_CONTRACT)
     })
 
     it('falls back to to_address when no counterparty is derivable', () => {

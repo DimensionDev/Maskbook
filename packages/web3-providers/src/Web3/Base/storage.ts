@@ -50,7 +50,13 @@ export function settingsStorage(plugin: NetworkPluginID) {
         settings.fungibleAssetSourceType.initializedPromise,
         settings.gasOptionType.initializedPromise,
         settings.nonFungibleAssetSourceType.initializedPromise,
-    ]).then(() => settings)
+    ]).then(async () => {
+        // Migrate the removed `SourceType.DeBank` ('DeBank') persisted by older versions.
+        for (const item of [settings.fungibleAssetSourceType, settings.nonFungibleAssetSourceType]) {
+            if ((item.value as string) === 'DeBank') await item.setValue(SourceType.Firefly)
+        }
+        return settings
+    })
 }
 export function providerStorage<ChainId extends number, ProviderType extends string>(
     pluginID: NetworkPluginID,

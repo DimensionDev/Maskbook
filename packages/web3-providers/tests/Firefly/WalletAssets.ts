@@ -157,4 +157,25 @@ describe('FireflyFungibleToken.getAssets', () => {
         const pageable = await FireflyFungibleToken.getAssets(ADDRESS)
         expect(pageable!.data.some((x) => x.symbol === 'MOODENG')).toBe(true)
     })
+
+    it('truncates float noise so balances stay integers and strips the (PoS) suffix', async () => {
+        mockList([
+            {
+                id: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+                chain: 'polygon',
+                community_id: '137',
+                name: 'USD Coin (PoS)',
+                symbol: 'USDC',
+                decimals: 6,
+                logo_url: null,
+                price: 1,
+                amount: 0.30000000000000004,
+            },
+        ])
+
+        const pageable = await FireflyFungibleToken.getAssets(ADDRESS)
+        const usdc = pageable!.data.find((x) => x.symbol === 'USDC')!
+        expect(usdc.balance).toBe('300000')
+        expect(usdc.name).toBe('USD Coin')
+    })
 })

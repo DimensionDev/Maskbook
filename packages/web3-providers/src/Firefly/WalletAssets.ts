@@ -1,4 +1,5 @@
 import urlcat from 'urlcat'
+import { BigNumber } from 'bignumber.js'
 import { memoize, unionWith } from 'lodash-es'
 import { createIndicator, createPageable } from '@masknet/shared-base'
 import {
@@ -12,7 +13,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     formatEthereumAddress,
     isNativeTokenAddress,
     isValidAddress as isValidAddressEVM,
@@ -27,7 +28,9 @@ import { Duration } from '../helpers/fetchCached.js'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 import { getNativeAssets } from '../helpers/getNativeAssets.js'
 import type { BaseHubOptions, FungibleTokenAPI } from '../entry-types.js'
-import { FIREFLY_BASE_URL } from './constants.js'
+import { FIREFLY_ASSETS_SUPPORTED_CHAINS, FIREFLY_BASE_URL } from './constants.js'
+
+export { FIREFLY_ASSETS_SUPPORTED_CHAINS } from './constants.js'
 import { resolveFireflyResponseData } from './helpers.js'
 
 export namespace FireflyWalletAssetsAPI {
@@ -54,28 +57,6 @@ export namespace FireflyWalletAssetsAPI {
 
     export type TokenListResponse = FireflyFarcasterAPI.Response<{ list: WalletAssetRecord[] }>
 }
-
-/**
- * EVM chains covered by the Firefly (Zerion-backed) asset endpoint. Balances on
- * other chains must be fetched over RPC instead.
- */
-export const FIREFLY_ASSETS_SUPPORTED_CHAINS = [
-    ChainId.Mainnet,
-    ChainId.Optimism,
-    ChainId.BSC,
-    ChainId.xDai,
-    ChainId.XLayer,
-    ChainId.Fantom,
-    ChainId.Robinhood,
-    ChainId.Celo,
-    ChainId.Avalanche,
-    ChainId.Base,
-    ChainId.Scroll,
-    ChainId.Arbitrum,
-    ChainId.Aurora,
-    ChainId.Zora,
-    ChainId.Polygon,
-]
 
 export function isFireflyAssetsSupportedChain(chainId: number) {
     return FIREFLY_ASSETS_SUPPORTED_CHAINS.includes(chainId as ChainId)
@@ -108,9 +89,10 @@ function formatAssets(data: FireflyWalletAssetsAPI.WalletAssetRecord[]): Array<F
                     type: TokenType.Fungible,
                     schema: isNativeTokenAddress(address) ? SchemaType.Native : SchemaType.ERC20,
                     decimals: x.decimals,
-                    name: x.name,
+                    name: x.name.replace('(PoS)', '').trim(),
                     symbol: x.symbol,
-                    balance: rightShift(x.amount, x.decimals).toFixed(),
+                    // `amount` is a float, so the shifted value can carry a fractional tail; balances are integers.
+                    balance: rightShift(x.amount, x.decimals).toFixed(0, BigNumber.ROUND_DOWN),
                     price: {
                         [CurrencyType.USD]: toFixed(x.price ?? 0),
                     },
