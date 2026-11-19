@@ -6,7 +6,7 @@ import { useEverSeen } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleTokenBalance, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { debank } from '@masknet/web3-providers/helpers'
+import { isFireflyAssetsSupportedChain } from '@masknet/web3-providers'
 import type { ReasonableNetwork } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography, useForkRef, type ListItemProps } from '@mui/material'
@@ -86,9 +86,9 @@ export const TokenItem = memo(function TokenItem({
     // #region Try getting balance through RPC.
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
-    // Debank might not provide asset from current custom network
-    const supportedByDebank = debank.getDebankChain(asset.chainId)
-    const tryRpc = (!supportedByDebank || !('balance' in asset)) && seen
+    // Firefly assets might not cover the current custom network
+    const supportedByFirefly = isFireflyAssetsSupportedChain(asset.chainId)
+    const tryRpc = (!supportedByFirefly || !('balance' in asset)) && seen
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,

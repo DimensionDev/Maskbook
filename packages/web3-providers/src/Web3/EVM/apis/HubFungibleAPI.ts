@@ -9,7 +9,7 @@ import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, Pr
 import defer * as ChainbaseFungibleToken from '../../../Chainbase/index.js'
 import defer * as Cloudflare from '../../../Cloudflare/index.js'
 import defer * as CoinGeckoPriceEVM from '../../../CoinGecko/index.js'
-import defer * as DeBankFungibleToken from '../../../DeBank/index.js'
+import defer * as FireflyFungibleToken from '../../../Firefly/index.js'
 import defer * as GoPlusAuthorization from '../../../GoPlusLabs/index.js'
 import defer * as R2D2TokenList from '../../../R2D2/index.js'
 import defer * as Rabby from '../../../Rabby/index.js'
@@ -40,7 +40,7 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
         >(
             {
                 [SourceType.Chainbase]: ChainbaseFungibleToken.ChainbaseFungibleToken,
-                [SourceType.DeBank]: DeBankFungibleToken.DeBankFungibleToken,
+                [SourceType.Firefly]: FireflyFungibleToken.FireflyFungibleToken,
                 [SourceType.GoPlus]: GoPlusAuthorization.GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby.Rabby,
                 [SourceType.R2D2]: R2D2TokenList.R2D2TokenList,
@@ -48,7 +48,7 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM.CoinGeckoPriceEVM,
             },
             [
-                DeBankFungibleToken.DeBankFungibleToken,
+                FireflyFungibleToken.FireflyFungibleToken,
                 ChainbaseFungibleToken.ChainbaseFungibleToken,
                 Rabby.Rabby,
                 GoPlusAuthorization.GoPlusAuthorization,

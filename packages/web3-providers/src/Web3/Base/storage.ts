@@ -42,15 +42,21 @@ export function settingsStorage(plugin: NetworkPluginID) {
     const { storage: settings } = PersistentStorages.Web3.createSubScope(`${plugin}_Settings`, {
         currencyType: CurrencyType.USD,
         gasOptionType: GasOptionType.NORMAL,
-        fungibleAssetSourceType: SourceType.DeBank,
-        nonFungibleAssetSourceType: SourceType.DeBank,
+        fungibleAssetSourceType: SourceType.Firefly,
+        nonFungibleAssetSourceType: SourceType.Firefly,
     })
     return Promise.all([
         settings.currencyType.initializedPromise,
         settings.fungibleAssetSourceType.initializedPromise,
         settings.gasOptionType.initializedPromise,
         settings.nonFungibleAssetSourceType.initializedPromise,
-    ]).then(() => settings)
+    ]).then(async () => {
+        // Migrate the removed `SourceType.DeBank` ('DeBank') persisted by older versions.
+        for (const item of [settings.fungibleAssetSourceType, settings.nonFungibleAssetSourceType]) {
+            if ((item.value as string) === 'DeBank') await item.setValue(SourceType.Firefly)
+        }
+        return settings
+    })
 }
 export function providerStorage<ChainId extends number, ProviderType extends string>(
     pluginID: NetworkPluginID,

@@ -9,8 +9,7 @@ import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { EVMHubOptions } from '../types/index.js'
 import defer * as MetaSwap from '../../../MetaSwap/index.js'
 import defer * as AstarGas from '../../../Astar/index.js'
-import defer * as DeBank from '../../../DeBank/index.js'
-import defer * as Zerion from '../../../Zerion/index.js'
+import defer * as Firefly from '../../../Firefly/index.js'
 
 export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
@@ -26,12 +25,11 @@ export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> 
         try {
             const isEIP1559 = EVMChainResolver.isFeatureSupported(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.MetaSwap.getGasOptions(options.chainId)
-            if (chainId === ChainId.Aurora) return await GasOptions.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.AstarGas.getGasOptions()
-            return await DeBank.DeBankGasOption.getGasOptions(options.chainId)
         } catch {
-            return GasOptions.getGasOptions(options.chainId)
+            // fall through to the RPC-based gas options
         }
+        return GasOptions.getGasOptions(options.chainId)
     }
 
     async getTransactions(
@@ -45,7 +43,7 @@ export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> 
             chainId,
         })
         return attemptUntil(
-            [DeBank.DeBankHistory, Zerion.Zerion].map((x) => () => x.getTransactions(options.account, options)),
+            [() => Firefly.FireflyWalletHistory.getTransactions(options.account, options)],
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }

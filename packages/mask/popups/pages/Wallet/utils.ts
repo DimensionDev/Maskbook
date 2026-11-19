@@ -52,8 +52,8 @@ export async function modifyTransaction(
     }
 }
 
-// The Debank transaction history api does not return the input data,
-//  so can not do the decoding within its scope.
+// The Firefly transaction history api does not always return the decoded receiver,
+//  so decode it from the input data when available.
 export function parseReceiverFromERC20TransferInput(input?: string | null) {
     if (!input) return ''
     try {
@@ -64,8 +64,8 @@ export function parseReceiverFromERC20TransferInput(input?: string | null) {
     }
 }
 
-// The Debank transaction history api does not return the input data and approved token info,
-//  so can not do the decoding within its scope.
+// The Firefly transaction history api does not return the input data and approved token info,
+//  so decode them from the input data when available.
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export function parseAmountFromERC20ApproveInput(input?: string | null): 'Infinite' | string | undefined {
     if (!input) return

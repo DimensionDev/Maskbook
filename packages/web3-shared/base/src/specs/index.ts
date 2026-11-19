@@ -133,7 +133,7 @@ export interface SocialLinks {
 
 export enum SourceType {
     // FT assets
-    DeBank = 'DeBank',
+    Firefly = 'Firefly',
     Zerion = 'Zerion',
     Chainbase = 'Chainbase',
     Flow = 'Flow',

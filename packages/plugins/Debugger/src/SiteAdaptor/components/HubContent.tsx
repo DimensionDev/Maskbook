@@ -117,7 +117,7 @@ export function HubContent() {
                             <ShadowRootMenu
                                 anchorEl={anchorEl}
                                 open={!!anchorEl}
-                                defaultValue={SourceType.DeBank}
+                                defaultValue={SourceType.Firefly}
                                 onClose={() => setAnchorEl(null)}>
                                 {getEnumAsArray(SourceType).map((x) => {
                                     return (

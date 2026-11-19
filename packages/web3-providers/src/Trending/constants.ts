@@ -15,7 +15,7 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
     [SourceType.GoPlus]: undefined,
     [SourceType.Approval]: undefined,
     [SourceType.R2D2]: undefined,
-    [SourceType.DeBank]: undefined,
+    [SourceType.Firefly]: undefined,
     [SourceType.Flow]: undefined,
     [SourceType.Solana]: undefined,
     [SourceType.CF]: undefined,

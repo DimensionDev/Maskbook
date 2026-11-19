@@ -64,15 +64,11 @@ export { R2D2TokenList } from './R2D2/index.js'
 // Name Service
 export { ENS } from './ENS/index.js'
 
-// Debank
-export { DeBankHistory } from './DeBank/index.js'
+// OKX
 export { OKX } from './OKX/index.js'
 
 // Chainbase
 export { ChainbaseHistory } from './Chainbase/index.js'
-
-// Zerion
-export { Zerion } from './Zerion/index.js'
 
 // RSS3
 export { RSS3 } from './RSS3/index.js'
@@ -91,6 +87,9 @@ export {
     FIREFLY_SITE_URL,
     FireflyDomain,
     FireflyWalletHistory,
+    FireflyFungibleToken,
+    FIREFLY_ASSETS_SUPPORTED_CHAINS,
+    isFireflyAssetsSupportedChain,
     getWalletPortfolioTotalValue,
     // Embedded wallet (replaces @privy-io/react-auth)
     FireflyEmbeddedWalletClient,
